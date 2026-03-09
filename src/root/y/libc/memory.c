@@ -36,13 +36,31 @@ void  Yttrium_BSwap(void * const target,
     assert(!(NULL==target&&length>0));
     assert(!(NULL==source&&length>0));
 
-    uint8_t *tgt = (uint8_t *)target;
-    uint8_t *src = (uint8_t *)source;
-    for(size_t i=length;i>0;--i)
     {
-        const uint8_t tmp = *tgt;
-        *(tgt++) = *(src);
-        *(src++) = tmp;
+        uint8_t *tgt = (uint8_t *)target;
+        uint8_t *src = (uint8_t *)source;
+        for(size_t i=length;i>0;--i)
+        {
+            const uint8_t tmp = *tgt;
+            *(tgt++) = *(src);
+            *(src++) = tmp;
+        }
     }
 
+}
+
+
+int   Yttrium_Zeroed(const void * const blockAddr,
+                     const size_t       blockSize)
+{
+    assert(!(NULL==blockAddr&&blockSize>0));
+
+    {
+        uint8_t *p = (uint8_t *)blockAddr;
+        for(size_t i=blockSize;i>0;--i)
+        {
+            if( 0 != *(p++) ) return 0;
+        }
+        return 1;
+    }
 }

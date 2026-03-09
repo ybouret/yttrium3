@@ -8,6 +8,7 @@ void Yttrium_Sort_(void * const a,
                    const size_t n,
                    const size_t width,
                    YttriumCompare compare,
+                   void * const   args,
                    void * const   rra)
 {
     size_t l  = (n>>1)+1;
@@ -39,12 +40,12 @@ void Yttrium_Sort_(void * const a,
         while (j<=ir)
         {
             char * ra_j = &ra[j*width];
-            if( (j<ir) && ( compare(ra_j,ra_j+width)<0) )
+            if( (j<ir) && ( compare(ra_j,ra_j+width,args)<0) )
             {
                 ++j;
                 ra_j += width;
             }
-            if( compare(rra,ra_j) < 0 )
+            if( compare(rra,ra_j,args) < 0 )
             {
                 memcpy(&ra[i*width],ra_j,width); //ra[i]=ra[j];
                 i=j;
@@ -62,6 +63,7 @@ void Yttrium_Sort(void * const   a,
                   const size_t   n,
                   const size_t   width,
                   YttriumCompare compare,
+                  void * const   args,
                   void * const   rra)
 {
 
@@ -76,7 +78,7 @@ void Yttrium_Sort(void * const   a,
             return;
         default:
             assert(n>=2);
-            Yttrium_Sort_(a,n,width,compare,rra);
+            Yttrium_Sort_(a,n,width,compare,args,rra);
     }
     
 }

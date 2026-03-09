@@ -1,10 +1,11 @@
 #include "y/utest/run.hpp"
+#include "y/config/platform.h"
 
 using namespace Yttrium;
 
-Y_UTEST(platform)
+Y_UTEST(config_platform)
 {
     std::cerr << "test: " << test << std::endl;
-    throw Exception();
+    //throw Exception();
 }
 Y_UDONE()

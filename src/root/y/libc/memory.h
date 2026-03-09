@@ -22,6 +22,9 @@ extern "C" {
                         void * const source,
                         const size_t length);
 
+    int   Yttrium_Zeroed(const void * const blockAddr,
+                         const size_t       blockSize);
+
 #if defined(__cplusplus)
 }
 #endif

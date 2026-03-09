@@ -9,12 +9,13 @@
 extern "C" {
 #endif
 
-    typedef int (*YttriumCompare)(const void * const, const void * const);
+    typedef int (*YttriumCompare)(const void * const, const void * const, void * const);
 
     void Yttrium_Sort(void * const   a,
                       const size_t   n,
                       const size_t   width,
                       YttriumCompare compare,
+                      void * const   args,
                       void * const   rra);
 
 

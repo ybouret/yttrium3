@@ -10,8 +10,8 @@ namespace Yttrium
 {
 
 #define Y_UTEST(NAME) \
-/**/    extern "C" int Y_UTest_##NAME(int argc, char **argv) {\
-/**/        (void)argc; (void)argv; \
+/**/    int Y_UTest_##NAME(int argc, char **argv) { \
+/**/        (void)argc; (void)argv;                 \
 /**/        static const char * const test = #NAME; (void)test; do
 
 #define Y_UDONE() while(false); return 0; }
