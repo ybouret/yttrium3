@@ -18,6 +18,9 @@ extern "C" {
                          const void * const source,
                          const size_t       length);
 
+    void  Yttrium_BSwap(void * const target,
+                        void * const source,
+                        const size_t length);
 
 #if defined(__cplusplus)
 }
