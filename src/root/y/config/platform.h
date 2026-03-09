@@ -39,7 +39,7 @@
 extern "C" {
 #endif
 
-    const char * Y_Platform_CallSign;
+    const char * Yttrium_Platform;
 
 #if defined(__cplusplus)
 }

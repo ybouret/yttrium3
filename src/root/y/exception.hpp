@@ -4,6 +4,7 @@
 #define Y_Exception_Included 1
 
 
-#endif
+
+#endif // !Y_Exception_Included
 
 
