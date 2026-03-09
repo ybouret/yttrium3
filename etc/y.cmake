@@ -224,7 +224,7 @@ endif()
 
 ################################################################################
 #
-# specific platform configuration
+# specific platform flags
 #
 ################################################################################
 if(Y_Linux OR Y_SunOS OR Y_FreeBSD)
@@ -258,7 +258,7 @@ function(Y_CreateLibrary THE_LIB)
                 set(path "${CMAKE_CURRENT_SOURCE_DIR}/${arg}")
                 if(IS_DIRECTORY ${path})
                         # processing subdirectory
-                        message( STATUS "   [*][${arg}]")
+                        message( STATUS "   |_[${arg}]")
                         file( GLOB src "${arg}/*.cpp" "${arg}/*.c" )
                         file( GLOB prv "${arg}/*.hxx")
                         file( GLOB hdr "${arg}/*.hpp" "${arg}/*.h")
@@ -272,10 +272,104 @@ function(Y_CreateLibrary THE_LIB)
                         install( FILES  ${hdr} DESTINATION include/${arg})
                 else()
                         # assuming regular file
-                        message( STATUS "   [+][${arg}]")
+                        message( STATUS "   --[${arg}]")
                         message( FATAL_ERROR "need to code...")
                 endif()
         endforeach()
         add_library(${THE_LIB} STATIC ${SRC} ${HDR} ${PRV})
         install( TARGETS ${THE_LIB} ARCHIVE)
 endfunction()
+
+################################################################################
+#
+#
+# Default Linking Libraries and Flags
+#
+#
+################################################################################
+function(Y_LinkLibraries THE_EXE)
+        set(THE_LIBS "")
+
+        # forward extra libraries
+        list(APPEND THE_LIBS ${ARGN} )
+        list(APPEND THE_LIBS "y")
+        #list(APPEND THE_LIBS "y-z")
+        #list(APPEND THE_LIBS "y-bz2")
+
+        if(Y_Linux OR Y_FreeBSD)
+                list( APPEND THE_LIBS "pthread" )
+        endif()
+        if(Y_Linux)
+                list( APPEND THE_LIBS "rt" )
+                list( APPEND THE_LIBS "dl" )
+        endif()
+
+        target_link_libraries(${THE_EXE} ${THE_LIBS})
+endfunction()
+
+
+################################################################################
+#
+#
+# Creating a test program and define Y_Test to use Y_UTEST()
+#
+#
+################################################################################
+function(Y_CreateTest THE_LIB)
+        set(THE_TEST "test-${THE_LIB}")
+        message( STATUS "Create Test <${THE_TEST}>")
+        # top-level sources
+        set(SRC main.cpp)
+        file( GLOB src "test-*.cpp" "*.hpp")
+        #cmake_print_variables(src)
+        #message( FATAL_ERROR "stop")
+        list( APPEND SRC ${src} )
+        list( SORT SRC )
+        # sub-dir sources
+        list(SORT ARGN)
+        foreach(SUBDIR IN LISTS ARGN)
+                message( STATUS "    [${SUBDIR}]")
+                file( GLOB src "${SUBDIR}/*.cpp")
+                list( APPEND SRC ${src})
+                source_group(${SUBDIR} FILES ${src})
+        endforeach()
+
+        # gather
+        add_executable(${THE_TEST} ${SRC})
+        set(Y_Test ${THE_TEST} PARENT_SCOPE)
+
+        # create unit tests
+        add_custom_target("u${THE_TEST}" 
+                COMMAND ${CMAKE_CTEST_COMMAND}
+                DEPENDS ${THE_TEST}
+                )
+endfunction()
+
+################################################################################
+#
+#
+# create a new test
+#
+#
+################################################################################
+function(Y_UTEST THE_NAME)
+        string(REPLACE ":" "_" THE_TEST "${THE_NAME}")
+        add_test(${THE_NAME} ${Y_Test} ${THE_TEST} ${ARGN})
+        message(STATUS "    <${THE_NAME}>")
+endfunction()
+
+################################################################################
+#
+#
+# Register "utest-THE_LIB" tor Y_UnitTests
+#
+#
+################################################################################
+
+macro(Y_Regression THE_LIB)
+        set(_UnitTests ${Y_UnitTests})
+        list(APPEND _UnitTests "utest-${THE_LIB}")
+        set(Y_UnitTests ${_UnitTests} PARENT_SCOPE)
+endmacro()
+
+
