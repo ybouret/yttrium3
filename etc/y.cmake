@@ -9,6 +9,7 @@ set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS    ON)
 set(CMAKE_SKIP_PREPROCESSED_SOURCE_RULES ON)
 set(CMAKE_SKIP_ASSEMBLY_SOURCE_RULES     ON)
 include(CMakePrintHelpers)
+set(CMAKE_INSTALL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../sdk")
 
 ################################################################################
 #
@@ -75,6 +76,8 @@ if(NOT Y_BUILD_TYPE_IS_DEFINED)
         message( FATAL_ERROR "CMAKE_BUILD_TYPE!=[Debug|Release]")
 endif()
 
+cmake_print_variables(CMAKE_BUILD_TYPE)
+
 ################################################################################
 #
 #
@@ -126,3 +129,153 @@ endif()
 
 
 cmake_print_variables(Y_Machine)
+
+
+################################################################################
+#
+#
+# Y_CC and Y_CXX with version
+#
+#
+################################################################################
+get_filename_component(Y_CC ${CMAKE_C_COMPILER} NAME_WE)
+get_filename_component(Y_CXX ${CMAKE_CXX_COMPILER} NAME_WE)
+cmake_print_variables(CMAKE_C_COMPILER)
+cmake_print_variables(CMAKE_CXX_COMPILER)
+cmake_print_variables(Y_CC Y_CXX)
+
+set(Y_CC_MAJOR 0)
+set(Y_CC_MINOR 0)
+
+cmake_print_variables(CMAKE_C_COMPILER_VERSION)
+string(REPLACE "." ";" Y_CC_VERSION ${CMAKE_C_COMPILER_VERSION})
+list(GET Y_CC_VERSION 0 Y_CC_MAJOR)
+list(GET Y_CC_VERSION 1 Y_CC_MINOR)
+cmake_print_variables(Y_CC_MAJOR Y_CC_MINOR)
+
+set(Y_KNOWN_COMPILER FALSE)
+
+################################################################################
+#
+# configuration for gcc/g++
+#
+################################################################################
+if("${Y_CC}" MATCHES "gcc.*")
+        message( STATUS "Using GNU Compilers")
+        set(Y_KNOWN_COMPILER TRUE)
+        set(Y_GNU TRUE)
+        string( APPEND CMAKE_C_FLAGS " -pipe -Wall -Wextra")
+        string( APPEND CMAKE_CXX_FLAGS " -pipe -Wall -Wextra -Weffc++")
+        if( "${Y_CC_MAJOR}" LESS "7" )
+                string( APPEND CMAKE_CXX_FLAGS " -std=c++0x")
+        endif()
+        if(APPLE)
+                string( APPEND CMAKE_CXX_FLAGS " -D_Alignof=sizeof")
+        endif()
+endif()
+
+################################################################################
+#
+# configuration for clang/clang++
+#
+################################################################################
+if("${Y_CC}" MATCHES "clang.*")
+        message( STATUS "Using Clang Compilers")
+        set(Y_KNOWN_COMPILER TRUE)
+        set(Y_CLANG TRUE)
+        string( APPEND CMAKE_C_FLAGS   " -pipe -Wall -Wextra")
+        string( APPEND CMAKE_CXX_FLAGS " -pipe -Wall -Wextra -Weffc++ -std=c++11")
+endif()
+
+
+
+################################################################################
+#
+# configuration for icc/icpc or icx/icpx
+#
+################################################################################
+if("${Y_CC}" MATCHES "ic.*")
+        message( STATUS "Using Intel Compilers")
+        set(Y_KNOWN_COMPILER TRUE)
+        set(Y_ICC TRUE)
+        string( APPEND CMAKE_C_FLAGS   " -Wall")
+        string( APPEND CMAKE_CXX_FLAGS " -Wall")
+        if( "${Y_CC_MAJOR}" LESS_EQUAL "13" )
+                string( APPEND CMAKE_CXX_FLAGS " -std=c++0x")
+        endif()
+endif()
+
+################################################################################
+#
+# configuration for Microsoft
+#
+################################################################################
+if("${Y_CC}" STREQUAL "cl")
+        message( STATUS "Using Microsoft Compilers")
+        set(Y_KNOWN_COMPILER TRUE)
+        set(Y_MSC TRUE)
+        string( APPEND CMAKE_C_FLAGS   " -Wall -nologo -wd4668")
+        string( APPEND CMAKE_CXX_FLAGS " -Wall -nologo -EHsc -wd4668")
+endif()
+
+if(NOT Y_KNOWN_COMPILER)
+        message( FATAL_ERROR "Unknown Compiler ${Y_CC}")
+endif()
+
+################################################################################
+#
+# specific platform configuration
+#
+################################################################################
+if(Y_Linux OR Y_SunOS OR Y_FreeBSD)
+        if(Y_GNU OR Y_CLANG OR Y_ICC)
+                string( APPEND CMAKE_C_FLAGS " -fPIC")
+                string( APPEND CMAKE_CXX_FLAGS " -fPIC")
+        endif()
+endif()
+
+
+cmake_print_variables(CMAKE_C_FLAGS)
+cmake_print_variables(CMAKE_CXX_FLAGS)
+
+
+
+################################################################################
+#
+#
+# Creating Library THE_LIB using files or subdir
+#
+#
+################################################################################
+function(Y_CreateLibrary THE_LIB)
+        message(STATUS "Create Library <${THE_LIB}>")
+        # local Sources, Private Sources and Headers
+        set(SRC "")
+        set(PRV "")
+        set(HDR "")
+        list(SORT ARGN)
+        foreach(arg IN LISTS ARGN)
+                set(path "${CMAKE_CURRENT_SOURCE_DIR}/${arg}")
+                if(IS_DIRECTORY ${path})
+                        # processing subdirectory
+                        message( STATUS "   [*][${arg}]")
+                        file( GLOB src "${arg}/*.cpp" "${arg}/*.c" )
+                        file( GLOB prv "${arg}/*.hxx")
+                        file( GLOB hdr "${arg}/*.hpp" "${arg}/*.h")
+                        list(SORT src)
+                        list(SORT prv)
+                        list(SORT hdr)
+                        source_group(${arg} FILES ${src} ${prv} ${hdr})
+                        list( APPEND SRC ${src})
+                        list( APPEND PRV ${prv})
+                        list( APPEND HDR ${hdr})
+                        install( FILES  ${hdr} DESTINATION include/${arg})
+                else()
+                        # assuming regular file
+                        message( STATUS "   [+][${arg}]")
+                        message( FATAL_ERROR "need to code...")
+                endif()
+        endforeach()
+        add_library(${THE_LIB} STATIC ${SRC} ${HDR} ${PRV})
+        install( TARGETS ${THE_LIB} ARCHIVE)
+endfunction()
