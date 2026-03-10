@@ -15,7 +15,16 @@ else()
     add_custom_target(dox ${DOX} -q WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..)
 endif()
 
+# prepare unit tests
 set(Y_UnitTests "")
+
+# add components
 add_subdirectory(root)
+
+# regression with all unit tests
 cmake_print_variables(Y_UnitTests)
+if( NOT "" STREQUAL "${Y_UnitTests}")
+    add_custom_target(regression
+    DEPENDS ${Y_UnitTests})
+endif()
 

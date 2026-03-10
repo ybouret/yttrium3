@@ -39,7 +39,7 @@
 extern "C" {
 #endif
 
-    const char * Yttrium_Platform;
+    extern const char * const Yttrium_Platform; //!< set as Y_Platform
 
 #if defined(__cplusplus)
 }

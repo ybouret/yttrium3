@@ -1,3 +1,3 @@
 #include "y/config/platform.h"
 
-const char * Yttrium_Platform = Y_Platform;
+const char * const Yttrium_Platform = Y_Platform;

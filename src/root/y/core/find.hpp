@@ -10,6 +10,16 @@ namespace Yttrium
 {
     namespace Core
     {
+        //______________________________________________________________________
+        //
+        //! linear lookup of data in a range
+        /**
+         \param lhs  argument to find
+         \param iter first iterator
+         \param size number of elements
+         \return true iff one of the elements is equal to lhs
+         */
+        //______________________________________________________________________
         template <typename ITER, typename LHS> inline
         bool Find(LHS &lhs, ITER iter, size_t size)
         {

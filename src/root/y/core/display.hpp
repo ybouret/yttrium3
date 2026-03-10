@@ -9,6 +9,16 @@ namespace Yttrium
 {
     namespace Core
     {
+        //______________________________________________________________________
+        //
+        //! vector-like display of a range
+        /**
+         \param os output stream
+         \param iter initial iterator
+         \param size number of elements
+         \return os
+         */
+        //______________________________________________________________________
         template <typename ITER> inline
         std::ostream & Display(std::ostream &os, ITER iter, size_t size)
         {
