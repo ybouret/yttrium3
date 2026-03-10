@@ -1,4 +1,5 @@
 #include "y/libc/bswap.h"
+#include "y/config/compiler.h"
 #include <string.h>
 #include <assert.h>
 
