@@ -1,8 +1,8 @@
 
 //! \file
 
-#ifndef Y_Config_Setup_Included
-#define Y_Config_Setup_Included
+#ifndef Y_Config_Setup_H_Included
+#define Y_Config_Setup_H_Included
 
 #if defined(__cplusplus)
 #include <cstdlib>
@@ -10,6 +10,6 @@
 #include <stdlib.h>
 #endif
 
-#endif // !Y_Config_Setup_Included
+#endif // !Y_Config_Setup_H_Included
 
 

@@ -1,5 +1,6 @@
 Y_CreateTest(root
 config
+libc
 core)
 Y_LinkLibraries(test-root)
 Y_Regression(root)
