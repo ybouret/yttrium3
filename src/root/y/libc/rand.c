@@ -5,9 +5,9 @@
 
 #define IA 16807
 #define IM 2147483647
-#define AMf (1.0f/IM)
-#define AMd (1.0/IM)
-#define AMl (1.0L/IM)
+#define AMf (1.0f/(float)IM)
+#define AMd (1.0/(double)IM)
+#define AMl (1.0L/(long double)IM)
 #define IQ 127773
 #define IR 2836
 #define MASK 123459876

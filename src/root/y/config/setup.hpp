@@ -24,6 +24,14 @@ namespace Yttrium
     //__________________________________________________________________________
     template <typename T> inline
     T & Coerce(const T &obj) noexcept { return (T&)obj; }
+
+    namespace Core
+    {
+        extern const char * const Unknown;
+        extern const char * const Success;
+        extern const char * const Failure;
+    };
+
 }
 
 #endif // !Y_Config_Setup_Included

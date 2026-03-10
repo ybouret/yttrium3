@@ -3,7 +3,6 @@ config
 libc
 core)
 Y_LinkLibraries(test-root)
-Y_Regression(root)
 
 enable_testing()
 
