@@ -1,8 +1,8 @@
 #include "y/libc/zeroed.h"
 #include "y/libc/defs.h"
+#include "y/config/compiler.h"
 
 #include <assert.h>
-#include "y/config/compiler.h"
 
 int   Yttrium_Zeroed(const void * const blockAddr,
                      const size_t       blockSize)
