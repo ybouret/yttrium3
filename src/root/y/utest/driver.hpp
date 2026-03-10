@@ -25,7 +25,9 @@ namespace Yttrium
         //______________________________________________________________________
         //
         //
+        //
         //! Handle tests
+        //
         //
         //______________________________________________________________________
         class Driver
@@ -37,67 +39,138 @@ namespace Yttrium
             //
             //__________________________________________________________________
         protected:
+            //! setup \param procEntry memory region \param procCount capacity
             explicit Driver(Proc * const procEntry, const size_t procCount) noexcept;
         public:
+            //! cleanup
             virtual ~Driver() noexcept;
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! register a new named test
             void operator()(CFunction const, const char * const) noexcept;
+
+            //! forward call from main \return forwarded call
             int  operator()(int,char **);
 
+            //! search proc by name \param name queried name \return matching proc, NULL otherwise
             Proc * search(const char * const name) noexcept;
+
+            //! display registered test
             void   display() const;
+
+            //! count tests containing name in their own name \param name queried name \return possible tests
             size_t countContaining(const char * const name) const noexcept;
+
+            //! prin test containing name in their own name \param name queried name
             void   printContaining(const char * const name) const;
 
         private:
-            Y_Disable_Copy_And_Assign(Driver);
-            Proc * const proc;
-            size_t       size;
-            const size_t pmax;
-            size_t       width;
+            Y_Disable_Copy_And_Assign(Driver); //!< discard
+            Proc * const proc;     //!< base address for tests
+            size_t       size;     //!< active tests
+            const size_t capacity; //!< maximum number of tests
+            size_t       width;    //!< maximum name length
         };
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Data to store named tests
+        //
+        //
+        //______________________________________________________________________
         template <unsigned LN2>
         class DriverData
         {
+        public:
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const size_t One = 1;          //!< alias
+            static const size_t N   = (One<<LN2); //!< capacity
+
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
         protected:
-            static const size_t one = 1;
-            static const size_t N   = (1<<LN2);
+            //! setup
             inline explicit DriverData() noexcept :
             wksp()
             {
             }
 
         public:
-
+            //! cleanup
             inline virtual ~DriverData() noexcept
             {
             }
 
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
         protected:
-            char wksp[N*sizeof(Proc)];
+            char wksp[N*sizeof(Proc)]; //!< internal stack for tests
 
         private:
-            Y_Disable_Copy_And_Assign(DriverData);
+            Y_Disable_Copy_And_Assign(DriverData); //!< discard
         };
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Self-contained 2^LN2 tests
+        //
+        //
+        //______________________________________________________________________
         template <unsigned LN2>
         class DriverWith : public DriverData<LN2>, public Driver
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
             using DriverData<LN2>::wksp;
             using DriverData<LN2>::N;
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup
             inline explicit DriverWith() noexcept :
             DriverData<LN2>(),
             Driver(static_cast<Proc *>(Y_BZero(wksp)), N)
             {
             }
 
+            //! cleanup
             inline virtual ~DriverWith() noexcept {}
 
         private:
-            Y_Disable_Copy_And_Assign(DriverWith);
+            Y_Disable_Copy_And_Assign(DriverWith); //!< discard
         };
 
 

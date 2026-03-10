@@ -14,16 +14,16 @@ namespace Yttrium
     {
         Driver:: ~Driver() noexcept
         {
-            Yttrium_BZero(proc,pmax*sizeof(Proc));
+            Yttrium_BZero(proc,capacity*sizeof(Proc));
         }
 
         Driver:: Driver(Proc * const procEntry, const size_t procCount) noexcept :
         proc(procEntry),
         size(0),
-        pmax(procCount),
+        capacity(procCount),
         width(0)
         {
-            assert( Yttrium_Zeroed(proc,pmax*sizeof(Proc)) );
+            assert( Yttrium_Zeroed(proc,capacity*sizeof(Proc)) );
         }
 
         Proc * Driver:: search(const char * const name) noexcept
@@ -51,9 +51,9 @@ namespace Yttrium
             assert(0!=name);
             assert(0!=func);
 
-            if(size>=pmax)
+            if(size>=capacity)
             {
-                std::cerr << "Exceeded " << pmax << " tests!" << std::endl;
+                std::cerr << "Exceeded " << capacity << " tests!" << std::endl;
                 exit(1);
             }
 
