@@ -9,10 +9,11 @@
 namespace Yttrium
 {
 
-#define Y_UTEST(NAME) \
+#define Y_UTEST(NAME)                               \
 /**/    int Y_UTest_##NAME(int argc, char **argv) { \
 /**/        (void)argc; (void)argv;                 \
-/**/        static const char * const test = #NAME; (void)test; do
+/**/        static const char * const test = #NAME; \
+/**/        (void)test; do
 
 #define Y_UDONE() while(false); return 0; }
 

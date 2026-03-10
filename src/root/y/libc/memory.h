@@ -11,9 +11,11 @@ extern "C" {
 #endif
 
     void * Yttrium_BZero(void * const addr, const size_t size);
+    
     void * Yttrium_BCopy(void * const       target,
                          const void * const source,
                          const size_t       length);
+
     void * Yttrium_BMove(void * const       target,
                          const void * const source,
                          const size_t       length);
