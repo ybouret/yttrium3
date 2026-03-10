@@ -5,6 +5,7 @@
 
 #include "y/config/setup.hpp"
 #include <exception>
+#include <iosfwd>
 
 namespace Yttrium
 {
@@ -25,8 +26,7 @@ namespace Yttrium
         // Definitions
         //
         //______________________________________________________________________
-        static const size_t       WhenLength = 128; //!< internal length for when
-        static const size_t       WhatLength = 256; //!< internal length for what
+        static const size_t       InfoLength = 256; //!< internal length for what
         static const char * const CallSign;         //!< "Exception"
         
         //______________________________________________________________________
@@ -45,7 +45,7 @@ namespace Yttrium
         // Interface
         //
         //______________________________________________________________________
-        virtual const char * what() const noexcept; //!< what cause exception \return what_
+        virtual const char * what() const noexcept; //!< exception nature \return CallSign
 
         //______________________________________________________________________
         //
@@ -53,17 +53,43 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
-        const char *         when() const noexcept; //!< context of exception \return when_
+        const char * info() const noexcept; //!< provides information \return info_
+        void display(std::ostream &) const;
 
         Exception & operator<<(const char * const) noexcept;
         Exception & operator>>(const char * const) noexcept;
 
     private:
         Y_Disable_Assign(Exception); //!< discard
-        void ldz() noexcept;         //!< cleanup
-        char when_[WhenLength];      //!< when data
-        char what_[WhatLength];      //!< what data
+        char info_[InfoLength];      //!< information
     };
+
+
+    namespace Specific
+    {
+        class Exception : public Yttrium::Exception
+        {
+        public:
+            static const size_t WhatLength = 128;
+
+            Exception(const Exception &) noexcept;
+            virtual ~Exception() noexcept;
+
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
+            virtual const char * what() const noexcept; //!< specific reason \return what_
+
+        private:
+            Y_Disable_Assign(Exception);
+            char what_[WhatLength];
+        };
+    }
+
+
 }
 
 #endif // !Y_Exception_Included
