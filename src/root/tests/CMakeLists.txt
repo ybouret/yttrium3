@@ -20,5 +20,7 @@ Y_UTEST(libc:strfmt)
 
 Y_UTEST(system:error)
 Y_UTEST(system:exception)
+Y_UTEST(system:pid)
+
 
 
