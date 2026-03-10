@@ -124,7 +124,10 @@ namespace Yttrium
 
         private:
             Y_Disable_Assign(Exception); //!< discarded
-            char what_[WhatLength];      //!< nature
+                                         //!
+        protected:
+            Exception()   noexcept; //!< setup empty
+            char what_[WhatLength]; //!< nature
         };
     }
 

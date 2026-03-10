@@ -1,7 +1,7 @@
 #include "y/utest/driver.hpp"
 
 
-Y_UTEST_DECL(3)
+Y_UTEST_DECL(8)
 {
     Y_UTEST(exception);
 
@@ -15,7 +15,8 @@ Y_UTEST_DECL(3)
     Y_UTEST(libc_sort);
     Y_UTEST(libc_strfmt);
 
-    Y_UTEST(system_error);
+    Y_UTEST(system_error);	
+    Y_UTEST(system_exception);
 }
 Y_UTEST_EXEC()
 

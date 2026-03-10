@@ -126,6 +126,13 @@ namespace Yttrium
     namespace Specific
     {
 
+        Exception:: Exception() noexcept :
+        Yttrium::Exception(),
+        what_()
+        {
+            Y_BZero(what_);
+        }
+
         Exception:: Exception(const char * const nature,
                               const char * const fmt,
                               ...) noexcept :
