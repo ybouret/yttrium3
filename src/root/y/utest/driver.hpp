@@ -13,15 +13,29 @@ namespace Yttrium
 
     namespace UTest
     {
+        //! entry point alias
         typedef int (*CFunction)(int,char **);
 
+        //! store named entry poin
         struct Proc {
-            CFunction    func;
-            const char * name;
+            CFunction    func; //!< entry point function
+            const char * name; //!< entry point name
         };
 
+        //______________________________________________________________________
+        //
+        //
+        //! Handle tests
+        //
+        //______________________________________________________________________
         class Driver
         {
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
         protected:
             explicit Driver(Proc * const procEntry, const size_t procCount) noexcept;
         public:

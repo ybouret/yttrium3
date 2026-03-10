@@ -1,14 +1,23 @@
 //! \file
 
-#ifndef Y_Core_Shuffle_Included
-#define Y_Core_Shuffle_Included 1
+#ifndef Y_Random_Shuffle_Included
+#define Y_Random_Shuffle_Included 1
 
 #include "y/swap.hpp"
 
 namespace Yttrium
 {
-    namespace Core
+    namespace Random
     {
+        //______________________________________________________________________
+        //
+        //! Fisher-Yates shuffle of a range
+        /**
+         \param ran posseses a leq<size_t>(size_t) method
+         \param a   first iterator
+         \param n   number of items to shuffle
+         */
+        //______________________________________________________________________
         template <typename RAND, typename ITER> inline
         void Shuffle(RAND &ran, ITER a, const size_t n) noexcept
         {
@@ -22,5 +31,5 @@ namespace Yttrium
     }
 }
 
-#endif // !Y_Core_Shuffle_Included
+#endif // !Y_Random_Shuffle_Included
 

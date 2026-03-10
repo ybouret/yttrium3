@@ -5,16 +5,19 @@
 
 #include "y/exception.hpp"
 #include <iostream>
+#include <iomanip>
 
 namespace Yttrium
 {
 
+    //! create entry point for a test
 #define Y_UTEST(NAME)                               \
 /**/    int Y_UTest_##NAME(int argc, char **argv) { \
 /**/        (void)argc; (void)argv;                 \
 /**/        static const char * const test = #NAME; \
 /**/        (void)test; do
 
+    //! finish test
 #define Y_UDONE() while(false); return 0; }
 
 }
