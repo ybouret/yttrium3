@@ -1,5 +1,6 @@
 #include "y/utest/driver.hpp"
-#include "y/libc/memory.h"
+#include "y/libc/bzero.h"
+#include "y/libc/zeroed.h"
 #include "y/core/max.hpp"
 #include "y/libc/sort.h"
 

@@ -5,7 +5,7 @@
 #define Y_UTest_Driver_Included 1
 
 #include "y/exception.hpp"
-#include "y/libc/memory.h"
+#include "y/libc/bzero.h"
 #include <iostream>
 
 namespace Yttrium
