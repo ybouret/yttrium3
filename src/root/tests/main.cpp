@@ -6,6 +6,7 @@ Y_UTEST_DECL(3)
     Y_UTEST(exception);
 
     Y_UTEST(config_platform);
+    Y_UTEST(config_compiler);
 
 
     Y_UTEST(core_display);

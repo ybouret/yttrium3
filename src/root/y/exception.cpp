@@ -5,8 +5,10 @@
 #include "y/libc/strcat.h"
 #include "y/libc/strcpy.h"
 #include "y/libc/strlen.h"
+#include "y/libc/strfmt.h"
 #include "y/core/max.hpp"
 #include <iostream>
+#include <cassert>
 
 namespace Yttrium
 {
@@ -25,10 +27,19 @@ namespace Yttrium
         Y_BCopy(info_,_);
     }
 
-    Exception:: Exception() noexcept :
+    Exception:: Exception() noexcept : info_() { Y_BZero(info_); }
+
+    Exception:: Exception(const char * const fmt,...) noexcept :
     info_()
     {
         Y_BZero(info_);
+
+        assert(0!=fmt);
+        va_list ap;
+        va_start(ap,fmt);
+        Yttrium_Strfmt(info_,sizeof(info_), fmt, &ap );
+        va_end(ap);
+
     }
 
     const char * Exception:: what() const noexcept
@@ -67,7 +78,7 @@ namespace Yttrium
 
     void Exception:: display(std::ostream &os) const
     {
-        static const char  sep = '*';
+        static const char  sep      = '*';
         const char * const whatText = what();
         const char * const infoText = info();
         const size_t       whatSize = Yttrium_Strlen(whatText);
@@ -81,8 +92,53 @@ namespace Yttrium
         printLine(os,frame,sep) << std::endl;
     }
 
+
+
+
+    Exception & Exception:: cat(const char * const fmt, ...) noexcept
+    {
+        assert(0!=fmt);
+        char temp[InfoLength];
+        {
+            va_list ap;
+            va_start(ap,fmt);
+            (void) Yttrium_Strfmt(temp,sizeof(temp), fmt, &ap );
+            va_end(ap);
+        }
+        return *this << temp;
+    }
+
+    Exception & Exception:: pre(const char * const fmt, ...) noexcept
+    {
+        assert(0!=fmt);
+        char temp[InfoLength];
+        {
+            va_list ap;
+            va_start(ap,fmt);
+            (void) Yttrium_Strfmt(temp,sizeof(temp), fmt, &ap );
+            va_end(ap);
+        }
+        return *this >> temp;
+    }
+
+
+
     namespace Specific
     {
+
+        Exception:: Exception(const char * const nature,
+                              const char * const fmt,
+                              ...) noexcept :
+        Yttrium::Exception()
+        {
+            Y_BZero(what_);
+            Yttrium_Strcpy(what_,sizeof(what_),nature);
+            va_list ap;
+            va_start(ap,fmt);
+            (void)Yttrium_Strfmt(info_,sizeof(info_), fmt, &ap );
+            va_end(ap);
+        }
+
         Exception:: ~Exception() noexcept
         {
             Y_BZero(what_);

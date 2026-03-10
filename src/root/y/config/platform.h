@@ -26,6 +26,24 @@
 #endif
 
 
+#if defined(__NetBSD__)
+#define Y_BSD       1
+#define Y_Platform "NetBSD"
+#define Y_NetBSD    1
+#endif
+
+#if defined(__sun__)
+#define Y_BSD       1
+#define Y_Platform "SunOS"
+#define Y_SunOS
+#endif
+
+
+#if defined(_WIN32) || defined(_WIN64)
+#define Y_WIN       1
+#define Y_Platform "Windows"
+#endif
+
 
 #if !defined(Y_Platform)
 #error "Y_Platform SHOULD be defined!"

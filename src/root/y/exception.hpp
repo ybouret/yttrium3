@@ -4,8 +4,10 @@
 #define Y_Exception_Included 1
 
 #include "y/config/setup.hpp"
+#include "y/check/printf.h"
 #include <exception>
 #include <iosfwd>
+
 
 namespace Yttrium
 {
@@ -35,7 +37,8 @@ namespace Yttrium
         // C++
         //
         //______________________________________________________________________
-        explicit Exception()         noexcept; //!< setup
+        explicit Exception()                           noexcept;
+        explicit Exception(const char * const fmt,...) noexcept Y_Printf_Check(2,3);
         virtual ~Exception()         noexcept; //!< cleanup
         Exception(const Exception &) noexcept; //!< duplicate
 
@@ -59,8 +62,14 @@ namespace Yttrium
         Exception & operator<<(const char * const) noexcept;
         Exception & operator>>(const char * const) noexcept;
 
+        Exception & cat(const char * const fmt, ...) noexcept Y_Printf_Check(2,3);
+        Exception & pre(const char * const fmt, ...) noexcept Y_Printf_Check(2,3);
+        
+        
+
     private:
         Y_Disable_Assign(Exception); //!< discard
+    protected:
         char info_[InfoLength];      //!< information
     };
 
@@ -71,7 +80,7 @@ namespace Yttrium
         {
         public:
             static const size_t WhatLength = 128;
-
+            Exception(const char * const nature, const char * const fmt, ...) noexcept Y_Printf_Check(3,4);
             Exception(const Exception &) noexcept;
             virtual ~Exception() noexcept;
 
