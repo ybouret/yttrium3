@@ -1,9 +1,13 @@
 # CMake at top-level
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.11)
+
+set(Y_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR} )
+set(Y_ETC_DIR ${Y_SRC_DIR}/../etc)
+set(CMAKE_INSTALL_PREFIX ${Y_SRC_DIR}/../sdk)
 
 # global project
 project(yttrium3)
-include(../etc/y.cmake)
+include(${Y_ETC_DIR}/y.cmake)
 
 # generating documentation
 find_program(DOX doxygen DOC "Doxygen")
