@@ -5,6 +5,8 @@
 
 namespace Yttrium
 {
+    const char * const Exception:: CallSign = "Exception";
+    
     void Exception:: ldz() noexcept
     {
         Y_BZero(what_);

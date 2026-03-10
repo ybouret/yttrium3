@@ -9,6 +9,9 @@
 Y_UTEST_DECL(3)
 {
     Y_UTEST(config_platform);
+
+    Y_UTEST(core_display);
+    Y_UTEST(core_rand);
 }
 Y_UTEST_EXEC()
 

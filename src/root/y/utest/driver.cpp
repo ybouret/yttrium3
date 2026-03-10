@@ -77,7 +77,7 @@ namespace Yttrium
             {
                 const Proc & p = proc[i];
                 const size_t n = strlen(p.name);
-                std::cerr << '\t' << '[' << p.name << ']' << std::endl;
+                std::cerr << '\t' << '[' << p.name << ']';
                 for(size_t i=n;i<=width;++i) std::cerr << ' ';
                 std::cerr << " #" << (i+1) << std::endl;
             }

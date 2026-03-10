@@ -8,23 +8,58 @@
 
 namespace Yttrium
 {
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Contextual exception
+    //
+    //
+    //__________________________________________________________________________
     class Exception : public std::exception
     {
     public:
-        static const size_t Length = 256;
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        static const size_t       WhenLength = 128; //!< internal length for when
+        static const size_t       WhatLength = 256; //!< internal length for what
+        static const char * const CallSign;         //!< "Exception"
+        
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+        explicit Exception()         noexcept; //!< setup
+        virtual ~Exception()         noexcept; //!< cleanup
+        Exception(const Exception &) noexcept; //!< duplicate
 
-        explicit Exception()         noexcept;
-        virtual ~Exception()         noexcept;
-        Exception(const Exception &) noexcept;
+        //______________________________________________________________________
+        //
+        //
+        // Interface
+        //
+        //______________________________________________________________________
+        virtual const char * what() const noexcept; //!< what cause exception \return what_
 
-        virtual const char * what() const noexcept;
-        const char *         when() const noexcept;
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+        const char *         when() const noexcept; //!< context of exception \return when_
 
     private:
-        Y_Disable_Assign(Exception);
-        void ldz() noexcept;
-        char when_[Length];
-        char what_[Length];
+        Y_Disable_Assign(Exception); //!< discard
+        void ldz() noexcept;         //!< cleanup
+        char when_[WhenLength];      //!< when data
+        char what_[WhatLength];      //!< what data
     };
 }
 
