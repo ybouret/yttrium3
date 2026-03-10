@@ -40,7 +40,7 @@ Y_UTEST(libc_sort)
                 return 1;
             }
         }
-        size_t tmp[0];
+        size_t tmp = 0;
         Yttrium_Sort(arr,num,sizeof(arr[0]),Comparing<size_t>,NULL,&tmp);
         Core::Display(std::cerr,arr,num);
         for(size_t i=0;i<num;++i)

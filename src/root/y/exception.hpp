@@ -55,6 +55,9 @@ namespace Yttrium
         //______________________________________________________________________
         const char *         when() const noexcept; //!< context of exception \return when_
 
+        Exception & operator<<(const char * const) noexcept;
+        Exception & operator>>(const char * const) noexcept;
+
     private:
         Y_Disable_Assign(Exception); //!< discard
         void ldz() noexcept;         //!< cleanup

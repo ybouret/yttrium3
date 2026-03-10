@@ -2,6 +2,8 @@
 #include "y/exception.hpp"
 #include "y/libc/bzero.h"
 #include "y/libc/bcopy.h"
+#include "y/libc/strcat.h"
+#include "y/libc/strcpy.h"
 
 namespace Yttrium
 {
@@ -42,6 +44,24 @@ namespace Yttrium
     {
         return when_;
     }
+
+
+    Exception & Exception:: operator<<(const char * const text) noexcept
+    {
+        Yttrium_Strcat(what_,sizeof(what_),text);
+        return *this;
+    }
+
+    Exception & Exception:: operator>>(const char * const text) noexcept
+    {
+        char temp[WhatLength];
+        Y_BZero(temp);
+        Yttrium_Strcpy(temp, sizeof(temp), text);
+        Yttrium_Strcat(temp, sizeof(temp), what_);
+        Yttrium_BCopy(what_, temp, WhatLength);
+        return *this;
+    }
+
 
 
 }
