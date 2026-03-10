@@ -13,12 +13,15 @@ namespace Yttrium
     public:
         static const size_t Length = 256;
 
-        explicit Exception() noexcept;
-        virtual ~Exception() noexcept;
+        explicit Exception()         noexcept;
+        virtual ~Exception()         noexcept;
+        Exception(const Exception &) noexcept;
 
         virtual const char * what() const noexcept;
+        const char *         when() const noexcept;
 
     private:
+        Y_Disable_Assign(Exception);
         void ldz() noexcept;
         char when_[Length];
         char what_[Length];

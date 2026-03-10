@@ -22,6 +22,6 @@ extern "C" {
 }
 #endif
 
-
+#define Y_BCopy(FIELD,OBJECT) Yttrium_BCopy(FIELD,(OBJECT).FIELD,sizeof(FIELD))
 
 #endif // !Y_Libc_BCopy_Included

@@ -76,14 +76,11 @@ namespace Yttrium
 
             inline explicit DriverWith() noexcept :
             DriverData<LN2>(),
-            Driver(static_cast<Proc *>(Yttrium_BZero(wksp,sizeof(wksp))), N)
+            Driver(static_cast<Proc *>(Y_BZero(wksp)), N)
             {
             }
 
-            inline virtual ~DriverWith() noexcept
-            {
-
-            }
+            inline virtual ~DriverWith() noexcept {}
 
         private:
             Y_Disable_Copy_And_Assign(DriverWith);

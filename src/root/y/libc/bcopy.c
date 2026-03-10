@@ -1,4 +1,3 @@
-
 #include "y/libc/bcopy.h"
 #include <string.h>
 #include <assert.h>

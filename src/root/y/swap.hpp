@@ -4,9 +4,7 @@
 #ifndef Y_Swap_Included
 #define Y_Swap_Included 1
 
-#include <cstdlib>
-
-extern "C" { void Yttrium_BSwap(void * const, void * const, const size_t); }
+#include "y/libc/bswap.h"
 
 namespace Yttrium
 {
