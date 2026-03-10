@@ -106,7 +106,7 @@ namespace Yttrium
 
         };
     }
-#endif
+#endif // defined(Y_Darwin)
 
     namespace System
     {

@@ -1,7 +1,9 @@
 Y_CreateTest(root
 config
 libc
-core)
+core
+system)
+
 Y_LinkLibraries(test-root)
 
 enable_testing()
@@ -15,4 +17,6 @@ Y_UTEST(core:rand)
 
 Y_UTEST(libc:sort)
 Y_UTEST(libc:strfmt)
+
+Y_UTEST(system:error)
 

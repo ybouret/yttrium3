@@ -14,7 +14,8 @@ Y_UTEST_DECL(3)
 
     Y_UTEST(libc_sort);
     Y_UTEST(libc_strfmt);
-    
+
+    Y_UTEST(system_error);
 }
 Y_UTEST_EXEC()
 
