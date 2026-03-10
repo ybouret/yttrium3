@@ -11,6 +11,16 @@
 extern "C" {
 #endif
 
+    //__________________________________________________________________________
+    //
+    //! copy string
+    /**
+     \param buffer target string
+     \param buflen target total bytes
+     \param source source string
+     \return updated buffer
+     */
+    //__________________________________________________________________________
     char * Yttrium_Strcpy(char * const       buffer,
                           const size_t       buflen,
                           const char * const source);

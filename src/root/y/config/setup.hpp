@@ -27,9 +27,9 @@ namespace Yttrium
 
     namespace Core
     {
-        extern const char * const Unknown;
-        extern const char * const Success;
-        extern const char * const Failure;
+        extern const char * const Unknown; //!< "Unknown"
+        extern const char * const Success; //!< "Success"
+        extern const char * const Failure; //!< "Failure"
     };
 
 }

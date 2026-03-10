@@ -37,8 +37,10 @@ namespace Yttrium
         // C++
         //
         //______________________________________________________________________
-        explicit Exception()                           noexcept;
+
+        //! setup for formatted info \param fmt format string
         explicit Exception(const char * const fmt,...) noexcept Y_Printf_Check(2,3);
+        explicit Exception()                           noexcept; //!< setup emptu
         virtual ~Exception()         noexcept; //!< cleanup
         Exception(const Exception &) noexcept; //!< duplicate
 
@@ -57,18 +59,22 @@ namespace Yttrium
         //
         //______________________________________________________________________
         const char * info() const noexcept; //!< provides information \return info_
-        void display(std::ostream &) const;
+        void display(std::ostream &) const; //!< pretty display
 
-        Exception & operator<<(const char * const) noexcept;
-        Exception & operator>>(const char * const) noexcept;
 
+        Exception & operator<<(const char * const) noexcept; //!< right append text \return *this
+        Exception & operator>>(const char * const) noexcept; //!< left append text \return *this
+
+        //! right append formatted info \param fmt format string \return *this
         Exception & cat(const char * const fmt, ...) noexcept Y_Printf_Check(2,3);
+
+        //! left append formatted info \param fmt format string \return *this
         Exception & pre(const char * const fmt, ...) noexcept Y_Printf_Check(2,3);
         
         
 
     private:
-        Y_Disable_Assign(Exception); //!< discard
+        Y_Disable_Assign(Exception); //!< discarded
     protected:
         char info_[InfoLength];      //!< information
     };
@@ -76,13 +82,37 @@ namespace Yttrium
 
     namespace Specific
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Exception with nature and info
+        //
+        //
+        //______________________________________________________________________
         class Exception : public Yttrium::Exception
         {
         public:
-            static const size_t WhatLength = 128;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const size_t WhatLength = 128; //!< internal bytes
+
+
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup \param nature explanation \param fmt format string
             Exception(const char * const nature, const char * const fmt, ...) noexcept Y_Printf_Check(3,4);
-            Exception(const Exception &) noexcept;
-            virtual ~Exception() noexcept;
+            Exception(const Exception &) noexcept; //!< duplicate
+            virtual ~Exception()         noexcept; //!< cleanup
 
             //__________________________________________________________________
             //
@@ -93,8 +123,8 @@ namespace Yttrium
             virtual const char * what() const noexcept; //!< specific reason \return what_
 
         private:
-            Y_Disable_Assign(Exception);
-            char what_[WhatLength];
+            Y_Disable_Assign(Exception); //!< discarded
+            char what_[WhatLength];      //!< nature
         };
     }
 

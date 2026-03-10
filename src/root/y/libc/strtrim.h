@@ -12,6 +12,14 @@
 extern "C" {
 #endif
 
+    //__________________________________________________________________________
+    //
+    //! trim trailing spaces
+    /**
+     \param buffer input/output string
+     \return updated buffer
+     */
+    //__________________________________________________________________________
     char * Yttrium_Strtrim(char * const buffer);
 
 

@@ -9,8 +9,16 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
-    size_t Yttrium_Strlen(const char * const);
+    
+    //__________________________________________________________________________
+    //
+    //! string length
+    /**
+     \param buffer target string
+     \return lenght of buffer, 0 if NULL
+     */
+    //__________________________________________________________________________
+    size_t Yttrium_Strlen(const char * const buffer);
 
 #if defined(__cplusplus)
 }
