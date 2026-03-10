@@ -10,7 +10,17 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
-    
+
+    //__________________________________________________________________________
+    //
+    //! move bytes from anyregions
+    /**
+     \param target target memory
+     \param source source memory
+     \param length bytes to copy
+     \return target
+     */
+    //__________________________________________________________________________
     void * Yttrium_BMove(void * const       target,
                          const void * const source,
                          const size_t       length);

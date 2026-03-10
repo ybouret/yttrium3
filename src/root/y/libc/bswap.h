@@ -12,6 +12,15 @@
 extern "C" {
 #endif
 
+    //__________________________________________________________________________
+    //
+    //! swap bytes in memory
+    /**
+     \param target target memory
+     \param source source memory
+     \param length bytes to copy
+     */
+    //__________________________________________________________________________
     void  Yttrium_BSwap(void * const target,
                         void * const source,
                         const size_t length);

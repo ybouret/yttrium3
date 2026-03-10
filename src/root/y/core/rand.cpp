@@ -18,7 +18,7 @@ namespace Yttrium
 
         float Rand:: operator()() noexcept
         {
-            return Yttrium_Rand(&seed);
+            return Yttrium_Randf(&seed);
         }
     }
 }
