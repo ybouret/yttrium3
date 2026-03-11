@@ -11,6 +11,7 @@ Y_UTEST_DECL(8)
 
     Y_UTEST(core_display);
     Y_UTEST(core_rand);
+    Y_UTEST(core_pool);
 
     Y_UTEST(libc_sort);
     Y_UTEST(libc_strfmt);

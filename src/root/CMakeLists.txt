@@ -14,6 +14,8 @@ y/calculus
 y/type
 y/memory
 y/memory/small
+y/container
+y/container/iter
 y/utest)
 
 add_subdirectory(tests)
