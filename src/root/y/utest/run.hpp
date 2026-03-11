@@ -12,10 +12,20 @@ namespace Yttrium
 
     namespace UTest
     {
+        //! helper to pretty print info
         struct Display
         {
-            static size_t Width;
-            static std::ostream & Print(std::ostream &,
+            static size_t Width; //!< default justification width
+
+            //! print justified fields
+            /**
+             \param os   output stream
+             \param pfx  optional prefix
+             \param name optional name
+             \param sfx  optional suffix
+             \return os
+             */
+            static std::ostream & Print(std::ostream &     os,
                                         const char * const pfx,
                                         const char * const name,
                                         const char * const sfx);
@@ -40,11 +50,20 @@ Yttrium::UTest::Display::Print(std::cerr,"sizeof(",#CLASS,")") << " = " << sizeo
 #define Y_PRINTV(FIELD) \
 Yttrium::UTest::Display::Print(std::cerr,0,#FIELD,0) << " = " << (FIELD) << std::endl
 
-
+    //! local silent assertion
 #define Y_ASSERT(EXPR) \
 /**/    do { \
 /**/        const bool __OK__ = (EXPR);\
-/**/        if(!__OK__) throw Yttrium::Specific::Exception(Core::Failure,"%s:%d: %s",test,__LINE__,#EXPR);\
+/**/        if(!__OK__) throw Yttrium::Specific::Exception(Core::Failure,"line %d: %s",__LINE__,#EXPR);\
+/**/    } while(false)
+
+    //! local explicit check
+#define Y_CHECK(EXPR) \
+/**/    do { \
+/**/        const bool __OK__   = (EXPR);\
+/**/        const char __XP__[] = #EXPR; \
+/**/        Yttrium::UTest::Display::Print(std::cerr,"[",__XP__,"]") << " : " << (__OK__ ? Core::Success : Core::Failure) << std::endl;\
+/**/        if(!__OK__) throw Yttrium::Specific::Exception(Core::Failure,"line %d: %s",__LINE__,__XP__);\
 /**/    } while(false)
 
 }

@@ -1,8 +1,28 @@
 
 #include "y/type/ints.hpp"
 #include "y/utest/run.hpp"
+#include <cassert>
+#include <typeinfo>
 
 using namespace Yttrium;
+
+namespace
+{
+    template <typename T> static inline
+    void showInt(const char * const name)
+    {
+        assert(name);
+        std::cerr << "<" << name << "> = " << typeid(T).name() << std::endl;
+        Y_PRINTV( IntegerFor<T>::Bytes );
+        std::cerr << "==> " << typeid( typename IntegerFor<T>::Type ).name() << std::endl;
+        Y_PRINTV( IntegerFor<T>::Minimum );
+        Y_PRINTV( IntegerFor<T>::Maximum );
+        std::cerr << std::endl;
+    }
+
+}
+
+#define ShowInt(TYPE) showInt<TYPE>( #TYPE )
 
 Y_UTEST(type_ints)
 {
@@ -33,6 +53,12 @@ Y_UTEST(type_ints)
     Y_PRINTV(       SignedInt<int64_t>::Maximum );
     Y_PRINTV(       SignedInt<int64_t>::Minimum );
 
+    std::cerr << std::endl << "Matching:" << std::endl;
+    ShowInt(int);
+    ShowInt(size_t);
+    ShowInt(unit_t);
+
+    
 }
 Y_UDONE()
 
