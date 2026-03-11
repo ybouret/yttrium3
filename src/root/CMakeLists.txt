@@ -15,6 +15,7 @@ y/calculus
 y/type
 y/memory
 y/memory/small
+y/ability
 y/container
 y/container/iter
 y/utest)
