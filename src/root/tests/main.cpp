@@ -20,6 +20,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(system_pid);
 
     Y_UTEST(calculus_integer_log2);
+    Y_UTEST(calculus_base2);
 
     Y_UTEST(type_ints);
 
