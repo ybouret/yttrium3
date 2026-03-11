@@ -1,10 +1,9 @@
 
 #include "y/system/at-exit.hpp"
 #include "y/exception.hpp"
+#include "y/libc/sort.h"
 
 #include <cassert>
-#include <iostream>
-#include <cstdlib>
 #include <cstring>
 
 namespace Yttrium
@@ -21,7 +20,8 @@ namespace Yttrium
 
             //! comparison by decreasing lifetime
             static inline int Compare(const void * const lhs,
-                                      const void * const rhs) noexcept
+                                      const void * const rhs,
+                                      void *) noexcept
             {
                 assert( 0 != lhs );
                 assert( 0 != rhs );
@@ -98,7 +98,10 @@ namespace Yttrium
             }
 
             // keep ordered
-            qsort(AtExitQueue, AtExitCount, sizeof(AtExit::Code), AtExit::Code::Compare);
+            //qsort(AtExitQueue, AtExitCount, sizeof(AtExit::Code), AtExit::Code::Compare);
+            AtExit::Code tmp = {0,0,0};
+            Yttrium_Sort(AtExitQueue, AtExitCount, sizeof(AtExit::Code), AtExit::Code::Compare, 0, &tmp);
+
         }
 
 
