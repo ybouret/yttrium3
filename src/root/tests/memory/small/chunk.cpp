@@ -16,6 +16,10 @@ Y_UTEST(memory_small_chunk)
         for(uint8_t numBlocks=1;numBlocks;++numBlocks)
         {
             Memory::Small::Chunk chunk(blockSize,numBlocks,data);
+            while(chunk.stillAvailable)
+            {
+                chunk.acquire(blockSize);
+            }
         }
     }
 

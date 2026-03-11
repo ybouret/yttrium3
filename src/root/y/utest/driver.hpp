@@ -16,7 +16,7 @@ namespace Yttrium
         //! entry point alias
         typedef int (*CFunction)(int,char **);
 
-        //! store named entry poin
+        //! store named entry point
         struct Proc {
             CFunction    func; //!< entry point function
             const char * name; //!< entry point name
