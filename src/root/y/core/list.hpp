@@ -20,6 +20,12 @@ namespace Yttrium
 /**/ assert(0==node->prev);     \
 /**/ assert(!owns(node))
 
+        //! helper to check emppty list
+#define Y_Core_List_CheckEmpty(L) \
+/**/ assert(0==(L).size);         \
+/**/ assert(0==(L).head);         \
+/**/ assert(0==(L).tail)
+
         //______________________________________________________________________
         //
         //
@@ -186,6 +192,93 @@ namespace Yttrium
                 return (NODE *)self.fetch(indx);
             }
 
+            //! exchange contents \param rhs another list
+            inline void  swapForList(ListOf &rhs) noexcept
+            {
+                this->swapForLinked(rhs);
+                CoerceSwap(tail,rhs.tail);
+            }
+
+            //! merge content at tail \param rhs another list \return *this
+            ListOf & mergeTail(ListOf &rhs) noexcept
+            {
+                ListOf &lhs = *this; assert( &lhs != &rhs );
+                if(lhs.size<=0)
+                {
+                    if(rhs.size>0)
+                        lhs.swapForList(rhs);
+                }
+                else
+                {
+                    assert(rhs.size>0);
+                    if(rhs.size>0)
+                    {
+                        // attach lhs.tail <-> rhs.head
+                        lhs.tail->next = rhs.head;
+                        rhs.head->prev = lhs.tail;
+
+                        // update lhs
+                        Coerce(lhs.tail)  = rhs.tail;
+                        Coerce(lhs.size) += rhs.size;
+
+                        // update rhs
+                        rhs.hardReset();
+                    }
+                }
+
+                return *this;
+            }
+
+            //! merge content at head \param rhs another list \return *this
+            ListOf & mergeHead(ListOf &rhs) noexcept
+            {
+                (void) rhs.mergeTail(*this); Y_Core_List_CheckEmpty(*this);
+                swapForList(rhs);
+                return *this;
+            }
+
+            //! divide content into two lists
+            /**
+             \param lhs empty list, will contain first half
+             \param rhs empty list, will contain second half
+             */
+            void divide(ListOf &lhs, ListOf &rhs) noexcept
+            {
+                Y_Core_List_CheckEmpty(lhs);
+                Y_Core_List_CheckEmpty(rhs);
+                switch(size)
+                {
+                    case 0: return;
+                    case 1: swapForList(lhs); return;
+                    default:
+                        break;
+                }
+                // select first half
+                NODE *       node = head;
+                const size_t half = size>>1; assert(half>0);
+                for(size_t i=half-1;i>0;--i)
+                {
+                    node=node->next;
+                }
+                // split node <-> peer
+                NODE * const peer = node->next;
+                peer->prev = 0;
+                node->next = 0;
+
+                // assign lhs
+                Coerce(lhs.head) = head;
+                Coerce(lhs.tail) = node;
+                Coerce(lhs.size) = half;
+
+                // assign rhs
+                Coerce(rhs.head) = peer;
+                Coerce(rhs.tail) = tail;
+                Coerce(rhs.size) = size-half;
+
+                // finalize this
+                hardReset();
+            }
+
             //__________________________________________________________________
             //
             //
@@ -195,6 +288,15 @@ namespace Yttrium
             NODE * const tail; //!< tail node
 
 
+        protected:
+
+            //! reset all data
+            inline void hardReset() noexcept
+            {
+                Coerce(head) = 0;
+                Coerce(tail) = 0;
+                Coerce(size) = 0;
+            }
 
         private:
             Y_Disable_Copy_And_Assign(ListOf); //!< discarded

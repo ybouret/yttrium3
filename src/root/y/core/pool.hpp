@@ -74,6 +74,11 @@ namespace Yttrium
                 return node;
             }
 
+            //! exchange contents \param rhs another pool
+            inline void swapForPool(PoolOf &rhs) noexcept
+            {
+                this->swapForLinked(rhs);
+            }
 
         private:
             Y_Disable_Copy_And_Assign(PoolOf); //!< discarded

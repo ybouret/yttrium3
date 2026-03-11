@@ -48,6 +48,18 @@ Y_UTEST(core_list)
         {
             if(ran.choice()) list.pushHead( &wksp[i] ); else list.pushTail( &wksp[i] );
             std::cerr << list << std::endl;
+            {
+                Core::ListOf<Node> lhs;
+                {
+                    Core::ListOf<Node> rhs;
+                    list.divide(lhs,rhs);
+                    Y_ASSERT(0==list.size);
+                    //lhs.mergeTail(rhs);
+                    lhs.mergeHead(rhs);
+                    //if(ran.choice()) lhs.mergeTail(rhs); else lhs.mergeHead(rhs);
+                }
+                list.swapForList(lhs);
+            }
         }
 
         {
@@ -57,6 +69,8 @@ Y_UTEST(core_list)
                 Y_ASSERT(node == list.fetch(indx) );
             }
         }
+
+
 
 
         while(list.size)

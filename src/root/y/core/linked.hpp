@@ -5,6 +5,7 @@
 
 
 #include "y/config/setup.hpp"
+#include "y/swap.hpp"
 #include <cassert>
 #include <iostream>
 
@@ -74,7 +75,17 @@ namespace Yttrium
                 return false;
             }
 
+        protected:
 
+            //! exchange variables \param rhs another lisy
+            inline void swapForLinked(Linked &rhs) noexcept
+            {
+                CoerceSwap(size,rhs.size);
+                CoerceSwap(head,rhs.head);
+            }
+
+
+        public:
             //__________________________________________________________________
             //
             //
