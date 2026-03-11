@@ -188,7 +188,9 @@ namespace Yttrium
 #define Y_UTEST_EXEC() \
 /**/      return driver(argc,argv);\
 /**/    }\
-/**/    catch(...) { std::cerr << "unhandled exception!" << std::endl; return 2; }\
+/**/    catch(const Yttrium::Exception &e) { e.display(std::cerr); return 1; }\
+/**/    catch(const std::exception &e) { std::cerr << "** " << e.what() << std::endl; return 2; }\
+/**/    catch(...) { std::cerr << "unhandled exception!" << std::endl; return 3; }\
 /**/  }
 
     //! declare test

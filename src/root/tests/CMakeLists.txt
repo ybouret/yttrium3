@@ -2,7 +2,8 @@ Y_CreateTest(root
 config
 libc
 core
-system)
+system
+memory/small)
 
 Y_LinkLibraries(test-root)
 
@@ -21,6 +22,8 @@ Y_UTEST(libc:strfmt)
 Y_UTEST(system:error)
 Y_UTEST(system:exception)
 Y_UTEST(system:pid)
+
+Y_UTEST(memory:small:chunk)
 
 
 

@@ -7,6 +7,16 @@
 
 namespace Yttrium
 {
+    //__________________________________________________________________________
+    //
+    //! inline clamping between two values
+    /**
+     \param lower lower bound
+     \param value value to test
+     \param upper upper bound
+     \return clamped value
+     */
+    //__________________________________________________________________________
     template <typename T> inline
     T Clamp(const T lower, const T value, const T upper)
     {

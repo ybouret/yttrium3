@@ -18,6 +18,9 @@ Y_UTEST_DECL(8)
     Y_UTEST(system_error);	
     Y_UTEST(system_exception);
     Y_UTEST(system_pid);
+
+    Y_UTEST(memory_small_chunk);
+
 }
 Y_UTEST_EXEC()
 
