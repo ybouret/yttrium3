@@ -7,7 +7,6 @@ Y_UTEST(memory_small_arena)
 {
 
     Y_PRINTV(Memory::Small::Arena::HeaderBytes);
-    Y_PRINTV(Memory::Small::Arena::HeaderShift);
     
 
 }

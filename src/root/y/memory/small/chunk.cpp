@@ -26,8 +26,7 @@ namespace Yttrium
             last( data + blockSize * numBlocks ),
             firstAvailable(0),
             stillAvailable(numBlocks),
-            providedBlocks(numBlocks),
-            alignmentBytes()
+            providedBlocks(numBlocks) //,             alignmentBytes()
             {
                 assert(blockSize>0);
                 uint8_t * p = data;

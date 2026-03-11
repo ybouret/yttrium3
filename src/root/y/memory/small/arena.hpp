@@ -19,7 +19,7 @@ namespace Yttrium
             {
             public:
                 static const size_t HeaderBytes = sizeof(Chunk);
-                static const size_t HeaderShift = IntegerLog2<HeaderBytes>::Value;
+                //static const size_t HeaderShift = IntegerLog2<HeaderBytes>::Value;
 
                 Arena(const size_t bs);
                 ~Arena() noexcept;
