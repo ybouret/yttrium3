@@ -10,6 +10,7 @@ y/libc
 y/core
 y/random
 y/system
+y/concurrent
 y/calculus
 y/type
 y/memory
