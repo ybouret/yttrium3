@@ -12,27 +12,36 @@ namespace Yttrium
 {
     namespace Core
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Base class for linked structures
+        //
+        //
+        //______________________________________________________________________
         template <typename NODE>
         class Linked
         {
         public:
-            inline explicit Linked() noexcept : size(0), head(0)
-            {
-            }
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
 
+            //! setup
+            inline explicit Linked() noexcept : size(0), head(0) {}
+
+            //! cleanup
             inline virtual ~Linked() noexcept
             {
                 assert(0==head);
                 assert(0==size);
             }
 
-            inline bool owns(const NODE * const node) const noexcept
-            {
-                for(const NODE * mine=head;mine;mine=mine->next)
-                    if(node==mine) return true;
-                return false;
-            }
-
+            //! display
             inline friend std::ostream & operator<<(std::ostream &os, const Linked &self)
             {
                 os << '[';
@@ -46,12 +55,38 @@ namespace Yttrium
                 return os;
             }
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
 
-            const size_t size;
-            NODE * const head;
+            //! check ownership of a node
+            /**
+             \param node node to test
+             \return true iff node is linked to this
+             */
+            inline bool owns(const NODE * const node) const noexcept
+            {
+                for(const NODE * mine=head;mine;mine=mine->next)
+                    if(node==mine) return true;
+                return false;
+            }
+
+
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+
+            const size_t size; //!< number of owned nodes
+            NODE * const head; //!< head node
 
         private:
-            Y_Disable_Copy_And_Assign(Linked);
+            Y_Disable_Copy_And_Assign(Linked); //!< discarded
         };
     }
 }

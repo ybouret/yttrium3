@@ -29,15 +29,15 @@ Y_UTEST(core_pool)
     Memory::Workspace<Node,10> wksp;
     Core::PoolOf<Node>         pool;
 
-    const size_t N = wksp.Size;
+    const size_t N = wksp.size;
     for(size_t i=1;i<=N;++i)
     {
         wksp[i].indx = i;
         Y_ASSERT(0==wksp[i].next);
     }
 
-    Random::Shuffle(ran, &wksp[1], wksp.Size);
-    Core::Display(std::cerr, &wksp[1], wksp.Size) << std::endl;
+    Random::Shuffle(ran, &wksp[1], wksp.size);
+    Core::Display(std::cerr, &wksp[1], wksp.size) << std::endl;
 
     std::cerr << pool << std::endl;
     for(size_t i=1;i<=N;++i)

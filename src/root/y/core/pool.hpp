@@ -23,15 +23,35 @@ namespace Yttrium
         class PoolOf : public Linked<NODE>
         {
         public:
-            typedef Linked<NODE> LinkedType;
-            typedef NODE         NodeType;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef Linked<NODE> LinkedType; //!< alias
+            typedef NODE         NodeType;   //!< alias
             using LinkedType::size;
             using LinkedType::head;
             using LinkedType::owns;
 
-            inline explicit PoolOf() noexcept : LinkedType() {}
-            inline virtual ~PoolOf() noexcept {}
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            inline explicit PoolOf() noexcept : LinkedType() {} //!< setup
+            inline virtual ~PoolOf() noexcept                {} //!< cleanup
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! query a node \return head node removed from this
             inline NODE * query() noexcept
             {
                 assert(size>0); assert(0!=head);
@@ -42,7 +62,8 @@ namespace Yttrium
                 return node;
             }
 
-            inline void store(NODE * const node) noexcept
+            //! store a node \param node a valid node \return stored node
+            inline NODE * store(NODE * const node) noexcept
             {
                 assert(0!=node);
                 assert(0==node->next);
@@ -50,12 +71,12 @@ namespace Yttrium
                 node->next = head;
                 Coerce(head) = node;
                 ++Coerce(size);
+                return node;
             }
 
 
-
         private:
-            Y_Disable_Copy_And_Assign(PoolOf);
+            Y_Disable_Copy_And_Assign(PoolOf); //!< discarded
         };
 
     }

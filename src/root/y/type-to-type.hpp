@@ -7,13 +7,13 @@
 
 namespace Yttrium
 {
-
+    //! type indicator
     template <typename T>
     struct TypeToType
     {
-        typedef T Type;
+        typedef T Type; //!< original value
     };
-    
+
 }
 
 #endif // !Y_TypeToType_Included

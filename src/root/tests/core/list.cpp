@@ -28,20 +28,20 @@ Y_UTEST(core_list)
 {
 
     Core::Rand                 ran( (long) time(NULL) );
-    Memory::Workspace<Node,20> wksp;
+    Memory::Workspace<Node,30> wksp;
     Core::ListOf<Node>         list;
 
-    const size_t N = wksp.Size;
+    const size_t N = wksp.size;
     for(size_t i=1;i<=N;++i)
     {
         wksp[i].indx = i;
         Y_ASSERT(0==wksp[i].next);
     }
 
-    for(size_t iter=0;iter<10;++iter)
+    for(size_t iter=0;iter<100;++iter)
     {
-        Random::Shuffle(ran, &wksp[1], wksp.Size);
-        Core::Display(std::cerr, &wksp[1], wksp.Size) << std::endl;
+        Random::Shuffle(ran, &wksp[1], wksp.size);
+        Core::Display(std::cerr, &wksp[1], wksp.size) << std::endl;
 
         std::cerr << list << std::endl;
         for(size_t i=1;i<=N;++i)
@@ -50,9 +50,23 @@ Y_UTEST(core_list)
             std::cerr << list << std::endl;
         }
 
+        {
+            size_t indx = 1;
+            for(Node *node = list.head; node; node=node->next, ++indx)
+            {
+                Y_ASSERT(node == list.fetch(indx) );
+            }
+        }
+
+
         while(list.size)
         {
-            if(ran.choice()) list.popTail(); else list.popHead();
+            switch( ran.in<int>(0,2) )
+            {
+                case 0: list.popTail(); break;
+                case 1: list.popHead(); break;
+                case 2: list.pop( list.fetch( ran.in<size_t>(1,list.size))); break;
+            }
             std::cerr << list << std::endl;
         }
     }

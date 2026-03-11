@@ -63,7 +63,8 @@ namespace Yttrium
         //! Fill a range with random data
         /**
          \param ran  posseses a in<uint8_t>(umin,umax) method
-         \param word data reference
+         \param a    first iterator
+         \param n    number of elements
          \param umin minimum byte value
          \param umax maximum byte value
          */

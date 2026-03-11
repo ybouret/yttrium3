@@ -9,10 +9,10 @@
 namespace Yttrium
 {
 
-    template <int N>
-    struct IntToType
+    //! convert an integer to a type
+    template <int N> struct IntToType
     {
-        static const int Value = N;
+        static const int Value = N; //!< original value
     };
 
 }

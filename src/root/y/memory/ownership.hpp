@@ -11,11 +11,17 @@ namespace Yttrium
 {
     namespace Memory
     {
+        //______________________________________________________________________
+        //
+        //
+        //! Helper for memory location
+        //
+        //______________________________________________________________________
         enum Ownership
         {
-            OwnedByPrev,
-            OwnedBySelf,
-            OwnedByNext
+            OwnedByPrev, //!< memory is previous container
+            OwnedBySelf, //!< memory is in this container
+            OwnedByNext  //!< memory is in next container
         };
         
     }
