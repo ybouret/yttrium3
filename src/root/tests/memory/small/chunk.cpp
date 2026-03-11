@@ -1,10 +1,17 @@
+#include "y/random/fill.hpp"
 #include "y/memory/small/chunk.hpp"
 #include "y/utest/run.hpp"
+
+#include "y/core/rand.hpp"
+#include "y/libc/zeroed.h"
+#include <ctime>
 
 using namespace Yttrium;
 
 Y_UTEST(memory_small_chunk)
 {
+    Core::Rand ran( (long) time(NULL) );
+
     Y_SIZEOF(Memory::Small::Chunk);
 
     char data[2048];
@@ -18,12 +25,13 @@ Y_UTEST(memory_small_chunk)
             Memory::Small::Chunk chunk(blockSize,numBlocks,data);
             while(chunk.stillAvailable)
             {
-                chunk.acquire(blockSize);
+                void * const p = chunk.acquire(blockSize);
+                Y_ASSERT( Yttrium_Zeroed(p,blockSize) );
+                Random::FillWith(ran,p,blockSize);
             }
         }
     }
 
-    //Y_ASSERT(NULL==data);
 }
 Y_UDONE()
 

@@ -9,24 +9,26 @@ namespace Yttrium
 {
     namespace Random
     {
+
         //______________________________________________________________________
         //
         //! Fisher-Yates shuffle of a range
         /**
          \param ran posseses a leq<size_t>(size_t) method
-         \param a   first iterator
+         \param a   head iterator
          \param n   number of items to shuffle
          */
         //______________________________________________________________________
-        template <typename RAND, typename ITER> inline
+        template <typename RAND, typename ITER> static inline
         void Shuffle(RAND &ran, ITER a, const size_t n) noexcept
         {
             for(size_t i=n-1;i>0;--i)
             {
                 const size_t j = ran.template leq<size_t>(i);
-                BSwap(a[i],a[j]);
+                BSwap(*(a+i),*(a+j));
             }
         }
+
 
     }
 }

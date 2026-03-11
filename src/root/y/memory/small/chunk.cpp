@@ -40,7 +40,7 @@ namespace Yttrium
                 assert(firstAvailable<providedBlocks);
 
                 uint8_t * const p = data + (firstAvailable * blockSize);
-                firstAvailable = *p; assert(firstAvailable<providedBlocks);
+                firstAvailable = *p; assert(firstAvailable<=providedBlocks);
                 --stillAvailable;
                 memset(p,0,blockSize);
                 return p;
