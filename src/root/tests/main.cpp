@@ -19,6 +19,10 @@ Y_UTEST_DECL(8)
     Y_UTEST(system_exception);
     Y_UTEST(system_pid);
 
+    Y_UTEST(calculus_integer_log2);
+
+    Y_UTEST(type_ints);
+
     Y_UTEST(memory_small_chunk);
 
 }

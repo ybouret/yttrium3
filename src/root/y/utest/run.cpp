@@ -6,7 +6,7 @@ namespace Yttrium {
 
     namespace UTest
     {
-        size_t Display::Width = 32;
+        size_t Display::Width = 40;
 
         std::ostream & Display:: Print(std::ostream &os,
                                        const char * const pfx,

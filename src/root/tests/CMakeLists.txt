@@ -3,6 +3,8 @@ config
 libc
 core
 system
+calculus
+type
 memory/small)
 
 Y_LinkLibraries(test-root)
@@ -22,6 +24,10 @@ Y_UTEST(libc:strfmt)
 Y_UTEST(system:error)
 Y_UTEST(system:exception)
 Y_UTEST(system:pid)
+
+Y_UTEST(calculus_integer_log2)
+
+Y_UTEST(type_ints)
 
 Y_UTEST(memory:small:chunk)
 

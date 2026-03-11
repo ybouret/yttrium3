@@ -10,6 +10,8 @@ y/libc
 y/core
 y/random
 y/system
+y/calculus
+y/type
 y/memory
 y/memory/small
 y/utest)

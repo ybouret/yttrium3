@@ -24,10 +24,13 @@ namespace Yttrium
 
                 ~Chunk() noexcept;
 
+                void * acquire(const size_t blockSize) noexcept;
+
+
                 uint8_t * const data;
+                const uint8_t * const last;
                 uint8_t         firstAvailable;
                 uint8_t         stillAvailable;
-                uint8_t         employedBlocks;
                 const uint8_t   providedBlocks;
 
             private:
