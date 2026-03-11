@@ -34,6 +34,8 @@ Y_UTEST(calculus_align)
 Y_UTEST(type_ints)
 
 Y_UTEST(memory:small:chunk)
+Y_UTEST(memory:small:arena)
+
 
 
 

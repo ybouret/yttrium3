@@ -76,13 +76,14 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                uint8_t * const       data;     //!< base memoery
-                const uint8_t * const last;     //!< first invalid memory
-                uint8_t         firstAvailable; //!< first available block address
-                uint8_t         stillAvailable; //!< available blocks
-                const uint8_t   providedBlocks; //!< initially provided blocks
+                uint8_t * const       data;           //!< base memoery
+                const uint8_t * const last;           //!< first invalid memory
+                uint8_t               firstAvailable; //!< first available block address
+                uint8_t               stillAvailable; //!< available blocks
+                const uint8_t         providedBlocks; //!< initially provided blocks
 
             private:
+                const uint8_t         alignmentBytes[2*sizeof(void*)-3]; //! force alignment
                 Y_Disable_Copy_And_Assign(Chunk); //!< discarded
             };
         }

@@ -68,7 +68,7 @@ namespace Yttrium
                 assert(0!=node);
                 assert(0==node->next);
                 assert(!owns(node));
-                node->next = head;
+                node->next   = head;
                 Coerce(head) = node;
                 ++Coerce(size);
                 return node;
