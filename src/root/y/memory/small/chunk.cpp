@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cstring>
 
+
 namespace Yttrium
 {
     namespace Memory
@@ -13,6 +14,7 @@ namespace Yttrium
 
             Chunk:: ~Chunk() noexcept
             {
+                //if(stillAvailable<providedBlocks) memset(data,0,last-data);
             }
 
 
@@ -46,6 +48,35 @@ namespace Yttrium
                 return p;
             }
 
+            Ownership Chunk:: whose(const void * const p) const noexcept
+            {
+                assert(0!=p);
+                if(p<data)
+                    return OwnedByPrev;
+                else
+                {
+                    if(p>=last)
+                        return OwnedByNext;
+                    else
+                        return OwnedBySelf;
+                }
+            }
+
+            void  Chunk:: release(void * const p, const size_t blockSize) noexcept
+            {
+                // sanity check
+                assert(0!=p);
+                assert(OwnedBySelf==whose(p));
+                assert(blockSize>0);
+
+                // find block to release
+                uint8_t * const toRelease = static_cast<uint8_t *>(p); assert( 0 == ( (toRelease-data) % blockSize) );
+                const ptrdiff_t available = (toRelease-data)/blockSize; assert(available >= 0); assert(available < (ptrdiff_t)providedBlocks);
+
+                *toRelease     = firstAvailable;     // mark it
+                firstAvailable = (uint8_t)available; // update firstAvailable
+                ++stillAvailable;                    // update status
+            }
         }
 
     }

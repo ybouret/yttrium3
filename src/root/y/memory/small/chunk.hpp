@@ -5,6 +5,7 @@
 
 #include "y/config/compiler.h"
 #include "y/config/setup.hpp"
+#include "y/memory/ownership.hpp"
 
 namespace Yttrium
 {
@@ -24,7 +25,9 @@ namespace Yttrium
 
                 ~Chunk() noexcept;
 
-                void * acquire(const size_t blockSize) noexcept;
+                void *    acquire(const size_t blockSize) noexcept;
+                void      release(void * const p, const size_t blockSize) noexcept;
+                Ownership whose(const void * const p) const noexcept;
 
 
                 uint8_t * const data;

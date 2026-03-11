@@ -22,10 +22,17 @@ namespace Yttrium
         template <typename RAND, typename ITER> static inline
         void Shuffle(RAND &ran, ITER a, const size_t n) noexcept
         {
-            for(size_t i=n-1;i>0;--i)
+            switch(n)
             {
-                const size_t j = ran.template leq<size_t>(i);
-                BSwap(*(a+i),*(a+j));
+                case 0:
+                case 1:
+                    return;
+                default:
+                    for(size_t i=n-1;i>0;--i)
+                    {
+                        const size_t j = ran.template leq<size_t>(i);
+                        BSwap(*(a+i),*(a+j));
+                    }
             }
         }
 
