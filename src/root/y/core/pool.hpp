@@ -11,7 +11,14 @@ namespace Yttrium
 {
     namespace Core
     {
-
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! simple pool of nodes
+        //
+        //
+        //______________________________________________________________________
         template <typename NODE>
         class PoolOf : public Linked<NODE>
         {

@@ -64,6 +64,10 @@ namespace Yttrium
                 return lower + leq<T>(upper-lower);
             }
 
+            inline bool choice() noexcept
+            {
+                return (*this)() <= 0.5f;
+            }
 
 
 

@@ -38,13 +38,19 @@ Y_UTEST(core_pool)
 
     Random::Shuffle(ran, &wksp[1], wksp.Size);
     Core::Display(std::cerr, &wksp[1], wksp.Size) << std::endl;
+
+    std::cerr << pool << std::endl;
     for(size_t i=1;i<=N;++i)
     {
         pool.store( &wksp[i] );
+        std::cerr << pool << std::endl;
     }
-    std::cerr << pool << std::endl;
-    while(pool.size) pool.query();
-    
+    while(pool.size)
+    {
+        pool.query();
+        std::cerr << pool << std::endl;
+    }
+
 
 }
 Y_UDONE()
