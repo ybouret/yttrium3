@@ -28,6 +28,7 @@ Y_UTEST(system:pid)
 
 Y_UTEST(calculus_integer_log2)
 Y_UTEST(calculus_base2)
+Y_UTEST(calculus_align)
 
 Y_UTEST(type_ints)
 

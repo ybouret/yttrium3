@@ -6,6 +6,8 @@
 #include "y/core/rand.hpp"
 #include "y/libc/zeroed.h"
 #include <ctime>
+#include <cstring>
+
 
 using namespace Yttrium;
 
