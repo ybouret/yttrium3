@@ -4,7 +4,7 @@
 #define Y_Memory_Solitary_Included 1
 
 #include "y/calculus/alignment.hpp"
-#include "y/config/setup.hpp"
+#include "y/type/args.hpp"
 #include "y/libc/bzero.h"
 
 namespace Yttrium
