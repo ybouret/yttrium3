@@ -5,7 +5,7 @@
 #define Y_System_Error_Included 1
 
 
-#include "y/config/platform.h"
+#include "y/config/setup.hpp"
 #include "y/check/printf.h"
 
 namespace Yttrium

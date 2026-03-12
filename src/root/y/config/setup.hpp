@@ -4,6 +4,9 @@
 #ifndef Y_Config_Setup_Included
 #define Y_Config_Setup_Included 1
 
+#include "y/config/setup.h"
+
+
 #define Y_Disable_Copy(CLASS)   private: CLASS(const CLASS&)              //!< disable copy constructor
 #define Y_Disable_Assign(CLASS) private: CLASS & operator=(const CLASS &) //!< disable assign operator
 

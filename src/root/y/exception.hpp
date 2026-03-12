@@ -5,7 +5,6 @@
 
 #include "y/config/setup.hpp"
 #include "y/check/printf.h"
-#include "y/config/compiler.h"
 #include <exception>
 #include <iosfwd>
 

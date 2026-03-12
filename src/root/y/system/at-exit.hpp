@@ -5,7 +5,6 @@
 
 
 #include "y/config/setup.hpp"
-#include "y/config/compiler.h"
 
 //! Tunable AtExit Capacity
 #if !defined(Y_System_AtExit_Capacity)
