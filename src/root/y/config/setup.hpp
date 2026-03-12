@@ -37,5 +37,8 @@ namespace Yttrium
 
 }
 
+#define Y_Return_Named_Case(NAME) case NAME: return #NAME
+
+
 #endif // !Y_Config_Setup_Included
 

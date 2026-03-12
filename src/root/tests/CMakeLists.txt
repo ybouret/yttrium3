@@ -16,6 +16,7 @@ Y_UTEST(exception)
 Y_UTEST(config:platform)
 
 Y_UTEST(core:display)
+Y_UTEST(core:hsort)
 Y_UTEST(core:rand)
 Y_UTEST(core:pool)
 Y_UTEST(core:list)
