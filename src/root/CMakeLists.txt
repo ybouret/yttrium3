@@ -11,6 +11,7 @@ y/core
 y/random
 y/system
 y/concurrent
+y/concurrent/singleton
 y/calculus
 y/type
 y/memory
