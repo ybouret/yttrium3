@@ -46,7 +46,7 @@ namespace Yttrium
 
             //! sort according to comparison
             /**
-             calling a C function, compare must not throw
+             \param idx array [0:num-1]
              \param arr array [0:num-1]
              \param num number of items
              \param compare valid comparator
@@ -61,8 +61,9 @@ namespace Yttrium
                 Yttrium_Sort(idx,num,sizeof(size_t),fcn,&arg,rra());
             }
 
-            //! sort by default increasing order
+            //! indexing by default increasing order
             /**
+             \param idx array [0:num-1]
              \param arr array [0:num-1]
              \param num number of items
              */
@@ -72,8 +73,9 @@ namespace Yttrium
                 Make(idx,arr,num,Sign::Increasing<T>);
             }
 
-            //! sort by default decreasing order
+            //! indexing by default decreasing order
             /**
+             \param idx array [0:num-1]
              \param arr array [0:num-1]
              \param num number of items
              */

@@ -6,6 +6,7 @@
 
 #include "y/system/at-exit.hpp"
 #include "y/type/ints.hpp"
+#include "y/ability/identifiable.hpp"
 
 namespace Yttrium
 {
@@ -21,7 +22,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Singulet
+        class Singulet : public Identifiable
         {
         public:
             //__________________________________________________________________

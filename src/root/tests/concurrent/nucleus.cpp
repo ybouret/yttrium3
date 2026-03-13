@@ -1,4 +1,5 @@
 #include "y/concurrent/nucleus.hpp"
+#include "y/ability/lockable.hpp"
 #include "y/utest/run.hpp"
 
 using namespace Yttrium;
@@ -6,8 +7,11 @@ using namespace Yttrium;
 Y_UTEST(concurrent_nucleus)
 {
     Concurrent::Singulet::Verbose = true;
+    {
+        Y_Giant_Lock();
+    }
+    
     Concurrent::Nucleus &nucleus = Concurrent::Nucleus::Instance();
-
     std::cerr << nucleus.callSign() << " @" << nucleus.lifeTime() << std::endl;
 
 }
