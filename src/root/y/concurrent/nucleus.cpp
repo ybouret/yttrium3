@@ -1,7 +1,7 @@
 
 
 #include "y/config/platform.h"
-#include "y/memory/extern-c.hpp"
+#include "y/memory/zombie.hpp"
 #include "y/system/exception.hpp"
 #include "y/ability/lockable.hpp"
 
@@ -31,7 +31,7 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(Attribute);
-                Memory::ExternC<pthread_mutexattr_t> attr;
+                Memory::Zombie<pthread_mutexattr_t> attr;
 
                 inline void init() {
                     const int err = pthread_mutexattr_init( attr() );
@@ -60,7 +60,7 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(SystemMutex);
-            Memory::ExternC<pthread_mutex_t> mutex;
+            Memory::Zombie<pthread_mutex_t> mutex;
 
             void destroy() noexcept
             {

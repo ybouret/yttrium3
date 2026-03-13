@@ -1,4 +1,4 @@
-#include "y/memory/workspace.hpp"
+#include "y/memory/zombie.hpp"
 #include "y/core/pool.hpp"
 #include "y/core/display.hpp"
 #include "y/utest/run.hpp"
@@ -25,9 +25,9 @@ namespace
 Y_UTEST(core_pool)
 {
 
-    Core::Rand                 ran( (long) time(NULL) );
-    Memory::Workspace<Node,10> wksp;
-    Core::PoolOf<Node>         pool;
+    Core::Rand              ran( (long) time(NULL) );
+    Memory::Zombie<Node,10> wksp;
+    Core::PoolOf<Node>      pool;
 
     const size_t N = wksp.size;
     for(size_t i=1;i<=N;++i)

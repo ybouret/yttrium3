@@ -5,7 +5,7 @@
 
 #include "y/type/sign.hpp"
 #include "y/libc/sort.h"
-#include "y/memory/extern-c.hpp"
+#include "y/memory/zombie.hpp"
 
 namespace Yttrium
 {
@@ -33,7 +33,7 @@ namespace Yttrium
             void Make(T arr[], const size_t num, COMPARE &compare) noexcept
             {
                 static YttriumCompare fcn = CompareWrapper<T,COMPARE>;
-                Memory::ExternC<T>    rra;
+                Memory::Zombie<T>     rra;
                 Yttrium_Sort(arr,num,sizeof(T),fcn,(void*)&compare,rra());
             }
 

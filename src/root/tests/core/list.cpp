@@ -1,5 +1,5 @@
 
-#include "y/memory/workspace.hpp"
+#include "y/memory/zombie.hpp"
 #include "y/core/list.hpp"
 #include "y/core/display.hpp"
 #include "y/utest/run.hpp"
@@ -28,7 +28,7 @@ Y_UTEST(core_list)
 {
 
     Core::Rand                 ran( (long) time(NULL) );
-    Memory::Workspace<Node,30> wksp;
+    Memory::Zombie<Node,30>    wksp;
     Core::ListOf<Node>         list;
 
     const size_t N = wksp.size;
