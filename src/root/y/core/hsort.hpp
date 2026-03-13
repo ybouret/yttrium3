@@ -11,44 +11,46 @@ namespace Yttrium
 {
     namespace Core
     {
-        
-        template <typename T, typename COMPARE> inline
-        int HSortCompare(const void * const lhs, const void * const rhs, void * const args) noexcept
+        struct HSort
         {
-            assert(0!=lhs);
-            assert(0!=rhs);
-            assert(0!=args);
-            COMPARE &compare = *(COMPARE *)args;
-            const T &L       = *static_cast<const T *>(lhs);
-            const T &R       = *static_cast<const T *>(rhs);
-            return (int) compare(L,R);
-        }
+            template <typename T, typename COMPARE> static inline
+            int CompareWrapper(const void * const lhs, const void * const rhs, void * const args) noexcept
+            {
+                assert(0!=lhs);
+                assert(0!=rhs);
+                assert(0!=args);
+                COMPARE &compare = *(COMPARE *)args;
+                const T &L       = *static_cast<const T *>(lhs);
+                const T &R       = *static_cast<const T *>(rhs);
+                return (int) compare(L,R);
+            }
 
-        //!
-        /**
-         calling a C function,compare must not throw
-         */
-        template <typename T, typename COMPARE> inline
-        void HSort(T arr[], const size_t num, COMPARE &compare) noexcept
-        {
-            static YttriumCompare fcn = HSortCompare<T,COMPARE>;
-            Memory::ExternC<T>    rra;
-            Yttrium_Sort(arr,num,sizeof(T),fcn,(void*)&compare,rra());
-        }
+            //!
+            /**
+             calling a C function,compare must not throw
+             */
+            template <typename T, typename COMPARE> static inline
+            void Make(T arr[], const size_t num, COMPARE &compare) noexcept
+            {
+                static YttriumCompare fcn = CompareWrapper<T,COMPARE>;
+                Memory::ExternC<T>    rra;
+                Yttrium_Sort(arr,num,sizeof(T),fcn,(void*)&compare,rra());
+            }
 
-        template <typename T> inline
-        void HSortIncreasing(T arr[], const size_t num) noexcept
-        {
-            HSort(arr,num,Sign::Increasing<T>);
-        }
+            template <typename T> static inline
+            void Increasing(T arr[], const size_t num) noexcept
+            {
+                Make(arr,num,Sign::Increasing<T>);
+            }
 
 
-        template <typename T> inline
-        void HSortDecreasing(T arr[], const size_t num) noexcept
-        {
-            HSort(arr,num,Sign::Decreasing<T>);
-        }
+            template <typename T> static inline
+            void Decreasing(T arr[], const size_t num) noexcept
+            {
+                Make(arr,num,Sign::Decreasing<T>);
+            }
 
+        };
 
 
     }

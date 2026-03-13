@@ -329,7 +329,7 @@ function(Y_CreateTest THE_LIB)
         # sub-dir sources
         list(SORT ARGN)
         foreach(SUBDIR IN LISTS ARGN)
-                message( STATUS "    [${SUBDIR}]")
+                message( STATUS "   |_[${SUBDIR}]")
                 file( GLOB src "${SUBDIR}/*.cpp")
                 list( SORT src )
                 list( APPEND SRC ${src})

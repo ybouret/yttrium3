@@ -18,7 +18,9 @@ Y_UTEST(core_hsort)
 
     Random::Shuffle(ran,arr,num);
     Core::Display(std::cerr,arr,num) << std::endl;
-    Core::HSort(arr,num,Sign::Increasing<int>);
+    Core::HSort::Make(arr,num,Sign::Increasing<int>);
+    Core::Display(std::cerr,arr,num) << std::endl;
+    Core::HSort::Decreasing(arr,num);
     Core::Display(std::cerr,arr,num) << std::endl;
 
 }
