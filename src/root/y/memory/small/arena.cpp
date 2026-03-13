@@ -1,8 +1,6 @@
 
 #include "y/memory/small/arena.hpp"
 #include "y/memory/metrics.hpp"
-#include "y/memory/small/chunk.hpp"
-//#include "y/check/static.hpp"
 
 namespace Yttrium
 {
@@ -11,7 +9,6 @@ namespace Yttrium
 
         namespace Small
         {
-            const size_t Arena:: MaxBlockSize = (Metrics::MaxPageBytes-sizeof(Chunk))/MinNumBlocks;
 
             Arena:: ~Arena() noexcept
             {
@@ -32,14 +29,20 @@ namespace Yttrium
                 return (length-dataAlign)/blockSize;
             }
 
+            size_t Arena:: pageBytesFor(const size_t blocks) noexcept
+            {
+                const size_t required = dataAlign + blocks * blockSize;
+                return NextPowerOfTwo(required);
+            }
+
             Arena:: Arena(const size_t bs) :
             blockSize(bs),
             dataAlign( DataAlign(blockSize) )
             {
                 assert(blockSize>0);
-                assert(blockSize<=MaxBlockSize);
                 
-                
+
+
             }
 
         }

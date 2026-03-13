@@ -27,6 +27,7 @@ namespace Yttrium
             firstAvailable(0),
             stillAvailable(numBlocks),
             providedBlocks(numBlocks),
+            //alignmentBytes(),
             next(0),
             prev(0)
             {

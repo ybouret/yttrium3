@@ -49,6 +49,7 @@ Y_UTEST(memory_small_chunk)
 
     Y_SIZEOF(Memory::Small::Chunk);
 
+
     void * addr[256];
     size_t nblk = 0;
     char   data[4096];

@@ -3,7 +3,6 @@
 #ifndef Y_Memory_Small_Chunk_Included
 #define Y_Memory_Small_Chunk_Included 1
 
-#include "y/config/compiler.h"
 #include "y/config/setup.hpp"
 #include "y/memory/ownership.hpp"
 
@@ -25,6 +24,7 @@ namespace Yttrium
             class Chunk
             {
             public:
+
                 //______________________________________________________________
                 //
                 //
@@ -85,7 +85,6 @@ namespace Yttrium
                 Chunk *               prev;
                 
             private:
-                //const uint8_t         alignmentBytes[2*sizeof(void*)-3]; //! force alignment
                 Y_Disable_Copy_And_Assign(Chunk); //!< discarded
             };
         }
