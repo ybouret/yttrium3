@@ -13,9 +13,10 @@ Y_UTEST(memory_small_arena)
 
     Y_PRINTV(Memory::Small::Arena::MinNumBlocks);
     Y_PRINTV(Memory::Small::Arena::MaxNumBlocks);
-    Y_PRINTV(Memory::Small::Arena::ChunkBytes);
-    Y_PRINTV(Memory::Small::Arena::ChunkExp2Bytes);
-    Y_PRINTV(Memory::Small::Arena::ChunkExp2Shift);
+    Y_PRINTV(Memory::Small::Arena::MaxBlockSizeLog2);
+    Y_PRINTV(Memory::Small::Arena::MaxBlockSize);
+
+
 
 
     for(size_t blockSize=1;blockSize<=10;++blockSize)
@@ -27,20 +28,7 @@ Y_UTEST(memory_small_arena)
     }
 
     
-    Y_PRINTV(MetaPrevPowerOfTwo<1>::Value);
-    Y_PRINTV(MetaPrevPowerOfTwo<2>::Value);
-    Y_PRINTV(MetaPrevPowerOfTwo<3>::Value);
-    Y_PRINTV(MetaPrevPowerOfTwo<4>::Value);
-    Y_PRINTV(MetaPrevPowerOfTwo<5>::Value);
-    std::cerr << std::endl;
-
-    Y_PRINTV(MetaNextPowerOfTwo<0>::Value);
-    Y_PRINTV(MetaNextPowerOfTwo<1>::Value);
-    Y_PRINTV(MetaNextPowerOfTwo<2>::Value);
-    Y_PRINTV(MetaNextPowerOfTwo<3>::Value);
-    Y_PRINTV(MetaNextPowerOfTwo<4>::Value);
-    Y_PRINTV(MetaNextPowerOfTwo<5>::Value);
-    Y_PRINTV(MetaNextPowerOfTwo<40>::Value);
+    
 
 }
 Y_UDONE()
