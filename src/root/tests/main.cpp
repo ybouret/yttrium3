@@ -30,6 +30,8 @@ Y_UTEST_DECL(8)
 
     Y_UTEST(type_ints);
 
+    Y_UTEST(concurrent_nucleus);
+
     Y_UTEST(memory_small_chunk);
     Y_UTEST(memory_small_arena);
 
