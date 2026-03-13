@@ -17,13 +17,14 @@ namespace Yttrium
     //! precompiled previous power-of-two
     template <size_t x> struct MetaPrevPowerOfTwo
     {
+        //! meta-computed value
         static const size_t Value = MetaIsPowerOfTwo<x>::Result ? x : MetaPrevPowerOfTwo<x-1>::Value;
     };
 
     //! WRONG termination for MetaPrevPowerOfTwo
     template <> struct MetaPrevPowerOfTwo<0>
     {
-        static const size_t Value = 0;
+        static const size_t Value = 0; //!< WRONG but necessary
     };
 
     //! precompiled next power-of two

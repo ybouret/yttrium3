@@ -37,6 +37,7 @@ namespace Yttrium
 
 }
 
+//! helper to return named case
 #define Y_Return_Named_Case(NAME) case NAME: return #NAME
 
 

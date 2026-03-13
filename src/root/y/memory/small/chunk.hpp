@@ -81,9 +81,9 @@ namespace Yttrium
                 uint8_t               firstAvailable; //!< first available block address
                 uint8_t               stillAvailable; //!< available blocks
                 const uint8_t         providedBlocks; //!< initially provided blocks
-                Chunk *               next;
-                Chunk *               prev;
-                
+                Chunk *               next;           //!< for list/pool
+                Chunk *               prev;           //!< for list
+
             private:
                 Y_Disable_Copy_And_Assign(Chunk); //!< discarded
             };
