@@ -32,9 +32,11 @@ namespace Yttrium
 
                 
 
-                const size_t blockSize; //!< common block size for all chunks
-                const size_t dataAlign; //!< offset to data chunk
-                
+                const size_t  blockSize; //!< common block size for all chunks
+                const size_t  dataAlign; //!< offset to data chunk
+                const size_t  numBlocks; //!< number of blocks
+                const size_t  pageBytes; //!< page used to hold chunk
+
             private:
                 Y_Disable_Copy_And_Assign(Arena);
             };
