@@ -1,6 +1,8 @@
 
 #include "y/memory/small/arena.hpp"
 #include "y/memory/small/chunk.hpp"
+#include "y/calculus/meta2.hpp"
+
 #include <iostream>
 
 namespace Yttrium
@@ -16,15 +18,7 @@ namespace Yttrium
 
             }
 
-            static inline
-            size_t DataAlign(const size_t blockSize) noexcept
-            {
-                assert(blockSize>0);
-                assert(blockSize<=Arena::MaxBlockSize);
-                size_t bytes = blockSize;
-                while(bytes<sizeof(Chunk)) bytes += blockSize;
-                return bytes;
-            }
+
 
             static inline
             size_t PageBytes(const size_t blockSize,
@@ -56,12 +50,30 @@ namespace Yttrium
                 return pageBytes;
             }
 
+#if 0
+            static inline
+            size_t DataAlign(const size_t blockSize) noexcept
+            {
+                assert(blockSize>0);
+                assert(blockSize<=Arena::MaxBlockSize);
+                size_t bytes = blockSize;
+                while(bytes<sizeof(Chunk)) bytes += blockSize;
+                return bytes;
+            }
+#else
+            static inline size_t DataAlign(const size_t) noexcept
+            {
+                return MetaNextPowerOfTwo< sizeof(Chunk) >::Value;
+            }
+#endif
 
             Arena:: Arena(const size_t bs) :
+            available(0),
             blockSize(bs),
             dataAlign( DataAlign(blockSize) ),
             numBlocks(0),
-            pageBytes( PageBytes(blockSize,dataAlign,Coerce(numBlocks)) )
+            pageBytes( PageBytes(blockSize,dataAlign,Coerce(numBlocks)) ),
+            newBlocks(numBlocks-1)
             {
 
 
@@ -75,6 +87,14 @@ namespace Yttrium
                 res       -= sizeof(Chunk);
                 return res;
             }
+
+
+            Chunk * Arena:: format(void * const page) noexcept
+            {
+                assert(page);
+                return new (page) Chunk(blockSize, (uint8_t)numBlocks, static_cast<char *>(page)+dataAlign);
+            }
+
 
         }
 

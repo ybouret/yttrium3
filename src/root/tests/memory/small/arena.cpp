@@ -11,15 +11,12 @@ Y_UTEST(memory_small_arena)
 {
 
 
-    Y_PRINTV(Memory::Small::Arena::MinNumBlocks);
-    Y_PRINTV(Memory::Small::Arena::MaxNumBlocks);
-    Y_PRINTV(Memory::Small::Arena::MaxBlockSizeLog2);
-    Y_PRINTV(Memory::Small::Arena::MaxBlockSize);
 
 
 
 
-    for(size_t blockSize=1;blockSize<=100;++blockSize)
+
+    for(size_t blockSize=1;blockSize<=256;++blockSize)
     {
         std::cerr << "-- blockSize = " << std::setw(4) << blockSize;
         Memory::Small::Arena arena(blockSize);
@@ -30,8 +27,13 @@ Y_UTEST(memory_small_arena)
         std::cerr << std::endl;
     }
 
-    
-    
+
+    Y_PRINTV(Memory::Small::Arena::MinNumBlocks);
+    Y_PRINTV(Memory::Small::Arena::MaxNumBlocks);
+    Y_PRINTV(Memory::Small::Arena::MaxBlockSizeLog2);
+    Y_PRINTV(Memory::Small::Arena::MaxBlockSize);
+    Y_SIZEOF(Memory::Small::Arena);
+
 
 }
 Y_UDONE()
