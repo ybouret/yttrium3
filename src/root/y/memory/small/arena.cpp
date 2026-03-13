@@ -70,8 +70,10 @@ namespace Yttrium
 
             size_t Arena:: lostBytes() const noexcept
             {
-                return pageBytes - numBlocks*blockSize - (dataAlign-sizeof(Chunk));
-
+                size_t res = pageBytes;
+                res       -= numBlocks * blockSize;
+                res       -= sizeof(Chunk);
+                return res;
             }
 
         }

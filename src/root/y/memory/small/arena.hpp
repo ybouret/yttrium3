@@ -33,7 +33,7 @@ namespace Yttrium
                 size_t lostBytes() const noexcept;
 
                 const size_t  blockSize; //!< common block size for all chunks
-                const size_t  dataAlign; //!< offset to data chunk
+                const size_t  dataAlign; //!< data alignment
                 const size_t  numBlocks; //!< number of blocks
                 const size_t  pageBytes; //!< page used to hold chunk
 
