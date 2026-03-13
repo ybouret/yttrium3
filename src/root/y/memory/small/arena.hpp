@@ -30,7 +30,7 @@ namespace Yttrium
                 Arena(const size_t bs);
                 ~Arena() noexcept;
 
-                
+                size_t lostBytes() const noexcept;
 
                 const size_t  blockSize; //!< common block size for all chunks
                 const size_t  dataAlign; //!< offset to data chunk

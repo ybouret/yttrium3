@@ -19,12 +19,15 @@ Y_UTEST(memory_small_arena)
 
 
 
-    for(size_t blockSize=1;blockSize<=10;++blockSize)
+    for(size_t blockSize=1;blockSize<=100;++blockSize)
     {
-        std::cerr << std::endl;
+        std::cerr << "-- blockSize = " << std::setw(4) << blockSize;
         Memory::Small::Arena arena(blockSize);
-        std::cerr << "-- blockSize = " << arena.blockSize << std::endl;
-        std::cerr << "   dataAlign = " << arena.dataAlign << std::endl;
+        std::cerr << " | dataAlign = " << std::setw(4) << arena.dataAlign;
+        std::cerr << " | numBlocks = " << std::setw(4) << arena.numBlocks;
+        std::cerr << " | pageBytes = " << std::setw(8) << arena.pageBytes;
+        std::cerr << " | lostBytes = " << arena.lostBytes();
+        std::cerr << std::endl;
     }
 
     

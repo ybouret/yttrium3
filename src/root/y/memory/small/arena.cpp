@@ -35,9 +35,9 @@ namespace Yttrium
                 static const size_t DefaultPageBytes = Metrics::DefaultBytes;
                 const size_t        minLength        = blockSize * (numBlocks=Arena::MinNumBlocks) + dataAlign;
 
-                std::cerr << "blockSize=" << blockSize << std::endl;
-                std::cerr << "dataAlign=" << dataAlign << std::endl;
-                std::cerr << "minLength=" << minLength << std::endl;
+                //std::cerr << "blockSize=" << blockSize << std::endl;
+                //std::cerr << "dataAlign=" << dataAlign << std::endl;
+                //std::cerr << "minLength=" << minLength << std::endl;
 
                 //! initialize pageBytes
                 size_t pageBytes = (minLength>DefaultPageBytes) ? NextPowerOfTwo(minLength) : DefaultPageBytes;
@@ -45,7 +45,7 @@ namespace Yttrium
                 //! adjust pageBytes to get a fitting numBlocks
             COMPUTE_NUM_BLOCKS:
                 numBlocks = (pageBytes - dataAlign)/blockSize;
-                std::cerr << "pageBytes = " << pageBytes << " / numBlocks=" << numBlocks << std::endl;
+                //std::cerr << "pageBytes = " << pageBytes << " / numBlocks=" << numBlocks << std::endl;
                 assert(numBlocks>=Arena::MinNumBlocks);
                 if(numBlocks>Arena::MaxNumBlocks)
                 {
@@ -53,7 +53,7 @@ namespace Yttrium
                     goto COMPUTE_NUM_BLOCKS;
                 }
 
-                return pageBytes;;
+                return pageBytes;
             }
 
 
@@ -65,6 +65,12 @@ namespace Yttrium
             {
 
 
+
+            }
+
+            size_t Arena:: lostBytes() const noexcept
+            {
+                return pageBytes - numBlocks*blockSize - (dataAlign-sizeof(Chunk));
 
             }
 
