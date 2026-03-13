@@ -17,6 +17,7 @@ Y_UTEST(config:platform)
 
 Y_UTEST(core:display)
 Y_UTEST(core:hsort)
+Y_UTEST(core:hindx)
 Y_UTEST(core:rand)
 Y_UTEST(core:pool)
 Y_UTEST(core:list)
