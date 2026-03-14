@@ -144,17 +144,17 @@ namespace Yttrium
 }
 
 #include "y/format/decimal.hpp"
+#include "y/libc/zeroed.h"
 #include <cerrno>
 
 namespace Yttrium
 {
     namespace Concurrent
     {
-        void * Nucleus:: Acquire(size_t & blockSize)
+
+        void * Nucleus:: acquire(size_t & blockSize)
         {
-            static Lockable &_ = Instance().giant();
-            Y_Lock(_);
-            
+            Y_Lock(code->mutex);
             if(blockSize>0)
             {
                 void * const blockAddr = calloc(1,blockSize);
@@ -164,6 +164,7 @@ namespace Yttrium
                     blockSize = 0;
                     throw Libc::Exception(ENOMEM,"Acquire(%s)",fmt.c_str());
                 }
+                assert(Yttrium_Zeroed(blockAddr,blockSize));
                 Code::RAM += blockSize;
                 return blockAddr;
             }
@@ -173,20 +174,11 @@ namespace Yttrium
             }
         }
 
-        void Nucleus:: Release(void *&blockAddr, size_t &blockSize) noexcept
+        void Nucleus:: release(void * &blockAddr, size_t &blockSize) noexcept
         {
-            if(0!=blockAddr)
+            if(blockAddr)
             {
-                // sanity check
-                assert(blockSize>0);
-                assert(0!=NucleusInstance);
-                assert(blockSize<=RAM);
-
-                // get lock
-                static Lockable &_ = NucleusInstance->code->mutex;
-                Y_Lock(_);
-
-                // free memory
+                Y_Lock(code->mutex);
                 free(blockAddr);
                 Code::RAM -= blockSize;
                 blockSize = 0;
@@ -197,6 +189,53 @@ namespace Yttrium
                 assert(0==blockSize);
             }
         }
+
+    }
+
+}
+
+#include "y/memory/metrics.hpp"
+
+namespace Yttrium
+{
+    namespace Concurrent
+    {
+        Memory::Page * Nucleus:: acquirePage(const unsigned shift)
+        {
+            static const char fn[] = "Nucleus::acquirePage";
+            assert(shift>=Memory::Metrics::MinPageShift);
+            assert(shift<=Memory::Metrics::MaxPageShift);
+
+
+
+            // allocating
+            Y_Lock(code->mutex);
+            const size_t blockSize = size_t(1) << shift;
+            void * const blockAddr = calloc(1,blockSize);
+            if(!blockAddr)
+                throw Libc::Exception(ENOMEM,"%s(2^%u)",fn,shift);
+
+            // updating
+            Code::RAM += blockSize;
+            Memory::Page * const page = static_cast<Memory::Page *>(blockAddr);
+            assert(0==page->next);
+            assert(0==page->prev);
+            return page;
+        }
+
+
+        void Nucleus:: releasePage(Memory::Page *const page, const unsigned int shift) noexcept
+        {
+            assert(0!=page);
+            assert(shift>=Memory::Metrics::MinPageShift);
+            assert(shift<=Memory::Metrics::MaxPageShift);
+
+            const size_t blockSize = size_t(1) << shift; assert(Code::RAM>=blockSize);
+            Code::RAM -= blockSize;
+            free(page);
+        }
+
+
     }
 
 }

@@ -4,6 +4,8 @@
 #define Y_Concurrent_Nucleus_Included 1
 
 #include "y/concurrent/singulet.hpp"
+#include "y/memory/allocator.hpp"
+#include "y/memory/page.hpp"
 
 namespace Yttrium
 {
@@ -20,7 +22,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Nucleus : public Singulet
+        class Nucleus : public Singulet, public Memory::Allocator
         {
         public:
             //__________________________________________________________________
@@ -41,6 +43,11 @@ namespace Yttrium
             //__________________________________________________________________
             virtual const char *  callSign() const noexcept;
             virtual Longevity     lifeTime() const noexcept;
+            virtual void *        acquire(size_t & blockSize);
+            virtual void          release(void * & blockAddr, size_t &blockSize) noexcept;
+
+            Memory::Page * acquirePage(const unsigned shift);
+            void           releasePage(Memory::Page * const page, const unsigned shift) noexcept;
 
             //__________________________________________________________________
             //
@@ -48,12 +55,11 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            static Nucleus & Instance();       //!< handle instance \return single Nucleus
+            static Nucleus & Instance();          //!< handle instance \return single Nucleus
             static Nucleus & Location() noexcept; //!< current location \return existing instance
-            Lockable &       giant() noexcept; //!< access internal mutex \return lockable interface
+            Lockable &       giant()    noexcept; //!< access internal mutex \return lockable interface
 
-            static void * Acquire(size_t & blockSize);
-            static void   Release(void * & blockAddr, size_t &blockSize) noexcept;
+            
 
             //__________________________________________________________________
             //

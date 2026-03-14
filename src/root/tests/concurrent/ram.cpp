@@ -17,6 +17,7 @@ namespace
 }
 Y_UTEST(concurrent_ram)
 {
+    Concurrent::Nucleus & nucleus = Concurrent::Nucleus::Instance();
     Core::Rand  ran;
 
     Block        block[1000];
@@ -25,7 +26,7 @@ Y_UTEST(concurrent_ram)
 
     for(size_t i=0;i<nmax;++i)
     {
-        block[i].addr = Concurrent::Nucleus::Acquire( block[i].size = ran.leq<size_t>(1000) );
+        block[i].addr = nucleus.acquire( block[i].size = ran.leq<size_t>(1000) );
     }
 
     //return 0;
@@ -33,7 +34,7 @@ Y_UTEST(concurrent_ram)
     Random::Shuffle(ran,block,nmax);
     for(size_t i=0;i<nmax;++i)
     {
-        Concurrent::Nucleus::Release(block[i].addr,block[i].size);
+        nucleus.release(block[i].addr,block[i].size);
     }
 
     Y_CHECK(0==Concurrent::Nucleus::RAM);
