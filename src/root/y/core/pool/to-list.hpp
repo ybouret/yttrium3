@@ -16,6 +16,34 @@ namespace Yttrium
             template <typename LIST, typename POOL> static inline
             LIST & Make(LIST &list, POOL &pool) noexcept
             {
+                Y_Core_List_CheckEmpty(list);
+                switch(pool.size)
+                {
+                    case 0: goto RETURN;
+                    case 1:
+                        Coerce(list.head) = Coerce(list.tail) = pool.head;
+                        Coerce(list.size) = 1;
+                        goto ZPOOL;
+                    default: break;
+                }
+
+                {
+                    assert(pool.size>=2);
+                    typename POOL::NodeType *last = Coerce(list.head) = pool.head;
+                    while(last->next)
+                    {
+                        last->next->prev=last;
+                        last = last->next;
+                    }
+                    assert(0!=last);
+                    Coerce(list.tail) = last;
+                    Coerce(list.size) = pool.size;
+                }
+
+            ZPOOL:
+                Coerce(pool.head) = 0;
+                Coerce(pool.size) = 0;
+            RETURN:
                 return list;
             }
 

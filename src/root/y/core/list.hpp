@@ -20,7 +20,7 @@ namespace Yttrium
 /**/ assert(0==node->prev);     \
 /**/ assert(!owns(node))
 
-        //! helper to check emppty list
+        //! helper to check empty list
 #define Y_Core_List_CheckEmpty(L) \
 /**/ assert(0==(L).size);         \
 /**/ assert(0==(L).head);         \

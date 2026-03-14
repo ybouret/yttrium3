@@ -26,7 +26,7 @@ Y_UTEST(core_pool)
 {
 
     Core::Rand              ran( (long) time(NULL) );
-    Memory::Zombie<Node,10> wksp;
+    Memory::Zombie<Node,30> wksp;
     Core::PoolOf<Node>      pool;
 
     const size_t N = wksp.size;
@@ -36,19 +36,22 @@ Y_UTEST(core_pool)
         Y_ASSERT(0==wksp[i].next);
     }
 
-    Random::Shuffle(ran, &wksp[1], wksp.size);
-    Core::Display(std::cerr, &wksp[1], wksp.size) << std::endl;
+    for(size_t iter=0;iter<10;++iter)
+    {
+        Random::Shuffle(ran, &wksp[1], wksp.size);
+        Core::Display(std::cerr, &wksp[1], wksp.size) << std::endl;
 
-    std::cerr << pool << std::endl;
-    for(size_t i=1;i<=N;++i)
-    {
-        pool.store( &wksp[i] );
         std::cerr << pool << std::endl;
-    }
-    while(pool.size)
-    {
-        pool.query();
-        std::cerr << pool << std::endl;
+        for(size_t i=1;i<=N;++i)
+        {
+            if(ran.choice()) pool.store( &wksp[i] ); else pool.stash( &wksp[i] );
+            std::cerr << pool << std::endl;
+        }
+        while(pool.size)
+        {
+            pool.query();
+            std::cerr << pool << std::endl;
+        }
     }
 
 

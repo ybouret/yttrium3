@@ -11,6 +11,12 @@ namespace Yttrium
 {
     namespace Core
     {
+
+        //! helper to check empty pool
+#define Y_Core_Pool_CheckEmpty(L) \
+/**/ assert(0==(L).size);         \
+/**/ assert(0==(L).head)
+
         //______________________________________________________________________
         //
         //
@@ -73,6 +79,28 @@ namespace Yttrium
                 ++Coerce(size);
                 return node;
             }
+
+            inline NODE * stash(NODE * const node) noexcept
+            {
+                assert(0!=node);
+                assert(0==node->next);
+                assert(0==node->next);
+                if(size<=0)
+                {
+                    Coerce(head) = node;
+                }
+                else
+                {
+                    NODE *last = head;
+                    while(last->next) last=last->next;
+                    assert(0!=last);
+                    assert(0==last->next);
+                    last->next = node;
+                }
+                ++Coerce(size);
+                return node;
+            }
+
 
             //! exchange contents \param rhs another pool
             inline void swapForPool(PoolOf &rhs) noexcept
