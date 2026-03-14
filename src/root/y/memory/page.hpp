@@ -5,7 +5,7 @@
 #define Y_Memory_Page_Included 1
 
 
-#include "y/calculus/integer-log2.hpp"
+#include "y/config/setup.hpp"
 
 namespace Yttrium
 {
@@ -14,11 +14,25 @@ namespace Yttrium
 
         struct Page
         {
-            static const size_t   MinBytes = 2*sizeof(void*);
-            static const unsigned MinShift = IntegerLog2<MinBytes>::Value;
+
             Page *next;
             Page *prev;
             static Page *From(void * const blockAddr) noexcept;
+
+            class Mill
+            {
+            protected:
+                explicit Mill() noexcept;
+
+            public:
+                virtual ~Mill() noexcept;
+
+                virtual Page * acquirePage(const unsigned shift) = 0;
+                virtual void   releasePage(Page * const page, const unsigned shift) noexcept = 0;
+
+            private:
+                Y_Disable_Copy_And_Assign(Mill);
+            };
         };
     }
 

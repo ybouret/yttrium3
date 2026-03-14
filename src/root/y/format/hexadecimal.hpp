@@ -68,7 +68,7 @@ namespace Yttrium
         LegacyString(),
         array()
         {
-            typedef typename UnsignedFor<sizeof(V)>::Type U;
+            typedef typename UnsignedFor<sizeof(V)>::Alias::Type U;
             union {
                 V data;
                 U word;
@@ -114,7 +114,7 @@ namespace Yttrium
         template <typename T> static inline
         std::ostream & Display(std::ostream &os, const T * const arr, size_t num)
         {
-            assert(Good(arr,num));
+            assert(!(0==arr&&num>0));
             return Core::Display(os,arr,num,Cast<T>);
         }
 

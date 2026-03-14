@@ -34,6 +34,7 @@ Y_UTEST(calculus:integer_log2)
 Y_UTEST(calculus:base2)
 Y_UTEST(calculus:meta2)
 Y_UTEST(calculus:align)
+Y_UTEST(calculus:gc)
 
 Y_UTEST(type_ints)
 

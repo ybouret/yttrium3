@@ -22,7 +22,10 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Nucleus : public Singulet, public Memory::Allocator
+        class Nucleus :
+        public Singulet,
+        public Memory::Allocator,
+        public Memory::Page::Mill
         {
         public:
             //__________________________________________________________________
@@ -41,13 +44,18 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual const char *  callSign() const noexcept;
-            virtual Longevity     lifeTime() const noexcept;
-            virtual void *        acquire(size_t & blockSize);
-            virtual void          release(void * & blockAddr, size_t &blockSize) noexcept;
+            virtual const char *   callSign() const noexcept;
+            virtual Longevity      lifeTime() const noexcept;
+            virtual void *         acquire(size_t & blockSize);
+            virtual void           release(void * & blockAddr, size_t &blockSize) noexcept;
 
-            Memory::Page * acquirePage(const unsigned shift);
-            void           releasePage(Memory::Page * const page, const unsigned shift) noexcept;
+            //! thread-safe, size restricted page allocation
+            /**
+             \param shift MinPageShift <= shift <= MaxPageShift
+             \return a zeroed page with 2^shift bytes
+             */
+            virtual Memory::Page * acquirePage(const unsigned shift);
+            virtual void           releasePage(Memory::Page * const page, const unsigned shift) noexcept;
 
             //__________________________________________________________________
             //
