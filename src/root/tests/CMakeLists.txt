@@ -6,6 +6,7 @@ system
 calculus
 type
 concurrent
+memory
 memory/small)
 
 Y_LinkLibraries(test-root)
@@ -43,6 +44,8 @@ Y_UTEST(concurrent:nucleus)
 Y_UTEST(concurrent:ram)
 Y_UTEST(memory:small:chunk)
 Y_UTEST(memory:small:arena)
+Y_UTEST(memory:pages)
+
 
 
 

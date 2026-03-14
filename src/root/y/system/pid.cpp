@@ -15,7 +15,7 @@ namespace Yttrium
 {
     namespace System
     {
-        uint64_t ProcessID:: Get()
+        uint64_t ProcessID:: Get() noexcept
         {
 
 #if defined(Y_WIN)

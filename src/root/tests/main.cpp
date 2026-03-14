@@ -37,6 +37,7 @@ Y_UTEST_DECL(8)
 
     Y_UTEST(memory_small_chunk);
     Y_UTEST(memory_small_arena);
+    Y_UTEST(memory_pages);
 
 }
 Y_UTEST_EXEC()

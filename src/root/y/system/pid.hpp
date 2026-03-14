@@ -18,7 +18,7 @@ namespace Yttrium
              - WIN: DWORD ::GetProcessId()
              \return process-id put in uint64_t
              */
-            static uint64_t Get();
+            static uint64_t Get() noexcept;
         };
     }
 }

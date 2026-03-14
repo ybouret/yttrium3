@@ -7,8 +7,17 @@ namespace Yttrium
 {
     namespace Core
     {
+        //! helper to test ordered collection
         struct TestOrdered
         {
+            //! test array
+            /**
+             \param arr array entry
+             \param num number of elements
+             \param compare comparison
+             \param verify  stricty/loosely
+             \return true iff ordered
+             */
             template <typename T, typename COMPARE, typename VERIFY> static inline
             bool Array(const T arr[], const size_t num, COMPARE &compare, VERIFY &verify)
             {
@@ -21,12 +30,19 @@ namespace Yttrium
                 return true;
             }
 
+            //! test linked
+            /**
+             \param linked       with head node and size
+             \param compareNodes node comparison
+             \param verify       stricty/loosely
+             \return true iff ordered
+             */
             template <typename LINKED, typename COMPARE_NODES, typename VERIFY> static inline
             bool Linked(LINKED &linked, COMPARE_NODES &compareNodes, VERIFY &verify)
             {
                 const size_t num = linked.size;
                 if(num<=1) return true;
-                const typename LINKED::NodeType *curr = linked.head, next=curr->next;
+                const typename LINKED::NodeType *curr = linked.head, *next=curr->next;
                 for(size_t i=num-1;i>0;--i)
                 {
                     assert(curr);

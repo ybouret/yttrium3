@@ -279,6 +279,12 @@ namespace Yttrium
                 hardReset();
             }
 
+            //! fusion of two lists int this
+            /**
+             \param lhs left list
+             \param rhs right list
+             \param compareNodes nodes comparison
+             */
             template <typename COMPARE_NODES> inline
             void fusion(ListOf &lhs, ListOf &rhs, COMPARE_NODES &compareNodes)
             {
@@ -292,6 +298,11 @@ namespace Yttrium
                 mergeTail(rhs);
             }
 
+
+            //! merge sort
+            /**
+             \param compareNodes nodes comparison
+             */
             template <typename COMPARE_NODES> inline
             void sort(COMPARE_NODES &compareNodes)
             {
@@ -312,9 +323,16 @@ namespace Yttrium
                 }
             }
 
-            inline void sortByAddress()
+            //! sort by increasing nodes address
+            inline void sortByIncreasingAddress()
             {
-                sort(CompareNodesByAddress);
+                sort(ByIncreasingNodeAddress);
+            }
+
+            //! sort by increasing nodes address
+            inline void sortByDecreasingAddress()
+            {
+                sort(ByDecreasingNodeAddress);
             }
 
 
@@ -329,10 +347,28 @@ namespace Yttrium
 
 
         protected:
+            //! nodes comparison
+            /**
+             \param lhs first node
+             \param rhs second node
+             \return address difference
+             */
             static inline
-            ptrdiff_t CompareNodesByAddress(const NODE * const lhs,
-                                            const NODE * const rhs) noexcept {
+            ptrdiff_t ByIncreasingNodeAddress(const NODE * const lhs,
+                                              const NODE * const rhs) noexcept {
                 return lhs-rhs;
+            }
+
+            //! nodes comparison
+            /**
+             \param lhs first node
+             \param rhs second node
+             \return address difference
+             */
+            static inline
+            ptrdiff_t ByDecreasingNodeAddress(const NODE * const lhs,
+                                              const NODE * const rhs) noexcept {
+                return rhs-lhs;
             }
 
             //! reset all data

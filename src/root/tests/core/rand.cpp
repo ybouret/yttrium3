@@ -7,7 +7,7 @@ using namespace Yttrium;
 
 Y_UTEST(core_rand)
 {
-    Core::Rand ran( (long)time(NULL) );
+    Core::Rand ran;
 
     for(size_t i=0;i<20;++i)
     {
