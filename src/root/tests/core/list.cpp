@@ -6,6 +6,7 @@
 #include "y/core/rand.hpp"
 #include "y/random/shuffle.hpp"
 #include <ctime>
+#include "y/type/sign.hpp"
 
 using namespace Yttrium;
 
@@ -20,6 +21,12 @@ namespace
         inline friend std::ostream & operator<<(std::ostream &os, const Node &node)
         {
             return os << node.indx;
+        }
+
+        static inline int Compare(const Node * const lhs,
+                                  const Node * const rhs) noexcept
+        {
+            return Sign::Of(lhs->indx,rhs->indx);
         }
     };
 }
@@ -83,6 +90,16 @@ Y_UTEST(core_list)
             }
             std::cerr << list << std::endl;
         }
+
+        for(size_t i=1;i<=N;++i)
+        {
+            if(ran.choice()) list.pushHead( &wksp[i] ); else list.pushTail( &wksp[i] );
+        }
+        std::cerr << list << std::endl;
+        list.sort(Node::Compare);
+        std::cerr << list << std::endl;
+        while(list.size) list.popTail();
+
     }
 
 

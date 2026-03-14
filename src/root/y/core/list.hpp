@@ -210,7 +210,7 @@ namespace Yttrium
                 }
                 else
                 {
-                    assert(rhs.size>0);
+                    assert(lhs.size>0);
                     if(rhs.size>0)
                     {
                         // attach lhs.tail <-> rhs.head
@@ -290,6 +290,27 @@ namespace Yttrium
                 }
                 mergeTail(lhs);
                 mergeTail(rhs);
+            }
+
+            template <typename COMPARE_NODES> inline
+            void sort(COMPARE_NODES &compareNodes) noexcept
+            {
+                if(size<=1) return;
+                ListOf lhs,rhs;
+                divide(lhs,rhs); assert(0==size);
+                try
+                {
+                    lhs.sort(compareNodes);
+                    rhs.sort(compareNodes);
+                    fusion(lhs,rhs,compareNodes);
+                }
+                catch(...)
+                {
+                    mergeHead(lhs);
+                    mergeTail(rhs);
+                    throw;
+                }
+
             }
 
 
