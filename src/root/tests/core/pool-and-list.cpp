@@ -1,4 +1,6 @@
 #include "y/core/pool/to-list.hpp"
+#include "y/core/list/to-pool.hpp"
+
 #include "y/core/pool/cxx.hpp"
 #include "y/core/list/cxx.hpp"
 #include "y/utest/run.hpp"
@@ -46,7 +48,11 @@ Y_UTEST(core_pool_and_list)
         Y_ASSERT(n==pool.size);
         std::cerr << "pool=" << pool << " -> ";
         Core::PoolToList::Make(list,pool);
-        std::cerr << list << std::endl;
+        std::cerr << list << " -> ";
+        Core::ListToPool::Make(pool,list);
+        std::cerr << pool << std::endl;
+
+        pool.release();
         list.release();
     }
 }
