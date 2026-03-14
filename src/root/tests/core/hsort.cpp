@@ -4,6 +4,7 @@
 #include "y/core/display.hpp"
 
 #include "y/random/shuffle.hpp"
+#include "y/core/test-ordered.hpp"
 #include <ctime>
 
 using namespace Yttrium;
@@ -19,8 +20,17 @@ Y_UTEST(core_hsort)
     Random::Shuffle(ran,arr,num);
     Core::Display(std::cerr,arr,num) << std::endl;
     Core::HSort::Make(arr,num,Sign::Increasing<int>);
+
+    Y_CHECK(Core::TestOrdered::Array(arr,num,Sign::Increasing<int>, Sign::LooselyIncreasing));
+    Y_CHECK(Core::TestOrdered::Array(arr,num,Sign::Increasing<int>, Sign::StriclyIncreasing));
+
+
+
     Core::Display(std::cerr,arr,num) << std::endl;
     Core::HSort::Decreasing(arr,num);
+
+    Y_CHECK(Core::TestOrdered::Array(arr,num,Sign::Decreasing<int>, Sign::LooselyIncreasing));
+    Y_CHECK(Core::TestOrdered::Array(arr,num,Sign::Decreasing<int>, Sign::StriclyIncreasing));
     Core::Display(std::cerr,arr,num) << std::endl;
 
 }

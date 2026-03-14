@@ -279,6 +279,20 @@ namespace Yttrium
                 hardReset();
             }
 
+            template <typename COMPARE_NODES> inline
+            void fusion(ListOf &lhs, ListOf &rhs, COMPARE_NODES &compareNodes)
+            {
+                Y_Core_List_CheckEmpty(*this);
+                while(lhs.size>0 && rhs.size>0) {
+                    const NODE * const L = lhs.head; assert(L);
+                    const NODE * const R = rhs.head; assert(R);
+                    pushTail( (int)compareNodes(L,R) < 0 ? lhs.popHead() : rhs.popHead() );
+                }
+                mergeTail(lhs);
+                mergeTail(rhs);
+            }
+
+
             //__________________________________________________________________
             //
             //
