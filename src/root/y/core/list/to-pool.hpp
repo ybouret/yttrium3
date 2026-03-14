@@ -25,18 +25,14 @@ namespace Yttrium
             POOL & Make(POOL &pool, LIST &list) noexcept
             {
                 Y_Core_Pool_CheckEmpty(pool);
-                switch(list.size)
-                {
-                    case 0: goto RETURN;
-                    case 1:
-                        Coerce(pool.head) = list.head;
-                        Coerce(pool.size) = list.size;
-                        goto ZLIST;
-                }
 
-            ZLIST:
-                Coerce(list.head) = 0; Coerce(list.tail) = 0; Coerce(list.size) = 0;
-            RETURN:
+                Coerce(pool.head) = list.head;
+                Coerce(pool.size) = list.size;
+                for(typename POOL::NodeType *node = pool.head;node;node=node->next)
+                    node->prev = 0;
+                Coerce(list.head) = 0;
+                Coerce(list.tail) = 0;
+                Coerce(list.size) = 0;
                 return pool;
             }
 
