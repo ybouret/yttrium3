@@ -40,6 +40,7 @@ namespace Yttrium
          \param os output stream
          \param iter initial iterator
          \param size number of elements
+         \param proc transform each element befor call
          \return os
          */
         //______________________________________________________________________

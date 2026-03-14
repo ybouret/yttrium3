@@ -9,6 +9,7 @@
 namespace Yttrium
 {
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
     namespace Calculus
     {
 
@@ -25,7 +26,9 @@ namespace Yttrium
         };
 
     }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
+    //! integer absolute value \param x any integer type \return |x|
     template <typename T> inline
     T IAbs(const T x) noexcept
     {

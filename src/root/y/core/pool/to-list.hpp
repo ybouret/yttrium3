@@ -11,8 +11,15 @@ namespace Yttrium
     namespace Core
     {
 
+        //! converting pool to list
         struct PoolToList
         {
+            //! make a list from a pool
+            /**
+             \param list an empty list
+             \param pool source pool
+             \return list
+             */
             template <typename LIST, typename POOL> static inline
             LIST & Make(LIST &list, POOL &pool) noexcept
             {

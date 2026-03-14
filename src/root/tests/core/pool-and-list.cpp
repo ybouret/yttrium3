@@ -36,9 +36,7 @@ Y_UTEST(core_pool_and_list)
 {
     CxxPool<Node> pool;
     CxxList<Node> list;
-
-
-
+    
     for(size_t n=0;n<=10;++n)
     {
         for(size_t i=1;i<=n;++i)
@@ -49,7 +47,7 @@ Y_UTEST(core_pool_and_list)
         std::cerr << "pool=" << pool << " -> ";
         Core::PoolToList::Make(list,pool);
         std::cerr << list << std::endl;
-        list.free();
+        list.release();
     }
 }
 

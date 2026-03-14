@@ -80,6 +80,7 @@ namespace Yttrium
                 return node;
             }
 
+            //! stash (slow)  a node \param node a valid node \return stashed node
             inline NODE * stash(NODE * const node) noexcept
             {
                 assert(0!=node);

@@ -7,20 +7,42 @@
 
 
 #include "y/core/list.hpp"
+#include "y/ability/releasable.hpp"
 
 namespace Yttrium
 {
 
+    //__________________________________________________________________________
+    //
+    //
+    //! Basic C++ list
+    //
+    //__________________________________________________________________________
     template <typename NODE>
-    class CxxList : public Core::ListOf<NODE>
+    class CxxList : public Core::ListOf<NODE>, public Releasable
     {
     public:
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
         using Core::ListOf<NODE>::size;
 
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+
+        //! setup empty
         inline explicit CxxList() noexcept : Core::ListOf<NODE>()
         {
         }
 
+        //! duplicate \param other another list
         inline CxxList(const CxxList &other) : Core::ListOf<NODE>()
         {
             try
@@ -28,22 +50,25 @@ namespace Yttrium
                 for(const NODE *node=other.head;node;node=node->next)
                     this->pushTail( new NODE(*node) );
             }
-            catch(...) { free_(); throw; }
+            catch(...) { release_(); throw; }
         }
 
-        inline virtual ~CxxList() noexcept
-        {
-            free_();
-        }
+        //! cleanup
+        inline virtual ~CxxList() noexcept { release_(); }
 
-        inline virtual void free() noexcept
-        {
-            free_();
-        }
+        //______________________________________________________________________
+        //
+        //
+        // Interface
+        //
+        //______________________________________________________________________
+        inline virtual void release() noexcept { release_(); }
 
     private:
-        Y_Disable_Assign(CxxList);
-        inline void free_() noexcept { while(size>0) delete this->popTail(); }
+        Y_Disable_Assign(CxxList); //!< discared
+
+        //! remove all nodes from the tail
+        inline void release_() noexcept { while(size>0) delete this->popTail(); }
     };
 
 }

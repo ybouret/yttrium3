@@ -10,19 +10,36 @@ namespace Yttrium
 {
     namespace Memory
     {
+        //! Memory Allocator interface
         class Allocator
         {
         protected:
-            explicit Allocator() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Allocator() noexcept; //!< setup
 
         public:
-            virtual ~Allocator() noexcept;
+            virtual ~Allocator() noexcept; //!< cleanup
 
+            //__________________________________________________________________
+            //
+            //
+            // interface
+            //
+            //__________________________________________________________________
+
+            //! acquire memory \param blockSize request, updated \return required memoy
             virtual void * acquire(size_t & blockSize)  = 0;
+
+            //! release bytes \param blockAddr previously acquired block \param blockSize previously acquired bytes
             virtual void   release(void * & blockAddr, size_t &blockSize) noexcept = 0;
 
         private:
-            Y_Disable_Copy_And_Assign(Allocator);
+            Y_Disable_Copy_And_Assign(Allocator); //!< discarded
         };
     }
 }
