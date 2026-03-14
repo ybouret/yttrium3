@@ -29,8 +29,9 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Rand(const long init=-1) noexcept; //!< setup \param init initial seed
-            virtual ~Rand()                   noexcept; //!< cleanup
+            explicit Rand(const long init) noexcept; //!< setup \param init initial seed
+            explicit Rand()                noexcept; //!< setup with time(NULL)
+            virtual ~Rand()                noexcept; //!< cleanup
 
             //__________________________________________________________________
             //

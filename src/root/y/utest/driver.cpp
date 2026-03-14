@@ -3,6 +3,7 @@
 #include "y/libc/zeroed.h"
 #include "y/core/max.hpp"
 #include "y/libc/sort.h"
+#include "y/ascii/plural.hpp"
 
 #include <iostream>
 #include <cassert>
@@ -136,7 +137,7 @@ namespace Yttrium
                     const size_t n = countContaining(name);
                     if(n>0)
                     {
-                        std::cerr << "maybe you meant: [" << n << "]" << std::endl;
+                        std::cerr << "maybe you meant (" << n << " matching test" << ASCII::Plural::s(n) << ") :" << std::endl;
                         printContaining(name);
                     }
                     return 0;

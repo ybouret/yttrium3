@@ -6,119 +6,11 @@
 #include "y/ability/latch.hpp"
 
 #if defined(Y_BSD)
-#include <pthread.h>
-
-namespace Yttrium
-{
-    namespace Concurrent
-    {
-        //______________________________________________________________________
-        //
-        //
-        //
-        //! pthread mutex wrapper
-        //
-        //
-        //______________________________________________________________________
-        class SystemMutex : public Latch
-        {
-        public:
-            //__________________________________________________________________
-            //
-            //
-            //! mutex attribute so set recursive
-            //
-            //__________________________________________________________________
-            class Attribute
-            {
-            public:
-                inline explicit Attribute() : attr() { init(); settype(); }
-                inline virtual ~Attribute() noexcept { destroy(); }
-
-                pthread_mutexattr_t * operator*() noexcept { return attr(); }
-
-            private:
-                Y_Disable_Copy_And_Assign(Attribute);
-                Memory::Zombie<pthread_mutexattr_t> attr;
-
-                inline void init() {
-                    const int err = pthread_mutexattr_init( attr() );
-                    if(0!=err) throw Libc::Exception(err,"pthread_mutexattr_init");
-                }
-
-                inline void settype() {
-                    const int err = pthread_mutexattr_settype( attr(), PTHREAD_MUTEX_RECURSIVE);
-                    if(0!=err) {
-                        destroy();
-                        throw Libc::Exception(err,"pthread_mutexattr_settype(RECURSIVE)");
-                    }
-                }
-
-                inline void destroy() noexcept { (void) pthread_mutexattr_destroy( attr() ); }
-            };
-
-            //__________________________________________________________________
-            //
-            //
-            // C++
-            //
-            //__________________________________________________________________
-            inline explicit SystemMutex(Attribute &attr) : mutex()
-            {
-                const int err = pthread_mutex_init( mutex(), *attr );
-                if(0!=err) throw Libc::Exception(err,"pthread_mutex_init");
-            }
-
-            inline virtual ~SystemMutex() noexcept { destroy(); }
-
-            //__________________________________________________________________
-            //
-            //
-            // Interface
-            //
-            //__________________________________________________________________
-            virtual void lock() noexcept {
-                const int err = pthread_mutex_lock( mutex() );
-                if(0!=err) Libc::Error::Critical(err, "pthread_mutex_lock" );
-            }
-
-            virtual void unlock() noexcept {
-                const int err = pthread_mutex_unlock( mutex() );
-                if(0!=err) Libc::Error::Critical(err, "pthread_mutex_lock" );
-            }
-
-            virtual bool tryLock() noexcept {
-                return 0 == pthread_mutex_trylock( mutex() );
-            }
-
-
-        private:
-            Y_Disable_Copy_And_Assign(SystemMutex);
-            Memory::Zombie<pthread_mutex_t> mutex;
-
-            void destroy() noexcept
-            {
-                (void) pthread_mutex_destroy( mutex() );
-            }
-
-        };
-
-
-    }
-}
-
+#include "sys/bsd.hxx"
 #endif // defined(Y_BSD)
 
 #if defined(Y_WIN)
-namespace Yttrium
-{
-    namespace Concurrent
-    {
-    }
-}
-
-
-
+#include "sys/win.hxx"
 #endif // defined(Y_WIN)
 
 
@@ -126,12 +18,13 @@ namespace Yttrium
 #include "y/calculus/alignment.hpp"
 #include "y/type/destruct.hpp"
 
+#include <iostream>
+
 namespace Yttrium
 {
     namespace Concurrent
     {
 
-        
         const char * const        Nucleus:: CallSign = "Concurrent::Nucleus";
         const char *              Nucleus:: callSign() const noexcept { return CallSign; }
         System::AtExit::Longevity Nucleus:: lifeTime() const noexcept { return LifeTime; }
@@ -159,44 +52,63 @@ namespace Yttrium
             SystemMutex::Attribute attr;
 #endif
             SystemMutex            mutex;
+            static uint64_t        RAM;
+
         private:
             Y_Disable_Copy_And_Assign(Code);
         };
 
-        static void *          NucleusWorkspace[ Alignment::WordsFor<Nucleus::Code>::Count ];
-        static Nucleus::Code * NucleusCode = 0;
-
-
-        Nucleus:: Nucleus()
+        uint64_t         Nucleus::Code::RAM = 0;
+        const uint64_t & Nucleus::RAM       = Nucleus::Code::RAM;
+        
+        namespace
         {
-            assert(0==NucleusCode);
+            static void    * NucleusWorkspace[ Alignment::WordsFor<Nucleus::Code>::Count ];
+            static Nucleus * NucleusInstance = 0;
+        }
+
+
+
+        void Nucleus:: deleteCode() noexcept
+        {
+            assert(0!=code);
+            Destruct(code);
+            Coerce(code) = 0;
+            Y_BZero(NucleusWorkspace);
+        }
+
+        Nucleus:: Nucleus() : code( new ( Y_BZero(NucleusWorkspace) ) Code()  )
+        {
+            assert(0==NucleusInstance);
             try
             {
                 System::AtExit::Perform(SelfDestruct,this,LifeTime);
-                NucleusCode = new ( Y_BZero(NucleusWorkspace) ) Code();
-                if(Verbose) Display("+", CallSign, LifeTime);
             }
             catch(...)
             {
-                NucleusCode = 0;
+                deleteCode();
                 throw;
             }
+            NucleusInstance = this;
+            if(Verbose) Display("+", CallSign, LifeTime);
+
         }
 
         Nucleus:: ~Nucleus() noexcept
         {
+            assert(0!=NucleusInstance);
             if(Verbose) Display("~", CallSign, LifeTime);
-            assert(0!=NucleusCode);
-            Destruct(NucleusCode);
-            NucleusCode = 0;
-            Y_BZero(NucleusWorkspace);
+            if(RAM>0) {
+                std::cerr << "*** Still Active RAM  = " << RAM << std::endl;
+            }
+            deleteCode();
+            NucleusInstance = 0;
         }
 
         void Nucleus:: SelfDestruct(void *const args) noexcept
         {
             assert(0!=args);
-            Nucleus &nucleus = *static_cast<Nucleus *>(args);
-            nucleus.~Nucleus();
+            static_cast<Nucleus *>(args)->~Nucleus();
         }
 
 
@@ -204,15 +116,22 @@ namespace Yttrium
         {
             static void *    workspace[ Alignment::WordsFor<Nucleus>::Count ];
             static Nucleus & nucleus = * new ( Y_BZero(workspace) ) Nucleus();
+
+            assert(0!=NucleusInstance);
             return nucleus;
+        }
+
+        Nucleus & Nucleus:: Location() noexcept
+        {
+            assert(0!=NucleusInstance);
+            return *NucleusInstance;
         }
 
         Lockable & Nucleus:: giant() noexcept
         {
-            assert(NucleusCode);
-            return NucleusCode->mutex;
+            assert(code);
+            return code->mutex;
         }
-
 
     }
 
@@ -220,6 +139,64 @@ namespace Yttrium
     {
         static Lockable & _ = Concurrent::Nucleus::Instance().giant();
         return _;
+    }
+
+}
+
+#include "y/format/decimal.hpp"
+#include <cerrno>
+
+namespace Yttrium
+{
+    namespace Concurrent
+    {
+        void * Nucleus:: Acquire(size_t & blockSize)
+        {
+            static Lockable &_ = Instance().giant();
+            Y_Lock(_);
+            
+            if(blockSize>0)
+            {
+                void * const blockAddr = calloc(1,blockSize);
+                if(!blockAddr)
+                {
+                    const Decimal fmt(blockSize);
+                    blockSize = 0;
+                    throw Libc::Exception(ENOMEM,"Acquire(%s)",fmt.c_str());
+                }
+                Code::RAM += blockSize;
+                return blockAddr;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        void Nucleus:: Release(void *&blockAddr, size_t &blockSize) noexcept
+        {
+            if(0!=blockAddr)
+            {
+                // sanity check
+                assert(blockSize>0);
+                assert(0!=NucleusInstance);
+                assert(blockSize<=RAM);
+
+                // get lock
+                static Lockable &_ = NucleusInstance->code->mutex;
+                Y_Lock(_);
+
+                // free memory
+                free(blockAddr);
+                Code::RAM -= blockSize;
+                blockSize = 0;
+                blockAddr = 0;
+            }
+            else
+            {
+                assert(0==blockSize);
+            }
+        }
     }
 
 }

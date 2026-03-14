@@ -38,6 +38,7 @@ Y_UTEST(calculus:align)
 Y_UTEST(type_ints)
 
 Y_UTEST(concurrent:nucleus)
+Y_UTEST(concurrent:ram)
 Y_UTEST(memory:small:chunk)
 Y_UTEST(memory:small:arena)
 

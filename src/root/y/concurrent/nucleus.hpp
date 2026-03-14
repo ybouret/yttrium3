@@ -48,17 +48,31 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            Lockable &       giant() noexcept; //!< access internal mutex \return lockable interface
             static Nucleus & Instance();       //!< handle instance \return single Nucleus
+            static Nucleus & Location() noexcept; //!< current location \return existing instance
+            Lockable &       giant() noexcept; //!< access internal mutex \return lockable interface
+
+            static void * Acquire(size_t & blockSize);
+            static void   Release(void * & blockAddr, size_t &blockSize) noexcept;
+
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+
+            static const uint64_t & RAM; //!< bookkeeping of allocated memory
 
         private:
             Y_Disable_Copy_And_Assign(Nucleus); //!< discarded
-            explicit Nucleus();                //!< setup internal code
-            virtual ~Nucleus() noexcept;       //!< cleanup internal code
+            explicit Nucleus();                 //!< setup internal code
+            virtual ~Nucleus() noexcept;        //!< cleanup internal code
+            Code * const code;                  //!< inner code
 
-            //! call destructor at exit
-            static void SelfDestruct(void * const) noexcept;
 
+            static void   SelfDestruct(void * const) noexcept; //!< call destructor at exit
+            void          deleteCode()               noexcept; //!< delete inner code
         };
 
     }
