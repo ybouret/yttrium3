@@ -8,6 +8,8 @@ y/config
 y/check
 y/libc
 y/core
+y/core/pool
+y/core/list
 y/random
 y/system
 y/ascii
