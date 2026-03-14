@@ -286,14 +286,14 @@ namespace Yttrium
                 while(lhs.size>0 && rhs.size>0) {
                     const NODE * const L = lhs.head; assert(L);
                     const NODE * const R = rhs.head; assert(R);
-                    pushTail( (int)compareNodes(L,R) < 0 ? lhs.popHead() : rhs.popHead() );
+                    pushTail( (compareNodes(L,R) < 0) ? lhs.popHead() : rhs.popHead() );
                 }
                 mergeTail(lhs);
                 mergeTail(rhs);
             }
 
             template <typename COMPARE_NODES> inline
-            void sort(COMPARE_NODES &compareNodes) noexcept
+            void sort(COMPARE_NODES &compareNodes)
             {
                 if(size<=1) return;
                 ListOf lhs,rhs;
@@ -310,8 +310,13 @@ namespace Yttrium
                     mergeTail(rhs);
                     throw;
                 }
-
             }
+
+            inline void sortByAddress()
+            {
+                sort(CompareNodesByAddress);
+            }
+
 
 
             //__________________________________________________________________
@@ -324,6 +329,11 @@ namespace Yttrium
 
 
         protected:
+            static inline
+            ptrdiff_t CompareNodesByAddress(const NODE * const lhs,
+                                            const NODE * const rhs) noexcept {
+                return lhs-rhs;
+            }
 
             //! reset all data
             inline void hardReset() noexcept
