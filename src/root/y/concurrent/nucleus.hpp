@@ -84,9 +84,9 @@ namespace Yttrium
             virtual ~Nucleus() noexcept;        //!< cleanup internal code
             Code * const code;                  //!< inner code
 
-
             static void   SelfDestruct(void * const) noexcept; //!< call destructor at exit
             void          deleteCode()               noexcept; //!< delete inner code
+
         };
 
     }

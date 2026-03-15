@@ -14,6 +14,7 @@ namespace Yttrium {
                                        const char * const sfx)
         {
             const size_t len = Yttrium_Strlen(name);
+            os << "-- ";
             if(pfx)  os << pfx;
             if(name) os << name;
             if(sfx)  os << sfx;

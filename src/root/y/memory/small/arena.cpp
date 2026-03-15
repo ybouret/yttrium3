@@ -23,7 +23,7 @@ namespace Yttrium
             static inline
             size_t PageBytes(const size_t blockSize,
                              const size_t dataAlign,
-                             size_t &     numBlocks)
+                             size_t &     numBlocks) noexcept
             {
                 // initialize numBlocks
                 static const size_t DefaultPageBytes = Metrics::DefaultBytes;
@@ -50,6 +50,16 @@ namespace Yttrium
                 return pageBytes;
             }
 
+            static inline
+            unsigned PageShift(const size_t blockSize,
+                               const size_t dataAlign,
+                               size_t &     numBlocks) noexcept
+            {
+                const size_t pageBytes = PageBytes(blockSize,dataAlign,numBlocks);
+                return ExactLog2(pageBytes);
+            }
+
+
 #if 0
             static inline
             size_t DataAlign(const size_t blockSize) noexcept
@@ -67,12 +77,13 @@ namespace Yttrium
             }
 #endif
 
-            Arena:: Arena(const size_t bs) :
+            Arena:: Arena(const size_t bs, Book & book) :
             available(0),
             blockSize(bs),
             dataAlign( DataAlign(blockSize) ),
             numBlocks(0),
-            pageBytes( PageBytes(blockSize,dataAlign,Coerce(numBlocks)) ),
+            allocator( book[ PageShift(blockSize,dataAlign,Coerce(numBlocks)) ] ),
+            //pageBytes( PageBytes(blockSize,dataAlign,Coerce(numBlocks)) ),
             newBlocks(numBlocks-1)
             {
 
@@ -82,7 +93,7 @@ namespace Yttrium
 
             size_t Arena:: lostBytes() const noexcept
             {
-                size_t res = pageBytes;
+                size_t res = allocator.pageBytes;
                 res       -= numBlocks * blockSize;
                 res       -= sizeof(Chunk);
                 return res;

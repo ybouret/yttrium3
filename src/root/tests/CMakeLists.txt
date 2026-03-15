@@ -45,6 +45,8 @@ Y_UTEST(concurrent:ram)
 Y_UTEST(memory:small:chunk)
 Y_UTEST(memory:small:arena)
 Y_UTEST(memory:pages)
+Y_UTEST(memory:book)
+
 
 
 

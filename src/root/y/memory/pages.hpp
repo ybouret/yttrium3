@@ -1,5 +1,3 @@
-
-
 //! \file
 
 #ifndef Y_Memory_Pages_Included
@@ -18,7 +16,7 @@ namespace Yttrium
         //
         //
         //
-        //! low-level cache of pages with same size (not thread-safe)
+        //! low-level cache of pages with same size (NOT thread-safe)
         //
         //
         //______________________________________________________________________
@@ -34,7 +32,7 @@ namespace Yttrium
 
             //! setup
             /**
-             \param pageMill thread-safe allocator
+             \param pageMill page allocator
              \param shift    Metrics::MinPageShift <= shift <= Metrics::MaxPageShift
              */
             explicit Pages(Page::Mill &pageMill, const unsigned shift) noexcept;
@@ -57,9 +55,9 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            void * get();                      //!< allocation \return an existing or a new zeroed block
-            void   put(void * const) noexcept; //!< store a previously allocated page
-            
+            void * get();                      //!< thread-unsafe allocation \return an existing or a new zeroed block
+            void   put(void * const) noexcept; //!< thread-unsafe store a previously allocated page
+
             //__________________________________________________________________
             //
             //

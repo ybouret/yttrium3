@@ -42,7 +42,7 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
-            //! Mill interface
+            //! Mill interface for power-of-two-sized pages
             //
             //__________________________________________________________________
             class Mill

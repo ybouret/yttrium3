@@ -5,7 +5,7 @@
 #define Y_Memory_Small_Arena_Included 1
 
 #include "y/config/setup.hpp"
-#include "y/memory/metrics.hpp"
+#include "y/memory/book.hpp"
 
 namespace Yttrium
 {
@@ -50,7 +50,7 @@ namespace Yttrium
                 /**
                  \param bs 1<= bs <= MaxBlockSize
                  */
-                Arena(const size_t bs);
+                Arena(const size_t bs, Book &book);
 
                 //! cleanup
                 ~Arena() noexcept;
@@ -70,13 +70,13 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                const size_t  available; //!< total available blocks
-                const size_t  blockSize; //!< common block size for all chunks
-                const size_t  dataAlign; //!< data alignment
-                const size_t  numBlocks; //!< number of blocks
-                const size_t  pageBytes; //!< page used to hold chunk
-                const size_t  newBlocks; //!< new blocks for a new chunk
-                
+                const size_t   available; //!< total available blocks
+                const size_t   blockSize; //!< common block size for all chunks
+                const size_t   dataAlign; //!< data alignment
+                const size_t   numBlocks; //!< number of blocks
+                Memory::Pages &allocator;
+                const size_t   newBlocks; //!< new blocks for a new chunk
+
             private:
                 Y_Disable_Copy_And_Assign(Arena); //!< discarded
             };
