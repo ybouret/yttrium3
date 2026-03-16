@@ -17,9 +17,9 @@ namespace Yttrium
                 while(clist.size)
                 {
                     Chunk * const chunk = clist.popHead();
-                    if(chunk->stillAvailable<chunk->providedBlocks)
+                    if(!chunk->isEmpty())
                     {
-                        std::cerr << "** Memory::Arena[" << blockSize << "] missing #" << (int)(chunk->providedBlocks-chunk->stillAvailable) << std::endl;
+                        std::cerr << "** Memory::Arena[" << blockSize << "] missing #" << chunk->missing() << std::endl;
                     }
                     allocator.put(chunk);
                 }
@@ -141,16 +141,22 @@ namespace Yttrium
 
             void *Arena:: acquireBlock(Chunk * const chunk) noexcept
             {
+                //--------------------------------------------------------------
                 // sanity check
+                //--------------------------------------------------------------
                 assert(0!=chunk);
                 assert(chunk->stillAvailable);
                 assert(ready>=chunk->stillAvailable);
 
+                //--------------------------------------------------------------
                 // update
+                //--------------------------------------------------------------
                 --ready;
                 if(chunk==empty) empty = 0;
 
+                //--------------------------------------------------------------
                 // return block
+                //--------------------------------------------------------------
                 return (acquiring=chunk)->acquire(blockSize);
             }
 
@@ -223,4 +229,26 @@ namespace Yttrium
     }
 
 }
+
+
+
+namespace Yttrium
+{
+    namespace Memory
+    {
+
+        namespace Small
+        {
+            void Arena:: release(void * const blockAddr) noexcept
+            {
+                assert(0!=blockSize);
+                
+            }
+
+        }
+
+    }
+
+}
+
 

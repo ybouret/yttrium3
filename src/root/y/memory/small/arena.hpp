@@ -65,8 +65,18 @@ namespace Yttrium
                 //______________________________________________________________
                 size_t  lostBytesPerChunk() const noexcept; //!< compute lost bytes per chunk \return allocated - usable
 
+                //! acquire a new block
+                /**
+                 - if some block is available:
+                 -- test acquiring (perfect caching)
+                 -- search by spiraling
+                 - otherwise create and assert a new chunk
+                 \return a zeroed block[blockSize[
+                 */
                 void   *acquire();
 
+                //! release a previously acquired block
+                void    release(void *blockAddr) noexcept;
 
                 //______________________________________________________________
                 //
@@ -90,10 +100,12 @@ namespace Yttrium
             private:
                 Y_Disable_Copy_And_Assign(Arena); //!< discarded
                 Chunk * newChunk();               //!< prepare a new chunk \return new formatted chunk with available numBlocks
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
                 void  * acquireBlock(Chunk * const chunk) noexcept;
                 void  * searchBoth(Chunk *lower, Chunk *upper) noexcept;
                 void  * searchNext(Chunk *upper) noexcept;
                 void  * searchPrev(Chunk *lowe) noexcept;
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             };
         }
 

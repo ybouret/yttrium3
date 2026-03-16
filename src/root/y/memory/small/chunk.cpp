@@ -79,6 +79,17 @@ namespace Yttrium
                 firstAvailable = (uint8_t)available; // update firstAvailable
                 ++stillAvailable;                    // update status
             }
+
+            bool Chunk:: isEmpty() const noexcept
+            {
+                return stillAvailable >= providedBlocks;
+            }
+
+            size_t Chunk:: missing() const noexcept
+            {
+                return providedBlocks - stillAvailable;
+            }
+
         }
 
     }
