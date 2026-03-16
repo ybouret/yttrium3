@@ -6,6 +6,7 @@
 
 #include "y/config/setup.hpp"
 #include "y/memory/book.hpp"
+#include "y/core/list.hpp"
 
 namespace Yttrium
 {
@@ -70,15 +71,23 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                const size_t   available; //!< total available blocks
-                const size_t   blockSize; //!< common block size for all chunks
-                const size_t   dataAlign; //!< data alignment
-                const size_t   numBlocks; //!< number of blocks
-                Memory::Pages &allocator;
-                const size_t   newBlocks; //!< new blocks for a new chunk
 
+                const size_t        blockSize; //!< block size per chunk
+            private:
+                Chunk *             acquiring;  //!< acquiring chunk
+                Chunk *             releasing;  //!< releasing chunk
+                Chunk *             empty;      //!< another empty chunk
+                size_t              ready;      //!< ready blocks
+                Core::ListOf<Chunk> clist;      //!< chunks ordered by increasing memory
+
+            public:
+                const size_t        numBlocks; //!< number of blocks per chunk [1:255]
+                const size_t        dataAlign; //!< data alignment
+                Memory::Pages &     allocator; //!< for
+                
             private:
                 Y_Disable_Copy_And_Assign(Arena); //!< discarded
+                Chunk * newChunk();
             };
         }
 

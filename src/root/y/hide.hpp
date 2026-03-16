@@ -3,6 +3,7 @@
 #ifndef Y_Hide_Included
 #define Y_Hide_Included 1
 
+#include "y/config/compiler.h"
 
 namespace Yttrium
 {

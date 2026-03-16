@@ -29,6 +29,50 @@ namespace
             return Sign::Of(lhs->indx,rhs->indx);
         }
     };
+
+    template <typename NODE>
+    static inline
+    void fullCheck( const Core::ListOf<NODE> &list )
+    {
+        switch(list.size)
+        {
+            case 0:
+                Y_CHECK(0==list.head);
+                Y_CHECK(0==list.tail);
+                return;
+
+            case 1:
+                Y_CHECK(list.head == list.tail);
+                Y_CHECK(list.head->prev == 0);
+                Y_CHECK(list.tail->next == 0);
+                return;
+
+            case 2:
+                Y_CHECK(list.head != list.tail);
+                Y_CHECK(list.head->prev == 0);
+                Y_CHECK(list.tail->next == 0);
+                Y_CHECK(list.head->next == list.tail);
+                Y_CHECK(list.tail->prev == list.head);
+                return;
+
+            default:
+                break;
+        }
+
+        Y_CHECK(list.size>=3);
+        Y_CHECK(list.head != list.tail);
+        Y_CHECK(list.head->prev == 0);
+        Y_CHECK(list.tail->next == 0);
+        Y_CHECK(list.head->next != list.tail);
+        Y_CHECK(list.tail->prev != list.head);
+        Y_CHECK(0!=list.head->next);
+        Y_CHECK(0!=list.tail->prev);
+
+
+
+    }
+
+
 }
 
 Y_UTEST(core_list)
@@ -98,6 +142,23 @@ Y_UTEST(core_list)
         std::cerr << list << std::endl;
         list.sort(Node::Compare);
         std::cerr << list << std::endl;
+        while(list.size) list.popTail();
+
+
+        for(size_t i=1;i<=N;++i)
+        {
+            Node * const node = &wksp[i]; Y_ASSERT(0==node->next); Y_ASSERT(0==node->prev);
+            if(list.size<=0)
+            {
+                list.pushTail(node); Y_ASSERT(1==list.size);
+            }
+            else
+            {
+                Node * const mine = list.fetch( ran.in<size_t>(1,list.size) ); Y_ASSERT(mine); Y_ASSERT(list.owns(mine));
+                list.insertNodeAfter(mine,node);
+            }
+            Y_ASSERT(i==list.size);
+        }
         while(list.size) list.popTail();
 
     }

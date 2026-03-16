@@ -2,7 +2,6 @@
 #include "y/memory/small/arena.hpp"
 #include "y/memory/small/chunk.hpp"
 #include "y/calculus/meta2.hpp"
-
 #include <iostream>
 
 namespace Yttrium
@@ -78,17 +77,17 @@ namespace Yttrium
 #endif
 
             Arena:: Arena(const size_t bs, Book & book) :
-            available(0),
             blockSize(bs),
-            dataAlign( DataAlign(blockSize) ),
+            acquiring(0),
+            releasing(0),
+            empty(0),
+            ready(0),
+            clist(),
             numBlocks(0),
-            allocator( book[ PageShift(blockSize,dataAlign,Coerce(numBlocks)) ] ),
-            //pageBytes( PageBytes(blockSize,dataAlign,Coerce(numBlocks)) ),
-            newBlocks(numBlocks-1)
+            dataAlign( DataAlign(blockSize) ),
+            allocator( book[ PageShift(blockSize,dataAlign,Coerce(numBlocks)) ] )
             {
-
-
-
+                
             }
 
             size_t Arena:: lostBytes() const noexcept
@@ -104,6 +103,14 @@ namespace Yttrium
             {
                 assert(page);
                 return new (page) Chunk(blockSize, (uint8_t)numBlocks, static_cast<char *>(page)+dataAlign);
+            }
+
+            Chunk * Arena:: newChunk() {
+                uint8_t * const zpage = static_cast<uint8_t*>( allocator.get() );
+                Chunk *   const chunk = clist.pushTail( new (zpage) Chunk(blockSize, (uint8_t)numBlocks, zpage + dataAlign) );
+
+
+                return chunk;
             }
 
 
