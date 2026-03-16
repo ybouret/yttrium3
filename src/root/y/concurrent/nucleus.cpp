@@ -70,7 +70,7 @@ namespace Yttrium
 
 
 
-        void Nucleus:: deleteCode() noexcept
+        void Nucleus:: destructCode() noexcept
         {
             assert(0!=code);
             Destruct(code);
@@ -78,7 +78,7 @@ namespace Yttrium
             Y_BZero(NucleusWorkspace);
         }
 
-        Memory::Page::Mill & Nucleus:: asMemoryPageMill() noexcept
+        Memory::Page::Mill & Nucleus:: mill() noexcept
         {
             return *this;
         }
@@ -87,7 +87,7 @@ namespace Yttrium
         Singulet(),
         Memory::Allocator(),
         Memory::Page::Mill(),
-        code( new ( Y_BZero(NucleusWorkspace) ) Code( asMemoryPageMill() )  ),
+        code( new ( Y_BZero(NucleusWorkspace) ) Code( mill() )  ),
         access(code->mutex),
         book(code->book)
         {
@@ -98,7 +98,7 @@ namespace Yttrium
             }
             catch(...)
             {
-                deleteCode();
+                destructCode();
                 throw;
             }
             NucleusInstance = this;
@@ -110,7 +110,7 @@ namespace Yttrium
         {
             assert(0!=NucleusInstance);
             if(Verbose) Display("~", CallSign, LifeTime);
-            deleteCode();
+            destructCode();
             NucleusInstance = 0;
             if(RAM>0) {
                 std::cerr << "*** Still Active RAM  = " << RAM << std::endl;
@@ -215,10 +215,8 @@ namespace Yttrium
             assert(shift>=Memory::Metrics::MinPageShift);
             assert(shift<=Memory::Metrics::MaxPageShift);
 
-
-
             // allocating
-            Y_Lock(code->mutex);
+            Y_Lock(access);
             const size_t blockSize = size_t(1) << shift;
             void * const blockAddr = calloc(1,blockSize);
             if(!blockAddr)
@@ -239,6 +237,7 @@ namespace Yttrium
             assert(shift>=Memory::Metrics::MinPageShift);
             assert(shift<=Memory::Metrics::MaxPageShift);
 
+            Y_Lock(access);
             const size_t blockSize = size_t(1) << shift; assert(Code::RAM>=blockSize);
             Code::RAM -= blockSize;
             free(page);

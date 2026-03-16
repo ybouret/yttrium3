@@ -83,8 +83,8 @@ namespace Yttrium
             Code * const code;                  //!< inner code
 
             static void         SelfDestruct(void * const) noexcept; //!< call destructor at exit
-            void                deleteCode()               noexcept; //!< delete inner code
-            Memory::Page::Mill &asMemoryPageMill() noexcept;
+            void                destructCode()             noexcept; //!< destruct inner code
+            Memory::Page::Mill &mill()                     noexcept; //!< avoid this in constructor \return *this
 
         public:
             Lockable     & access; //!< interface to inner, global mutex
