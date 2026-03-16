@@ -14,7 +14,11 @@ namespace Yttrium
 
             Arena:: ~Arena() noexcept
             {
-
+                while(clist.size)
+                {
+                    Chunk * const chunk = clist.popHead();
+                    allocator.put(chunk);
+                }
             }
 
 
@@ -24,21 +28,14 @@ namespace Yttrium
                              const size_t dataAlign,
                              size_t &     numBlocks) noexcept
             {
-                // initialize numBlocks
+                // initialize pageBytes
                 static const size_t DefaultPageBytes = Metrics::DefaultBytes;
                 const size_t        minLength        = blockSize * (numBlocks=Arena::MinNumBlocks) + dataAlign;
+                size_t              pageBytes = (minLength>DefaultPageBytes) ? NextPowerOfTwo(minLength) : DefaultPageBytes;
 
-                //std::cerr << "blockSize=" << blockSize << std::endl;
-                //std::cerr << "dataAlign=" << dataAlign << std::endl;
-                //std::cerr << "minLength=" << minLength << std::endl;
-
-                //! initialize pageBytes
-                size_t pageBytes = (minLength>DefaultPageBytes) ? NextPowerOfTwo(minLength) : DefaultPageBytes;
-
-                //! adjust pageBytes to get a fitting numBlocks
+                // adjust pageBytes to get a fitting numBlocks
             COMPUTE_NUM_BLOCKS:
                 numBlocks = (pageBytes - dataAlign)/blockSize;
-                //std::cerr << "pageBytes = " << pageBytes << " / numBlocks=" << numBlocks << std::endl;
                 assert(numBlocks>=Arena::MinNumBlocks);
                 if(numBlocks>Arena::MaxNumBlocks)
                 {
@@ -87,10 +84,11 @@ namespace Yttrium
             dataAlign( DataAlign(blockSize) ),
             allocator( book[ PageShift(blockSize,dataAlign,Coerce(numBlocks)) ] )
             {
-                
+                acquiring = releasing = newChunk();
+                ready     = numBlocks;
             }
 
-            size_t Arena:: lostBytes() const noexcept
+            size_t Arena:: lostBytesPerChunk() const noexcept
             {
                 size_t res = allocator.pageBytes;
                 res       -= numBlocks * blockSize;
@@ -99,19 +97,25 @@ namespace Yttrium
             }
 
 
-            Chunk * Arena:: format(void * const page) noexcept
-            {
-                assert(page);
-                return new (page) Chunk(blockSize, (uint8_t)numBlocks, static_cast<char *>(page)+dataAlign);
-            }
 
             Chunk * Arena:: newChunk() {
                 uint8_t * const zpage = static_cast<uint8_t*>( allocator.get() );
                 Chunk *   const chunk = clist.pushTail( new (zpage) Chunk(blockSize, (uint8_t)numBlocks, zpage + dataAlign) );
+                while(chunk->prev && chunk->prev>chunk) clist.towardsHead(chunk);
 
+#if !defined(NDEBUG)
+                for(const Chunk *node=clist.head;node;node=node->next)
+                {
+                    if(chunk->prev) { assert(chunk->prev<chunk); }
+                    if(chunk->next) { assert(chunk<chunk->next); }
+                }
+#endif // !defined(NDEBUG)
 
                 return chunk;
             }
+
+
+
 
 
         }

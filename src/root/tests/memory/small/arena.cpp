@@ -25,7 +25,7 @@ Y_UTEST(memory_small_arena)
         std::cerr << " | numBlocks = " << std::setw(4) << arena.numBlocks;
         std::cerr << " | pageBytes = " << std::setw(8) << arena.allocator.pageBytes;
         std::cerr << " | pageShift = " << std::setw(8) << arena.allocator.pageShift;
-        std::cerr << " | lostBytes = " << arena.lostBytes();
+        std::cerr << " | lostBytes = " << arena.lostBytesPerChunk();
         std::cerr << std::endl;
     }
 

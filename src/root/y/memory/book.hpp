@@ -13,30 +13,63 @@ namespace Yttrium
 {
     namespace Memory
     {
-
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Multiple page cache in one position
+        //
+        //
+        //______________________________________________________________________
         class Book : public Collectable
         {
         public:
-            static const unsigned MinPageShift = Metrics::MinPageShift;
-            static const unsigned MaxPageShift = Metrics::MaxPageShift;
-            static const unsigned NumPageSlots = 1 + MaxPageShift - MinPageShift;
-            static const size_t   Required     = NumPageSlots * sizeof(Pages);
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const unsigned MinPageShift = Metrics::MinPageShift;           //!< alias
+            static const unsigned MaxPageShift = Metrics::MaxPageShift;           //!< alias
+            static const unsigned NumPageSlots = 1 + MaxPageShift - MinPageShift; //!< number of different shifts
+            static const size_t   Required     = NumPageSlots * sizeof(Pages);    //!< inner memory
 
-            explicit Book(Page::Mill &mill) noexcept;
-            virtual ~Book()                 noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Book(Page::Mill &mill) noexcept; //!< setup slots \param mill page mill
+            virtual ~Book()                 noexcept; //!< cleanup
 
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
+            //! call gc on each slot \param amount amount to thrash
             virtual void gc(const uint8_t amount) noexcept;
-            
-            Pages &       operator[](const unsigned shift) noexcept;
-            const Pages & operator[](const unsigned shift) const noexcept;
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            Pages &       operator[](const unsigned shift)       noexcept; //!< access \param shift \return matching Pages
+            const Pages & operator[](const unsigned shift) const noexcept; //!< access \param shift \return matching Pages
+
+            //! query total available bytes \return sum of all cached bytes
             uint64_t      availableBytes() const noexcept;
 
 
         private:
-            Y_Disable_Copy_And_Assign(Book);
-            Pages * const pages;
-            void *        wksp[ Alignment::WordsGEQ<Required>::Count ];
+            Y_Disable_Copy_And_Assign(Book); //!< discarded
+            Pages * const pages;             //!< in [MinShift:MaxShift]
+            void *        wksp[ Alignment::WordsGEQ<Required>::Count ]; //!< inner memory
         };
     }
 

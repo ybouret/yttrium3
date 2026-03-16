@@ -49,7 +49,8 @@ namespace Yttrium
 
                 //! setup from block size
                 /**
-                 \param bs 1<= bs <= MaxBlockSize
+                 \param bs   1<= bs <= MaxBlockSize
+                 \param book to choose pages according to inner metrics
                  */
                 Arena(const size_t bs, Book &book);
 
@@ -62,8 +63,7 @@ namespace Yttrium
                 // Methods
                 //
                 //______________________________________________________________
-                size_t  lostBytes() const noexcept;         //!< compute lost bytes per chunk \return allocated - usable
-                Chunk * format(void * const page) noexcept; //!< helper to format chunk \param page memory[pageBytes] \return ready chunk
+                size_t  lostBytesPerChunk() const noexcept; //!< compute lost bytes per chunk \return allocated - usable
 
                 //______________________________________________________________
                 //
@@ -87,7 +87,7 @@ namespace Yttrium
                 
             private:
                 Y_Disable_Copy_And_Assign(Arena); //!< discarded
-                Chunk * newChunk();
+                Chunk * newChunk();               //!< prepare a new chunk \return new formatted chunk with available numBlocks
             };
         }
 

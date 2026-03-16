@@ -155,7 +155,7 @@ Y_UTEST(core_list)
             else
             {
                 Node * const mine = list.fetch( ran.in<size_t>(1,list.size) );
-                list.insertNodeAfter(mine,node);
+                list.insertAfter(mine,node);
             }
             Y_ASSERT(i==list.size);
         }
@@ -171,10 +171,18 @@ Y_UTEST(core_list)
             else
             {
                 Node * const mine = list.fetch( ran.in<size_t>(1,list.size) );
-                list.insertNodeBefore(mine,node);
+                list.insertBefore(mine,node);
             }
             Y_ASSERT(i==list.size);
         }
+
+        std::cerr << list << std::endl;
+        for(size_t i=N;i>=2;--i)
+        {
+            list.towardsHead( list.fetch(i) );
+            std::cerr << list << std::endl;
+        }
+
         while(list.size) list.popTail();
 
     }

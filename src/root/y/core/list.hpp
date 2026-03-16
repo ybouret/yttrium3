@@ -335,8 +335,13 @@ namespace Yttrium
                 sort(ByDecreasingNodeAddress);
             }
 
-
-            NODE * insertNodeAfter(NODE * const mine, NODE * const node) noexcept
+            //! insertion after a node
+            /**
+             \param mine one of my node
+             \param node source node
+             \return inserted node after mine
+             */
+            NODE * insertAfter(NODE * const mine, NODE * const node) noexcept
             {
                 Y_Core_List_Check(node); assert(mine); assert(size>0); assert( owns(mine) );
                 if(tail==mine)
@@ -359,7 +364,13 @@ namespace Yttrium
                 return node;
             }
 
-            NODE * insertNodeBefore(NODE * const mine, NODE * const node) noexcept
+            //! insertion before a node
+            /**
+             \param mine one of my node
+             \param node source node
+             \return inserted node before mine
+             */
+            NODE * insertBefore(NODE * const mine, NODE * const node) noexcept
             {
                 Y_Core_List_Check(node); assert(mine); assert(size>0); assert( owns(mine) );
                 if(head==mine)
@@ -379,6 +390,21 @@ namespace Yttrium
                 }
                 ++Coerce(size);
                 return node;
+            }
+
+            //! move a node towards head
+            /**
+             \param node one of my node
+             \return node exchanged with its prev
+             */
+            NODE * towardsHead(NODE * const node) noexcept
+            {
+                assert(owns(node));
+                assert(head!=node);
+                assert(size>=2);
+                assert(0!=node->prev);
+                NODE * const prev = node->prev;
+                return insertBefore(prev,pop(node));
             }
 
 
