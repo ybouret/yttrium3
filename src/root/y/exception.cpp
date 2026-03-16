@@ -2,7 +2,7 @@
 #include "y/exception.hpp"
 #include "y/libc/block/zero.h"
 #include "y/libc/block/copy.h"
-#include "y/libc/strcat.h"
+#include "y/libc/str/cat.h"
 #include "y/libc/strcpy.h"
 #include "y/libc/strlen.h"
 #include "y/libc/strfmt.h"
