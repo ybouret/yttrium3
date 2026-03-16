@@ -16,7 +16,7 @@ namespace Yttrium
         //
         //
         //
-        //! low-level cache of pages with same size (NOT thread-safe)
+        //! LEVEL-1 cache of pages, THREAD-SAFE from mill's access()
         //
         //
         //______________________________________________________________________
@@ -69,8 +69,9 @@ namespace Yttrium
         public:
             const unsigned      pageShift;  //!< in valid metrics boundaries
             const size_t        pageBytes;  //!< 2^pageShift
-            Page::Mill        & mill;       //!< thread-safe page provider
-
+            Page::Mill        & mill;       //!< thread-safe, PERISTENT page provider
+            Lockable          & lock;       //!< PERSISTEN mill.access()
+            
         private:
             Y_Disable_Copy_And_Assign(Pages); //!< discarded
             void release_() noexcept;         //!< release pages pool

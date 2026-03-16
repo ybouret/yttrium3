@@ -47,6 +47,8 @@ namespace Yttrium
 
         //! garbace collector for amount
         /**
+         - gc(0) could be used to optimize internal data
+         - gc(All) is the default release method
          \param amount in  0 (none) to 0xff (all) of content
          */
         virtual void gc(const uint8_t amount) noexcept = 0;

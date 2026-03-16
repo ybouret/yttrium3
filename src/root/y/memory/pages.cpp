@@ -5,6 +5,7 @@
 #include "y/core/list/to-pool.hpp"
 #include "y/memory/metrics.hpp"
 #include "y/type/sign.hpp"
+#include "y/ability/lockable.hpp"
 #include <cstring>
 
 namespace Yttrium
@@ -16,7 +17,8 @@ namespace Yttrium
         pool(),
         pageShift(blockShift),
         pageBytes( size_t(1) << pageShift ),
-        mill(pageMill)
+        mill(pageMill),
+        lock(mill.access())
         {
             assert(pageShift>=Metrics::MinPageShift);
             assert(pageShift<=Metrics::MaxPageShift);
@@ -24,6 +26,7 @@ namespace Yttrium
 
         void Pages:: release_() noexcept
         {
+            Y_Lock(lock);
             while(pool.size) mill.releasePage( pool.query(), pageShift);
         }
 
@@ -39,11 +42,13 @@ namespace Yttrium
 
         size_t Pages:: count() const noexcept
         {
+            Y_Lock(lock);
             return pool.size;
         }
 
         void Pages:: cache(const size_t n)
         {
+            Y_Lock(lock);
             for(size_t i=0;i<n;++i) pool.store( mill.acquirePage(pageShift) );
         }
 
@@ -52,6 +57,7 @@ namespace Yttrium
 
         void Pages:: gc(const uint8_t amount) noexcept
         {
+            Y_Lock(lock);
             const size_t       newSize = NewSize(amount,pool.size);
             {
                 Core::ListOf<Page> list;
@@ -76,6 +82,7 @@ namespace Yttrium
 
         void * Pages:: get()
         {
+            Y_Lock(lock);
             if(pool.size)
                 return static_cast<Page *>( memset(pool.query(),0,pageBytes) );
             else
@@ -84,6 +91,7 @@ namespace Yttrium
 
         void Pages:: put(void * const page) noexcept
         {
+            Y_Lock(lock);
             assert(page);
             pool.store( Page::From(page) );
         }
