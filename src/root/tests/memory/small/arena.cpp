@@ -54,8 +54,8 @@ Y_UTEST(memory_small_arena)
 
         Random::Shuffle(ran,addr,size);
         Release(size/2,addr,size,arena);
-
-        //Release(0,addr,size,arena);
+        Acquire(nmax,addr,size,arena);
+        Release(0,addr,size,arena);
     }
 
 

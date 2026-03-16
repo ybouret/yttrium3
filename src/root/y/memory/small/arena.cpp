@@ -14,6 +14,7 @@ namespace Yttrium
 
             Arena:: ~Arena() noexcept
             {
+                // cleanup
                 while(clist.size)
                 {
                     Chunk * const chunk = clist.popHead();
@@ -32,12 +33,20 @@ namespace Yttrium
                              const size_t dataAlign,
                              size_t &     numBlocks) noexcept
             {
-                // initialize pageBytes
+                //--------------------------------------------------------------
+                //
+                // initialize pageBytes using minimal content
+                //
+                //--------------------------------------------------------------
                 static const size_t DefaultPageBytes = Metrics::DefaultBytes;
                 const size_t        minLength        = blockSize * (numBlocks=Arena::MinNumBlocks) + dataAlign;
                 size_t              pageBytes = (minLength>DefaultPageBytes) ? NextPowerOfTwo(minLength) : DefaultPageBytes;
 
+                //--------------------------------------------------------------
+                //
                 // adjust pageBytes to get a fitting numBlocks
+                //
+                //--------------------------------------------------------------
             COMPUTE_NUM_BLOCKS:
                 numBlocks = (pageBytes - dataAlign)/blockSize;
                 assert(numBlocks>=Arena::MinNumBlocks);
@@ -244,20 +253,68 @@ namespace Yttrium
                 assert(0!=blockSize);
                 assert(0!=releasing);
 
+                //--------------------------------------------------------------
+                //
+                // locate releasing
+                //
+                //--------------------------------------------------------------
                 switch( releasing->whose(blockAddr) )
                 {
                     case OwnedByPrev: do { releasing = releasing->prev; assert(releasing); } while( !releasing->owns(blockAddr) ); break;
                     case OwnedByNext: do { releasing = releasing->next; assert(releasing); } while( !releasing->owns(blockAddr) ); break;
                     case OwnedBySelf: break;
                 }
+                assert(0!=releasing);
                 assert(releasing->owns(blockAddr));
 
-                //assert(empty!=releasing);
-
+                //--------------------------------------------------------------
+                //
+                // release and update
+                //
+                //--------------------------------------------------------------
                 releasing->release(blockAddr,blockSize);
                 ++ready;
-                
 
+                //--------------------------------------------------------------
+                //
+                // done if releasing is not empty
+                //
+                //--------------------------------------------------------------
+                if(!releasing->isEmpty()) return;
+
+                //--------------------------------------------------------------
+                //
+                // mark first empty if possible
+                //
+                //--------------------------------------------------------------
+                if(0==empty) { empty = releasing; return; }
+
+
+                //--------------------------------------------------------------
+                //
+                // process two empty chunks
+                //
+                //--------------------------------------------------------------
+                std::cerr << "Found two empty chunks!!" << std::endl;
+                assert(empty!=releasing);
+                assert(empty->isEmpty());
+                assert(ready>=2*numBlocks);
+
+                // will remove highest address
+                if(empty<releasing)
+                    Swap(empty,releasing);
+                assert(releasing<empty);
+
+                // be careful with acquiring
+                if(acquiring==empty)
+                {
+                    std::cerr << "need to move acquiring" << std::endl;
+                    exit(1);
+                }
+
+                allocator.put( clist.pop(empty) );
+                ready -= numBlocks;
+                empty  = releasing;
             }
 
         }
