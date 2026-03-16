@@ -1,5 +1,5 @@
 #include "y/libc/str/cat.h"
-#include "y/libc/strlen.h"
+#include "y/libc/str/len.h"
 
 #include <assert.h>
 

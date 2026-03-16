@@ -1,5 +1,5 @@
 #include "y/utest/run.hpp"
-#include "y/libc/strlen.h"
+#include "y/libc/str/len.h"
 #include <cassert>
 
 namespace Yttrium {

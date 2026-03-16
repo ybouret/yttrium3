@@ -1,5 +1,5 @@
 #include "y/libc/strtrim.h"
-#include "y/libc/strlen.h"
+#include "y/libc/str/len.h"
 #include <ctype.h>
 
 char * Yttrium_Strtrim(char * const buffer)
