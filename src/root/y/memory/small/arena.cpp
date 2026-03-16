@@ -17,6 +17,10 @@ namespace Yttrium
                 while(clist.size)
                 {
                     Chunk * const chunk = clist.popHead();
+                    if(chunk->stillAvailable<chunk->providedBlocks)
+                    {
+                        std::cerr << "** Memory::Arena[" << blockSize << "] missing #" << (int)(chunk->providedBlocks-chunk->stillAvailable) << std::endl;
+                    }
                     allocator.put(chunk);
                 }
             }
@@ -85,7 +89,6 @@ namespace Yttrium
             allocator( book[ PageShift(blockSize,dataAlign,Coerce(numBlocks)) ] )
             {
                 acquiring = releasing = newChunk();
-                ready     = numBlocks;
             }
 
             size_t Arena:: lostBytesPerChunk() const noexcept
@@ -98,7 +101,8 @@ namespace Yttrium
 
 
 
-            Chunk * Arena:: newChunk() {
+            Chunk * Arena:: newChunk()
+            {
                 uint8_t * const zpage = static_cast<uint8_t*>( allocator.get() );
                 Chunk *   const chunk = clist.pushTail( new (zpage) Chunk(blockSize, (uint8_t)numBlocks, zpage + dataAlign) );
                 while(chunk->prev && chunk->prev>chunk) clist.towardsHead(chunk);
@@ -111,15 +115,112 @@ namespace Yttrium
                 }
 #endif // !defined(NDEBUG)
 
+                ready += numBlocks;
                 return chunk;
             }
-
-
-
-
 
         }
 
     }
 
 }
+
+
+
+#include "y/system/error.hpp"
+#include "y/format/decimal.hpp"
+#include <cerrno>
+
+namespace Yttrium
+{
+    namespace Memory
+    {
+
+        namespace Small
+        {
+
+            void *Arena:: acquireBlock(Chunk * const chunk) noexcept
+            {
+                // sanity check
+                assert(0!=chunk);
+                assert(chunk->stillAvailable);
+                assert(ready>=chunk->stillAvailable);
+
+                // update
+                --ready;
+                if(chunk==empty) empty = 0;
+
+                // return block
+                return (acquiring=chunk)->acquire(blockSize);
+            }
+
+            void * Arena:: searchPrev(Chunk *lower) noexcept
+            {
+                assert(0!=lower);
+            TRY:
+                if(lower->stillAvailable) return acquireBlock(lower);
+                lower = lower->next;
+                assert(0!=lower);
+                goto TRY;
+            }
+
+            void * Arena:: searchNext(Chunk *upper) noexcept
+            {
+                assert(0!=upper);
+            TRY:
+                if(upper->stillAvailable) { return acquireBlock(upper); }
+                upper = upper->next;
+                assert(0!=upper);
+                goto TRY;
+            }
+
+            void * Arena:: searchBoth(Chunk *lower, Chunk *upper) noexcept
+            {
+            SEARCH_BOTH:
+                assert(0!=lower);
+                assert(0!=upper);
+
+                if(lower->stillAvailable)      return acquireBlock(lower);
+                if( 0 == (lower=lower->prev) ) return searchNext(upper);
+                assert(0!=lower);
+
+                if(upper->stillAvailable)      return acquireBlock(upper);
+                if( 0 == (upper=upper->next))  return searchPrev(lower);
+                assert(0!=upper);
+
+                goto SEARCH_BOTH;
+            }
+
+
+            void   *Arena:: acquire()
+            {
+                assert(0!=acquiring);
+
+                if(ready>0)
+                {
+                    if(acquiring->stillAvailable)
+                        return acquireBlock(acquiring); // cached
+                    else
+                    {
+                        Chunk * const lower = acquiring->prev;
+                        Chunk * const upper = acquiring->next;
+                        if(lower)
+                            return upper ? searchBoth(lower,upper) : searchPrev(lower);
+                        else
+                            return searchNext(upper);
+                    }
+                }
+                else
+                {
+                    assert(0==empty);
+                    return acquireBlock( newChunk() );
+                }
+
+            }
+
+        }
+
+    }
+
+}
+

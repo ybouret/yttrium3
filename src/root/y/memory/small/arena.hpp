@@ -65,13 +65,15 @@ namespace Yttrium
                 //______________________________________________________________
                 size_t  lostBytesPerChunk() const noexcept; //!< compute lost bytes per chunk \return allocated - usable
 
+                void   *acquire();
+
+
                 //______________________________________________________________
                 //
                 //
                 // Members
                 //
                 //______________________________________________________________
-
                 const size_t        blockSize; //!< block size per chunk
             private:
                 Chunk *             acquiring;  //!< acquiring chunk
@@ -88,6 +90,10 @@ namespace Yttrium
             private:
                 Y_Disable_Copy_And_Assign(Arena); //!< discarded
                 Chunk * newChunk();               //!< prepare a new chunk \return new formatted chunk with available numBlocks
+                void  * acquireBlock(Chunk * const chunk) noexcept;
+                void  * searchBoth(Chunk *lower, Chunk *upper) noexcept;
+                void  * searchNext(Chunk *upper) noexcept;
+                void  * searchPrev(Chunk *lowe) noexcept;
             };
         }
 
