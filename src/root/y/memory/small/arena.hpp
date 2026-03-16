@@ -108,6 +108,8 @@ namespace Yttrium
                 const size_t    numBlocks; //!< number of blocks per chunk [1:255]
                 const size_t    dataAlign; //!< data alignment
                 Memory::Pages & allocator; //!< for
+                Arena *         next;      //!< for list
+                Arena *         prev;      //!< for list
 
             private:
                 Y_Disable_Copy_And_Assign(Arena); //!< discarded

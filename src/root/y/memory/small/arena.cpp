@@ -104,7 +104,9 @@ namespace Yttrium
             clist(),
             numBlocks(0),
             dataAlign( DataAlign(blockSize) ),
-            allocator( userBook[ PageShift(blockSize,dataAlign,Coerce(numBlocks)) ] )
+            allocator( userBook[ PageShift(blockSize,dataAlign,Coerce(numBlocks)) ] ),
+            next(0),
+            prev(0)
             {
                 acquiring = releasing = newChunk();
             }

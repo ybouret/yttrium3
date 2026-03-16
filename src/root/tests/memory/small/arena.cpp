@@ -65,6 +65,7 @@ Y_UTEST(memory_small_arena)
     Y_PRINTV(Memory::Small::Arena::MinNumBlocks);
     Y_PRINTV(Memory::Small::Arena::MaxNumBlocks);
     Y_SIZEOF(Memory::Small::Arena);
+    Y_SIZEOF(Core::ListOf<Memory::Small::Arena>);
 
 
 }
