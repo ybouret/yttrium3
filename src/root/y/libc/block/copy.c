@@ -1,4 +1,4 @@
-#include "y/libc/bcopy.h"
+#include "y/libc/block/copy.h"
 #include <string.h>
 #include <assert.h>
  

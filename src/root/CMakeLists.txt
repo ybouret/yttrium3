@@ -7,6 +7,7 @@ y
 y/config
 y/check
 y/libc
+y/libc/block
 y/core
 y/core/pool
 y/core/list
