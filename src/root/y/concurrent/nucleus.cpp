@@ -127,7 +127,7 @@ namespace Yttrium
             return *NucleusInstance;
         }
 
-        Lockable & Nucleus:: giant() noexcept
+        Lockable & Nucleus:: access() noexcept
         {
             assert(code);
             return code->mutex;
@@ -137,7 +137,7 @@ namespace Yttrium
 
     Lockable & Lockable:: Giant()
     {
-        static Lockable & _ = Concurrent::Nucleus::Instance().giant();
+        static Lockable & _ = Concurrent::Nucleus::Instance().access();
         return _;
     }
 
@@ -200,6 +200,8 @@ namespace Yttrium
 {
     namespace Concurrent
     {
+        
+
         Memory::Page * Nucleus:: acquirePage(const unsigned shift)
         {
             static const char fn[] = "Nucleus::acquirePage";

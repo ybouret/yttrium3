@@ -63,9 +63,9 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            static Nucleus & Instance();          //!< handle instance \return single Nucleus
-            static Nucleus & Location() noexcept; //!< current location \return existing instance
-            Lockable &       giant()    noexcept; //!< access internal mutex \return lockable interface
+            static  Nucleus &  Instance();          //!< handle instance \return single Nucleus
+            static  Nucleus &  Location() noexcept; //!< current location \return existing instance
+            virtual Lockable & access()   noexcept; //!< access internal mutex \return lockable interface
 
             
 

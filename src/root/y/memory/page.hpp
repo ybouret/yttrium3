@@ -9,6 +9,8 @@
 
 namespace Yttrium
 {
+    class Lockable;
+    
     namespace Memory
     {
 
@@ -65,11 +67,22 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
+                virtual Lockable & access() noexcept = 0;
 
-                //! acquire a power of two page \param shift request \return 2^shift bytes
-                virtual Page * acquirePage(const unsigned shift) = 0;
+                //! acquire a power of two page
+                /**
+                 - the call MUST be THREAD-SAFE thru access()
+                 \param shift request
+                 \return 2^shift bytes
+                 */
+                virtual Page *    acquirePage(const unsigned shift) = 0;
 
-                //! release a power of two page \param page valid page \param shift for 2^shift bytes
+                //! release a power of two page
+                /**
+                 - the call MUST be THREAD-SAFE thru access()
+                 \param page valid, previously acquired page
+                 \param shift for 2^shift bytes
+                 */
                 virtual void   releasePage(Page * const page, const unsigned shift) noexcept = 0;
 
             private:
