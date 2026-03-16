@@ -3,7 +3,7 @@
 #ifndef Y_Swap_Included
 #define Y_Swap_Included 1
 
-#include "y/libc/bswap.h"
+#include "y/libc/block/swap.h"
 
 namespace Yttrium
 {

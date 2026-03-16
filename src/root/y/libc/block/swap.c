@@ -1,4 +1,4 @@
-#include "y/libc/bswap.h"
+#include "y/libc/block/swap.h"
 #include "y/config/compiler.h"
 #include <string.h>
 #include <assert.h>
