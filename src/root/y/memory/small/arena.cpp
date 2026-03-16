@@ -12,6 +12,12 @@ namespace Yttrium
         namespace Small
         {
 
+            const Arena::Chunks & Arena:: chunks() const noexcept
+            {
+                return clist;
+            }
+
+
             Arena:: ~Arena() noexcept
             {
                 // cleanup
@@ -295,7 +301,6 @@ namespace Yttrium
                 // process two empty chunks
                 //
                 //--------------------------------------------------------------
-                std::cerr << "Found two empty chunks!!" << std::endl;
                 assert(empty!=releasing);
                 assert(empty->isEmpty());
                 assert(ready>=2*numBlocks);
@@ -307,12 +312,12 @@ namespace Yttrium
 
                 // be careful with acquiring
                 if(acquiring==empty)
-                {
-                    std::cerr << "need to move acquiring" << std::endl;
-                    exit(1);
-                }
+                    acquiring = releasing;
 
+                // remove empty
                 allocator.put( clist.pop(empty) );
+
+                // update status
                 ready -= numBlocks;
                 empty  = releasing;
             }

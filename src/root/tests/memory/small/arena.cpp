@@ -52,17 +52,18 @@ Y_UTEST(memory_small_arena)
         std::cerr << std::endl;
         Acquire(nmax,addr,size,arena);
 
-        Random::Shuffle(ran,addr,size);
-        Release(size/2,addr,size,arena);
-        Acquire(nmax,addr,size,arena);
+        for(size_t iter=0;iter<10;++iter)
+        {
+            Random::Shuffle(ran,addr,size);
+            Release(size/ran.in<size_t>(2,4),addr,size,arena);
+            Acquire(nmax,addr,size,arena);
+        }
         Release(0,addr,size,arena);
     }
 
-
+    std::cerr << std::endl;
     Y_PRINTV(Memory::Small::Arena::MinNumBlocks);
     Y_PRINTV(Memory::Small::Arena::MaxNumBlocks);
-    Y_PRINTV(Memory::Small::Arena::MaxBlockSizeLog2);
-    Y_PRINTV(Memory::Small::Arena::MaxBlockSize);
     Y_SIZEOF(Memory::Small::Arena);
 
 
