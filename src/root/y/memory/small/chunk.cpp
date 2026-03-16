@@ -80,6 +80,11 @@ namespace Yttrium
                 ++stillAvailable;                    // update status
             }
 
+            bool Chunk:: owns(const void *const p) const noexcept
+            {
+                return p>=data && p < last;
+            }
+
             bool Chunk:: isEmpty() const noexcept
             {
                 return stillAvailable >= providedBlocks;

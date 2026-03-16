@@ -3,6 +3,7 @@
 #include "y/concurrent/nucleus.hpp"
 #include "y/core/rand.hpp"
 #include "y/libc/bzero.h"
+#include "y/random/shuffle.hpp"
 
 using namespace Yttrium;
 
@@ -13,9 +14,15 @@ namespace
     void Acquire(const size_t nmax, void * addr[], size_t &size, Memory::Small::Arena &arena)
     {
         while(size<nmax)
-        {
             addr[size++] = arena.acquire();
-        }
+
+    }
+
+    static inline
+    void Release(const size_t nmin, void * addr[], size_t &size, Memory::Small::Arena &arena)
+    {
+        while(size>nmin)
+            arena.release( addr[--size] );
     }
 }
 
@@ -45,7 +52,10 @@ Y_UTEST(memory_small_arena)
         std::cerr << std::endl;
         Acquire(nmax,addr,size,arena);
 
+        Random::Shuffle(ran,addr,size);
+        Release(size/2,addr,size,arena);
 
+        //Release(0,addr,size,arena);
     }
 
 

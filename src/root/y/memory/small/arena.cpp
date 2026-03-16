@@ -242,7 +242,22 @@ namespace Yttrium
             void Arena:: release(void * const blockAddr) noexcept
             {
                 assert(0!=blockSize);
+                assert(0!=releasing);
+
+                switch( releasing->whose(blockAddr) )
+                {
+                    case OwnedByPrev: do { releasing = releasing->prev; assert(releasing); } while( !releasing->owns(blockAddr) ); break;
+                    case OwnedByNext: do { releasing = releasing->next; assert(releasing); } while( !releasing->owns(blockAddr) ); break;
+                    case OwnedBySelf: break;
+                }
+                assert(releasing->owns(blockAddr));
+
+                //assert(empty!=releasing);
+
+                releasing->release(blockAddr,blockSize);
+                ++ready;
                 
+
             }
 
         }
