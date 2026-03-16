@@ -359,6 +359,28 @@ namespace Yttrium
                 return node;
             }
 
+            NODE * insertNodeBefore(NODE * const mine, NODE * const node) noexcept
+            {
+                Y_Core_List_Check(node); assert(mine); assert(size>0); assert( owns(mine) );
+                if(head==mine)
+                {
+                    head->prev   = node;
+                    node->next   = head;
+                    Coerce(head) = node;
+                }
+                else
+                {
+                    assert(size>=2); assert(tail!=head); assert(0!=mine->prev);
+                    NODE * const prev = mine->prev;
+                    node->next = mine;
+                    node->prev = prev;
+                    mine->prev = node;
+                    prev->next = node;
+                }
+                ++Coerce(size);
+                return node;
+            }
+
 
             //__________________________________________________________________
             //

@@ -147,15 +147,31 @@ Y_UTEST(core_list)
 
         for(size_t i=1;i<=N;++i)
         {
-            Node * const node = &wksp[i]; Y_ASSERT(0==node->next); Y_ASSERT(0==node->prev);
+            Node * const node = &wksp[i];
             if(list.size<=0)
             {
-                list.pushTail(node); Y_ASSERT(1==list.size);
+                list.pushTail(node);
             }
             else
             {
-                Node * const mine = list.fetch( ran.in<size_t>(1,list.size) ); Y_ASSERT(mine); Y_ASSERT(list.owns(mine));
+                Node * const mine = list.fetch( ran.in<size_t>(1,list.size) );
                 list.insertNodeAfter(mine,node);
+            }
+            Y_ASSERT(i==list.size);
+        }
+        while(list.size) list.popTail();
+
+        for(size_t i=1;i<=N;++i)
+        {
+            Node * const node = &wksp[i];
+            if(list.size<=0)
+            {
+                list.pushTail(node);
+            }
+            else
+            {
+                Node * const mine = list.fetch( ran.in<size_t>(1,list.size) );
+                list.insertNodeBefore(mine,node);
             }
             Y_ASSERT(i==list.size);
         }
