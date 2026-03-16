@@ -65,9 +65,8 @@ namespace Yttrium
             //__________________________________________________________________
             static  Nucleus &  Instance();          //!< handle instance \return single Nucleus
             static  Nucleus &  Location() noexcept; //!< current location \return existing instance
-            virtual Lockable & access()   noexcept; //!< access internal mutex \return lockable interface
-
             
+
 
             //__________________________________________________________________
             //
@@ -86,7 +85,8 @@ namespace Yttrium
 
             static void   SelfDestruct(void * const) noexcept; //!< call destructor at exit
             void          deleteCode()               noexcept; //!< delete inner code
-
+        public:
+            Lockable & access;
         };
 
     }

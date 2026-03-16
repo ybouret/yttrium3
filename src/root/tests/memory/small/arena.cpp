@@ -30,7 +30,7 @@ Y_UTEST(memory_small_arena)
 {
     Core::Rand           ran;
     Concurrent::Nucleus &nucleus = Concurrent::Nucleus::Instance();
-    Memory::Book         book(nucleus);
+    Memory::Book         book(nucleus,nucleus.access);
 
 
     void *       addr[1000];

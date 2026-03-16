@@ -77,7 +77,9 @@ namespace Yttrium
             Y_BZero(NucleusWorkspace);
         }
 
-        Nucleus:: Nucleus() : code( new ( Y_BZero(NucleusWorkspace) ) Code()  )
+        Nucleus:: Nucleus() :
+        code( new ( Y_BZero(NucleusWorkspace) ) Code()  ),
+        access(code->mutex)
         {
             assert(0==NucleusInstance);
             try
@@ -127,17 +129,12 @@ namespace Yttrium
             return *NucleusInstance;
         }
 
-        Lockable & Nucleus:: access() noexcept
-        {
-            assert(code);
-            return code->mutex;
-        }
 
     }
 
     Lockable & Lockable:: Giant()
     {
-        static Lockable & _ = Concurrent::Nucleus::Instance().access();
+        static Lockable & _ = Concurrent::Nucleus::Instance().access;
         return _;
     }
 

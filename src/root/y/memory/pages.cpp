@@ -13,12 +13,14 @@ namespace Yttrium
     namespace Memory
     {
 
-        Pages:: Pages(Page::Mill &pageMill, const unsigned blockShift) noexcept :
+        Pages:: Pages(Page::Mill   & pageMill,
+                      Lockable     & userLock,
+                      const unsigned blockShift) noexcept :
         pool(),
         pageShift(blockShift),
         pageBytes( size_t(1) << pageShift ),
         mill(pageMill),
-        lock(mill.access())
+        lock(userLock)
         {
             assert(pageShift>=Metrics::MinPageShift);
             assert(pageShift<=Metrics::MaxPageShift);

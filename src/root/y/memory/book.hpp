@@ -41,7 +41,13 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Book(Page::Mill &mill) noexcept; //!< setup slots \param mill page mill
+            //! setup slots
+            /**
+             \param mill page mill
+             \param lock page lock
+             */
+            explicit Book(Page::Mill &mill,
+                          Lockable   &lock) noexcept;
             virtual ~Book()                 noexcept; //!< cleanup
 
             //__________________________________________________________________

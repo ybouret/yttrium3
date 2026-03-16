@@ -9,14 +9,15 @@ namespace Yttrium
     {
 
 
-        Book:: Book(Page::Mill &mill) noexcept :
+        Book:: Book(Page::Mill &mill,
+                    Lockable   &lock) noexcept :
         pages(0),
         wksp()
         {
             Coerce(pages) = static_cast<Pages *>( Y_BZero(wksp) ) - MinPageShift;
             for(unsigned shift=MinPageShift;shift<=MaxPageShift;++shift)
             {
-                new (pages+shift) Pages(mill,shift);
+                new (pages+shift) Pages(mill,lock,shift);
             }
         }
 

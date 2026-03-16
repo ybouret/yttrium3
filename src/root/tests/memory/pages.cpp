@@ -23,7 +23,7 @@ Y_UTEST(memory_pages)
     Y_PRINTV(Collectable::NewSize(0xff,100));
 
     Concurrent::Nucleus &nucleus = Concurrent::Nucleus::Instance();
-    Memory::Pages        pages(nucleus,10);
+    Memory::Pages        pages(nucleus,nucleus.access,10);
 
     void *         p[100];
     const size_t   n = sizeof(p)/sizeof(p[0]);

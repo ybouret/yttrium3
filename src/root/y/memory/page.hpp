@@ -67,8 +67,7 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
-                virtual Lockable & access() noexcept = 0;
-
+                
                 //! acquire a power of two page
                 /**
                  - the call MUST be THREAD-SAFE thru access()

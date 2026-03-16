@@ -32,10 +32,13 @@ namespace Yttrium
 
             //! setup
             /**
-             \param pageMill page allocator
+             \param pageMill (thread-safe) peristent page allocator
+             \param userLock persistent lock for this pages access
              \param shift    Metrics::MinPageShift <= shift <= Metrics::MaxPageShift
              */
-            explicit Pages(Page::Mill &pageMill, const unsigned shift) noexcept;
+            explicit Pages(Page::Mill &pageMill,
+                           Lockable   &userLock,
+                           const unsigned shift) noexcept;
             virtual ~Pages() noexcept;
 
             //__________________________________________________________________
