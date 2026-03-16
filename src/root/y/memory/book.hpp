@@ -43,8 +43,8 @@ namespace Yttrium
             //__________________________________________________________________
             //! setup slots
             /**
-             \param mill page mill
-             \param lock page lock
+             \param mill page mill for each slot
+             \param lock page lock for each slot
              */
             explicit Book(Page::Mill &mill,
                           Lockable   &lock) noexcept;

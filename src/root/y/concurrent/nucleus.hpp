@@ -10,6 +10,7 @@
 namespace Yttrium
 {
     class Lockable;
+    namespace Memory { class Book; }
 
     namespace Concurrent
     {
@@ -49,7 +50,7 @@ namespace Yttrium
             virtual void *         acquire(size_t & blockSize);
             virtual void           release(void * & blockAddr, size_t &blockSize) noexcept;
 
-            //! thread-safe, size restricted page allocation
+            //! thread-safe, size-restricted page allocation
             /**
              \param shift MinPageShift <= shift <= MaxPageShift
              \return a zeroed page with 2^shift bytes
@@ -65,8 +66,7 @@ namespace Yttrium
             //__________________________________________________________________
             static  Nucleus &  Instance();          //!< handle instance \return single Nucleus
             static  Nucleus &  Location() noexcept; //!< current location \return existing instance
-            
-
+             
 
             //__________________________________________________________________
             //
@@ -74,7 +74,6 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-
             static const uint64_t & RAM; //!< bookkeeping of allocated memory
 
         private:
@@ -83,10 +82,13 @@ namespace Yttrium
             virtual ~Nucleus() noexcept;        //!< cleanup internal code
             Code * const code;                  //!< inner code
 
-            static void   SelfDestruct(void * const) noexcept; //!< call destructor at exit
-            void          deleteCode()               noexcept; //!< delete inner code
+            static void         SelfDestruct(void * const) noexcept; //!< call destructor at exit
+            void                deleteCode()               noexcept; //!< delete inner code
+            Memory::Page::Mill &asMemoryPageMill() noexcept;
+
         public:
-            Lockable & access;
+            Lockable     & access; //!< interface to inner, global mutex
+            Memory::Book & book;   //!< inner book
         };
 
     }

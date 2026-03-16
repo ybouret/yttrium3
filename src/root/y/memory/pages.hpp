@@ -16,7 +16,7 @@ namespace Yttrium
         //
         //
         //
-        //! LEVEL-1 cache of pages, THREAD-SAFE from mill's access()
+        //! LEVEL-1 cache of pages, THREAD-SAFE
         //
         //
         //______________________________________________________________________

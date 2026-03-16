@@ -39,7 +39,7 @@ namespace Yttrium
                 static const size_t   MaxNumBlocks      = 255;                                          //!< maximum number of blocks per chunk
                 static const unsigned MaxBlockSizeLog2  = Metrics::MaxPageShift - (1+MinNumBlocksLog2); //!< from MaxBlockSize<=MaxPageBytes/(1+MinNumBlocks)
                 static const size_t   MaxBlockSize      = size_t(1) << MaxBlockSizeLog2;                //!< MaxBlockSize = 2^MaxBlockSizeLog2
-                typedef Core::ListOf<Chunk> Chunks;
+                typedef Core::ListOf<Chunk> Chunks; //!< alias
 
                 //______________________________________________________________
                 //
@@ -50,10 +50,13 @@ namespace Yttrium
 
                 //! setup from block size
                 /**
-                 \param bs   1<= bs <= MaxBlockSize
-                 \param book to choose pages according to inner metrics
+                 \param userSize   1<= bs <= MaxBlockSize
+                 \param userBook PERSISTENT to choose pages according to inner metrics
+                 \param userLock PERSISTENT lock to use inner memory
                  */
-                Arena(const size_t bs, Book &book);
+                Arena(const size_t userSize,
+                      Book        &userBook,
+                      Lockable    &userLock);
 
                 //! cleanup
                 ~Arena() noexcept;
@@ -66,20 +69,24 @@ namespace Yttrium
                 //______________________________________________________________
                 size_t  lostBytesPerChunk() const noexcept; //!< compute lost bytes per chunk \return allocated - usable
 
-                //! acquire a new block
+                //! acquire a new block, thread safe thru access
                 /**
                  - if some block is available:
-                 -- test acquiring (perfect caching)
-                 -- search by spiraling
+                 -# test acquiring (perfect caching)
+                 -# search by spiraling localilty
                  - otherwise create and assert a new chunk
-                 \return a zeroed block[blockSize[
+                 \return a zeroed block[blockSize]
                  */
                 void   *acquire();
 
-                //! release a previously acquired block
+                //! release a block, thread safe thru access
+                /**
+                 \param blockAddr a previously acquired block
+                 */
                 void    release(void *blockAddr) noexcept;
 
-                const Chunks & chunks() const noexcept;
+                //! access to inner chunks \return address of chunks
+                const Chunks * operator->() const noexcept;
 
                 //______________________________________________________________
                 //
@@ -88,6 +95,8 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 const size_t    blockSize; //!< block size per chunk
+                Lockable       &access;    //!< PERSISTENT access
+
             private:
                 Chunk *         acquiring;  //!< acquiring chunk
                 Chunk *         releasing;  //!< releasing chunk

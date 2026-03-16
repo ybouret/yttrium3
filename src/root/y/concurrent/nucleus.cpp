@@ -1,9 +1,8 @@
-
-
 #include "y/config/platform.h"
 #include "y/memory/zombie.hpp"
 #include "y/system/exception.hpp"
 #include "y/ability/latch.hpp"
+#include "y/memory/book.hpp"
 
 #if defined(Y_BSD)
 #include "sys/bsd.hxx"
@@ -33,14 +32,15 @@ namespace Yttrium
         class Nucleus :: Code
         {
         public:
-            inline Code() :
+            inline Code(Memory::Page::Mill &mill) :
 #if defined(Y_BSD)
             attr(),
-            mutex(attr)
+            mutex(attr),
 #endif
 #if defined(Y_WIN)
-            mutex()
+            mutex(),
 #endif
+            book(mill,mutex)
             {
 
             }
@@ -52,6 +52,7 @@ namespace Yttrium
             SystemMutex::Attribute attr;
 #endif
             SystemMutex            mutex;
+            Memory::Book           book;
             static uint64_t        RAM;
 
         private:
@@ -77,9 +78,18 @@ namespace Yttrium
             Y_BZero(NucleusWorkspace);
         }
 
+        Memory::Page::Mill & Nucleus:: asMemoryPageMill() noexcept
+        {
+            return *this;
+        }
+
         Nucleus:: Nucleus() :
-        code( new ( Y_BZero(NucleusWorkspace) ) Code()  ),
-        access(code->mutex)
+        Singulet(),
+        Memory::Allocator(),
+        Memory::Page::Mill(),
+        code( new ( Y_BZero(NucleusWorkspace) ) Code( asMemoryPageMill() )  ),
+        access(code->mutex),
+        book(code->book)
         {
             assert(0==NucleusInstance);
             try
@@ -100,11 +110,11 @@ namespace Yttrium
         {
             assert(0!=NucleusInstance);
             if(Verbose) Display("~", CallSign, LifeTime);
+            deleteCode();
+            NucleusInstance = 0;
             if(RAM>0) {
                 std::cerr << "*** Still Active RAM  = " << RAM << std::endl;
             }
-            deleteCode();
-            NucleusInstance = 0;
         }
 
         void Nucleus:: SelfDestruct(void *const args) noexcept

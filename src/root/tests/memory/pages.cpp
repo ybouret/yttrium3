@@ -23,34 +23,37 @@ Y_UTEST(memory_pages)
     Y_PRINTV(Collectable::NewSize(0xff,100));
 
     Concurrent::Nucleus &nucleus = Concurrent::Nucleus::Instance();
-    Memory::Pages        pages(nucleus,nucleus.access,10);
+    {
+        Memory::Pages        pages(nucleus,nucleus.access,10);
 
-    void *         p[100];
-    const size_t   n = sizeof(p)/sizeof(p[0]);
-    pages.cache(n/10);
-    std::cerr << "count=" << pages.count() << std::endl;
-    for(size_t i=0;i<n;++i)
-    {
-        p[i] = pages.get(); Y_ASSERT( Yttrium_Zeroed(p[i], pages.pageBytes) );
-        Random::Fill(ran, (char *)p[i], pages.pageBytes);
+        void *         p[100];
+        const size_t   n = sizeof(p)/sizeof(p[0]);
+        pages.cache(n/10);
+        std::cerr << "count=" << pages.count() << std::endl;
+        for(size_t i=0;i<n;++i)
+        {
+            p[i] = pages.get(); Y_ASSERT( Yttrium_Zeroed(p[i], pages.pageBytes) );
+            Random::Fill(ran, (char *)p[i], pages.pageBytes);
+        }
+        Random::Shuffle(ran,p,n);
+        for(size_t i=0;i<n/2;++i)
+        {
+            pages.put(p[i]);
+        }
+        std::cerr << "count=" << pages.count() << std::endl;
+        pages.gc(0x20);
+        std::cerr << "count=" << pages.count() << std::endl;
+        for(size_t i=0;i<n/2;++i)
+        {
+            p[i] = pages.get(); Y_ASSERT( Yttrium_Zeroed(p[i], pages.pageBytes) );
+            Random::Fill(ran, (char *)p[i], pages.pageBytes);
+        }
+        for(size_t i=0;i<n;++i)
+        {
+            pages.put(p[i]);
+        }
     }
-    Random::Shuffle(ran,p,n);
-    for(size_t i=0;i<n/2;++i)
-    {
-        pages.put(p[i]);
-    }
-    std::cerr << "count=" << pages.count() << std::endl;
-    pages.gc(0x20);
-    std::cerr << "count=" << pages.count() << std::endl;
-    for(size_t i=0;i<n/2;++i)
-    {
-        p[i] = pages.get(); Y_ASSERT( Yttrium_Zeroed(p[i], pages.pageBytes) );
-        Random::Fill(ran, (char *)p[i], pages.pageBytes);
-    }
-    for(size_t i=0;i<n;++i)
-    {
-        pages.put(p[i]);
-    }
+    
 
 
 

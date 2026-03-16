@@ -43,7 +43,7 @@ Y_UTEST(memory_small_arena)
         Y_BZero(addr);
         size = 0;
         
-        Memory::Small::Arena arena(blockSize,book);
+        Memory::Small::Arena arena(blockSize,book,nucleus.access);
         std::cerr << " | dataAlign = " << std::setw(4) << arena.dataAlign;
         std::cerr << " | numBlocks = " << std::setw(4) << arena.numBlocks;
         std::cerr << " | pageBytes = " << std::setw(8) << arena.allocator.pageBytes;

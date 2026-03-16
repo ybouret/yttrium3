@@ -12,9 +12,9 @@ namespace Yttrium
         namespace Small
         {
 
-            const Arena::Chunks & Arena:: chunks() const noexcept
+            const Arena::Chunks * Arena:: operator->() const noexcept
             {
-                return clist;
+                return &clist;
             }
 
 
@@ -92,8 +92,11 @@ namespace Yttrium
             }
 #endif
 
-            Arena:: Arena(const size_t bs, Book & book) :
-            blockSize(bs),
+            Arena:: Arena(const size_t userSize,
+                          Book &       userBook,
+                          Lockable &   userLock) :
+            blockSize(userSize),
+            access(userLock),
             acquiring(0),
             releasing(0),
             empty(0),
@@ -101,7 +104,7 @@ namespace Yttrium
             clist(),
             numBlocks(0),
             dataAlign( DataAlign(blockSize) ),
-            allocator( book[ PageShift(blockSize,dataAlign,Coerce(numBlocks)) ] )
+            allocator( userBook[ PageShift(blockSize,dataAlign,Coerce(numBlocks)) ] )
             {
                 acquiring = releasing = newChunk();
             }
@@ -144,6 +147,7 @@ namespace Yttrium
 
 #include "y/system/error.hpp"
 #include "y/format/decimal.hpp"
+#include "y/ability/lockable.hpp"
 #include <cerrno>
 
 namespace Yttrium
@@ -215,6 +219,8 @@ namespace Yttrium
 
             void   *Arena:: acquire()
             {
+                Y_Lock(access);
+
                 assert(0!=acquiring);
 
                 if(ready>0)
@@ -256,6 +262,8 @@ namespace Yttrium
         {
             void Arena:: release(void * const blockAddr) noexcept
             {
+                Y_Lock(access);
+                
                 assert(0!=blockSize);
                 assert(0!=releasing);
 

@@ -3,7 +3,7 @@
 #ifndef Y_Type_Conversion_Included
 #define Y_Type_Conversion_Included 1
 
-#include "y/core/setup.hpp"
+#include "y/config/setup.hpp"
 
 namespace Yttrium
 {
