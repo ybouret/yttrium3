@@ -1,6 +1,6 @@
 
 #include "y/memory/book.hpp"
-#include "y/libc/bzero.h"
+#include "y/libc/block/zero.h"
 #include "y/type/destruct.hpp"
 
 namespace Yttrium

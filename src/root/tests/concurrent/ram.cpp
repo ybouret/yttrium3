@@ -3,7 +3,7 @@
 
 #include "y/core/rand.hpp"
 #include "y/random/shuffle.hpp"
-#include "y/libc/bzero.h"
+#include "y/libc/block/zero.h"
 
 using namespace Yttrium;
 

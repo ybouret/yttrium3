@@ -1,5 +1,5 @@
 #include "y/utest/driver.hpp"
-#include "y/libc/bzero.h"
+#include "y/libc/block/zero.h"
 #include "y/libc/block/zeroed.h"
 #include "y/core/max.hpp"
 #include "y/libc/sort.h"

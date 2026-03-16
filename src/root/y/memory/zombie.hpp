@@ -7,7 +7,7 @@
 
 #include "y/type/args.hpp"
 #include "y/calculus/alignment.hpp"
-#include "y/libc/bzero.h"
+#include "y/libc/block/zero.h"
 
 namespace Yttrium
 {

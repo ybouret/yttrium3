@@ -2,7 +2,7 @@
 #include "y/utest/run.hpp"
 #include "y/concurrent/nucleus.hpp"
 #include "y/core/rand.hpp"
-#include "y/libc/bzero.h"
+#include "y/libc/block/zero.h"
 #include "y/random/shuffle.hpp"
 
 using namespace Yttrium;
