@@ -1,4 +1,4 @@
-#include "y/libc/strtrim.h"
+#include "y/libc/str/trim.h"
 #include "y/libc/str/len.h"
 #include <ctype.h>
 

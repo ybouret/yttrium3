@@ -5,7 +5,7 @@
 #include "y/libc/str/cat.h"
 #include "y/libc/str/cpy.h"
 #include "y/libc/str/len.h"
-#include "y/libc/strfmt.h"
+#include "y/libc/str/fmt.h"
 #include "y/core/max.hpp"
 #include <iostream>
 #include <cassert>

@@ -6,7 +6,7 @@
 
 #include "y/exception.hpp"
 #include "y/system/error.hpp"
-#include "y/libc/strfmt.h"
+#include "y/libc/str/fmt.h"
 #include <cassert>
 
 namespace Yttrium

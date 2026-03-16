@@ -1,4 +1,4 @@
-#include "y/libc/strfmt.h"
+#include "y/libc/str/fmt.h"
 #include "y/utest/run.hpp"
 
 #include <stdarg.h>

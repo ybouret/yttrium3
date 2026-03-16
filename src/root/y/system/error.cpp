@@ -1,6 +1,6 @@
 #include "y/system/error.hpp"
 #include "y/libc/str/cpy.h"
-#include "y/libc/strtrim.h"
+#include "y/libc/str/trim.h"
 #include "y/config/setup.hpp"
 #include <cassert>
 #include <cstring>

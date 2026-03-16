@@ -1,4 +1,4 @@
-#include "y/libc/strfmt.h"
+#include "y/libc/str/fmt.h"
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>
