@@ -1,6 +1,6 @@
 #include "y/utest/driver.hpp"
 #include "y/libc/bzero.h"
-#include "y/libc/zeroed.h"
+#include "y/libc/block/zeroed.h"
 #include "y/core/max.hpp"
 #include "y/libc/sort.h"
 #include "y/ascii/plural.hpp"

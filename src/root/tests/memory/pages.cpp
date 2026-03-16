@@ -5,7 +5,7 @@
 #include "y/core/rand.hpp"
 #include "y/random/shuffle.hpp"
 #include "y/random/fill.hpp"
-#include "y/libc/zeroed.h"
+#include "y/libc/block/zeroed.h"
 
 
 using namespace Yttrium;

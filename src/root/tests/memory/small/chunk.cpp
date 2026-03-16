@@ -4,7 +4,7 @@
 #include "y/utest/run.hpp"
 
 #include "y/core/rand.hpp"
-#include "y/libc/zeroed.h"
+#include "y/libc/block/zeroed.h"
 #include <ctime>
 #include <cstring>
 

@@ -1,4 +1,4 @@
-#include "y/libc/bmove.h"
+#include "y/libc/block/move.h"
 #include <string.h>
 #include <assert.h>
 
