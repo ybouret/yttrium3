@@ -68,7 +68,10 @@ namespace Yttrium
             //__________________________________________________________________
             static  Nucleus &  Instance();          //!< handle instance \return single Nucleus
             static  Nucleus &  Location() noexcept; //!< current location \return existing instance
-             
+
+
+            SystemMutex * acquireSystemMutex();
+            void          releaseSystemMutex(SystemMutex * const) noexcept;
 
             //__________________________________________________________________
             //

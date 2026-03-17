@@ -101,7 +101,8 @@ namespace Yttrium
         public:
             explicit Data(Memory::Book &book,
                           Lockable     &lock) :
-            mutexArena( sizeof(SystemMutex), book, lock)
+            mutexArena( sizeof(SystemMutex), book, lock),
+            mutexes(mutexArena)
             {
                 std::cerr << "---- Creating Data" << std::endl;
             }
@@ -112,8 +113,8 @@ namespace Yttrium
 
             }
 
-            Memory::Small::Arena mutexArena;
-
+            Memory::Small::Arena               mutexArena;
+            Memory::Small::House<SystemMutex>  mutexes;
 
         private:
             Y_Disable_Copy_And_Assign(Data);
@@ -132,15 +133,16 @@ namespace Yttrium
         void Nucleus:: destructCode() noexcept
         {
             assert(0!=code);
-            Destruct(code);
-            Coerce(code) = 0;
-            Y_BZero(NucleusCode);
             if(data)
             {
                 Destruct(data);
                 Coerce(data) = 0;
                 Y_BZero(NucleusData);
             }
+            Destruct(code);
+            Coerce(code) = 0;
+            Y_BZero(NucleusCode);
+
         }
 
         Memory::PageFactory & Nucleus:: factory() noexcept
@@ -170,6 +172,8 @@ namespace Yttrium
             }
             NucleusInstance = this;
             if(Verbose) Display("+", CallSign, LifeTime);
+            std::cerr << "sizeof(Code) = " << sizeof(Code) << std::endl;
+            std::cerr << "sizeof(Data) = " << sizeof(Data) << std::endl;
 
         }
 
@@ -268,6 +272,35 @@ namespace Yttrium
 
 }
 
+namespace Yttrium
+{
+    namespace Concurrent
+    {
+        SystemMutex * Nucleus:: acquireSystemMutex()
+        {
+            Y_Lock(access);
+            assert(data);
+#if defined(Y_BSD)
+            return data->mutexes.produce(code->attr);
+#endif
+#if defined(Y_WIN)
+            return data->mutexes.produce();
+#endif
+        }
+
+        void Nucleus:: releaseSystemMutex(SystemMutex * const mutex) noexcept
+        {
+            Y_Lock(access);
+            assert(mutex);
+            assert(data);
+            data->mutexes.recycle(mutex);
+        }
+
+
+    }
+
+}
+
 #include "y/memory/metrics.hpp"
 
 namespace Yttrium
@@ -284,9 +317,7 @@ namespace Yttrium
             assert(code);
             
             // allocating
-            std::cerr << "acquirePage[" << shift << "]" << std::endl;
             Y_Lock(access);
-            std::cerr << "ready..." << std::endl;
             const size_t blockSize = size_t(1) << shift;
             void * const blockAddr = calloc(1,blockSize);
             if(!blockAddr)

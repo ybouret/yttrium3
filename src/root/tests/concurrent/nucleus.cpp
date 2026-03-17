@@ -14,6 +14,9 @@ Y_UTEST(concurrent_nucleus)
     Concurrent::Nucleus &nucleus = Concurrent::Nucleus::Instance();
     std::cerr << nucleus.callSign() << " @" << nucleus.lifeTime() << std::endl;
 
+    Concurrent::SystemMutex *mtx = nucleus.acquireSystemMutex();
+    nucleus.releaseSystemMutex(mtx);
+
 }
 Y_UDONE()
 

@@ -73,7 +73,6 @@ namespace Yttrium
                                size_t &     numBlocks) noexcept
             {
                 const size_t pageBytes = PageBytes(blockSize,dataAlign,numBlocks);
-                std::cerr << "blockSize=" << blockSize << ", pageBytes=" << pageBytes << ", numBlocks=" << numBlocks << std::endl;
                 return ExactLog2(pageBytes);
             }
 
@@ -112,7 +111,6 @@ namespace Yttrium
             prev(0)
             {
                 acquiring = releasing = newChunk();
-                std::cerr << "arena is initialized" << std::endl;
             }
 
             size_t Arena:: lostBytesPerChunk() const noexcept
@@ -127,9 +125,7 @@ namespace Yttrium
 
             Chunk * Arena:: newChunk()
             {
-                std::cerr << "newChunk()" << std::endl;
                 uint8_t * const zpage = static_cast<uint8_t*>( allocator.get() );
-                std::cerr << "zpage@" << zpage << std::endl;
                 Chunk *   const chunk = clist.pushTail( new (zpage) Chunk(blockSize, (uint8_t)numBlocks, zpage + dataAlign) );
                 while(chunk->prev && chunk->prev>chunk) clist.towardsHead(chunk);
 

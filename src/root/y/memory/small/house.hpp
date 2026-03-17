@@ -48,6 +48,18 @@ namespace Yttrium
                     catch(...) { arena.release(addr); throw;}
                 }
 
+                template <typename U>
+                inline Type * produce( U &u )
+                {
+                    void * addr = arena.acquire();
+                    try {
+                        return new (addr) MutableType(u);
+                    }
+                    catch(...) { arena.release(addr); throw;}
+                }
+
+
+
 
             private:
                 Y_Disable_Copy_And_Assign(House);

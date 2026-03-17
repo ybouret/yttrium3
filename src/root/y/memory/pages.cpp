@@ -1,7 +1,6 @@
 
 #include "y/memory/pages.hpp"
 #include "y/memory/page/factory.hpp"
-//#include "y/core/pool.hpp"
 #include "y/core/pool/to-list.hpp"
 #include "y/core/list/to-pool.hpp"
 #include "y/memory/metrics.hpp"
@@ -85,14 +84,11 @@ namespace Yttrium
 
         void * Pages:: get()
         {
-            std::cerr << "get[" << pageBytes << "]" << std::endl;
             Y_Lock(access);
-            std::cerr << "ready..." << std::endl;
             if(pool.size)
                 return static_cast<Page *>( memset(pool.query(),0,pageBytes) );
             else
             {
-                std::cerr << "new page" << std::endl;
                 return factory.acquirePage(pageShift);
             }
         }
