@@ -1,18 +1,63 @@
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
-class SystemMutex
+namespace Yttrium
 {
-public:
+	namespace Concurrent
+	{
+		class SystemMutex : public Latch
+		{
+		public:
+			inline explicit SystemMutex() noexcept
+			{
+				::InitializeCriticalSection(mutex());
+			}
 
-private:
+			inline virtual ~SystemMutex() noexcept
+			{
+				::LeaveCriticalSection(mutex());
+			}
 
-};
+			inline virtual void lock() noexcept
+			{
+				::EnterCriticalSection(mutex());
+			}
+
+			inline virtual void unlock() noexcept
+			{
+				::LeaveCriticalSection(mutex());
+			}
+
+			inline virtual bool tryLock() noexcept
+			{
+				return TRUE == ::TryEnterCriticalSection(mutex());
+			}
+
+			Memory::Zombie<CRITICAL_SECTION> mutex;
+
+		private:
+			Y_Disable_Copy_And_Assign(SystemMutex);
+		};
 
 
-class SystemCondition
-{
-public:
+		class SystemCondition
+		{
+		public:
+			inline   SystemCondition()
+			{
 
-private:
+			}
 
-};
+			inline ~SystemCondition() noexcept
+			{
+
+			}
+
+		private:
+			Y_Disable_Copy_And_Assign(SystemCondition);
+		};
+
+	}
+
+}

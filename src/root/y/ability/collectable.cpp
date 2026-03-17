@@ -22,7 +22,8 @@ namespace Yttrium
 
     size_t Collectable:: NewSize(const uint8_t amount, const size_t oldSize) noexcept
     {
-        return GC::Kept(oldSize,All-amount);
+        const uint8_t keep = (uint8_t)(All - amount);
+        return GC::Kept(oldSize,keep);
     }
 
 
