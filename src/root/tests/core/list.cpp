@@ -1,5 +1,5 @@
 
-#include "y/memory/zombie.hpp"
+#include "y/memory/type/zombie.hpp"
 #include "y/core/list.hpp"
 #include "y/core/display.hpp"
 #include "y/utest/run.hpp"

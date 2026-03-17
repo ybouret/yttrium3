@@ -22,6 +22,7 @@ y/concurrent/singleton
 y/calculus
 y/type
 y/memory
+y/memory/type
 y/memory/small
 y/memory/page
 y/ability

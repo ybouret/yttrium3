@@ -1,4 +1,4 @@
-#include "y/memory/moniker.hpp"
+#include "y/memory/type/moniker.hpp"
 #include "y/utest/run.hpp"
 
 using namespace Yttrium;
@@ -40,6 +40,8 @@ Y_UTEST(memory_moniker)
 {
     {
         Memory::Moniker<int> imon;
+        std::cerr << imon << std::endl;
+        *imon = 7;
         std::cerr << imon << std::endl;
     }
 

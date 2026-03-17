@@ -6,7 +6,7 @@
 
 #include "y/type/sign.hpp"
 #include "y/libc/sort.h"
-#include "y/memory/zombie.hpp"
+#include "y/memory/type/zombie.hpp"
 
 namespace Yttrium
 {
