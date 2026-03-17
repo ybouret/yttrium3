@@ -62,7 +62,11 @@ namespace Yttrium
                 if(0!=err) throw Libc::Exception(err,"pthread_mutex_init");
             }
 
-            inline virtual ~SystemMutex() noexcept { destroy(); }
+            inline virtual ~SystemMutex() noexcept
+            {
+                const int err = pthread_mutex_destroy( mutex() );
+                if(0!=err) Libc::Error::Critical(err, "pthread_mutex_destroy" );
+            }
 
             //__________________________________________________________________
             //
@@ -84,18 +88,57 @@ namespace Yttrium
                 return 0 == pthread_mutex_trylock( mutex() );
             }
 
+            pthread_mutex_t * operator()(void) noexcept { return mutex(); }
 
         private:
             Y_Disable_Copy_And_Assign(SystemMutex);
             Memory::Zombie<pthread_mutex_t> mutex;
 
-            void destroy() noexcept
-            {
-                (void) pthread_mutex_destroy( mutex() );
-            }
+
 
         };
 
+
+        class SystemCondition
+        {
+        public:
+
+            inline SystemCondition() : cond()
+            {
+                const int err = pthread_cond_init( cond(), 0);
+                if(0!=err) throw Libc::Exception(err, "pthread_cond_init" );
+            }
+
+            inline void wait(SystemMutex &mutex) noexcept
+            {
+                const int err = pthread_cond_wait( cond(), mutex() );
+                if(0!=err) Libc::Error::Critical(err, "pthread_cond_init" );
+            }
+
+            inline void signal()
+            {
+                const int err = pthread_cond_signal( cond() );
+                if(0!=err) Libc::Error::Critical(err, "pthread_cond_signal" );
+            }
+
+            inline void broadcast()
+            {
+                const int err = pthread_cond_broadcast( cond() );
+                if(0!=err) Libc::Error::Critical(err, "pthread_cond_signal" );
+            }
+
+
+            inline ~SystemCondition() noexcept
+            {
+                const int err = pthread_cond_destroy( cond() );
+                if(0!=err) Libc::Error::Critical(err, "pthread_cond_destroy" );
+            }
+
+        private:
+            Y_Disable_Copy_And_Assign(SystemCondition);
+            Memory::Zombie<pthread_cond_t> cond;
+
+        };
 
     }
 }

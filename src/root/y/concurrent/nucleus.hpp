@@ -15,7 +15,8 @@ namespace Yttrium
     namespace Concurrent
     {
         class SystemMutex;
-        
+        class SystemCondition;
+
         //______________________________________________________________________
         //
         //

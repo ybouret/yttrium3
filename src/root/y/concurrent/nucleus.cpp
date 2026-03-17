@@ -174,6 +174,8 @@ namespace Yttrium
             if(Verbose) Display("+", CallSign, LifeTime);
             std::cerr << "sizeof(Code) = " << sizeof(Code) << std::endl;
             std::cerr << "sizeof(Data) = " << sizeof(Data) << std::endl;
+            std::cerr << "sizeof(SystemMutex)     = " << sizeof(SystemMutex)     << std::endl;
+            std::cerr << "sizeof(SystemCondition) = " << sizeof(SystemCondition) << std::endl;
 
         }
 
