@@ -9,13 +9,10 @@ Y_UTEST(memory_small_house)
 {
     Concurrent::Nucleus &        nucleus = Concurrent::Nucleus::Instance();
     Memory::Book        &        book    = nucleus.book;
-    //Memory::Small::Arena         arena(8,book,nucleus.access);
+    Memory::Small::Arena         arena(8,book,nucleus.access);
 
-#if 0
     Memory::Small::House<double> house(arena);
-
-    return 0;
-
+    
     double *     addr[1000];
     const size_t size = Y_Static_Size(addr);
 
@@ -23,7 +20,6 @@ Y_UTEST(memory_small_house)
     {
         addr[i] = house.produce();
     }
-#endif
 
 }
 Y_UDONE()

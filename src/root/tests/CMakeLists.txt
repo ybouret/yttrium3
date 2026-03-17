@@ -43,6 +43,8 @@ Y_UTEST(type_ints)
 
 Y_UTEST(concurrent:nucleus)
 Y_UTEST(concurrent:ram)
+Y_UTEST(concurrent:mutex)
+
 Y_UTEST(memory:small:chunk)
 Y_UTEST(memory:small:arena)
 Y_UTEST(memory:small:house)

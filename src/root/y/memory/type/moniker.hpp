@@ -27,7 +27,7 @@ namespace Yttrium
 
             void *wksp[ Alignment::WordsFor<T>::Count ];
         private:
-            Y_Disable_Assign(MonikerData);
+            Y_Disable_Copy_And_Assign(MonikerData);
         };
 
         template <typename T>
@@ -55,7 +55,7 @@ namespace Yttrium
             MonikerData<T>(), Embedded<T>(wksp,u,v,w) { }
 
         private:
-            Y_Disable_Assign(Moniker);
+            Y_Disable_Copy_And_Assign(Moniker);
 
 
         };
