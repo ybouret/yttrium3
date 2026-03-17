@@ -5,6 +5,8 @@
 
 #include "y/core/rand.hpp"
 #include "y/libc/block/zeroed.h"
+#include "y/libc/defs.h"
+
 #include <ctime>
 #include <cstring>
 
@@ -24,7 +26,7 @@ namespace
         while(nblk<n)
         {
             void * const p = (addr[nblk++] = chunk.acquire(blockSize));
-            Y_ASSERT( Yttrium_Zeroed(p,blockSize) );
+            Y_ASSERT( Y_TRUE == Yttrium_Zeroed(p,blockSize) );
             Random::FillWith(ran,p,blockSize);
         }
     }

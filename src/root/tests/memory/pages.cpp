@@ -6,6 +6,7 @@
 #include "y/random/shuffle.hpp"
 #include "y/random/fill.hpp"
 #include "y/libc/block/zeroed.h"
+#include "y/libc/defs.h"
 
 
 using namespace Yttrium;
@@ -32,7 +33,7 @@ Y_UTEST(memory_pages)
         std::cerr << "count=" << pages.count() << std::endl;
         for(size_t i=0;i<n;++i)
         {
-            p[i] = pages.get(); Y_ASSERT( Yttrium_Zeroed(p[i], pages.pageBytes) );
+            p[i] = pages.get(); Y_ASSERT( Y_TRUE == Yttrium_Zeroed(p[i], pages.pageBytes) );
             Random::Fill(ran, (char *)p[i], pages.pageBytes);
         }
         Random::Shuffle(ran,p,n);
@@ -45,7 +46,7 @@ Y_UTEST(memory_pages)
         std::cerr << "count=" << pages.count() << std::endl;
         for(size_t i=0;i<n/2;++i)
         {
-            p[i] = pages.get(); Y_ASSERT( Yttrium_Zeroed(p[i], pages.pageBytes) );
+            p[i] = pages.get(); Y_ASSERT( Y_TRUE == Yttrium_Zeroed(p[i], pages.pageBytes) );
             Random::Fill(ran, (char *)p[i], pages.pageBytes);
         }
         for(size_t i=0;i<n;++i)

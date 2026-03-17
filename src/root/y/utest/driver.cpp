@@ -128,9 +128,9 @@ namespace Yttrium
             else
             {
                 const char * const name = argv[1];
-                Proc * const       proc = search(name);
-                if(proc)
-                    return proc->func(--argc,++argv);
+                Proc * const       mine = search(name);
+                if(mine)
+                    return mine->func(--argc,++argv);
                 else
                 {
                     std::cerr << "no [" << name << "] in" << argv[0] << std::endl;

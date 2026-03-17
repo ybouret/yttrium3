@@ -84,7 +84,7 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                uint8_t * const       data;           //!< base memoery
+                uint8_t * const       data;           //!< base memory
                 const uint8_t * const last;           //!< first invalid memory
                 uint8_t               firstAvailable; //!< first available block address
                 uint8_t               stillAvailable; //!< available blocks

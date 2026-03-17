@@ -23,7 +23,7 @@ Y_UTEST(calculus_gc)
         std::cerr << Hexadecimal(qw) << std::endl;
         for(unsigned keep=0;keep<256;++keep)
         {
-            const uint64_t kept = Calculus::GC_::Kept(qw,keep);
+            const uint64_t kept = Calculus::GC_::Kept(qw,(uint8_t)keep);
             Y_ASSERT(kept<=qw);
         }
     }
@@ -38,9 +38,9 @@ Y_UTEST(calculus_gc)
             std::cerr << "|" << std::setw(4) << (int)keep << ":" << std::setw(5) << kept;
             if(255==keep) break;
         CHOOSE_DELTA:
-            size_t delta = ran.leq<size_t>(255-keep);
+            size_t delta = ran.leq<size_t>(255-(size_t)keep);
             if(delta<=0) goto CHOOSE_DELTA;
-            keep += delta;
+            keep += (uint8_t)delta;
         }
         std::cerr << std::endl;
     }

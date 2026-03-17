@@ -73,7 +73,9 @@ namespace Yttrium
 
                 // find block to release
                 uint8_t * const toRelease = static_cast<uint8_t *>(p); assert( 0 == ( (toRelease-data) % blockSize) );
-                const ptrdiff_t available = (toRelease-data)/blockSize; assert(available >= 0); assert(available < (ptrdiff_t)providedBlocks);
+                const ptrdiff_t available = (toRelease-data)/ (ptrdiff_t)blockSize;
+                assert(available >= 0);
+                assert(available < (ptrdiff_t)providedBlocks);
 
                 *toRelease     = firstAvailable;     // mark it
                 firstAvailable = (uint8_t)available; // update firstAvailable
@@ -92,7 +94,7 @@ namespace Yttrium
 
             size_t Chunk:: missing() const noexcept
             {
-                return providedBlocks - stillAvailable;
+                return (size_t)providedBlocks - (size_t)stillAvailable;
             }
 
         }
