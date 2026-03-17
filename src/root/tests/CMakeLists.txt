@@ -48,6 +48,7 @@ Y_UTEST(memory:small:arena)
 Y_UTEST(memory:small:house)
 Y_UTEST(memory:pages)
 Y_UTEST(memory:book)
+Y_UTEST(memory:moniker)
 
 Y_UTEST(pointer:auto)
 
