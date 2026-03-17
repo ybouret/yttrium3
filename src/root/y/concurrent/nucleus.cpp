@@ -99,10 +99,15 @@ namespace Yttrium
         class Nucleus :: Data
         {
         public:
+            static const size_t MutexSize = sizeof(SystemMutex);
+            static const size_t CondSize  = sizeof(SystemCondition);
+            static const size_t CommSize  = MutexSize > CondSize ? MutexSize : CondSize;
+
             explicit Data(Memory::Book &book,
                           Lockable     &lock) :
-            mutexArena( sizeof(SystemMutex), book, lock),
-            mutexes(mutexArena)
+            arena( CommSize, book, lock),
+            mutexes(arena),
+            conditions(arena)
             {
                 std::cerr << "---- Creating Data" << std::endl;
             }
@@ -113,8 +118,9 @@ namespace Yttrium
 
             }
 
-            Memory::Small::Arena               mutexArena;
-            Memory::Small::House<SystemMutex>  mutexes;
+            Memory::Small::Arena                   arena;
+            Memory::Small::House<SystemMutex>      mutexes;
+            Memory::Small::House<SystemCondition>  conditions;
 
         private:
             Y_Disable_Copy_And_Assign(Data);
