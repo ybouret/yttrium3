@@ -39,7 +39,8 @@ namespace Yttrium
             static const char * const CallSign;                    //!< "Nucleus"
             static const Longevity    LifeTime = GreatestLifeTime; //!< alias
             class Code;
-
+            class Data;
+            
             //__________________________________________________________________
             //
             //
@@ -82,7 +83,8 @@ namespace Yttrium
             explicit Nucleus();                 //!< setup internal code
             virtual ~Nucleus() noexcept;        //!< cleanup internal code
             Code * const code;                  //!< inner code
-
+            Data * const data;                  //!< inner data
+            
             static void          SelfDestruct(void * const) noexcept; //!< call destructor at exit
             void                 destructCode()             noexcept; //!< destruct inner code
             Memory::PageFactory &factory()                  noexcept; //!< avoid this in constructor \return *this

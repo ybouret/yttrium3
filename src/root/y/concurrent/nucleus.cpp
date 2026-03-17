@@ -34,7 +34,7 @@ namespace Yttrium
         //
         //
         //
-        //! Implementation of Nucleus
+        //! Implementation of Nucleus with LEVEL-1 cache
         //
         //
         //______________________________________________________________________
@@ -93,15 +93,32 @@ namespace Yttrium
 
         uint64_t         Nucleus::Code::RAM = 0;
         const uint64_t & Nucleus::RAM       = Nucleus::Code::RAM;
-        
+
+
+        //! contains LEVEL-2 caches
+        class Nucleus :: Data
+        {
+        public:
+            explicit Data()
+            {
+                std::cerr << "---- Creating Data" << std::endl;
+            }
+
+            virtual ~Data() noexcept
+            {
+                std::cerr << "---- Deleting Data" << std::endl;
+
+            }
+
+        private:
+            Y_Disable_Copy_And_Assign(Data);
+        };
+
         namespace
         {
-            static void    * NucleusWorkspace[ Alignment::WordsFor<Nucleus::Code>::Count ];
+            static void    * NucleusCode[ Alignment::WordsFor<Nucleus::Code>::Count ];
+            static void    * NucleusData[ Alignment::WordsFor<Nucleus::Data>::Count ];
             static Nucleus * NucleusInstance = 0;
-
-
-            
-
         }
 
 
@@ -112,7 +129,13 @@ namespace Yttrium
             assert(0!=code);
             Destruct(code);
             Coerce(code) = 0;
-            Y_BZero(NucleusWorkspace);
+            Y_BZero(NucleusCode);
+            if(data)
+            {
+                Destruct(data);
+                Coerce(data) = 0;
+                Y_BZero(NucleusData);
+            }
         }
 
         Memory::PageFactory & Nucleus:: factory() noexcept
@@ -124,7 +147,8 @@ namespace Yttrium
         Singulet(),
         Memory::Allocator(),
         Memory::PageFactory(),
-        code( new ( Y_BZero(NucleusWorkspace) ) Code( factory() )  ),
+        code( new ( Y_BZero(NucleusCode) ) Code( factory() )  ),
+        data( 0 ),
         access(code->mutex),
         book(code->book)
         {
@@ -132,6 +156,7 @@ namespace Yttrium
             try
             {
                 System::AtExit::Perform(SelfDestruct,this,LifeTime);
+                Coerce(data) = new ( Y_BZero(NucleusData) ) Data();
             }
             catch(...)
             {
