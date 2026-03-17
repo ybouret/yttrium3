@@ -13,6 +13,7 @@ namespace Yttrium
 {
     namespace Memory
     {
+
         //______________________________________________________________________
         //
         //
@@ -46,8 +47,8 @@ namespace Yttrium
              \param mill page mill for each slot
              \param lock page lock for each slot
              */
-            explicit Book(Page::Mill &mill,
-                          Lockable   &lock) noexcept;
+            explicit Book(PageFactory &factory,
+                          Lockable    &access) noexcept;
             virtual ~Book()                 noexcept; //!< cleanup
 
             //__________________________________________________________________

@@ -5,7 +5,7 @@
 
 #include "y/concurrent/singulet.hpp"
 #include "y/memory/allocator.hpp"
-#include "y/memory/page.hpp"
+#include "y/memory/page/factory.hpp"
 
 namespace Yttrium
 {
@@ -26,7 +26,7 @@ namespace Yttrium
         class Nucleus :
         public Singulet,
         public Memory::Allocator,
-        public Memory::Page::Mill
+        public Memory::PageFactory
         {
         public:
             //__________________________________________________________________
@@ -82,9 +82,9 @@ namespace Yttrium
             virtual ~Nucleus() noexcept;        //!< cleanup internal code
             Code * const code;                  //!< inner code
 
-            static void         SelfDestruct(void * const) noexcept; //!< call destructor at exit
-            void                destructCode()             noexcept; //!< destruct inner code
-            Memory::Page::Mill &mill()                     noexcept; //!< avoid this in constructor \return *this
+            static void          SelfDestruct(void * const) noexcept; //!< call destructor at exit
+            void                 destructCode()             noexcept; //!< destruct inner code
+            Memory::PageFactory &factory()                  noexcept; //!< avoid this in constructor \return *this
 
         public:
             Lockable     & access; //!< interface to inner, global mutex

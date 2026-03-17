@@ -1,6 +1,7 @@
 
 #include "y/memory/pages.hpp"
-#include "y/core/pool.hpp"
+#include "y/memory/page/factory.hpp"
+//#include "y/core/pool.hpp"
 #include "y/core/pool/to-list.hpp"
 #include "y/core/list/to-pool.hpp"
 #include "y/memory/metrics.hpp"
@@ -13,14 +14,14 @@ namespace Yttrium
     namespace Memory
     {
 
-        Pages:: Pages(Page::Mill   & pageMill,
-                      Lockable     & userLock,
+        Pages:: Pages(PageFactory  & pageFactory,
+                      Lockable     & userAccess,
                       const unsigned blockShift) noexcept :
         pool(),
         pageShift(blockShift),
         pageBytes( size_t(1) << pageShift ),
-        mill(pageMill),
-        lock(userLock)
+        factory(pageFactory),
+        access(userAccess)
         {
             assert(pageShift>=Metrics::MinPageShift);
             assert(pageShift<=Metrics::MaxPageShift);
@@ -28,8 +29,8 @@ namespace Yttrium
 
         void Pages:: release_() noexcept
         {
-            Y_Lock(lock);
-            while(pool.size) mill.releasePage( pool.query(), pageShift);
+            Y_Lock(access);
+            while(pool.size) factory.releasePage( pool.query(), pageShift);
         }
 
         Pages:: ~Pages() noexcept
@@ -44,14 +45,14 @@ namespace Yttrium
 
         size_t Pages:: count() const noexcept
         {
-            Y_Lock(lock);
+            Y_Lock(access);
             return pool.size;
         }
 
         void Pages:: cache(const size_t n)
         {
-            Y_Lock(lock);
-            for(size_t i=0;i<n;++i) pool.store( mill.acquirePage(pageShift) );
+            Y_Lock(access);
+            for(size_t i=0;i<n;++i) pool.store( factory.acquirePage(pageShift) );
         }
 
 
@@ -59,12 +60,12 @@ namespace Yttrium
 
         void Pages:: gc(const uint8_t amount) noexcept
         {
-            Y_Lock(lock);
+            Y_Lock(access);
             const size_t       newSize = NewSize(amount,pool.size);
             {
                 Core::ListOf<Page> list;
                 Core::PoolToList::Make(list,pool).sortByDecreasingAddress();
-                while(list.size>newSize) mill.releasePage(list.popHead(),pageShift);
+                while(list.size>newSize) factory.releasePage(list.popHead(),pageShift);
                 Core::ListToPool::Make(pool,list);
             }
             assert(newSize==pool.size);
@@ -84,16 +85,16 @@ namespace Yttrium
 
         void * Pages:: get()
         {
-            Y_Lock(lock);
+            Y_Lock(access);
             if(pool.size)
                 return static_cast<Page *>( memset(pool.query(),0,pageBytes) );
             else
-                return mill.acquirePage(pageShift);
+                return factory.acquirePage(pageShift);
         }
 
         void Pages:: put(void * const page) noexcept
         {
-            Y_Lock(lock);
+            Y_Lock(access);
             assert(page);
             pool.store( Page::From(page) );
         }

@@ -10,8 +10,12 @@
 
 namespace Yttrium
 {
+    class Lockable;
+    
     namespace Memory
     {
+        class PageFactory;
+
         //______________________________________________________________________
         //
         //
@@ -36,8 +40,8 @@ namespace Yttrium
              \param userLock persistent lock for this pages access
              \param shift    Metrics::MinPageShift <= shift <= Metrics::MaxPageShift
              */
-            explicit Pages(Page::Mill &pageMill,
-                           Lockable   &userLock,
+            explicit Pages(PageFactory &pageFactory,
+                           Lockable    &userAccess,
                            const unsigned shift) noexcept;
             virtual ~Pages() noexcept;
 
@@ -72,9 +76,9 @@ namespace Yttrium
         public:
             const unsigned      pageShift;  //!< in valid metrics boundaries
             const size_t        pageBytes;  //!< 2^pageShift
-            Page::Mill        & mill;       //!< thread-safe, PERISTENT page provider
-            Lockable          & lock;       //!< PERSISTEN mill.access()
-            
+            PageFactory       & factory;    //!< thread-safe, PERISTENT page factory
+            Lockable          & access;     //!< PERSISTENT access lock
+
         private:
             Y_Disable_Copy_And_Assign(Pages); //!< discarded
             void release_() noexcept;         //!< release pages pool

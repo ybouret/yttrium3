@@ -11,15 +11,6 @@ namespace Yttrium
             assert(blockAddr);
             return static_cast<Page *>( memset(blockAddr,0,sizeof(Page)) );
         }
-
-        Page::Mill:: Mill() noexcept
-        {
-        }
-
-        Page::Mill:: ~Mill() noexcept
-        {
-        }
         
-
     }
 }

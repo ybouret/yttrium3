@@ -9,8 +9,8 @@ namespace Yttrium
     {
 
 
-        Book:: Book(Page::Mill &mill,
-                    Lockable   &lock) noexcept :
+        Book:: Book(PageFactory &mill,
+                    Lockable    &lock) noexcept :
         pages(0),
         wksp()
         {

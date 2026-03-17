@@ -32,7 +32,7 @@ namespace Yttrium
                 {
                 }
 
-                inline void   recycle(Type * const target) noexcept
+                inline void recycle(Type * const target) noexcept
                 {
                     assert(0!=target);
                     MutableType * const tgt = Coerce(target);

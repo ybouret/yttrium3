@@ -32,7 +32,7 @@ namespace Yttrium
         class Nucleus :: Code
         {
         public:
-            inline Code(Memory::Page::Mill &mill) :
+            inline Code(Memory::PageFactory &factory) :
 #if defined(Y_BSD)
             attr(),
             mutex(attr),
@@ -40,7 +40,7 @@ namespace Yttrium
 #if defined(Y_WIN)
             mutex(),
 #endif
-            book(mill,mutex)
+            book(factory,mutex)
             {
 
             }
@@ -78,7 +78,7 @@ namespace Yttrium
             Y_BZero(NucleusWorkspace);
         }
 
-        Memory::Page::Mill & Nucleus:: mill() noexcept
+        Memory::PageFactory & Nucleus:: factory() noexcept
         {
             return *this;
         }
@@ -86,8 +86,8 @@ namespace Yttrium
         Nucleus:: Nucleus() :
         Singulet(),
         Memory::Allocator(),
-        Memory::Page::Mill(),
-        code( new ( Y_BZero(NucleusWorkspace) ) Code( mill() )  ),
+        Memory::PageFactory(),
+        code( new ( Y_BZero(NucleusWorkspace) ) Code( factory() )  ),
         access(code->mutex),
         book(code->book)
         {
