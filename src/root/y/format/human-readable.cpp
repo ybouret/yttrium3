@@ -61,6 +61,10 @@ namespace Yttrium
     {
     }
 
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4774 ) // format for sprintf
+#endif 
+
     std::ostream & operator<<(std::ostream &os, const HumanReadable &hr)
     {
         // request: 4 + 1 + precision

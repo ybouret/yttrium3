@@ -23,10 +23,15 @@
 #if defined(_MSC_VER)
 #  define Y_Compiler "Microsoft"
 #  define Y_MSC 1
-#  pragma warning ( disable : 4514 4820 4625 4626 5026 5027 4774 4710 4711 4571 5039 5045 4435)
 
-// for virtual base class
-#  pragma warning ( disable : 4589)
+#pragma warning ( disable : 4820 ) // padding
+#pragma warning ( disable : 5039 ) // TpSetCallbackCleanupGroup(pcbe, ptpcg, pfng);
+#pragma warning ( disable : 4710 ) // function not inline
+#pragma warning ( disable : 4711 ) // functionselected for automatic inline
+#pragma warning ( disable : 5045 ) // spectre mitigation
+#pragma warning ( disable : 4514 ) // unreference inlined was removed
+#pragma warning ( disable : 4738 ) // storing 32-bit float in memory
+
 #endif // defined(_MSC_VER)
 
 // detect GNU
@@ -63,7 +68,7 @@
 #if defined(__cplusplus)
 namespace Yttrium
 {
-    typedef ptrdiff_t unit_t;
+	typedef ptrdiff_t unit_t;
 }
 #endif // defined(__cplusplus)
 

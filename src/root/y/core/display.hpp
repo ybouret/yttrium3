@@ -3,6 +3,8 @@
 #ifndef Y_Core_Display_Included
 #define Y_Core_Display_Included 1
 
+#include "y/config/compiler.h"
+
 #include <iostream>
 
 namespace Yttrium

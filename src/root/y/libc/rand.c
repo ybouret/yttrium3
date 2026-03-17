@@ -1,5 +1,7 @@
 
 #include "y/libc/rand.h"
+#include "y/config/compiler.h"
+
 #include <assert.h>
 #include <stdlib.h>
 
