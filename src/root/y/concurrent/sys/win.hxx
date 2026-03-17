@@ -9,7 +9,7 @@ namespace Yttrium
 		class SystemMutex : public Latch
 		{
 		public:
-			inline explicit SystemMutex() noexcept
+			inline explicit SystemMutex() noexcept : mutex()
 			{
 				::InitializeCriticalSection(mutex());
 			}
