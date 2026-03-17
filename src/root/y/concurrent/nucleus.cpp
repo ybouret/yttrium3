@@ -99,7 +99,9 @@ namespace Yttrium
         class Nucleus :: Data
         {
         public:
-            explicit Data()
+            explicit Data(Memory::Book &book,
+                          Lockable     &lock) :
+            mutexArena( sizeof(SystemMutex), book, lock)
             {
                 std::cerr << "---- Creating Data" << std::endl;
             }
@@ -109,6 +111,9 @@ namespace Yttrium
                 std::cerr << "---- Deleting Data" << std::endl;
 
             }
+
+            Memory::Small::Arena mutexArena;
+
 
         private:
             Y_Disable_Copy_And_Assign(Data);
@@ -156,7 +161,7 @@ namespace Yttrium
             try
             {
                 System::AtExit::Perform(SelfDestruct,this,LifeTime);
-                Coerce(data) = new ( Y_BZero(NucleusData) ) Data();
+                Coerce(data) = new ( Y_BZero(NucleusData) ) Data(book,access);
             }
             catch(...)
             {
