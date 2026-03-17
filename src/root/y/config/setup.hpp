@@ -33,6 +33,7 @@ namespace Yttrium
         extern const char * const Unknown; //!< "Unknown"
         extern const char * const Success; //!< "Success"
         extern const char * const Failure; //!< "Failure"
+        extern const char * const NullPtr; //!< "(nil)"
     };
 
 }

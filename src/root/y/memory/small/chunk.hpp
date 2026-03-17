@@ -17,8 +17,11 @@ namespace Yttrium
             //
             //
             //
-            //! handling chunk on any given region of memory
-            //
+            //! Manage same-sized blocks on any given region of memory
+            /**
+             - very low-level management
+             - obviously thread-unsafe
+             */
             //
             //__________________________________________________________________
             class Chunk

@@ -18,7 +18,7 @@ namespace Yttrium
         //
         //
         //
-        //! Multiple page cache in one position
+        //! Repository of Pages
         //
         //
         //______________________________________________________________________
@@ -31,10 +31,11 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            static const unsigned MinPageShift = Metrics::MinPageShift;           //!< alias
-            static const unsigned MaxPageShift = Metrics::MaxPageShift;           //!< alias
-            static const unsigned NumPageSlots = 1 + MaxPageShift - MinPageShift; //!< number of different shifts
-            static const size_t   Required     = NumPageSlots * sizeof(Pages);    //!< inner memory
+            static const unsigned MinPageShift  = Metrics::MinPageShift;                     //!< alias
+            static const unsigned MaxPageShift  = Metrics::MaxPageShift;                     //!< alias
+            static const unsigned NumPageSlots  = 1 + MaxPageShift - MinPageShift;           //!< number of different shifts
+            static const size_t   RequiredBytes = NumPageSlots * sizeof(Pages);              //!< inner memory
+            static const size_t   RequiredWords = Alignment::WordsGEQ<RequiredBytes>::Count; //!< inner memory
 
             //__________________________________________________________________
             //
@@ -68,15 +69,16 @@ namespace Yttrium
             //__________________________________________________________________
             Pages &       operator[](const unsigned shift)       noexcept; //!< access \param shift \return matching Pages
             const Pages & operator[](const unsigned shift) const noexcept; //!< access \param shift \return matching Pages
+            
 
             //! query total available bytes \return sum of all cached bytes
             uint64_t      availableBytes() const noexcept;
 
 
         private:
-            Y_Disable_Copy_And_Assign(Book); //!< discarded
-            Pages * const pages;             //!< in [MinShift:MaxShift]
-            void *        wksp[ Alignment::WordsGEQ<Required>::Count ]; //!< inner memory
+            Y_Disable_Copy_And_Assign(Book);   //!< discarded
+            Pages * const pages;               //!< in [MinShift:MaxShift]
+            void *        wksp[RequiredWords]; //!< inner memory
         };
     }
 

@@ -85,11 +85,16 @@ namespace Yttrium
 
         void * Pages:: get()
         {
+            std::cerr << "get[" << pageBytes << "]" << std::endl;
             Y_Lock(access);
+            std::cerr << "ready..." << std::endl;
             if(pool.size)
                 return static_cast<Page *>( memset(pool.query(),0,pageBytes) );
             else
+            {
+                std::cerr << "new page" << std::endl;
                 return factory.acquirePage(pageShift);
+            }
         }
 
         void Pages:: put(void * const page) noexcept

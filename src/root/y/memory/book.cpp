@@ -2,6 +2,7 @@
 #include "y/memory/book.hpp"
 #include "y/libc/block/zero.h"
 #include "y/type/destruct.hpp"
+#include "y/ability/lockable.hpp"
 
 namespace Yttrium
 {
@@ -48,7 +49,8 @@ namespace Yttrium
 
         uint64_t Book:: availableBytes() const noexcept
         {
-            assert(pages);
+            Pages * const first = pages+MinPageShift;
+            Y_Lock(first->access);
             uint64_t sum = 0;
             for(unsigned shift=MinPageShift;shift<=MaxPageShift;++shift)
             {
@@ -60,6 +62,8 @@ namespace Yttrium
 
         void Book:: gc(const uint8_t amount) noexcept
         {
+            Pages * const first = pages+MinPageShift;
+            Y_Lock(first->access);
             for(unsigned shift=MinPageShift;shift<=MaxPageShift;++shift)
             {
                 pages[shift].gc(amount);

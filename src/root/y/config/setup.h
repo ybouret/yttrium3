@@ -13,6 +13,9 @@
 #include <stdlib.h>
 #endif
 
+//! inline static size of an array
+#define Y_Static_Size(ARR) ( sizeof(ARR) / sizeof(ARR[0]) )
+
 #endif // !Y_Config_Setup_H_Included
 
 

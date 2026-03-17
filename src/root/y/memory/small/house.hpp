@@ -17,18 +17,18 @@ namespace Yttrium
         {
 
             template <typename T>
-            class HouseOf
+            class House
             {
             public:
                 Y_Args_Expose(T,Type);
 
-                inline explicit HouseOf( Arena &userArena ) noexcept :
+                inline explicit House( Arena &userArena ) noexcept :
                 arena( userArena )
                 {
                     assert( arena.blockSize >= sizeof(Type) );
                 }
 
-                inline virtual ~HouseOf() noexcept
+                inline virtual ~House() noexcept
                 {
                 }
 
@@ -50,7 +50,7 @@ namespace Yttrium
 
 
             private:
-                Y_Disable_Copy_And_Assign(HouseOf);
+                Y_Disable_Copy_And_Assign(House);
                 Arena & arena;
             };
         }

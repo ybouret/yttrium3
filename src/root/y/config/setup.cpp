@@ -7,6 +7,7 @@ namespace Yttrium
         const char * const Unknown = "Unknown";
         const char * const Success = "Success";
         const char * const Failure = "Failure";
+        const char * const NullPtr = "(nil)";
 
     }
 }

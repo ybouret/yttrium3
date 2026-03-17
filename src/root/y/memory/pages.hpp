@@ -20,7 +20,7 @@ namespace Yttrium
         //
         //
         //
-        //! LEVEL-1 cache of pages, THREAD-SAFE
+        //! LEVEL-1 cache of pages, THREAD-SAFE, autonomous
         //
         //
         //______________________________________________________________________
@@ -36,12 +36,12 @@ namespace Yttrium
 
             //! setup
             /**
-             \param pageMill (thread-safe) peristent page allocator
-             \param userLock persistent lock for this pages access
+             \param pageFactory (thread-safe) peristent page factory
+             \param userAccess persistent lock for this access
              \param shift    Metrics::MinPageShift <= shift <= Metrics::MaxPageShift
              */
-            explicit Pages(PageFactory &pageFactory,
-                           Lockable    &userAccess,
+            explicit Pages(PageFactory &  pageFactory,
+                           Lockable    &  userAccess,
                            const unsigned shift) noexcept;
             virtual ~Pages() noexcept;
 
@@ -62,8 +62,8 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            void * get();                      //!< thread-unsafe allocation \return an existing or a new zeroed block
-            void   put(void * const) noexcept; //!< thread-unsafe store a previously allocated page
+            void * get();                      //!< thread-safe allocation \return an existing or a new zeroed block
+            void   put(void * const) noexcept; //!< thread-safe store a previously allocated page
 
             //__________________________________________________________________
             //

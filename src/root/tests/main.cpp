@@ -41,7 +41,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(memory_pages);
     Y_UTEST(memory_book);
 
-
+    Y_UTEST(pointer_auto);
 }
 Y_UTEST_EXEC()
 

@@ -4,6 +4,7 @@
 #include "y/core/rand.hpp"
 #include "y/libc/block/zero.h"
 #include "y/random/shuffle.hpp"
+#include "y/memory/pages.hpp"
 
 using namespace Yttrium;
 
@@ -30,7 +31,6 @@ Y_UTEST(memory_small_arena)
 {
     Core::Rand           ran;
     Concurrent::Nucleus &nucleus = Concurrent::Nucleus::Instance();
-    Memory::Book         book(nucleus,nucleus.access);
 
 
     void *       addr[1000];
@@ -43,7 +43,7 @@ Y_UTEST(memory_small_arena)
         Y_BZero(addr);
         size = 0;
         
-        Memory::Small::Arena arena(blockSize,book,nucleus.access);
+        Memory::Small::Arena arena(blockSize,nucleus.book,nucleus.access);
         std::cerr << " | dataAlign = " << std::setw(4) << arena.dataAlign;
         std::cerr << " | numBlocks = " << std::setw(4) << arena.numBlocks;
         std::cerr << " | pageBytes = " << std::setw(8) << arena.allocator.pageBytes;

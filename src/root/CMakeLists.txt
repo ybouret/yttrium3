@@ -27,6 +27,7 @@ y/memory/page
 y/ability
 y/container
 y/container/iter
+y/pointer
 y/utest)
 
 add_subdirectory(tests)

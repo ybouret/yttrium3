@@ -3,6 +3,7 @@
 #include "y/system/exception.hpp"
 #include "y/ability/latch.hpp"
 #include "y/memory/book.hpp"
+#include "y/memory/small/house.hpp"
 
 #if defined(Y_BSD)
 #include "sys/bsd.hxx"
@@ -29,9 +30,25 @@ namespace Yttrium
         System::AtExit::Longevity Nucleus:: lifeTime() const noexcept { return LifeTime; }
 
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Implementation of Nucleus
+        //
+        //
+        //______________________________________________________________________
         class Nucleus :: Code
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! create the core mutex and core memory handling
             inline Code(Memory::PageFactory &factory) :
 #if defined(Y_BSD)
             attr(),
@@ -45,15 +62,30 @@ namespace Yttrium
 
             }
 
+            // cleanup
             inline ~Code() noexcept {}
 
+            //__________________________________________________________________
+            //
+            //
+            // Member
+            //
+            //__________________________________________________________________
 
 #if defined(Y_BSD)
-            SystemMutex::Attribute attr;
+            SystemMutex::Attribute attr;       // for recursive mutex
 #endif
-            SystemMutex            mutex;
-            Memory::Book           book;
-            static uint64_t        RAM;
+            SystemMutex                         mutex;      // system mutex wrapper
+            Memory::Book                        book;       // global pages
+
+
+            //__________________________________________________________________
+            //
+            //
+            // Data
+            //
+            //__________________________________________________________________
+            static uint64_t        RAM;        // memory monitoring
 
         private:
             Y_Disable_Copy_And_Assign(Code);
@@ -66,7 +98,12 @@ namespace Yttrium
         {
             static void    * NucleusWorkspace[ Alignment::WordsFor<Nucleus::Code>::Count ];
             static Nucleus * NucleusInstance = 0;
+
+
+            
+
         }
+
 
 
 
@@ -214,9 +251,12 @@ namespace Yttrium
             static const char fn[] = "Nucleus::acquirePage";
             assert(shift>=Memory::Metrics::MinPageShift);
             assert(shift<=Memory::Metrics::MaxPageShift);
-
+            assert(code);
+            
             // allocating
+            std::cerr << "acquirePage[" << shift << "]" << std::endl;
             Y_Lock(access);
+            std::cerr << "ready..." << std::endl;
             const size_t blockSize = size_t(1) << shift;
             void * const blockAddr = calloc(1,blockSize);
             if(!blockAddr)

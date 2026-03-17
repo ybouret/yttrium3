@@ -14,7 +14,8 @@ namespace Yttrium
 
     namespace Concurrent
     {
-
+        class SystemMutex;
+        
         //______________________________________________________________________
         //
         //
@@ -87,8 +88,8 @@ namespace Yttrium
             Memory::PageFactory &factory()                  noexcept; //!< avoid this in constructor \return *this
 
         public:
-            Lockable     & access; //!< interface to inner, global mutex
-            Memory::Book & book;   //!< inner book
+            Lockable     & access; //!< reference to inner, global mutex
+            Memory::Book & book;   //!< reference to inner book
         };
 
     }

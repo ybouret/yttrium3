@@ -7,7 +7,8 @@ calculus
 type
 concurrent
 memory
-memory/small)
+memory/small
+pointer)
 
 Y_LinkLibraries(test-root)
 
@@ -48,7 +49,7 @@ Y_UTEST(memory:small:house)
 Y_UTEST(memory:pages)
 Y_UTEST(memory:book)
 
-
+Y_UTEST(pointer:auto)
 
 
 

@@ -5,13 +5,18 @@
 #define Y_Memory_Small_Arena_Included 1
 
 #include "y/config/setup.hpp"
-#include "y/memory/book.hpp"
 #include "y/core/list.hpp"
+#include "y/memory/metrics.hpp"
 
 namespace Yttrium
 {
+
+    class Lockable;
+
     namespace Memory
     {
+        class Book;
+        class Pages;
 
         namespace Small
         {
@@ -22,7 +27,11 @@ namespace Yttrium
             //
             //
             //! Arena of multiple chunks with same block size
-            //
+            /**
+             - LEVEL-2 cache
+             - memory I/O is protected with Pages setup (LEVEL-1)
+             - self I/O is protected by access
+             */
             //
             //__________________________________________________________________
             class Arena
@@ -39,7 +48,7 @@ namespace Yttrium
                 static const size_t   MaxNumBlocks      = 255;                                          //!< maximum number of blocks per chunk
                 static const unsigned MaxBlockSizeLog2  = Metrics::MaxPageShift - (1+MinNumBlocksLog2); //!< from MaxBlockSize<=MaxPageBytes/(1+MinNumBlocks)
                 static const size_t   MaxBlockSize      = size_t(1) << MaxBlockSizeLog2;                //!< MaxBlockSize = 2^MaxBlockSizeLog2
-                typedef Core::ListOf<Chunk> Chunks; //!< alias
+                typedef Core::ListOf<Chunk> Chunks;                                                     //!< alias
 
                 //______________________________________________________________
                 //
@@ -94,8 +103,8 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                const size_t    blockSize; //!< block size per chunk
-                Lockable       &access;    //!< PERSISTENT access
+                const size_t     blockSize; //!< block size per chunk
+                Lockable &       access;    //!< PERSISTENT access
 
             private:
                 Chunk *         acquiring;  //!< acquiring chunk
