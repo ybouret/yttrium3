@@ -341,7 +341,7 @@ namespace Yttrium
              \param node source node
              \return inserted node after mine
              */
-            NODE * insertAfter(NODE * const mine, NODE * const node) noexcept
+            inline NODE * insertAfter(NODE * const mine, NODE * const node) noexcept
             {
                 Y_Core_List_Check(node); assert(mine); assert(size>0); assert( owns(mine) );
                 if(tail==mine)
@@ -370,7 +370,7 @@ namespace Yttrium
              \param node source node
              \return inserted node before mine
              */
-            NODE * insertBefore(NODE * const mine, NODE * const node) noexcept
+            inline NODE * insertBefore(NODE * const mine, NODE * const node) noexcept
             {
                 Y_Core_List_Check(node); assert(mine); assert(size>0); assert( owns(mine) );
                 if(head==mine)
@@ -397,7 +397,7 @@ namespace Yttrium
              \param node one of my node
              \return node exchanged with its prev
              */
-            NODE * towardsHead(NODE * const node) noexcept
+            inline NODE * towardsHead(NODE * const node) noexcept
             {
                 assert(owns(node));
                 assert(head!=node);
@@ -405,6 +405,14 @@ namespace Yttrium
                 assert(0!=node->prev);
                 NODE * const prev = node->prev;
                 return insertBefore(prev,pop(node));
+            }
+
+            inline NODE * moveToHead(NODE * const node) noexcept
+            {
+                assert(owns(node));
+                assert(head!=0);
+                assert(size>0);
+                return head != node ? pushHead( pop(node) ) : node;
             }
 
 
