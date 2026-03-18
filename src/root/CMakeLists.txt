@@ -17,6 +17,8 @@ y/system
 y/ascii
 y/format
 y/concurrent
+y/concurrent/nucleus
+y/concurrent/thread
 y/concurrent/sys
 y/concurrent/singleton
 y/calculus

@@ -94,11 +94,24 @@ namespace Yttrium
             Y_Disable_Copy_And_Assign(SystemMutex);
             Memory::Zombie<pthread_mutex_t> mutex;
 
-
-
         };
 
+    }
 
+}
+
+namespace Yttrium
+{
+    namespace Concurrent
+    {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! pthread condition wrapper
+        //
+        //
+        //______________________________________________________________________
         class SystemCondition
         {
         public:
@@ -137,8 +150,35 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(SystemCondition);
             Memory::Zombie<pthread_cond_t> cond;
+        };
+
+
+    }
+}
+
+
+namespace Yttrium
+{
+    namespace Concurrent
+    {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! pthread condition wrapper
+        //
+        //
+        //______________________________________________________________________
+        class SystemThread
+        {
+        public:
+
+
+        private:
 
         };
 
     }
+
 }
+
