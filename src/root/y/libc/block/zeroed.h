@@ -4,6 +4,7 @@
 #define Y_Libc_Zeroed_Included
 
 #include "y/config/setup.h"
+#include "y/libc/defs.h"
 
 #if defined(__cplusplus)
 extern "C" {

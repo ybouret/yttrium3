@@ -12,14 +12,21 @@ namespace Yttrium
         namespace Plastic
         {
             class Bricks;
-            
+
+            //__________________________________________________________________
+            //
+            //
+            //! Brick to pave anonymous memory regions
+            //
+            //__________________________________________________________________
             struct Brick
             {
-                Bricks * used;
-                size_t   size;
-                Brick *  next;
-                Brick *  prev;
+                Bricks * used; //!< owner of the memory region
+                size_t   size; //!< size in bytes at this+1
+                Brick *  next; //!< for list
+                Brick *  prev; //!< for list
 
+                //! update size using next
                 void updateSize() noexcept;
 
             };

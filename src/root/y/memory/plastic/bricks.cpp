@@ -17,24 +17,39 @@ namespace Yttrium
                 assert(pageSize>=Bricks::MinBlockSize);
                 const size_t numBricks = pageSize / sizeof(Brick);
                 assert(numBricks>=Bricks::MinPerPage+2);
-                std::cerr << "numBricks in " << pageSize << " bytes : " << numBricks << " => main bytes=" << (numBricks-2) * sizeof(Brick) << std::endl;
+                //std::cerr << "numBricks in " << pageSize << " bytes : " << numBricks << " => main bytes=" << (numBricks-2) * sizeof(Brick) << std::endl;
                 return numBricks-1;
             }
+
+#if !defined(NDEBUG)
+            static bool CheckGapsOf(const Bricks * const bricks) noexcept
+            {
+                size_t count = 0;
+                for(const Brick *node=bricks->head;node!=bricks->tail;node=node->next)
+                {
+                    if(0==node->used) ++count;
+                }
+                return count == bricks->ngap;
+            }
+#endif // !defined(NDEBUG)
 
             Bricks:: Bricks(void * const pageAddr, const size_t pageSize) noexcept :
             ngap(1),
             head( static_cast<Brick *>(pageAddr) ),
-            tail( head + BrickTailOffset(pageSize) )
+            tail( head + BrickTailOffset(pageSize) ),
+            maxBlockSize((static_cast<size_t>(tail-head)-1) * sizeof(Brick))
             {
                 head->prev = 0;
                 head->next = tail;
                 head->used = 0;
-                head->size = (static_cast<size_t>(tail-head)-1) * sizeof(Brick);
+                head->size = maxBlockSize;
 
                 tail->prev = head;
                 tail->next = 0;
                 tail->used = this;
                 tail->size = 0;
+
+                assert( CheckGapsOf(this) );
             }
 
 
@@ -43,6 +58,7 @@ namespace Yttrium
                 assert(0==head->prev);
                 assert(0==tail->next);
                 assert(this==tail->used);
+                assert(CheckGapsOf(this));
 
                 for(const Brick *brick = head; brick != tail; brick=brick->next)
                 {
@@ -53,6 +69,17 @@ namespace Yttrium
                     }
                 }
 
+            }
+
+
+
+            bool Bricks:: ownsBrick(const Brick * const node) const noexcept
+            {
+                for(const Brick *brick = head; brick != tail; brick=brick->next)
+                {
+                    if(node==brick) return true;
+                }
+                return false;
             }
 
 
@@ -70,7 +97,7 @@ namespace Yttrium
 
             void * Bricks:: acquire(size_t &blockSize) noexcept
             {
-                if(ngap<=0)
+                if(ngap<=0 || blockSize>maxBlockSize)
                     return 0; // full
                 else
                 {
@@ -100,6 +127,7 @@ namespace Yttrium
                 assert(brick);
                 assert(0==brick->used);
                 assert(brick->size>=blockSize);
+                assert(CheckGapsOf(this));
 
                 // mark brick as used
                 brick->used = this;
@@ -133,7 +161,7 @@ namespace Yttrium
                     node->next  = next;
                     next->prev  = node;
 
-                    // update states
+                    // update states, ngap is unchanged
                     brick->size = blockSize;
                     node->used  = 0;
                     node->updateSize();
@@ -142,11 +170,85 @@ namespace Yttrium
                 else
                 {
                     blockSize = brick->size;
+                    --ngap;
                 }
+                assert( CheckGapsOf(this) );
                 return memset(p,0,blockSize);
             }
 
 
+
+            Bricks * Bricks:: Release(void * const blockAddr,
+                                      size_t &     blockSize) noexcept
+            {
+                static const unsigned FUSION_NONE = 0x00;
+                static const unsigned FUSION_PREV = 0x01;
+                static const unsigned FUSION_NEXT = 0x02;
+                static const unsigned FUSION_BOTH = FUSION_PREV | FUSION_NEXT;
+
+                // sanity check on input
+                assert(0!=blockAddr);
+                assert(blockSize>0);
+                assert(0==(blockSize%sizeof(Brick)));
+
+                // deduce brick and sanity check
+                Brick * const  brick  = static_cast<Brick *>(blockAddr)-1;
+                assert(0!=brick->used);
+                assert(brick->size == blockSize);
+                assert(brick->next);
+
+                // check fusion status
+                Bricks * const bricks = brick->used; assert(bricks->ownsBrick(brick));
+                Brick * const  next   = brick->next;
+                unsigned       flag = (0==next->used) ? FUSION_NEXT : FUSION_NONE;
+                Brick * const  prev   = brick->prev; if(prev && 0==prev->used) flag |= FUSION_PREV;
+                //std::cerr << "flag=" << flag << std::endl;
+
+                // proceed with fusion
+                switch(flag)
+                {
+                    case FUSION_NEXT: {
+                        Brick * const post = next->next; assert(post);
+                        brick->next = post;
+                        post->prev  = brick; }
+                        brick->updateSize();
+                        brick->used = 0;
+                        // no change in gaps
+                        assert( CheckGapsOf(bricks) );
+                        break;
+
+
+                    case FUSION_PREV:
+                        prev->next = next;
+                        next->prev = prev;
+                        prev->updateSize();
+                        // no change in gaps
+                        assert( CheckGapsOf(bricks) );
+                        break;
+
+                    case FUSION_BOTH: assert(bricks->ngap>=2); {
+                        Brick * const post = next->next; assert(post);
+                        prev->next = post;
+                        post->prev = prev; }
+                        prev->updateSize();
+
+                        // decrease by one gap
+                        --bricks->ngap;
+                        assert( CheckGapsOf(bricks) );
+                        break;
+
+                    default:
+                        assert(FUSION_NONE==flag);
+
+                        // mark as free and increase ngap
+                        brick->used = 0;
+                        ++bricks->ngap;
+                        assert( CheckGapsOf(bricks) );
+                }
+
+
+                return bricks;
+            }
         }
 
     }

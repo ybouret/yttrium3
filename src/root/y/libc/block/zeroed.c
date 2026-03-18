@@ -1,5 +1,4 @@
 #include "y/libc/block/zeroed.h"
-#include "y/libc/defs.h"
 #include "y/config/compiler.h"
 
 #include <assert.h>
