@@ -60,8 +60,8 @@ namespace Yttrium
                 //! setup from block size
                 /**
                  \param userSize   1<= bs <= MaxBlockSize
-                 \param userBook PERSISTENT to choose pages according to inner metrics
-                 \param userLock PERSISTENT lock to use inner memory
+                 \param userBook PERSISTENT to choose Pages according to inner metrics
+                 \param userLock PERSISTENT lock for memory operations
                  */
                 Arena(const size_t userSize,
                       Book        &userBook,
