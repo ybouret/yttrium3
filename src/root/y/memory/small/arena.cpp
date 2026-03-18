@@ -141,6 +141,16 @@ namespace Yttrium
                 return chunk;
             }
 
+
+            bool Arena:: owns(const void * const blockAddr) const noexcept
+            {
+                for(const Chunk *node=clist.head;node;node=node->next)
+                {
+                    if(node->owns(blockAddr)) return true;
+                }
+                return false;
+            }
+
         }
 
     }

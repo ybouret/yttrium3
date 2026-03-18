@@ -58,6 +58,27 @@ namespace Yttrium
                     catch(...) { arena.release(addr); throw;}
                 }
 
+                template <typename U, typename V>
+                inline Type * produce( U &u, V &v )
+                {
+                    void * addr = arena.acquire();
+                    try {
+                        return new (addr) MutableType(u,v);
+                    }
+                    catch(...) { arena.release(addr); throw;}
+                }
+
+
+                template <typename U, typename V, typename W>
+                inline Type * produce( U &u, V &v, W &w )
+                {
+                    void * addr = arena.acquire();
+                    try {
+                        return new (addr) MutableType(u,v,w);
+                    }
+                    catch(...) { arena.release(addr); throw;}
+                }
+
 
 
 

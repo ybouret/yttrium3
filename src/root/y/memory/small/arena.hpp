@@ -97,6 +97,8 @@ namespace Yttrium
                 //! access to inner chunks \return address of chunks
                 const Chunks * operator->() const noexcept;
 
+                bool owns(const void * const blockAddr) const noexcept;
+
                 //______________________________________________________________
                 //
                 //
