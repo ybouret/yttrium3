@@ -16,6 +16,8 @@ namespace Yttrium
     {
         class SystemMutex;
         class SystemCondition;
+        class SystemThread;
+        class Thread;
 
         //______________________________________________________________________
         //
@@ -73,6 +75,10 @@ namespace Yttrium
 
             SystemMutex * acquireSystemMutex();                             //!< inner acquire/setup \return ready system mutex
             void          releaseSystemMutex(SystemMutex * const) noexcept; //!< clear/release system mutex
+
+            SystemThread * acquireSystemThread(Thread &);
+            void           releaseSystemThread(SystemThread * const) noexcept;
+
 
             //__________________________________________________________________
             //

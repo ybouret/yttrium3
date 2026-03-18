@@ -101,17 +101,21 @@ namespace Yttrium
         class Nucleus :: Data
         {
         public:
-            static const size_t MutexSize = sizeof(SystemMutex);
-            static const size_t CondSize  = sizeof(SystemCondition);
-            static const size_t CommSize  = MutexSize > CondSize ? MutexSize : CondSize;
+            static const size_t MutexSize  = sizeof(SystemMutex);
+            static const size_t CondSize   = sizeof(SystemCondition);
+            static const size_t ThreadSize = sizeof(SystemThread);
+            static const size_t CommPart   = MutexSize > CondSize   ? MutexSize : CondSize;
+            static const size_t CommSize   = CommPart  > ThreadSize ? CommPart : ThreadSize;
 
             explicit Data(Memory::Book &book,
                           Lockable     &lock) :
             arena( CommSize, book, lock),
             mutexes(arena),
-            conditions(arena)
+            conditions(arena),
+            threads(arena)
             {
-                //std::cerr << "---- Creating Data" << std::endl;
+                std::cerr << "---- Creating Data" << std::endl;
+                std::cerr << "CommSize = " << CommSize << std::endl;
             }
 
             virtual ~Data() noexcept
@@ -122,6 +126,7 @@ namespace Yttrium
             Memory::Small::Arena                   arena;
             Memory::Small::House<SystemMutex>      mutexes;
             Memory::Small::House<SystemCondition>  conditions;
+            Memory::Small::House<SystemThread>     threads;
 
         private:
             Y_Disable_Copy_And_Assign(Data);
@@ -184,7 +189,11 @@ namespace Yttrium
             std::cerr << "sizeof(SystemMutex)     = " << sizeof(SystemMutex)     << std::endl;
             std::cerr << "sizeof(SystemCondition) = " << sizeof(SystemCondition) << std::endl;
             std::cerr << "sizeof(SystemThread)    = " << sizeof(SystemThread)    << std::endl;
-
+#if defined(Y_BSD)
+            std::cerr << "sizeof(pthread_mutex_t) = " << sizeof(pthread_mutex_t) << std::endl;
+            std::cerr << "sizeof(pthread_cond_t)  = " << sizeof(pthread_cond_t)  << std::endl;
+            std::cerr << "sizeof(pthread_t)       = " << sizeof(pthread_t)       << std::endl;
+#endif
         }
 
         Nucleus:: ~Nucleus() noexcept
@@ -233,37 +242,10 @@ namespace Yttrium
 
 #include "nucleus/allocator.hxx"
 
-namespace Yttrium
-{
-    namespace Concurrent
-    {
-        SystemMutex * Nucleus:: acquireSystemMutex()
-        {
-            Y_Lock(access);
-            assert(data);
-            assert(code);
-#if defined(Y_BSD)
-            return data->mutexes.produce(code->attr);
-#endif
 
-#if defined(Y_WIN)
-            return data->mutexes.produce();
-#endif
-        }
-
-        void Nucleus:: releaseSystemMutex(SystemMutex * const mutex) noexcept
-        {
-            Y_Lock(access);
-            assert(mutex);
-            assert(data);
-            data->mutexes.recycle(mutex);
-        }
-
-
-    }
-
-}
 
 #include "nucleus/factory.hxx"
 #include "nucleus/mutex.hxx"
+#include "nucleus/thread.hxx"
+
 

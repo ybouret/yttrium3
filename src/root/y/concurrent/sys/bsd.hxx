@@ -171,18 +171,17 @@ namespace Yttrium
         class SystemThread
         {
         public:
-            inline SystemThread(Thread::Proc threadProc, void * const threadArgs) :
-            proc(threadProc),
-            args(threadArgs),
+            inline SystemThread(Thread &thread) :
             pthr()
             {
-                const int err = pthread_create( pthr(), 0, Launch, this);
+                const int err = pthread_create( pthr(), 0, Launch, &thread);
                 if(0!=err) throw Libc::Exception(err,"pthread_create");
             }
 
 
             inline ~SystemThread() noexcept
             {
+                std::cerr << "Waiting for SystemThread" << std::endl;
                 void *    res = 0;
                 const int err = pthread_join( *pthr(), &res );
                 if(0!=err) Libc::Error::Critical(err, "pthread_join");
@@ -191,8 +190,6 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(SystemThread);
-            Thread::Proc const        proc;
-            void * const              args;
             Memory::Zombie<pthread_t> pthr;
 
             static inline void * Launch(void *addr) noexcept
@@ -200,7 +197,7 @@ namespace Yttrium
                 assert(0!=addr);
                 try
                 {
-                    SystemThread &self = *static_cast<SystemThread *>(addr);
+                    Thread &self = *static_cast<Thread *>(addr);
                     self.proc(self.args);
                 }
                 catch(...)

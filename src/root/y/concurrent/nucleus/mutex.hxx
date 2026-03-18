@@ -4,25 +4,35 @@ namespace Yttrium
 {
     namespace Concurrent
     {
-        static SystemMutex * AcquireSystemMutex()
+        SystemMutex * Nucleus:: acquireSystemMutex()
         {
-            static Nucleus &nucleus = Nucleus::Instance();
-            return nucleus.acquireSystemMutex();
+            assert(data);
+            assert(code);
+#if defined(Y_BSD)
+            return data->mutexes.produce(code->attr);
+#endif
+
+#if defined(Y_WIN)
+            return data->mutexes.produce();
+#endif
+        }
+
+        void Nucleus:: releaseSystemMutex(SystemMutex * const mutex) noexcept
+        {
+            assert(mutex);
+            assert(data);
+            data->mutexes.recycle(mutex);
         }
 
 
+    }
 
-        Mutex:: Mutex() : handle( AcquireSystemMutex() )
-        {
-        }
+}
 
-        Mutex:: ~Mutex() noexcept
-        {
-            static Nucleus &nucleus = Nucleus::Location();
-            nucleus.releaseSystemMutex(handle);
-            Coerce(handle) = 0;
-        }
-
+namespace Yttrium
+{
+    namespace Concurrent
+    {
         void Mutex:: lock() noexcept
         {
             assert(handle);
