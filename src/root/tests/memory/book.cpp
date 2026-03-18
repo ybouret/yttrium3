@@ -18,6 +18,10 @@ Y_UTEST(memory_book)
         book[shift].cache(ran.in<size_t>(1,10));
     }
     std::cerr << "reserved: " << book.availableBytes() << std::endl;
+    book.gc(0x25);
+    std::cerr << "reserved: " << book.availableBytes() << std::endl;
+
+
 }
 Y_UDONE()
 

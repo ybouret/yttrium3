@@ -18,7 +18,7 @@ namespace Yttrium
         //
         //
         //
-        //! Repository of Pages
+        //! Repository of Pages protected by the same lock
         //
         //
         //______________________________________________________________________
