@@ -7,10 +7,12 @@
 namespace Yttrium
 {
 
+    //! helper to declare a shallow type
 #define Y_Shallow_Decl(NAME) \
 /**/ struct NAME##_ {} ;\
 /**/ extern const NAME##_ NAME
 
+    //! helper to implement THE shallow type instance
 #define Y_Shallow_Impl(NAME) const NAME##_ NAME = {}
 
 }

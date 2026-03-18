@@ -45,8 +45,8 @@ namespace Yttrium
             //__________________________________________________________________
             //! setup slots
             /**
-             \param mill page mill for each slot
-             \param lock page lock for each slot
+             \param factory page factory for each Pages
+             \param access  lock for each Pages
              */
             explicit Book(PageFactory &factory,
                           Lockable    &access) noexcept;

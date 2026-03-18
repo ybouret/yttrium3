@@ -13,19 +13,40 @@ namespace Yttrium
     {
         class SystemMutex;
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Portable Mutex
+        //
+        //
+        //______________________________________________________________________
         class Mutex : public Latch
         {
         public:
-            explicit Mutex();
-            virtual ~Mutex() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Mutex();           //!< acquire system mutex
+            virtual ~Mutex() noexcept;  //!< release system mutex
 
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
             virtual void lock()    noexcept;
             virtual void unlock()  noexcept;
             virtual bool tryLock() noexcept;
 
-            SystemMutex * const handle;
+            
         private:
-            Y_Disable_Copy_And_Assign(Mutex);
+            SystemMutex * const handle;       //!< system mutex handle
+            Y_Disable_Copy_And_Assign(Mutex); //!< discarded
         };
 
     }

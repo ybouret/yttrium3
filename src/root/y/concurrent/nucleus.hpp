@@ -71,8 +71,8 @@ namespace Yttrium
             static  Nucleus &  Location() noexcept; //!< current location \return existing instance
 
 
-            SystemMutex * acquireSystemMutex();
-            void          releaseSystemMutex(SystemMutex * const) noexcept;
+            SystemMutex * acquireSystemMutex();                             //!< inner acquire/setup \return ready system mutex
+            void          releaseSystemMutex(SystemMutex * const) noexcept; //!< clear/release system mutex
 
             //__________________________________________________________________
             //

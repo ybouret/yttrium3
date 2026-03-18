@@ -407,6 +407,7 @@ namespace Yttrium
                 return insertBefore(prev,pop(node));
             }
 
+            //! move owned no to head \param node one of list node \return node moved to head of list
             inline NODE * moveToHead(NODE * const node) noexcept
             {
                 assert(owns(node));

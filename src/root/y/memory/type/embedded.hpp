@@ -16,18 +16,41 @@ namespace Yttrium
     namespace Memory
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Embed type in memory
+        //
+        //
+        //______________________________________________________________________
         template <typename T>
         class Embedded
         {
         public:
-            Y_Args_Expose(T,Type);
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            Y_Args_Expose(T,Type); //!< aliases
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! no argument new type setup \param where new type locaction
             inline explicit Embedded(void * const where) :
             addr( new ( Init(where) ) MutableType() )
             {
 
             }
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             template <typename U>
             inline explicit Embedded(void * const where, U &u) :
             addr( new ( Init(where) ) MutableType(u) )
@@ -49,29 +72,38 @@ namespace Yttrium
             {
 
             }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
-
-            inline virtual ~Embedded() noexcept
-            {
+            //! cleanup
+            inline virtual ~Embedded() noexcept {
                 Init( Destructed(addr) );
                 Coerce(addr) = 0;
             }
 
+            //! display
             inline friend std::ostream & operator<<(std::ostream &os, const Embedded &self)
             {
                 return os << *self;
             }
 
-            inline Type      & operator*()       noexcept { assert(addr); return *addr; }
-            inline ConstType & operator*() const noexcept { assert(addr); return *addr; }
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            inline Type      & operator*()       noexcept { assert(addr); return *addr; } //!< access \return type reference
+            inline ConstType & operator*() const noexcept { assert(addr); return *addr; } //!< const access \return const type reference
 
-            inline Type      * operator->()       noexcept { assert(addr); return addr; }
-            inline ConstType * operator->() const noexcept { assert(addr); return addr; }
+            inline Type      * operator->()       noexcept { assert(addr); return addr; } //!< access \return type address
+            inline ConstType * operator->() const noexcept { assert(addr); return addr; } //!< const access \return const type address
 
 
         private:
-            MutableType * const addr;
-            Y_Disable_Copy_And_Assign(Embedded);
+            Y_Disable_Copy_And_Assign(Embedded); //!< discarded
+            MutableType * const addr;            //!< inner PERSISTENT address
+
+            //! prepare space \param where type location \return clean region
             static inline void * Init(void * const where) noexcept
             {
                 assert(0!=where);
