@@ -5,6 +5,8 @@
 #include "y/memory/book.hpp"
 #include "y/memory/small/house.hpp"
 
+#include "y/concurrent/thread.hpp"
+
 #if defined(Y_BSD)
 #include "sys/bsd.hxx"
 #endif // defined(Y_BSD)
@@ -109,13 +111,12 @@ namespace Yttrium
             mutexes(arena),
             conditions(arena)
             {
-                std::cerr << "---- Creating Data" << std::endl;
+                //std::cerr << "---- Creating Data" << std::endl;
             }
 
             virtual ~Data() noexcept
             {
-                std::cerr << "---- Deleting Data" << std::endl;
-
+                //std::cerr << "---- Deleting Data" << std::endl;
             }
 
             Memory::Small::Arena                   arena;
@@ -182,6 +183,7 @@ namespace Yttrium
             std::cerr << "sizeof(Data) = " << sizeof(Data) << std::endl;
             std::cerr << "sizeof(SystemMutex)     = " << sizeof(SystemMutex)     << std::endl;
             std::cerr << "sizeof(SystemCondition) = " << sizeof(SystemCondition) << std::endl;
+            std::cerr << "sizeof(SystemThread)    = " << sizeof(SystemThread)    << std::endl;
 
         }
 

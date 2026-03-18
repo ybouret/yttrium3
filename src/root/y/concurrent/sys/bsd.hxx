@@ -93,7 +93,6 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(SystemMutex);
             Memory::Zombie<pthread_mutex_t> mutex;
-
         };
 
     }
@@ -172,10 +171,44 @@ namespace Yttrium
         class SystemThread
         {
         public:
+            inline SystemThread(Thread::Proc threadProc, void * const threadArgs) :
+            proc(threadProc),
+            args(threadArgs),
+            pthr()
+            {
+                const int err = pthread_create( pthr(), 0, Launch, this);
+                if(0!=err) throw Libc::Exception(err,"pthread_create");
+            }
+
+
+            inline ~SystemThread() noexcept
+            {
+                void *    res = 0;
+                const int err = pthread_join( *pthr(), &res );
+                if(0!=err) Libc::Error::Critical(err, "pthread_join");
+            }
 
 
         private:
+            Y_Disable_Copy_And_Assign(SystemThread);
+            Thread::Proc const        proc;
+            void * const              args;
+            Memory::Zombie<pthread_t> pthr;
 
+            static inline void * Launch(void *addr) noexcept
+            {
+                assert(0!=addr);
+                try
+                {
+                    SystemThread &self = *static_cast<SystemThread *>(addr);
+                    self.proc(self.args);
+                }
+                catch(...)
+                {
+
+                }
+                return 0;
+            }
         };
 
     }
