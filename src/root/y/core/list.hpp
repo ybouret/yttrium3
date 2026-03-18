@@ -73,6 +73,7 @@ namespace Yttrium
                 switch(size) {
                     case 0: Coerce(head) = Coerce(tail) = node; break;
                     default:
+                        assert(0!=tail);
                         tail->next   = node;
                         node->prev   = tail;
                         Coerce(tail) = node;
@@ -88,6 +89,7 @@ namespace Yttrium
                 switch(size) {
                     case 0: Coerce(head) = Coerce(tail) = node; break;
                     default:
+                        assert(0!=head);
                         head->prev   = node;
                         node->next   = head;
                         Coerce(head) = node;
