@@ -181,7 +181,6 @@ namespace Yttrium
 
             inline ~SystemThread() noexcept
             {
-                std::cerr << "Waiting for SystemThread" << std::endl;
                 void *    res = 0;
                 const int err = pthread_join( *pthr(), &res );
                 if(0!=err) Libc::Error::Critical(err, "pthread_join");

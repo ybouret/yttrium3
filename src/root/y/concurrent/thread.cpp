@@ -19,7 +19,6 @@ namespace Yttrium
         args(threadArgs),
         impl( AcquireSystemThread( self() ) )
         {
-            std::cerr << "+Thread" << std::endl;
 
         }
 
@@ -28,7 +27,6 @@ namespace Yttrium
         Thread:: ~Thread() noexcept
         {
             static Nucleus & nucleus = Nucleus::Location();
-            std::cerr << "~Thread" << std::endl;
             nucleus.releaseSystemThread(impl);
             Coerce(impl) = 0;
             Coerce(proc) = 0;
