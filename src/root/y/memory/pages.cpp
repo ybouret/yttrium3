@@ -68,7 +68,9 @@ namespace Yttrium
                 Core::ListToPool::Make(pool,list);
             }
             assert(newSize==pool.size);
+            assert(pool.hasDecreasingAddresses());
 
+#if 0
 #if !defined(NDEBUG)
             for(const Page *page=pool.head;page;page=page->next)
             {
@@ -79,6 +81,8 @@ namespace Yttrium
                 }
             }
 #endif // !defined(NDEBUG)
+#endif
+            
         }
 
 

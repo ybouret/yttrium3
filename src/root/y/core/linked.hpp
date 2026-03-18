@@ -75,6 +75,25 @@ namespace Yttrium
                 return false;
             }
 
+
+            //! check nodes have increasing address \return true if that's the case
+            inline bool hasIncreasingAddresses() const noexcept
+            {
+                for(const NODE *node=head;node;node=node->next) {
+                    if(node->next && node->next<node) return false;
+                }
+                return true;
+            }
+
+            //! check nodes have decreasing address \return true if that's the case
+            inline bool hasDecreasingAddresses() const noexcept
+            {
+                for(const NODE *node=head;node;node=node->next) {
+                    if(node->next && node->next>node) return false;
+                }
+                return true;
+            }
+
         protected:
 
             //! exchange variables \param rhs another lisy

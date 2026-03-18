@@ -20,14 +20,13 @@ namespace Yttrium
             //! Manage same-sized blocks on any given region of memory
             /**
              - very low-level management
-             - obviously thread-unsafe
+             - obviously NOT thread-safe
              */
             //
             //__________________________________________________________________
             class Chunk
             {
             public:
-
                 //______________________________________________________________
                 //
                 //

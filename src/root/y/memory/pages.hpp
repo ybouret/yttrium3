@@ -34,11 +34,11 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            //! setup
+            //! setup to manage pages of 2^shift bytes
             /**
              \param pageFactory (thread-safe) peristent page factory
-             \param userAccess persistent lock for this access
-             \param shift    Metrics::MinPageShift <= shift <= Metrics::MaxPageShift
+             \param userAccess  PERSISTENT lock for this access
+             \param shift       Metrics::MinPageShift <= shift <= Metrics::MaxPageShift
              */
             explicit Pages(PageFactory &  pageFactory,
                            Lockable    &  userAccess,
