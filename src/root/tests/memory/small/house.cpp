@@ -1,4 +1,6 @@
 #include "y/memory/small/house.hpp"
+#include "y/core/rand.hpp"
+#include "y/random/shuffle.hpp"
 #include "y/utest/run.hpp"
 
 #include "y/concurrent/nucleus.hpp"
@@ -7,6 +9,7 @@ using namespace Yttrium;
 
 Y_UTEST(memory_small_house)
 {
+    Core::Rand                   ran;
     Concurrent::Nucleus &        nucleus = Concurrent::Nucleus::Instance();
     Memory::Book        &        book    = nucleus.book;
     Memory::Small::Arena         arena(8,book,nucleus.access);
@@ -20,6 +23,13 @@ Y_UTEST(memory_small_house)
     {
         addr[i] = house.produce();
     }
+    Random::Shuffle(ran,addr,size);
+
+    for(size_t i=0;i<size;++i)
+    {
+        house.recycle(addr[i]);
+    }
+
 
 }
 Y_UDONE()
