@@ -1,5 +1,5 @@
 #include "y/config/platform.h"
-#include "y/memory/type/zombie.hpp"
+#include "y/memory/type/single.hpp"
 #include "y/system/exception.hpp"
 #include "y/ability/latch.hpp"
 #include "y/memory/book.hpp"

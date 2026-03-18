@@ -32,7 +32,7 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(Attribute);
-                Memory::Zombie<pthread_mutexattr_t> attr;
+                Memory::Single<pthread_mutexattr_t> attr;
 
                 inline void init() {
                     const int err = pthread_mutexattr_init( attr() );
@@ -92,7 +92,7 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(SystemMutex);
-            Memory::Zombie<pthread_mutex_t> mutex;
+            Memory::Single<pthread_mutex_t> mutex;
         };
 
     }
@@ -148,7 +148,7 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(SystemCondition);
-            Memory::Zombie<pthread_cond_t> cond;
+            Memory::Single<pthread_cond_t> cond;
         };
 
 
@@ -190,7 +190,7 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(SystemThread);
-            Memory::Zombie<pthread_t> pthr;
+            Memory::Single<pthread_t> pthr;
 
             static inline void * Launch(void *addr) noexcept
             {

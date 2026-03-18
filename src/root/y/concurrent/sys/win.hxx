@@ -34,7 +34,7 @@ namespace Yttrium
 				return TRUE == ::TryEnterCriticalSection(mutex());
 			}
 
-			Memory::Zombie<CRITICAL_SECTION> mutex;
+			Memory::Single<CRITICAL_SECTION> mutex;
 
 		private:
 			Y_Disable_Copy_And_Assign(SystemMutex);

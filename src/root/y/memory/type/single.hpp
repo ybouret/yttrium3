@@ -1,8 +1,9 @@
 
+
 //! \file
 
-#ifndef Y_Memory_Zombie_Included
-#define Y_Memory_Zombie_Included 1
+#ifndef Y_Memory_Single_Included
+#define Y_Memory_Single_Included 1
 
 
 #include "y/type/args.hpp"
@@ -22,8 +23,8 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        template <typename T, const size_t N=1>
-        class Zombie
+        template <typename T>
+        class Single
         {
         public:
             //__________________________________________________________________
@@ -33,7 +34,6 @@ namespace Yttrium
             //
             //__________________________________________________________________
             Y_Args_Expose(T,Type);        //!< aliases
-            static const size_t size = N; //!< number of zombie(s)
 
             //__________________________________________________________________
             //
@@ -43,16 +43,16 @@ namespace Yttrium
             //__________________________________________________________________
 
             //! setup
-            inline explicit Zombie() noexcept : ptr(0), cxx(0), wksp()
+            inline explicit Single() noexcept :  addr(0), wksp()
             {
-                Coerce(ptr) = static_cast<MutableType *>( Y_BZero(wksp) );
-                Coerce(cxx) = ptr-1;
+                Coerce(addr) = static_cast<MutableType*>( Y_BZero(wksp) );
             }
 
             //! cleanup
-            inline ~Zombie() noexcept
+            inline ~Single() noexcept
             {
                 Y_BZero(wksp);
+                Coerce(addr) = 0;
             }
 
             //__________________________________________________________________
@@ -62,33 +62,20 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            //! access zombie \param indx 1<=indx<=size \return indx-th zombie
-            inline Type & operator[](const size_t indx) noexcept
-            {
-                assert(indx>=1); assert(indx<=size); return cxx[indx];
-            }
-
-            //! access const zombie \param indx 1<=indx<=size \return indx-th zombie
-            inline ConstType & operator[](const size_t indx) const noexcept
-            {
-                assert(indx>=1); assert(indx<=size); return cxx[indx];
-            }
-
             //! access static memory \return first zombie address
-            inline MutableType * operator()(void)       noexcept { return ptr; }
+            inline MutableType * operator()(void)       noexcept { return addr; }
 
             //! access static const memory \return first zombie address
-            inline ConstType   * operator()(void) const noexcept { return ptr; }
+            inline ConstType   * operator()(void) const noexcept { return addr; }
 
         private:
-            Y_Disable_Copy_And_Assign(Zombie); //!< discarded
-            MutableType * const ptr; //!< base address
-            MutableType * const cxx; //!< shifted address
-            void * wksp[ Alignment::WordsGEQ<sizeof(T)*N>::Count ]; //!< static buffer
+            Y_Disable_Copy_And_Assign(Single); //!< discarded
+            MutableType * const addr;
+            void * wksp[ Alignment::WordsFor<T>::Count ]; //!< static buffer
         };
     }
 
 }
 
-#endif // !Y_Memory_Zombie_Included
+#endif // !Y_Memory_Single_Included
 

@@ -6,7 +6,7 @@
 
 #include "y/type/sign.hpp"
 #include "y/libc/sort.h"
-#include "y/memory/type/zombie.hpp"
+#include "y/memory/type/single.hpp"
 
 namespace Yttrium
 {
@@ -57,7 +57,7 @@ namespace Yttrium
             {
                 static YttriumCompare  fcn = CompareWrapper<T,COMPARE>;
                 Parameters<T,COMPARE>  arg = { arr, &compare };
-                Memory::Zombie<size_t> rra;
+                Memory::Single<size_t> rra;
                 for(size_t i=0;i<num;++i) idx[i] = i;
                 Yttrium_Sort(idx,num,sizeof(size_t),fcn,&arg,rra());
             }
