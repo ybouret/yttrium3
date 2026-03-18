@@ -8,6 +8,7 @@ type
 concurrent
 memory
 memory/small
+memory/plastic
 pointer)
 
 Y_LinkLibraries(test-root)
@@ -53,6 +54,7 @@ Y_UTEST(memory:small:blocks)
 Y_UTEST(memory:pages)
 Y_UTEST(memory:book)
 Y_UTEST(memory:moniker)
+Y_UTEST(memory:plastic:bricks)
 
 Y_UTEST(pointer:auto)
 

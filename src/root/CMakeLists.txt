@@ -26,6 +26,7 @@ y/memory
 y/memory/type
 y/memory/small
 y/memory/page
+y/memory/plastic
 y/ability
 y/container
 y/container/iter
