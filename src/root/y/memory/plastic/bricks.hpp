@@ -60,20 +60,36 @@ namespace Yttrium
                  */
                 void * acquire(size_t &blockSize) noexcept;
 
-                static Bricks * Release(void * const blockAddr,
-                                        size_t &     blockSize) noexcept;
 
+                //! release a block
+                /**
+                 \param blockAddr previously acquired block
+                 \param blockSize previously acquired size
+                 \return owning Bricks, fusioned block
+                 */
+                static Bricks * Release(void * & blockAddr,
+                                        size_t & blockSize) noexcept;
 
+                //! test owned brick (mostly to debug) \return true if brick is found
                 bool ownsBrick(const Brick * const) const noexcept;
-                
 
-                size_t        ngap; //!< availalable gaps
-                Brick * const head; //!< head brick
-                Brick * const tail; //!< tail brick
-                const size_t  maxBlockSize;
+
+                size_t         ngap; //!< availalable gaps
+                Brick * const  head; //!< head brick
+                Brick * const  tail; //!< tail brick
+                const size_t   maxBlockSize;
+                Bricks * const next;
+                Bricks * const prev;
                 
             private:
-                Y_Disable_Copy_And_Assign(Bricks);
+                Y_Disable_Copy_And_Assign(Bricks); //!< discard
+
+                //! prepare brick with optional split
+                /**
+                 \param brick     matching brick
+                 \param blockSize input/output blockSize
+                 \return zeroed block of blockSize bytes
+                 */
                 void * deliver(Brick * const brick, size_t &blockSize) noexcept;
 
 

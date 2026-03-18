@@ -37,7 +37,9 @@ namespace Yttrium
             ngap(1),
             head( static_cast<Brick *>(pageAddr) ),
             tail( head + BrickTailOffset(pageSize) ),
-            maxBlockSize((static_cast<size_t>(tail-head)-1) * sizeof(Brick))
+            maxBlockSize((static_cast<size_t>(tail-head)-1) * sizeof(Brick)),
+            next(0),
+            prev(0)
             {
                 head->prev = 0;
                 head->next = tail;
@@ -178,8 +180,8 @@ namespace Yttrium
 
 
 
-            Bricks * Bricks:: Release(void * const blockAddr,
-                                      size_t &     blockSize) noexcept
+            Bricks * Bricks:: Release(void * & blockAddr,
+                                      size_t & blockSize) noexcept
             {
                 static const unsigned FUSION_NONE = 0x00;
                 static const unsigned FUSION_PREV = 0x01;
@@ -246,7 +248,8 @@ namespace Yttrium
                         assert( CheckGapsOf(bricks) );
                 }
 
-
+                blockAddr = 0;
+                blockSize = 0;
                 return bricks;
             }
         }

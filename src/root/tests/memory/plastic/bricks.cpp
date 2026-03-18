@@ -71,9 +71,8 @@ Y_UTEST(memory_plastic_bricks)
     Y_PRINTV(Memory::Plastic::Bricks::BrickBytes);
     Y_PRINTV(Memory::Plastic::Bricks::MinPerPage);
     Y_PRINTV(Memory::Plastic::Bricks::MinBlockSize);
-    //Y_PRINTV(Memory::Plastic::Bricks::MinPageBytes);
-    //Y_PRINTV(Memory::Plastic::Bricks::MinPageShift);
-
+    Y_SIZEOF(Memory::Plastic::Bricks);
+    
 
     void * data[500];
     Memory::Plastic::Bricks bricks(data,sizeof(data));
@@ -95,6 +94,8 @@ Y_UTEST(memory_plastic_bricks)
     Release(0,blocks,nblock, &bricks);
 
     Y_CHECK(bricks.areEmpty());
+
+
 }
 Y_UDONE()
 
