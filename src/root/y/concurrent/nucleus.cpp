@@ -333,6 +333,8 @@ namespace Yttrium
             if(!blockAddr)
                 throw Libc::Exception(ENOMEM,"%s(2^%u)",fn,shift);
 
+            assert( Yttrium_Zeroed(blockAddr,blockSize) );
+
             // updating
             Code::RAM += blockSize;
             Memory::Page * const page = static_cast<Memory::Page *>(blockAddr);

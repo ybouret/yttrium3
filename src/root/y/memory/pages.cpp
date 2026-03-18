@@ -100,7 +100,7 @@ namespace Yttrium
         void Pages:: put(void * const page) noexcept
         {
             Y_Lock(access);
-            assert(page);
+            assert(0!=page);
             pool.store( Page::From(page) );
         }
     }
