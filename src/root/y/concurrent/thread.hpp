@@ -11,23 +11,57 @@ namespace Yttrium
     namespace Concurrent
     {
         class SystemThread;
-        
+
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Thread launching interface
+        //
+        //
+        //______________________________________________________________________
         class Thread
         {
         public:
-            typedef void (*Proc)(void * const);
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef void (*Proc)(void * const); //!< C-style function to launch
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
 
+            //! launch with persistent data
+            /**
+             - thread is built and launched
+             \param threadProc procedure to call
+             \param threadArgs PERISTENT arguments for threadProc
+             */
             explicit Thread(Proc const threadProc, void * const threadArgs);
+
+            //! wait for thread and cleanup
             virtual ~Thread() noexcept;
 
-            Thread::Proc const        proc;
-            void * const              args;
-            
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            Thread::Proc const        proc; //!< procedure
+            void * const              args; //!< arguments (PERSISTENT)
+
         private:
-            Y_Disable_Copy_And_Assign(Thread);
-            SystemThread * const      impl;
-            Thread & self() noexcept;
+            Y_Disable_Copy_And_Assign(Thread); //!< discarded
+            SystemThread * const      impl;    //!< platform dependent
+            Thread & self() noexcept;          //!< avoid this in constructor \return *this
         };
     }
 }

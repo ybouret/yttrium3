@@ -76,8 +76,8 @@ namespace Yttrium
             SystemMutex * acquireSystemMutex();                             //!< inner acquire/setup \return ready system mutex
             void          releaseSystemMutex(SystemMutex * const) noexcept; //!< clear/release system mutex
 
-            SystemThread * acquireSystemThread(Thread &);
-            void           releaseSystemThread(SystemThread * const) noexcept;
+            SystemThread * acquireSystemThread(Thread &);                      //!< inner acquire/setup \return running SystemThread
+            void           releaseSystemThread(SystemThread * const) noexcept; //!< wait/release system thread
 
 
             //__________________________________________________________________

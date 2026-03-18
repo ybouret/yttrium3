@@ -70,7 +70,7 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(Single); //!< discarded
-            MutableType * const addr;
+            MutableType * const addr;          //!< alias
             void * wksp[ Alignment::WordsFor<T>::Count ]; //!< static buffer
         };
     }
