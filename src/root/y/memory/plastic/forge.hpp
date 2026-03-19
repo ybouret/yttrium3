@@ -45,6 +45,8 @@ namespace Yttrium
 
                 virtual ~Forge() noexcept;
 
+                static unsigned ShiftFor(const size_t blockSize);
+
                 Book     & book;    //!< PERSISTENT pages
                 Lockable & access;  //!< PERSISTENT access
 
@@ -52,7 +54,7 @@ namespace Yttrium
                 Y_Disable_Copy_And_Assign(Forge);
 
                 Bricks * newBricks(const unsigned shift);
-                
+
             };
 
         }

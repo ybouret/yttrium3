@@ -1,6 +1,10 @@
 
 #include "y/memory/plastic/forge.hpp"
 #include "y/memory/book.hpp"
+#include "y/core/max.hpp"
+
+#include "y/exception.hpp"
+#include "y/format/decimal.hpp"
 
 namespace Yttrium
 {
@@ -23,16 +27,26 @@ namespace Yttrium
 
             }
 
+
+            unsigned Forge:: ShiftFor(const size_t blockSize)
+            {
+                const size_t lower     = DataOffset + 2*sizeof(Brick) + blockSize;
+                const size_t predicted = Max(lower,MinPageBytes);
+                if(predicted>MaxPageBytes)
+                    throw Specific::Exception("Forge::ShiftFor", "bytes overflow for blockSize=%s", Decimal(blockSize).c_str());
+                return CeilLog2(predicted);
+            }
+
             Bricks * Forge:: newBricks(const unsigned shift)
             {
                 assert(shift>= MinPageShift);
                 assert(shift<= MaxPageShift);
 
-                Pages &           alloc = book[shift];
-                void *    const   block = alloc.get();
+                Pages &           alloc     = book[shift];
+                void *    const   block     = alloc.get();
                 char * const      dataAddr  = static_cast<char *>(block) + DataOffset;
                 const size_t      dataSize  = alloc.pageBytes - DataOffset;
-                
+
                 return new(block) Bricks(dataAddr,dataSize,shift);
             }
 
