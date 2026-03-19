@@ -12,12 +12,11 @@ namespace Yttrium
         namespace Plastic
         {
 
-            static   size_t BrickTailOffset(const size_t pageSize)
+            static   size_t BrickTailOffset(const size_t dataSize)
             {
-                assert(pageSize>=Bricks::MinUserBytes);
-                const size_t numBricks = pageSize / sizeof(Brick);
-                assert(numBricks>=Bricks::MinPerPage+2);
-                //std::cerr << "numBricks in " << pageSize << " bytes : " << numBricks << " => main bytes=" << (numBricks-2) * sizeof(Brick) << std::endl;
+                assert(dataSize>=Bricks::MinUserBytes);
+                const size_t numBricks = dataSize / sizeof(Brick);
+                assert(numBricks>=Bricks::MinDataBrick+2);
                 return numBricks-1;
             }
 
@@ -33,10 +32,11 @@ namespace Yttrium
             }
 #endif // !defined(NDEBUG)
 
-            Bricks:: Bricks(void * const pageAddr, const size_t pageSize) noexcept :
+            Bricks:: Bricks(void * const dataAddr,
+                            const size_t dataSize) noexcept :
             ngap(1),
-            head( static_cast<Brick *>(pageAddr) ),
-            tail( head + BrickTailOffset(pageSize) ),
+            head( static_cast<Brick *>(dataAddr) ),
+            tail( head + BrickTailOffset(dataSize) ),
             maxBlockSize((static_cast<size_t>(tail-head)-1) * sizeof(Brick)),
             next(0),
             prev(0)

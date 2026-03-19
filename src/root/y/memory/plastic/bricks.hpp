@@ -32,8 +32,8 @@ namespace Yttrium
                 //______________________________________________________________
                 static const size_t   BrickBytes   = sizeof(Brick);                  //!< alias
                 static const unsigned BrickShift   = IntegerLog2<BrickBytes>::Value; //!< by design
-                static const size_t   MinPerPage   = 1;                              //!< alias
-                static const size_t   MinUserBytes = (2+MinPerPage) * BrickBytes;    //!< head+memory+tail
+                static const size_t   MinDataBrick = 1;                              //!< at least one Brick of data
+                static const size_t   MinUserBytes = (2+MinDataBrick) * BrickBytes;  //!< head+memory+tail
 
                 //______________________________________________________________
                 //
@@ -44,10 +44,11 @@ namespace Yttrium
 
                 //! setup
                 /**
-                 \param pageAddr valid memory address
-                 \param pageSize pageSize>=MinBlockSize
+                 \param dataAddr valid memory address
+                 \param dataSize dataSize>=MinUserBytes
                  */
-                Bricks(void * const pageAddr, const size_t pageSize) noexcept;
+                Bricks(void * const dataAddr,
+                       const size_t dataSize) noexcept;
 
                 //! cleanup
                 ~Bricks() noexcept;
