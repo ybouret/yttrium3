@@ -51,6 +51,8 @@ namespace Yttrium
             private:
                 Y_Disable_Copy_And_Assign(Forge);
 
+                Bricks * newBricks(const unsigned shift);
+                
             };
 
         }
