@@ -35,15 +35,26 @@ namespace Yttrium
             class Forge
             {
             public:
-                static const size_t   DataOffset   = Alignment::To<Brick>::CeilOf<sizeof(Bricks)>::Value;
-                static const size_t   HeaderSize   = DataOffset + Bricks::MinUserBytes;
-                static const size_t   MinRawBytes  = MetaNextPowerOfTwo<HeaderSize>::Value;
-                static const size_t   MinPageBytes = MetaMax<MinRawBytes,Metrics::DefaultBytes>::Value;
-                static const unsigned MinPageShift = IntegerLog2<MinPageBytes>::Value;
-                static const size_t   MaxPageBytes = Metrics::MaxPageBytes;
-                static const unsigned MaxPageShift = Metrics::MaxPageShift;
-                static const unsigned NumBuckets   = MaxPageShift+1-MinPageShift;
-                typedef Core::ListOf<Bricks> Bucket;
+                static const size_t          DataOffset   = Alignment::To<Brick>::CeilOf<sizeof(Bricks)>::Value;
+                static const size_t          HeaderSize   = DataOffset + Bricks::MinUserBytes;
+                static const size_t          MinRawBytes  = MetaNextPowerOfTwo<HeaderSize>::Value;
+                static const size_t          MinPageBytes = MetaMax<MinRawBytes,Metrics::DefaultBytes>::Value;
+                static const unsigned        MinPageShift = IntegerLog2<MinPageBytes>::Value;
+                static const size_t          MaxPageBytes = Metrics::MaxPageBytes;
+                static const unsigned        MaxPageShift = Metrics::MaxPageShift;
+                static const unsigned        NumBuckets   = MaxPageShift+1-MinPageShift;
+                typedef Core::ListOf<Bricks> Bucket_;
+
+                class Bucket : public Bucket_
+                {
+                public:
+                    explicit Bucket() noexcept;
+                    virtual ~Bucket() noexcept;
+                private:
+                    Y_Disable_Copy_And_Assign(Bucket);
+                };
+
+
 
                 explicit Forge(Book     &userBook,
                                Lockable &userLock) noexcept;

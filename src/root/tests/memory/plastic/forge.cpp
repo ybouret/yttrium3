@@ -41,6 +41,12 @@ Y_UTEST(memory_plastic_forge)
 
     Y_PRINTV(Memory::Plastic::Forge::MinPageShift);
     Y_PRINTV(Memory::Plastic::Forge::MaxPageShift);
+    Y_PRINTV(Memory::Plastic::Forge::NumBuckets);
+
+    Y_SIZEOF(Memory::Plastic::Forge::Bucket);
+    Y_SIZEOF(Memory::Plastic::Forge);
+
+
 }
 Y_UDONE()
 
