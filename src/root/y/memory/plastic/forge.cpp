@@ -52,12 +52,7 @@ namespace Yttrium
                 return new(block) Bricks(dataAddr,dataSize,shift);
             }
 
-            void * Forge:: acquire(size_t &blockSize)
-            {
-               
-
-
-            }
+            
 
 
 

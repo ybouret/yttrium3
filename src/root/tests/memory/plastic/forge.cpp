@@ -1,4 +1,5 @@
 #include "y/memory/plastic/forge.hpp"
+#include "y/concurrent/nucleus.hpp"
 #include "y/utest/run.hpp"
 
 #include "y/core/rand.hpp"
@@ -20,7 +21,18 @@ Y_UTEST(memory_plastic_forge)
         std::cerr << std::setw(6) << blockSize << " -> " << bytes << std::endl;
     }
 
+    Concurrent::Nucleus &  nucleus = Concurrent::Nucleus::Instance();
+    Memory::Plastic::Forge forge(nucleus.book,nucleus.access);
 
+#if 0
+    for(unsigned shift=Memory::Plastic::Forge::MinPageShift;shift <= 16;++shift)
+    {
+        Memory::Plastic::Bricks * bricks = forge.newBricks(shift);
+        Y_ASSERT(bricks->info==shift);
+        std::cerr << ( size_t(1) << shift ) << " => " << bricks->maxBlockSize << std::endl;
+    }
+#endif
+    
 
 }
 Y_UDONE()
