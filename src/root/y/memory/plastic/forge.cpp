@@ -17,6 +17,8 @@ namespace Yttrium
 
             Forge:: Forge(Book     & userBook,
                           Lockable & userLock) noexcept :
+            last(0),
+            list(),
             book(   userBook ),
             access( userLock )
             {
@@ -31,7 +33,7 @@ namespace Yttrium
             unsigned Forge:: ShiftFor(const size_t blockSize)
             {
                 const size_t lower     = DataOffset + 2*sizeof(Brick) + blockSize;
-                const size_t predicted = Max(lower,MinPageBytes);
+                const size_t predicted = Max(lower,Metrics::DefaultBytes);
                 if(predicted>MaxPageBytes)
                     throw Specific::Exception("Forge::ShiftFor", "bytes overflow for blockSize=%s", Decimal(blockSize).c_str());
                 return CeilLog2(predicted);
@@ -49,6 +51,20 @@ namespace Yttrium
 
                 return new(block) Bricks(dataAddr,dataSize,shift);
             }
+
+            void * Forge:: acquire(size_t &blockSize)
+            {
+                if(last)
+                {
+                    void * const p = last->acquire(blockSize);
+                    if(p) return p;
+                }
+                
+
+
+            }
+
+
 
         }
 

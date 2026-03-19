@@ -9,6 +9,7 @@
 #include "y/memory/metrics.hpp"
 #include "y/calculus/meta2.hpp"
 #include "y/core/meta-max.hpp"
+#include "y/core/list.hpp"
 
 namespace Yttrium
 {
@@ -26,7 +27,9 @@ namespace Yttrium
             //
             //
             //! Forge of bricks
-            //
+            /**
+             - LEVEL-1 cache of bricks built upon Page
+             */
             //
             //__________________________________________________________________
             class Forge
@@ -47,8 +50,16 @@ namespace Yttrium
 
                 static unsigned ShiftFor(const size_t blockSize);
 
-                Book     & book;    //!< PERSISTENT pages
-                Lockable & access;  //!< PERSISTENT access
+                void * acquire(size_t & blockSize);
+
+
+            private:
+                Bricks *             last;
+                Core::ListOf<Bricks> list;
+
+            public:
+                Book               & book;    //!< PERSISTENT pages
+                Lockable           & access;  //!< PERSISTENT access
 
             private:
                 Y_Disable_Copy_And_Assign(Forge);
