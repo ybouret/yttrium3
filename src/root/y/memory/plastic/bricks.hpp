@@ -5,6 +5,7 @@
 #define Y_Memory_Plastic_Bricks_Included 1
 
 #include "y/memory/plastic/brick.hpp"
+#include "y/calculus/integer-log2.hpp"
 
 namespace Yttrium
 {
@@ -29,9 +30,10 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
-                static const size_t   BrickBytes   = sizeof(Brick);               //!< alias
-                static const size_t   MinPerPage   = 1;                           //!< alias
-                static const size_t   MinBlockSize = (2+MinPerPage) * BrickBytes; //!< head+memory+tail
+                static const size_t   BrickBytes   = sizeof(Brick);                  //!< alias
+                static const unsigned BrickShift   = IntegerLog2<BrickBytes>::Value; //!< by design
+                static const size_t   MinPerPage   = 1;                              //!< alias
+                static const size_t   MinBlockSize = (2+MinPerPage) * BrickBytes;    //!< head+memory+tail
 
                 //______________________________________________________________
                 //

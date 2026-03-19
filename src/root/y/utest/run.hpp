@@ -48,7 +48,7 @@ Yttrium::UTest::Display::Print(std::cerr,"sizeof(",#CLASS,")") << " = " << sizeo
 
     //! display justified field value
 #define Y_PRINTV(FIELD) \
-Yttrium::UTest::Display::Print(std::cerr,0,#FIELD,0) << " = " << (FIELD) << std::endl
+Yttrium::UTest::Display::Print(std::cerr,"       ",#FIELD," ") << " = " << (FIELD) << std::endl
 
     //! local silent assertion
 #define Y_ASSERT(EXPR) \

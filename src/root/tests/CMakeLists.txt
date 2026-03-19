@@ -55,6 +55,7 @@ Y_UTEST(memory:pages)
 Y_UTEST(memory:book)
 Y_UTEST(memory:moniker)
 Y_UTEST(memory:plastic:bricks)
+Y_UTEST(memory:plastic:forge)
 
 Y_UTEST(pointer:auto)
 
