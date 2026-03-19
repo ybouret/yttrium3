@@ -26,6 +26,9 @@ namespace Yttrium
                 Brick *  next; //!< for list
                 Brick *  prev; //!< for list
 
+                static size_t BytesBetween(const Brick * const a,
+                                           const Brick * const b) noexcept;
+
                 //! update size using next
                 void updateSize() noexcept;
 

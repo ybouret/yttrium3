@@ -55,7 +55,6 @@ namespace
         {
             Block &b = blocks[--nblock];
             Y_ASSERT(owner==Memory::Plastic::Bricks::Release(b.addr,b.size));
-
         }
     }
 
@@ -74,7 +73,7 @@ Y_UTEST(memory_plastic_bricks)
     Y_SIZEOF(Memory::Plastic::Bricks);
     
 
-    void * data[500];
+    void * data[1024];
     Memory::Plastic::Bricks bricks(data,sizeof(data));
     
     Y_PRINTV(sizeof(data));
@@ -82,10 +81,10 @@ Y_UTEST(memory_plastic_bricks)
     Y_PRINTV(bricks.head->size);
     Y_PRINTV(bricks.maxBlockSize);
 
-    Block   blocks[1024];
+    Block   blocks[2048];
     size_t  nblock = 0;
     Acquire(bricks,blocks,nblock,ran);
-    for(size_t iter=0;iter<10;++iter)
+    for(size_t iter=0;iter<100;++iter)
     {
         Random::Shuffle(ran,blocks,nblock);
         Release(nblock / ran.in<size_t>(1,4),blocks,nblock, &bricks);

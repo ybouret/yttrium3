@@ -33,7 +33,7 @@ namespace Yttrium
                 static const size_t   BrickBytes   = sizeof(Brick);                  //!< alias
                 static const unsigned BrickShift   = IntegerLog2<BrickBytes>::Value; //!< by design
                 static const size_t   MinDataBrick = 1;                              //!< at least one Brick of data
-                static const size_t   MinUserBytes = (2+MinDataBrick) * BrickBytes;  //!< head+memory+tail
+                static const size_t   MinUserBytes = (2+MinDataBrick) * BrickBytes;  //!< head+data+tail
 
                 //______________________________________________________________
                 //
@@ -47,8 +47,9 @@ namespace Yttrium
                  \param dataAddr valid memory address
                  \param dataSize dataSize>=MinUserBytes
                  */
-                Bricks(void * const dataAddr,
-                       const size_t dataSize) noexcept;
+                Bricks(void * const   dataAddr,
+                       const size_t   dataSize,
+                       const unsigned dataInfo = 0) noexcept;
 
                 //! cleanup
                 ~Bricks() noexcept;
@@ -77,12 +78,13 @@ namespace Yttrium
                 bool ownsBrick(const Brick * const) const noexcept;
 
 
-                size_t         ngap; //!< availalable gaps
+                size_t         gaps; //!< availalable gaps
                 Brick * const  head; //!< head brick
                 Brick * const  tail; //!< tail brick
                 const size_t   maxBlockSize;
                 Bricks * const next;
                 Bricks * const prev;
+                const unsigned info;
                 
             private:
                 Y_Disable_Copy_And_Assign(Bricks); //!< discard

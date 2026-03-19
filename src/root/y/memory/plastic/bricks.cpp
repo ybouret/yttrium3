@@ -12,7 +12,7 @@ namespace Yttrium
         namespace Plastic
         {
 
-            static   size_t BrickTailOffset(const size_t dataSize)
+            static size_t BrickTailOffset(const size_t dataSize)
             {
                 assert(dataSize>=Bricks::MinUserBytes);
                 const size_t numBricks = dataSize / sizeof(Brick);
@@ -28,18 +28,20 @@ namespace Yttrium
                 {
                     if(0==node->used) ++count;
                 }
-                return count == bricks->ngap;
+                return count == bricks->gaps;
             }
 #endif // !defined(NDEBUG)
 
-            Bricks:: Bricks(void * const dataAddr,
-                            const size_t dataSize) noexcept :
-            ngap(1),
+            Bricks:: Bricks(void * const   dataAddr,
+                            const size_t   dataSize,
+                            const unsigned dataInfo) noexcept :
+            gaps(1),
             head( static_cast<Brick *>(dataAddr) ),
             tail( head + BrickTailOffset(dataSize) ),
-            maxBlockSize((static_cast<size_t>(tail-head)-1) * sizeof(Brick)),
+            maxBlockSize( Brick::BytesBetween(head,tail) ),
             next(0),
-            prev(0)
+            prev(0),
+            info(dataInfo)
             {
                 head->prev = 0;
                 head->next = tail;
@@ -90,7 +92,7 @@ namespace Yttrium
                 if(0==head->used && head->next == tail )
                 {
                     assert(head == tail->prev);
-                    assert(1==ngap);
+                    assert(1==gaps);
                     return true;
                 }
                 else
@@ -99,7 +101,7 @@ namespace Yttrium
 
             void * Bricks:: acquire(size_t &blockSize) noexcept
             {
-                if(ngap<=0 || blockSize>maxBlockSize)
+                if(gaps<=0 || blockSize>maxBlockSize)
                     return 0; // full
                 else
                 {
@@ -172,7 +174,7 @@ namespace Yttrium
                 else
                 {
                     blockSize = brick->size;
-                    --ngap;
+                    --gaps;
                 }
                 assert( CheckGapsOf(this) );
                 return memset(p,0,blockSize);
@@ -228,14 +230,14 @@ namespace Yttrium
                         assert( CheckGapsOf(bricks) );
                         break;
 
-                    case FUSION_BOTH: assert(bricks->ngap>=2); {
+                    case FUSION_BOTH: assert(bricks->gaps>=2); {
                         Brick * const post = next->next; assert(post);
                         prev->next = post;
                         post->prev = prev; }
                         prev->updateSize();
 
                         // decrease by one gap
-                        --bricks->ngap;
+                        --bricks->gaps;
                         assert( CheckGapsOf(bricks) );
                         break;
 
@@ -244,7 +246,7 @@ namespace Yttrium
 
                         // mark as free and increase ngap
                         brick->used = 0;
-                        ++bricks->ngap;
+                        ++bricks->gaps;
                         assert( CheckGapsOf(bricks) );
                 }
 
