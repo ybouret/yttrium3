@@ -70,7 +70,7 @@ Y_UTEST(memory_plastic_bricks)
     Y_SIZEOF(Memory::Plastic::Brick);
     Y_PRINTV(Memory::Plastic::Bricks::BrickBytes);
     Y_PRINTV(Memory::Plastic::Bricks::MinPerPage);
-    Y_PRINTV(Memory::Plastic::Bricks::MinBlockSize);
+    Y_PRINTV(Memory::Plastic::Bricks::MinUserBytes);
     Y_SIZEOF(Memory::Plastic::Bricks);
     
 

@@ -6,6 +6,7 @@
 
 #include "y/memory/plastic/bricks.hpp"
 #include "y/calculus/alignment.hpp"
+#include "y/memory/metrics.hpp"
 
 namespace Yttrium
 {
@@ -26,7 +27,9 @@ namespace Yttrium
             class Forge
             {
             public:
-                static const size_t DataOffset = Alignment::To<Brick>::CeilOf<sizeof(Bricks)>::Value;
+                static const size_t DataOffset  = Alignment::To<Brick>::CeilOf<sizeof(Bricks)>::Value;
+                static const size_t MinRawBytes_ = DataOffset + Bricks::MinUserBytes;
+                static const size_t MinRawBytes  = MinRawBytes_ > Metrics::MinPageBytes ? MinRawBytes_ : Metrics::MinPageBytes;
                 explicit Forge();
                 virtual ~Forge() noexcept;
 

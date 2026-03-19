@@ -33,7 +33,7 @@ namespace Yttrium
                 static const size_t   BrickBytes   = sizeof(Brick);                  //!< alias
                 static const unsigned BrickShift   = IntegerLog2<BrickBytes>::Value; //!< by design
                 static const size_t   MinPerPage   = 1;                              //!< alias
-                static const size_t   MinBlockSize = (2+MinPerPage) * BrickBytes;    //!< head+memory+tail
+                static const size_t   MinUserBytes = (2+MinPerPage) * BrickBytes;    //!< head+memory+tail
 
                 //______________________________________________________________
                 //

@@ -14,7 +14,7 @@ namespace Yttrium
 
             static   size_t BrickTailOffset(const size_t pageSize)
             {
-                assert(pageSize>=Bricks::MinBlockSize);
+                assert(pageSize>=Bricks::MinUserBytes);
                 const size_t numBricks = pageSize / sizeof(Brick);
                 assert(numBricks>=Bricks::MinPerPage+2);
                 //std::cerr << "numBricks in " << pageSize << " bytes : " << numBricks << " => main bytes=" << (numBricks-2) * sizeof(Brick) << std::endl;
