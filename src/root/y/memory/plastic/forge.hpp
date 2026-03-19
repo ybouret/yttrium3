@@ -50,6 +50,7 @@ namespace Yttrium
                 public:
                     explicit Bucket() noexcept;
                     virtual ~Bucket() noexcept;
+                    Bricks * cache;
                 private:
                     Y_Disable_Copy_And_Assign(Bucket);
                 };

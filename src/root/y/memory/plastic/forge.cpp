@@ -18,15 +18,28 @@ namespace Yttrium
         namespace Plastic
         {
 
-            Forge:: Bucket:: Bucket() noexcept : Bucket_()
+            Forge:: Bucket:: Bucket() noexcept : Bucket_(), cache(0)
             {
             }
 
-            Forge:: Bucket:: ~Bucket() noexcept  
+            Forge:: Bucket:: ~Bucket() noexcept
             {
             }
 
+        }
 
+    }
+
+}
+
+namespace Yttrium
+{
+
+    namespace Memory
+    {
+
+        namespace Plastic
+        {
             Forge:: Forge(Book     & userBook,
                           Lockable & userLock) noexcept :
             buckets(0),
