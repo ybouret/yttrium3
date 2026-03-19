@@ -54,12 +54,7 @@ namespace Yttrium
 
             void * Forge:: acquire(size_t &blockSize)
             {
-                if(last)
-                {
-                    void * const p = last->acquire(blockSize);
-                    if(p) return p;
-                }
-                
+               
 
 
             }
