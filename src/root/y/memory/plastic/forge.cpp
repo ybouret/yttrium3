@@ -3,6 +3,9 @@
 #include "y/memory/book.hpp"
 #include "y/core/max.hpp"
 
+#include "y/libc/block/zero.h"
+#include "y/type/destruct.hpp"
+
 #include "y/exception.hpp"
 #include "y/format/decimal.hpp"
 
@@ -17,16 +20,25 @@ namespace Yttrium
 
             Forge:: Forge(Book     & userBook,
                           Lockable & userLock) noexcept :
-            last(0),
-            list(),
+            buckets(0),
             book(   userBook ),
-            access( userLock )
+            access( userLock ),
+            wksp()
             {
+                Coerce(buckets) = static_cast<Bucket *>( Y_BZero(wksp) )-MinPageShift;
+                for(unsigned shift=MinPageShift;shift<=MaxPageShift;++shift)
+                {
+                    new (buckets+shift) Bucket();
+                }
             }
+
 
             Forge:: ~Forge() noexcept
             {
-
+                for(unsigned shift=MinPageShift;shift<=MaxPageShift;++shift)
+                    Destruct(buckets+shift);
+                Y_BZero(wksp);
+                Coerce(buckets) = 0;
             }
 
 
@@ -44,12 +56,12 @@ namespace Yttrium
                 assert(shift>= MinPageShift);
                 assert(shift<= MaxPageShift);
 
-                Pages &           alloc     = book[shift];
+                Pages &           alloc     = book[shift]; assert(shift==alloc.pageShift);
                 void *    const   block     = alloc.get();
                 char * const      dataAddr  = static_cast<char *>(block) + DataOffset;
                 const size_t      dataSize  = alloc.pageBytes - DataOffset;
 
-                return new(block) Bricks(dataAddr,dataSize,shift);
+                return buckets[shift].insertByIncreasingAddress( new (block) Bricks(dataAddr,dataSize,shift) );
             }
 
             

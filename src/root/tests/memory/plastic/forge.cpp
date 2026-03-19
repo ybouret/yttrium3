@@ -9,10 +9,7 @@ using namespace Yttrium;
 Y_UTEST(memory_plastic_forge)
 {
     Core::Rand ran;
-    Y_SIZEOF(Memory::Plastic::Brick);
-    Y_SIZEOF(Memory::Plastic::Bricks);
-    Y_PRINTV(Memory::Plastic::Forge::DataOffset);
-    Y_PRINTV(Memory::Plastic::Forge::MinRawBytes);
+
 
     for(size_t blockSize=0;blockSize<=100000; blockSize += ran.in<size_t>(1,1000))
     {
@@ -32,8 +29,18 @@ Y_UTEST(memory_plastic_forge)
         std::cerr << ( size_t(1) << shift ) << " => " << bricks->maxBlockSize << std::endl;
     }
 #endif
-    
 
+
+    Y_SIZEOF(Memory::Plastic::Brick);
+    Y_SIZEOF(Memory::Plastic::Bricks);
+    Y_PRINTV(Memory::Plastic::Forge::DataOffset);
+    Y_PRINTV(Memory::Plastic::Forge::MinRawBytes);
+
+    Y_PRINTV(Memory::Plastic::Forge::MinPageBytes);
+    Y_PRINTV(Memory::Plastic::Forge::MaxPageBytes);
+
+    Y_PRINTV(Memory::Plastic::Forge::MinPageShift);
+    Y_PRINTV(Memory::Plastic::Forge::MaxPageShift);
 }
 Y_UDONE()
 

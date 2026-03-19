@@ -63,7 +63,7 @@ namespace Yttrium
                  \return a zeroed block with at least blockSize bytes, adjusted upon success
                  */
                 void * acquire(size_t &blockSize) noexcept;
-
+                
 
                 //! release a block
                 /**
@@ -82,8 +82,8 @@ namespace Yttrium
                 Brick * const  head; //!< head brick
                 Brick * const  tail; //!< tail brick
                 const size_t   maxBlockSize;
-                Bricks * const next;
-                Bricks * const prev;
+                Bricks *       next;
+                Bricks *       prev;
                 const unsigned info;
                 
             private:

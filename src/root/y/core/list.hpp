@@ -418,6 +418,15 @@ namespace Yttrium
                 return head != node ? pushHead( pop(node) ) : node;
             }
 
+            inline NODE *insertByIncreasingAddress(NODE * const node) noexcept
+            {
+                Y_Core_List_Check(node);
+                (void) pushTail(node);
+                while(node && node->prev>node) (void) towardsHead(node);
+                assert(this->hasIncreasingAddresses());
+                return node;
+            }
+
 
             //__________________________________________________________________
             //

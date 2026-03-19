@@ -126,9 +126,8 @@ namespace Yttrium
             Chunk * Arena:: newChunk()
             {
                 uint8_t * const zpage = static_cast<uint8_t*>( allocator.get() );
-                Chunk *   const chunk = clist.pushTail( new (zpage) Chunk(blockSize, (uint8_t)numBlocks, zpage + dataAlign) );
-                while(chunk->prev && chunk->prev>chunk) clist.towardsHead(chunk);
-
+                Chunk *   const chunk = clist.insertByIncreasingAddress( new (zpage) Chunk(blockSize, (uint8_t)numBlocks, zpage + dataAlign) );
+                
 #if !defined(NDEBUG)
                 for(const Chunk *node=clist.head;node;node=node->next)
                 {

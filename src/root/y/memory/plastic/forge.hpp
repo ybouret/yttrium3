@@ -36,12 +36,14 @@ namespace Yttrium
             {
             public:
                 static const size_t   DataOffset   = Alignment::To<Brick>::CeilOf<sizeof(Bricks)>::Value;
-                static const size_t   MinRawBytes  = MetaMax<DataOffset + Bricks::MinUserBytes,Metrics::MinPageBytes>::Value;
-                static const size_t   MinPageBytes = MetaNextPowerOfTwo<MinRawBytes>::Value;
+                static const size_t   HeaderSize   = DataOffset + Bricks::MinUserBytes;
+                static const size_t   MinRawBytes  = MetaNextPowerOfTwo<HeaderSize>::Value;
+                static const size_t   MinPageBytes = MetaMax<MinRawBytes,Metrics::DefaultBytes>::Value;
                 static const unsigned MinPageShift = IntegerLog2<MinPageBytes>::Value;
                 static const size_t   MaxPageBytes = Metrics::MaxPageBytes;
                 static const unsigned MaxPageShift = Metrics::MaxPageShift;
-
+                static const unsigned NumBuckets   = MaxPageShift+1-MinPageShift;
+                typedef Core::ListOf<Bricks> Bucket;
 
                 explicit Forge(Book     &userBook,
                                Lockable &userLock) noexcept;
@@ -54,16 +56,15 @@ namespace Yttrium
                 Bricks * newBricks(const unsigned shift);
 
             private:
-                Bricks *             last;
-                Core::ListOf<Bricks> list;
+                Bucket * const buckets;
 
             public:
-                Book               & book;    //!< PERSISTENT pages
+                Book               & book;    //!< PERSISTENT book of Pages
                 Lockable           & access;  //!< PERSISTENT access
 
             private:
                 Y_Disable_Copy_And_Assign(Forge);
-
+                void * wksp[ Alignment::WordsGEQ<NumBuckets*sizeof(Bucket)>::Count];
 
             };
 
