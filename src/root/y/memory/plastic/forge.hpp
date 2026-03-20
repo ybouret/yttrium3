@@ -42,18 +42,9 @@ namespace Yttrium
                 static const unsigned        MinPageShift = IntegerLog2<MinPageBytes>::Value;
                 static const size_t          MaxPageBytes = Metrics::MaxPageBytes;
                 static const unsigned        MaxPageShift = Metrics::MaxPageShift;
-                static const unsigned        NumBuckets   = MaxPageShift+1-MinPageShift;
-                typedef Core::ListOf<Bricks> Bucket_;
+                static const size_t          MaxBlockSize = MaxPageBytes - HeaderSize;
 
-                class Bucket : public Bucket_
-                {
-                public:
-                    explicit Bucket() noexcept;
-                    virtual ~Bucket() noexcept;
-                    Bricks * cache;
-                private:
-                    Y_Disable_Copy_And_Assign(Bucket);
-                };
+
 
 
 
@@ -62,13 +53,23 @@ namespace Yttrium
 
                 virtual ~Forge() noexcept;
 
-                static unsigned ShiftFor(const size_t blockSize);
+                //!
+                /**
+                 \param blockSize 0 <= blockSize <= MaxBlockSize
+                 */
+                static unsigned ShiftFor(const size_t blockSize) noexcept;
 
+                //!
+                /**
+                 \param blockSize 0 <= blockSize <= MaxBlockSize
+                 */
                 void *   acquire(size_t & blockSize);
-                Bricks * newBricks(const unsigned shift);
+                void     release(void * &blockAddr,
+                                 size_t &blockSize) noexcept;
+
 
             private:
-                Bucket * const buckets;
+                Core::ListOf<Bricks> list;
 
             public:
                 Book               & book;    //!< PERSISTENT book of Pages
@@ -76,8 +77,9 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(Forge);
-                void * wksp[ Alignment::WordsGEQ<NumBuckets*sizeof(Bucket)>::Count];
-
+                Bricks * newBricks(const unsigned shift);
+                Bricks * newBricksFor(const size_t blockSize);
+                void     remove(Bricks * const) noexcept;
             };
 
         }
