@@ -56,7 +56,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             using MonikerData<T>::wksp;
-            Y_Args_Declare(T,Type);
+            Y_Args_Declare(T,Type); //!< aliases
 
             //__________________________________________________________________
             //
