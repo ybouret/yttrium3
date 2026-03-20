@@ -46,10 +46,11 @@ namespace Yttrium
                 /**
                  \param dataAddr valid memory address
                  \param dataSize dataSize>=MinUserBytes
+                 \param dataInfo optional info
                  */
                 Bricks(void * const   dataAddr,
                        const size_t   dataSize,
-                       const unsigned dataInfo = 0) noexcept;
+                       const unsigned dataInfo) noexcept;
 
                 //! cleanup
                 ~Bricks() noexcept;
@@ -78,14 +79,14 @@ namespace Yttrium
                 bool ownsBrick(const Brick * const) const noexcept;
 
 
-                size_t         gaps; //!< availalable gaps
-                Brick * const  head; //!< head brick
-                Brick * const  tail; //!< tail brick
-                const size_t   maxBlockSize;
-                Bricks *       next;
-                Bricks *       prev;
-                const unsigned info;
-                
+                size_t         gaps;         //!< availalable gaps
+                Brick * const  head;         //!< head brick
+                Brick * const  tail;         //!< tail brick
+                const size_t   maxBlockSize; //!< max block size when empty
+                Bricks *       next;         //!< for list
+                Bricks *       prev;         //!< for list
+                const unsigned info;         //!< for Forge
+
             private:
                 Y_Disable_Copy_And_Assign(Bricks); //!< discard
 

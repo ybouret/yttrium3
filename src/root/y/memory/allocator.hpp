@@ -47,6 +47,12 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
+            //! helper to acquire array of objects
+            /**
+             \param count minimal count of objects (set to 1 at least)
+             \param bytes acquired bytes, should be initially 0
+             \return memory with count and bytes
+             */
             template <typename T> inline
             T * acquireAs(size_t &count, size_t &bytes)
             {
@@ -62,6 +68,12 @@ namespace Yttrium
                 } catch(...) { assert(0==bytes); count = 0; }
             }
 
+            //! helper to release array of objects
+            /**
+             \param types acquired objects
+             \param count number of objectes
+             \param bytes matching bytes
+             */
             template <typename T> inline
             void releaseAs(T * &types, T & count, size_t & bytes) noexcept
             {

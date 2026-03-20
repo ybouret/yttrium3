@@ -106,6 +106,8 @@ namespace Yttrium
                 //______________________________________________________________
             private:
                 Core::ListOf<Bricks> list;    //!< LRU bricks
+                Bricks *             empty;   //!< none or first empty
+                
             public:
                 Book               & book;    //!< PERSISTENT book of Pages
                 Lockable           & access;  //!< PERSISTENT access

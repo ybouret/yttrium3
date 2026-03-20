@@ -60,13 +60,16 @@ Y_UTEST(memory_plastic_forge)
     Concurrent::Nucleus &  nucleus = Concurrent::Nucleus::Instance();
     Memory::Plastic::Forge forge(nucleus.book,nucleus.access);
 
-    Block        blocks[1000];
+    Block        blocks[10000];
     const size_t nblock = Y_Static_Size(blocks);
     size_t       size = 0;
 
     Acquire(forge,nblock,blocks,size,ran);
-
-
+    for(size_t iter=0;iter<10;++iter)
+    {
+        Release(forge,nblock/ran.in<size_t>(2,4),blocks,size);
+        Acquire(forge,nblock,blocks,size,ran);
+    }
     Release(forge,0,blocks,size);
 
 

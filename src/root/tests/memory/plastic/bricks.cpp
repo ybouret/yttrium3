@@ -74,7 +74,7 @@ Y_UTEST(memory_plastic_bricks)
     
 
     void * data[1024];
-    Memory::Plastic::Bricks bricks(data,sizeof(data));
+    Memory::Plastic::Bricks bricks(data,sizeof(data),0);
     
     Y_PRINTV(sizeof(data));
     Y_CHECK(bricks.areEmpty());

@@ -10,6 +10,8 @@
 #include "y/format/decimal.hpp"
 
 #include "y/ability/lockable.hpp"
+#include "y/swap.hpp"
+#include "y/type/sign.hpp"
 
 namespace Yttrium
 {
@@ -22,6 +24,7 @@ namespace Yttrium
             Forge:: Forge(Book     & userBook,
                           Lockable & userLock) noexcept :
             list(),
+            empty(0),
             book(   userBook ),
             access( userLock )
             {
@@ -31,10 +34,10 @@ namespace Yttrium
 
             Forge:: ~Forge() noexcept
             {
+                Y_Lock(access);
                 while(list.size)
                     remove( list.popTail() );
             }
-
 
             unsigned Forge:: ShiftFor(const size_t blockSize) noexcept
             {
@@ -80,6 +83,8 @@ namespace Yttrium
                     if(p)
                     {
                         (void) list.moveToHead(node);
+                        if(empty==node)
+                            empty = 0;
                         return p;
                     }
                 }
@@ -105,9 +110,43 @@ namespace Yttrium
                 Y_Lock(access);
                 assert(0!=blockAddr);
                 assert(blockSize>0);
-                Bricks * const node = Bricks::Release(blockAddr,blockSize);
+                Bricks *  node = Bricks::Release(blockAddr,blockSize);
                 assert(list.owns(node));
-                (void) list.moveToHead(node);
+                if( list.moveToHead(node)->areEmpty() )
+                {
+                    if(0==empty)
+                    {
+                        empty = node;
+                    }
+                    else
+                    {
+                        // wil remove the smallest by size or highest address
+                        assert(empty->areEmpty());
+                        switch( Sign::Of(empty->info,node->info) )
+                        {
+                            case Negative:
+                                assert(empty->info<node->info);
+                                break;
+
+                            case __Zero__: assert(empty->info==node->info);
+                                if(node<empty)
+                                    Swap(node,empty);
+                                assert(node>empty);
+                                break;
+
+                            case Positive:
+                                assert(empty->info>node->info);
+                                Swap(empty,node);
+                                assert(empty->info<node->info);
+                                break;
+                        }
+
+                        assert(node->info>empty->info || node>empty);
+                        
+                        remove( list.pop(node) );
+                    }
+                }
+
             }
 
 
