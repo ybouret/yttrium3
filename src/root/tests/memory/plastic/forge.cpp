@@ -62,7 +62,7 @@ Y_UTEST(memory_plastic_forge)
 
     Block        blocks[10000];
     const size_t nblock = Y_Static_Size(blocks);
-    size_t       size = 0;
+    size_t       size   = 0;
 
     Acquire(forge,nblock,blocks,size,ran);
     for(size_t iter=0;iter<10;++iter)

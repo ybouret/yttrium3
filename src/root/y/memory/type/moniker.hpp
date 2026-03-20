@@ -7,6 +7,8 @@
 
 #include "y/memory/type/embedded.hpp"
 #include "y/calculus/alignment.hpp"
+#include "y/type/copy-of.hpp"
+
 #include <iostream>
 
 namespace Yttrium
@@ -54,6 +56,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             using MonikerData<T>::wksp;
+            Y_Args_Declare(T,Type);
 
             //__________________________________________________________________
             //
@@ -69,6 +72,9 @@ namespace Yttrium
             inline virtual ~Moniker() noexcept {}
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            inline explicit Moniker(ParamType args) :
+            MonikerData<T>(), Embedded<T>(wksp,args) { }
+
             template <typename U>
             inline explicit Moniker(U &u) :
             MonikerData<T>(), Embedded<T>(wksp,u) { }
