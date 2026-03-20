@@ -11,8 +11,8 @@ Y_UTEST(system_wall_time)
     const uint64_t mark = chrono.Ticks();
     do
     {
-        std::cerr << "Time = " << std::setw(15) << chrono.since(mark) << "\r";
-    } while( chrono.since(mark) < 5.0L );
+        (std::cerr << "Time = " << std::setw(15) << chrono.since(mark) << "\r").flush();
+    } while( chrono.since(mark) < 3.0L );
     std::cerr << std::endl;
 }
 Y_UDONE()
