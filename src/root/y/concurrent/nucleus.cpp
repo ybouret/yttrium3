@@ -17,7 +17,6 @@
 
 
 #include "y/concurrent/nucleus.hpp"
-#include "y/calculus/alignment.hpp"
 #include "y/type/destruct.hpp"
 
 #include <iostream>

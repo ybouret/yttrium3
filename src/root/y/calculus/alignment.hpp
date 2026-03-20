@@ -122,7 +122,7 @@ namespace Yttrium
 
         typedef void *               SystemMemoryWord; //!< alias
         typedef To<SystemMemoryWord> SystemMemory;     //!< alias
-
+        
         //______________________________________________________________________
         //
         //

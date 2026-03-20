@@ -27,12 +27,14 @@ namespace Yttrium
     /**
      \param ans current maximum, updated if necessary
      \param rhs argument to test
+     \return ans for further usage
      */
     //__________________________________________________________________________
     template <typename T> inline
-    void InSituMax(T &ans, const T rhs)
+    T &InSituMax(T &ans, const T rhs)
     {
         if(ans<rhs) ans = rhs;
+        return ans;
     }
 
 

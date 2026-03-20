@@ -6,6 +6,7 @@
 #include "y/concurrent/singulet.hpp"
 #include "y/memory/allocator.hpp"
 #include "y/memory/page/factory.hpp"
+#include "y/calculus/alignment.hpp"
 
 namespace Yttrium
 {
@@ -40,7 +41,9 @@ namespace Yttrium
             //
             //__________________________________________________________________
             static const char * const CallSign;                    //!< "Nucleus"
-            static const Longevity    LifeTime = GreatestLifeTime; //!< alias
+            static const Longevity    LifeTime     = GreatestLifeTime; //!< alias
+            static const size_t       MaxBlockSize = Alignment::SystemMemory::Maximum;      //!< max aligned block size
+            static const size_t       MinBlockSize = sizeof( Alignment::SystemMemoryWord ); //!< min aligned block size
             class Code;
             class Data;
             

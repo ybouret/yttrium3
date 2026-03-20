@@ -418,6 +418,7 @@ namespace Yttrium
                 return head != node ? pushHead( pop(node) ) : node;
             }
 
+            //! insert a node in an ordered list \param node a new node \return inserted node at its ordered position
             inline NODE *insertByIncreasingAddress(NODE * const node) noexcept
             {
                 Y_Core_List_Check(node);
