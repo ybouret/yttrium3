@@ -37,6 +37,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(concurrent_ram);
     Y_UTEST(concurrent_mutex);
     Y_UTEST(concurrent_thread);
+    Y_UTEST(concurrent_memory);
 
 
     Y_UTEST(memory_small_chunk);
