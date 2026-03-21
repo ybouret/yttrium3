@@ -39,7 +39,8 @@ namespace Yttrium
             static uint64_t Ticks();                               //!< unlocked ticks \return system ticks
             long double operator()(const uint64_t) const noexcept; //!< convert ticks \return seconds
             long double since(const uint64_t start) const;         //!< ellapsed time \param start origin \return seconds
-
+            void        waitFor(const long double duration) const;
+            
             //__________________________________________________________________
             //
             //
