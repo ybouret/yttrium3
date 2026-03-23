@@ -4,9 +4,9 @@
 
 
 static
-void Yttrium_Sort_(void * const a,
-                   const size_t n,
-                   const size_t width,
+void Yttrium_Sort_(void * const   a,
+                   const size_t   n,
+                   const size_t   wa,
                    YttriumCompare compare,
                    void * const   args,
                    void * const   rra)
@@ -14,23 +14,23 @@ void Yttrium_Sort_(void * const a,
     size_t l  = (n>>1)+1;
     size_t ir = n;
     char * const ra1 = (char*)a; // first   item
-    char * const ra = ra1-width; // shifted array
+    char * const ra = ra1-wa; // shifted array
 
     for(;;)
     {
         if(l>1)
         {
-            memcpy(rra,&ra[--l*width],width);
+            memcpy(rra,&ra[--l*wa],wa);
         }
         else
         {
-            char * const ra_ir = &ra[ir*width];
-            memcpy(rra,ra_ir,width); // rra=ra[ir];
-            memcpy(ra_ir,ra1,width); // ra[ir]=ra[1];
+            char * const ra_ir = &ra[ir*wa];
+            memcpy(rra,ra_ir,wa); // rra=ra[ir];
+            memcpy(ra_ir,ra1,wa); // ra[ir]=ra[1];
             if(--ir == 1)
             {
                 //ra[1]=rra;
-                memcpy(ra1,rra,width);
+                memcpy(ra1,rra,wa);
                 break;
             }
         }
@@ -39,22 +39,22 @@ void Yttrium_Sort_(void * const a,
         size_t j = l+l;
         while (j<=ir)
         {
-            char * ra_j = &ra[j*width];
-            if( (j<ir) && ( compare(ra_j,ra_j+width,args)<0) )
+            char * ra_j = &ra[j*wa];
+            if( (j<ir) && ( compare(ra_j,ra_j+wa,args)<0) )
             {
                 ++j;
-                ra_j += width;
+                ra_j += wa;
             }
             if( compare(rra,ra_j,args) < 0 )
             {
-                memcpy(&ra[i*width],ra_j,width); //ra[i]=ra[j];
+                memcpy(&ra[i*wa],ra_j,wa); //ra[i]=ra[j];
                 i=j;
                 j <<= 1;
             }
             else
                 break;
         }
-        memcpy(&ra[i*width],rra,width);//ra[i]=rra;
+        memcpy(&ra[i*wa],rra,wa);//ra[i]=rra;
     }
 
 }
