@@ -11,6 +11,9 @@
 #include "y/random/shuffle.hpp"
 #include "y/random/fill.hpp"
 #include "y/libc/block/zeroed.h"
+#include "y/memory/pages.hpp"
+#include "y/memory/book.hpp"
+#include "y/memory/small/blocks.hpp"
 
 using namespace Yttrium;
 
@@ -26,6 +29,12 @@ namespace
         {
             Random::FillWith(ran,addr,size,1);
         }
+    };
+
+    struct Wad
+    {
+        void *   entry;
+        unsigned shift;
     };
 
     static inline
@@ -76,13 +85,128 @@ namespace
         Release(alloc,0,blocks,count);
     }
 
+}
+
+namespace {
+    static inline
+    void Acquire(Memory::Book &book,
+                 const size_t nmax,
+                 Wad          wads[],
+                 size_t      &count,
+                 Core::Rand &ran)
+    {
+        while(count<nmax)
+        {
+            Wad &wad = wads[count];
+            wad.shift = ran.in<unsigned>(8,14);
+            wad.entry = book[wad.shift].get();
+            ++count;
+        }
+    }
+
+    static inline void Release(Memory::Book &book,
+                               const size_t nmin,
+                               Wad          wads[],
+                               size_t &     count) noexcept
+    {
+        while(count>nmin)
+        {
+            Wad &wad = wads[--count];
+            book[wad.shift].put(wad.entry);
+        }
+    }
+
+    static inline
+    void Torture(Memory::Book &book,
+                 Wad           wads[],
+                 const size_t  nwad,
+                 Core::Rand   &ran)
+    {
+        size_t count = 0;
+        Acquire(book,nwad,wads,count,ran);
+        for(size_t iter=ran.in<size_t>(10,100);iter>0;--iter)
+        {
+            Random::Shuffle(ran,wads,nwad);
+            Release(book,nwad/ran.in<size_t>(2,4),wads,count);
+            Acquire(book,nwad,wads,count,ran);
+        }
+        Release(book,0,wads,count);
+    }
+
+}
+
+namespace
+{
+    static inline
+    void Acquire(Memory::Small::Blocks & alloc,
+                 const size_t        nmax,
+                 Block               blocks[],
+                 size_t            & count,
+                 Core::Rand        & ran)
+    {
+        while(count<nmax)
+        {
+            Block &b = blocks[count];
+            b.size   = ran.in<size_t>(1,500);
+            b.addr   = alloc.acquire(b.size);
+            Y_ASSERT( Y_TRUE == Yttrium_Zeroed(b.addr,b.size) );
+            b.fill(ran);
+            ++count;
+        }
+    }
+
+    static inline
+    void Release(Memory::Small::Blocks &alloc,
+                 const size_t       nmin,
+                 Block              blocks[],
+                 size_t            &count) noexcept
+    {
+        while(count>nmin)
+        {
+            Block &b = blocks[--count];
+            alloc.release(b.addr,b.size);
+            Y_VZero(b);
+        }
+    }
+
+    static inline
+    void Torture(Memory::Small::Blocks &alloc,
+                 Block                  blocks[],
+                 const size_t           nblock,
+                 Core::Rand            &ran)
+    {
+        size_t count = 0;
+        Acquire(alloc,nblock,blocks,count,ran);
+        for(size_t iter=ran.in<size_t>(10,100);iter>0;--iter)
+        {
+            Random::Shuffle(ran,blocks,nblock);
+            Release(alloc,nblock/ran.in<size_t>(2,4),blocks,count);
+            Acquire(alloc,nblock,blocks,count,ran);
+        }
+        Release(alloc,0,blocks,count);
+    }
+}
+
+
+namespace {
+
+    struct Params
+    {
+        System::WallTime      & chrono;
+        Concurrent::Nucleus   & nucleus;
+        Memory::Small::Blocks & msb;
+    };
+
     static inline
     void MemoryInThread(void * const args)
     {
         assert(0!=args);
-        Lockable         & sync   = Lockable::Giant();
-        System::WallTime & chrono = *static_cast<System::WallTime *>(args);
-        long               seed   = 0;
+        Lockable              & sync    = Lockable::Giant();
+        Params                & params  = *static_cast<Params *>(args);
+        //System::WallTime      & chrono  = params.chrono;
+        Concurrent::Nucleus   & nucleus = params.nucleus;
+        Memory::Small::Blocks & msb     = params.msb;
+        long                    seed    = 0;
         {
             Y_Lock(sync);
             const uint64_t u = System::WallTime::Ticks();
@@ -90,23 +214,20 @@ namespace
             (std::cerr << "In Thread, seed=" << seed << std::endl).flush();
         }
 
-        Concurrent::Nucleus &nucleus = Concurrent::Nucleus::Location();
-        Core::Rand           ran(seed);
-        {
-            Y_Lock(sync);
-            chrono.waitFor(0.01f + ran() * 0.02f);
-        }
-        Block        blocks[100];
-        const size_t nblock = Y_Static_Size(blocks);
-        Torture(nucleus,blocks,nblock,ran);
+        Core::Rand ran(seed);
+        Block      blocks[512];
+        Wad        wads[512];
 
+        Torture(nucleus,      blocks, Y_Static_Size(blocks), ran);
+        Torture(nucleus.book, wads,   Y_Static_Size(wads),   ran);
+        Torture(msb,          blocks, Y_Static_Size(blocks), ran);
     }
 
     class MyThread : public Concurrent::Thread
     {
     public:
-        explicit MyThread(System::WallTime &chrono) :
-        Concurrent::Thread(MemoryInThread,&chrono)
+
+        explicit MyThread(Params &params) : Concurrent::Thread(MemoryInThread,&params)
         {
         }
 
@@ -122,10 +243,19 @@ namespace
 
 Y_UTEST(concurrent_memory)
 {
-    const size_t numThreads = 8;
-    void *       wksp[ Alignment::WordsGEQ<numThreads*sizeof(MyThread)>::Count ];
-    System::WallTime chrono;
-    Memory::AutoBuilt<MyThread> threads(wksp,numThreads,chrono);
+
+    System::WallTime        chrono;
+    Concurrent::Nucleus   & nucleus = Concurrent::Nucleus::Location();
+    Memory::Book          & book    = nucleus.book;
+    Memory::Small::Blocks   msb(book,nucleus.access);
+
+    Params params = { chrono, nucleus, msb };
+
+    {
+        const size_t numThreads = 8;
+        void *       wksp[ Alignment::WordsGEQ<numThreads*sizeof(MyThread)>::Count ];
+        Memory::AutoBuilt<MyThread> threads(wksp,numThreads,params);
+    }
 }
 Y_UDONE()
 

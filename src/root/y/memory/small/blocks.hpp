@@ -7,6 +7,7 @@
 #include "y/memory/small/house.hpp"
 #include "y/calculus/meta2.hpp"
 #include "y/calculus/alignment.hpp"
+#include "y/memory/allocator.hpp"
 
 namespace Yttrium
 {
