@@ -5,7 +5,6 @@
 namespace Yttrium
 {
 
-#if 0
     ClassLockPolicy:: ~ClassLockPolicy() noexcept
     {
     }
@@ -15,7 +14,6 @@ namespace Yttrium
     {
 
     }
-#endif
     
 }
 
