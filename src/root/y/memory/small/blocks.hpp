@@ -81,6 +81,8 @@ namespace Yttrium
                  */
                 void   release(void * const blockAddr, const size_t blockSize) noexcept;
 
+                
+
                 //! check ownership
                 /**
                  \param blockAddr address to look for
@@ -96,7 +98,7 @@ namespace Yttrium
                 Arena *        acquiring;        //!< top-level caching
                 Arena *        releasing;        //!< top-level caching
                 Memory::Book & book;             //!< PERSISTENT book
-                Arena          arena;            //!< dedicated arena( sizeof(Arena) ) to create speficf arenas
+                Arena          arena;            //!< dedicated arena( sizeof(Arena) ) to create specific arenas
                 House<Arena>   house;            //!< helper to setup arenas
                 void *         wksp[TableWords]; //!< inner static memory
             };

@@ -24,7 +24,7 @@ namespace Yttrium
                 for(size_t i=0;i<TableSize;++i) new( table+i ) Slot();
 
                 std::cerr << "arena.blockSize=" << arena.blockSize << std::endl;
-
+                std::cerr << "arena.numBlocks=" << arena.numBlocks << std::endl;
             }
 
             Blocks:: ~Blocks() noexcept

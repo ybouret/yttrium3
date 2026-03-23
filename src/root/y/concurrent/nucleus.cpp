@@ -117,13 +117,10 @@ namespace Yttrium
             conditions(arena),
             threads(arena)
             {
-                std::cerr << "---- Creating Data" << std::endl;
-                std::cerr << "CommSize = " << CommSize << std::endl;
             }
 
             virtual ~Data() noexcept
             {
-                //std::cerr << "---- Deleting Data" << std::endl;
             }
 
             Memory::Small::Blocks                  blocks;
@@ -188,13 +185,14 @@ namespace Yttrium
             }
             NucleusInstance = this;
             if(Verbose) Display("+", CallSign, LifeTime);
+
             std::cerr << "sizeof(Code) = " << sizeof(Code) << std::endl;
             std::cerr << "sizeof(Data) = " << sizeof(Data) << std::endl;
             std::cerr << "sizeof(SystemMutex)     = " << sizeof(SystemMutex)     << std::endl;
             std::cerr << "sizeof(SystemCondition) = " << sizeof(SystemCondition) << std::endl;
             std::cerr << "sizeof(SystemThread)    = " << sizeof(SystemThread)    << std::endl;
             std::cerr << "CommSize                = " << Data::CommSize          << std::endl;
-            
+
 #if defined(Y_BSD)
             std::cerr << "sizeof(pthread_mutex_t) = " << sizeof(pthread_mutex_t) << std::endl;
             std::cerr << "sizeof(pthread_cond_t)  = " << sizeof(pthread_cond_t)  << std::endl;
