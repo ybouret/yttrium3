@@ -70,6 +70,23 @@ namespace Yttrium
                 Make(arr,num,Sign::Decreasing<T>);
             }
 
+
+            //! sort according to comparison
+            /**
+             calling a C function, compare must not throw
+             \param arr array [0:num-1]
+             \param num number of items
+             \param compare valid comparator
+             \param brr array [0:num-1] to be co-sorted
+             */
+            template <typename T, typename U, typename COMPARE> static inline
+            void Make(T arr[], const size_t num, COMPARE &compare, U brr[]) noexcept
+            {
+                static YttriumCompare fcn = CompareWrapper<T,COMPARE>;
+                Memory::Single<T>     rra;
+                Memory::Single<U>     rrb;
+                Yttrium_CoSort(arr,num,sizeof(T),fcn,(void*)&compare,rra(),brr,sizeof(U),rrb());
+            }
         };
 
 

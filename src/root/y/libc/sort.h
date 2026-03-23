@@ -31,6 +31,30 @@ extern "C" {
                       void * const   args,
                       void * const   rra);
 
+    //__________________________________________________________________________
+    //
+    //! Co-heap-sort anonymous arrays
+    /**
+     \param a       base address of items
+     \param n       number of items
+     \param wa      bytes per item of a
+     \param compare comparison function
+     \param args    comparison extra arguments
+     \param rra     extra memory of at least wa bytes
+     \param b       base address of co-items
+     \param wb      bytes per item of b
+     \param rrb     extra memory of at least wb bytes
+     */
+    //__________________________________________________________________________
+    void Yttrium_CoSort(void * const   a,
+                        const size_t   n,
+                        const size_t   wa,
+                        YttriumCompare compare,
+                        void * const   args,
+                        void * const   rra,
+                        void * const   b,
+                        const size_t   wb,
+                        void * const   rrb);
 
 
 #if defined(__cplusplus)

@@ -23,8 +23,9 @@ Y_UTEST(libc_sort)
 {
 	Core::Rand   ran((long)time(NULL));
 	size_t       arr[9] = { 0 };
-	const size_t num = sizeof(arr) / sizeof(arr[0]);
+    const size_t num = Y_Static_Size(arr);
 
+    std::cerr << "Sorting" << std::endl;
 	for (size_t i = 0; i < num; ++i) arr[i] = i;
 	Core::Display(std::cerr, arr, num) << std::endl;
 
@@ -55,6 +56,49 @@ Y_UTEST(libc_sort)
 
 		std::cerr << std::endl;
 	}
+
+    std::cerr << std::endl;
+    std::cerr << "Co-Sorting" << std::endl;
+    char chr[num];
+
+
+    for(size_t iter=0;iter<10;++iter)
+    {
+        Random::Shuffle(ran, arr, num);
+        for(size_t i=0;i<num;++i) chr[i] = 'a' + (char)i ;
+        Core::Display(std::cerr, arr, num) << " <== ";
+        Core::Display(std::cerr, chr, num) << std::endl;
+
+        {
+            size_t s = 0;
+            char   c = 0;
+            Yttrium_CoSort(arr, num, sizeof(arr[0]), Comparing<size_t>, NULL, &s,
+                           chr, sizeof(chr[0]), &c);
+        }
+        Core::Display(std::cerr, arr, num) << " ==> ";
+        Core::Display(std::cerr, chr, num) << std::endl;
+
+        for (size_t i = 0; i < num; ++i)
+        {
+            const char lhs = (char)i + 'a';
+            if (!Core::Find(lhs, chr, num))
+            {
+                std::cerr << "missing " << lhs << std::endl;
+                return 1;
+            }
+        }
+
+        for (size_t i = 0; i < num; ++i)
+        {
+            if (i != arr[i])
+            {
+                std::cerr << " invalid " << i << std::endl;
+                return 1;
+            }
+        }
+
+
+    }
 
 
 
