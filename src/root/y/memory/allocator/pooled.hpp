@@ -2,7 +2,7 @@
 //! \file
 
 #ifndef Y_Memory_Allocator_Pooled_Included
-#define Y_Memory_Allocator_Global_Included 1
+#define Y_Memory_Allocator_Pooled_Included 1
 
 #include "y/memory/allocator.hpp"
 #include "y/singleton.hpp"
