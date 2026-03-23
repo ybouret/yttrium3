@@ -7,7 +7,8 @@
 #include "y/concurrent/singulet.hpp"
 #include "y/concurrent/singleton/class-lock-policy.hpp"
 #include "y/calculus/alignment.hpp"
-#include "y/memory/stealth.hpp"
+#include "y/ability/lockable.hpp"
+#include "y/libc/block/zero.h"
 #include <new>
 
 namespace Yttrium
@@ -64,11 +65,11 @@ namespace Yttrium
                 if(Verbose) Display("+", T::CallSign, T::LifeTime);
                 try
                 {
-                    Instance_ = new ( Y_Memory_BZero(workspace) ) T();
+                    Instance_ = new ( Y_BZero(workspace) ) T();
                 }
                 catch(...)
                 {
-                    (void) Y_Memory_BZero(workspace);
+                    (void) Y_BZero(workspace);
                     Instance_ = 0;
                     throw;
                 }
@@ -127,7 +128,7 @@ namespace Yttrium
             {
                 if(Verbose) Display("~", T::CallSign, T::LifeTime);
                 Instance_->~T();
-                Memory::Stealth::Zero(Instance_, sizeof(T) );
+                Yttrium_BZero(Instance_, sizeof(T) );
                 Instance_ = 0;
             }
         }

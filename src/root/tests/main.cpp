@@ -38,6 +38,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(concurrent_mutex);
     Y_UTEST(concurrent_thread);
     Y_UTEST(concurrent_memory);
+    Y_UTEST(concurrent_life_time);
 
 
     Y_UTEST(memory_small_chunk);
@@ -50,6 +51,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(memory_plastic_bricks);
     Y_UTEST(memory_plastic_forge);
     Y_UTEST(memory_auto_built);
+    Y_UTEST(memory_allocator);
 
     Y_UTEST(pointer_auto);
 }
