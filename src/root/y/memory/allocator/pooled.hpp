@@ -17,7 +17,7 @@ namespace Yttrium
         //
         //
         //
-        //! Memory Pooled allocator
+        //! Memory Pooled allocator, alias to inner Plastic::Forge
         //
         //
         //______________________________________________________________________
