@@ -49,6 +49,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(memory_moniker);
     Y_UTEST(memory_plastic_bricks);
     Y_UTEST(memory_plastic_forge);
+    Y_UTEST(memory_auto_built);
 
     Y_UTEST(pointer_auto);
 }

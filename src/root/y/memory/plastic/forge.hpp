@@ -83,7 +83,7 @@ namespace Yttrium
                  */
                 virtual void *   acquire(size_t & blockSize);
                 virtual void     release(void * &blockAddr,
-                                 size_t &blockSize) noexcept;
+                                         size_t &blockSize) noexcept;
 
                 //______________________________________________________________
                 //
@@ -107,7 +107,7 @@ namespace Yttrium
             private:
                 Core::ListOf<Bricks> list;    //!< LRU bricks
                 Bricks *             empty;   //!< none or first empty
-                
+
             public:
                 Book               & book;    //!< PERSISTENT book of Pages
                 Lockable           & access;  //!< PERSISTENT access

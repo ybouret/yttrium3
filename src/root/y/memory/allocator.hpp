@@ -88,6 +88,14 @@ namespace Yttrium
                 count = 0;
             }
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            char * createText(const char * const text, size_t &blockSize);
+            void   deleteText(char * &text,  size_t &blockSize) noexcept;
 
         private:
             Y_Disable_Copy_And_Assign(Allocator); //!< discarded

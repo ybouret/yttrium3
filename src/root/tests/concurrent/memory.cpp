@@ -6,6 +6,17 @@
 
 using namespace Yttrium;
 
+
+
+namespace
+{
+    static inline
+    void MemoryInThread(void * const)
+    {
+
+    }
+}
+
 Y_UTEST(concurrent_memory)
 {
 
