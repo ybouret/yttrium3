@@ -5,6 +5,7 @@
 
 #include "y/memory/auto-build.hpp"
 #include "y/type/args.hpp"
+#include "y/type/procedural.hpp"
 
 namespace Yttrium
 {
@@ -65,6 +66,24 @@ namespace Yttrium
             {
             }
 
+
+            //! setup with one indexed argument constructor
+            /**
+             - userBlockAddr must have at least userNumBlocks * sizeof(T)
+             - MutableType(arr[indx]) called for each type
+             \param userBlockAddr where to build
+             \param userNumBlocks blocks to build
+             \param arr           array[1:numBlocks] to build
+             */
+            template <typename ARR>
+            inline explicit AutoBuilt(const Procedural_ &,
+                                      void * const userBlockAddr,
+                                      const size_t userNumBlocks,
+                                      ARR &        arr) :
+            AutoBuild(userBlockAddr,userNumBlocks,sizeof(T),OnDelete,OnBuildN<ARR>,(void*)&arr)
+            {
+            }
+
             //! cleanup
             inline virtual ~AutoBuilt() noexcept
             {
@@ -92,6 +111,18 @@ namespace Yttrium
                 U &u  = *static_cast<U*>(arg1);
                 new (addr) MutableType(u);
             }
+
+            template <typename ARR>
+            static inline void OnBuildN(void *const  addr,
+                                        void * const arg1,
+                                        const size_t indx)
+            {
+                assert(0!=arg1);
+                assert(indx>0);
+                ARR &arr  = *static_cast<ARR*>(arg1);
+                new (addr) MutableType(arr[indx]);
+            }
+
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         };
