@@ -4,6 +4,7 @@
 #include "y/ability/latch.hpp"
 #include "y/memory/book.hpp"
 #include "y/memory/small/house.hpp"
+#include "y/memory/small/blocks.hpp"
 
 #include "y/concurrent/thread.hpp"
 
@@ -18,6 +19,7 @@
 
 #include "y/concurrent/nucleus.hpp"
 #include "y/type/destruct.hpp"
+#include "y/core/meta-max.hpp"
 
 #include <iostream>
 
@@ -103,11 +105,13 @@ namespace Yttrium
             static const size_t MutexSize  = sizeof(SystemMutex);
             static const size_t CondSize   = sizeof(SystemCondition);
             static const size_t ThreadSize = sizeof(SystemThread);
-            static const size_t CommPart   = MutexSize > CondSize   ? MutexSize : CondSize;
-            static const size_t CommSize   = CommPart  > ThreadSize ? CommPart : ThreadSize;
+            //static const size_t CommPart   = MutexSize > CondSize   ? MutexSize : CondSize;
+            //static const size_t CommSize   = CommPart  > ThreadSize ? CommPart : ThreadSize;
+            static const size_t CommSize = MetaMaxOfTriplet<MutexSize,CondSize,ThreadSize>::Value;
 
             explicit Data(Memory::Book &book,
                           Lockable     &lock) :
+            blocks(book,lock),
             arena( CommSize, book, lock),
             mutexes(arena),
             conditions(arena),
@@ -122,6 +126,7 @@ namespace Yttrium
                 //std::cerr << "---- Deleting Data" << std::endl;
             }
 
+            Memory::Small::Blocks                  blocks;
             Memory::Small::Arena                   arena;
             Memory::Small::House<SystemMutex>      mutexes;
             Memory::Small::House<SystemCondition>  conditions;
@@ -188,6 +193,8 @@ namespace Yttrium
             std::cerr << "sizeof(SystemMutex)     = " << sizeof(SystemMutex)     << std::endl;
             std::cerr << "sizeof(SystemCondition) = " << sizeof(SystemCondition) << std::endl;
             std::cerr << "sizeof(SystemThread)    = " << sizeof(SystemThread)    << std::endl;
+            std::cerr << "CommSize                = " << Data::CommSize          << std::endl;
+            
 #if defined(Y_BSD)
             std::cerr << "sizeof(pthread_mutex_t) = " << sizeof(pthread_mutex_t) << std::endl;
             std::cerr << "sizeof(pthread_cond_t)  = " << sizeof(pthread_cond_t)  << std::endl;

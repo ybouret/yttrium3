@@ -52,7 +52,7 @@ namespace Yttrium
                 //! setup
                 /**
                  \param userBook repository of pages for inner arenas
-                 \param userLock locking for this and each newly created arena
+                 \param userLock locking for this AND each newly created arena
                  */
                 explicit Blocks(Memory::Book & userBook,
                                 Lockable     & userLock) noexcept;

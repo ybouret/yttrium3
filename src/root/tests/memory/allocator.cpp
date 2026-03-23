@@ -4,6 +4,15 @@
 
 using namespace Yttrium;
 
+namespace Yttrium
+{
+    namespace Memory
+    {
+        
+    }
+}
+
+
 Y_UTEST(memory_allocator)
 {
     Concurrent::Singulet::Verbose = true;
