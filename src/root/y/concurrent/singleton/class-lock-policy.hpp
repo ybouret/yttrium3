@@ -5,7 +5,6 @@
 #ifndef Y_Concurrent_Singleton_ClassLockPolicy_Included
 #define Y_Concurrent_Singleton_ClassLockPolicy_Included 1
 
-#if 0
 #include "y/concurrent/mutex.hpp"
 
 namespace Yttrium
@@ -45,6 +44,5 @@ namespace Yttrium
 
 }
 
-#endif
 
 #endif // !Y_Concurrent_Singleton_ClassLockPolicy_Included

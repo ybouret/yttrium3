@@ -18,7 +18,7 @@ namespace Yttrium
         //
         //
         //
-        //! Memory Global alllocator, aliased on Concurrent::Nucleus
+        //! Memory Global allocator, aliased on Concurrent::Nucleus
         //
         //
         //______________________________________________________________________
@@ -28,8 +28,8 @@ namespace Yttrium
         {
         public:
             static const char * const                    CallSign;                             //!< "Memory::Global"
-            static const System::AtExit::Longevity       LifeTime = LifeTimeFor::MemoryGlobal; //!< longeity
-            typedef AliasLockPolicy<Concurrent::Nucleus> Policy; //!< alias
+            static const System::AtExit::Longevity       LifeTime = LifeTimeFor::MemoryGlobal; //!< longevity
+            typedef AliasLockPolicy<Concurrent::Nucleus> Policy;                               //!< alias
 
             virtual void * acquire(size_t &);
             virtual void   release(void * &, size_t &) noexcept;
@@ -39,7 +39,7 @@ namespace Yttrium
             friend class Singleton<Global,Policy>;
 
             explicit Global();          //!< setup
-            virtual ~Global() noexcept; //!< cleanu
+            virtual ~Global() noexcept; //!< cleanup
         };
 
     }

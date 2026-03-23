@@ -1,4 +1,3 @@
-
 #include "y/memory/allocator/global.hpp"
 
 namespace Yttrium
