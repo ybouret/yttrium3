@@ -8,6 +8,9 @@
 #include "y/calculus/alignment.hpp"
 #include "y/core/rand.hpp"
 #include "y/check/crc32.hpp"
+#include "y/random/shuffle.hpp"
+#include "y/random/fill.hpp"
+#include "y/libc/block/zeroed.h"
 
 using namespace Yttrium;
 
@@ -19,6 +22,10 @@ namespace
     {
         void * addr;
         size_t size;
+        void fill(Core::Rand &ran) noexcept
+        {
+            Random::FillWith(ran,addr,size,1);
+        }
     };
 
     static inline
@@ -33,6 +40,8 @@ namespace
             Block &b = blocks[count];
             b.size   = ran.in<size_t>(0,1000);
             b.addr   = alloc.acquire(b.size);
+            Y_ASSERT( Y_TRUE == Yttrium_Zeroed(b.addr,b.size) );
+            b.fill(ran);
             ++count;
         }
     }
@@ -48,6 +57,23 @@ namespace
             Block &b = blocks[--count];
             alloc.release(b.addr,b.size);
         }
+    }
+
+    static inline
+    void Torture(Memory::Allocator &alloc,
+                 Block               blocks[],
+                 const size_t        nblock,
+                 Core::Rand         &ran)
+    {
+        size_t count = 0;
+        Acquire(alloc,nblock,blocks,count,ran);
+        for(size_t iter=ran.in<size_t>(10,100);iter>0;--iter)
+        {
+            Random::Shuffle(ran,blocks,nblock);
+            Release(alloc,nblock/ran.in<size_t>(2,4),blocks,count);
+            Acquire(alloc,nblock,blocks,count,ran);
+        }
+        Release(alloc,0,blocks,count);
     }
 
     static inline
@@ -72,11 +98,8 @@ namespace
         }
         Block        blocks[100];
         const size_t nblock = Y_Static_Size(blocks);
-        size_t       count  = 0;
+        Torture(nucleus,blocks,nblock,ran);
 
-        Acquire(nucleus,nblock,blocks,count,ran);
-
-        Release(nucleus,0,blocks,count);
     }
 
     class MyThread : public Concurrent::Thread
@@ -99,7 +122,7 @@ namespace
 
 Y_UTEST(concurrent_memory)
 {
-    const size_t numThreads = 2;
+    const size_t numThreads = 8;
     void *       wksp[ Alignment::WordsGEQ<numThreads*sizeof(MyThread)>::Count ];
     System::WallTime chrono;
     Memory::AutoBuilt<MyThread> threads(wksp,numThreads,chrono);
