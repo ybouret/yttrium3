@@ -23,8 +23,9 @@ namespace Yttrium
                 Coerce(table) = static_cast<Slot *>( Y_BZero(wksp) );
                 for(size_t i=0;i<TableSize;++i) new( table+i ) Slot();
 
-                std::cerr << "arena.blockSize=" << arena.blockSize << std::endl;
-                std::cerr << "arena.numBlocks=" << arena.numBlocks << std::endl;
+                std::cerr << "sizeof(arena)   = " << sizeof(Arena)   << std::endl;
+                std::cerr << "arena.blockSize = " << arena.blockSize << std::endl;
+                std::cerr << "arena.numBlocks = " << arena.numBlocks << std::endl;
             }
 
             Blocks:: ~Blocks() noexcept
@@ -115,6 +116,23 @@ namespace Yttrium
                 }
 
             }
+
+            Arena & Blocks:: operator[](const size_t blockSize)
+            {
+                Y_Lock(arena.access);
+                Slot &slot = table[blockSize&TableMask];
+
+                // look for existing blockSize
+                for(Arena *a=slot.head;a;a=a->next)
+                {
+                    if(blockSize==a->blockSize)
+                        return *slot.moveToHead(a);
+                }
+
+                // not found
+                return *slot.pushHead( house.produce(blockSize,book,arena.access) );
+            }
+
 
         }
 

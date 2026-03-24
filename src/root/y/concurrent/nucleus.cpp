@@ -105,9 +105,7 @@ namespace Yttrium
             static const size_t MutexSize  = sizeof(SystemMutex);
             static const size_t CondSize   = sizeof(SystemCondition);
             static const size_t ThreadSize = sizeof(SystemThread);
-            //static const size_t CommPart   = MutexSize > CondSize   ? MutexSize : CondSize;
-            //static const size_t CommSize   = CommPart  > ThreadSize ? CommPart : ThreadSize;
-            static const size_t CommSize = MetaMaxOfTriplet<MutexSize,CondSize,ThreadSize>::Value;
+            static const size_t CommSize   = MetaMaxOfTriplet<MutexSize,CondSize,ThreadSize>::Value;
 
             explicit Data(Memory::Book &book,
                           Lockable     &lock) :
