@@ -21,7 +21,7 @@ namespace Yttrium
 
         std::ostream & Log:: Indent(std::ostream &out, const size_t n)
         {
-            for(size_t i=n;i>0;--i) out << ' ';
+            for(size_t i=n<<1;i>0;--i) out << ' ';
             return out;
         }
 

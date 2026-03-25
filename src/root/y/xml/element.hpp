@@ -39,7 +39,16 @@ namespace Yttrium
 }
 
 
+#define Y_XML_Section(xml,NAME) \
+/**/ Yttrium::XML::Element NAME(xml,#NAME); NAME.end()
 
+#define Y_XML_Standalone(xml,NAME,ATTR)\
+/**/    do { \
+/**/        Yttrium::XML::Element NAME(xml,#NAME,true); NAME << ATTR; NAME.end(); \
+/**/     } while(false)
+
+#define Y_XML_Section_Attr(xml,NAME,ATTR) \
+/**/ Yttrium::XML::Element NAME(xml,#NAME); NAME << ATTR; NAME.end()
 
 #endif // !Y_XML_Element_Included
 

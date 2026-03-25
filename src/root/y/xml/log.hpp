@@ -35,5 +35,7 @@ namespace Yttrium
 
 }
 
+#define Y_XMLog(xml,MSG) do { if(xml.verbose) { xml() << MSG << std::endl; } } while(false)
+
 #endif // !Y_XML_Log_Included
 

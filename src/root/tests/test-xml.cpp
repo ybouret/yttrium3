@@ -12,17 +12,12 @@ namespace
     {
 
         const int value = 7;
-        XML::Element elem(xml,"elem");
-        elem << Y_XML_Attr(xml.verbose);
-        elem.end();
-        XML::Element sub(xml,"sub");
-        sub.end();
-        {
-            XML::Element mark(xml,"mark",true);
-            mark << Y_XML_Attr(value);
-            mark.end();
-        }
-
+        Y_XML_Section_Attr(xml,top,Y_XML_Attr(xml.verbose) << Y_XML_Attr(value));
+        Y_XMLog(xml, "message in " << top.tag);
+        Y_XML_Section(xml,sub);
+        Y_XMLog(xml, "message in " << sub.tag);
+        Y_XML_Standalone(xml,mark, Y_XML_Attr(value));
+        Y_XMLog(xml, "message in " << sub.tag);
 
     }
 
@@ -34,8 +29,11 @@ Y_UTEST(xml)
     XML::Log xml(std::cerr,verbose);
 
 
+    std::cerr << "-- verbose" << std::endl;
     TestXML(xml);
     xml.verbose = false; Y_ASSERT(false == verbose);
+
+    std::cerr << "--quiet" << std::endl;
     TestXML(xml);
     
 }
