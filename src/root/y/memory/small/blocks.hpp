@@ -82,6 +82,11 @@ namespace Yttrium
                 void   release(void * const blockAddr, const size_t blockSize) noexcept;
 
 
+                //! get arena for required size
+                /**
+                 \param blockSize required block size
+                 \return existing/new arena for blockSize
+                 */
                 Arena & operator[](const size_t blockSize);
 
                 //! check ownership

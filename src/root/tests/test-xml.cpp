@@ -12,9 +12,9 @@ namespace
     {
 
         const int value = 7;
-        Y_XML_Section_Attr(xml,top,Y_XML_Attr(xml.verbose) << Y_XML_Attr(value));
+        Y_XML_Element_Attr(xml,top,Y_XML_Attr(xml.verbose) << Y_XML_Attr(value));
         Y_XMLog(xml, "message in " << top.tag);
-        Y_XML_Section(xml,sub);
+        Y_XML_Element(xml,sub);
         Y_XMLog(xml, "message in " << sub.tag);
         Y_XML_Standalone(xml,mark, Y_XML_Attr(value));
         Y_XMLog(xml, "message in " << sub.tag);
