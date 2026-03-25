@@ -369,7 +369,7 @@ namespace Yttrium
                 }
                 const size_t allocatedCount = providedBlocks - stillAvailable;
                 const size_t chunks = clist.size;
-                Y_XML_Standalone(xml,arena, Y_XML_Attr(blockSize)
+                Y_XML_Standalone(xml,arena, Y_XML_Attr_Setw(blockSize,4)
                                  <<         Y_XML_Attr(chunks)
                                  <<         Y_XML_Attr(providedBlocks)
                                  <<         Y_XML_Attr(allocatedCount)

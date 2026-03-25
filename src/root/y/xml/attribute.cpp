@@ -15,13 +15,14 @@ namespace Yttrium
             assert(self.args);
             assert(self.show);
             
-            return self.show(os << ' ' << self.name << '=',self.args);
+            return self.show(os << ' ' << self.name << '=',self.args,self.wlen);
         }
 
         Attribute:: Attribute(const Attribute &_) noexcept :
         name(_.name),
         args(_.args),
-        show(_.show)
+        show(_.show),
+        wlen(_.wlen)
         {
 
         }

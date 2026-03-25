@@ -121,7 +121,7 @@ namespace Yttrium
     {
         void   Pages:: toXML(XML::Log &xml) const
         {
-            Y_XML_Standalone(xml,pages,Y_XML_Attr(pageBytes) << Y_XML_Attr(pool.size) );
+            Y_XML_Standalone(xml,pages,Y_XML_Attr_Setw(pageBytes,10) << Y_XML_Attr(pool.size) );
         }
     }
 
