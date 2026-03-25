@@ -240,6 +240,8 @@ namespace {
     };
 }
 
+#include "y/stream/xmlog.hpp"
+
 Y_UTEST(concurrent_memory)
 {
 
@@ -255,6 +257,10 @@ Y_UTEST(concurrent_memory)
         void *       wksp[ Alignment::WordsGEQ<numThreads*sizeof(MyThread)>::Count ];
         Memory::AutoBuilt<MyThread> threads(wksp,numThreads,params);
     }
+
+    bool verbose = true;
+    XML::Log xml(std::cerr,verbose);
+    nucleus.toXML(xml);
 }
 Y_UDONE()
 

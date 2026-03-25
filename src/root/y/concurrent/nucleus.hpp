@@ -7,6 +7,7 @@
 #include "y/memory/allocator.hpp"
 #include "y/memory/page/factory.hpp"
 #include "y/calculus/alignment.hpp"
+#include "y/ability/logging.hpp"
 
 namespace Yttrium
 {
@@ -31,7 +32,8 @@ namespace Yttrium
         class Nucleus :
         public Singulet,
         public Memory::Allocator,
-        public Memory::PageFactory
+        public Memory::PageFactory,
+        public Logging
         {
         public:
             //__________________________________________________________________
@@ -65,6 +67,8 @@ namespace Yttrium
              */
             virtual Memory::Page * acquirePage(const unsigned shift);
             virtual void           releasePage(Memory::Page * const page, const unsigned shift) noexcept;
+
+            void toXML(XML::Log &) const;
 
             //__________________________________________________________________
             //

@@ -251,4 +251,27 @@ namespace Yttrium
 #include "nucleus/mutex.hxx"
 #include "nucleus/thread.hxx"
 
+#include "y/stream/xmlog.hpp"
 
+namespace Yttrium
+{
+
+    namespace Concurrent
+    {
+        void Nucleus:: toXML(XML::Log &xml) const
+        {
+            const size_t MutexSize  = Data::MutexSize;
+            const size_t CondSize   = Data::CondSize;
+            const size_t ThreadSize = Data::ThreadSize;
+
+            Y_XML_Element_Attr(xml,nucleus,Y_XML_Attr(MutexSize)
+                               <<          Y_XML_Attr(CondSize)
+                               <<          Y_XML_Attr(ThreadSize));
+            code->book.toXML(xml);
+            data->blocks.toXML(xml);
+        }
+
+
+    }
+
+}
