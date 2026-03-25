@@ -25,9 +25,12 @@ namespace Yttrium
                 Coerce(table) = static_cast<Slot *>( Y_BZero(wksp) );
                 for(size_t i=0;i<TableSize;++i) new( table+i ) Slot();
 
+#if 0
                 std::cerr << "sizeof(arena)   = " << sizeof(Arena)   << std::endl;
                 std::cerr << "arena.blockSize = " << arena.blockSize << std::endl;
                 std::cerr << "arena.numBlocks = " << arena.numBlocks << std::endl;
+#endif
+                
             }
 
             Blocks:: ~Blocks() noexcept

@@ -12,7 +12,7 @@
 namespace Yttrium
 {
     class Lockable;
-    namespace Memory { class Book; }
+    namespace Memory { class Book; namespace Small { class Blocks; } }
 
     namespace Concurrent
     {
@@ -109,6 +109,7 @@ namespace Yttrium
         public:
             Lockable     & access; //!< reference to inner, global mutex
             Memory::Book & book;   //!< reference to inner book
+            Memory::Small::Blocks & blocks; //!< reference to inner small blocks
         };
 
     }

@@ -110,7 +110,6 @@ namespace Yttrium
             explicit Data(Memory::Book& book,
                           Lockable& lock) :
             blocks(book, lock),
-            //arena(PrimitiveSize, book, lock),
             arena( blocks[PrimitiveSize] ),
             mutexes(arena),
             conditions(arena),
@@ -169,7 +168,8 @@ namespace Yttrium
         code(new (Y_BZero(NucleusCode)) Code(factory())),
         data(0),
         access(code->mutex),
-        book(code->book)
+        book(code->book),
+        blocks(data->blocks)
         {
             assert(0 == NucleusInstance);
             try
@@ -185,6 +185,7 @@ namespace Yttrium
             NucleusInstance = this;
             if (Verbose) Display("+", CallSign, LifeTime);
 
+#if 0
             std::cerr << "sizeof(Code) = " << sizeof(Code) << std::endl;
             std::cerr << "sizeof(Data) = " << sizeof(Data) << std::endl;
             std::cerr << "sizeof(SystemMutex)     = " << sizeof(SystemMutex) << std::endl;
@@ -197,6 +198,8 @@ namespace Yttrium
             std::cerr << "sizeof(pthread_cond_t)  = " << sizeof(pthread_cond_t) << std::endl;
             std::cerr << "sizeof(pthread_t)       = " << sizeof(pthread_t) << std::endl;
 #endif
+#endif
+
         }
 
         Nucleus:: ~Nucleus() noexcept
