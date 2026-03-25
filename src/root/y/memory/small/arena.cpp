@@ -349,4 +349,37 @@ namespace Yttrium
 
 }
 
+#include "y/stream/xmlog.hpp"
 
+namespace Yttrium
+{
+    namespace Memory
+    {
+        namespace Small
+        {
+            void Arena:: toXML(XML::Log &xml) const
+            {
+                Y_Lock(access);
+                size_t providedBlocks = 0;
+                size_t stillAvailable = 0;
+                for(const Chunk *node=clist.head;node;node=node->next)
+                {
+                    providedBlocks += node->providedBlocks;
+                    stillAvailable += node->stillAvailable;
+                }
+                const size_t allocatedCount = providedBlocks - stillAvailable;
+                const size_t chunks = clist.size;
+                Y_XML_Standalone(xml,arena, Y_XML_Attr(blockSize)
+                                 <<         Y_XML_Attr(chunks)
+                                 <<         Y_XML_Attr(providedBlocks)
+                                 <<         Y_XML_Attr(allocatedCount)
+                                 <<         Y_XML_Attr(stillAvailable));
+
+
+            }
+        }
+    }
+
+
+
+}

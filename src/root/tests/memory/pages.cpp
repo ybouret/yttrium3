@@ -7,7 +7,7 @@
 #include "y/random/fill.hpp"
 #include "y/libc/block/zeroed.h"
 #include "y/libc/defs.h"
-
+#include "y/stream/xmlog.hpp"
 
 using namespace Yttrium;
 
@@ -53,6 +53,10 @@ Y_UTEST(memory_pages)
         {
             pages.put(p[i]);
         }
+
+        bool     verbose = true;
+        XML::Log xml(std::cerr,verbose);
+        pages.toXML(xml);
     }
     
 

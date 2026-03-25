@@ -8,6 +8,7 @@
 #include "y/calculus/meta2.hpp"
 #include "y/calculus/alignment.hpp"
 #include "y/memory/allocator.hpp"
+#include "y/ability/logging.hpp"
 
 namespace Yttrium
 {
@@ -25,7 +26,7 @@ namespace Yttrium
             //
             //
             //__________________________________________________________________
-            class Blocks
+            class Blocks : public Logging
             {
             public:
                 //______________________________________________________________
@@ -60,6 +61,8 @@ namespace Yttrium
                 //! cleanup
                 virtual ~Blocks() noexcept;
 
+                virtual void toXML(XML::Log &) const;
+                
                 //______________________________________________________________
                 //
                 //

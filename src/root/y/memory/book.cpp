@@ -3,6 +3,7 @@
 #include "y/libc/block/zero.h"
 #include "y/type/destruct.hpp"
 #include "y/ability/lockable.hpp"
+#include "y/stream/xmlog.hpp"
 
 namespace Yttrium
 {
@@ -70,6 +71,19 @@ namespace Yttrium
             }
         }
 
+        const unsigned Book::NumPageSlots;
+
+        void Book:: toXML(XML::Log &xml) const
+        {
+            Pages * const first = pages+MinPageShift;
+            Y_Lock(first->access);
+            Y_XML_Element_Attr(xml,book,Y_XML_Attr(NumPageSlots));
+            for(unsigned shift=MinPageShift;shift<=MaxPageShift;++shift)
+            {
+                const Pages &p = pages[shift];
+                if(p->size) p.toXML(xml);
+            }
+        }
     }
 
 }

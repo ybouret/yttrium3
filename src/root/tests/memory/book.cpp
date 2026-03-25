@@ -2,6 +2,7 @@
 #include "y/concurrent/nucleus.hpp"
 #include "y/utest/run.hpp"
 #include "y/core/rand.hpp"
+#include "y/stream/xmlog.hpp"
 
 using namespace Yttrium;
 
@@ -10,6 +11,8 @@ Y_UTEST(memory_book)
     Core::Rand ran;
     Y_SIZEOF(Memory::Pages);
     Y_SIZEOF(Memory::Book);
+    bool verbose = true;
+    XML::Log xml(std::cerr,verbose);
 
     Concurrent::Nucleus &nucleus = Concurrent::Nucleus::Instance();
     Memory::Book        &book    = nucleus.book;
@@ -18,8 +21,12 @@ Y_UTEST(memory_book)
         book[shift].cache(ran.in<size_t>(1,10));
     }
     std::cerr << "reserved: " << book.availableBytes() << std::endl;
+    book.toXML(xml);
+
+    std::cerr << "performing gc..." << std::endl;
     book.gc(0x25);
     std::cerr << "reserved: " << book.availableBytes() << std::endl;
+    book.toXML(xml);
 
 
 }

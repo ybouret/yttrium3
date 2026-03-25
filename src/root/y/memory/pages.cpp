@@ -103,7 +103,26 @@ namespace Yttrium
             assert(0!=page);
             pool.store( Page::From(page) );
         }
+
+        const Core::Linked<Page> * Pages:: operator->() const noexcept
+        {
+            return &pool;
+        }
+
     }
 
 }
 
+#include "y/stream/xmlog.hpp"
+
+namespace Yttrium
+{
+    namespace Memory
+    {
+        void   Pages:: toXML(XML::Log &xml) const
+        {
+            Y_XML_Standalone(xml,pages,Y_XML_Attr(pageBytes) << Y_XML_Attr(pool.size) );
+        }
+    }
+
+}

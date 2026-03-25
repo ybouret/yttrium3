@@ -1,5 +1,4 @@
 #include "y/stream/xmlog.hpp"
-
 #include "y/utest/run.hpp"
 
 using namespace Yttrium;

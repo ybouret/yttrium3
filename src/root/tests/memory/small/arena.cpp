@@ -5,6 +5,7 @@
 #include "y/libc/block/zero.h"
 #include "y/random/shuffle.hpp"
 #include "y/memory/pages.hpp"
+#include "y/stream/xmlog.hpp"
 
 using namespace Yttrium;
 
@@ -31,7 +32,8 @@ Y_UTEST(memory_small_arena)
 {
     Core::Rand           ran;
     Concurrent::Nucleus &nucleus = Concurrent::Nucleus::Instance();
-
+    bool                 verbose = true;
+    XML::Log             xml(std::cerr,verbose);
 
     void *       addr[1000];
     const size_t nmax = sizeof(addr)/sizeof(addr[0]);
@@ -59,6 +61,7 @@ Y_UTEST(memory_small_arena)
             Acquire(nmax,addr,size,arena);
         }
         Release(0,addr,size,arena);
+        //arena.toXML(xml);
     }
 
     std::cerr << std::endl;

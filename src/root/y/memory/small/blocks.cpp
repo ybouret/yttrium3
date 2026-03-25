@@ -10,6 +10,8 @@ namespace Yttrium
 
         namespace Small
         {
+            const size_t Blocks:: TableSize;
+
             Blocks:: Blocks(Memory::Book &userBook,
                             Lockable     &userLock) noexcept:
             table(0),
@@ -131,6 +133,38 @@ namespace Yttrium
 
                 // not found
                 return *slot.pushHead( house.produce(blockSize,book,arena.access) );
+            }
+
+        }
+
+    }
+
+}
+
+#include "y/stream/xmlog.hpp"
+
+namespace Yttrium
+{
+
+    namespace Memory
+    {
+
+        namespace Small
+        {
+
+            void Blocks:: toXML(XML::Log &xml) const
+            {
+                Y_XML_Element_Attr(xml,blocks,Y_XML_Attr(TableSize));
+                arena.toXML(xml);
+                Y_XML_Element(xml,content);
+                for(size_t i=0;i<TableSize;++i)
+                {
+                    const Slot &slot = table[i];
+                    for(const Arena *a=slot.head;a;a=a->next)
+                    {
+                        a->toXML(xml);
+                    }
+                }
             }
 
 

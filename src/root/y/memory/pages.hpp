@@ -7,6 +7,7 @@
 #include "y/memory/page.hpp"
 #include "y/core/pool.hpp"
 #include "y/ability/caching.hpp"
+#include "y/ability/logging.hpp"
 
 namespace Yttrium
 {
@@ -24,7 +25,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Pages : public Caching
+        class Pages : public Caching, public Logging
         {
         public:
             //__________________________________________________________________
@@ -55,7 +56,8 @@ namespace Yttrium
             virtual size_t count()     const noexcept;
             virtual void   cache(const size_t);
             virtual void   gc(const uint8_t) noexcept;
-
+            virtual void   toXML(XML::Log &) const;
+            
             //__________________________________________________________________
             //
             //
@@ -64,6 +66,9 @@ namespace Yttrium
             //__________________________________________________________________
             void * get();                      //!< thread-safe allocation \return an existing or a new zeroed block
             void   put(void * const) noexcept; //!< thread-safe store a previously allocated page
+
+            //! access \return &pool
+            const Core::Linked<Page> * operator->() const noexcept;
 
             //__________________________________________________________________
             //

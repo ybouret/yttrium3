@@ -13,6 +13,8 @@ namespace Yttrium
 
     class Lockable;
 
+    namespace XML { class Log; }
+
     namespace Memory
     {
         class Book;
@@ -63,9 +65,9 @@ namespace Yttrium
                  \param userBook PERSISTENT to choose Pages according to inner metrics
                  \param userLock PERSISTENT lock for memory operations
                  */
-                Arena(const size_t userSize,
-                      Book        &userBook,
-                      Lockable    &userLock);
+                Arena(const size_t  userSize,
+                      Book        & userBook,
+                      Lockable    & userLock);
 
                 //! cleanup
                 ~Arena() noexcept;
@@ -99,6 +101,8 @@ namespace Yttrium
 
                 //! check ownership \param blockAddr memory \return true if within one the chunks
                 bool owns(const void * const blockAddr) const noexcept;
+
+                void toXML(XML::Log &xml) const;
 
                 //______________________________________________________________
                 //

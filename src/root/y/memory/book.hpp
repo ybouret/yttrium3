@@ -22,7 +22,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Book : public Collectable
+        class Book : public Collectable, public Logging
         {
         public:
             //__________________________________________________________________
@@ -60,6 +60,7 @@ namespace Yttrium
             //__________________________________________________________________
             //! call gc on each slot \param amount amount to thrash
             virtual void gc(const uint8_t amount) noexcept;
+            virtual void toXML(XML::Log &) const;
 
             //__________________________________________________________________
             //

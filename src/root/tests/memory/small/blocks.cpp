@@ -4,6 +4,8 @@
 #include "y/concurrent/nucleus.hpp"
 #include "y/core/rand.hpp"
 
+#include "y/stream/xmlog.hpp"
+
 using namespace Yttrium;
 
 namespace
@@ -74,6 +76,9 @@ Y_UTEST(memory_small_blocks)
         Acquire(blocks,nmax,blks,size,ran);
     }
 
+    bool     verbose = true;
+    XML::Log xml(std::cerr,verbose);
+    blocks.toXML(xml);
     Release(blocks,0,blks,size);
 
 }
