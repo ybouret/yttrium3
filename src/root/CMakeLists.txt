@@ -34,7 +34,9 @@ y/ability
 y/container
 y/container/iter
 y/pointer
-y/utest)
+y/utest
+y/stream
+)
 
 add_subdirectory(tests)
 Y_Regression(root)

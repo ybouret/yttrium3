@@ -1,5 +1,4 @@
-#include "y/xml/log.hpp"
-#include "y/xml/element.hpp"
+#include "y/stream/xmlog.hpp"
 
 #include "y/utest/run.hpp"
 
