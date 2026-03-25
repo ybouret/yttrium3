@@ -59,6 +59,50 @@ namespace Yttrium
             
 		};
 
+		class SystemThread
+		{
+		public:
+			inline SystemThread(Thread &thread) : tid(0), handle(INVALID_HANDLE_VALUE)
+			{
+				Y_Giant_Lock();
+				handle = ::CreateThread(0, 0, Launch, (void*)&thread, 0, &tid);
+				if (!handle)
+				{
+					throw Windows::Exception(::GetLastError(), "::CreateThread");
+				}
+			}
+
+			inline ~SystemThread() noexcept
+			{
+				Y_Giant_Lock();
+				tid = 0;
+				if (!::CloseHandle(handle))
+				{
+					Windows::Error::Critical(::GetLastError(), "::CloseHandle(THREAD)");
+				}
+			}
+
+			DWORD  tid;
+			HANDLE handle;
+
+		private:
+			Y_Disable_Copy_And_Assign(SystemThread);
+
+			static inline DWORD WINAPI Launch(LPVOID args) noexcept
+			{
+				assert(0 != args);
+				Thread& thread = *static_cast<Thread*>(args);
+				try 
+				{
+					thread.proc(thread.args);
+				}
+				catch (...)
+				{
+
+				}
+				return 0;
+			}
+		};
 	}
 
 }
