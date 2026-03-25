@@ -32,10 +32,10 @@ namespace
 
             const Memory::Plastic::Brick * const self = static_cast<Memory::Plastic::Brick *>(p) - 1;
             const Memory::Plastic::Brick * const next = self->next;
-            Y_ASSERT(self->used);
-            Y_ASSERT(next);
+            Y_ASSERT(0!=self->used);
+            Y_ASSERT(0!=next);
             Y_ASSERT(self->size==b.size);
-            Y_ASSERT( Yttrium_Zeroed(b.addr,b.size) );
+            Y_ASSERT( Y_TRUE == Yttrium_Zeroed(b.addr,b.size) );
 
             const Memory::Sentinel keepSelf("self",self,sizeof(Memory::Plastic::Brick));
             const Memory::Sentinel keepNext("next",next,sizeof(Memory::Plastic::Brick));

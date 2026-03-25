@@ -192,9 +192,9 @@ namespace {
 
     struct Params
     {
-        System::WallTime      & chrono;
-        Concurrent::Nucleus   & nucleus;
-        Memory::Small::Blocks & msb;
+        System::WallTime      * chrono;
+        Concurrent::Nucleus   * nucleus;
+        Memory::Small::Blocks * msb;
     };
 
     static inline
@@ -203,9 +203,8 @@ namespace {
         assert(0!=args);
         Lockable              & sync    = Lockable::Giant();
         Params                & params  = *static_cast<Params *>(args);
-        //System::WallTime      & chrono  = params.chrono;
-        Concurrent::Nucleus   & nucleus = params.nucleus;
-        Memory::Small::Blocks & msb     = params.msb;
+        Concurrent::Nucleus   & nucleus = *params.nucleus;
+        Memory::Small::Blocks & msb     = *params.msb;
         long                    seed    = 0;
         {
             Y_Lock(sync);
@@ -249,7 +248,7 @@ Y_UTEST(concurrent_memory)
     Memory::Book          & book    = nucleus.book;
     Memory::Small::Blocks   msb(book,nucleus.access);
 
-    Params params = { chrono, nucleus, msb };
+    Params params = { &chrono, &nucleus, &msb };
 
     {
         const size_t numThreads = 8;

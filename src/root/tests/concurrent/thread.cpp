@@ -16,7 +16,7 @@ namespace
     static inline
     void DoSomething(void * const args)
     {
-        Y_ASSERT(args);
+        Y_ASSERT(0!=args);
         Parameters & params = *static_cast<Parameters *>(args);
         {
             Y_Lock(*params.sync);

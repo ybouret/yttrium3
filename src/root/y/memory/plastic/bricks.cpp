@@ -157,13 +157,13 @@ namespace Yttrium
                 {
                     // find new node
                     Brick * const node = &p[blockSize/sizeof(Brick)];
-                    Brick * const next = brick->next;
+                    Brick * const post = brick->next;
 
                     // relink
                     brick->next = node;
                     node->prev  = brick;
-                    node->next  = next;
-                    next->prev  = node;
+                    node->next  = post;
+                    post->prev  = node;
 
                     // update states, ngap is unchanged
                     brick->size = blockSize;

@@ -74,12 +74,10 @@ namespace Yttrium
 
 			inline ~SystemThread() noexcept
 			{
-				Y_Giant_Lock();
+				//Y_Giant_Lock();
 				tid = 0;
-				if (!::CloseHandle(handle))
-				{
-					Windows::Error::Critical(::GetLastError(), "::CloseHandle(THREAD)");
-				}
+				if (WAIT_OBJECT_0 != ::WaitForSingleObject(handle, INFINITE))
+					Windows::Error::Critical(::GetLastError(), "WaitForSingleObject");
 			}
 
 			DWORD  tid;
