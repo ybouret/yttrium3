@@ -81,5 +81,6 @@ Y_UTEST(memory_small_blocks)
     blocks.toXML(xml);
     Release(blocks,0,blks,size);
 
+    Y_PRINTV(blocks[12].blockSize);
 }
 Y_UDONE()

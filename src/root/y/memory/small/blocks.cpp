@@ -125,6 +125,7 @@ namespace Yttrium
             Arena & Blocks:: operator[](const size_t blockSize)
             {
                 Y_Lock(arena.access);
+                std::cerr << "Looking for " << blockSize << std::endl;
                 Slot &slot = table[blockSize&TableMask];
 
                 // look for existing blockSize
@@ -134,7 +135,7 @@ namespace Yttrium
                         return *slot.moveToHead(a);
                 }
 
-                // not found
+                // not found, create a new one
                 return *slot.pushHead( house.produce(blockSize,book,arena.access) );
             }
 

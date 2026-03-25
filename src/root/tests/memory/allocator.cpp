@@ -26,6 +26,10 @@ Y_UTEST(memory_allocator)
     std::cerr << P.callSign() << "@" << P.lifeTime() << std::endl;
     std::cerr << D.callSign() << "@" << D.lifeTime() << std::endl;
 
+    size_t blockSize = 10;
+    void * blockAddr = D.acquire(blockSize);
+    
+
 
 }
 Y_UDONE()
