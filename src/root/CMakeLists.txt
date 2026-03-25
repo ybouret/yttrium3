@@ -9,6 +9,7 @@ y/check
 y/libc
 y/libc/block
 y/libc/str
+y/xml
 y/core
 y/core/pool
 y/core/list

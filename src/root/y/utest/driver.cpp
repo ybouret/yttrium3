@@ -108,7 +108,7 @@ namespace Yttrium
                 const char * const big = p.name;
                 if(strlen(big)>=nameLength && strstr(big,name))
                 {
-                    std::cerr << '\t' << p.name << std::endl;
+                    std::cerr << '\t' << '[' << p.name << ']' << std::endl;
                 }
             }
         }

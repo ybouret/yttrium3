@@ -16,6 +16,7 @@ Y_LinkLibraries(test-root)
 enable_testing()
 
 Y_UTEST(exception)
+Y_UTEST(xml)
 
 Y_UTEST(config:platform)
 
