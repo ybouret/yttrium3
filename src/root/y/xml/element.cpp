@@ -2,49 +2,62 @@
 #include "y/xml/element.hpp"
 #include <iostream>
 #include <cassert>
+#include <cstdarg>
 
 namespace Yttrium
 {
     namespace XML
     {
-        Element:: Element(const char * const  userTag,
-                          Log               & userOut,
-                          const bool          userOne,
-                          const bool          userAtr) noexcept :
-        tag(userTag),
+        Element:: Element(Log               & userOut,
+                          const char * const  userTag,
+                          const bool          userOne) :
         out(userOut),
-        one(userOne),
-        atr(userAtr)
+        tag(userTag),
+        one(userOne)
         {
             assert(userTag);
 
             if(out.verbose)
             {
-                std::ostream & os = prolog();
-                if(userAtr)
-                {
-                    
-                }
+                out() << LANGLE << tag;
             }
 
             ++out.level;
+        }
+
+        void Element:: end()
+        {
+            if(out.verbose)
+            {
+                if(one)
+                {
+                    *out << SLASH;
+                }
+                *out << RANGLE << std::endl;
+            }
+        }
+
+        Element & Element:: operator<<(const Attribute attr)
+        {
+            if(out.verbose) *out << attr;
+            return *this;
         }
 
 
         Element:: ~Element() noexcept
         {
             --out.level;
-
-        }
-
-        std::ostream & Element:: prolog()
-        {
             if(out.verbose)
             {
-                out() << LANGLE << tag;
+                if(!one)
+                {
+                    out() << LANGLE << SLASH << tag << RANGLE << std::endl;
+                }
             }
-            return *out;
         }
+
+
+
 
     }
 

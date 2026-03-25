@@ -4,6 +4,7 @@
 #define Y_XML_Element_Included 1
 
 #include "y/xml/log.hpp"
+#include "y/xml/attribute.hpp"
 
 namespace Yttrium
 {
@@ -17,19 +18,18 @@ namespace Yttrium
             static const char RANGLE = '>';
             static const char SLASH  = '/';
 
-            explicit Element(const char * const  userTag,
-                             Log               & userOut,
-                             const bool          userOne = false,
-                             const bool          userAtr = false) noexcept;
+            explicit Element(Log               & userOut,
+                             const char * const  userTag,
+                             const bool          userOne = false);
             virtual ~Element() noexcept;
 
-            std::ostream & prolog(); //!< open \return out() << '<' + tag
-            void           epilog(); //!< *out << '>' << std::endl
+            Element & operator<<(const Attribute attr);
 
-            const char * const tag;
-            Log  &             out;
-            const bool         one;
-            const bool         atr;
+            void end();
+
+            Log  &             out; //!< output
+            const char * const tag; //!< tag
+            const bool         one; //!< standalone flag
 
         private:
             Y_Disable_Copy_And_Assign(Element);
@@ -37,6 +37,9 @@ namespace Yttrium
         
     }
 }
+
+
+
 
 #endif // !Y_XML_Element_Included
 
