@@ -16,6 +16,7 @@
 #include "y/memory/small/blocks.hpp"
 #include "y/memory/allocator/global.hpp"
 #include "y/memory/allocator/pooled.hpp"
+#include "y/memory/allocator/dyadic.hpp"
 
 using namespace Yttrium;
 
@@ -198,7 +199,7 @@ namespace {
         Concurrent::Nucleus   * nucleus;
         Memory::Allocator     * global;
         Memory::Allocator     * pooled;
-
+        Memory::Allocator     * dyadic;
     };
 
     static inline
@@ -224,6 +225,7 @@ namespace {
         Torture(*params.nucleus->blocks, blocks, Y_Static_Size(blocks), ran);
         Torture(*params.global,          blocks, Y_Static_Size(blocks), ran);
         Torture(*params.pooled,          blocks, Y_Static_Size(blocks), ran);
+        Torture(*params.dyadic,          blocks, Y_Static_Size(blocks), ran);
 
     }
 
@@ -257,7 +259,8 @@ Y_UTEST(concurrent_memory)
         &chrono,
         &nucleus,
         & Memory::Global::Instance(),
-        & Memory::Pooled::Instance()
+        & Memory::Pooled::Instance(),
+        & Memory::Dyadic::Instance()
     };
 
     {
