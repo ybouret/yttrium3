@@ -2,6 +2,8 @@
 #include "y/memory/allocator/pooled.hpp"
 #include "y/memory/allocator/dyadic.hpp"
 
+#include "y/memory/small/blocks.hpp"
+
 #include "y/utest/run.hpp"
 
 
@@ -11,11 +13,8 @@ using namespace Yttrium;
 
 Y_UTEST(memory_allocator)
 {
-
-
-
-
     Concurrent::Singulet::Verbose = true;
+
 
     Memory::Dyadic &D = Memory::Dyadic::Instance();
     Memory::Global &G = Memory::Global::Instance();
@@ -28,7 +27,8 @@ Y_UTEST(memory_allocator)
 
     size_t blockSize = 10;
     void * blockAddr = D.acquire(blockSize);
-    
+
+    D.release(blockAddr,blockSize);
 
 
 }

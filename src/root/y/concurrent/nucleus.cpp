@@ -169,13 +169,15 @@ namespace Yttrium
         data(0),
         access(code->mutex),
         book(code->book),
-        blocks(data->blocks)
+        blocks(0)
         {
+            if (Verbose) Display("+", CallSign, LifeTime);
             assert(0 == NucleusInstance);
             try
             {
                 System::AtExit::Perform(SelfDestruct, this, LifeTime);
-                Coerce(data) = new (Y_BZero(NucleusData)) Data(book, access);
+                Coerce(data)   = new (Y_BZero(NucleusData)) Data(book, access);
+                Coerce(blocks) = & data->blocks;
             }
             catch (...)
             {
@@ -183,22 +185,6 @@ namespace Yttrium
                 throw;
             }
             NucleusInstance = this;
-            if (Verbose) Display("+", CallSign, LifeTime);
-
-#if 0
-            std::cerr << "sizeof(Code) = " << sizeof(Code) << std::endl;
-            std::cerr << "sizeof(Data) = " << sizeof(Data) << std::endl;
-            std::cerr << "sizeof(SystemMutex)     = " << sizeof(SystemMutex) << std::endl;
-            std::cerr << "sizeof(SystemCondition) = " << sizeof(SystemCondition) << std::endl;
-            std::cerr << "sizeof(SystemThread)    = " << sizeof(SystemThread) << std::endl;
-            std::cerr << "PrimitiveSize           = " << Data::PrimitiveSize << std::endl;
-
-#if defined(Y_BSD)
-            std::cerr << "sizeof(pthread_mutex_t) = " << sizeof(pthread_mutex_t) << std::endl;
-            std::cerr << "sizeof(pthread_cond_t)  = " << sizeof(pthread_cond_t) << std::endl;
-            std::cerr << "sizeof(pthread_t)       = " << sizeof(pthread_t) << std::endl;
-#endif
-#endif
 
         }
 

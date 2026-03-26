@@ -24,7 +24,7 @@ namespace Yttrium
 
             inline Code(Concurrent::Nucleus &nucleus) :
             dyadicArena(),
-            smallBlocks(nucleus.blocks),
+            smallBlocks(*nucleus.blocks),
             book(nucleus.book)
             {
                 std::cerr << "+" << CallSign << "::Code" << std::endl;
@@ -44,20 +44,12 @@ namespace Yttrium
                 if(shift<=MaxCommShift)
                 {
                     ArenaPtr & pArena = dyadicArena[shift];
-                    std::cerr << "pArena@" << pArena << std::endl;
                     if(0==pArena)
-                    {
-                        const size_t blockSize = _1<<shift;
-                        std::cerr << "Query Arena#" << blockSize << std::endl;
-                        Arena & a = smallBlocks[blockSize];
-                        std::cerr << a.blockSize << std::endl;
-                        //pArena = & a;
-                    }
-                    std::cerr << "pArena@" << pArena << std::endl;
+                        pArena = &smallBlocks[_1<<shift];
 
                     assert(0!=pArena);
-                    std::cerr << "bs=" << pArena->blockSize << std::endl;
-                    assert(size_t(1)<<shift == pArena->blockSize);
+                    assert((_1<<shift) == pArena->blockSize);
+
                     return pArena->acquire();
                 }
                 else

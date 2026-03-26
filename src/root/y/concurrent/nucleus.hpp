@@ -109,7 +109,7 @@ namespace Yttrium
         public:
             Lockable     & access; //!< reference to inner, global mutex
             Memory::Book & book;   //!< reference to inner book
-            Memory::Small::Blocks & blocks; //!< reference to inner small blocks
+            Memory::Small::Blocks * const blocks;
         };
 
     }
