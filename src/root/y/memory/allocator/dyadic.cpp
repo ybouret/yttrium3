@@ -40,7 +40,7 @@ namespace Yttrium
             inline void * acquire(const unsigned shift)
             {
                 static const size_t _1 = 1;
-                std::cerr << "acquire shift=" << shift << std::endl;
+
                 if(shift<=MaxCommShift)
                 {
                     ArenaPtr & pArena = dyadicArena[shift];

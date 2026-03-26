@@ -269,9 +269,9 @@ Y_UTEST(concurrent_memory)
         Memory::AutoBuilt<MyThread> threads(wksp,numThreads,params);
     }
 
-    bool verbose = true;
-    XML::Log xml(std::cerr,verbose);
-    nucleus.toXML(xml);
+    //bool verbose = true;
+    //XML::Log xml(std::cerr,verbose);
+    //nucleus.toXML(xml);
 }
 Y_UDONE()
 
