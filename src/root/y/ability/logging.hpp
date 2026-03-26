@@ -6,7 +6,7 @@
 #define Y_Logging_Included 1
 
 #include "y/config/setup.hpp"
-
+#include <iosfwd>
 
 namespace Yttrium
 {
@@ -42,6 +42,16 @@ namespace Yttrium
 
         //! write as XML description \param xml target
         virtual void toXML(XML::Log &xml) const = 0;
+
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+
+        //! write XML to output \return given output
+        std::ostream & writeXML(std::ostream &) const;
 
     private:
         Y_Disable_Copy_And_Assign(Logging); //!< discarding
