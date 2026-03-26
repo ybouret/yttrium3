@@ -19,6 +19,8 @@ namespace Yttrium
             static const unsigned MaxCommShift = MinPageShift - 1;
             static const size_t   MaxCommBytes = size_t(1) << MaxCommShift;
             static const unsigned NumSmall     = MaxCommShift+1;
+            typedef  Small::Arena Arena;
+            typedef Arena *       ArenaPtr;
 
             inline Code(Concurrent::Nucleus &nucleus) :
             dyadicArena(),
@@ -41,10 +43,16 @@ namespace Yttrium
                 std::cerr << "acquire shift=" << shift << std::endl;
                 if(shift<=MaxCommShift)
                 {
-                    Memory::Small::Arena  * &pArena = dyadicArena[shift];
+                    ArenaPtr & pArena = dyadicArena[shift];
                     std::cerr << "pArena@" << pArena << std::endl;
                     if(0==pArena)
-                        pArena = & smallBlocks[_1<<shift];
+                    {
+                        const size_t blockSize = _1<<shift;
+                        std::cerr << "Query Arena#" << blockSize << std::endl;
+                        Arena & a = smallBlocks[blockSize];
+                        std::cerr << a.blockSize << std::endl;
+                        //pArena = & a;
+                    }
                     std::cerr << "pArena@" << pArena << std::endl;
 
                     assert(0!=pArena);
@@ -71,7 +79,7 @@ namespace Yttrium
                 }
             }
 
-            Memory::Small::Arena  * dyadicArena[NumSmall];
+            ArenaPtr                dyadicArena[NumSmall];
             Memory::Small::Blocks & smallBlocks;
             Memory::Book          & book;
 

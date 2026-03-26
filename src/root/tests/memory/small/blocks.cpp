@@ -82,5 +82,7 @@ Y_UTEST(memory_small_blocks)
     Release(blocks,0,blks,size);
 
     Y_PRINTV(blocks[12].blockSize);
+    Y_PRINTV(blocks[17].blockSize);
+
 }
 Y_UDONE()
