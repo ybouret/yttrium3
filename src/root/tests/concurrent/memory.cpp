@@ -14,6 +14,8 @@
 #include "y/memory/pages.hpp"
 #include "y/memory/book.hpp"
 #include "y/memory/small/blocks.hpp"
+#include "y/memory/allocator/global.hpp"
+#include "y/memory/allocator/pooled.hpp"
 
 using namespace Yttrium;
 
@@ -194,7 +196,9 @@ namespace {
     {
         System::WallTime      * chrono;
         Concurrent::Nucleus   * nucleus;
-        Memory::Small::Blocks * msb;
+        Memory::Allocator     * global;
+        Memory::Allocator     * pooled;
+
     };
 
     static inline
@@ -203,8 +207,6 @@ namespace {
         assert(0!=args);
         Lockable              & sync    = Lockable::Giant();
         Params                & params  = *static_cast<Params *>(args);
-        Concurrent::Nucleus   & nucleus = *params.nucleus;
-        Memory::Small::Blocks & msb     = *params.msb;
         long                    seed    = 0;
         {
             Y_Lock(sync);
@@ -217,9 +219,12 @@ namespace {
         Block      blocks[512];
         Wad        wads[512];
 
-        Torture(nucleus,      blocks, Y_Static_Size(blocks), ran);
-        Torture(nucleus.book, wads,   Y_Static_Size(wads),   ran);
-        Torture(msb,          blocks, Y_Static_Size(blocks), ran);
+        Torture(*params.nucleus,         blocks, Y_Static_Size(blocks), ran);
+        Torture( params.nucleus->book,   wads,   Y_Static_Size(wads),   ran);
+        Torture(*params.nucleus->blocks, blocks, Y_Static_Size(blocks), ran);
+        Torture(*params.global,          blocks, Y_Static_Size(blocks), ran);
+        Torture(*params.pooled,          blocks, Y_Static_Size(blocks), ran);
+
     }
 
     class MyThread : public Concurrent::Thread
@@ -247,10 +252,13 @@ Y_UTEST(concurrent_memory)
 
     System::WallTime        chrono;
     Concurrent::Nucleus   & nucleus = Concurrent::Nucleus::Location();
-    Memory::Book          & book    = nucleus.book;
-    Memory::Small::Blocks   msb(book,nucleus.access);
 
-    Params params = { &chrono, &nucleus, &msb };
+    Params params = {
+        &chrono,
+        &nucleus,
+        & Memory::Global::Instance(),
+        & Memory::Pooled::Instance()
+    };
 
     {
         const size_t numThreads = 8;

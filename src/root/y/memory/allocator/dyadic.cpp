@@ -110,9 +110,10 @@ namespace Yttrium
             Y_Lock(access);
             try
             {
-                const unsigned shift     = CeilLog2(blockSize);
-                void * const   blockAddr = code->acquire(shift);
-                blockSize = size_t(1) << shift;
+                static const size_t _1        = 1;
+                const unsigned      shift     = CeilLog2(blockSize);
+                void * const        blockAddr = code->acquire(shift);
+                blockSize = _1 << shift;
                 return blockAddr;
             }
             catch(...)
@@ -124,9 +125,10 @@ namespace Yttrium
 
         void Dyadic:: release(void * & blockAddr, size_t & blockSize) noexcept
         {
-            assert(0!=code);
+            assert( 0 != code);
             assert( 0 != blockAddr );
             assert( IsPowerOfTwo(blockSize) );
+
             const unsigned shift = ExactLog2(blockSize);
             Y_Lock(access);
             code->release(blockAddr,shift);
