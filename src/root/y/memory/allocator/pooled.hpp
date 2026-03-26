@@ -26,9 +26,21 @@ namespace Yttrium
         public Allocator
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
             static const char * const               CallSign;                             //!< "Memory::Global"
             static const System::AtExit::Longevity  LifeTime = LifeTimeFor::MemoryPooled; //!< longevity
 
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
             virtual void * acquire(size_t &);
             virtual void   release(void * &, size_t &) noexcept;
 

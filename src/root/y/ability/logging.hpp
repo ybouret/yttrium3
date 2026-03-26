@@ -40,6 +40,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
 
+        //! write as XML description \param xml target
         virtual void toXML(XML::Log &xml) const = 0;
 
     private:

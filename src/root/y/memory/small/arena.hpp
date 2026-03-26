@@ -102,6 +102,7 @@ namespace Yttrium
                 //! check ownership \param blockAddr memory \return true if within one the chunks
                 bool owns(const void * const blockAddr) const noexcept;
 
+                //! specific toXML \param xml target
                 void toXML(XML::Log &xml) const;
 
                 //______________________________________________________________

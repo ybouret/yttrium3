@@ -27,14 +27,11 @@ namespace Yttrium
             smallBlocks(*nucleus.blocks),
             book(nucleus.book)
             {
-                std::cerr << "+" << CallSign << "::Code" << std::endl;
                 Y_BZero(dyadicArena);
-                std::cerr << "NumSmall=" << NumSmall << std::endl;
             }
 
             inline ~Code() noexcept
             {
-                std::cerr << "~" << CallSign << "::Code" << std::endl;
             }
 
             inline void * acquire(const unsigned shift)
@@ -135,5 +132,23 @@ namespace Yttrium
             blockAddr = 0;
             blockSize = 0;
         }
+
+        void * Dyadic:: acquireBlock(const unsigned shift)
+        {
+            assert( 0 != code );
+            assert( shift <= Metrics::MaxPageShift );
+            Y_Lock(access);
+            return code->acquire(shift);
+        }
+
+        void Dyadic:: releaseBlock(void *const entry, const unsigned int shift) noexcept
+        {
+            assert( 0 != code  );
+            assert( 0 != entry );
+            assert( shift <= Metrics::MaxPageShift );
+            Y_Lock(access);
+            code->release(entry,shift);
+        }
+
     }
 }

@@ -48,6 +48,7 @@ namespace Yttrium
             /**
              \param userName PERSISTENT name
              \param userArgs PERSISTENT args
+             \param w        optional field width
              */
             template <typename T> inline
             Attribute(const char * const userName, const T & userArgs, const unsigned w=0) noexcept :
@@ -93,6 +94,8 @@ namespace Yttrium
 
 //! helper to display an attribute
 #define Y_XML_Attr(NAME) Yttrium::XML::Attribute(#NAME,NAME)
+
+//! helper to display an attribue with width
 #define Y_XML_Attr_Setw(NAME,n) Yttrium::XML::Attribute(#NAME,NAME,n)
 
 #endif // !Y_XML_Attribute_Included

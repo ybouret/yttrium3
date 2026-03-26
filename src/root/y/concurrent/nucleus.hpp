@@ -107,9 +107,9 @@ namespace Yttrium
             Memory::PageFactory &factory()                  noexcept; //!< avoid this in constructor \return *this
 
         public:
-            Lockable     & access; //!< reference to inner, global mutex
-            Memory::Book & book;   //!< reference to inner book
-            Memory::Small::Blocks * const blocks;
+            Lockable     & access;                //!< reference to inner, global mutex
+            Memory::Book & book;                  //!< reference to inner book
+            Memory::Small::Blocks * const blocks; //!< address of inner blocks
         };
 
     }
