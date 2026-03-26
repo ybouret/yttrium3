@@ -28,8 +28,8 @@ namespace Yttrium
     namespace Concurrent
     {
 
-        const char* const        Nucleus::CallSign = "Concurrent::Nucleus";
-        const char* Nucleus::callSign() const noexcept { return CallSign; }
+        const char* const         Nucleus::CallSign = "Concurrent::Nucleus";
+        const char*               Nucleus::callSign() const noexcept { return CallSign; }
         System::AtExit::Longevity Nucleus::lifeTime() const noexcept { return LifeTime; }
 
 
@@ -102,9 +102,9 @@ namespace Yttrium
         class Nucleus::Data
         {
         public:
-            static const size_t MutexSize = sizeof(SystemMutex);
-            static const size_t CondSize = sizeof(SystemCondition);
-            static const size_t ThreadSize = sizeof(SystemThread);
+            static const size_t MutexSize     = sizeof(SystemMutex);
+            static const size_t CondSize      = sizeof(SystemCondition);
+            static const size_t ThreadSize    = sizeof(SystemThread);
             static const size_t PrimitiveSize = MetaMaxOfTriplet<MutexSize, CondSize, ThreadSize>::Value;
 
             explicit Data(Memory::Book& book,
