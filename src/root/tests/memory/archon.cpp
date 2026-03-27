@@ -65,15 +65,15 @@ Y_UTEST(memory_archon)
     Memory::Archon &archon = Memory::Archon::Instance();
     std::cerr << "Using " << archon.callSign() << std::endl;
 
-    Block        blocks[200];
+    Block        blocks[256];
     const size_t nblock = Y_Static_Size(blocks);
     size_t       count  = 0;
 
     Acquire(archon,nblock,blocks,count,ran);
-    for(size_t iter=0;iter<100;++iter)
+    for(size_t iter=0;iter<128;++iter)
     {
         Random::Shuffle(ran,blocks,count);
-        Release(archon,count/ran.in<size_t>(2,4), blocks,count);
+        Release(archon,count/ran.in<size_t>(2,16), blocks,count);
         Acquire(archon,nblock,blocks,count,ran);
     }
     Release(archon,0,blocks,count);
