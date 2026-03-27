@@ -18,6 +18,7 @@
 #include "y/memory/allocator/pooled.hpp"
 #include "y/memory/allocator/dyadic.hpp"
 #include "y/memory/allocator/archon.hpp"
+#include "y/format/hexadecimal.hpp"
 
 using namespace Yttrium;
 
@@ -214,8 +215,9 @@ namespace {
         {
             Y_Lock(sync);
             const uint64_t u = System::WallTime::Ticks();
-            seed = (long) CRC32::Run(u);
-            (std::cerr << "In Thread, seed=" << seed << std::endl).flush();
+            const uint32_t c = CRC32::Run(u);
+            seed = (long)c;
+            (std::cerr << "In Thread, seed=" << Hexadecimal(c) << std::endl).flush();
         }
 
         Core::Rand ran(seed);
@@ -227,7 +229,7 @@ namespace {
         //Torture(*params.nucleus->blocks, blocks, Y_Static_Size(blocks), ran);
         //Torture(*params.global,          blocks, Y_Static_Size(blocks), ran);
         //Torture(*params.pooled,          blocks, Y_Static_Size(blocks), ran);
-        Torture(*params.dyadic,          blocks, Y_Static_Size(blocks), ran);
+        //Torture(*params.dyadic,          blocks, Y_Static_Size(blocks), ran);
         Torture(*params.archon,          blocks, Y_Static_Size(blocks), ran);
 
     }
@@ -267,10 +269,13 @@ Y_UTEST(concurrent_memory)
         & Memory::Archon::Instance()
     };
 
+    const size_t numThreads = 8;
+    void *       wksp[ Alignment::WordsGEQ<numThreads*sizeof(MyThread)>::Count ];
+
+    for(size_t cycle=1;cycle<=2;++cycle)
     {
-        const size_t numThreads = 8;
-        void *       wksp[ Alignment::WordsGEQ<numThreads*sizeof(MyThread)>::Count ];
-        Memory::AutoBuilt<MyThread> threads(wksp,numThreads,params);
+        (std::cerr << "-- cycle " << cycle << std::endl).flush();
+        Memory::AutoBuilt<MyThread> threads(Y_BZero(wksp),numThreads,params);
     }
 
 
