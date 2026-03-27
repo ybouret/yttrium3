@@ -197,16 +197,22 @@ namespace Yttrium
 
         void * Archon:: acquireBlock(const unsigned blockShift)
         {
+            // sanity check
             assert(0!=code);
+            assert(blockShift>=MinBlockShift);
 
+            // locked acquire
             Y_Lock(access);
             return code->acquireBlock(blockShift);
         }
 
         void   Archon:: releaseBlock(void * const blockAddr, const unsigned blockShift) noexcept
         {
+            // sanity check
             assert(0!=code);
+            assert(blockShift>=MinBlockShift);
 
+            // locked release
             Y_Lock(access);
             code->releaseBlock(blockAddr,blockShift);
         }
@@ -214,9 +220,12 @@ namespace Yttrium
 
         void * Archon:: acquire(size_t & blockSize)
         {
+            // sanity check
             assert(code);
             if(blockSize>MaxBlockBytes) throw Specific::Exception(CallSign,"blockSize overflow");
             const unsigned blockShift = CeilLog2( Max(blockSize,MinBlockBytes) );
+
+            // locked acquire
             Y_Lock(access);
             try
             {
@@ -234,11 +243,13 @@ namespace Yttrium
 
         void Archon:: release(void * & blockAddr, size_t &blockSize) noexcept
         {
+            // sanity check
             assert(code); assert(0!=blockAddr); assert( IsPowerOfTwo(blockSize) );
             const unsigned blockShift = ExactLog2(blockSize);
             assert(blockShift>=MinBlockShift);
             assert(blockShift<=MaxBlockShift);
 
+            // locked release
             Y_Lock(access);
             code->releaseBlock(blockAddr,blockShift);
             blockAddr = 0;

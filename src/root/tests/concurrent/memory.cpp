@@ -79,6 +79,8 @@ namespace
                  const size_t        nblock,
                  Core::Rand         &ran)
     {
+        Yttrium_BZero(blocks,nblock*sizeof(Block));
+
         size_t count = 0;
         Acquire(alloc,nblock,blocks,count,ran);
         for(size_t iter=ran.in<size_t>(10,100);iter>0;--iter)
@@ -229,7 +231,7 @@ namespace {
         //Torture(*params.nucleus->blocks, blocks, Y_Static_Size(blocks), ran);
         //Torture(*params.global,          blocks, Y_Static_Size(blocks), ran);
         //Torture(*params.pooled,          blocks, Y_Static_Size(blocks), ran);
-        //Torture(*params.dyadic,          blocks, Y_Static_Size(blocks), ran);
+        Torture(*params.dyadic,          blocks, Y_Static_Size(blocks), ran);
         Torture(*params.archon,          blocks, Y_Static_Size(blocks), ran);
 
     }

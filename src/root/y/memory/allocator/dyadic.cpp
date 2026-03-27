@@ -30,6 +30,7 @@ namespace Yttrium
             {
                 Y_BZero(dyadicArena);
                 assert(0!=nucleus.blocks);
+                std::cerr << "Dyadic MaxCommBytes=" << MaxCommBytes << std::endl;
             }
 
             inline ~Code() noexcept
@@ -44,7 +45,10 @@ namespace Yttrium
                     ArenaPtr &   pArena     = dyadicArena[blockShift];
                     const size_t blockBytes = _1<<blockShift;
                     if(0==pArena)
+                    {
+                        Y_Locked_Print(std::cerr,"new Arena@" << blockBytes);
                         pArena = &smallBlocks[blockBytes];
+                    }
 
                     assert(0!=pArena);
                     assert(0!=dyadicArena[blockShift]);
@@ -103,11 +107,12 @@ namespace Yttrium
 
         void * Dyadic:: acquire(size_t &blockSize)
         {
+            // sanity check
             assert(0!=code);
-
             if(blockSize>Base2<size_t>::MaxBytes)
                 throw Specific::Exception(CallSign,"blockSize overflow");
 
+            // locked acquire
             Y_Lock(access);
             try
             {
@@ -125,11 +130,14 @@ namespace Yttrium
 
         void Dyadic:: release(void * & blockAddr, size_t & blockSize) noexcept
         {
+            // sanity check
             assert( 0 != code);
             assert( 0 != blockAddr );
             assert( IsPowerOfTwo(blockSize) );
+            const unsigned shift = ExactLog2(blockSize);
+            assert( (Code::_1 << shift) == blockSize);
 
-            const unsigned shift = ExactLog2(blockSize); assert( (Code::_1 << shift) == blockSize);
+            // locked release
             Y_Lock(access);
             code->release(blockAddr,shift);
             blockAddr = 0;
@@ -138,17 +146,23 @@ namespace Yttrium
 
         void * Dyadic:: acquireBlock(const unsigned shift)
         {
+            // sanity check
             assert( 0 != code );
             assert( shift <= Metrics::MaxPageShift );
+
+            // locked acquire
             Y_Lock(access);
             return code->acquire(shift);
         }
 
         void Dyadic:: releaseBlock(void *const entry, const unsigned int shift) noexcept
         {
+            // sanity check
             assert( 0 != code  );
             assert( 0 != entry );
             assert( shift <= Metrics::MaxPageShift );
+
+            // locked release
             Y_Lock(access);
             code->release(entry,shift);
         }

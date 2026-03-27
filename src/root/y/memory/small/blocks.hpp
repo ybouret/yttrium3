@@ -62,7 +62,7 @@ namespace Yttrium
                 virtual ~Blocks() noexcept;
 
                 virtual void toXML(XML::Log &) const;
-                
+
                 //______________________________________________________________
                 //
                 //
@@ -110,6 +110,8 @@ namespace Yttrium
                 Arena          arena;            //!< dedicated arena( sizeof(Arena) ) to create specific arenas
                 House<Arena>   house;            //!< helper to setup arenas
                 void *         wksp[TableWords]; //!< inner static memory
+
+                Arena * newArena(const size_t blockSize);
             };
         }
 

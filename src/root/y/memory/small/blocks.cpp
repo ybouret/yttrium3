@@ -57,6 +57,11 @@ namespace Yttrium
                 return false;
             }
 
+            Arena * Blocks:: newArena(const size_t blockSize)
+            {
+                return house.produce(blockSize,book,arena.access);
+            }
+
             void * Blocks:: acquire(const size_t blockSize)
             {
                 Y_Lock(arena.access);
@@ -64,10 +69,12 @@ namespace Yttrium
                 assert(blockSize>0);
                 assert(blockSize<=Arena::MaxBlockSize);
 
+                // find slot for blockSize
                 Slot &slot = table[blockSize&TableMask];
 
                 if(acquiring&&blockSize==acquiring->blockSize)
                 {
+                    // cached!
                     assert(slot.owns(acquiring));
                     return slot.moveToHead(acquiring)->acquire();
                 }
@@ -83,8 +90,7 @@ namespace Yttrium
 
                     // create a new arena
                     assert(0==acquiring);
-                    return slot.pushHead( acquiring = house.produce(blockSize,book,arena.access) )->acquire();
-
+                    return slot.pushHead( acquiring = newArena(blockSize) )->acquire();
                 }
             }
 
@@ -97,9 +103,12 @@ namespace Yttrium
                 assert(blockSize<=Arena::MaxBlockSize);
                 assert(0!=blockAddr);
 
+                // find slot
                 Slot &slot = table[blockSize&TableMask];
+
                 if(releasing&&blockSize==releasing->blockSize)
                 {
+                    // cached!
                     assert(slot.owns(releasing));
                     slot.moveToHead(releasing)->release(blockAddr);
                 }
@@ -118,6 +127,8 @@ namespace Yttrium
             Arena & Blocks:: operator[](const size_t blockSize)
             {
                 Y_Lock(arena.access);
+
+                // find slot
                 Slot &slot = table[blockSize&TableMask];
 
                 // look for existing blockSize
@@ -128,7 +139,7 @@ namespace Yttrium
                 }
 
                 // not found, create a new one
-                return *slot.pushHead( house.produce(blockSize,book,arena.access) );
+                return *slot.pushHead( newArena(blockSize) );
             }
 
         }

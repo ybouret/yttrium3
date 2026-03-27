@@ -53,6 +53,10 @@ Y_UTEST(memory_small_blocks)
     Concurrent::Nucleus & nucleus = Concurrent::Nucleus::Instance();
     Memory::Small::Blocks blocks(nucleus.book,nucleus.access);
 
+    for(size_t blockSize=1;blockSize<=130;++blockSize)
+    {
+        Y_ASSERT(blocks[blockSize].blockSize==blockSize);
+    }
 
     Y_PRINTV(Memory::Small::Blocks::BytesPerSlot);
     Y_PRINTV(Memory::Small::Blocks::DefaultBytes);

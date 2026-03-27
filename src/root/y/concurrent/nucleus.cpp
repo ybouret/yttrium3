@@ -107,9 +107,9 @@ namespace Yttrium
             static const size_t ThreadSize    = sizeof(SystemThread);
             static const size_t PrimitiveSize = MetaMaxOfTriplet<MutexSize, CondSize, ThreadSize>::Value;
 
-            explicit Data(Memory::Book& book,
-                          Lockable& lock) :
-            blocks(book, lock),
+            explicit Data(Memory::Book & book,
+                          Lockable     & lock) :
+            blocks(book,lock),
             arena( blocks[PrimitiveSize] ),
             mutexes(arena),
             conditions(arena),
@@ -141,7 +141,7 @@ namespace Yttrium
 
 
 
-        void Nucleus::destructCode() noexcept
+        void Nucleus:: destructCode() noexcept
         {
             assert(0 != code);
             if (data)
@@ -176,7 +176,7 @@ namespace Yttrium
             try
             {
                 System::AtExit::Perform(SelfDestruct, this, LifeTime);
-                Coerce(data)   = new (Y_BZero(NucleusData)) Data(book, access);
+                Coerce(data)   = new (Y_BZero(NucleusData)) Data(book,access);
                 Coerce(blocks) = & data->blocks;
             }
             catch (...)

@@ -219,7 +219,8 @@ namespace Yttrium
                 goto TRY;
             }
 
-            void * Arena:: searchBoth(Chunk *lower, Chunk *upper) noexcept
+            void * Arena:: searchBoth(Chunk * lower,
+                                      Chunk * upper) noexcept
             {
             SEARCH_BOTH:
                 assert(0!=lower);
@@ -254,12 +255,15 @@ namespace Yttrium
                         if(lower)
                             return upper ? searchBoth(lower,upper) : searchPrev(lower);
                         else
+                        {
                             return searchNext(upper);
+                        }
                     }
                 }
                 else
                 {
                     assert(0==empty);
+                    assert(0==countReady());
                     return acquireBlock( newChunk() );
                 }
 
