@@ -30,6 +30,7 @@ namespace {
             Block & b = blocks[count];
             b.size    = ran.in<size_t>(0,4000);
             b.addr    = archon.acquire(b.size);
+            Y_ASSERT( IsPowerOfTwo(b.size) );
             Y_ASSERT( Y_TRUE == Yttrium_Zeroed(b.addr,b.size) );
             Random::FillWith(ran,b.addr,b.size,1);
             ++count;
@@ -64,11 +65,12 @@ Y_UTEST(memory_archon)
     Memory::Archon &archon = Memory::Archon::Instance();
     std::cerr << "Using " << archon.callSign() << std::endl;
 
-    Block        blocks[100];
+    Block        blocks[200];
     const size_t nblock = Y_Static_Size(blocks);
     size_t       count  = 0;
 
     Acquire(archon,nblock,blocks,count,ran);
+    for(size_t iter=0;iter<100;++iter)
     {
         Random::Shuffle(ran,blocks,count);
         Release(archon,count/ran.in<size_t>(2,4), blocks,count);

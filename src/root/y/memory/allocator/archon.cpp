@@ -17,16 +17,44 @@ namespace Yttrium
         const char * const Archon:: CallSign = "Memory::Archon";
         const unsigned     Archon:: NumSlots;
 
+        //______________________________________________________________________
+        //
+        //
+        //! Archon implementation
+        //
+        //______________________________________________________________________
         class Archon:: Code : public Collectable
         {
         public:
-            typedef Core::PoolOf<Page> Slot_;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef Core::PoolOf<Page> Slot_; //!< alias
 
+            //__________________________________________________________________
+            //
+            //
+            //! LRU cache of same blockShift/blockBytes based on Dyadic
+            //
+            //__________________________________________________________________
             class Slot : public Slot_, public Collectable
             {
             public:
-                static const size_t One = 1;
+                //______________________________________________________________
+                //
+                // Definitions
+                //______________________________________________________________
+                static const size_t One = 1; //!< alias
 
+                //______________________________________________________________
+                //
+                // C++
+                //______________________________________________________________
+
+                //! initilialize with blockSize and Dyadic instance
                 inline explicit Slot(const unsigned bs,
                                      Dyadic        &da) noexcept :
                 Slot_(),
@@ -35,18 +63,28 @@ namespace Yttrium
                 blockBytes(One<<blockShift)
                 {}
 
-                inline virtual ~Slot() noexcept {}
+                //! cleanup
+                inline virtual ~Slot() noexcept { purge(); }
 
+                //______________________________________________________________
+                //
+                // Methods
+                //______________________________________________________________
+
+                //! use cached or new block
                 inline void *get() {
-                    return size>0 ? memset( query(), 0, blockBytes) : allocation.acquireBlock(blockShift);
+                    return (size>0) ? memset( query(), 0, blockBytes) : allocation.acquireBlock(blockShift);
                 }
 
+                //! store used block
                 inline void   put(void * const blockAddr) noexcept
                 { assert(0!=blockAddr); store( Page::From(blockAddr) ); }
 
-                inline Slot * purge() noexcept
-                { while(size) allocation.releaseBlock( query(), blockShift); return this; }
+                inline void purge() noexcept
+                { while(size) allocation.releaseBlock( query(), blockShift); }
 
+
+                //! gc returning to Dyadic
                 inline virtual void gc(const uint8_t amount) noexcept
                 {
                     const size_t newSize = NewSize(amount,size);
@@ -58,32 +96,53 @@ namespace Yttrium
                     Core::ListToPool::Make(*this,list);
                 }
 
-                const unsigned  blockShift;
-                Dyadic        & allocation;
-                const size_t    blockBytes;
+                //______________________________________________________________
+                //
+                // Members
+                //______________________________________________________________
+                const unsigned  blockShift; //!< the block shift
+                Dyadic        & allocation; //!< dyadic instance
+                const size_t    blockBytes; //!< 2^blockShift
 
             private:
-                Y_Disable_Copy_And_Assign(Slot);
+                Y_Disable_Copy_And_Assign(Slot); //!< discarding
             };
 
-            static const size_t NumBytes = NumSlots * sizeof(Slot);
+            static const size_t NumBytes = NumSlots * sizeof(Slot); //!< inner bytes
 
-            explicit Code() noexcept :
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup
+            explicit Code() :
             slots(0),
-            dyadic( Memory::Dyadic::Instance() ),
             wksp()
             {
+                Memory::Dyadic &da = Memory::Dyadic::Instance();
                 Coerce(slots) = static_cast<Slot *>( Y_BZero(wksp) ) - MinBlockShift;
                 for(unsigned i=MinBlockShift;i<=MaxBlockShift;++i)
-                    new (slots+i) Slot(i,dyadic);
+                    new (slots+i) Slot(i,da);
             }
 
+            //! cleanup
             virtual ~Code() noexcept
             {
                 for(unsigned blockShift=MaxBlockShift;blockShift>=MinBlockShift;--blockShift)
-                    Destruct( slots[blockShift].purge() );
+                    Destruct( &slots[blockShift] );
             }
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! acquire block from selected slot
             inline void * acquireBlock(const unsigned blockShift)
             {
                 assert(blockShift>=MinBlockShift);
@@ -92,6 +151,7 @@ namespace Yttrium
                 return slots[blockShift].get();
             }
 
+            //! release block to select slot
             inline void releaseBlock(void * const blockAddr, const unsigned blockShift) noexcept
             {
                 assert(0!=blockAddr);
@@ -100,6 +160,7 @@ namespace Yttrium
                 slots[blockShift].put(blockAddr);
             }
 
+            //! gc on all slots
             inline void gc(const uint8_t amount) noexcept
             {
                 for(unsigned blockShift=MaxBlockShift;blockShift>=MinBlockShift;--blockShift)
@@ -107,7 +168,6 @@ namespace Yttrium
             }
 
             Slot * const     slots;
-            Memory::Dyadic & dyadic;
 
         private:
             Y_Disable_Copy_And_Assign(Code);
@@ -131,12 +191,14 @@ namespace Yttrium
             assert(0!=code);
             Destruct(code);
             Y_BZero(ArchonCode);
+            Coerce(code) = 0;
         }
 
 
         void * Archon:: acquireBlock(const unsigned blockShift)
         {
             assert(0!=code);
+
             Y_Lock(access);
             return code->acquireBlock(blockShift);
         }
@@ -144,6 +206,7 @@ namespace Yttrium
         void   Archon:: releaseBlock(void * const blockAddr, const unsigned blockShift) noexcept
         {
             assert(0!=code);
+
             Y_Lock(access);
             code->releaseBlock(blockAddr,blockShift);
         }
@@ -171,12 +234,11 @@ namespace Yttrium
 
         void Archon:: release(void * & blockAddr, size_t &blockSize) noexcept
         {
-            assert(code);
-            assert(0!=blockAddr);
-            assert( IsPowerOfTwo(blockSize) );
+            assert(code); assert(0!=blockAddr); assert( IsPowerOfTwo(blockSize) );
             const unsigned blockShift = ExactLog2(blockSize);
             assert(blockShift>=MinBlockShift);
             assert(blockShift<=MaxBlockShift);
+
             Y_Lock(access);
             code->releaseBlock(blockAddr,blockShift);
             blockAddr = 0;
@@ -209,7 +271,9 @@ namespace Yttrium
                 const Code::Slot &slot = code->slots[bs];
                 if(slot.size)
                 {
-                    Y_XML_Standalone(xml,Slot, Y_XML_Attr_Setw(slot.blockBytes,6) << Y_XML_Attr(slot.size) );
+                    const size_t bs       = slot.blockBytes;
+                    const size_t available = slot.size;
+                    Y_XML_Standalone(xml,Slot, Y_XML_Attr_Setw(bs,6) << Y_XML_Attr(available) );
                 }
             }
         }

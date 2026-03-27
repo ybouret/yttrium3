@@ -19,7 +19,7 @@ namespace Yttrium
             static const unsigned MaxCommShift = MinPageShift - 1;
             static const size_t   MaxCommBytes = size_t(1) << MaxCommShift;
             static const unsigned NumSmall     = MaxCommShift+1;
-            typedef  Small::Arena Arena;
+            typedef Small::Arena  Arena;
             typedef Arena *       ArenaPtr;
 
             inline Code(Concurrent::Nucleus &nucleus) :
@@ -28,6 +28,7 @@ namespace Yttrium
             book(nucleus.book)
             {
                 Y_BZero(dyadicArena);
+                assert(0!=nucleus.blocks);
             }
 
             inline ~Code() noexcept
@@ -40,17 +41,21 @@ namespace Yttrium
 
                 if(shift<=MaxCommShift)
                 {
-                    ArenaPtr & pArena = dyadicArena[shift];
+                    ArenaPtr &   pArena     = dyadicArena[shift];
+                    const size_t blockSize = _1<<shift;
                     if(0==pArena)
-                        pArena = &smallBlocks[_1<<shift];
+                        pArena = &smallBlocks[blockSize];
 
                     assert(0!=pArena);
-                    assert((_1<<shift) == pArena->blockSize);
+                    assert(0!=dyadicArena[shift]);
+                    assert(dyadicArena[shift] == pArena);
+                    assert(blockSize == pArena->blockSize);
 
                     return pArena->acquire();
                 }
                 else
                 {
+                    assert(shift>MaxCommShift);
                     return book[shift].get();
                 }
             }
