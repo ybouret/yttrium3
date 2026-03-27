@@ -61,6 +61,10 @@ Y_UTEST(memory:moniker)
 Y_UTEST(memory:plastic:bricks)
 Y_UTEST(memory:plastic:forge)
 Y_UTEST(memory:auto_built)
+Y_UTEST(memory:allocator)
+Y_UTEST(memory:archon)
+
+
 
 Y_UTEST(pointer:auto)
 

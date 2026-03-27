@@ -29,6 +29,8 @@ static const System::AtExit::Longevity CLASS = ConcurrentNucleus - (__LINE__-Hel
         Y_LifeTimeFor(MemoryGlobal); //!< for Memory::Global
         Y_LifeTimeFor(MemoryPooled); //!< for Memory::Pooled
         Y_LifeTimeFor(MemoryDyadic); //!< for Memory::Pooled
+        Y_LifeTimeFor(MemoryArchon); //!< for Memory::Pooled
+
     };
 
 }

@@ -17,6 +17,7 @@
 #include "y/memory/allocator/global.hpp"
 #include "y/memory/allocator/pooled.hpp"
 #include "y/memory/allocator/dyadic.hpp"
+#include "y/memory/allocator/archon.hpp"
 
 using namespace Yttrium;
 
@@ -200,6 +201,7 @@ namespace {
         Memory::Allocator     * global;
         Memory::Allocator     * pooled;
         Memory::Allocator     * dyadic;
+        Memory::Allocator     * archon;
     };
 
     static inline
@@ -260,7 +262,8 @@ Y_UTEST(concurrent_memory)
         &nucleus,
         & Memory::Global::Instance(),
         & Memory::Pooled::Instance(),
-        & Memory::Dyadic::Instance()
+        & Memory::Dyadic::Instance(),
+        & Memory::Archon::Instance()
     };
 
     {

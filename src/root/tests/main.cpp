@@ -53,6 +53,8 @@ Y_UTEST_DECL(8)
     Y_UTEST(memory_plastic_forge);
     Y_UTEST(memory_auto_built);
     Y_UTEST(memory_allocator);
+    Y_UTEST(memory_archon);
+
 
     Y_UTEST(pointer_auto);
 }
