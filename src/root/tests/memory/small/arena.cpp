@@ -54,7 +54,7 @@ Y_UTEST(memory_small_arena)
         std::cerr << std::endl;
         Acquire(nmax,addr,size,arena);
 
-        for(size_t iter=0;iter<10;++iter)
+        for(size_t iter=0;iter<128;++iter)
         {
             Random::Shuffle(ran,addr,size);
             Release(size/ran.in<size_t>(2,4),addr,size,arena);

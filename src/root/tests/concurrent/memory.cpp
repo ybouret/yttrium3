@@ -228,7 +228,7 @@ namespace {
         Torture(*params.global,          blocks, Y_Static_Size(blocks), ran);
         Torture(*params.pooled,          blocks, Y_Static_Size(blocks), ran);
         Torture(*params.dyadic,          blocks, Y_Static_Size(blocks), ran);
-        //Torture(*params.archon,          blocks, Y_Static_Size(blocks), ran);
+        Torture(*params.archon,          blocks, Y_Static_Size(blocks), ran);
 
     }
 
@@ -254,7 +254,7 @@ namespace {
 
 Y_UTEST(concurrent_memory)
 {
-
+    Concurrent::Singulet::Verbose = true;
     System::WallTime        chrono;
     Concurrent::Nucleus   & nucleus = Concurrent::Nucleus::Location();
 

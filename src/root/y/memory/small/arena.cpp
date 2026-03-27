@@ -181,10 +181,11 @@ namespace Yttrium
                 assert(ready>=chunk->stillAvailable);
 
                 //--------------------------------------------------------------
-                // update
+                // update status
                 //--------------------------------------------------------------
                 --ready;
-                if(chunk==empty) empty = 0;
+                if(chunk==empty)
+                    empty = 0;
 
                 //--------------------------------------------------------------
                 // return block
@@ -196,8 +197,10 @@ namespace Yttrium
             {
                 assert(0!=lower);
             TRY:
-                if(lower->stillAvailable) return acquireBlock(lower);
+                if(lower->stillAvailable)
+                    return acquireBlock(lower);
                 lower = lower->next;
+                if(!lower) { std::cerr << "no lower at blockSize=" << blockSize << std::endl; }
                 assert(0!=lower);
                 goto TRY;
             }
@@ -206,7 +209,8 @@ namespace Yttrium
             {
                 assert(0!=upper);
             TRY:
-                if(upper->stillAvailable) { return acquireBlock(upper); }
+                if(upper->stillAvailable)
+                    return acquireBlock(upper);
                 upper = upper->next;
                 assert(0!=upper);
                 goto TRY;
@@ -235,7 +239,7 @@ namespace Yttrium
                 Y_Lock(access);
 
                 assert(0!=acquiring);
-
+                assert( countReady() == ready );
                 if(ready>0)
                 {
                     if(acquiring->stillAvailable)
@@ -301,6 +305,7 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 releasing->release(blockAddr,blockSize);
                 ++ready;
+                assert( countReady() == ready );
 
                 //--------------------------------------------------------------
                 //
@@ -335,12 +340,25 @@ namespace Yttrium
                 if(acquiring==empty)
                     acquiring = releasing;
 
-                // remove empty
+                // remove empty to its page
                 allocator.put( clist.pop(empty) );
 
                 // update status
                 ready -= numBlocks;
                 empty  = releasing;
+
+                assert( countReady() == ready);
+            }
+
+
+            size_t Arena:: countReady() const noexcept
+            {
+                size_t stillAvailable = 0;
+                for(const Chunk *node=clist.head;node;node=node->next)
+                {
+                    stillAvailable += node->stillAvailable;
+                }
+                return stillAvailable;
             }
 
         }

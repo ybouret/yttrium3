@@ -137,6 +137,7 @@ namespace Yttrium
                 void  * searchBoth(Chunk *lower, Chunk *upper) noexcept;
                 void  * searchNext(Chunk *upper) noexcept;
                 void  * searchPrev(Chunk *lower) noexcept;
+                size_t  countReady() const noexcept;
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
             };
