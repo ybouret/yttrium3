@@ -14,10 +14,11 @@ namespace Yttrium
         class Dyadic:: Code
         {
         public:
+            static const size_t   _1           = 1;
             static const size_t   MinPageBytes = Metrics::MinPageBytes;
             static const unsigned MinPageShift = Metrics::MinPageShift;
             static const unsigned MaxCommShift = MinPageShift - 1;
-            static const size_t   MaxCommBytes = size_t(1) << MaxCommShift;
+            static const size_t   MaxCommBytes = _1 << MaxCommShift;
             static const unsigned NumSmall     = MaxCommShift+1;
             typedef Small::Arena  Arena;
             typedef Arena *       ArenaPtr;
@@ -35,28 +36,27 @@ namespace Yttrium
             {
             }
 
-            inline void * acquire(const unsigned shift)
+            inline void * acquire(const unsigned blockShift)
             {
-                static const size_t _1 = 1;
 
-                if(shift<=MaxCommShift)
+                if(blockShift<=MaxCommShift)
                 {
-                    ArenaPtr &   pArena     = dyadicArena[shift];
-                    const size_t blockSize = _1<<shift;
+                    ArenaPtr &   pArena     = dyadicArena[blockShift];
+                    const size_t blockBytes = _1<<blockShift;
                     if(0==pArena)
-                        pArena = &smallBlocks[blockSize];
+                        pArena = &smallBlocks[blockBytes];
 
                     assert(0!=pArena);
-                    assert(0!=dyadicArena[shift]);
-                    assert(dyadicArena[shift] == pArena);
-                    assert(blockSize == pArena->blockSize);
+                    assert(0!=dyadicArena[blockShift]);
+                    assert(dyadicArena[blockShift] == pArena);
+                    assert(blockBytes == pArena->blockSize);
 
                     return pArena->acquire();
                 }
                 else
                 {
-                    assert(shift>MaxCommShift);
-                    return book[shift].get();
+                    assert(blockShift>MaxCommShift);
+                    return book[blockShift].get();
                 }
             }
 
@@ -111,10 +111,9 @@ namespace Yttrium
             Y_Lock(access);
             try
             {
-                static const size_t _1        = 1;
                 const unsigned      shift     = CeilLog2(blockSize);
                 void * const        blockAddr = code->acquire(shift);
-                blockSize = _1 << shift;
+                blockSize = Code::_1 << shift;
                 return blockAddr;
             }
             catch(...)
@@ -130,7 +129,7 @@ namespace Yttrium
             assert( 0 != blockAddr );
             assert( IsPowerOfTwo(blockSize) );
 
-            const unsigned shift = ExactLog2(blockSize);
+            const unsigned shift = ExactLog2(blockSize); assert( (Code::_1 << shift) == blockSize);
             Y_Lock(access);
             code->release(blockAddr,shift);
             blockAddr = 0;

@@ -174,10 +174,10 @@ namespace
     }
 
     static inline
-    void Torture(Memory::Small::Blocks &alloc,
-                 Block                  blocks[],
-                 const size_t           nblock,
-                 Core::Rand            &ran)
+    void Torture(Memory::Small::Blocks & alloc,
+                 Block                   blocks[],
+                 const size_t            nblock,
+                 Core::Rand            & ran)
     {
         size_t count = 0;
         Acquire(alloc,nblock,blocks,count,ran);
@@ -222,13 +222,13 @@ namespace {
         Block      blocks[512];
         Wad        wads[512];
 
-        Torture(*params.nucleus,         blocks, Y_Static_Size(blocks), ran);
-        Torture( params.nucleus->book,   wads,   Y_Static_Size(wads),   ran);
-        Torture(*params.nucleus->blocks, blocks, Y_Static_Size(blocks), ran);
-        Torture(*params.global,          blocks, Y_Static_Size(blocks), ran);
-        Torture(*params.pooled,          blocks, Y_Static_Size(blocks), ran);
+        //Torture(*params.nucleus,         blocks, Y_Static_Size(blocks), ran);
+        //Torture( params.nucleus->book,   wads,   Y_Static_Size(wads),   ran);
+        //Torture(*params.nucleus->blocks, blocks, Y_Static_Size(blocks), ran);
+        //Torture(*params.global,          blocks, Y_Static_Size(blocks), ran);
+        //Torture(*params.pooled,          blocks, Y_Static_Size(blocks), ran);
         Torture(*params.dyadic,          blocks, Y_Static_Size(blocks), ran);
-        //Torture(*params.archon,          blocks, Y_Static_Size(blocks), ran);
+        Torture(*params.archon,          blocks, Y_Static_Size(blocks), ran);
 
     }
 

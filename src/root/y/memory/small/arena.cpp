@@ -179,6 +179,7 @@ namespace Yttrium
                 assert(0!=chunk);
                 assert(chunk->stillAvailable);
                 assert(ready>=chunk->stillAvailable);
+                assert( countReady() == ready);
 
                 //--------------------------------------------------------------
                 // update status
@@ -190,7 +191,9 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 // return block
                 //--------------------------------------------------------------
-                return (acquiring=chunk)->acquire(blockSize);
+                void * const p = (acquiring=chunk)->acquire(blockSize);
+                assert( countReady() == ready);
+                return p;
             }
 
             void * Arena:: searchPrev(Chunk *lower) noexcept
