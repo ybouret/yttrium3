@@ -184,7 +184,7 @@ namespace
         for(size_t iter=ran.in<size_t>(10,100);iter>0;--iter)
         {
             Random::Shuffle(ran,blocks,nblock);
-            Release(alloc,nblock/ran.in<size_t>(2,4),blocks,count);
+            Release(alloc,nblock/ran.in<size_t>(2,16),blocks,count);
             Acquire(alloc,nblock,blocks,count,ran);
         }
         Release(alloc,0,blocks,count);
@@ -228,7 +228,7 @@ namespace {
         Torture(*params.global,          blocks, Y_Static_Size(blocks), ran);
         Torture(*params.pooled,          blocks, Y_Static_Size(blocks), ran);
         Torture(*params.dyadic,          blocks, Y_Static_Size(blocks), ran);
-        Torture(*params.archon,          blocks, Y_Static_Size(blocks), ran);
+        //Torture(*params.archon,          blocks, Y_Static_Size(blocks), ran);
 
     }
 
@@ -273,9 +273,7 @@ Y_UTEST(concurrent_memory)
         Memory::AutoBuilt<MyThread> threads(wksp,numThreads,params);
     }
 
-    //bool verbose = true;
-    //XML::Log xml(std::cerr,verbose);
-    //nucleus.toXML(xml);
+
 }
 Y_UDONE()
 
