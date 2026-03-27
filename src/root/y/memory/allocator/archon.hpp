@@ -40,7 +40,7 @@ namespace Yttrium
             static const size_t       MaxBlockBytes = Metrics::MaxPageBytes;                           //!< alias
             static const unsigned     MaxBlockShift = Metrics::MaxPageShift;                           //!< alias
             static const unsigned     NumSlots      = 1+MaxBlockShift - MinBlockShift;                 //!< alias
-            typedef ClassLockPolicy   Policy;                                                          //!<alias
+            typedef ClassLockPolicy   Policy;                                                          //!< alias
             class Code;
 
             //__________________________________________________________________
@@ -73,6 +73,7 @@ namespace Yttrium
              */
             void   releaseBlock(void * const blockAddr, const unsigned blockShift) noexcept;
 
+            //! specific garbage collector \param amount amount to free on each slot
             void gc(const uint8_t amount) noexcept;
 
         private:

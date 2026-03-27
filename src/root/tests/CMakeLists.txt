@@ -19,6 +19,7 @@ Y_UTEST(exception)
 Y_UTEST(xml)
 
 Y_UTEST(config:platform)
+Y_UTEST(config:compiler)
 
 Y_UTEST(core:display)
 Y_UTEST(core:hsort)
