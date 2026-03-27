@@ -65,7 +65,7 @@ namespace
         for(size_t iter=0;iter<128;++iter)
         {
             Random::Shuffle(ran,blocks,count);
-            Release(alloc,count/ran.in<size_t>(2,4), blocks,count);
+            Release(alloc,count/ran.in<size_t>(2,16), blocks,count);
             Acquire(alloc,nblock,blocks,count,ran);
         }
         Release(alloc,0,blocks,count);

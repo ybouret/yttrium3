@@ -65,7 +65,7 @@ Y_UTEST(memory_small_chunk)
             Memory::Small::Chunk chunk(blockSize,numBlocks,data);
             memset(addr,0,sizeof(addr));
             AcquireUpTo(numBlocks,addr,nblk,chunk,blockSize,ran);
-            for(size_t iter=0;iter<10;++iter)
+            for(size_t iter=0;iter<1000;++iter)
             {
                 Random::Shuffle(ran,addr,nblk);
                 ReleaseDown(nblk>>1,addr,nblk,chunk,blockSize);

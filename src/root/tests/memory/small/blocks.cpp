@@ -4,7 +4,6 @@
 #include "y/concurrent/nucleus.hpp"
 #include "y/core/rand.hpp"
 
-#include "y/stream/xmlog.hpp"
 
 using namespace Yttrium;
 
@@ -52,7 +51,6 @@ Y_UTEST(memory_small_blocks)
 {
     Core::Rand            ran;
     Concurrent::Nucleus & nucleus = Concurrent::Nucleus::Instance();
-
     Memory::Small::Blocks blocks(nucleus.book,nucleus.access);
 
 
@@ -69,20 +67,16 @@ Y_UTEST(memory_small_blocks)
 
     Acquire(blocks,nmax,blks,size,ran);
 
-    for(size_t iter=0;iter<10;++iter)
+    for(size_t iter=0;iter<128;++iter)
     {
         Check(blocks,blks,size);
         Release(blocks,size/ran.in<size_t>(2,4),blks,size);
         Acquire(blocks,nmax,blks,size,ran);
     }
 
-    bool     verbose = true;
-    XML::Log xml(std::cerr,verbose);
-    blocks.toXML(xml);
+    blocks.writeXML(std::cerr);
     Release(blocks,0,blks,size);
 
-    Y_PRINTV(blocks[12].blockSize);
-    Y_PRINTV(blocks[17].blockSize);
 
 }
 Y_UDONE()
