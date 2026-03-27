@@ -21,6 +21,9 @@ namespace Yttrium
         //
         //
         //! LEVEL-2 Cache
+        /**
+         uses Memory::Dyadic as LEVEL-1 cache
+         */
         //
         //
         //______________________________________________________________________
@@ -30,37 +33,54 @@ namespace Yttrium
         public Logging
         {
         public:
-            static const char * const CallSign; //!< "Memory::Archon"
-            static const Longevity    LifeTime      = LifeTimeFor::MemoryArchon;
-            static const size_t       MinBlockBytes = MetaMax<sizeof(Page),2*sizeof(uint64_t)>::Value;
-            static const unsigned     MinBlockShift = IntegerLog2<MinBlockBytes>::Value;
-            static const size_t       MaxBlockBytes = Metrics::MaxPageBytes;
-            static const unsigned     MaxBlockShift = Metrics::MaxPageShift;
-            static const unsigned     NumSlots      = 1+MaxBlockShift - MinBlockShift;
-            typedef ClassLockPolicy   Policy;
+            static const char * const CallSign;                                                        //!< "Memory::Archon"
+            static const Longevity    LifeTime      = LifeTimeFor::MemoryArchon;                       //!< life time
+            static const size_t       MinBlockBytes = MetaMax<sizeof(Page),2*sizeof(uint64_t)>::Value; //!< alias
+            static const unsigned     MinBlockShift = IntegerLog2<MinBlockBytes>::Value;               //!< alias
+            static const size_t       MaxBlockBytes = Metrics::MaxPageBytes;                           //!< alias
+            static const unsigned     MaxBlockShift = Metrics::MaxPageShift;                           //!< alias
+            static const unsigned     NumSlots      = 1+MaxBlockShift - MinBlockShift;                 //!< alias
+            typedef ClassLockPolicy   Policy;                                                          //!<alias
             class Code;
 
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
             virtual void * acquire(size_t & blockSize);
             virtual void   release(void * &blockAddr, size_t &blockSize) noexcept;
             virtual void   toXML(XML::Log &) const;
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
             //! acquire memory by its log2 size
             /**
-             \param MinBlockShift <= blockShift << MaxBlockShift
+             \param  blockShift MinBlockShift <= blockShift << MaxBlockShift
              \return block[2^blockShift]
              */
             void * acquireBlock(const unsigned blockShift);
 
             //! release memory
+            /**
+             \param blockAddr previously acquired
+             \param blockShift blockAddr[2^blockShift]
+             */
             void   releaseBlock(void * const blockAddr, const unsigned blockShift) noexcept;
 
-            
+            void gc(const uint8_t amount) noexcept;
+
         private:
-            Y_Disable_Copy_And_Assign(Archon);
+            Y_Disable_Copy_And_Assign(Archon); //!< discarded
             friend class Singleton<Archon,ClassLockPolicy>;
-            Archon();
-            ~Archon() noexcept;
-            Code * const code;
+            Archon();           //!< setup
+            ~Archon() noexcept; //!< cleanup
+            Code * const code;  //!< inner code
 
         };
     }

@@ -84,7 +84,6 @@ namespace Yttrium
 
         Dyadic :: Dyadic() : Singleton<Dyadic,Policy>()
         {
-            std::cerr << "sizeof(Code)=" << sizeof(Code) << std::endl;
             assert(0==code);
             code = new ( Y_BZero(CodeWksp) ) Code(Concurrent::Nucleus::Location());
         }

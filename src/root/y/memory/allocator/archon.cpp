@@ -17,51 +17,51 @@ namespace Yttrium
         const char * const Archon:: CallSign = "Memory::Archon";
         const unsigned     Archon:: NumSlots;
 
-        class Archon:: Code
+        class Archon:: Code : public Collectable
         {
         public:
             typedef Core::PoolOf<Page> Slot_;
 
-            class Slot : public Slot_
+            class Slot : public Slot_, public Collectable
             {
             public:
                 static const size_t One = 1;
 
-                inline explicit Slot(const unsigned blockShift) noexcept :
-                Slot_(), blockSize(One<<blockShift) {}
+                inline explicit Slot(const unsigned bs,
+                                     Dyadic        &da) noexcept :
+                Slot_(),
+                blockShift(bs),
+                allocation(da),
+                blockBytes(One<<blockShift)
+                {}
 
                 inline virtual ~Slot() noexcept {}
 
-                inline void * get() noexcept
-                { assert(size>0); return memset( query(), 0, blockSize); }
+                inline void *get() {
+                    return size>0 ? memset( query(), 0, blockBytes) : allocation.acquireBlock(blockShift);
+                }
 
                 inline void   put(void * const blockAddr) noexcept
                 { assert(0!=blockAddr); store( Page::From(blockAddr) ); }
 
-                inline Slot * free(Dyadic       & dyadic,
-                                 const unsigned blockShift) noexcept
-                { while(size) dyadic.releaseBlock( query(), blockShift); return this; }
+                inline Slot * purge() noexcept
+                { while(size) allocation.releaseBlock( query(), blockShift); return this; }
 
-                inline void trim(const size_t   newSize,
-                                 Dyadic       & dyadic,
-                                 const unsigned blockShift) noexcept
+                inline virtual void gc(const uint8_t amount) noexcept
                 {
+                    const size_t newSize = NewSize(amount,size);
                     Core::ListOf<Page> list;
                     Core::PoolToList::Make(list,*this);
                     list.sortByDecreasingAddress();
                     while(list.size>newSize)
-                        dyadic.releaseBlock(list.popHead(),blockShift);
+                        allocation.releaseBlock(list.popHead(),blockShift);
                     Core::ListToPool::Make(*this,list);
                 }
 
-                inline void gc(const uint8_t  amount,
-                               Dyadic       & dyadic,
-                               const unsigned blockShift) noexcept
-                {
-                    trim( Collectable::NewSize(amount,size), dyadic, blockShift);
-                }
+                const unsigned  blockShift;
+                Dyadic        & allocation;
+                const size_t    blockBytes;
 
-                const size_t blockSize;
             private:
                 Y_Disable_Copy_And_Assign(Slot);
             };
@@ -75,13 +75,13 @@ namespace Yttrium
             {
                 Coerce(slots) = static_cast<Slot *>( Y_BZero(wksp) ) - MinBlockShift;
                 for(unsigned i=MinBlockShift;i<=MaxBlockShift;++i)
-                    new (slots+i) Slot(i);
+                    new (slots+i) Slot(i,dyadic);
             }
 
             virtual ~Code() noexcept
             {
                 for(unsigned blockShift=MaxBlockShift;blockShift>=MinBlockShift;--blockShift)
-                    Destruct( slots[blockShift].free(dyadic,blockShift) );
+                    Destruct( slots[blockShift].purge() );
             }
 
             inline void * acquireBlock(const unsigned blockShift)
@@ -89,8 +89,7 @@ namespace Yttrium
                 assert(blockShift>=MinBlockShift);
                 assert(blockShift<=MaxBlockShift);
 
-                Slot & slot = slots[blockShift];
-                return slot.size ? slot.get() : dyadic.acquireBlock(blockShift);
+                return slots[blockShift].get();
             }
 
             inline void releaseBlock(void * const blockAddr, const unsigned blockShift) noexcept
@@ -99,6 +98,12 @@ namespace Yttrium
                 assert(blockShift>=MinBlockShift);
                 assert(blockShift<=MaxBlockShift);
                 slots[blockShift].put(blockAddr);
+            }
+
+            inline void gc(const uint8_t amount) noexcept
+            {
+                for(unsigned blockShift=MaxBlockShift;blockShift>=MinBlockShift;--blockShift)
+                    slots[blockShift].gc(amount);
             }
 
             Slot * const     slots;
@@ -178,6 +183,14 @@ namespace Yttrium
             blockSize = 0;
         }
 
+        void Archon:: gc(const uint8_t amount) noexcept
+        {
+            assert(code);
+            Y_Lock(access);
+            code->gc(amount);
+        }
+
+
     }
 }
 
@@ -196,7 +209,7 @@ namespace Yttrium
                 const Code::Slot &slot = code->slots[bs];
                 if(slot.size)
                 {
-                    Y_XML_Standalone(xml,Slot, Y_XML_Attr_Setw(slot.blockSize,8) << Y_XML_Attr(slot.size) );
+                    Y_XML_Standalone(xml,Slot, Y_XML_Attr_Setw(slot.blockBytes,6) << Y_XML_Attr(slot.size) );
                 }
             }
         }
