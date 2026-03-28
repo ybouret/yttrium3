@@ -177,6 +177,7 @@ namespace Yttrium
                 // sanity check
                 //--------------------------------------------------------------
                 assert(0!=chunk);
+                assert(clist.owns(chunk));
                 assert(chunk->stillAvailable);
                 assert(ready>=chunk->stillAvailable);
                 assert( countReady() == ready);
@@ -225,6 +226,9 @@ namespace Yttrium
             SEARCH_BOTH:
                 assert(0!=lower);
                 assert(0!=upper);
+                assert(clist.owns(lower));
+                assert(clist.owns(upper));
+                assert(lower->next == upper->prev);
 
                 if(lower->stillAvailable)      return acquireBlock(lower);
                 if( 0 == (lower=lower->prev) ) return searchNext(upper);
@@ -241,27 +245,48 @@ namespace Yttrium
             void   *Arena:: acquire()
             {
                 Y_Lock(access);
-
-                assert(0!=acquiring);
+                
+                assert( 0!=acquiring );
+                assert( clist.owns(acquiring));
                 assert( countReady() == ready );
+                
                 if(ready>0)
                 {
                     if(acquiring->stillAvailable)
-                        return acquireBlock(acquiring); // cached
+                        return acquireBlock(acquiring); // cached!
                     else
                     {
+                        assert(0==acquiring->stillAvailable);
                         Chunk * const lower = acquiring->prev;
                         Chunk * const upper = acquiring->next;
                         if(lower)
-                            return upper ? searchBoth(lower,upper) : searchPrev(lower);
+                        {
+                            assert(acquiring!=clist.head);
+                            assert(lower->next==acquiring);
+                            if(upper)
+                            {
+                                assert(acquiring!=clist.tail);
+                                assert(upper->prev==acquiring);
+                                return searchBoth(lower,upper);
+                            }
+                            else
+                            {
+                                assert(acquiring==clist.tail);
+                                return searchPrev(lower);
+                            }
+                        }
                         else
                         {
+                            assert(acquiring==clist.head);
+                            assert(0!=upper);
+                            assert(upper->prev==acquiring);
                             return searchNext(upper);
                         }
                     }
                 }
                 else
                 {
+                    assert(0==ready);
                     assert(0==empty);
                     assert(0==countReady());
                     return acquireBlock( newChunk() );
@@ -290,6 +315,7 @@ namespace Yttrium
                 
                 assert(0!=blockSize);
                 assert(0!=releasing);
+                assert(clist.owns(releasing));
 
                 //--------------------------------------------------------------
                 //

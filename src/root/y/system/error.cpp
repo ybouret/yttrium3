@@ -67,7 +67,10 @@ namespace Yttrium
 #endif
 
 #if defined(Y_Darwin)
-#include <mach/mach.h>
+extern "C"
+{
+    const char * Yttrium_mach_error_string(const int);
+};
 
 namespace Yttrium
 {
@@ -79,7 +82,7 @@ namespace Yttrium
         {
             assert(NULL!=errorBuffer);
             assert(errorLength>0);
-            return Yttrium_Strcpy(errorBuffer, errorLength, mach_error_string(errorCode));
+            return Yttrium_Strcpy(errorBuffer, errorLength, Yttrium_mach_error_string(errorCode));
         }
     }
 }

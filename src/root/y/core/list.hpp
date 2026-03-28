@@ -5,7 +5,6 @@
 #ifndef Y_Core_List_Included
 #define Y_Core_List_Included
 
-
 #include "y/core/linked.hpp"
 #include <cassert>
 
@@ -25,6 +24,9 @@ namespace Yttrium
 /**/ assert(0==(L).size);         \
 /**/ assert(0==(L).head);         \
 /**/ assert(0==(L).tail)
+
+
+
 
         //______________________________________________________________________
         //
@@ -428,6 +430,61 @@ namespace Yttrium
                 return node;
             }
 
+
+#define Y_Core_List_Wrong(EXPR) \
+do { const bool res = (EXPR); if(res) { std::cerr << __FILE__ << ':' << __LINE__ << ": bad " <<  #EXPR << std::endl; return false; } } while(false)
+
+            inline bool healthy() const noexcept
+            {
+                switch(size)
+                {
+                    case 0:
+                        Y_Core_List_Wrong(head);
+                        Y_Core_List_Wrong(tail);
+                        return true;
+
+                    case 1:
+                        Y_Core_List_Wrong(!head);
+                        Y_Core_List_Wrong(!tail);
+                        Y_Core_List_Wrong(head!=tail);
+                        Y_Core_List_Wrong(head->prev);
+                        Y_Core_List_Wrong(tail->next);
+                        return true;
+
+                    case 2:
+                        Y_Core_List_Wrong(!head);
+                        Y_Core_List_Wrong(!tail);
+                        Y_Core_List_Wrong(head==tail);
+                        Y_Core_List_Wrong(head->prev);
+                        Y_Core_List_Wrong(tail->next);
+                        Y_Core_List_Wrong(head->next!=tail);
+                        Y_Core_List_Wrong(tail->prev!=head);
+                        return true;
+
+                    default:
+                        break;
+                }
+
+                Y_Core_List_Wrong(!head);
+                Y_Core_List_Wrong(!tail);
+                Y_Core_List_Wrong(head==tail);
+                Y_Core_List_Wrong(head->prev);
+                Y_Core_List_Wrong(tail->next);
+                Y_Core_List_Wrong(head->next==tail);
+                Y_Core_List_Wrong(head->next==0);
+                Y_Core_List_Wrong(tail->prev==head);
+                Y_Core_List_Wrong(tail->prev==0);
+
+                const NODE * node = head->next;
+                for(size_t n=size-2;n>0;--n,node=node->next)
+                {
+                    Y_Core_List_Wrong(node==0);
+                    Y_Core_List_Wrong(node->next==0);
+                    Y_Core_List_Wrong(node->prev==0);
+                }
+                Y_Core_List_Wrong(node!=tail);
+                return true;
+            }
 
             //__________________________________________________________________
             //
