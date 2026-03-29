@@ -1,5 +1,5 @@
 
-#include "y/config/platform.h"
+#include "y/config/setup.h"
 
 #if defined(Y_Darwin)
 
