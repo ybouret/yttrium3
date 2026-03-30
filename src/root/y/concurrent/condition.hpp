@@ -19,6 +19,10 @@ namespace Yttrium
             explicit Condition();
             virtual ~Condition() noexcept;
 
+
+            void signal()    noexcept;
+            void broadcast() noexcept;
+
         private:
             SystemCondition * const handle;
             Y_Disable_Copy_And_Assign(Condition);
