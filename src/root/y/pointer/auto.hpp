@@ -101,4 +101,4 @@ namespace Yttrium
 
 }
 
-#endif
+#endif // !Y_Pointer_Auto_Included

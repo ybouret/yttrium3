@@ -64,5 +64,5 @@ namespace Yttrium
 
 }
 
-#endif
+#endif // !Y_Pointer_Keyed_Included
 

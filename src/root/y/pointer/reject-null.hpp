@@ -90,5 +90,5 @@ namespace Yttrium
     }
 }
 
-#endif
+#endif // !Y_Pointer_RejectNull_Included
 

@@ -90,6 +90,6 @@ namespace Yttrium
     }
 }
 
-#endif
+#endif // !Y_Pointer_Smart_Included
 
 
