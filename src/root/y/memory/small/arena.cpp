@@ -26,8 +26,7 @@ namespace Yttrium
                 while(clist.size)
                 {
                     Chunk * const chunk = clist.popHead();
-                    if(!chunk->isEmpty())
-                    {
+                    if(!chunk->isEmpty()) {
                         std::cerr << "** Memory::Arena[" << blockSize << "] missing #" << chunk->missing() << std::endl;
                     }
                     allocator.put(chunk);

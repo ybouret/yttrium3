@@ -9,6 +9,7 @@
 #include "y/calculus/alignment.hpp"
 #include "y/memory/allocator.hpp"
 #include "y/ability/logging.hpp"
+#include "y/ability/lockable.hpp"
 
 namespace Yttrium
 {
@@ -26,7 +27,7 @@ namespace Yttrium
             //
             //
             //__________________________________________________________________
-            class Blocks : public Logging
+            class Blocks : public Lockable, public Logging
             {
             public:
                 //______________________________________________________________
@@ -62,6 +63,15 @@ namespace Yttrium
                 virtual ~Blocks() noexcept;
 
                 virtual void toXML(XML::Log &) const;
+
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
+                virtual void lock() noexcept;
+                virtual void unlock() noexcept;
 
                 //______________________________________________________________
                 //

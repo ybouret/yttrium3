@@ -14,6 +14,8 @@ namespace Yttrium
 
             Blocks:: Blocks(Memory::Book &userBook,
                             Lockable     &userLock) noexcept:
+            Lockable(),
+            Logging(),
             table(0),
             acquiring(0),
             releasing(0),
@@ -24,6 +26,17 @@ namespace Yttrium
             {
                 Coerce(table) = static_cast<Slot *>( Y_BZero(wksp) );
                 for(size_t i=0;i<TableSize;++i) new( table+i ) Slot();
+            }
+
+            void Blocks:: lock() noexcept
+            {
+                arena.access.lock();
+            }
+
+
+            void Blocks:: unlock() noexcept
+            {
+                arena.access.unlock();
             }
 
             Blocks:: ~Blocks() noexcept
