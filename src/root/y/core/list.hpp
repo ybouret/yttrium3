@@ -430,7 +430,7 @@ namespace Yttrium
                 return node;
             }
 
-
+#if 0
 #define Y_Core_List_Wrong(EXPR) \
 do { const bool res = (EXPR); if(res) { std::cerr << __FILE__ << ':' << __LINE__ << ": bad " <<  #EXPR << std::endl; return false; } } while(false)
 
@@ -485,7 +485,7 @@ do { const bool res = (EXPR); if(res) { std::cerr << __FILE__ << ':' << __LINE__
                 Y_Core_List_Wrong(node!=tail);
                 return true;
             }
-
+#endif
             //__________________________________________________________________
             //
             //

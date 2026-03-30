@@ -282,9 +282,9 @@ namespace Yttrium
                 const Code::Slot &slot = code->slots[bs];
                 if(slot.size)
                 {
-                    const size_t bs       = slot.blockBytes;
+                    const size_t bytes    = slot.blockBytes;
                     const size_t available = slot.size;
-                    Y_XML_Standalone(xml,Slot, Y_XML_Attr_Setw(bs,6) << Y_XML_Attr(available) );
+                    Y_XML_Standalone(xml,Slot, Y_XML_Attr_Setw(bytes,6) << Y_XML_Attr(available) );
                 }
             }
         }

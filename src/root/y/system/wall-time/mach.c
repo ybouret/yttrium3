@@ -33,7 +33,7 @@ long double Yttrium_mach_calibrate(int * const err)
 #else
 
 
-uint64_t Yttrium_mach_absolute_time()
+uint64_t Yttrium_mach_absolute_time(void)
 {
     return 0;
 }
