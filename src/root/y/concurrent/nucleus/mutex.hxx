@@ -1,4 +1,3 @@
-#include "y/concurrent/mutex.hpp"
 
 namespace Yttrium
 {
@@ -28,6 +27,8 @@ namespace Yttrium
     }
 
 }
+
+#include "y/concurrent/mutex.hpp"
 
 namespace Yttrium
 {

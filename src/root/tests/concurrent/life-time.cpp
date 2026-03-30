@@ -9,6 +9,9 @@ Y_UTEST(concurrent_life_time)
 {
     Y_Show_LifeTimeFor(ConcurrentNucleus);
     Y_Show_LifeTimeFor(MemoryGlobal);
+    Y_Show_LifeTimeFor(MemoryPooled);
+    Y_Show_LifeTimeFor(MemoryDyadic);
+    Y_Show_LifeTimeFor(MemoryArchon);
 
 }
 Y_UDONE()

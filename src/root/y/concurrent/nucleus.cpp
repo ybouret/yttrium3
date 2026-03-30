@@ -233,12 +233,11 @@ namespace Yttrium
 }
 
 #include "nucleus/allocator.hxx"
-
-
-
 #include "nucleus/factory.hxx"
 #include "nucleus/mutex.hxx"
 #include "nucleus/thread.hxx"
+#include "nucleus/condition.hxx"
+
 
 #include "y/stream/xmlog.hpp"
 
