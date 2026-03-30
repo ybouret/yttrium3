@@ -224,7 +224,7 @@ namespace {
 
         Core::Rand ran(seed);
         Block      blocks[512];
-        Wad        wads[512];
+        //Wad        wads[512];
 
         //Torture(*params.nucleus,         blocks, Y_Static_Size(blocks), ran);
         //Torture( params.nucleus->book,   wads,   Y_Static_Size(wads),   ran);

@@ -6,6 +6,7 @@
 #define Y_Concurrent_FakeLock_Included 1
 
 #include "y/ability/latch.hpp"
+#include "y/ascii/base64/naming.hpp"
 
 namespace Yttrium
 {
@@ -20,9 +21,11 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class FakeLock : public Latch
+        class FakeLock : public Latch, public NamedAddress
         {
         public:
+            static bool Verbose;
+            
             //__________________________________________________________________
             //
             //
@@ -52,7 +55,7 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(FakeLock); //!< discarding
-           
+            void * self() noexcept;
         };
 
     }
