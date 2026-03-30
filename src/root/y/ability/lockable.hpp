@@ -83,7 +83,7 @@ namespace Yttrium
     //! declare and use the giant lock
 #define Y_Giant_Lock() static Yttrium::Lockable &giantLock = Yttrium::Lockable::Giant(); Y_Lock(giantLock)
 
-
+    //! printing with global lock
 #define Y_Locked_Print(OS,MSG) do { Y_Giant_Lock(); ((OS) << MSG << std::endl).flush(); } while(false)
 
 }

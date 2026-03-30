@@ -111,6 +111,7 @@ namespace Yttrium
                 House<Arena>   house;            //!< helper to setup arenas
                 void *         wksp[TableWords]; //!< inner static memory
 
+                //! create a new arena from house \param blockSize arena block size \return new ready arena
                 Arena * newArena(const size_t blockSize);
             };
         }
