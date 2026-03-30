@@ -17,6 +17,7 @@ y/random
 y/system
 y/system/wall-time
 y/ascii
+y/ascii/base64
 y/format
 y/concurrent
 y/concurrent/nucleus

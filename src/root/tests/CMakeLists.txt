@@ -70,6 +70,6 @@ Y_UTEST(memory:archon)
 
 Y_UTEST(pointer:auto)
 
-
+Y_UTEST(ascii:base64)
 
 
