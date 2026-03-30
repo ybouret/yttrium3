@@ -9,7 +9,8 @@ concurrent
 memory
 memory/small
 memory/plastic
-pointer)
+pointer
+ascii)
 
 Y_LinkLibraries(test-root)
 

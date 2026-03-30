@@ -57,6 +57,9 @@ Y_UTEST_DECL(8)
 
 
     Y_UTEST(pointer_auto);
+
+    Y_UTEST(ascii_base64);
+
 }
 Y_UTEST_EXEC()
 
