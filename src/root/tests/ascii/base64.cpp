@@ -1,5 +1,5 @@
 #include "y/ascii/base64/encoding.hpp"
-#include "y/ascii/base64/metrics.hpp"
+#include "y/ascii/base64/naming.hpp"
 #include "y/libc/block/zero.h"
 #include "y/utest/run.hpp"
 
@@ -87,6 +87,10 @@ Y_UTEST(ascii_base64)
     Y_PRINTV( ASCII::Base64::CharsFor<6>::Value );
     Y_PRINTV( ASCII::Base64::CharsFor<7>::Value );
     Y_PRINTV( ASCII::Base64::CharsFor<8>::Value );
+
+    const ASCII::Base64::Naming<void *> id = out;
+
+    std::cerr << "id=" << id << std::endl;
 
 }
 Y_UDONE()

@@ -100,7 +100,46 @@ namespace Yttrium
                 out[3] = table[u3];
             };
 
-           
+            size_t Encoding:: Encode(char *             output,
+                                     const uint8_t *    input,
+                                     const size_t       length,
+                                     const bool         pad,
+                                     const char * const table) noexcept
+            {
+                static const size_t three = 3;
+                assert(!(0==output&&length>0));
+                assert(!(0==input&&length>0));
+
+                const size_t num3To4 = length / three;
+                size_t       result  = num3To4 * 4;
+                for(size_t i=num3To4;i>0;--i)
+                {
+                    Encode3(output,input[0],input[1],input[2],table);
+                    output += 4;
+                    input  += 3;
+                }
+
+                switch(length%three)
+                {
+                    case 1:
+                        Encode1(output,input[0],pad,table);
+                        result += pad ? 4 : 2;
+                        break;
+
+                    case 2:
+                        Encode2(output,input[0],input[1],pad,table);
+                        result += pad ? 4 : 3;
+                        break;
+                        
+                    default:
+                        assert(0==(length%three));
+                        break;
+
+                }
+
+                return result;
+
+            }
         }
 
     }

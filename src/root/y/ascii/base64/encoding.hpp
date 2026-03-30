@@ -62,6 +62,8 @@ namespace Yttrium
                  */
                 static void    Encode3(char * const out, const uint8_t b0, const uint8_t b1, const uint8_t b2, const char * const table = STD) noexcept;
 
+
+                static size_t Encode(char * output, const uint8_t * input, const size_t length, const bool pad = true, const char * const table = STD) noexcept;
             };
 
 
