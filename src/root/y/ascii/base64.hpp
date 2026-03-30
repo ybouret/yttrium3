@@ -3,15 +3,24 @@
 #ifndef Y_ASCII_Base64_Included
 #define Y_ASCII_Base64_Included
 
-#include "y/config/compiler.h"
+#include "y/calculus/alignment.hpp"
 
 namespace Yttrium
 {
     namespace ASCII
     {
+
+        //______________________________________________________________________
+        //
+        //
+        //
         //! Base64 encoding and decoding low-level functions
+        //
+        //
+        //______________________________________________________________________
         struct Base64
         {
+
             static const char    STD[64];     //!< standard table
             static const char    URL[64];     //!< url table
             static const char    Pad = '=';   //!< padding symbol
@@ -49,7 +58,28 @@ namespace Yttrium
              */
             static void    Encode3(char * const out, const uint8_t b0, const uint8_t b1, const uint8_t b2, const char * const table = STD) noexcept;
 
+            //! compute output bytes for given input
+            template <size_t INPUT> struct BytesFor
+            {
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+                static const size_t _3 = 3;
+                static const size_t q  = INPUT/_3;
+                static const size_t r  = INPUT%_3;
+                static const size_t n  = q + ( (r>0) ? 1 : 0 );
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+                static const size_t Value = n*4; //!< value
+            };
+
+            //! compute output chars for given input
+            template <size_t INPUT> struct CharsFor
+            {
+                static const size_t Required = BytesFor<INPUT>::Value + 1; //!< bytes + '0'
+                static const size_t Value    = Alignment::SystemMemory::CeilOf<Required>::Value; //!< valye
+            };
+
         };
+
+
     }
 }
 

@@ -65,5 +65,27 @@ Y_UTEST(ascii_base64)
     Y_BZero(out);
     ASCII::Base64::Encode3(out,'A','K','Z');
     std::cerr << out << std::endl;
+
+    Y_PRINTV( ASCII::Base64::BytesFor<0>::Value );
+    Y_PRINTV( ASCII::Base64::BytesFor<1>::Value );
+    Y_PRINTV( ASCII::Base64::BytesFor<2>::Value );
+    Y_PRINTV( ASCII::Base64::BytesFor<3>::Value );
+    Y_PRINTV( ASCII::Base64::BytesFor<4>::Value );
+    Y_PRINTV( ASCII::Base64::BytesFor<5>::Value );
+    Y_PRINTV( ASCII::Base64::BytesFor<6>::Value );
+    Y_PRINTV( ASCII::Base64::BytesFor<7>::Value );
+    Y_PRINTV( ASCII::Base64::BytesFor<8>::Value );
+    std::cerr << std::endl;
+    
+    Y_PRINTV( ASCII::Base64::CharsFor<0>::Value );
+    Y_PRINTV( ASCII::Base64::CharsFor<1>::Value );
+    Y_PRINTV( ASCII::Base64::CharsFor<2>::Value );
+    Y_PRINTV( ASCII::Base64::CharsFor<3>::Value );
+    Y_PRINTV( ASCII::Base64::CharsFor<4>::Value );
+    Y_PRINTV( ASCII::Base64::CharsFor<5>::Value );
+    Y_PRINTV( ASCII::Base64::CharsFor<6>::Value );
+    Y_PRINTV( ASCII::Base64::CharsFor<7>::Value );
+    Y_PRINTV( ASCII::Base64::CharsFor<8>::Value );
+
 }
 Y_UDONE()
