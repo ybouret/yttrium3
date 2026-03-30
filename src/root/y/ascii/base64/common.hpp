@@ -13,9 +13,10 @@ namespace Yttrium
 
         namespace Base64
         {
+            //! common data for Base64
             struct Common
             {
-                static const char Pad = '=';
+                static const char Pad = '='; //!< padding char
             };
         }
 
