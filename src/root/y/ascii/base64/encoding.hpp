@@ -4,6 +4,7 @@
 #ifndef Y_ASCII_Base64_Encoding_Included
 #define Y_ASCII_Base64_Encoding_Included
 
+#include "y/ascii/base64/common.hpp"
 #include "y/calculus/alignment.hpp"
 
 namespace Yttrium
@@ -19,16 +20,15 @@ namespace Yttrium
             //
             //
             //
-            //! Base64 encoding   low-level functions
+            //! Base64 encoding low-level functions
             //
             //
             //__________________________________________________________________
             struct Encoding
             {
-                static const char    STD[64];     //!< standard table
-                static const char    URL[64];     //!< url table
-                static const char    Pad = '=';   //!< padding symbol
-                static const uint8_t LUT[256];    //!< reverse look-up-table, 255 means error
+                static const char STD[64];           //!< standard table
+                static const char URL[64];           //!< url table
+                static const char Pad = Common::Pad; //!< padding symbol
 
                 //! return encoding byte for LUT \param C char \return 0:63 if encoding, 255 means error
                 static uint8_t GetByte(const char C) noexcept;

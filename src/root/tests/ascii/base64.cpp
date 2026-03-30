@@ -1,4 +1,5 @@
-#include "y/ascii/base64.hpp"
+#include "y/ascii/base64/encoding.hpp"
+#include "y/ascii/base64/metrics.hpp"
 #include "y/libc/block/zero.h"
 #include "y/utest/run.hpp"
 
@@ -46,7 +47,7 @@ Y_UTEST(ascii_base64)
             for(unsigned k=0;k<16;++k,++i)
             {
                 const char c = (char)i;
-                std::cerr << std::setw(3) << (unsigned) ASCII::Base64::Encoding(c);
+                std::cerr << std::setw(3) << (unsigned) ASCII::Base64::Encoding::GetByte(c);
                 if(i<255) std::cerr << ',';
             }
             std::cerr << std::endl;
@@ -55,15 +56,15 @@ Y_UTEST(ascii_base64)
 
     char out[8];
     Y_BZero(out);
-    ASCII::Base64::Encode1(out,'A');
+    ASCII::Base64::Encoding::Encode1(out,'A');
     std::cerr << out << std::endl;
 
     Y_BZero(out);
-    ASCII::Base64::Encode2(out,'A','K');
+    ASCII::Base64::Encoding::Encode2(out,'A','K');
     std::cerr << out << std::endl;
 
     Y_BZero(out);
-    ASCII::Base64::Encode3(out,'A','K','Z');
+    ASCII::Base64::Encoding::Encode3(out,'A','K','Z');
     std::cerr << out << std::endl;
 
     Y_PRINTV( ASCII::Base64::BytesFor<0>::Value );
@@ -76,7 +77,7 @@ Y_UTEST(ascii_base64)
     Y_PRINTV( ASCII::Base64::BytesFor<7>::Value );
     Y_PRINTV( ASCII::Base64::BytesFor<8>::Value );
     std::cerr << std::endl;
-    
+
     Y_PRINTV( ASCII::Base64::CharsFor<0>::Value );
     Y_PRINTV( ASCII::Base64::CharsFor<1>::Value );
     Y_PRINTV( ASCII::Base64::CharsFor<2>::Value );
