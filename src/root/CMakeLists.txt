@@ -23,6 +23,7 @@ y/concurrent
 y/concurrent/nucleus
 y/concurrent/sys
 y/concurrent/singleton
+y/concurrent/windows
 y/calculus
 y/type
 y/memory
