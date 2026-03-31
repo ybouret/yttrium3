@@ -1,9 +1,10 @@
 
 #include "y/concurrent/mutex.hpp"
+#include "y/concurrent/condition.hpp"
 #include "y/concurrent/nucleus.hpp"
 #include "y/system/wall-time.hpp"
 #include "y/utest/run.hpp"
-#include "y/concurrent/thread.hpp"
+#include "y/concurrent/threaded.hpp"
 #include "y/memory/auto-built.hpp"
 #include "y/calculus/alignment.hpp"
 #include "y/core/rand.hpp"
@@ -199,13 +200,17 @@ namespace {
 
     struct Params
     {
-        System::WallTime      * chrono;
         Concurrent::Nucleus   * nucleus;
+        Concurrent::Mutex     * mutex;
+        Concurrent::Condition * cv;
         Memory::Allocator     * global;
         Memory::Allocator     * pooled;
         Memory::Allocator     * dyadic;
         Memory::Allocator     * archon;
+        size_t                  ready;
     };
+
+#define NUM_THREADS 8
 
     static inline
     void MemoryInThread(void * const args)
@@ -213,6 +218,8 @@ namespace {
         assert(0!=args);
         Lockable              & sync    = Lockable::Giant();
         Params                & params  = *static_cast<Params *>(args);
+        Concurrent::Mutex     & mutex   = *params.mutex;
+        Concurrent::Condition & cv      = *params.cv;
         long                    seed    = 0;
         {
             Y_Lock(sync);
@@ -222,13 +229,27 @@ namespace {
             (std::cerr << "In Thread, seed=" << Hexadecimal(c) << std::endl).flush();
         }
 
+        // synchronizing
+        mutex.lock();
+        if(++params.ready>=NUM_THREADS)
+        {
+            (std::cerr << "syncronized!" << std::endl).flush();
+            cv.broadcast();
+        }
+        else
+        {
+            cv.wait(mutex);
+        }
+        mutex.unlock();
+
+
         Core::Rand ran(seed);
         Block      blocks[512];
-        //Wad        wads[512];
+        Wad        wads[512];
 
-        //Torture(*params.nucleus,         blocks, Y_Static_Size(blocks), ran);
+        Torture(*params.nucleus,         blocks, Y_Static_Size(blocks), ran);
         //Torture( params.nucleus->book,   wads,   Y_Static_Size(wads),   ran);
-        Torture(*params.nucleus->blocks, blocks, Y_Static_Size(blocks), ran);
+        //Torture(*params.nucleus->blocks, blocks, Y_Static_Size(blocks), ran);
         //Torture(*params.global,          blocks, Y_Static_Size(blocks), ran);
         //Torture(*params.pooled,          blocks, Y_Static_Size(blocks), ran);
         //Torture(*params.dyadic,          blocks, Y_Static_Size(blocks), ran);
@@ -248,10 +269,11 @@ namespace {
         {
         }
 
-
     private:
         Y_Disable_Copy_And_Assign(MyThread);
     };
+
+
 }
 
 #include "y/stream/xmlog.hpp"
@@ -259,24 +281,28 @@ namespace {
 Y_UTEST(concurrent_memory)
 {
     Concurrent::Singulet::Verbose = true;
-    System::WallTime        chrono;
-    Concurrent::Nucleus   & nucleus = Concurrent::Nucleus::Location();
+    Concurrent::Nucleus   & nucleus = Concurrent::Nucleus::Instance();
+    Concurrent::Mutex       mutex;
+    Concurrent::Condition   cv;
 
     Params params = {
-        &chrono,
-        &nucleus,
+        & nucleus,
+        & mutex,
+        & cv,
         & Memory::Global::Instance(),
         & Memory::Pooled::Instance(),
         & Memory::Dyadic::Instance(),
-        & Memory::Archon::Instance()
+        & Memory::Archon::Instance(),
+        0
     };
 
-    const size_t numThreads = 8;
+    const size_t numThreads = NUM_THREADS;
     void *       wksp[ Alignment::WordsGEQ<numThreads*sizeof(MyThread)>::Count ];
 
     for(size_t cycle=1;cycle<=2;++cycle)
     {
         (std::cerr << "-- cycle " << cycle << std::endl).flush();
+        params.ready = 0;
         Memory::AutoBuilt<MyThread> threads(Y_BZero(wksp),numThreads,params);
     }
 
