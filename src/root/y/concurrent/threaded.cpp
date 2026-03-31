@@ -4,9 +4,9 @@ namespace Yttrium
 {
     namespace Concurrent
     {
-        ThreadSkin * ThreadSkin:: data() noexcept { return this; }
+        Casing * Casing:: data() noexcept { return this; }
 
-        ThreadSkin::  ~ThreadSkin() noexcept {}
+        Casing::  ~Casing() noexcept {}
 
         Threaded:: ~Threaded() noexcept {}
     }

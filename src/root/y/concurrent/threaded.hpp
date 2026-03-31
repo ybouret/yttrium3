@@ -20,7 +20,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class ThreadSkin
+        class Casing
         {
         public:
             //__________________________________________________________________
@@ -29,7 +29,7 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            typedef void (ThreadSkin::*Meth)(void); //!< alias
+            typedef void (Casing::*Meth)(void); //!< alias
 
 
             //__________________________________________________________________
@@ -45,7 +45,7 @@ namespace Yttrium
              \param userMeth method pointer for object
              */
             template <typename OBJECT, typename METHOD> inline
-            explicit ThreadSkin(OBJECT & userHost, METHOD const userMeth) noexcept :
+            explicit Casing(OBJECT & userHost, METHOD const userMeth) noexcept :
             call( Launch0<OBJECT,METHOD> ),
             host( &userHost ),
             meth( MethodToMeth<METHOD>(userMeth) ),
@@ -62,7 +62,7 @@ namespace Yttrium
              \param u        argument for method
              */
             template <typename OBJECT, typename METHOD, typename U> inline
-            explicit ThreadSkin(OBJECT &     userHost,
+            explicit Casing(OBJECT &     userHost,
                                 METHOD const userMeth,
                                 U &          u) noexcept :
             call( Launch1<OBJECT,METHOD,U> ),
@@ -74,12 +74,12 @@ namespace Yttrium
             }
 
             //! cleanup
-            virtual ~ThreadSkin() noexcept;
+            virtual ~Casing() noexcept;
 
 
 
         protected:
-            ThreadSkin * data() noexcept; //!< for threaded \return this
+            Casing * data() noexcept; //!< for threaded \return this
 
             //__________________________________________________________________
             //
@@ -93,7 +93,7 @@ namespace Yttrium
             void *       const arg1; //!< alias
 
         private:
-            Y_Disable_Copy_And_Assign(ThreadSkin); //!< discardded
+            Y_Disable_Copy_And_Assign(Casing); //!< discardded
 
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
@@ -124,9 +124,9 @@ namespace Yttrium
             void Launch0(void * const args)
             {
                 assert(args);
-                ThreadSkin    &self = *static_cast<ThreadSkin *>(args);  assert(self.host);
-                OBJECT &       host = *static_cast<OBJECT *>(self.host); assert(self.meth);
-                METHOD   const func = MethToMethod<METHOD>(self.meth);
+                Casing &     self = *static_cast<Casing *>(args);      assert(self.host);
+                OBJECT &     host = *static_cast<OBJECT *>(self.host); assert(self.meth);
+                METHOD const func = MethToMethod<METHOD>(self.meth);
                 (host.*func)();
             }
 
@@ -134,10 +134,10 @@ namespace Yttrium
             void Launch1(void * const args)
             {
                 assert(args);
-                ThreadSkin    &self = *static_cast<ThreadSkin *>(args);    assert(self.host);
-                OBJECT &       host = *static_cast<OBJECT *>(self.host);   assert(self.meth);
-                METHOD   const func = MethToMethod<METHOD>(self.meth);     assert(self.arg1);
-                U &            arg1 = *static_cast<U *>(self.arg1);
+                Casing &     self = *static_cast<Casing *>(args);    assert(self.host);
+                OBJECT &     host = *static_cast<OBJECT *>(self.host);   assert(self.meth);
+                METHOD const func = MethToMethod<METHOD>(self.meth);     assert(self.arg1);
+                U &          arg1 = *static_cast<U *>(self.arg1);
                 (host.*func)(arg1);
             }
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
@@ -152,7 +152,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Threaded : public ThreadSkin, public Thread
+        class Threaded : public Casing, public Thread
         {
         public:
             //__________________________________________________________________
@@ -170,12 +170,12 @@ namespace Yttrium
             template <typename OBJECT,typename METHOD>
             explicit Threaded(OBJECT &     userHost,
                               METHOD const userMeth) :
-            ThreadSkin(userHost,userMeth),
+            Casing(userHost,userMeth),
             Thread(call,data())
             {
 
             }
-            
+
             //! start object.method(u)
             /**
              \param userHost PERSISTENT object reference
@@ -186,7 +186,7 @@ namespace Yttrium
             explicit Threaded(OBJECT &     userHost,
                               METHOD const userMeth,
                               U           &u) :
-            ThreadSkin(userHost,userMeth,u),
+            Casing(userHost,userMeth,u),
             Thread(call,data())
             {
 
