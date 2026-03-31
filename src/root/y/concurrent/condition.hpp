@@ -12,16 +12,17 @@ namespace Yttrium
     namespace Concurrent
     {
         class SystemCondition;
-
+        class Mutex;
+        
         class Condition
         {
         public:
             explicit Condition();
             virtual ~Condition() noexcept;
 
-
-            void signal()    noexcept;
-            void broadcast() noexcept;
+            void wait(Mutex &) noexcept;
+            void signal()      noexcept;
+            void broadcast()   noexcept;
 
         private:
             SystemCondition * const handle;

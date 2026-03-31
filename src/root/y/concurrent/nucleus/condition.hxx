@@ -29,8 +29,20 @@ namespace Yttrium
 
         void Condition:: signal() noexcept
         {
-            
+            assert(handle);
+            handle->signal();
         }
 
+        void Condition:: broadcast() noexcept
+        {
+            assert(handle);
+            handle->broadcast();
+        }
+
+        void Condition:: wait(Mutex &mutex) noexcept
+        {
+            assert(handle);
+            handle->wait(*mutex.handle);
+        }
     }
 }

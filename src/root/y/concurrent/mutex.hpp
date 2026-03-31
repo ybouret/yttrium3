@@ -12,6 +12,7 @@ namespace Yttrium
     namespace Concurrent
     {
         class SystemMutex;
+        class Condition;
 
         //______________________________________________________________________
         //
@@ -43,10 +44,11 @@ namespace Yttrium
             virtual void unlock()  noexcept;
             virtual bool tryLock() noexcept;
 
-            
+
         private:
             SystemMutex * const handle;       //!< system mutex handle
             Y_Disable_Copy_And_Assign(Mutex); //!< discarded
+            friend class Condition;
         };
 
     }
