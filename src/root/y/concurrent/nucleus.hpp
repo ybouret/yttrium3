@@ -86,8 +86,8 @@ namespace Yttrium
             SystemThread * acquireSystemThread(Thread &);                      //!< inner acquire/setup \return running SystemThread
             void           releaseSystemThread(SystemThread * const) noexcept; //!< wait/release system thread
 
-            SystemCondition * acquireSystemCondition();
-            void              releaseSystemCondition(SystemCondition * const) noexcept;
+            SystemCondition * acquireSystemCondition();                                 //!< inner acquire/setup \return ready system condition
+            void              releaseSystemCondition(SystemCondition * const) noexcept; //!< release system condition
 
             //__________________________________________________________________
             //

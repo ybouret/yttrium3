@@ -13,20 +13,41 @@ namespace Yttrium
     {
         class SystemCondition;
         class Mutex;
-        
+
+
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! condition variable
+        //
+        //
+        //______________________________________________________________________
         class Condition
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
             explicit Condition();
             virtual ~Condition() noexcept;
 
-            void wait(Mutex &) noexcept;
-            void signal()      noexcept;
-            void broadcast()   noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            void wait(Mutex &) noexcept; //!< wait on a locked mutex
+            void signal()      noexcept; //!< wake up one waiting thread
+            void broadcast()   noexcept; //!< wake up all waiting threads
 
         private:
-            SystemCondition * const handle;
-            Y_Disable_Copy_And_Assign(Condition);
+            SystemCondition * const handle;       //!< inner data
+            Y_Disable_Copy_And_Assign(Condition); //!< discarded
         };
     }
 

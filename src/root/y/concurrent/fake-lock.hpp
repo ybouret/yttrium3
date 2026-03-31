@@ -24,7 +24,7 @@ namespace Yttrium
         class FakeLock : public Latch, public NamedAddress
         {
         public:
-            static bool Verbose;
+            static bool Verbose; //!< helper to trace calls
             
             //__________________________________________________________________
             //
@@ -55,7 +55,7 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(FakeLock); //!< discarding
-            void * self() noexcept;
+            void * self() noexcept;              //!< helper \return this
         };
 
     }
