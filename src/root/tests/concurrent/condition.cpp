@@ -52,24 +52,7 @@ Y_UTEST(concurrent_condition)
     Concurrent::Thread t2(ThreadProc,&params);
     Concurrent::Thread t3(ThreadProc,&params);
 
-    if(false)
-    {
-        mutex.lock();
-        if(params.ready<3)
-        {
-            cond.wait(mutex);
-            Y_CHECK(3==params.ready);
-        }
-        Y_CHECK(3==params.ready);
-        mutex.unlock();
-    }
-
-   // cond.signal();
-   // cond.signal();
-   // cond.signal();
-
-
-
+    
 
 
 

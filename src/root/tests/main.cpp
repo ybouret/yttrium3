@@ -38,6 +38,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(concurrent_ram);
     Y_UTEST(concurrent_mutex);
     Y_UTEST(concurrent_thread);
+    Y_UTEST(concurrent_threaded);
     Y_UTEST(concurrent_memory);
     Y_UTEST(concurrent_life_time);
     Y_UTEST(concurrent_fake_lock);
