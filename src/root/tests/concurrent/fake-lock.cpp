@@ -43,7 +43,7 @@ namespace
     class Dummy : public Concurrent::FakeLock, public AutoLocking<Dummy>
     {
     public:
-        inline Dummy() noexcept : Concurrent::FakeLock(), AutoLocking<Dummy>(*this)
+        inline Dummy() noexcept : Concurrent::FakeLock(), AutoLocking<Dummy>( self() )
         {
         }
 
@@ -59,6 +59,7 @@ namespace
 
     private:
         Y_Disable_Copy_And_Assign(Dummy);
+        inline Dummy& self() noexcept { return *this;  }
     };
 }
 

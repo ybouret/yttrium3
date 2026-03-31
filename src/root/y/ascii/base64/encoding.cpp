@@ -29,7 +29,7 @@ namespace Yttrium
             {
                 assert(table);
                 for(size_t i=0;i<64;++i)
-                    if( C == table[i]) return i;
+                    if( C == table[i]) return (uint8_t)i;
                 return 0xff;
             }
 

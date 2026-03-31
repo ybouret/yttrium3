@@ -115,6 +115,7 @@ namespace Yttrium
             conditions(arena),
             threads(arena)
             {
+            
             }
 
             virtual ~Data() noexcept
