@@ -43,6 +43,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(concurrent_life_time);
     Y_UTEST(concurrent_fake_lock);
     Y_UTEST(concurrent_condition);
+    Y_UTEST(concurrent_member);
 
 
     Y_UTEST(memory_small_chunk);

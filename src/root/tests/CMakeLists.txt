@@ -55,6 +55,7 @@ Y_UTEST(concurrent:memory)
 Y_UTEST(concurrent:life_time)
 Y_UTEST(concurrent:fake_lock)
 Y_UTEST(concurrent:condition)
+Y_UTEST(concurrent:member)
 
 Y_UTEST(memory:small:chunk)
 Y_UTEST(memory:small:arena)

@@ -211,7 +211,7 @@ namespace {
     };
 
 #define NUM_THREADS 8
-
+#define NUM_BLOCKS  512
 
     static inline
     void synchronize(const char * const     msg,
@@ -232,6 +232,7 @@ namespace {
         }
         mutex.unlock();
     }
+
 
     static inline
     void MemoryInThread(void * const args)
@@ -254,12 +255,15 @@ namespace {
         // synchronizing
 
         Core::Rand ran(seed);
-        Block      blocks[512];
-        Wad        wads[512];
+        Block      blocks[NUM_BLOCKS];
+        Wad        wads[NUM_BLOCKS];
 
         synchronize("synchronized for nucleus",cv,mutex,ready);
-        Torture(*params.nucleus,         blocks, Y_Static_Size(blocks), ran);
-        //Torture( params.nucleus->book,   wads,   Y_Static_Size(wads),   ran);
+        Torture(*params.nucleus,blocks,Y_Static_Size(blocks),ran);
+
+        synchronize("synchronized for book",cv,mutex,ready);
+        Torture( params.nucleus->book,wads,Y_Static_Size(wads),ran);
+
         //Torture(*params.nucleus->blocks, blocks, Y_Static_Size(blocks), ran);
         //Torture(*params.global,          blocks, Y_Static_Size(blocks), ran);
         //Torture(*params.pooled,          blocks, Y_Static_Size(blocks), ran);
