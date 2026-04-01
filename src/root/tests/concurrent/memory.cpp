@@ -276,7 +276,7 @@ namespace {
 #endif
 
         synchronize("synchronized for dyadic",cv,mutex,ready);
-        Torture(*params.dyadic,          blocks, Y_Static_Size(blocks), ran);
+        Torture(*params.dyadic,blocks,Y_Static_Size(blocks),ran);
         //Torture(*params.archon,          blocks, Y_Static_Size(blocks), ran);
 
         synchronize("returning\n",cv,mutex,ready);
