@@ -102,6 +102,8 @@ namespace Yttrium
                  */
                 Arena & operator[](const size_t blockSize);
 
+                void fetch(Arena * &pArena, const size_t blockSize);
+
                 //! check ownership
                 /**
                  \param blockAddr address to look for
@@ -123,6 +125,8 @@ namespace Yttrium
 
                 //! create a new arena from house \param blockSize arena block size \return new ready arena
                 Arena * newArena(const size_t blockSize);
+                void fetch_(Arena * &pArena, const size_t blockSize);
+
             };
         }
 

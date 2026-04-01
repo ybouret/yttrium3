@@ -14,8 +14,7 @@ namespace Yttrium
         namespace Small
         {
 
-            const Arena::Chunks * Arena:: operator->() const noexcept
-            {
+            const Arena::Chunks * Arena:: operator->() const noexcept {
                 return &clist;
             }
 
@@ -26,7 +25,8 @@ namespace Yttrium
                 while(clist.size)
                 {
                     Chunk * const chunk = clist.popHead();
-                    if(!chunk->isEmpty()) {
+                    if(!chunk->isEmpty())
+                    {
                         std::cerr << "** Memory::Arena[" << blockSize << "] missing #" << chunk->missing() << std::endl;
                     }
                     allocator.put(chunk);
@@ -196,13 +196,85 @@ namespace Yttrium
                 return p;
             }
 
+
+            void * Arena:: acquire()
+            {
+                Y_Lock(access);
+
+                // sanity check
+                assert( 0!=acquiring );
+                assert( clist.owns(acquiring));
+                assert( countReady() == ready );
+
+                if(ready>0)
+                {
+                    if(acquiring->stillAvailable)
+                        return acquireBlock(acquiring); // cached!
+                    else
+                    {
+                        static const unsigned LOWER = 0x01;
+                        static const unsigned UPPER = 0x02;
+                        static const unsigned BIDIR = LOWER | UPPER;
+                        assert(0==acquiring->stillAvailable);
+                        Chunk * lower = acquiring->prev;
+                        Chunk * upper = acquiring->next;
+                        assert(upper||lower);
+                        unsigned flag = 0;
+                        if( lower ) { assert(lower->next==acquiring); flag |= LOWER; }
+                        if( upper ) { assert(upper->prev==acquiring); flag |= UPPER; }
+                        assert(LOWER==flag || UPPER==flag || BIDIR==flag);
+
+                        switch(flag)
+                        {
+                            case LOWER: goto LOWER_ONLY;
+                            case UPPER: goto UPPER_ONLY;
+                            case BIDIR: goto INTERLACED;
+                            default:
+                                break;
+                        }
+                        Libc::Error::Critical(EINVAL,"corrupted search flag=%u",flag);
+
+                    INTERLACED:
+                        assert(0!=lower); assert(0!=upper);
+                        if(lower->stillAvailable)  return acquireBlock(lower);
+                        if(0==(lower=lower->prev)) goto UPPER_ONLY;
+                        if(upper->stillAvailable)  return acquireBlock(upper);
+                        if(0==(upper=upper->next)) goto LOWER_ONLY;
+                        goto INTERLACED;
+
+                    UPPER_ONLY:
+                        assert(0==lower);
+                        assert(0!=upper);
+                        if(upper->stillAvailable)  return acquireBlock(upper);
+                        upper = upper->next;
+                        assert(0!=upper);
+                        goto UPPER_ONLY;
+
+                    LOWER_ONLY:
+                        assert(0!=lower);
+                        assert(0==upper);
+                        if(lower->stillAvailable)  return acquireBlock(lower);
+                        lower=lower->prev;
+                        assert(0!=lower);
+                        goto LOWER_ONLY;
+                    }
+                }
+                else
+                {
+                    assert(0==empty);
+                    return acquireBlock( newChunk() );
+                }
+
+
+            }
+
             void * Arena:: searchPrev(Chunk *lower) noexcept
             {
                 assert(0!=lower);
             TRY:
                 if(lower->stillAvailable)
                     return acquireBlock(lower);
-                lower = lower->next;
+                lower = lower->prev;
                 if(!lower) { std::cerr << "no lower at blockSize=" << blockSize << std::endl; }
                 assert(0!=lower);
                 goto TRY;
@@ -240,11 +312,11 @@ namespace Yttrium
                 goto SEARCH_BOTH;
             }
 
-
+#if 0
             void   *Arena:: acquire()
             {
                 Y_Lock(access);
-                
+
                 assert( 0!=acquiring );
                 assert( clist.owns(acquiring));
                 assert( countReady() == ready );
@@ -292,6 +364,7 @@ namespace Yttrium
                 }
 
             }
+#endif
 
         }
 

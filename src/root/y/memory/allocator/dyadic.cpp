@@ -11,18 +11,43 @@ namespace Yttrium
     {
         const char * const Dyadic:: CallSign = "Memory::Dyadic";
 
+        //----------------------------------------------------------------------
+        //
+        //
+        //
+        // encapsulated code
+        //
+        //
+        //
+        //----------------------------------------------------------------------
         class Dyadic:: Code
         {
         public:
-            static const size_t   _1           = 1;
-            static const size_t   MinPageBytes = Metrics::MinPageBytes;
-            static const unsigned MinPageShift = Metrics::MinPageShift;
-            static const unsigned MaxCommShift = MinPageShift - 1;
-            static const size_t   MaxCommBytes = _1 << MaxCommShift;
-            static const unsigned NumSmall     = MaxCommShift+1;
-            typedef Small::Arena  Arena;
-            typedef Arena *       ArenaPtr;
+            //------------------------------------------------------------------
+            //
+            //
+            // Definitions
+            //
+            //
+            //------------------------------------------------------------------
+            static const size_t   _1           = 1;                     //!< alias
+            static const size_t   MinPageBytes = Metrics::MinPageBytes; //!< sent to book
+            static const unsigned MinPageShift = Metrics::MinPageShift; //!< sent to book
+            static const unsigned MaxCommShift = MinPageShift - 1;      //!< sent to arena
+            static const size_t   MaxCommBytes = _1 << MaxCommShift;    //!< sent to arena
+            static const unsigned NumSmall     = MaxCommShift+1;        //!< auxiliary arenas
+            typedef Small::Arena  Arena;    //!< alias
+            typedef Arena *       ArenaPtr; //!< alias
 
+            //------------------------------------------------------------------
+            //
+            //
+            // C++
+            //
+            //
+            //------------------------------------------------------------------
+
+            //! setup \param nucleus Nucleus instance
             inline Code(Concurrent::Nucleus &nucleus) :
             dyadicArena(),
             smallBlocks(*nucleus.blocks),
@@ -33,10 +58,18 @@ namespace Yttrium
                 std::cerr << "Dyadic MaxCommBytes=" << MaxCommBytes << std::endl;
             }
 
+            //! cleanup
             inline ~Code() noexcept
             {
             }
 
+            //------------------------------------------------------------------
+            //
+            //
+            // Methods
+            //
+            //
+            //------------------------------------------------------------------
             inline void * acquire(const unsigned blockShift)
             {
 
@@ -47,7 +80,8 @@ namespace Yttrium
                     if(0==pArena)
                     {
                         Y_Locked_Print(std::cerr,"new Arena@" << blockBytes);
-                        pArena = &smallBlocks[blockBytes];
+                        //pArena = &smallBlocks[blockBytes];
+                        smallBlocks.fetch(pArena,blockBytes);
                     }
 
                     assert(0!=pArena);

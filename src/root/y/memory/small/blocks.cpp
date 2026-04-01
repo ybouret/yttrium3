@@ -137,10 +137,19 @@ namespace Yttrium
 
             }
 
-            Arena & Blocks:: operator[](const size_t blockSize)
+
+
+
+            void Blocks:: fetch(Arena *&pArena, const size_t blockSize)
             {
                 Y_Lock(arena.access);
+                fetch_(pArena,blockSize);
 
+            }
+            void Blocks:: fetch_(Arena * &pArena, const size_t blockSize)
+            {
+                assert(0==pArena);
+                
                 // find slot
                 Slot &slot = table[blockSize&TableMask];
 
@@ -148,12 +157,24 @@ namespace Yttrium
                 for(Arena *a=slot.head;a;a=a->next)
                 {
                     if(blockSize==a->blockSize)
-                        return *slot.moveToHead(a);
+                    {
+                        pArena = slot.moveToHead(a);
+                        return;
+                    }
                 }
 
                 // not found, create a new one
-                return *slot.pushHead( newArena(blockSize) );
+                pArena = slot.pushHead( newArena(blockSize) );
             }
+
+            Arena & Blocks:: operator[](const size_t blockSize)
+            {
+                Y_Lock(arena.access);
+                Arena * p = 0;
+                fetch_(p,blockSize);
+                return *p;
+            }
+
 
         }
 

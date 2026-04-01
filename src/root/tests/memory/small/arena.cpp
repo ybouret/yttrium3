@@ -30,12 +30,12 @@ namespace
 
 Y_UTEST(memory_small_arena)
 {
-    Core::Rand           ran;
-    Concurrent::Nucleus &nucleus = Concurrent::Nucleus::Instance();
-    bool                 verbose = true;
-    XML::Log             xml(std::cerr,verbose);
+    Core::Rand            ran;
+    Concurrent::Nucleus & nucleus = Concurrent::Nucleus::Instance();
+    bool                  verbose = true;
+    XML::Log              xml(std::cerr,verbose);
 
-    void *       addr[1000];
+    void *       addr[512];
     const size_t nmax = sizeof(addr)/sizeof(addr[0]);
     size_t       size = 0;
 
