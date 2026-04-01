@@ -180,33 +180,18 @@ namespace Yttrium
                 return memset(p,0,blockSize);
             }
 
-
-
-            Bricks * Bricks:: Release(void * & blockAddr,
-                                      size_t & blockSize) noexcept
+            Bricks * Bricks:: OwnerOfReturned(Brick * const brick) noexcept
             {
                 static const unsigned FUSION_NONE = 0x00;
                 static const unsigned FUSION_PREV = 0x01;
                 static const unsigned FUSION_NEXT = 0x02;
                 static const unsigned FUSION_BOTH = FUSION_PREV | FUSION_NEXT;
 
-                // sanity check on input
-                assert(0!=blockAddr);
-                assert(blockSize>0);
-                assert(0==(blockSize%sizeof(Brick)));
-
-                // deduce brick and sanity check
-                Brick * const  brick  = static_cast<Brick *>(blockAddr)-1;
-                assert(0!=brick->used);
-                assert(brick->size == blockSize);
-                assert(brick->next);
-
                 // check fusion status
                 Bricks * const bricks = brick->used; assert(bricks->ownsBrick(brick));
                 Brick * const  next   = brick->next;
                 unsigned       flag = (0==next->used) ? FUSION_NEXT : FUSION_NONE;
                 Brick * const  prev   = brick->prev; if(prev && 0==prev->used) flag |= FUSION_PREV;
-                //std::cerr << "flag=" << flag << std::endl;
 
                 // proceed with fusion
                 switch(flag)
@@ -250,10 +235,41 @@ namespace Yttrium
                         assert( CheckGapsOf(bricks) );
                 }
 
+                return bricks;
+            }
+
+            Bricks * Bricks:: Release(void * & blockAddr,
+                                      size_t & blockSize) noexcept
+            {
+
+                // sanity check on input
+                assert(0!=blockAddr);
+                assert(blockSize>0);
+                assert(0==(blockSize%sizeof(Brick)));
+
+                // deduce brick and sanity check
+                Brick * const  brick  = static_cast<Brick *>(blockAddr)-1;
+                assert(0!=brick->used);
+                assert(brick->size == blockSize);
+                assert(brick->next);
+
+                // update state
+                Bricks * const bricks = OwnerOfReturned(brick);
                 blockAddr = 0;
                 blockSize = 0;
                 return bricks;
             }
+
+
+            Bricks * Bricks:: Release(void * const blockAddr) noexcept
+            {
+                assert(0!=blockAddr);
+                Brick * const  brick  = static_cast<Brick *>(blockAddr)-1;
+                assert(0!=brick->used);
+                assert(brick->next);
+                return OwnerOfReturned(brick);
+            }
+
         }
 
     }

@@ -19,7 +19,6 @@ namespace Yttrium
     namespace Memory
     {
         class Book;
-
         namespace Plastic
         {
 
@@ -101,6 +100,10 @@ namespace Yttrium
                  */
                 static unsigned ShiftFor(const size_t blockSize) noexcept;
 
+                void * legacyAcquire(const size_t blockSize);
+                void   legacyRelease(void * const blockAddr) noexcept;
+
+
                 const ListType * operator->() const noexcept;
 
                 //______________________________________________________________
@@ -126,6 +129,7 @@ namespace Yttrium
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
                 Bricks * newBricks(const unsigned shift);
                 Bricks * newBricksFor(const size_t blockSize);
+                void     postRelease(Bricks * node) noexcept;
 #endif
             };
 

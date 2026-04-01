@@ -44,6 +44,16 @@ namespace Yttrium
             virtual void * acquire(size_t &);
             virtual void   release(void * &, size_t &) noexcept;
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            void * legacyAcquire(const size_t);
+            void   legacyRelease(void * const) noexcept;
+            
+
         private:
             Y_Disable_Copy_And_Assign(Pooled); //!< discarded
             friend class Singleton<Pooled,ClassLockPolicy>;

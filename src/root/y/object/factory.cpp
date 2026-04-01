@@ -4,6 +4,7 @@
 #include "y/memory/plastic/forge.hpp"
 #include "y/concurrent/nucleus.hpp"
 #include "y/memory/small/blocks.hpp"
+#include "y/memory/allocator/pooled.hpp"
 
 namespace Yttrium
 {
@@ -52,6 +53,10 @@ namespace Yttrium
                 static Memory::Small::Blocks &blocks = * Concurrent::Nucleus::Instance().blocks;
                 return blocks.acquire( SlimCompress(blockSize) );
             }
+            case Fair: {
+                static Memory::Pooled & pooled = Memory::Pooled::Instance();
+                
+            }
         }
         return 0;
     }
@@ -62,7 +67,11 @@ namespace Yttrium
         Y_Lock(access);
         switch(model)
         {
-            case None: return;
+            case None: assert(0==blockAddr); return;
+            case Slim: assert(0!=blockAddr); {
+                static Memory::Small::Blocks &blocks = *Concurrent::Nucleus::Location().blocks;
+                blocks.release(blockAddr, SlimCompress(blockSize) );
+            }
         }
     }
 

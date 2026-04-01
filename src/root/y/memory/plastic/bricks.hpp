@@ -76,6 +76,13 @@ namespace Yttrium
                 static Bricks * Release(void * & blockAddr,
                                         size_t & blockSize) noexcept;
 
+                //! legacy release a block
+                /**
+                 \param blockAddr previously acquired block
+                 */
+                static Bricks * Release(void * const blockAddr) noexcept;
+
+
                 //! test owned brick (mostly to debug) \return true if brick is found
                 bool ownsBrick(const Brick * const) const noexcept;
 
@@ -99,6 +106,7 @@ namespace Yttrium
                  */
                 void * deliver(Brick * const brick, size_t &blockSize) noexcept;
 
+                static Bricks * OwnerOfReturned(Brick * const brick) noexcept;
 
             };
             

@@ -110,13 +110,8 @@ namespace Yttrium
                 book[bricks->info].put( Destructed(bricks) );
             }
 
-            void Forge:: release(void * &blockAddr,
-                                 size_t &blockSize) noexcept
+            void Forge:: postRelease(Bricks * node) noexcept
             {
-                Y_Lock(access);
-                assert(0!=blockAddr);
-                assert(blockSize>0);
-                Bricks *  node = Bricks::Release(blockAddr,blockSize);
                 assert(list.owns(node));
                 if( list.moveToHead(node)->areEmpty() )
                 {
@@ -148,12 +143,38 @@ namespace Yttrium
                         }
 
                         assert(node->info>empty->info || node>empty);
-                        
+
                         remove( list.pop(node) );
                     }
                 }
+            }
+
+            void Forge:: release(void * &blockAddr,
+                                 size_t &blockSize) noexcept
+            {
+                Y_Lock(access);
+                assert(0!=blockAddr);
+                assert(blockSize>0);
+                postRelease(Bricks::Release(blockAddr,blockSize));
 
             }
+
+            void * Forge:: legacyAcquire(const size_t blockSize)
+            {
+                size_t bs = blockSize;
+                void * const p = acquire(bs);
+                assert(bs>=blockSize);
+                return p;
+            }
+
+
+            void Forge:: legacyRelease(void * const blockAddr) noexcept
+            {
+                Y_Lock(access);
+                assert(0!=blockAddr);
+                postRelease(Bricks::Release(blockAddr));
+            }
+
 
 
         }

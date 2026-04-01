@@ -53,6 +53,18 @@ namespace Yttrium
         }
 
 
+        void * Pooled:: legacyAcquire(const size_t blockSize)
+        {
+            assert(0!=PooledForge);
+            return PooledForge->legacyAcquire(blockSize);
+        }
+
+        void Pooled:: legacyRelease(void * const blockAddr) noexcept
+        {
+            assert(0!=PooledForge);
+            PooledForge->legacyRelease(blockAddr);
+        }
+
     }
 
 }

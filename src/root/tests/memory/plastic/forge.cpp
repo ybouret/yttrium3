@@ -25,8 +25,16 @@ namespace
         while(size<nmax)
         {
             Block &b = blocks[size++];
-            b.size   = ran.in<size_t>(0,1000);
-            b.addr = forge.acquire(b.size);
+            if(ran.choice())
+            {
+                b.size   = ran.in<size_t>(0,1000);
+                b.addr   = forge.acquire(b.size);
+            }
+            else
+            {
+                b.size = 0;
+                b.addr = forge.legacyAcquire(ran.in<size_t>(0,1000));
+            }
         }
     }
 
@@ -35,12 +43,21 @@ namespace
     void Release(Memory::Plastic::Forge & forge,
                  const size_t             nmin,
                  Block                    blocks[],
-                 size_t                &  size)
+                 size_t                &  size )
     {
         while(size>nmin)
         {
             Block &b = blocks[--size];
-            forge.release(b.addr,b.size);
+            Y_ASSERT(0!=b.addr);
+            if(b.size>0)
+            {
+                forge.release(b.addr,b.size);
+            }
+            else
+            {
+                forge.legacyRelease(b.addr);
+                b.addr = 0;
+            }
         }
     }
 }
@@ -57,6 +74,8 @@ Y_UTEST(memory_plastic_forge)
         std::cerr << std::setw(6) << blockSize << " -> " << bytes << std::endl;
     }
 
+    std::cerr << std::endl;
+    (std::cerr << "-- Testing I/O" << std::endl).flush();
     Concurrent::Nucleus &  nucleus = Concurrent::Nucleus::Instance();
     {
         Memory::Plastic::Forge forge(nucleus.book,nucleus.access);
@@ -66,9 +85,9 @@ Y_UTEST(memory_plastic_forge)
         size_t       size   = 0;
 
         Acquire(forge,nblock,blocks,size,ran);
-        for(size_t iter=0;iter<10;++iter)
+        for(size_t iter=0;iter<32;++iter)
         {
-            Release(forge,nblock/ran.in<size_t>(2,4),blocks,size);
+            Release(forge,nblock/ran.in<size_t>(2,32),blocks,size);
             Acquire(forge,nblock,blocks,size,ran);
         }
         Release(forge,0,blocks,size);
@@ -91,6 +110,7 @@ Y_UTEST(memory_plastic_forge)
 
     std::cerr << std::endl;
 
+    std::cerr << "-- Final checks..." << std::endl;
     {
         Memory::Plastic::Forge forge(nucleus.book,nucleus.access);
 
