@@ -262,7 +262,6 @@ namespace {
         Core::Rand ran(seed);
         Block      blocks[NUM_BLOCKS];
 
-#if 1
         synchronize("synchronized for nucleus",cv,mutex,ready);
         Torture(*params.nucleus,blocks,Y_Static_Size(blocks),ran);
 
@@ -278,7 +277,6 @@ namespace {
 
         synchronize("synchronized for pooled",cv,mutex,ready);
         Torture(*params.pooled,blocks,Y_Static_Size(blocks),ran);
-#endif
 
         synchronize("synchronized for dyadic",cv,mutex,ready);
         Torture(*params.dyadic,blocks,Y_Static_Size(blocks),ran);
