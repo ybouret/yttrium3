@@ -72,7 +72,7 @@ namespace Yttrium
                     assert(bytes>=count*sizeof(T));
                     count = bytes/sizeof(T);
                     return static_cast<T*>(addr);
-                } catch(...) { assert(0==bytes); count = 0; }
+                } catch(...) { assert(0==bytes); count = 0; throw; }
             }
 
             //! helper to release array of objects
@@ -82,7 +82,7 @@ namespace Yttrium
              \param bytes matching bytes
              */
             template <typename T> inline
-            void releaseAs(T * &types, T & count, size_t & bytes) noexcept
+            void releaseAs(T * &types, size_t & count, size_t & bytes) noexcept
             {
                 assert(0!=types);
                 assert(count>0);

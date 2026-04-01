@@ -21,8 +21,7 @@ namespace Yttrium
             None, //!< NULL
             Slim, //!< uses Small
             Fair, //!< uses Pooled
-            Vast, //!< uses Dyadic
-            Huge  //!< uses Global
+            Vast  //!< uses Archon
         };
         static Model ModelFor(const size_t blockSize) noexcept;
 
@@ -30,6 +29,10 @@ namespace Yttrium
 
         void * query(const size_t blockSize);
         void   store(void * const blockAddr, const size_t blockSize) noexcept;
+
+        static const size_t MaxSlimBytes;
+        static const size_t MaxFairBytes;
+        static const size_t MaxVastBytes;
 
     private:
         Y_Disable_Copy_And_Assign(Factory);

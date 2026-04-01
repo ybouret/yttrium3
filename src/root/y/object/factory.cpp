@@ -5,6 +5,9 @@
 #include "y/concurrent/nucleus.hpp"
 #include "y/memory/small/blocks.hpp"
 #include "y/memory/allocator/pooled.hpp"
+#include "y/memory/allocator/archon.hpp"
+#include "y/exception.hpp"
+#include "y/format/decimal.hpp"
 
 namespace Yttrium
 {
@@ -21,19 +24,23 @@ namespace Yttrium
     {
     }
 
-    Object:: Factory::Model Object:: Factory:: ModelFor(const size_t blockSize) noexcept
+
+    namespace
     {
         static const size_t   _1           = 1;
         static const unsigned MaxSlimShift = Memory::Metrics::MinPageShift-1;
-        static const size_t   MaxSlimBytes = _1 << MaxSlimShift;
-        static const size_t   MaxFairBytes =  Memory::Plastic::Forge::DefaultMaxBlockSize;
-        static const size_t   MaxVastBytes = Memory::Metrics::MaxPageBytes;
+    }
+    const size_t   Object:: Factory:: MaxSlimBytes = _1 << MaxSlimShift;
+    const size_t   Object:: Factory:: MaxFairBytes =  Memory::Plastic::Forge::DefaultMaxBlockSize;
+    const size_t   Object:: Factory:: MaxVastBytes =  Memory::Metrics::MaxPageBytes;
 
+    Object:: Factory::Model Object:: Factory:: ModelFor(const size_t blockSize) noexcept
+    {
+        assert(blockSize<=MaxVastBytes);
         if(blockSize<=0)            return None;
         if(blockSize<=MaxSlimBytes) return Slim;
         if(blockSize<=MaxFairBytes) return Fair;
-        if(blockSize<=MaxVastBytes) return Vast;
-        return Huge;
+        return Vast;
     }
 
     size_t Object:: Factory:: SlimCompress(const size_t blockSize) noexcept
@@ -44,6 +51,7 @@ namespace Yttrium
 
     void * Object:: Factory:: query(const size_t blockSize)
     {
+        if(blockSize>=MaxVastBytes) throw Specific::Exception(CallSign,"blockSize=%s overflow", Decimal(blockSize).c_str() );
         const Model model = ModelFor(blockSize);
         Y_Lock(access);
         switch(model)
@@ -55,7 +63,12 @@ namespace Yttrium
             }
             case Fair: {
                 static Memory::Pooled & pooled = Memory::Pooled::Instance();
-                
+                return pooled.legacyAcquire(blockSize);
+            }
+            case Vast: {
+                static Memory::Archon & archon  = Memory::Archon::Instance();
+                const unsigned          shift   = CeilLog2(blockSize);
+                return archon.acquireBlock(shift);
             }
         }
         return 0;
@@ -71,7 +84,18 @@ namespace Yttrium
             case Slim: assert(0!=blockAddr); {
                 static Memory::Small::Blocks &blocks = *Concurrent::Nucleus::Location().blocks;
                 blocks.release(blockAddr, SlimCompress(blockSize) );
-            }
+            } return;
+
+            case Fair: assert(0!=blockAddr); {
+                static Memory::Pooled & pooled = Memory::Pooled::Location();
+                pooled.legacyRelease(blockAddr);
+            } return;
+
+            case Vast: assert(0!=blockAddr); {
+                static Memory::Archon & archon  = Memory::Archon::Location();
+                const unsigned          shift   = CeilLog2(blockSize);
+                archon.releaseBlock(blockAddr,shift);
+            } return;
         }
     }
 
