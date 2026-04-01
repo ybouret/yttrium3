@@ -75,10 +75,10 @@ namespace
     }
 
     static inline
-    void Torture(Memory::Allocator &alloc,
-                 Block               blocks[],
-                 const size_t        nblock,
-                 Core::Rand         &ran)
+    void Torture(Memory::Allocator &  alloc,
+                 Block                blocks[],
+                 const size_t         nblock,
+                 Core::Rand         & ran)
     {
         Yttrium_BZero(blocks,nblock*sizeof(Block));
 
@@ -212,6 +212,27 @@ namespace {
 
 #define NUM_THREADS 8
 
+
+    static inline
+    void synchronize(const char * const     msg,
+                     Concurrent::Condition &cv,
+                     Concurrent::Mutex     &mutex,
+                     size_t                &ready)
+    {
+        mutex.lock();
+        if(++ready>=NUM_THREADS)
+        {
+            (std::cerr << "-- " << msg << std::endl).flush();
+            cv.broadcast();
+        }
+        else
+        {
+            cv.wait(mutex);
+            ready = 0;
+        }
+        mutex.unlock();
+    }
+
     static inline
     void MemoryInThread(void * const args)
     {
@@ -220,6 +241,7 @@ namespace {
         Params                & params  = *static_cast<Params *>(args);
         Concurrent::Mutex     & mutex   = *params.mutex;
         Concurrent::Condition & cv      = *params.cv;
+        size_t                & ready   = params.ready;
         long                    seed    = 0;
         {
             Y_Lock(sync);
@@ -230,23 +252,12 @@ namespace {
         }
 
         // synchronizing
-        mutex.lock();
-        if(++params.ready>=NUM_THREADS)
-        {
-            (std::cerr << "syncronized!" << std::endl).flush();
-            cv.broadcast();
-        }
-        else
-        {
-            cv.wait(mutex);
-        }
-        mutex.unlock();
-
 
         Core::Rand ran(seed);
         Block      blocks[512];
         Wad        wads[512];
 
+        synchronize("synchronized for nucleus",cv,mutex,ready);
         Torture(*params.nucleus,         blocks, Y_Static_Size(blocks), ran);
         //Torture( params.nucleus->book,   wads,   Y_Static_Size(wads),   ran);
         //Torture(*params.nucleus->blocks, blocks, Y_Static_Size(blocks), ran);
@@ -255,6 +266,7 @@ namespace {
         //Torture(*params.dyadic,          blocks, Y_Static_Size(blocks), ran);
         //Torture(*params.archon,          blocks, Y_Static_Size(blocks), ran);
 
+        synchronize("returning\n",cv,mutex,ready);
     }
 
     class MyThread : public Concurrent::Thread
