@@ -15,6 +15,22 @@ namespace
         void * addr;
         size_t size;
     };
+
+    class Dummy : public Object
+    {
+    public:
+
+        explicit Dummy() : Object()
+        {
+        }
+
+        virtual ~Dummy() noexcept
+        {
+        }
+
+    private:
+        Y_Disable_Copy_And_Assign(Dummy);
+    };
 }
 Y_UTEST(object)
 {
@@ -57,8 +73,36 @@ Y_UTEST(object)
             F.store(entry[i].addr,entry[i].size);
         }
 
+
+        for(size_t i=0;i<count;++i)
+        {
+            entry[i].addr = F.acquire(entry[i].size=i);
+            Y_ASSERT(0!=entry[i].addr);
+            Y_ASSERT(entry[i].size>0);
+        }
+        Random::Shuffle(ran,entry,count);
+
+        for(size_t i=0;i<count;++i)
+        {
+            F.release(entry[i].addr,entry[i].size);
+        }
+
+
         mgr.releaseAs(entry,count,bytes);
     }
+
+    Dummy * dummy = 0;
+    delete  dummy;
+
+    dummy = new Dummy();
+    delete dummy;
+
+    dummy = new Dummy[5];
+    delete []dummy;
+
+    void *wksp[4];
+    dummy = new (wksp) Dummy();
+    
 
 
 }

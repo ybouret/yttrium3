@@ -14,7 +14,7 @@ namespace Yttrium
 
     const char * const Object::Factory::CallSign = "Object";
 
-    
+
     Object:: Factory:: ~Factory() noexcept
     {
     }
@@ -45,15 +45,15 @@ namespace Yttrium
 
     size_t Object:: Factory:: SlimCompress(const size_t blockSize) noexcept
     {
-        return Alignment::SystemMemory::Ceil(blockSize);
+        return Alignment::To<CompressType>::Ceil(blockSize);
     }
 
 
     void * Object:: Factory:: query(const size_t blockSize)
     {
         if(blockSize>=MaxVastBytes) throw Specific::Exception(CallSign,"blockSize=%s overflow", Decimal(blockSize).c_str() );
-        const Model model = ModelFor(blockSize);
         Y_Lock(access);
+        const Model model = ModelFor(blockSize);
         switch(model)
         {
             case None: break;
@@ -65,6 +65,7 @@ namespace Yttrium
                 static Memory::Pooled & pooled = Memory::Pooled::Instance();
                 return pooled.legacyAcquire(blockSize);
             }
+
             case Vast: {
                 static Memory::Archon & archon  = Memory::Archon::Instance();
                 const unsigned          shift   = CeilLog2(blockSize);
@@ -76,8 +77,8 @@ namespace Yttrium
 
     void Object:: Factory:: store(void * const blockAddr, const size_t blockSize) noexcept
     {
-        const Model model = ModelFor(blockSize);
         Y_Lock(access);
+        const Model model = ModelFor(blockSize);
         switch(model)
         {
             case None: assert(0==blockAddr); return;
@@ -98,6 +99,57 @@ namespace Yttrium
             } return;
         }
     }
+}
+
+#include "y/memory/allocator/global.hpp"
+
+namespace Yttrium
+{
+
+    void * Object:: Factory:: acquire(size_t &blockSize)
+    {
+        Y_Lock(access);
+
+        if(blockSize<=MaxFairBytes)
+        {
+            static Memory::Allocator & pooled = Memory::Pooled::Instance();
+            return pooled.acquire(blockSize);
+        }
+
+        if(blockSize<=MaxVastBytes)
+        {
+            static Memory::Allocator & archon = Memory::Archon::Instance();
+            return archon.acquire(blockSize);
+        }
+        
+        {
+            static Memory::Allocator & global = Memory::Global::Instance();
+            return global.acquire(blockSize);
+        }
+    }
+
+
+    void Object:: Factory:: release(void * & blockAddr, size_t & blockSize) noexcept
+    {
+        Y_Lock(access);
+        if(blockSize<=MaxFairBytes)
+        {
+            static Memory::Allocator & pooled = Memory::Pooled::Location();
+            return pooled.release(blockAddr,blockSize);
+        }
+
+        if(blockSize<=MaxVastBytes)
+        {
+            static Memory::Allocator & archon = Memory::Archon::Location();
+            return archon.release(blockAddr,blockSize);
+        }
+
+        {
+            static Memory::Allocator & global = Memory::Global::Location();
+            return global.release(blockAddr,blockSize);
+        }
+    }
+
 
 }
 

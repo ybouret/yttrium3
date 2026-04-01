@@ -11,6 +11,8 @@ namespace Yttrium
 {
     namespace Memory
     {
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         template <typename ALLOCATOR>
         struct AllocatorProxy
         {
@@ -28,6 +30,8 @@ namespace Yttrium
                 mgr.release(blockAddr,blockSize);
             }
         };
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
     }
 
 }

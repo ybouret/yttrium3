@@ -50,9 +50,20 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            void * legacyAcquire(const size_t);
-            void   legacyRelease(void * const) noexcept;
-            
+
+            //! acquire memory
+            /**
+             \param  blockSize minimal byte count
+             \return blockAddr
+             */
+            void * legacyAcquire(const size_t blockSize);
+
+            //! release memory, with automatic retrieving of block size
+            /**
+             \param blockAddr acquired memory
+             */
+            void   legacyRelease(void * const blockAddr) noexcept;
+
 
         private:
             Y_Disable_Copy_And_Assign(Pooled); //!< discarded

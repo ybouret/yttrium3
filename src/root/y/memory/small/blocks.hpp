@@ -102,6 +102,11 @@ namespace Yttrium
                  */
                 Arena & operator[](const size_t blockSize);
 
+                //! get arena for required size
+                /**
+                 \param pArena    initially NULL, set to matching Arena
+                 \param blockSize blockSize to get/create
+                 */
                 void fetch(Arena * &pArena, const size_t blockSize);
 
                 //! check ownership
@@ -125,7 +130,10 @@ namespace Yttrium
 
                 //! create a new arena from house \param blockSize arena block size \return new ready arena
                 Arena * newArena(const size_t blockSize);
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
                 void fetch_(Arena * &pArena, const size_t blockSize);
+#endif
 
             };
         }

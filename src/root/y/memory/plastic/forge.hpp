@@ -51,7 +51,7 @@ namespace Yttrium
                 static const size_t          ReservedSize = DataOffset + Bricks::Reserved;                       //!< alias
                 static const size_t          MaxBlockSize = MaxPageBytes - ReservedSize;                         //!< alias
                 static const size_t          DefaultMaxBlockSize = Memory::Metrics::DefaultBytes - ReservedSize; //!< alias
-                typedef Core::ListOf<Bricks> ListType;
+                typedef Core::ListOf<Bricks> ListType; //!< alias
 
                 //______________________________________________________________
                 //
@@ -100,10 +100,21 @@ namespace Yttrium
                  */
                 static unsigned ShiftFor(const size_t blockSize) noexcept;
 
+                //! acquire block
+                /**
+                 \param blockSize minimal block size
+                 \return acquired memory
+                 */
                 void * legacyAcquire(const size_t blockSize);
+
+                //! release block with automatic blockSize retrieval
+                /**
+                 \param blockAddr previously acquired block
+                 */
                 void   legacyRelease(void * const blockAddr) noexcept;
 
 
+                //! access to check status \return &list
                 const ListType * operator->() const noexcept;
 
                 //______________________________________________________________

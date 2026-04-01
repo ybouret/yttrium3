@@ -30,10 +30,10 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
-                static const size_t   BrickBytes   = sizeof(Brick);                  //!< alias
-                static const unsigned BrickShift   = IntegerLog2<BrickBytes>::Value; //!< by design
-                static const size_t   MinDataBrick = 1;                              //!< at least one Brick of data
-                static const size_t   Reserved     = 2*BrickBytes;
+                static const size_t   BrickBytes   = sizeof(Brick);                         //!< alias
+                static const unsigned BrickShift   = IntegerLog2<BrickBytes>::Value;        //!< by design
+                static const size_t   MinDataBrick = 1;                                     //!< at least one Brick of data
+                static const size_t   Reserved     = 2*BrickBytes;                          //!< for head and tial
                 static const size_t   MinUserBytes = Reserved + MinDataBrick * BrickBytes;  //!< head+data+tail
 
                 //______________________________________________________________
@@ -79,6 +79,7 @@ namespace Yttrium
                 //! legacy release a block
                 /**
                  \param blockAddr previously acquired block
+                 \return owner of released block
                  */
                 static Bricks * Release(void * const blockAddr) noexcept;
 
@@ -106,6 +107,11 @@ namespace Yttrium
                  */
                 void * deliver(Brick * const brick, size_t &blockSize) noexcept;
 
+                //! release brick and return modified owner
+                /**
+                 \param brick retrieved from address
+                 \return modified brick's owmner
+                 */
                 static Bricks * OwnerOfReturned(Brick * const brick) noexcept;
 
             };

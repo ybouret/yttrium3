@@ -6,16 +6,40 @@
 #include "y/object.hpp"
 #include "y/singleton.hpp"
 #include "y/concurrent/life-time.hpp"
+#include "y/memory/allocator.hpp"
 
 namespace Yttrium
 {
-    class Object :: Factory : public Singleton<Factory,ClassLockPolicy>
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //!  Object::Factory
+    //
+    //
+    //__________________________________________________________________________
+    class Object :: Factory :
+    public Singleton<Factory,ClassLockPolicy>,
+    public Memory::Allocator
     {
     public:
-        static const char * const CallSign;
-        static const Longevity    LifeTime = LifeTimeFor::ObjectFactory;
-        typedef ClassLockPolicy   Policy;
-        
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        static const char * const CallSign;                              //!< "Object::Factory"
+        static const Longevity    LifeTime = LifeTimeFor::ObjectFactory; //!< alias
+        typedef ClassLockPolicy   Policy;                                //!< alias
+        typedef void *            CompressType;                          //!< type to align Small::Blocks to
+        static const size_t       MaxSlimBytes;                          //!< limit to use Small::Blocks
+        static const size_t       MaxFairBytes;                          //!< limit to use Memory::Pooled
+        static const size_t       MaxVastBytes;                          //!< limit to use Memory::Archon
+
+        //! named memory model
         enum Model
         {
             None, //!< NULL
@@ -23,23 +47,67 @@ namespace Yttrium
             Fair, //!< uses Pooled
             Vast  //!< uses Archon
         };
-        static Model ModelFor(const size_t blockSize) noexcept;
 
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+
+        //! helper \param blockSize block size \return matching model
+        static Model  ModelFor(const size_t blockSize)     noexcept;
+
+        //! helper \param blockSize blockSize>0 \return aligned to CompressType
         static size_t SlimCompress(const size_t blockSize) noexcept;
 
+        //! acquire with selected allocator w.r.t blockSize
+        /**
+         - blockSize = 0 => None => NULL
+         - blockSize <= MaxSlimBytes => Small::Block[ SlimCompress(blockSize) ]
+         - blockSize <= MaxFairBytes => Pooled (aligned on Plastic::Brick)
+         - blockSize <= MaxVastBytes => Archon (aligned on NextPowerOfTwo)
+         \param  blockSize required blockSize, 0 means NULL
+         \return blockAddr
+         */
         void * query(const size_t blockSize);
+
+        //! release with selected allocator w.r.t blockSize
+        /**
+         \param blockAddr acquired block address
+         \param blockSize required block size
+         */
         void   store(void * const blockAddr, const size_t blockSize) noexcept;
 
-        static const size_t MaxSlimBytes;
-        static const size_t MaxFairBytes;
-        static const size_t MaxVastBytes;
+        //______________________________________________________________________
+        //
+        //
+        // Interface
+        //
+        //______________________________________________________________________
+
+        //! uses Small::Blocks,Pooled,Archon,Global
+        /**
+         \param blockSize required block size
+         \return memory in selected allocator
+         */
+        virtual void * acquire(size_t &blockSize);
+
+        //! used Small::Blocks,pooled,Archon,Global
+        /**
+         \param blockAddr acquired memory
+         \param blockSize required block size
+         */
+        virtual void   release(void * &blockAddr, size_t &blockSize) noexcept;
 
     private:
-        Y_Disable_Copy_And_Assign(Factory);
         friend class Singleton<Factory,Policy>;
-        explicit Factory();
-        virtual ~Factory() noexcept;
+        Y_Disable_Copy_And_Assign(Factory); //!< discarded
+        explicit Factory();                 //!< setup
+        virtual ~Factory() noexcept;        //!< cleanup
     };
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
 }
 
 
