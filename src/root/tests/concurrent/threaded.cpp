@@ -9,7 +9,7 @@ namespace
     class Worker
     {
     public:
-        inline Worker()
+        inline Worker() : mutex()
         {
         }
 
@@ -17,7 +17,6 @@ namespace
         {
         }
 
-        Concurrent::Mutex mutex;
 
         inline void work()
         {
@@ -29,6 +28,7 @@ namespace
             { Y_Lock(mutex); (std::cerr << "In work(" << a << ")" << std::endl).flush(); }
         }
 
+        Concurrent::Mutex mutex;
 
 
     private:
