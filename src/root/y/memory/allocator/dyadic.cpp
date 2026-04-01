@@ -75,19 +75,17 @@ namespace Yttrium
 
                 if(blockShift<=MaxCommShift)
                 {
-                    ArenaPtr &   pArena     = dyadicArena[blockShift];
-                    const size_t blockBytes = _1<<blockShift;
+                    ArenaPtr &   pArena = dyadicArena[blockShift];
                     if(0==pArena)
                     {
-                        Y_Locked_Print(std::cerr,"new Arena@" << blockBytes);
-                        //pArena = &smallBlocks[blockBytes];
-                        smallBlocks.fetch(pArena,blockBytes);
+                        const size_t blockSize = _1<<blockShift;
+                        smallBlocks.fetch(pArena,blockSize);
                     }
 
                     assert(0!=pArena);
                     assert(0!=dyadicArena[blockShift]);
                     assert(dyadicArena[blockShift] == pArena);
-                    assert(blockBytes == pArena->blockSize);
+                    assert( (_1<<blockShift) == pArena->blockSize);
 
                     return pArena->acquire();
                 }

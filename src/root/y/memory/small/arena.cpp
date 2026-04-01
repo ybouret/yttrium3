@@ -201,7 +201,9 @@ namespace Yttrium
             {
                 Y_Lock(access);
 
+                //--------------------------------------------------------------
                 // sanity check
+                //--------------------------------------------------------------
                 assert( 0!=acquiring );
                 assert( clist.owns(acquiring));
                 assert( countReady() == ready );
@@ -212,14 +214,13 @@ namespace Yttrium
                         return acquireBlock(acquiring); // cached!
                     else
                     {
+                        assert(0==acquiring->stillAvailable);
                         static const unsigned LOWER = 0x01;
                         static const unsigned UPPER = 0x02;
                         static const unsigned BIDIR = LOWER | UPPER;
-                        assert(0==acquiring->stillAvailable);
-                        Chunk * lower = acquiring->prev;
-                        Chunk * upper = acquiring->next;
-                        assert(upper||lower);
-                        unsigned flag = 0;
+                        Chunk *  lower = acquiring->prev;
+                        Chunk *  upper = acquiring->next; assert(upper||lower);
+                        unsigned flag  = 0;
                         if( lower ) { assert(lower->next==acquiring); flag |= LOWER; }
                         if( upper ) { assert(upper->prev==acquiring); flag |= UPPER; }
                         assert(LOWER==flag || UPPER==flag || BIDIR==flag);
@@ -232,7 +233,7 @@ namespace Yttrium
                             default:
                                 break;
                         }
-                        Libc::Error::Critical(EINVAL,"corrupted search flag=%u",flag);
+                        Libc::Error::Critical(EINVAL,"Memory::Small::Areana corrupted search flag=%u",flag);
 
                     INTERLACED:
                         assert(0!=lower); assert(0!=upper);
@@ -267,104 +268,6 @@ namespace Yttrium
 
 
             }
-
-            void * Arena:: searchPrev(Chunk *lower) noexcept
-            {
-                assert(0!=lower);
-            TRY:
-                if(lower->stillAvailable)
-                    return acquireBlock(lower);
-                lower = lower->prev;
-                if(!lower) { std::cerr << "no lower at blockSize=" << blockSize << std::endl; }
-                assert(0!=lower);
-                goto TRY;
-            }
-
-            void * Arena:: searchNext(Chunk *upper) noexcept
-            {
-                assert(0!=upper);
-            TRY:
-                if(upper->stillAvailable)
-                    return acquireBlock(upper);
-                upper = upper->next;
-                assert(0!=upper);
-                goto TRY;
-            }
-
-            void * Arena:: searchBoth(Chunk * lower,
-                                      Chunk * upper) noexcept
-            {
-            SEARCH_BOTH:
-                assert(0!=lower);
-                assert(0!=upper);
-                assert(clist.owns(lower));
-                assert(clist.owns(upper));
-                assert(lower->next == upper->prev);
-
-                if(lower->stillAvailable)      return acquireBlock(lower);
-                if( 0 == (lower=lower->prev) ) return searchNext(upper);
-                assert(0!=lower);
-
-                if(upper->stillAvailable)      return acquireBlock(upper);
-                if( 0 == (upper=upper->next))  return searchPrev(lower);
-                assert(0!=upper);
-
-                goto SEARCH_BOTH;
-            }
-
-#if 0
-            void   *Arena:: acquire()
-            {
-                Y_Lock(access);
-
-                assert( 0!=acquiring );
-                assert( clist.owns(acquiring));
-                assert( countReady() == ready );
-                
-                if(ready>0)
-                {
-                    if(acquiring->stillAvailable)
-                        return acquireBlock(acquiring); // cached!
-                    else
-                    {
-                        assert(0==acquiring->stillAvailable);
-                        Chunk * const lower = acquiring->prev;
-                        Chunk * const upper = acquiring->next;
-                        if(lower)
-                        {
-                            assert(acquiring!=clist.head);
-                            assert(lower->next==acquiring);
-                            if(upper)
-                            {
-                                assert(acquiring!=clist.tail);
-                                assert(upper->prev==acquiring);
-                                return searchBoth(lower,upper);
-                            }
-                            else
-                            {
-                                assert(acquiring==clist.tail);
-                                return searchPrev(lower);
-                            }
-                        }
-                        else
-                        {
-                            assert(acquiring==clist.head);
-                            assert(0!=upper);
-                            assert(upper->prev==acquiring);
-                            return searchNext(upper);
-                        }
-                    }
-                }
-                else
-                {
-                    assert(0==ready);
-                    assert(0==empty);
-                    assert(0==countReady());
-                    return acquireBlock( newChunk() );
-                }
-
-            }
-#endif
 
         }
 

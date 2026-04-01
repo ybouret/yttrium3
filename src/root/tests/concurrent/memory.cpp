@@ -41,6 +41,10 @@ namespace
     {
         void *   entry;
         unsigned shift;
+        void fill(Core::Rand &ran) noexcept
+        {
+            Random::FillWith(ran,entry,size_t(1)<<shift,1);
+        }
     };
 
     static inline
@@ -108,6 +112,7 @@ namespace {
             Wad &wad = wads[count];
             wad.shift = ran.in<unsigned>(8,14);
             wad.entry = book[wad.shift].get();
+            wad.fill(ran);
             ++count;
         }
     }
@@ -211,7 +216,7 @@ namespace {
     };
 
 #define NUM_THREADS 8
-#define NUM_BLOCKS  1024
+#define NUM_BLOCKS  512
 
     static inline
     void synchronize(const char * const     msg,
@@ -257,7 +262,7 @@ namespace {
         Core::Rand ran(seed);
         Block      blocks[NUM_BLOCKS];
 
-#if 0
+#if 1
         synchronize("synchronized for nucleus",cv,mutex,ready);
         Torture(*params.nucleus,blocks,Y_Static_Size(blocks),ran);
 
@@ -277,7 +282,9 @@ namespace {
 
         synchronize("synchronized for dyadic",cv,mutex,ready);
         Torture(*params.dyadic,blocks,Y_Static_Size(blocks),ran);
-        //Torture(*params.archon,          blocks, Y_Static_Size(blocks), ran);
+
+        synchronize("synchronized for archon",cv,mutex,ready);
+        Torture(*params.archon,blocks,Y_Static_Size(blocks),ran);
 
         synchronize("returning\n",cv,mutex,ready);
     }
