@@ -26,10 +26,11 @@ static const System::AtExit::Longevity CLASS = ConcurrentNucleus - (__LINE__-Hel
     {
         static const System::AtExit::Longevity ConcurrentNucleus = Concurrent::Singulet::GreatestLifeTime; //!< top-level life-time
         static const System::AtExit::Longevity Helper = (__LINE__); //!< helper to deduce life times
-        Y_LifeTimeFor(MemoryGlobal); //!< for Memory::Global
-        Y_LifeTimeFor(MemoryPooled); //!< for Memory::Pooled
-        Y_LifeTimeFor(MemoryDyadic); //!< for Memory::Pooled
-        Y_LifeTimeFor(MemoryArchon); //!< for Memory::Pooled
+        Y_LifeTimeFor(MemoryGlobal);  //!< for Memory::Global
+        Y_LifeTimeFor(MemoryPooled);  //!< for Memory::Pooled
+        Y_LifeTimeFor(MemoryDyadic);  //!< for Memory::Pooled
+        Y_LifeTimeFor(MemoryArchon);  //!< for Memory::Pooled
+        Y_LifeTimeFor(ObjectFactory); //!< for Object::Factory
 
     };
 

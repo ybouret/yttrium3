@@ -39,10 +39,16 @@ namespace Yttrium
                     remove( list.popTail() );
             }
 
+            const Forge::ListType * Forge:: operator->() const noexcept
+            {
+                return &list;
+            }
+
+
             unsigned Forge:: ShiftFor(const size_t blockSize) noexcept
             {
                 assert(blockSize<=MaxBlockSize);
-                const size_t lower     = HeaderSize + blockSize;
+                const size_t lower     = Max(ReservedSize + blockSize,MinimalSize);
                 const size_t predicted = Max(lower,Metrics::DefaultBytes); assert(predicted<=MaxPageBytes);
                 return CeilLog2(predicted);
             }

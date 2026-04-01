@@ -33,7 +33,8 @@ namespace Yttrium
                 static const size_t   BrickBytes   = sizeof(Brick);                  //!< alias
                 static const unsigned BrickShift   = IntegerLog2<BrickBytes>::Value; //!< by design
                 static const size_t   MinDataBrick = 1;                              //!< at least one Brick of data
-                static const size_t   MinUserBytes = (2+MinDataBrick) * BrickBytes;  //!< head+data+tail
+                static const size_t   Reserved     = 2*BrickBytes;
+                static const size_t   MinUserBytes = Reserved + MinDataBrick * BrickBytes;  //!< head+data+tail
 
                 //______________________________________________________________
                 //

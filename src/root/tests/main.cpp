@@ -5,6 +5,7 @@ Y_UTEST_DECL(8)
 {
     Y_UTEST(exception);
     Y_UTEST(xml);
+    Y_UTEST(object);
 
     Y_UTEST(config_platform);
     Y_UTEST(config_compiler);
@@ -63,6 +64,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(pointer_auto);
 
     Y_UTEST(ascii_base64);
+
 
 }
 Y_UTEST_EXEC()

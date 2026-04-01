@@ -58,33 +58,50 @@ Y_UTEST(memory_plastic_forge)
     }
 
     Concurrent::Nucleus &  nucleus = Concurrent::Nucleus::Instance();
-    Memory::Plastic::Forge forge(nucleus.book,nucleus.access);
-
-    Block        blocks[10000];
-    const size_t nblock = Y_Static_Size(blocks);
-    size_t       size   = 0;
-
-    Acquire(forge,nblock,blocks,size,ran);
-    for(size_t iter=0;iter<10;++iter)
     {
-        Release(forge,nblock/ran.in<size_t>(2,4),blocks,size);
+        Memory::Plastic::Forge forge(nucleus.book,nucleus.access);
+
+        Block        blocks[10000];
+        const size_t nblock = Y_Static_Size(blocks);
+        size_t       size   = 0;
+
         Acquire(forge,nblock,blocks,size,ran);
+        for(size_t iter=0;iter<10;++iter)
+        {
+            Release(forge,nblock/ran.in<size_t>(2,4),blocks,size);
+            Acquire(forge,nblock,blocks,size,ran);
+        }
+        Release(forge,0,blocks,size);
+
+
+        Y_SIZEOF(Memory::Plastic::Brick);
+        Y_SIZEOF(Memory::Plastic::Bricks);
+        Y_PRINTV(Memory::Plastic::Forge::DataOffset);
+        Y_PRINTV(Memory::Plastic::Forge::MinRawBytes);
+
+        Y_PRINTV(Memory::Plastic::Forge::MinPageBytes);
+        Y_PRINTV(Memory::Plastic::Forge::MaxPageBytes);
+
+        Y_PRINTV(Memory::Plastic::Forge::MinPageShift);
+        Y_PRINTV(Memory::Plastic::Forge::MaxPageShift);
+
+
+        Y_SIZEOF(Memory::Plastic::Forge);
     }
-    Release(forge,0,blocks,size);
 
+    std::cerr << std::endl;
 
-    Y_SIZEOF(Memory::Plastic::Brick);
-    Y_SIZEOF(Memory::Plastic::Bricks);
-    Y_PRINTV(Memory::Plastic::Forge::DataOffset);
-    Y_PRINTV(Memory::Plastic::Forge::MinRawBytes);
+    {
+        Memory::Plastic::Forge forge(nucleus.book,nucleus.access);
 
-    Y_PRINTV(Memory::Plastic::Forge::MinPageBytes);
-    Y_PRINTV(Memory::Plastic::Forge::MaxPageBytes);
+        { size_t n=0; void * p = forge.acquire(n); forge.release(p,n); }
+        const Memory::Plastic::Bricks * const head = forge->head;
+        Y_ASSERT(head!=0);
+        Y_PRINTV(head->maxBlockSize);
+        const size_t DefaultMaxBlockSize = Memory::Plastic::Forge::DefaultMaxBlockSize;
+        Y_CHECK(DefaultMaxBlockSize==head->maxBlockSize);
+    }
 
-    Y_PRINTV(Memory::Plastic::Forge::MinPageShift);
-    Y_PRINTV(Memory::Plastic::Forge::MaxPageShift);
-
-    Y_SIZEOF(Memory::Plastic::Forge);
 
 
 }

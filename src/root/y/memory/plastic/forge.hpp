@@ -43,13 +43,16 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 static const size_t          DataOffset   = Alignment::To<Brick>::CeilOf<sizeof(Bricks)>::Value; //!< offset of data
-                static const size_t          HeaderSize   = DataOffset + Bricks::MinUserBytes;                   //!< to handle data
-                static const size_t          MinRawBytes  = MetaNextPowerOfTwo<HeaderSize>::Value;               //!< alias
+                static const size_t          MinimalSize  = DataOffset + Bricks::MinUserBytes;                   //!< to handle minimal data
+                static const size_t          MinRawBytes  = MetaNextPowerOfTwo<MinimalSize>::Value;              //!< alias
                 static const size_t          MinPageBytes = MetaMax<MinRawBytes,Metrics::DefaultBytes>::Value;   //!< alias
                 static const unsigned        MinPageShift = IntegerLog2<MinPageBytes>::Value;                    //!< alias
                 static const size_t          MaxPageBytes = Metrics::MaxPageBytes;                               //!< alias
                 static const unsigned        MaxPageShift = Metrics::MaxPageShift;                               //!< alias
-                static const size_t          MaxBlockSize = MaxPageBytes - HeaderSize;                           //!< alias
+                static const size_t          ReservedSize = DataOffset + Bricks::Reserved;                       //!< alias
+                static const size_t          MaxBlockSize = MaxPageBytes - ReservedSize;                         //!< alias
+                static const size_t          DefaultMaxBlockSize = Memory::Metrics::DefaultBytes - ReservedSize; //!< alias
+                typedef Core::ListOf<Bricks> ListType;
 
                 //______________________________________________________________
                 //
@@ -98,6 +101,8 @@ namespace Yttrium
                  */
                 static unsigned ShiftFor(const size_t blockSize) noexcept;
 
+                const ListType * operator->() const noexcept;
+
                 //______________________________________________________________
                 //
                 //
@@ -105,12 +110,12 @@ namespace Yttrium
                 //
                 //______________________________________________________________
             private:
-                Core::ListOf<Bricks> list;    //!< LRU bricks
-                Bricks *             empty;   //!< none or first empty
+                ListType list;    //!< LRU bricks
+                Bricks * empty;   //!< none or first empty
 
             public:
-                Book               & book;    //!< PERSISTENT book of Pages
-                Lockable           & access;  //!< PERSISTENT access
+                Book     & book;    //!< PERSISTENT book of Pages
+                Lockable & access;  //!< PERSISTENT access
 
             private:
                 Y_Disable_Copy_And_Assign(Forge); //!< discarded

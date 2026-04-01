@@ -38,6 +38,7 @@ y/container/iter
 y/pointer
 y/utest
 y/stream
+y/object
 )
 
 add_subdirectory(tests)
