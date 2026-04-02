@@ -12,11 +12,12 @@ namespace Yttrium
 {
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+    
     //__________________________________________________________________________
     //
     //
     //
-    //!  Object::Factory
+    //!  Object::Factory gathers LEVEL-1 caches
     //
     //
     //__________________________________________________________________________
@@ -66,7 +67,7 @@ namespace Yttrium
          - blockSize = 0 => None => NULL
          - blockSize <= MaxSlimBytes => Small::Block[ SlimCompress(blockSize) ]
          - blockSize <= MaxFairBytes => Pooled (aligned on Plastic::Brick)
-         - blockSize <= MaxVastBytes => Archon (aligned on NextPowerOfTwo)
+         - blockSize <= MaxVastBytes => Dyadic (aligned on NextPowerOfTwo)
          \param  blockSize required blockSize, 0 means NULL
          \return blockAddr
          */
@@ -86,14 +87,14 @@ namespace Yttrium
         //
         //______________________________________________________________________
 
-        //! uses Small::Blocks,Pooled,Archon,Global
+        //! uses Small::Blocks,Pooled,Dyadic,Global
         /**
          \param blockSize required block size
          \return memory in selected allocator
          */
         virtual void * acquire(size_t &blockSize);
 
-        //! used Small::Blocks,pooled,Archon,Global
+        //! used Small::Blocks,Pooled,Dyadic,Global
         /**
          \param blockAddr acquired memory
          \param blockSize required block size

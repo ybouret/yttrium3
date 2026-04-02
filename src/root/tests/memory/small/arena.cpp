@@ -39,7 +39,7 @@ Y_UTEST(memory_small_arena)
     const size_t nmax = sizeof(addr)/sizeof(addr[0]);
     size_t       size = 0;
 
-    for(size_t blockSize=1;blockSize<=256;++blockSize)
+    for(size_t blockSize=1;blockSize<=512;++blockSize)
     {
         std::cerr << "-- blockSize = " << std::setw(4) << blockSize;
         Y_BZero(addr);

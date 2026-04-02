@@ -5,6 +5,8 @@
 
 #include "y/core/rand.hpp"
 #include "y/random/shuffle.hpp"
+#include "y/random/fill.hpp"
+#include "y/format/hexadecimal.hpp"
 
 using namespace Yttrium;
 
@@ -16,11 +18,13 @@ namespace
         size_t size;
     };
 
+
+
     class Dummy : public Object
     {
     public:
 
-        explicit Dummy() : Object()
+        Dummy() : Object()
         {
         }
 
@@ -28,9 +32,13 @@ namespace
         {
         }
 
+        uint32_t a;
+
     private:
         Y_Disable_Copy_And_Assign(Dummy);
     };
+
+
 }
 Y_UTEST(object)
 {
@@ -91,18 +99,24 @@ Y_UTEST(object)
         mgr.releaseAs(entry,count,bytes);
     }
 
-    Dummy * dummy = 0;
-    delete  dummy;
+    {
+        Dummy * dummy = 0;
+        delete  dummy;
 
-    dummy = new Dummy();
-    delete dummy;
+        dummy = new Dummy();
+        delete dummy;
 
-    dummy = new Dummy[5];
-    delete []dummy;
+        dummy = new Dummy[5];
+        delete []dummy;
 
-    void *wksp[4];
-    dummy = new (wksp) Dummy();
-    
+        void *wksp[4];
+        ;
+        Hexadecimal::Display(std::cerr, (uint8_t *)Random::FillWith(ran,Y_BZero(wksp),sizeof(wksp),1), sizeof(wksp)) << std::endl;
+        dummy = new (wksp) Dummy();
+        std::cerr << dummy->a << std::endl;
+    }
+
+
 
 
 }

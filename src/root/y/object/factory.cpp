@@ -5,7 +5,7 @@
 #include "y/concurrent/nucleus.hpp"
 #include "y/memory/small/blocks.hpp"
 #include "y/memory/allocator/pooled.hpp"
-#include "y/memory/allocator/archon.hpp"
+#include "y/memory/allocator/dyadic.hpp"
 #include "y/exception.hpp"
 #include "y/format/decimal.hpp"
 
@@ -67,9 +67,9 @@ namespace Yttrium
             }
 
             case Vast: {
-                static Memory::Archon & archon  = Memory::Archon::Instance();
+                static Memory::Dyadic & dyadic  = Memory::Dyadic::Instance();
                 const unsigned          shift   = CeilLog2(blockSize);
-                return archon.acquireBlock(shift);
+                return dyadic.acquireBlock(shift);
             }
         }
         return 0;
@@ -93,9 +93,9 @@ namespace Yttrium
             } return;
 
             case Vast: assert(0!=blockAddr); {
-                static Memory::Archon & archon  = Memory::Archon::Location();
+                static Memory::Dyadic & dyadic  = Memory::Dyadic::Location();
                 const unsigned          shift   = CeilLog2(blockSize);
-                archon.releaseBlock(blockAddr,shift);
+                dyadic.releaseBlock(blockAddr,shift);
             } return;
         }
     }
@@ -118,8 +118,8 @@ namespace Yttrium
 
         if(blockSize<=MaxVastBytes)
         {
-            static Memory::Allocator & archon = Memory::Archon::Instance();
-            return archon.acquire(blockSize);
+            static Memory::Allocator & dyadic = Memory::Dyadic::Instance();
+            return dyadic.acquire(blockSize);
         }
         
         {
@@ -140,8 +140,8 @@ namespace Yttrium
 
         if(blockSize<=MaxVastBytes)
         {
-            static Memory::Allocator & archon = Memory::Archon::Location();
-            return archon.release(blockAddr,blockSize);
+            static Memory::Allocator & dyadic = Memory::Dyadic::Location();
+            return dyadic.release(blockAddr,blockSize);
         }
 
         {

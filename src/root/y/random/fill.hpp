@@ -24,10 +24,10 @@ namespace Yttrium
          */
         //______________________________________________________________________
         template <typename RAND> inline
-        void FillWith(RAND &        ran,
-                      void * const  addr,
-                      const size_t  size,
-                      const uint8_t umin = 0,
+        void * FillWith(RAND &        ran,
+                        void * const  addr,
+                        const size_t  size,
+                        const uint8_t umin = 0,
                       const uint8_t umax = 255) noexcept
         {
             assert(!(0==addr&&size>0));
@@ -36,6 +36,7 @@ namespace Yttrium
             {
                 p[i] = ran.template in<uint8_t>(umin,umax);
             }
+            return addr;
         }
 
         //______________________________________________________________________
