@@ -46,14 +46,16 @@ namespace Yttrium
 
         template <bool> struct MetaAccept;
 
+        //! accept the instance
         template <> struct MetaAccept<true>
         {
-            typedef const int Type;
+            typedef const int Type; //!< will set to 1
         };
 
+        //! reject the instance
         template <> struct MetaAccept<false>
         {
-            typedef const void * Type;
+            typedef const void * Type; //!< won't set to 1
         };
 
     }
@@ -62,25 +64,29 @@ namespace Yttrium
     //! check exact value
     template <size_t x> struct MetaExactLog2
     {
-        typedef typename Core::MetaAccept< MetaIsPowerOfTwo<x>::Result >::Type IsExactLog2;
-        static IsExactLog2  Check = 1;
-        static const size_t Value = Core::MetaLog2API<true,x>::Value;
+        typedef typename Core::MetaAccept< MetaIsPowerOfTwo<x>::Result >::Type IsExactLog2; //!< alias
+        static IsExactLog2  Check = 1; //!< only possible when exact log2
+        static const size_t Value = Core::MetaLog2API<true,x>::Value; //!< compute value
     };
 
+    //! ceil log2
     template <size_t x> struct MetaCeilLog2
     {
-        static const size_t Value = Core::MetaLog2API<MetaIsPowerOfTwo<x>::Result,x>::Value;
+        static const size_t Value = Core::MetaLog2API<MetaIsPowerOfTwo<x>::Result,x>::Value; //!< compute value
     };
 
 
+    //! computed next power of two
     template <size_t x> struct MetaNextPowerOfTwo
     {
-        static const  bool     IsExact = MetaIsPowerOfTwo<x>::Result;
-        static const unsigned  RawLog2 = Core::MetaLog2API<IsExact,x>::Value;
-        static const size_t    _1      = 1;
-        static const size_t    Value   = _1 << ( IsExact ? RawLog2 : RawLog2+1);
+        static const  bool     IsExact = MetaIsPowerOfTwo<x>::Result;            //!< true iff exact log2
+        static const unsigned  RawLog2 = Core::MetaLog2API<IsExact,x>::Value;    //!< compute from API
+        static const size_t    _1      = 1;                                      //!< alias
+        static const size_t    Value   = _1 << ( IsExact ? RawLog2 : RawLog2+1); //!< detec
     };
 
+
+    
 
     //! precompiled previous power-of-two
     template <size_t x> struct MetaPrevPowerOfTwo
