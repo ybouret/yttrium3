@@ -13,11 +13,9 @@ using namespace Yttrium;
 Y_UTEST(calculus_meta2)
 {
     Core::Rand          ran;
-
-    //Y_PRINTV(MetaExactLog2<1>::Value);
-    //return 0;
-
     static const size_t _1 = 1;
+
+
     Y_Check_ExactLog2(0);
     Y_Check_ExactLog2(1);
     Y_Check_ExactLog2(2);

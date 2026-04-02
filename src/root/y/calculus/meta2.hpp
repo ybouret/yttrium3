@@ -16,39 +16,70 @@ namespace Yttrium
     };
 
 
-    template <bool IsExact,size_t x> struct MetaLog2API;
-
-    template <size_t x> struct MetaLog2API<true,x>
+    namespace Core
     {
-        static const unsigned Value = 1 + MetaLog2API<true,(x>>1)>::Value;
-    };
+        template <bool IsExact,size_t x> struct MetaLog2API;
 
-    template <> struct MetaLog2API<true,1>
-    {
-        static const unsigned Value = 0;
-    };
+        //! generic Log2 for power-of-two integer
+        template <size_t x> struct MetaLog2API<true,x>
+        {
+            static const unsigned Value = 1 + MetaLog2API<true,(x>>1)>::Value; //!< recursive value
+        };
 
-    template <size_t x> struct MetaLog2API<false,x>
-    {
-        static const unsigned Value = 1 + MetaLog2API<false,(x>>1)>::Value;
-    };
+        //! termination for power-of-two integer
+        template <> struct MetaLog2API<true,1>
+        {
+            static const unsigned Value = 0; //!< terminal value
+        };
 
-    template <> struct MetaLog2API<false,0>
-    {
-        static const unsigned Value = 0;
-    };
+        //! generic Log2 for NOT power-of-two integer
+        template <size_t x> struct MetaLog2API<false,x>
+        {
+            static const unsigned Value = 1 + MetaLog2API<false,(x>>1)>::Value; //!< recursive value
+        };
 
+        //! termination for NOT power-of-two integer
+        template <> struct MetaLog2API<false,0>
+        {
+            static const unsigned Value = 0; //!< terminal value
+        };
+
+        template <bool> struct MetaAccept;
+
+        template <> struct MetaAccept<true>
+        {
+            typedef const int Type;
+        };
+
+        template <> struct MetaAccept<false>
+        {
+            typedef const void * Type;
+        };
+
+    }
+
+
+    //! check exact value
     template <size_t x> struct MetaExactLog2
     {
-        static const size_t Value =  MetaLog2API<true,x>::Value;
+        typedef typename Core::MetaAccept< MetaIsPowerOfTwo<x>::Result >::Type IsExactLog2;
+        static IsExactLog2  Check = 1;
+        static const size_t Value = Core::MetaLog2API<true,x>::Value;
     };
 
     template <size_t x> struct MetaCeilLog2
     {
-        static const size_t Value = MetaLog2API<MetaIsPowerOfTwo<x>::Result,x>::Value;
+        static const size_t Value = Core::MetaLog2API<MetaIsPowerOfTwo<x>::Result,x>::Value;
     };
 
 
+    template <size_t x> struct MetaNextPowerOfTwo
+    {
+        static const  bool     IsExact = MetaIsPowerOfTwo<x>::Result;
+        static const unsigned  RawLog2 = Core::MetaLog2API<IsExact,x>::Value;
+        static const size_t    _1      = 1;
+        static const size_t    Value   = _1 << ( IsExact ? RawLog2 : RawLog2+1);
+    };
 
 
     //! precompiled previous power-of-two
@@ -64,6 +95,7 @@ namespace Yttrium
         static const size_t Value = 0; //!< WRONG but necessary
     };
 
+#if 0
     //! precompiled next power-of two
     template <size_t x> struct MetaNextPowerOfTwo
     {
@@ -76,7 +108,7 @@ namespace Yttrium
     {
         static const size_t Value = 1; //!< special case
     };
-
+#endif
 
 }
 
