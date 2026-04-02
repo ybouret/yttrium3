@@ -29,6 +29,7 @@ y/type
 y/memory
 y/memory/type
 y/memory/small
+y/memory/small/arena
 y/memory/page
 y/memory/plastic
 y/memory/allocator

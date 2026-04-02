@@ -49,11 +49,11 @@ Y_UTEST(memory_small_arena)
         size = 0;
         
         Memory::Small::Arena arena(blockSize,nucleus.book,nucleus.access);
-        std::cerr << " | DataAlign = " << std::setw(4) << arena.DataAlign;
-        std::cerr << " | numBlocks = " << std::setw(4) << arena.numBlocks;
-        std::cerr << " | pageBytes = " << std::setw(8) << arena.allocator.pageBytes;
-        std::cerr << " | pageShift = " << std::setw(8) << arena.allocator.pageShift;
-        std::cerr << " | lostBytes = " << arena.lostBytesInHeader() << "+" << arena.lostBytesPerChunk();
+        std::cerr << " | DataOffset = " << std::setw(4) << arena.DataOffset;
+        std::cerr << " | numBlocks  = " << std::setw(4) << arena.numBlocks;
+        std::cerr << " | pageBytes  = " << std::setw(8) << arena.allocator.pageBytes;
+        std::cerr << " | pageShift  = " << std::setw(8) << arena.allocator.pageShift;
+        std::cerr << " | lostBytes  = " << arena.lostBytesInHeader() << "+" << arena.lostBytesPerChunk();
         std::cerr << std::endl;
         Acquire(nmax,addr,size,arena);
 
@@ -78,11 +78,11 @@ Y_UTEST(memory_small_arena)
     {
         std::cerr << "-- blockSize = " << std::setw(4) << blockSize;
         Memory::Small::Arena arena(blockSize,nucleus.book,nucleus.access);
-        std::cerr << " | DataAlign = " << std::setw(4) << arena.DataAlign;
-        std::cerr << " | numBlocks = " << std::setw(4) << arena.numBlocks;
-        std::cerr << " | pageBytes = " << std::setw(8) << arena.allocator.pageBytes;
-        std::cerr << " | pageShift = " << std::setw(8) << arena.allocator.pageShift;
-        std::cerr << " | lostBytes = " << arena.lostBytesInHeader() << "+" << arena.lostBytesPerChunk();
+        std::cerr << " | DataOffset = " << std::setw(4) << arena.DataOffset;
+        std::cerr << " | numBlocks  = " << std::setw(4) << arena.numBlocks;
+        std::cerr << " | pageBytes  = " << std::setw(8) << arena.allocator.pageBytes;
+        std::cerr << " | pageShift  = " << std::setw(8) << arena.allocator.pageShift;
+        std::cerr << " | lostBytes  = " << arena.lostBytesInHeader() << "+" << arena.lostBytesPerChunk();
         std::cerr << std::endl;
     }
 

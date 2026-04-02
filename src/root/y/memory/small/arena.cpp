@@ -45,7 +45,7 @@ namespace Yttrium
                 //
                 //--------------------------------------------------------------
                 static const size_t DefaultPageBytes = Metrics::DefaultBytes;
-                const size_t        minLength        = blockSize * (numBlocks=Arena::MinNumBlocks) + Arena::DataAlign;
+                const size_t        minLength        = blockSize * (numBlocks=Arena::MinNumBlocks) + Arena::DataOffset;
                 size_t              pageBytes = (minLength>DefaultPageBytes) ? NextPowerOfTwo(minLength) : DefaultPageBytes;
 
                 //--------------------------------------------------------------
@@ -54,7 +54,7 @@ namespace Yttrium
                 //
                 //--------------------------------------------------------------
             COMPUTE_NUM_BLOCKS:
-                numBlocks = (pageBytes - Arena::DataAlign)/blockSize;
+                numBlocks = (pageBytes - Arena::DataOffset)/blockSize;
                 assert(numBlocks>=Arena::MinNumBlocks);
                 if(numBlocks>Arena::MaxNumBlocks)
                 {
@@ -116,12 +116,12 @@ namespace Yttrium
 
             size_t Arena:: lostBytesInHeader() const noexcept
             {
-                return DataAlign - sizeof(Chunk);
+                return DataOffset - sizeof(Chunk);
             }
 
             size_t Arena:: lostBytesPerChunk() const noexcept
             {
-                size_t res = allocator.pageBytes - DataAlign;
+                size_t res = allocator.pageBytes - DataOffset;
                 res       -= numBlocks * blockSize;
                 return res;
             }
@@ -131,7 +131,7 @@ namespace Yttrium
             Chunk * Arena:: newChunk()
             {
                 uint8_t * const zpage = static_cast<uint8_t*>( allocator.get() );
-                Chunk *   const chunk = clist.insertByIncreasingAddress( new (zpage) Chunk(blockSize, (uint8_t)numBlocks, zpage + DataAlign) );
+                Chunk *   const chunk = clist.insertByIncreasingAddress( new (zpage) Chunk(blockSize, (uint8_t)numBlocks, zpage + DataOffset) );
                 
 #if !defined(NDEBUG)
                 for(const Chunk *node=clist.head;node;node=node->next)

@@ -8,6 +8,32 @@
 #include "y/random/fill.hpp"
 #include "y/format/hexadecimal.hpp"
 
+
+#include "y/memory/small/arena/metrics.hpp"
+#include "y/calculus/meta2.hpp"
+#include "y/core/meta-max.hpp"
+
+namespace Yttrium
+{
+
+
+
+    struct OMetrics
+    {
+        static const size_t   MinNumBlocks = Memory::Small::ArenaMetrics::MinNumBlocks;
+        static const size_t   MaxNumBlocks = Memory::Small::ArenaMetrics::MaxNumBlocks;
+        static const size_t   DataOffset   = Memory::Small::ArenaMetrics::DataOffset;
+        static const size_t   MaxSlimBytes = 512;
+        static const unsigned MaxSlimShift = MetaExactLog2<MaxSlimBytes>::Value;
+        static const size_t   MinRawLength = MetaMax<DataOffset + MinNumBlocks * MaxSlimBytes,Memory::Metrics::DefaultBytes>::Value;
+        static const size_t   MinUserBytes = MetaNextPowerOfTwo<MinRawLength>::Value;
+        static const size_t   UserBlocks   = (MinUserBytes-DataOffset) / MaxSlimBytes;
+        typedef typename Core::MetaAccept< (UserBlocks<=MaxNumBlocks) >::Type HasValidSlimBytes;
+        static HasValidSlimBytes Check = 1;
+    };
+
+}
+
 using namespace Yttrium;
 
 namespace
@@ -114,6 +140,11 @@ Y_UTEST(object)
     }
 
 
+    Y_PRINTV(OMetrics::MaxSlimBytes);
+    Y_PRINTV(OMetrics::MinRawLength);
+    Y_PRINTV(OMetrics::MinUserBytes);
+    Y_PRINTV(OMetrics::UserBlocks);
+    //Y_PRINTV(OMetrics::UserBlocks);
 
 
 }

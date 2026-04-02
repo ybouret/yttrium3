@@ -4,6 +4,7 @@
 #ifndef Y_Memory_Small_Arena_Included
 #define Y_Memory_Small_Arena_Included 1
 
+#include "y/memory/small/arena/metrics.hpp"
 #include "y/config/setup.hpp"
 #include "y/core/list.hpp"
 #include "y/memory/metrics.hpp"
@@ -46,13 +47,12 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 static const size_t   _1                = 1;                                            //!< alias
-                static const unsigned MinNumBlocksLog2  = 4;                                            //!< to ensure MinNumBlocks is a power of two
-                static const size_t   MinNumBlocks      = _1<<MinNumBlocksLog2;                         //!< minimum number of blocks per chunk
-                static const size_t   MaxNumBlocks      = 255;                                          //!< maximum number of blocks per chunk
+                static const unsigned MinNumBlocksLog2  = ArenaMetrics::MinNumBlocksLog2;               //!< to ensure MinNumBlocks is a power of two
+                static const size_t   MinNumBlocks      = ArenaMetrics::MinNumBlocks;                   //!< minimum number of blocks per chunk
+                static const size_t   MaxNumBlocks      = ArenaMetrics::MaxNumBlocks;                   //!< maximum number of blocks per chunk
                 static const unsigned MaxBlockSizeLog2  = Metrics::MaxPageShift - (1+MinNumBlocksLog2); //!< from MaxBlockSize<=MaxPageBytes/(1+MinNumBlocks)
                 static const size_t   MaxBlockSize      = _1 << MaxBlockSizeLog2;                       //!< MaxBlockSize = 2^MaxBlockSizeLog2
-                static const size_t   DataAlign         = 8 * sizeof(void*);                            //!< Chunk requires 5 * sizeof(void*)
-                static const unsigned DataAlignLn2      = IntegerLog2<DataAlign>::Value;                //!< log2(DataAlign)
+                static const size_t   DataOffset        = ArenaMetrics::DataOffset;                      //!< Chunk requires 5 * sizeof(void*)
                 typedef Core::ListOf<Chunk> Chunks;                                                     //!< alias
 
                 //______________________________________________________________
@@ -64,7 +64,7 @@ namespace Yttrium
 
                 //! setup from block size
                 /**
-                 \param userSize   1<= bs <= MaxBlockSize
+                 \param userSize 1<= bs <= MaxBlockSize
                  \param userBook PERSISTENT to choose Pages according to inner metrics
                  \param userLock PERSISTENT lock for memory operations
                  */
