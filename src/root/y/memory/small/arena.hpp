@@ -45,11 +45,14 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
+                static const size_t   _1                = 1;                                            //!< alias
                 static const unsigned MinNumBlocksLog2  = 4;                                            //!< to ensure MinNumBlocks is a power of two
-                static const size_t   MinNumBlocks      = 1<<MinNumBlocksLog2;                          //!< minimum number of blocks per chunk
+                static const size_t   MinNumBlocks      = _1<<MinNumBlocksLog2;                         //!< minimum number of blocks per chunk
                 static const size_t   MaxNumBlocks      = 255;                                          //!< maximum number of blocks per chunk
                 static const unsigned MaxBlockSizeLog2  = Metrics::MaxPageShift - (1+MinNumBlocksLog2); //!< from MaxBlockSize<=MaxPageBytes/(1+MinNumBlocks)
-                static const size_t   MaxBlockSize      = size_t(1) << MaxBlockSizeLog2;                //!< MaxBlockSize = 2^MaxBlockSizeLog2
+                static const size_t   MaxBlockSize      = _1 << MaxBlockSizeLog2;                       //!< MaxBlockSize = 2^MaxBlockSizeLog2
+                static const size_t   DataAlign         = 8 * sizeof(void*);                            //!< Chunk requires 5 * sizeof(void*)
+                static const unsigned DataAlignLn2      = IntegerLog2<DataAlign>::Value;                //!< log2(DataAlign)
                 typedef Core::ListOf<Chunk> Chunks;                                                     //!< alias
 
                 //______________________________________________________________
@@ -78,6 +81,7 @@ namespace Yttrium
                 // Methods
                 //
                 //______________________________________________________________
+                size_t  lostBytesInHeader() const noexcept; //!< lost bytes due to Chunk \return  DataAlign-sizeof(Chunk)
                 size_t  lostBytesPerChunk() const noexcept; //!< compute lost bytes per chunk \return allocated - usable
 
                 //! acquire a new block, thread safe thru access
@@ -123,7 +127,7 @@ namespace Yttrium
 
             public:
                 const size_t    numBlocks; //!< number of blocks per chunk [1:255]
-                const size_t    dataAlign; //!< data alignment
+                //const size_t    dataAlign; //!< data alignment
                 Memory::Pages & allocator; //!< for
                 Arena *         next;      //!< for list
                 Arena *         prev;      //!< for list

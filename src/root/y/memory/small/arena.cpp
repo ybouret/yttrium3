@@ -37,7 +37,6 @@ namespace Yttrium
 
             static inline
             size_t PageBytes(const size_t blockSize,
-                             const size_t dataAlign,
                              size_t &     numBlocks) noexcept
             {
                 //--------------------------------------------------------------
@@ -46,7 +45,7 @@ namespace Yttrium
                 //
                 //--------------------------------------------------------------
                 static const size_t DefaultPageBytes = Metrics::DefaultBytes;
-                const size_t        minLength        = blockSize * (numBlocks=Arena::MinNumBlocks) + dataAlign;
+                const size_t        minLength        = blockSize * (numBlocks=Arena::MinNumBlocks) + Arena::DataAlign;
                 size_t              pageBytes = (minLength>DefaultPageBytes) ? NextPowerOfTwo(minLength) : DefaultPageBytes;
 
                 //--------------------------------------------------------------
@@ -55,7 +54,7 @@ namespace Yttrium
                 //
                 //--------------------------------------------------------------
             COMPUTE_NUM_BLOCKS:
-                numBlocks = (pageBytes - dataAlign)/blockSize;
+                numBlocks = (pageBytes - Arena::DataAlign)/blockSize;
                 assert(numBlocks>=Arena::MinNumBlocks);
                 if(numBlocks>Arena::MaxNumBlocks)
                 {
@@ -68,13 +67,13 @@ namespace Yttrium
 
             static inline
             unsigned PageShift(const size_t blockSize,
-                               const size_t dataAlign,
                                size_t &     numBlocks) noexcept
             {
-                const size_t pageBytes = PageBytes(blockSize,dataAlign,numBlocks);
+                const size_t pageBytes = PageBytes(blockSize,numBlocks);
                 return ExactLog2(pageBytes);
             }
 
+#if 0
 
 #if 0
             static inline
@@ -93,6 +92,8 @@ namespace Yttrium
             }
 #endif
 
+#endif
+
             Arena:: Arena(const size_t userSize,
                           Book &       userBook,
                           Lockable &   userLock) :
@@ -104,19 +105,24 @@ namespace Yttrium
             ready(0),
             clist(),
             numBlocks(0),
-            dataAlign( DataAlign(blockSize) ),
-            allocator( userBook[ PageShift(blockSize,dataAlign,Coerce(numBlocks)) ] ),
+            //dataAlign( DataAlign(blockSize) ),
+            allocator( userBook[ PageShift(blockSize,Coerce(numBlocks)) ] ),
             next(0),
             prev(0)
             {
                 acquiring = releasing = newChunk();
             }
 
+
+            size_t Arena:: lostBytesInHeader() const noexcept
+            {
+                return DataAlign - sizeof(Chunk);
+            }
+
             size_t Arena:: lostBytesPerChunk() const noexcept
             {
-                size_t res = allocator.pageBytes;
+                size_t res = allocator.pageBytes - DataAlign;
                 res       -= numBlocks * blockSize;
-                res       -= sizeof(Chunk);
                 return res;
             }
 
@@ -125,7 +131,7 @@ namespace Yttrium
             Chunk * Arena:: newChunk()
             {
                 uint8_t * const zpage = static_cast<uint8_t*>( allocator.get() );
-                Chunk *   const chunk = clist.insertByIncreasingAddress( new (zpage) Chunk(blockSize, (uint8_t)numBlocks, zpage + dataAlign) );
+                Chunk *   const chunk = clist.insertByIncreasingAddress( new (zpage) Chunk(blockSize, (uint8_t)numBlocks, zpage + DataAlign) );
                 
 #if !defined(NDEBUG)
                 for(const Chunk *node=clist.head;node;node=node->next)

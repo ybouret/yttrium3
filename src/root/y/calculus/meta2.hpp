@@ -3,6 +3,7 @@
 #ifndef Y_Calculus_Meta2_Included
 #define Y_Calculus_Meta2_Included
 
+#include "y/type/pick.hpp"
 #include <cstdlib>
 
 namespace Yttrium
@@ -13,6 +14,42 @@ namespace Yttrium
     {
         static const bool Result = (x && (!(x & (x - size_t(1) ) )) ); //!< true iff x=2^n
     };
+
+
+    template <bool IsExact,size_t x> struct MetaLog2API;
+
+    template <size_t x> struct MetaLog2API<true,x>
+    {
+        static const unsigned Value = 1 + MetaLog2API<true,(x>>1)>::Value;
+    };
+
+    template <> struct MetaLog2API<true,1>
+    {
+        static const unsigned Value = 0;
+    };
+
+    template <size_t x> struct MetaLog2API<false,x>
+    {
+        static const unsigned Value = 1 + MetaLog2API<false,(x>>1)>::Value;
+    };
+
+    template <> struct MetaLog2API<false,0>
+    {
+        static const unsigned Value = 0;
+    };
+
+    template <size_t x> struct MetaExactLog2
+    {
+        static const size_t Value =  MetaLog2API<true,x>::Value;
+    };
+
+    template <size_t x> struct MetaCeilLog2
+    {
+        static const size_t Value = MetaLog2API<MetaIsPowerOfTwo<x>::Result,x>::Value;
+    };
+
+
+
 
     //! precompiled previous power-of-two
     template <size_t x> struct MetaPrevPowerOfTwo
