@@ -70,6 +70,18 @@ Y_UTEST(memory_small_arena)
     Y_SIZEOF(Memory::Small::Arena);
     Y_SIZEOF(Core::ListOf<Memory::Small::Arena>);
 
+    std::cerr << std::endl;
+    for(size_t blockSize=1;blockSize<=512;blockSize<<=1)
+    {
+        std::cerr << "-- blockSize = " << std::setw(4) << blockSize;
+        Memory::Small::Arena arena(blockSize,nucleus.book,nucleus.access);
+        std::cerr << " | dataAlign = " << std::setw(4) << arena.dataAlign;
+        std::cerr << " | numBlocks = " << std::setw(4) << arena.numBlocks;
+        std::cerr << " | pageBytes = " << std::setw(8) << arena.allocator.pageBytes;
+        std::cerr << " | pageShift = " << std::setw(8) << arena.allocator.pageShift;
+        std::cerr << " | lostBytes = " << arena.lostBytesPerChunk();
+        std::cerr << std::endl;
+    }
 
 }
 Y_UDONE()
