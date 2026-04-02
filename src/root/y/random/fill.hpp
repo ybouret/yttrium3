@@ -21,6 +21,7 @@ namespace Yttrium
          \param size data size
          \param umin minimum byte value
          \param umax maximum byte value
+         \return filled block address
          */
         //______________________________________________________________________
         template <typename RAND> inline
@@ -28,7 +29,7 @@ namespace Yttrium
                         void * const  addr,
                         const size_t  size,
                         const uint8_t umin = 0,
-                      const uint8_t umax = 255) noexcept
+                        const uint8_t umax = 255) noexcept
         {
             assert(!(0==addr&&size>0));
             uint8_t * const p = static_cast<uint8_t *>(addr);

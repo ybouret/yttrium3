@@ -9,7 +9,12 @@
 namespace Yttrium
 {
 
+    //__________________________________________________________________________
+    //
+    //
     //! precompiled power-of-two flag
+    //
+    //__________________________________________________________________________
     template <size_t x> struct MetaIsPowerOfTwo
     {
         static const bool Result = (x && (!(x & (x - size_t(1) ) )) ); //!< true iff x=2^n
@@ -60,8 +65,10 @@ namespace Yttrium
 
     }
 
-
-    //! check exact value
+    //__________________________________________________________________________
+    //
+    //! compute for exact power of two value
+    //__________________________________________________________________________
     template <size_t x> struct MetaExactLog2
     {
         typedef typename Core::MetaAccept< MetaIsPowerOfTwo<x>::Result >::Type IsExactLog2; //!< alias
@@ -69,52 +76,39 @@ namespace Yttrium
         static const size_t Value = Core::MetaLog2API<true,x>::Value; //!< compute value
     };
 
+    //__________________________________________________________________________
+    //
     //! ceil log2
+    //__________________________________________________________________________
     template <size_t x> struct MetaCeilLog2
     {
         static const size_t Value = Core::MetaLog2API<MetaIsPowerOfTwo<x>::Result,x>::Value; //!< compute value
     };
 
-
+    //__________________________________________________________________________
+    //
     //! computed next power of two
+    //__________________________________________________________________________
     template <size_t x> struct MetaNextPowerOfTwo
     {
-        static const  bool     IsExact = MetaIsPowerOfTwo<x>::Result;            //!< true iff exact log2
-        static const unsigned  RawLog2 = Core::MetaLog2API<IsExact,x>::Value;    //!< compute from API
-        static const size_t    _1      = 1;                                      //!< alias
-        static const size_t    Value   = _1 << ( IsExact ? RawLog2 : RawLog2+1); //!< detec
+        static const size_t    _1    = 1;                             //!< alias
+        static const size_t    Value = _1 << MetaCeilLog2<x>::Value; //!< computed value
     };
 
-
-    
-
-    //! precompiled previous power-of-two
+    //__________________________________________________________________________
+    //
+    //! computed prev power of two
+    //__________________________________________________________________________
     template <size_t x> struct MetaPrevPowerOfTwo
     {
-        //! meta-computed value
-        static const size_t Value = MetaIsPowerOfTwo<x>::Result ? x : MetaPrevPowerOfTwo<x-1>::Value;
+        typedef typename Core::MetaAccept< (x>0) >::Type IsPossible;                 //!< alias
+        static const IsPossible Check    = 1;                                        //!< will block x=0
+        static const bool       IsExact  = MetaIsPowerOfTwo<x>::Result;              //!< true iff exact log2
+        static const unsigned   CeilLog2 = MetaCeilLog2<x>::Value;                   //!< ceil log2
+        static const size_t     _1       = 1;                                        //!< alias
+        static const size_t     Value    = _1 << ( IsExact ? CeilLog2 : CeilLog2-1); //!< deduce value
     };
 
-    //! WRONG termination for MetaPrevPowerOfTwo
-    template <> struct MetaPrevPowerOfTwo<0>
-    {
-        static const size_t Value = 0; //!< WRONG but necessary
-    };
-
-#if 0
-    //! precompiled next power-of two
-    template <size_t x> struct MetaNextPowerOfTwo
-    {
-        //! trick to avoid infinite recursion
-        static const size_t Value = MetaIsPowerOfTwo<x>::Result ? x : (MetaPrevPowerOfTwo<x>::Value<<1);
-    };
-
-    //! termination for MetaNextPowerOfTwo
-    template <> struct MetaNextPowerOfTwo<0>
-    {
-        static const size_t Value = 1; //!< special case
-    };
-#endif
 
 }
 

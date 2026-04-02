@@ -45,6 +45,8 @@ Y_UTEST(calculus_meta2)
     Y_Check_ExactLog2(26);
     Y_Check_ExactLog2(27);
     Y_Check_ExactLog2(28);
+    Y_Check_ExactLog2(29);
+    Y_Check_ExactLog2(30);
     std::cerr << std::endl;
 
 
@@ -75,6 +77,30 @@ Y_UTEST(calculus_meta2)
         fclose(fp);
         std::cerr << "#checks=" << nt << std::endl;
     }
+
+
+    Y_PRINTV( MetaNextPowerOfTwo<0>::Value );
+    Y_PRINTV( MetaNextPowerOfTwo<1>::Value );
+    Y_PRINTV( MetaNextPowerOfTwo<2>::Value );
+    Y_PRINTV( MetaNextPowerOfTwo<3>::Value );
+    Y_PRINTV( MetaNextPowerOfTwo<4>::Value );
+    Y_PRINTV( MetaNextPowerOfTwo<5>::Value );
+    Y_PRINTV( MetaNextPowerOfTwo<6>::Value );
+    Y_PRINTV( MetaNextPowerOfTwo<7>::Value );
+    Y_PRINTV( MetaNextPowerOfTwo<8>::Value );
+    Y_PRINTV( MetaNextPowerOfTwo<1000>::Value );
+    std::cerr << std::endl;
+
+    //Y_PRINTV( MetaPrevPowerOfTwo<0>::Value );
+    Y_PRINTV( MetaPrevPowerOfTwo<1>::Value );
+    Y_PRINTV( MetaPrevPowerOfTwo<2>::Value );
+    Y_PRINTV( MetaPrevPowerOfTwo<3>::Value );
+    Y_PRINTV( MetaPrevPowerOfTwo<4>::Value );
+    Y_PRINTV( MetaPrevPowerOfTwo<5>::Value );
+    Y_PRINTV( MetaPrevPowerOfTwo<6>::Value );
+    Y_PRINTV( MetaPrevPowerOfTwo<7>::Value );
+    Y_PRINTV( MetaPrevPowerOfTwo<8>::Value );
+    Y_PRINTV( MetaPrevPowerOfTwo<1000>::Value );
 
 }
 Y_UDONE()
