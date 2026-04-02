@@ -24,7 +24,7 @@ namespace
     {
     public:
 
-        Dummy() : Object()
+        Dummy() : Object(), a(0)
         {
         }
 
@@ -110,10 +110,7 @@ Y_UTEST(object)
         delete []dummy;
 
         void *wksp[4];
-        ;
-        Hexadecimal::Display(std::cerr, (uint8_t *)Random::FillWith(ran,Y_BZero(wksp),sizeof(wksp),1), sizeof(wksp)) << std::endl;
         dummy = new (wksp) Dummy();
-        std::cerr << dummy->a << std::endl;
     }
 
 
