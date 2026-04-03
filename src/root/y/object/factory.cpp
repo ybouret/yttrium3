@@ -24,16 +24,7 @@ namespace Yttrium
     {
     }
 
-
-    namespace
-    {
-        static const size_t   _1           = 1;
-        static const unsigned MaxSlimShift = Memory::Metrics::MinPageShift-1;
-    }
-    const size_t   Object:: Factory:: MaxSlimBytes = _1 << MaxSlimShift;
-    const size_t   Object:: Factory:: MaxFairBytes =  Memory::Plastic::Forge::DefaultMaxBlockSize;
-    const size_t   Object:: Factory:: MaxVastBytes =  Memory::Metrics::MaxPageBytes;
-
+    
     Object:: Factory::Model Object:: Factory:: ModelFor(const size_t blockSize) noexcept
     {
         assert(blockSize<=MaxVastBytes);

@@ -6,41 +6,7 @@
 #include "y/core/rand.hpp"
 #include "y/random/shuffle.hpp"
 #include "y/random/fill.hpp"
-#include "y/format/hexadecimal.hpp"
 
-
-#include "y/memory/small/arena/metrics.hpp"
-#include "y/memory/plastic/forge/metrics.hpp"
-
-#include "y/calculus/meta2.hpp"
-#include "y/core/meta-max.hpp"
-
-namespace Yttrium
-{
-
-
-#if 0
-    template <size_t MAX_SLIM_BYTES>
-    struct OMetrics
-    {
-        static const size_t   MaxSlimBytes = MAX_SLIM_BYTES;
-        static const unsigned MaxSlimShift = MetaExactLog2<MaxSlimBytes>::Value; //!< enforce power of two
-        static const size_t   MinNumBlocks = Memory::Small::ArenaMetrics::MinNumBlocks;
-        static const size_t   MaxNumBlocks = Memory::Small::ArenaMetrics::MaxNumBlocks;
-        static const size_t   DataLocation = Memory::Small::ArenaMetrics::DataLocation;
-
-        static const size_t   NumPredicted = DataLocation + MinNumBlocks*MaxSlimBytes;
-        static const size_t   MinRawLength = MetaMax<NumPredicted,Memory::Metrics::DefaultBytes>::Value;
-        static const size_t   MinUserBytes = MetaNextPowerOfTwo<MinRawLength>::Value;
-        static const size_t   UserBlocks   = (MinUserBytes-DataLocation) / MaxSlimBytes;
-        typedef typename Core::MetaAccept< (UserBlocks<=MaxNumBlocks) >::Type HasValidSlimBytes;
-        static HasValidSlimBytes Check = 1;
-        static const size_t MaxFairBytes = MinUserBytes - Memory::Plastic::ForgeMetrics::ReservedSize;
-        static const size_t MaxVastBytes = Memory::Metrics::MaxPageBytes;
-    };
-#endif
-
-}
 
 using namespace Yttrium;
 
@@ -78,32 +44,40 @@ Y_UTEST(object)
 {
     Core::Rand     ran;
 
-
-    size_t last  = 0;
-    size_t count = 0;
-    for(size_t i=1;i<=Object::Factory::MaxSlimBytes;++i)
     {
-        const size_t curr = Object::Factory::SlimCompress(i);
-        std::cerr << std::setw(4) << i << " -> " << curr << std::endl;
-        if(curr>last)
+        std::cerr << "Testing Slim::Compression" << std::endl;
+        size_t last  = 0;
+        size_t count = 0;
+        for(size_t i=1;i<=Object::Factory::MaxSlimBytes;++i)
         {
-            last = curr;
-            ++count;
+            const size_t curr = Object::Factory::SlimCompress(i);
+            std::cerr << std::setw(4) << i << " -> " << curr << std::endl;
+            if(curr>last)
+            {
+                last = curr;
+                ++count;
+            }
         }
+        std::cerr << "count = " << count << " / " << Object::Factory::MaxSlimBytes << std::endl;
+        std::cerr << std::endl;
     }
-    std::cerr << "count = " << count << " / " << Object::Factory::MaxSlimBytes << std::endl;
 
+
+    std::cerr << "Metrics:" << std::endl;
     Y_PRINTV(Object::Factory::MaxSlimBytes);
     Y_PRINTV(Object::Factory::MaxFairBytes);
     Y_PRINTV(Object::Factory::MaxVastBytes);
+    std::cerr << std::endl;
 
     Object::Factory &F = Object::Factory::Instance();
 
     {
         Memory::Allocator & mgr = Memory::Global::Instance();
         size_t  bytes = 0;
-        size_t  count = 6000;
+        size_t  count = (3*ObjectFactoryType::MaxFairBytes)/2;
         Block  *entry = mgr.acquireAs<Block>(count,bytes);
+
+        (std::cerr << "Testing Object I/O with up to " << count << " bytes" << std::endl).flush();
 
         for(size_t i=0;i<count;++i)
         {
@@ -116,6 +90,7 @@ Y_UTEST(object)
         }
 
 
+        (std::cerr << "Testing Allocator I/O with up to " << count << " bytes" << std::endl).flush();
         for(size_t i=0;i<count;++i)
         {
             entry[i].addr = F.acquire(entry[i].size=i);
@@ -131,8 +106,10 @@ Y_UTEST(object)
 
 
         mgr.releaseAs(entry,count,bytes);
+        std::cerr << std::endl;
     }
 
+    std::cerr << "Testing Ctor/Dtor" << std::endl;
     {
         Dummy * dummy = 0;
         delete  dummy;
@@ -146,7 +123,7 @@ Y_UTEST(object)
         void *wksp[4];
         dummy = new (wksp) Dummy();
     }
-
+    std::cerr << std::endl;
 
 
     Y_PRINTV(ObjectFactory<16>::MinUserBytes);

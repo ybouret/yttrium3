@@ -50,6 +50,8 @@ namespace Yttrium
         Y_Disable_Copy_And_Assign(ObjectFactory);
     };
 
+    typedef ObjectFactory<256> ObjectFactoryType;
+
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
     
     //__________________________________________________________________________
@@ -62,7 +64,8 @@ namespace Yttrium
     //__________________________________________________________________________
     class Object :: Factory :
     public Singleton<Factory,ClassLockPolicy>,
-    public Memory::Allocator
+    public Memory::Allocator,
+    public ObjectFactoryType
     {
     public:
         //______________________________________________________________________
@@ -75,10 +78,7 @@ namespace Yttrium
         static const Longevity    LifeTime = LifeTimeFor::ObjectFactory; //!< alias
         typedef ClassLockPolicy   Policy;                                //!< alias
         typedef void *            CompressType;                          //!< type to align Small::Blocks to
-        static const size_t       MaxSlimBytes;                          //!< limit to use Small::Blocks
-        static const size_t       MaxFairBytes;                          //!< limit to use Memory::Pooled
-        static const size_t       MaxVastBytes;                          //!< limit to use Memory::Archon
-
+        
         //! named memory model
         enum Model
         {
