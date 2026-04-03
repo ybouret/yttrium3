@@ -19,10 +19,11 @@ namespace Yttrium
 {
 
 
-
-    template <size_t MaxSlimBytes>
+#if 0
+    template <size_t MAX_SLIM_BYTES>
     struct OMetrics
     {
+        static const size_t   MaxSlimBytes = MAX_SLIM_BYTES;
         static const unsigned MaxSlimShift = MetaExactLog2<MaxSlimBytes>::Value; //!< enforce power of two
         static const size_t   MinNumBlocks = Memory::Small::ArenaMetrics::MinNumBlocks;
         static const size_t   MaxNumBlocks = Memory::Small::ArenaMetrics::MaxNumBlocks;
@@ -34,10 +35,10 @@ namespace Yttrium
         static const size_t   UserBlocks   = (MinUserBytes-DataLocation) / MaxSlimBytes;
         typedef typename Core::MetaAccept< (UserBlocks<=MaxNumBlocks) >::Type HasValidSlimBytes;
         static HasValidSlimBytes Check = 1;
-
-        static const size_t MaxVastBytes = MinUserBytes - Memory::Plastic::ForgeMetrics::ReservedSize;
-        
+        static const size_t MaxFairBytes = MinUserBytes - Memory::Plastic::ForgeMetrics::ReservedSize;
+        static const size_t MaxVastBytes = Memory::Metrics::MaxPageBytes;
     };
+#endif
 
 }
 
@@ -147,18 +148,14 @@ Y_UTEST(object)
     }
 
 
-    //Y_PRINTV(OMetrics::MaxSlimBytes);
-    //Y_PRINTV(OMetrics::MinRawLength);
-    //Y_PRINTV(OMetrics::MinUserBytes);
-    //Y_PRINTV(OMetrics::UserBlocks);
-    //Y_PRINTV(OMetrics::UserBlocks);
-    Y_PRINTV(OMetrics<16>::MinUserBytes);
-    Y_PRINTV(OMetrics<32>::MinUserBytes);
-    Y_PRINTV(OMetrics<64>::MinUserBytes);
-    Y_PRINTV(OMetrics<128>::MinUserBytes);
-    Y_PRINTV(OMetrics<256>::MinUserBytes);
-    Y_PRINTV(OMetrics<512>::MinUserBytes);
-    Y_PRINTV(OMetrics<1024>::MinUserBytes);
+
+    Y_PRINTV(ObjectFactory<16>::MinUserBytes);
+    Y_PRINTV(ObjectFactory<32>::MinUserBytes);
+    Y_PRINTV(ObjectFactory<64>::MinUserBytes);
+    Y_PRINTV(ObjectFactory<128>::MinUserBytes);
+    Y_PRINTV(ObjectFactory<256>::MinUserBytes);
+    Y_PRINTV(ObjectFactory<512>::MinUserBytes);
+    Y_PRINTV(ObjectFactory<1024>::MinUserBytes);
 
 
 }

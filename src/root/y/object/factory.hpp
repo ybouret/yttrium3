@@ -7,9 +7,48 @@
 #include "y/singleton.hpp"
 #include "y/concurrent/life-time.hpp"
 #include "y/memory/allocator.hpp"
+#include "y/calculus/meta2.hpp"
+#include "y/core/meta-max.hpp"
+
+#include "y/memory/metrics.hpp"
+#include "y/memory/small/arena/metrics.hpp"
+#include "y/memory/plastic/forge/metrics.hpp"
 
 namespace Yttrium
 {
+
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //!  Metrics for Object::Factory
+    //
+    //
+    //__________________________________________________________________________
+    template <size_t MAX_SLIM_BYTES>
+    class ObjectFactory
+    {
+    public:
+        static const size_t   MaxSlimBytes = MAX_SLIM_BYTES;
+        static const unsigned MaxSlimShift = MetaExactLog2<MaxSlimBytes>::Value;                         //!< enforce power of two
+        static const size_t   MinNumBlocks = Memory::Small::ArenaMetrics::MinNumBlocks;                  //!< retrieve information
+        static const size_t   MaxNumBlocks = Memory::Small::ArenaMetrics::MaxNumBlocks;                  //!< retrieve information
+        static const size_t   DataLocation = Memory::Small::ArenaMetrics::DataLocation;                  //!< retrieve information
+        static const size_t   NumPredicted = DataLocation + MinNumBlocks*MaxSlimBytes;                   //!< assumed bytes per Chunk
+        static const size_t   MinRawLength = MetaMax<NumPredicted,Memory::Metrics::DefaultBytes>::Value; //!< adjusted bytes per Chunk
+        static const size_t   MinUserBytes = MetaNextPowerOfTwo<MinRawLength>::Value;                    //!< rounded bytes per Chunk
+        static const size_t   UserBlocks   = (MinUserBytes-DataLocation) / MaxSlimBytes;                 //!< fitting blocks in Chunk
+        typedef typename Core::MetaAccept< (UserBlocks<=MaxNumBlocks) >::Type HasValidSlimBytes;         //!< alias
+        static HasValidSlimBytes Check = 1;                                                              //!< checking possibler MAX_SLIM_BYTES
+        static const size_t MaxFairBytes = MinUserBytes - Memory::Plastic::ForgeMetrics::ReservedSize;   //!< matching medium sized object limit
+        static const size_t MaxVastBytes = Memory::Metrics::MaxPageBytes;                                //!< alias
+
+        inline explicit ObjectFactory() noexcept {}
+        inline virtual ~ObjectFactory() noexcept {}
+
+    private:
+        Y_Disable_Copy_And_Assign(ObjectFactory);
+    };
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
     
