@@ -20,7 +20,7 @@ namespace Yttrium
                 static const unsigned MinNumBlocksLog2  = 4;                    //!< to ensure MinNumBlocks is a power of two
                 static const size_t   MinNumBlocks      = _1<<MinNumBlocksLog2; //!< Minimal Blocks in Chunk
                 static const size_t   MaxNumBlocks      = 255;                  //!< Maximal Blocks in Chunk
-                static const size_t   DataOffset        = 8 * sizeof(void*);    //!< Chunk requires 5 * sizeof(void*)
+                static const size_t   DataLocation      = 8 * sizeof(void*);    //!< Chunk requires 5 * sizeof(void*)
             };
 
         }

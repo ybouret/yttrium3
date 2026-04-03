@@ -41,14 +41,14 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
-                static const size_t          DataOffset   = Alignment::To<Brick>::CeilOf<sizeof(Bricks)>::Value; //!< offset of data
-                static const size_t          MinimalSize  = DataOffset + Bricks::MinUserBytes;                   //!< to handle minimal data
+                static const size_t          BrickOffset  = Alignment::To<Brick>::CeilOf<sizeof(Bricks)>::Value; //!< offset of data
+                static const size_t          MinimalSize  = BrickOffset + Bricks::MinUserBytes;                   //!< to handle minimal data
                 static const size_t          MinRawBytes  = MetaNextPowerOfTwo<MinimalSize>::Value;              //!< alias
                 static const size_t          MinPageBytes = MetaMax<MinRawBytes,Metrics::DefaultBytes>::Value;   //!< alias
                 static const unsigned        MinPageShift = IntegerLog2<MinPageBytes>::Value;                    //!< alias
                 static const size_t          MaxPageBytes = Metrics::MaxPageBytes;                               //!< alias
                 static const unsigned        MaxPageShift = Metrics::MaxPageShift;                               //!< alias
-                static const size_t          ReservedSize = DataOffset + Bricks::Reserved;                       //!< alias
+                static const size_t          ReservedSize = BrickOffset + Bricks::Reserved;                       //!< alias
                 static const size_t          MaxBlockSize = MaxPageBytes - ReservedSize;                         //!< alias
                 static const size_t          DefaultMaxBlockSize = Memory::Metrics::DefaultBytes - ReservedSize; //!< alias
                 typedef Core::ListOf<Bricks> ListType; //!< alias
@@ -60,7 +60,7 @@ namespace Yttrium
                 //
                 //______________________________________________________________
 
-                //! setuo
+                //! setup
                 /**
                  \param userBook PERSISTENT provider of Pages
                  \param userLock PERSISTENT access control

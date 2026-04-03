@@ -18,16 +18,18 @@ namespace Yttrium
 
 
 
+    template <size_t MaxSlimBytes>
     struct OMetrics
     {
+        static const unsigned MaxSlimShift = MetaExactLog2<MaxSlimBytes>::Value; //!< enforce power of two
         static const size_t   MinNumBlocks = Memory::Small::ArenaMetrics::MinNumBlocks;
         static const size_t   MaxNumBlocks = Memory::Small::ArenaMetrics::MaxNumBlocks;
-        static const size_t   DataOffset   = Memory::Small::ArenaMetrics::DataOffset;
-        static const size_t   MaxSlimBytes = 512;
-        static const unsigned MaxSlimShift = MetaExactLog2<MaxSlimBytes>::Value;
-        static const size_t   MinRawLength = MetaMax<DataOffset + MinNumBlocks * MaxSlimBytes,Memory::Metrics::DefaultBytes>::Value;
+        static const size_t   DataLocation = Memory::Small::ArenaMetrics::DataLocation;
+
+        static const size_t   NumPredicted = DataLocation + MinNumBlocks*MaxSlimBytes;
+        static const size_t   MinRawLength = MetaMax<NumPredicted,Memory::Metrics::DefaultBytes>::Value;
         static const size_t   MinUserBytes = MetaNextPowerOfTwo<MinRawLength>::Value;
-        static const size_t   UserBlocks   = (MinUserBytes-DataOffset) / MaxSlimBytes;
+        static const size_t   UserBlocks   = (MinUserBytes-DataLocation) / MaxSlimBytes;
         typedef typename Core::MetaAccept< (UserBlocks<=MaxNumBlocks) >::Type HasValidSlimBytes;
         static HasValidSlimBytes Check = 1;
     };
@@ -140,11 +142,18 @@ Y_UTEST(object)
     }
 
 
-    Y_PRINTV(OMetrics::MaxSlimBytes);
-    Y_PRINTV(OMetrics::MinRawLength);
-    Y_PRINTV(OMetrics::MinUserBytes);
-    Y_PRINTV(OMetrics::UserBlocks);
+    //Y_PRINTV(OMetrics::MaxSlimBytes);
+    //Y_PRINTV(OMetrics::MinRawLength);
+    //Y_PRINTV(OMetrics::MinUserBytes);
     //Y_PRINTV(OMetrics::UserBlocks);
+    //Y_PRINTV(OMetrics::UserBlocks);
+    Y_PRINTV(OMetrics<16>::MinUserBytes);
+    Y_PRINTV(OMetrics<32>::MinUserBytes);
+    Y_PRINTV(OMetrics<64>::MinUserBytes);
+    Y_PRINTV(OMetrics<128>::MinUserBytes);
+    Y_PRINTV(OMetrics<256>::MinUserBytes);
+    Y_PRINTV(OMetrics<512>::MinUserBytes);
+    Y_PRINTV(OMetrics<1024>::MinUserBytes);
 
 
 }

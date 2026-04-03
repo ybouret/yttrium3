@@ -52,7 +52,7 @@ namespace Yttrium
                 static const size_t   MaxNumBlocks      = ArenaMetrics::MaxNumBlocks;                   //!< maximum number of blocks per chunk
                 static const unsigned MaxBlockSizeLog2  = Metrics::MaxPageShift - (1+MinNumBlocksLog2); //!< from MaxBlockSize<=MaxPageBytes/(1+MinNumBlocks)
                 static const size_t   MaxBlockSize      = _1 << MaxBlockSizeLog2;                       //!< MaxBlockSize = 2^MaxBlockSizeLog2
-                static const size_t   DataOffset        = ArenaMetrics::DataOffset;                      //!< Chunk requires 5 * sizeof(void*)
+                static const size_t   DataLocation      = ArenaMetrics::DataLocation;                   //!< Chunk requires 5 * sizeof(void*)
                 typedef Core::ListOf<Chunk> Chunks;                                                     //!< alias
 
                 //______________________________________________________________

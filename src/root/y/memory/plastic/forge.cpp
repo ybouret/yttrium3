@@ -60,8 +60,8 @@ namespace Yttrium
 
                 Pages &           alloc     = book[shift]; assert(shift==alloc.pageShift);
                 void *    const   block     = alloc.get();
-                char * const      dataAddr  = static_cast<char *>(block) + DataOffset;
-                const size_t      dataSize  = alloc.pageBytes - DataOffset;
+                char * const      dataAddr  = static_cast<char *>(block) + BrickOffset;
+                const size_t      dataSize  = alloc.pageBytes - BrickOffset;
 
                 return list.pushHead( new (block) Bricks(dataAddr,dataSize,shift) );
             }
