@@ -42,7 +42,10 @@ namespace Yttrium
 
     void * Object:: Factory:: query(const size_t blockSize)
     {
-        if(blockSize>=MaxVastBytes) throw Specific::Exception(CallSign,"blockSize=%s overflow", Decimal(blockSize).c_str() );
+        if(blockSize>=MaxVastBytes)
+            throw Specific::Exception(CallSign,"blockSize=%s overflow", Decimal(blockSize).c_str() );
+
+
         Y_Lock(access);
         const Model model = ModelFor(blockSize);
         switch(model)
@@ -68,6 +71,8 @@ namespace Yttrium
 
     void Object:: Factory:: store(void * const blockAddr, const size_t blockSize) noexcept
     {
+        assert(blockSize<=MaxVastBytes);
+        
         Y_Lock(access);
         const Model model = ModelFor(blockSize);
         switch(model)
