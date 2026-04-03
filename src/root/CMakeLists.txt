@@ -32,6 +32,7 @@ y/memory/small
 y/memory/small/arena
 y/memory/page
 y/memory/plastic
+y/memory/plastic/forge
 y/memory/allocator
 y/ability
 y/container

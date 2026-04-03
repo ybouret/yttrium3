@@ -103,6 +103,7 @@ Y_UTEST(memory_plastic_forge)
 
         Y_PRINTV(Memory::Plastic::Forge::MinPageShift);
         Y_PRINTV(Memory::Plastic::Forge::MaxPageShift);
+        Y_PRINTV(Memory::Plastic::Forge::ReservedSize);
 
 
         Y_SIZEOF(Memory::Plastic::Forge);
@@ -120,8 +121,22 @@ Y_UTEST(memory_plastic_forge)
         Y_PRINTV(head->maxBlockSize);
         const size_t DefaultMaxBlockSize = Memory::Plastic::Forge::DefaultMaxBlockSize;
         Y_CHECK(DefaultMaxBlockSize==head->maxBlockSize);
+
+
+
     }
 
+    {
+        Memory::Plastic::Forge forge(nucleus.book,nucleus.access);
+        const size_t nmax = 16384 - Memory::Plastic::ForgeMetrics::ReservedSize;
+        { size_t n = nmax; void * p = forge.acquire(n); forge.release(p,n); }
+        const Memory::Plastic::Bricks * const head = forge->head;
+        Y_ASSERT(head!=0);
+        Y_PRINTV(head->maxBlockSize);
+        Y_PRINTV(nmax);
+        Y_CHECK(nmax==head->maxBlockSize);
+
+    }
 
 
 }

@@ -10,6 +10,8 @@
 
 
 #include "y/memory/small/arena/metrics.hpp"
+#include "y/memory/plastic/forge/metrics.hpp"
+
 #include "y/calculus/meta2.hpp"
 #include "y/core/meta-max.hpp"
 
@@ -32,6 +34,9 @@ namespace Yttrium
         static const size_t   UserBlocks   = (MinUserBytes-DataLocation) / MaxSlimBytes;
         typedef typename Core::MetaAccept< (UserBlocks<=MaxNumBlocks) >::Type HasValidSlimBytes;
         static HasValidSlimBytes Check = 1;
+
+        static const size_t MaxVastBytes = MinUserBytes - Memory::Plastic::ForgeMetrics::ReservedSize;
+        
     };
 
 }
