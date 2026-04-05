@@ -94,12 +94,111 @@ namespace Yttrium
 
 }
 
+#include "y/core/pool.hpp"
+#include "y/ability/caching.hpp"
+
 namespace Yttrium
 {
 
     namespace Memory
     {
 
+        class PooledSupply : public Supply, public Caching
+        {
+        public:
+            explicit PooledSupply(const size_t userBlockSize,
+                                  Lockable    &userLock);
+            virtual ~PooledSupply() noexcept;
+
+            virtual void * summon();
+            virtual void   banish(void * const) noexcept;
+            
+            virtual void   release() noexcept;
+            virtual void   cache(const size_t);
+            virtual void   gc(const uint8_t) noexcept;
+
+            Lockable          &access;
+        private:
+            Y_Disable_Copy_And_Assign(PooledSupply);
+            Core::PoolOf<Page> pool;
+            void               release_() noexcept;
+        };
+
+    }
+
+}
+
+#include <cstring>
+#include "y/core/list/to-pool.hpp"
+#include "y/core/pool/to-list.hpp"
+
+namespace Yttrium
+{
+
+    namespace Memory
+    {
+        PooledSupply:: PooledSupply(const size_t userBlockSize,
+                                    Lockable &   userLock) :
+        Supply( Max(sizeof(Page),userBlockSize) ),
+        access(userLock),
+        pool()
+        {
+
+        }
+
+        PooledSupply:: ~PooledSupply() noexcept
+        {
+            release_();
+        }
+
+
+        void PooledSupply:: release() noexcept
+        {
+            Y_Lock(access);
+            release_();
+        }
+
+        void PooledSupply:: release_() noexcept
+        {
+            while(pool.size) arena.release(pool.query());
+        }
+
+        void * PooledSupply:: summon()
+        {
+            Y_Lock(access);
+            if(pool.size>0)
+                return memset( pool.query(), 0, arena.blockSize);
+            else
+                return arena.acquire();
+        }
+
+        void PooledSupply:: banish(void * const blockAddr) noexcept
+        {
+            assert(0!=blockAddr);
+            Y_Lock(access);
+            pool.store( Page::From(blockAddr) );
+        }
+
+        void PooledSupply:: cache(const size_t n)
+        {
+            Y_Lock(access);
+            Y_Lock(arena.access);
+            for(size_t i=0;i<n;++i) pool.store( static_cast<Page *>(arena.acquire()) );
+        }
+
+        void PooledSupply:: gc(const uint8_t amount) noexcept
+        {
+            Y_Lock(access);
+            Core::ListOf<Page> list;
+            {
+                Core::PoolToList::Make(list,pool).sortByDecreasingAddress();
+                const size_t newSize = NewSize(amount,list.size);
+                Y_Lock(arena.access);
+                while(list.size>newSize)
+                    arena.release( list.popHead() );
+            }
+            Core::ListToPool::Make(pool,list);
+        }
 
     }
 
