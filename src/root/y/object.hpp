@@ -19,7 +19,8 @@ namespace Yttrium
     {
     public:
         class Factory;
-        
+        class Chamber;
+
         explicit Object() noexcept;
         virtual ~Object() noexcept;
 

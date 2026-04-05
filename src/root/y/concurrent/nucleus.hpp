@@ -79,7 +79,12 @@ namespace Yttrium
             static  Nucleus &  Instance();          //!< handle instance \return single Nucleus
             static  Nucleus &  Location() noexcept; //!< current location \return existing instance
 
-
+            //__________________________________________________________________
+            //
+            //
+            // system primitives
+            //
+            //__________________________________________________________________
             SystemMutex * acquireSystemMutex();                             //!< inner acquire/setup \return ready system mutex
             void          releaseSystemMutex(SystemMutex * const) noexcept; //!< clear/release system mutex
 

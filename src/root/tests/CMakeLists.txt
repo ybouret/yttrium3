@@ -71,7 +71,7 @@ Y_UTEST(memory:auto_built)
 Y_UTEST(memory:allocator)
 Y_UTEST(memory:archon)
 Y_UTEST(memory:troop)
-
+Y_UTEST(memory:supply)
 
 
 Y_UTEST(pointer:auto)
