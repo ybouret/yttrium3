@@ -7,7 +7,9 @@ Y_UTEST(object_drifter)
 {
     Y_PRINTV(Object::Drifter::Hideout::TableSize);
     Y_SIZEOF(Object::Drifter::Hideout::Node);
-    
+
+    Object::Drifter::Hideout &h = Object::Drifter::Hideout::Instance();
+    std::cerr << h.callSign() << std::endl;
 }
 Y_UDONE()
 
