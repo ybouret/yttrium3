@@ -70,6 +70,8 @@ Y_UTEST_DECL(8)
 
     Y_UTEST(ascii_base64);
 
+    Y_UTEST(threading_gmt);
+    Y_UTEST(threading_stc);
 
 }
 Y_UTEST_EXEC()

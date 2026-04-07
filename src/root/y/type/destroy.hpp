@@ -4,7 +4,7 @@
 #ifndef Y_Type_Destroy_Included
 #define Y_Type_Destroy_Included 1
 
-#include "y/core/setup.hpp"
+#include "y/config/setup.hpp"
 #include <cassert>
 
 namespace Yttrium

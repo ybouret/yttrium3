@@ -10,7 +10,9 @@ memory
 memory/small
 memory/plastic
 pointer
-ascii)
+ascii
+threading
+)
 
 Y_LinkLibraries(test-root)
 
@@ -79,4 +81,6 @@ Y_UTEST(pointer:auto)
 
 Y_UTEST(ascii:base64)
 
+Y_UTEST(threading:gmt)
+Y_UTEST(threading:stc)
 

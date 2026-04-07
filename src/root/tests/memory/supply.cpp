@@ -131,7 +131,6 @@ namespace Yttrium
 
 }
 
-#if 1
 
 #include "y/core/pool.hpp"
 #include "y/ability/caching.hpp"
@@ -249,76 +248,23 @@ namespace Yttrium
     namespace Memory
     {
 
-#define Y_Memory_Zombies(CODE) do {\
-/**/    void * const addr = this->zacquire();\
-/**/    try { CODE;  }\
-/**/    catch(...) { this->zrelease(addr); throw; } \
-/**/    } while(false)
 
-        template <typename T, typename SUPPLY>
-        class Zombies : public SUPPLY
-        {
-        public:
-            Y_Args_Expose(T,Type);
-            typedef SUPPLY SupplyType;
-
-            inline explicit Zombies() : SupplyType(sizeof(T))
-            {
-
-            }
-
-            inline explicit Zombies(Lockable &userLock) : SupplyType(sizeof(T),userLock)
-            {
-
-            }
-
-
-            inline virtual ~Zombies() noexcept
-            {
-            }
-
-
-            inline Type * summon()
-            {
-                Y_Memory_Zombies( return new (addr) MutableType()  );
-            }
-
-            template <typename U>
-            inline Type * summon(U &u)
-            {
-                Y_Memory_Zombies( return new (addr) MutableType(u)  );
-            }
-
-            template <typename U, typename V>
-            inline Type * summon(U &u, V& v)
-            {
-                Y_Memory_Zombies( return new (addr) MutableType(u,v)  );
-            }
-
-            inline Type * mirror(ConstType &other)
-            {
-                Y_Memory_Zombies( return new (addr) MutableType(other)  );
-            }
-
-            inline void banish(Type * const alive) noexcept
-            {
-                this->zrelease( Destructed( (MutableType*)alive ) );
-            }
-
-        private:
-            Y_Disable_Copy_And_Assign(Zombies);
-        };
     }
+
 }
 
-#endif
+
+
 
 using namespace Yttrium;
 
 Y_UTEST(memory_supply)
 {
-
     
+    Memory::DirectSupply ds(18);
+    Memory::PooledSupply ps(18);
+
+
 }
 Y_UDONE()
 
