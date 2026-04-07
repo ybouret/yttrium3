@@ -72,6 +72,8 @@ Y_UTEST_DECL(8)
 
     Y_UTEST(threading_gmt);
     Y_UTEST(threading_stc);
+    Y_UTEST(threading_mth);
+    Y_UTEST(threading_mto);
 
 }
 Y_UTEST_EXEC()

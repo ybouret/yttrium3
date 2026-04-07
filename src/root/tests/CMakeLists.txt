@@ -83,4 +83,6 @@ Y_UTEST(ascii:base64)
 
 Y_UTEST(threading:gmt)
 Y_UTEST(threading:stc)
+Y_UTEST(threading:mth)
+Y_UTEST(threading:mto)
 
