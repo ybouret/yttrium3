@@ -15,7 +15,7 @@
 #include "y/singleton.hpp"
 #include "y/concurrent/life-time.hpp"
 #include "y/ability/logging.hpp"
-
+//#include "y/ability/collectable.hpp"
 
 namespace Yttrium
 {
@@ -53,7 +53,7 @@ namespace Yttrium
         //! Node holding blocks of same blockSize, LEVEL-2 cache
         //
         //______________________________________________________________________
-        class Node : public Pool
+        class Node : public Pool //, public Collectable
         {
         public:
             //__________________________________________________________________
@@ -73,8 +73,8 @@ namespace Yttrium
             //
             // Methods
             //__________________________________________________________________
-            void * acquire();                      //!< \return cached/new block
-            void   release(void * const) noexcept; //!< release acquired block
+            void * acquireBlock();                      //!< \return cached/new block
+            void   releaseBlock(void * const) noexcept; //!< release acquired block
 
             //__________________________________________________________________
             //

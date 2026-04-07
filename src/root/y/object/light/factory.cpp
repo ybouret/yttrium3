@@ -30,7 +30,7 @@ namespace Yttrium
     }
 
 
-    void * LightObject:: Factory:: Node:: acquire()
+    void * LightObject:: Factory:: Node:: acquireBlock()
     {
         if(size>0)
         {
@@ -42,7 +42,7 @@ namespace Yttrium
         }
     }
 
-    void LightObject:: Factory:: Node :: release(void *const blockAddr) noexcept
+    void LightObject:: Factory:: Node :: releaseBlock(void *const blockAddr) noexcept
     {
         assert(blockAddr);
         store( Memory::Page::From(blockAddr) );
@@ -92,7 +92,7 @@ namespace Yttrium
         if(acquiring&&blockSize==acquiring->blockSize)
         {
             assert( slot.owns(acquiring) );
-            return slot.moveToHead(acquiring)->acquire();
+            return slot.moveToHead(acquiring)->acquireBlock();
         }
         else
         {
@@ -103,7 +103,7 @@ namespace Yttrium
             for(Node *node=slot.head;node;node=node->next)
             {
                 if(blockSize==node->blockSize)
-                    return slot.moveToHead(acquiring=node)->acquire();
+                    return slot.moveToHead(acquiring=node)->acquireBlock();
             }
             
             //------------------------------------------------------------------
@@ -112,7 +112,7 @@ namespace Yttrium
             const size_t minBlockSize = Max(blockSize,sizeof(Memory::Page));
             const size_t theBlockSize = minBlockSize; // TODO: align
             Node * const node         = nHouse.produce(blockSize,blocks[theBlockSize]);
-            return slot.pushHead(acquiring=node)->acquire();
+            return slot.pushHead(acquiring=node)->acquireBlock();
         }
     }
 
@@ -125,14 +125,14 @@ namespace Yttrium
         if(releasing&&blockSize==releasing->blockSize)
         {
             assert( slot.owns(releasing) );
-            return slot.moveToHead(releasing)->release(blockAddr);
+            return slot.moveToHead(releasing)->releaseBlock(blockAddr);
         }
         else
         {
             for(Node *node=slot.head;node;node=node->next)
             {
                 if(blockSize==node->blockSize)
-                    return slot.moveToHead(releasing=node)->release(blockAddr);
+                    return slot.moveToHead(releasing=node)->releaseBlock(blockAddr);
             }
             Libc::Error::Critical(EINVAL, "%s invalid release address/blockSize=%s", CallSign, Decimal(blockSize).c_str() );
         }
