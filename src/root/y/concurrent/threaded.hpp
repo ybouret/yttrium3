@@ -49,7 +49,8 @@ namespace Yttrium
             call( Launch0<OBJECT,METHOD> ),
             host( &userHost ),
             meth( MethodToMeth<METHOD>(userMeth) ),
-            arg1(0)
+            arg1(0),
+            arg2(0)
             {
 
             }
@@ -63,12 +64,34 @@ namespace Yttrium
              */
             template <typename OBJECT, typename METHOD, typename U> inline
             explicit Casing(OBJECT &     userHost,
-                                METHOD const userMeth,
-                                U &          u) noexcept :
+                            METHOD const userMeth,
+                            U &          u) noexcept :
             call( Launch1<OBJECT,METHOD,U> ),
             host( &userHost ),
             meth( MethodToMeth<METHOD>(userMeth) ),
-            arg1( (void*) &u)
+            arg1( (void*) &u),
+            arg2( 0 )
+            {
+
+            }
+
+            //! setup for no 2-arguments method
+            /**
+             \param userHost PERSISTENT object reference
+             \param userMeth method pointer for object
+             \param u        argument for method
+             \param v        argument for method
+             */
+            template <typename OBJECT, typename METHOD, typename U, typename V> inline
+            explicit Casing(OBJECT &     userHost,
+                            METHOD const userMeth,
+                            U &          u,
+                            V &          v) noexcept :
+            call( Launch2<OBJECT,METHOD,U,V> ),
+            host( &userHost ),
+            meth( MethodToMeth<METHOD>(userMeth) ),
+            arg1( (void*) &u),
+            arg2( (void*) &v)
             {
 
             }
@@ -90,7 +113,8 @@ namespace Yttrium
             Thread::Proc const call; //!< alias
             void *       const host; //!< alias
             Meth         const meth; //!< alias
-            void *       const arg1; //!< alias
+            void *       const arg1; //!< alias for first arg
+            void *       const arg2; //!< alias for second arg
 
         private:
             Y_Disable_Copy_And_Assign(Casing); //!< discardded
@@ -134,12 +158,26 @@ namespace Yttrium
             void Launch1(void * const args)
             {
                 assert(args);
-                Casing &     self = *static_cast<Casing *>(args);    assert(self.host);
-                OBJECT &     host = *static_cast<OBJECT *>(self.host);   assert(self.meth);
-                METHOD const func = MethToMethod<METHOD>(self.meth);     assert(self.arg1);
+                Casing &     self = *static_cast<Casing *>(args);       assert(self.host);
+                OBJECT &     host = *static_cast<OBJECT *>(self.host);  assert(self.meth);
+                METHOD const func = MethToMethod<METHOD>(self.meth);    assert(self.arg1);
                 U &          arg1 = *static_cast<U *>(self.arg1);
                 (host.*func)(arg1);
             }
+
+            template <typename OBJECT, typename METHOD, typename U, typename V> static inline
+            void Launch2(void * const args)
+            {
+                assert(args);
+                Casing &     self = *static_cast<Casing *>(args);      assert(self.host);
+                OBJECT &     host = *static_cast<OBJECT *>(self.host); assert(self.meth);
+                METHOD const func = MethToMethod<METHOD>(self.meth);   assert(self.arg1);
+                U &          arg1 = *static_cast<U *>(self.arg1);      assert(self.arg2);
+                V &          arg2 = *static_cast<V *>(self.arg2);
+                (host.*func)(arg1);
+            }
+
+
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         };

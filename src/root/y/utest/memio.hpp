@@ -12,6 +12,10 @@
 #include "y/random/fill.hpp"
 #include <iostream>
 
+#include "y/concurrent/condition.hpp"
+#include "y/concurrent/mutex.hpp"
+#include "y/concurrent/threaded.hpp"
+
 namespace Yttrium
 {
 
@@ -19,8 +23,9 @@ namespace Yttrium
     {
 
         //! Memory I/O tests
-        struct MemIO
+        class MemIO
         {
+        public:
             //! block  of anonymous data
             struct Block
             {
@@ -101,6 +106,34 @@ namespace Yttrium
                 Release(F,0,blocks,count);
                 std::cerr << "-- Testing " << F.callSign() << " is done!" << std::endl << std::endl;
             }
+
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            MemIO();
+            ~MemIO() noexcept;
+
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            Concurrent::Mutex     mutex;
+            Concurrent::Condition cond;
+            size_t                ready;
         };
 
     }
