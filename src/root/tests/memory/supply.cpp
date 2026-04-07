@@ -1,5 +1,6 @@
 #include "y/concurrent/nucleus.hpp"
 #include "y/memory/small/blocks.hpp"
+#include "y/concurrent/mutex.hpp"
 #include "y/utest/run.hpp"
 
 namespace Yttrium
@@ -15,8 +16,8 @@ namespace Yttrium
         public:
             virtual ~Supply() noexcept;
 
-            virtual void * summon() = 0;
-            virtual void   banish(void * const) noexcept = 0;
+            virtual void * zacquire() = 0;
+            virtual void   zrelease(void * const) noexcept = 0;
 
         protected:
             Small::Arena &arena;
@@ -61,8 +62,8 @@ namespace Yttrium
             explicit DirectSupply(const size_t userBlockSize);
             virtual ~DirectSupply() noexcept;
 
-            virtual void * summon();
-            virtual void   banish(void * const) noexcept;
+            virtual void * zacquire();
+            virtual void   zrelease(void * const) noexcept;
 
         private:
             Y_Disable_Copy_And_Assign(DirectSupply);
@@ -79,12 +80,12 @@ namespace Yttrium
 
         }
 
-        void * DirectSupply:: summon()
+        void * DirectSupply:: zacquire()
         {
             return arena.acquire();
         }
 
-        void DirectSupply:: banish(void * const blockAddr) noexcept
+        void DirectSupply:: zrelease(void * const blockAddr) noexcept
         {
             arena.release(blockAddr);
         }
@@ -110,11 +111,12 @@ namespace Yttrium
                                   Lockable    &userLock);
             virtual ~PooledSupply() noexcept;
 
-            virtual void * summon();
-            virtual void   banish(void * const) noexcept;
-            
+            virtual void * zacquire();
+            virtual void   zrelease(void * const) noexcept;
+
             virtual void   release() noexcept;
             virtual void   cache(const size_t);
+            virtual size_t count() const noexcept;
             virtual void   gc(const uint8_t) noexcept;
 
             Lockable          &access;
@@ -163,7 +165,7 @@ namespace Yttrium
             while(pool.size) arena.release(pool.query());
         }
 
-        void * PooledSupply:: summon()
+        void * PooledSupply:: zacquire()
         {
             Y_Lock(access);
             if(pool.size>0)
@@ -172,11 +174,16 @@ namespace Yttrium
                 return arena.acquire();
         }
 
-        void PooledSupply:: banish(void * const blockAddr) noexcept
+        void PooledSupply:: zrelease(void * const blockAddr) noexcept
         {
             assert(0!=blockAddr);
             Y_Lock(access);
             pool.store( Page::From(blockAddr) );
+        }
+
+        size_t PooledSupply:: count() const noexcept
+        {
+            return pool.size;
         }
 
         void PooledSupply:: cache(const size_t n)
@@ -204,11 +211,81 @@ namespace Yttrium
 
 }
 
+namespace Yttrium
+{
+    namespace Memory
+    {
+
+#define Y_Memory_Zombies(CODE) do {\
+/**/    void * const addr = this->zacquire();\
+/**/    try { CODE;  }\
+/**/    catch(...) { this->zrelease(addr); throw; } \
+/**/    } while(false)
+
+        template <typename T, typename SUPPLY>
+        class Zombies : public SUPPLY
+        {
+        public:
+            Y_Args_Expose(T,Type);
+            typedef SUPPLY SupplyType;
+
+            inline explicit Zombies() : SupplyType(sizeof(T))
+            {
+
+            }
+
+            inline explicit Zombies(Lockable &userLock) : SupplyType(sizeof(T),userLock)
+            {
+
+            }
+
+
+            inline virtual ~Zombies() noexcept
+            {
+            }
+
+
+            inline Type * summon()
+            {
+                Y_Memory_Zombies( return new (addr) MutableType()  );
+            }
+
+            template <typename U>
+            inline Type * summon(U &u)
+            {
+                Y_Memory_Zombies( return new (addr) MutableType(u)  );
+            }
+
+            template <typename U, typename V>
+            inline Type * summon(U &u, V& v)
+            {
+                Y_Memory_Zombies( return new (addr) MutableType(u,v)  );
+            }
+
+            inline Type * mirror(ConstType &other)
+            {
+                Y_Memory_Zombies( return new (addr) MutableType(other)  );
+            }
+
+            inline void banish(Type * const alive) noexcept
+            {
+                this->zrelease( Destructed( (MutableType*)alive ) );
+            }
+
+        private:
+            Y_Disable_Copy_And_Assign(Zombies);
+        };
+    }
+}
 
 using namespace Yttrium;
 
 Y_UTEST(memory_supply)
 {
+
+    Concurrent::Mutex    mutex;
+    Memory::DirectSupply ds(10);
+    Memory::PooledSupply ps(10,mutex);
 
 }
 Y_UDONE()

@@ -29,7 +29,13 @@ namespace Yttrium
     class ObjectFactory
     {
     public:
-        static const size_t   MaxSlimBytes = MAX_SLIM_BYTES;
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        static const size_t   MaxSlimBytes = MAX_SLIM_BYTES;                                             //!< alias from parameter
         static const unsigned MaxSlimShift = MetaExactLog2<MaxSlimBytes>::Value;                         //!< enforce power of two
         static const size_t   MinNumBlocks = Memory::Small::ArenaMetrics::MinNumBlocks;                  //!< retrieve information
         static const size_t   MaxNumBlocks = Memory::Small::ArenaMetrics::MaxNumBlocks;                  //!< retrieve information
@@ -43,14 +49,20 @@ namespace Yttrium
         static const size_t MaxFairBytes = MinUserBytes - Memory::Plastic::ForgeMetrics::ReservedSize;   //!< matching medium sized object limit
         static const size_t MaxVastBytes = Memory::Metrics::MaxPageBytes;                                //!< alias
 
-        inline explicit ObjectFactory() noexcept {}
-        inline virtual ~ObjectFactory() noexcept {}
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+        inline explicit ObjectFactory() noexcept {} //!< setup
+        inline virtual ~ObjectFactory() noexcept {} //!< cleanup
 
     private:
-        Y_Disable_Copy_And_Assign(ObjectFactory);
+        Y_Disable_Copy_And_Assign(ObjectFactory); //!< discarded
     };
 
-    typedef ObjectFactory<256> ObjectFactoryType;
+    typedef ObjectFactory<256> ObjectFactoryType; //!< default factory type
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
     

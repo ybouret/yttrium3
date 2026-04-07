@@ -14,6 +14,7 @@ namespace Yttrium
         namespace Small
         {
 
+            //! "public" part of Arena Metrics
             struct ArenaMetrics
             {
                 static const size_t   _1                = 1;                    //!< alias

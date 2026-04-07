@@ -7,6 +7,7 @@
 #include "y/random/shuffle.hpp"
 #include "y/random/fill.hpp"
 
+#include "y/type/destruct.hpp"
 
 using namespace Yttrium;
 
@@ -122,6 +123,7 @@ Y_UTEST(object)
 
         void *wksp[4];
         dummy = new (wksp) Dummy();
+        Destruct(dummy);
     }
     std::cerr << std::endl;
 
