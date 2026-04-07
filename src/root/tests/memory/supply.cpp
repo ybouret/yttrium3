@@ -242,10 +242,72 @@ namespace Yttrium
 }
 
 #include "y/ability/auto-locking.hpp"
+
 namespace Yttrium
 {
     namespace Memory
     {
+
+        template <typename SUPPLY, typename THREADING_POLICY>
+        class LockableSupply : public SUPPLY, public THREADING_POLICY
+        {
+        public:
+            explicit LockableSupply(const size_t bs) :
+            SUPPLY(bs),
+            THREADING_POLICY()
+            {
+            }
+
+            virtual ~LockableSupply() noexcept
+            {
+            }
+
+
+        private:
+            Y_Disable_Copy_And_Assign(LockableSupply);
+        };
+
+        template <typename SUPPLY, typename THREADING_POLICY>
+        class StorageBase
+        {
+        public:
+            typedef LockableSupply<SUPPLY,THREADING_POLICY> SupplyType;
+
+            inline explicit StorageBase(const size_t bs) : supply(bs) {}
+            inline virtual ~StorageBase() noexcept {}
+
+        protected:
+            SupplyType supply;
+
+        private:
+            Y_Disable_Copy_And_Assign(StorageBase);
+        };
+
+
+        template <typename SUPPLY, typename THREADING_POLICY>
+        class Storage :
+        public StorageBase<SUPPLY,THREADING_POLICY>,
+        public AutoLocking< typename StorageBase<SUPPLY,THREADING_POLICY>::SupplyType >
+        {
+        public:
+            typedef StorageBase<SUPPLY,THREADING_POLICY> StorageType;
+            typedef typename StorageType::SupplyType     SupplyType;
+            using StorageType::supply;
+
+            inline explicit Storage(const size_t bs) :
+            StorageType(bs),
+            AutoLocking<SupplyType>(supply)
+            {
+            }
+
+
+            inline virtual ~Storage() noexcept
+            {
+            }
+
+        private:
+            Y_Disable_Copy_And_Assign(Storage);
+        };
 
 
     }
@@ -253,7 +315,7 @@ namespace Yttrium
 }
 
 
-
+#include "y/threading/single-threaded-class.hpp"
 
 using namespace Yttrium;
 
@@ -263,6 +325,14 @@ Y_UTEST(memory_supply)
     Memory::DirectSupply ds(18);
     Memory::PooledSupply ps(18);
 
+    Y_SIZEOF(Memory::DirectSupply);
+    Y_SIZEOF(Memory::PooledSupply);
+
+    Memory::Storage<Memory::DirectSupply,SingleThreadedClass> ds_stc(18);
+
+
+    void * blockAddr = ds_stc->zacquire();
+    ds_stc->zrelease(blockAddr);
 
 }
 Y_UDONE()
