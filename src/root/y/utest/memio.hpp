@@ -18,14 +18,18 @@ namespace Yttrium
     namespace UTest
     {
 
+        //! Memory I/O tests
         struct MemIO
         {
+            //! block  of anonymous data
             struct Block
             {
-                void * addr;
-                size_t size;
+                void * addr; //!< address
+                size_t size; //!< size in bytes
             };
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+        private:
             template <typename ALLOC>
             static inline
             void Acquire(ALLOC        & mgr,
@@ -39,7 +43,7 @@ namespace Yttrium
                 {
                     Block &b = blocks[count];
                     b.size   = ran.in<size_t>(1,maxBlockSize);
-                    b.addr   = mgr.acquire(b.size);
+                    b.addr   = mgr.query(b.size);
                     if( !Yttrium_Zeroed(b.addr,b.size))
                         throw Specific::Exception(mgr.callSign(),"block is not zeroed!");
                     Random::FillWith(ran,b.addr,b.size,1);
@@ -57,13 +61,24 @@ namespace Yttrium
                 while(count>minCount)
                 {
                     Block &b = blocks[--count];
-                    mgr.release(b.addr,b.size);
+                    mgr.store(b.addr,b.size);
                 }
             }
 
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
 
-
+        public:
+            //__________________________________________________________________
+            //
+            //
+            //! test CLASS::Factory
+            /**
+             \param ran          random provider
+             \param maxBlockSize probe in [1:maxBlockSize]
+             */
+            //
+            //__________________________________________________________________
             template <typename CLASS, const size_t NUM_BLOCKS, const size_t CYCLES=16> static inline
             void Test(Core::Rand &ran, const size_t maxBlockSize)
             {
@@ -84,7 +99,6 @@ namespace Yttrium
 
                 Release(F,0,blocks,count);
                 std::cerr << "-- Testing " << F.callSign() << " is done!" << std::endl << std::endl;
-
             }
         };
 

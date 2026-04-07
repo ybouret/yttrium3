@@ -82,7 +82,7 @@ namespace Yttrium
 
 
 
-    void * LightObject::Factory:: acquire(const size_t blockSize)
+    void * LightObject::Factory:: query(const size_t blockSize)
     {
         Y_Lock(access);
         assert(blockSize>0); // TODO: maxblocksize
@@ -116,7 +116,7 @@ namespace Yttrium
         }
     }
 
-    void   LightObject:: Factory:: release(void * const blockAddr, const size_t blockSize) noexcept
+    void   LightObject:: Factory:: store(void * const blockAddr, const size_t blockSize) noexcept
     {
         Y_Lock(access);
         assert(0!=blockAddr); assert(blockSize>0);

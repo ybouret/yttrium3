@@ -11,46 +11,90 @@
 #include "y/memory/small/house.hpp"
 #include "y/calculus/meta2.hpp"
 #include "y/calculus/alignment.hpp"
+
 #include "y/singleton.hpp"
+#include "y/concurrent/life-time.hpp"
 #include "y/ability/logging.hpp"
+
 
 namespace Yttrium
 {
 
     namespace Memory { namespace Small { class Blocks; } }
 
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! factory for LightObject
+    //
+    //
+    //__________________________________________________________________________
     class LightObject:: Factory :
     public Singleton<Factory,ClassLockPolicy>,
     public Logging
     {
     public:
-        static const char * const CallSign;
-        static const Longevity    LifeTime = 100;
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        static const char * const          CallSign;                                   //!< "LightObject::Factory"
+        static const Longevity             LifeTime = LifeTimeFor::LightObjectFactory; //!< alias
+        typedef Memory::Small::Arena       Arena;                                      //!< alias
+        typedef Memory::Small::Blocks      Blocks;                                     //!< alias
+        typedef Core::PoolOf<Memory::Page> Pool;                                       //!< alias
 
-        typedef Memory::Small::Arena       Arena;
-        typedef Memory::Small::Blocks      Blocks;
-        typedef Core::PoolOf<Memory::Page> Pool;
-
+        //______________________________________________________________________
+        //
+        //
+        //! Node holding blocks of same blockSize, LEVEL-2 cache
+        //
+        //______________________________________________________________________
         class Node : public Pool
         {
         public:
-            typedef Memory::Small::House<Node> House;
-            Node(const size_t, Arena &) noexcept;
-            ~Node()       noexcept;
+            //__________________________________________________________________
+            //
+            // Definitions
+            //__________________________________________________________________
+            typedef Memory::Small::House<Node> House; //!< alias
 
-            void * acquire();
-            void   release(void * const) noexcept;
-            
-            const size_t blockSize;
-            Arena &      arena;
-            Node *       next;
-            Node *       prev;
+            //__________________________________________________________________
+            //
+            // C++
+            //__________________________________________________________________
+            Node(const size_t, Arena &) noexcept; //!< setup with blockSize and matching arena
+            virtual ~Node()             noexcept; //!< cleanup
+
+            //__________________________________________________________________
+            //
+            // Methods
+            //__________________________________________________________________
+            void * acquire();                      //!< \return cached/new block
+            void   release(void * const) noexcept; //!< release acquired block
+
+            //__________________________________________________________________
+            //
+            // Members
+            //__________________________________________________________________
+            const size_t blockSize; //!< request by user
+            Arena &      arena;     //!< arena.blockSize >= sizeof(MemoryPage), blockSize
+            Node *       next;      //!< for pool/list
+            Node *       prev;      //!< for list
         private:
-            Y_Disable_Copy_And_Assign(Node);
+            Y_Disable_Copy_And_Assign(Node); //!< discarded
         };
+        typedef Core::ListOf<Node> Slot; //!< alias
 
-        typedef Core::ListOf<Node> Slot;
-
+        //______________________________________________________________________
+        //
+        //
+        // Internal hash table metrics
+        //
+        //______________________________________________________________________
         static const size_t         BytesPerSlot = sizeof(Slot);                                         //!< alias
         static const size_t         DefaultBytes = Y_BLOCK_SIZE;                                         //!< inner static memory hint
         static const size_t         TableSize    = MetaPrevPowerOfTwo<DefaultBytes/BytesPerSlot>::Value; //!< inner static memory
@@ -59,25 +103,46 @@ namespace Yttrium
         static const size_t         TableBytes   = TableSize * sizeof(Slot);                             //!< actual table bytes request
         static const size_t         TableWords   = Alignment::WordsGEQ<TableBytes>::Count;               //!< inner table words
 
-
+        //______________________________________________________________________
+        //
+        //
+        // Interface
+        //
+        //______________________________________________________________________
         virtual void toXML(XML::Log &) const;
 
-        void * acquire(const size_t blockSize);
-        void   release(void * const blockAddr, const size_t blockSize) noexcept;
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+
+        //! acquire block \param blockSize block size \return matching block
+        void * query(const size_t blockSize);
+
+        //! release block and keep it \param blockAddr addres \param blockSize block size
+        void   store(void * const blockAddr, const size_t blockSize) noexcept;
 
     private:
-        Y_Disable_Copy_And_Assign(Factory);
+        Y_Disable_Copy_And_Assign(Factory); //!< discarded
         friend class Singleton<Factory,ClassLockPolicy>;
-        Factory();
-        virtual ~Factory() noexcept;
+        Factory();                   //!< setup
+        virtual ~Factory() noexcept; //!< cleanup
 
-        Node *       acquiring;
-        Node *       releasing;
-        Slot * const slots;
-        Blocks     & blocks;
-        Arena      & nArena;
-        Node::House  nHouse;
-        void *       wksp[TableWords];
+        //______________________________________________________________________
+        //
+        //
+        // Members
+        //
+        //______________________________________________________________________
+        Node *       acquiring;        //!< last acquiring
+        Node *       releasing;        //!< last releasing
+        Slot * const slots;            //!< slots[TableSize]
+        Blocks     & blocks;           //!< all arenas
+        Arena      & nArena;           //!< arena for Node
+        Node::House  nHouse;           //!< house for Node
+        void *       wksp[TableWords]; //!< inner memory
     };
 }
 
