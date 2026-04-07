@@ -17,6 +17,7 @@ namespace
         }
 
         Node(const Node &node) noexcept :
+        LightObject(),
         value(node.value),
         next(0), prev(0)
         {
