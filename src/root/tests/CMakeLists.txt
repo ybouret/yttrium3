@@ -19,7 +19,7 @@ enable_testing()
 Y_UTEST(exception)
 Y_UTEST(xml)
 Y_UTEST(object)
-Y_UTEST(object:drifter)
+Y_UTEST(light_object)
 
 Y_UTEST(config:platform)
 Y_UTEST(config:compiler)

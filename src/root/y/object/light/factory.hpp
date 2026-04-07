@@ -1,10 +1,10 @@
 
 //! \file
 
-#ifndef Y_Object_Drifter_Hideout_Included
-#define Y_Object_Drifter_Hideout_Included 1
+#ifndef Y_LightObject_Factory_Included
+#define Y_LightObject_Factory_Included 1
 
-#include "y/object/drifter.hpp"
+#include "y/object/light.hpp"
 #include "y/core/pool.hpp"
 #include "y/core/list.hpp"
 #include "y/memory/page.hpp"
@@ -12,13 +12,16 @@
 #include "y/calculus/meta2.hpp"
 #include "y/calculus/alignment.hpp"
 #include "y/singleton.hpp"
+#include "y/ability/logging.hpp"
 
 namespace Yttrium
 {
 
     namespace Memory { namespace Small { class Blocks; } }
 
-    class Object:: Drifter:: Hideout : public Singleton<Hideout,ClassLockPolicy>
+    class LightObject:: Factory :
+    public Singleton<Factory,ClassLockPolicy>,
+    public Logging
     {
     public:
         static const char * const CallSign;
@@ -36,7 +39,8 @@ namespace Yttrium
             ~Node()       noexcept;
 
             void * acquire();
-
+            void   release(void * const) noexcept;
+            
             const size_t blockSize;
             Arena &      arena;
             Node *       next;
@@ -56,13 +60,16 @@ namespace Yttrium
         static const size_t         TableWords   = Alignment::WordsGEQ<TableBytes>::Count;               //!< inner table words
 
 
+        virtual void toXML(XML::Log &) const;
+
         void * acquire(const size_t blockSize);
+        void   release(void * const blockAddr, const size_t blockSize) noexcept;
 
     private:
-        Y_Disable_Copy_And_Assign(Hideout);
-        friend class Singleton<Hideout,ClassLockPolicy>;
-        Hideout();
-        virtual ~Hideout() noexcept;
+        Y_Disable_Copy_And_Assign(Factory);
+        friend class Singleton<Factory,ClassLockPolicy>;
+        Factory();
+        virtual ~Factory() noexcept;
 
         Node *       acquiring;
         Node *       releasing;
@@ -74,4 +81,4 @@ namespace Yttrium
     };
 }
 
-#endif // !Y_Object_Drifter_Hideout_Included
+#endif // !Y_LightObject_Factory_Included

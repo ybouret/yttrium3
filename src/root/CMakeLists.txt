@@ -41,7 +41,7 @@ y/pointer
 y/utest
 y/stream
 y/object
-y/object/drifter
+y/object/light
 )
 
 add_subdirectory(tests)

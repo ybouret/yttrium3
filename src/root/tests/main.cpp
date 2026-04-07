@@ -6,7 +6,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(exception);
     Y_UTEST(xml);
     Y_UTEST(object);
-    Y_UTEST(object_drifter);
+    Y_UTEST(light_object);
 
     Y_UTEST(config_platform);
     Y_UTEST(config_compiler);
