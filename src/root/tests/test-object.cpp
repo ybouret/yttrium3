@@ -1,11 +1,7 @@
 #include "y/object/factory.hpp"
 #include "y/memory/metrics.hpp"
 #include "y/utest/run.hpp"
-#include "y/memory/allocator/global.hpp"
-
-#include "y/core/rand.hpp"
-#include "y/random/shuffle.hpp"
-#include "y/random/fill.hpp"
+#include "y/utest/memio.hpp"
 
 #include "y/type/destruct.hpp"
 
@@ -13,13 +9,6 @@ using namespace Yttrium;
 
 namespace
 {
-    struct Block
-    {
-        void * addr;
-        size_t size;
-    };
-
-
 
     class Dummy : public Object
     {
@@ -70,45 +59,9 @@ Y_UTEST(object)
     Y_PRINTV(Object::Factory::MaxVastBytes);
     std::cerr << std::endl;
 
-    Object::Factory &F = Object::Factory::Instance();
-
-    {
-        Memory::Allocator & mgr = Memory::Global::Instance();
-        size_t  bytes = 0;
-        size_t  count = (3*ObjectFactoryType::MaxFairBytes)/2;
-        Block  *entry = mgr.acquireAs<Block>(count,bytes);
-
-        (std::cerr << "Testing Object I/O with up to " << count << " bytes" << std::endl).flush();
-
-        for(size_t i=0;i<count;++i)
-        {
-            entry[i].addr = F.query(entry[i].size=i);
-        }
-        Random::Shuffle(ran,entry,count);
-        for(size_t i=0;i<count;++i)
-        {
-            F.store(entry[i].addr,entry[i].size);
-        }
+    UTest::MemIO::Test<Object,1024,32>(ran,(3*ObjectFactoryType::MaxFairBytes)/2);
 
 
-        (std::cerr << "Testing Allocator I/O with up to " << count << " bytes" << std::endl).flush();
-        for(size_t i=0;i<count;++i)
-        {
-            entry[i].addr = F.acquire(entry[i].size=i);
-            Y_ASSERT(0!=entry[i].addr);
-            Y_ASSERT(entry[i].size>0);
-        }
-        Random::Shuffle(ran,entry,count);
-
-        for(size_t i=0;i<count;++i)
-        {
-            F.release(entry[i].addr,entry[i].size);
-        }
-
-
-        mgr.releaseAs(entry,count,bytes);
-        std::cerr << std::endl;
-    }
 
     std::cerr << "Testing Ctor/Dtor" << std::endl;
     {

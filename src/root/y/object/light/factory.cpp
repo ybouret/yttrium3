@@ -158,7 +158,13 @@ namespace Yttrium
             {
                 if(node->size)
                 {
-                    Y_XML_Standalone(xml,Node,Y_XML_Attr(node->size));
+                    const size_t available     = node->size;
+                    const size_t nodeBlockSize = node->blockSize;
+                    const size_t dataBlockSize = node->arena.blockSize;
+                    Y_XML_Standalone(xml,LightObjectNode,
+                                     /**/ Y_XML_Attr_Setw(available,4)
+                                     <<   Y_XML_Attr_Setw(nodeBlockSize,3)
+                                     <<   Y_XML_Attr_Setw(dataBlockSize,3));
                 }
             }
         }
