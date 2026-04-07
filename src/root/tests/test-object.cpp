@@ -32,8 +32,7 @@ namespace
 }
 Y_UTEST(object)
 {
-    Core::Rand     ran;
-
+    
     {
         std::cerr << "Testing Slim::Compression" << std::endl;
         size_t last  = 0;
@@ -59,7 +58,7 @@ Y_UTEST(object)
     Y_PRINTV(Object::Factory::MaxVastBytes);
     std::cerr << std::endl;
 
-    UTest::MemIO::Test<Object,1024,32>(ran,(3*ObjectFactoryType::MaxFairBytes)/2);
+    UTest::MemIO::Test<Object,1024,32>( (3*ObjectFactoryType::MaxFairBytes)/2 );
 
 
 

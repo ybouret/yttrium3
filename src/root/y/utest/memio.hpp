@@ -80,7 +80,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             template <typename CLASS, const size_t NUM_BLOCKS, const size_t CYCLES=16> static inline
-            void Test(Core::Rand &ran, const size_t maxBlockSize)
+            void Test( const size_t maxBlockSize)
             {
                 typedef typename CLASS::Factory Factory;
                 Factory & F = Factory::Instance();
@@ -88,6 +88,7 @@ namespace Yttrium
                 Block blocks[NUM_BLOCKS];
                 Y_BZero(blocks);
 
+                Core::Rand ran;
                 size_t count = 0;
                 Acquire(F,ran,NUM_BLOCKS,blocks,count,maxBlockSize);
                 for(size_t i=CYCLES;i>0;--i)
