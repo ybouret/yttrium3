@@ -15,7 +15,7 @@
 #include "y/singleton.hpp"
 #include "y/concurrent/life-time.hpp"
 #include "y/ability/logging.hpp"
-//#include "y/ability/collectable.hpp"
+#include "y/ability/collectable.hpp"
 
 namespace Yttrium
 {
@@ -32,6 +32,7 @@ namespace Yttrium
     //__________________________________________________________________________
     class LightObject:: Factory :
     public Singleton<Factory,ClassLockPolicy>,
+    public Collectable,
     public Logging
     {
     public:
@@ -53,7 +54,7 @@ namespace Yttrium
         //! Node holding blocks of same blockSize, LEVEL-2 cache
         //
         //______________________________________________________________________
-        class Node : public Pool //, public Collectable
+        class Node : public Pool, public Collectable
         {
         public:
             //__________________________________________________________________
@@ -68,6 +69,12 @@ namespace Yttrium
             //__________________________________________________________________
             Node(const size_t, Arena &) noexcept; //!< setup with blockSize and matching arena
             virtual ~Node()             noexcept; //!< cleanup
+
+            //__________________________________________________________________
+            //
+            // Interface
+            //__________________________________________________________________
+            virtual void gc(const uint8_t) noexcept;
 
             //__________________________________________________________________
             //
@@ -110,6 +117,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
         virtual void toXML(XML::Log &) const;
+        virtual void gc(const uint8_t) noexcept;
 
         //______________________________________________________________________
         //

@@ -8,6 +8,9 @@
 #include <cerrno>
 #include "y/format/decimal.hpp"
 
+#include "y/core/pool/to-list.hpp"
+#include "y/core/list/to-pool.hpp"
+
 namespace Yttrium
 {
 
@@ -28,6 +31,18 @@ namespace Yttrium
             arena.release( query() );
         }
     }
+
+    void LightObject:: Factory:: Node:: gc(const uint8_t amount) noexcept
+    {
+        Core::ListOf<Memory::Page> list;
+        Core::PoolToList::Make(list,*this).sortByDecreasingAddress();
+        {
+            const size_t newSize = NewSize(amount,size);
+            while(list.size>newSize) arena.release( list.popHead() );
+        }
+        Core::ListToPool::Make(*this,list);
+    }
+
 
 
     void * LightObject:: Factory:: Node:: acquireBlock()
@@ -138,6 +153,20 @@ namespace Yttrium
         }
     }
 
+    void LightObject:: Factory:: gc(const uint8_t amount) noexcept
+    {
+        Y_Lock(access);
+        releasing = 0;
+        acquiring = 0;
+        for(size_t i=0;i<TableSize;++i)
+        {
+            Slot &slot = slots[i];
+            for(Node * node=slot.head;node;node=node->next)
+            {
+                node->gc(amount);
+            }
+        }
+    }
 
 
 }

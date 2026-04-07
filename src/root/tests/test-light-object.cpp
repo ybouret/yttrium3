@@ -64,10 +64,13 @@ Y_UTEST(light_object)
         }
     }
 
+    F.release();
+    F.writeXML(std::cerr);
+    
     UTest::MemIO memIO;
     memIO.test<8,LightObject,1024>(80);
 
-    //F.writeXML(std::cerr);
+    F.writeXML(std::cerr);
 
 
 }
