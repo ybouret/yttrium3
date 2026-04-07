@@ -241,6 +241,7 @@ namespace Yttrium
 
 }
 
+#include "y/ability/auto-locking.hpp"
 namespace Yttrium
 {
     namespace Memory
