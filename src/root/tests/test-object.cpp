@@ -58,7 +58,7 @@ Y_UTEST(object)
     Y_PRINTV(Object::Factory::MaxVastBytes);
     std::cerr << std::endl;
 
-    UTest::MemIO::Test<Object,1024,32>( (3*ObjectFactoryType::MaxFairBytes)/2 );
+    UTest::MemIO::Test<Object,1024>( (3*ObjectFactoryType::MaxFairBytes)/2 );
 
 
 
@@ -87,6 +87,11 @@ Y_UTEST(object)
     Y_PRINTV(ObjectFactory<256>::MinUserBytes);
     Y_PRINTV(ObjectFactory<512>::MinUserBytes);
     Y_PRINTV(ObjectFactory<1024>::MinUserBytes);
+    std::cerr << std::endl;
+
+    UTest::MemIO memIO;
+    memIO.test<8,Object,512>(10000);
+
 
 
 }

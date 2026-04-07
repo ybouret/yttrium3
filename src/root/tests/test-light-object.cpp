@@ -46,7 +46,7 @@ Y_UTEST(light_object)
     Y_SIZEOF(LightObject::Factory::Node);
 
 
-    UTest::MemIO::Test<LightObject,1024,32>(80);
+    UTest::MemIO::Test<LightObject,1024>(80);
 
     LightObject::Factory &F = LightObject::Factory::Instance();
     F.writeXML(std::cerr);
@@ -64,6 +64,10 @@ Y_UTEST(light_object)
         }
     }
 
+    UTest::MemIO memIO;
+    memIO.test<8,LightObject,1024>(80);
+
+    //F.writeXML(std::cerr);
 
 
 }

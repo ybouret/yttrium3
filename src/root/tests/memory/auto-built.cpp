@@ -17,6 +17,13 @@ namespace
             std::cerr << "+Dummy@" << value << std::endl;
         }
 
+        inline Dummy(const int v, const double alpha) :
+        value(v)
+        {
+            std::cerr << "+Dummy@" << value << " * " << alpha << std::endl;
+        }
+
+
         inline ~Dummy() noexcept
         {
             std::cerr << "~Dummy@" << value << std::endl;
@@ -41,6 +48,13 @@ Y_UTEST(memory_auto_built)
     {
         const int v = 7;
         Memory::AutoBuilt<Dummy> dummy(wksp,numBlocks,v);
+        std::cerr << "#built=" << dummy.numBlocks << std::endl;
+    }
+
+    {
+        const int v = 9;
+        const double a = 0.1;
+        Memory::AutoBuilt<Dummy> dummy(wksp,numBlocks,v,a);
         std::cerr << "#built=" << dummy.numBlocks << std::endl;
     }
 

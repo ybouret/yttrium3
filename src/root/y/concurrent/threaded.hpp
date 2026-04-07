@@ -174,7 +174,7 @@ namespace Yttrium
                 METHOD const func = MethToMethod<METHOD>(self.meth);   assert(self.arg1);
                 U &          arg1 = *static_cast<U *>(self.arg1);      assert(self.arg2);
                 V &          arg2 = *static_cast<V *>(self.arg2);
-                (host.*func)(arg1);
+                (host.*func)(arg1,arg2);
             }
 
 
