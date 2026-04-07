@@ -8,7 +8,7 @@ using namespace Yttrium;
 Y_UTEST(threading_mth)
 {
     Concurrent::Mutex   m;
-    MultiThreadedHandle cls(m);
+    const MultiThreadedHandle cls(m);
     {
         MultiThreadedHandle::Lock guard(cls);
     };

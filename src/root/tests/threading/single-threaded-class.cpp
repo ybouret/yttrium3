@@ -6,7 +6,7 @@ using namespace Yttrium;
 
 Y_UTEST(threading_stc)
 {
-    SingleThreadedClass cls;
+    const SingleThreadedClass cls;
     {
         SingleThreadedClass::Lock guard(cls);
     };
