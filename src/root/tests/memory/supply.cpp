@@ -253,8 +253,12 @@ namespace Yttrium
         {
         public:
             explicit LockableSupply(const size_t bs) :
-            SUPPLY(bs),
-            THREADING_POLICY()
+            SUPPLY(bs), THREADING_POLICY()
+            {
+            }
+
+            explicit LockableSupply(const size_t bs, Lockable &lk) :
+            SUPPLY(bs), THREADING_POLICY(lk)
             {
             }
 
@@ -274,6 +278,8 @@ namespace Yttrium
             typedef LockableSupply<SUPPLY,THREADING_POLICY> SupplyType;
 
             inline explicit StorageBase(const size_t bs) : supply(bs) {}
+            inline explicit StorageBase(const size_t bs, Lockable &lk) : supply(bs,lk) {}
+
             inline virtual ~StorageBase() noexcept {}
 
         protected:
@@ -295,8 +301,12 @@ namespace Yttrium
             using StorageType::supply;
 
             inline explicit Storage(const size_t bs) :
-            StorageType(bs),
-            AutoLocking<SupplyType>(supply)
+            StorageType(bs), AutoLocking<SupplyType>(supply)
+            {
+            }
+
+            inline explicit Storage(const size_t bs, Lockable &lk) :
+            StorageType(bs,lk), AutoLocking<SupplyType>(supply)
             {
             }
 
@@ -316,6 +326,7 @@ namespace Yttrium
 
 
 #include "y/threading/single-threaded-class.hpp"
+#include "y/threading/multi-threaded-object.hpp"
 
 using namespace Yttrium;
 
@@ -329,10 +340,14 @@ Y_UTEST(memory_supply)
     Y_SIZEOF(Memory::PooledSupply);
 
     Memory::Storage<Memory::DirectSupply,SingleThreadedClass> ds_stc(18);
+    Memory::Storage<Memory::PooledSupply,MultiThreadedObject> ps_mto(18);
 
 
     void * blockAddr = ds_stc->zacquire();
     ds_stc->zrelease(blockAddr);
+
+    blockAddr = ps_mto->zacquire();
+    ps_mto->zrelease(blockAddr);
 
 }
 Y_UDONE()

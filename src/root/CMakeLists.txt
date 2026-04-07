@@ -43,6 +43,7 @@ y/utest
 y/stream
 y/object
 y/object/light
+y/string
 )
 
 add_subdirectory(tests)
