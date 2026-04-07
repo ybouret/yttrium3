@@ -4,6 +4,7 @@
 #define Y_MultiThreadedHandle_Included 1
 
 #include "y/threading/locker.hpp"
+#include "y/threading/policy.hpp"
 
 namespace Yttrium {
 
@@ -17,7 +18,7 @@ namespace Yttrium {
     //
     //
     //__________________________________________________________________________
-    class MultiThreadedHandle
+    class MultiThreadedHandle : public Threading::Policy
     {
     public:
         typedef Threading::Locker<MultiThreadedHandle> Lock; //!< alias
@@ -26,6 +27,8 @@ namespace Yttrium {
         virtual ~MultiThreadedHandle()                   noexcept; //!< cleanup
         MultiThreadedHandle(const MultiThreadedHandle &) noexcept; //!< duplicate
 
+        virtual void lock()   noexcept;
+        virtual void unlock() noexcept;
     private:
         friend class Threading::Locker<MultiThreadedHandle>;
         Y_Disable_Assign(MultiThreadedHandle); //!< discarding

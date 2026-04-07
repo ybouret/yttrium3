@@ -6,6 +6,7 @@
 
 #include "y/config/setup.hpp"
 #include "y/threading/must-lock.hpp"
+#include "y/threading/policy.hpp"
 
 namespace Yttrium
 {
@@ -17,7 +18,7 @@ namespace Yttrium
     //
     //
     //__________________________________________________________________________
-    class SingleThreadedClass
+    class SingleThreadedClass : public Threading::Policy
     {
     public:
 
@@ -34,6 +35,9 @@ namespace Yttrium
         explicit SingleThreadedClass() noexcept; //!< setup
         virtual ~SingleThreadedClass() noexcept; //!< cleanup
         SingleThreadedClass(const SingleThreadedClass &) noexcept; //!< duplicate, do nothing
+
+        virtual void lock()   noexcept;
+        virtual void unlock() noexcept;
 
     private:
         Y_Disable_Assign(SingleThreadedClass); //!< discarding

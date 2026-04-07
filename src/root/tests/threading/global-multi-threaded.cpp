@@ -5,11 +5,17 @@ using namespace Yttrium;
 
 Y_UTEST(threading_gmt)
 {
-    const GlobalMultiThreaded cls;
     {
-        GlobalMultiThreaded::Lock guard(cls);
+        const GlobalMultiThreaded cls;
+        {
+            GlobalMultiThreaded::Lock guard(cls);
+        };
+    }
 
-    };
+    {
+        GlobalMultiThreaded cls;
+        Y_Lock(cls);
+    }
 }
 Y_UDONE()
 

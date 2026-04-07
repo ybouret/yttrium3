@@ -10,10 +10,19 @@ Y_UTEST(threading_mto)
     Y_SIZEOF(Concurrent::Mutex);
     Y_SIZEOF(MultiThreadedObject);
 
-    const MultiThreadedObject cls;
     {
-        MultiThreadedObject::Lock guard(cls);
+        const MultiThreadedObject cls;
+        {
+            MultiThreadedObject::Lock guard(cls);
+        }
     }
+
+    {
+        MultiThreadedObject cls;
+        Y_Lock(cls);
+    }
+
+
 
 }
 Y_UDONE()

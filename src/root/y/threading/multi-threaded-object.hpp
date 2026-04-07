@@ -4,6 +4,7 @@
 #define Y_MultiThreadedObject_Included 1
 
 #include "y/threading/locker.hpp"
+#include "y/threading/policy.hpp"
 
 namespace Yttrium {
 
@@ -17,7 +18,7 @@ namespace Yttrium {
     //
     //
     //__________________________________________________________________________
-    class MultiThreadedObject
+    class MultiThreadedObject : public Threading::Policy
     {
     public:
         typedef Threading::Locker<MultiThreadedObject> Lock; //!< alias
@@ -26,6 +27,9 @@ namespace Yttrium {
         explicit MultiThreadedObject();                   //!< setup
         virtual ~MultiThreadedObject() noexcept;          //!< cleanup
         MultiThreadedObject(const MultiThreadedObject &); //!< as setup
+
+        virtual void lock()   noexcept;
+        virtual void unlock() noexcept;
 
     private:
         friend class Threading::Locker<MultiThreadedObject>;

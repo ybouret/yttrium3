@@ -18,7 +18,9 @@ namespace Yttrium
         //
         //
         //! Lightweight locking mechanisment for host with 'authorization' member
-        //
+        /**
+         stronger than Lockable, since it can lock const object
+         */
         //
         //______________________________________________________________________
         template <typename CLASS>

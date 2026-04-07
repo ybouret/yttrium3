@@ -7,9 +7,24 @@ namespace Yttrium {
     MultiThreadedHandle:: ~MultiThreadedHandle() noexcept { Coerce(authorization) = 0; }
 
 
-    MultiThreadedHandle::  MultiThreadedHandle(const MultiThreadedHandle &_) noexcept : authorization(_.authorization)
+    MultiThreadedHandle::  MultiThreadedHandle(const MultiThreadedHandle &_) noexcept :
+    Threading::Policy(),
+    authorization(_.authorization)
     {
     }
-    
+
+
+    void MultiThreadedHandle:: lock() noexcept
+    {
+        assert(authorization);
+        authorization->lock();
+    }
+
+    void MultiThreadedHandle:: unlock() noexcept
+    {
+        assert(authorization);
+        authorization->unlock();
+    }
+
 
 }

@@ -89,9 +89,7 @@ namespace Yttrium
 
     namespace Memory
     {
-
-
-
+        
         class DirectSupply : public Supply
         {
         public:
