@@ -14,11 +14,12 @@
 
 #include "y/concurrent/condition.hpp"
 #include "y/concurrent/mutex.hpp"
-#include "y/concurrent/thread.hpp"
+#include "y/concurrent/threaded.hpp"
 #include "y/calculus/alignment.hpp"
 #include "y/memory/auto-built.hpp"
 #include "y/system/wall-time.hpp"
 #include "y/check/crc32.hpp"
+#include "y/type/temporary.hpp"
 
 namespace Yttrium
 {
@@ -126,11 +127,12 @@ namespace Yttrium
                 typedef typename CLASS::Factory Factory;
                 Factory & F = Factory::Instance();
                 std::cerr << "-- Testing " << F.callSign() << " with " << NUM_BLOCKS << " blocks in [1:" << maxBlockSize << "]" << std::endl;
-                Block blocks[NUM_BLOCKS];
+                Block      blocks[NUM_BLOCKS];
+                size_t     count = 0;
+                Core::Rand ran;
+
                 Y_BZero(blocks);
 
-                Core::Rand ran;
-                size_t count = 0;
                 Acquire(F,ran,NUM_BLOCKS,blocks,count,maxBlockSize);
                 for(size_t i=16;i>0;--i)
                 {
@@ -138,8 +140,8 @@ namespace Yttrium
                     Release(F,count/ran.in<size_t>(2,32),blocks,count);
                     Acquire(F,ran,NUM_BLOCKS,blocks,count,maxBlockSize);
                 }
-
                 Release(F,0,blocks,count);
+
                 std::cerr << "-- Testing " << F.callSign() << " is done!" << std::endl << std::endl;
             }
 
@@ -161,16 +163,6 @@ namespace Yttrium
             //__________________________________________________________________
 
         private:
-
-            //! Thead Proc, forward to paralellRun \param args this address
-            template <typename CLASS, size_t NUM_THREADS, size_t NUM_BLOCKS>
-            static inline void Launch(void * const args)
-            {
-                assert(args);
-                MemIO & self = *static_cast<MemIO *>(args);
-                self.parallelRun<CLASS,NUM_THREADS,NUM_BLOCKS>();
-            }
-
             //! perform test in thread
             template <typename CLASS, size_t NUM_THREADS, size_t NUM_BLOCKS>
             inline void parallelRun()
@@ -217,13 +209,15 @@ namespace Yttrium
             inline void test(const size_t maxBlockSize)
             {
                 std::cerr << "-- Testing Parallel New/Delete with " << NUM_THREADS << " threads" << std::endl;
-                static const size_t Required   = NUM_THREADS * sizeof(Concurrent::Thread);
+                static const size_t Required   = NUM_THREADS * sizeof(Concurrent::Threaded);
                 void *              wksp[ Alignment::WordsGEQ<Required>::Count ];
                 ready = 0;
-                upper = maxBlockSize;
-                Concurrent::Thread::Proc const proc = Launch<CLASS,NUM_THREADS,NUM_BLOCKS>;
-                void *  const                  args = this;
-                Memory::AutoBuilt<Concurrent::Thread> threads(wksp,NUM_THREADS,proc,args);
+                const Temporary<size_t> save(upper,maxBlockSize);
+                Memory::AutoBuilt<Concurrent::Threaded> threads(*this,
+                                                                & MemIO::parallelRun<CLASS,NUM_THREADS,NUM_BLOCKS>,
+                                                                Y_BZero(wksp),
+                                                                NUM_THREADS);
+
                 std::cerr << "-- Testing Parallel Done!" << std::endl << std::endl;
             }
 

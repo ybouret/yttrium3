@@ -6,6 +6,7 @@
 #include "y/memory/auto-build.hpp"
 #include "y/type/args.hpp"
 #include "y/type/procedural.hpp"
+#include "y/type/copy-of.hpp"
 
 namespace Yttrium
 {
@@ -25,6 +26,14 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
+            // Definition
+            //
+            //__________________________________________________________________
+            typedef void (AutoBuiltArgs::*Meth)(void); //!< generic pointer to method
+
+            //__________________________________________________________________
+            //
+            //
             // C++
             //
             //__________________________________________________________________
@@ -33,14 +42,24 @@ namespace Yttrium
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             template <typename U> inline
-            explicit AutoBuiltArgs(U &u) noexcept : arg1( (void *) &u ), arg2(0), arg3(0) {}
+            explicit AutoBuiltArgs(U &u) noexcept : arg1( (void *) &u ), arg2(0), arg3(0), meth(0) {}
 
 
             template <typename U, typename V> inline
-            explicit AutoBuiltArgs(U &u, V &v) noexcept : arg1( (void *) &u ), arg2( (void*) &v ), arg3(0) {}
+            explicit AutoBuiltArgs(U &u, V &v) noexcept : arg1( (void *) &u ), arg2( (void*) &v ), arg3(0), meth(0) {}
 
             template <typename U, typename V, typename W> inline
-            explicit AutoBuiltArgs(U &u, V &v, W &w) noexcept : arg1( (void *) &u ), arg2( (void*) &v ), arg3( (void*)&w ) {}
+            explicit AutoBuiltArgs(U &u, V &v, W &w) noexcept : arg1( (void *) &u ), arg2( (void*) &v ), arg3( (void*)&w ), meth(0) {}
+
+            template <
+            typename OBJECT,
+            typename METHOD> inline
+            explicit AutoBuiltArgs(const CopyOf_ &, OBJECT & object, METHOD method) noexcept :
+            arg1( &object ), arg2(0), arg3(0), meth( MethodToMeth(method) )
+            {
+                assert(arg1);
+                assert(meth);
+            }
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
             //__________________________________________________________________
@@ -49,9 +68,10 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            void * const arg1; //!< first  argument
+            void * const arg1; //!< first  argument/object address
             void * const arg2; //!< second argument
             void * const arg3; //!< third  argument
+            Meth   const meth; //!< optional method for C++
 
         protected:
             //__________________________________________________________________
@@ -62,7 +82,13 @@ namespace Yttrium
             //__________________________________________________________________
             AutoBuiltArgs *args() noexcept; //!< for AutoBuilt args \return this
 
-
+            //! anonyous to specific pointer to method \param method valid class method pointer \return anonymous pointer
+            template <typename METHOD> static inline
+            Meth MethodToMeth(METHOD method) noexcept
+            {
+                union { METHOD M; Meth m; } alias = { method };
+                return alias.m;
+            }
 
         private:
             Y_Disable_Copy_And_Assign(AutoBuiltArgs); //!< discarded
@@ -185,6 +211,27 @@ namespace Yttrium
             {
             }
 
+
+            //! setup with object+method
+            /**
+             - userBlockAddr must have at least userNumBlocks * sizeof(T)
+             - MutableType(arr[indx]) called for each type
+             \param object        PERSISTENT object
+             \param method        to call MutableType(object,method)
+             \param userBlockAddr where to build
+             \param userNumBlocks blocks to build
+             */
+            template <typename OBJECT, typename METHOD>
+            inline explicit AutoBuilt(OBJECT &       object,
+                                      METHOD         method,
+                                      void * const   userBlockAddr,
+                                      const size_t   userNumBlocks) :
+            AutoBuiltArgs(CopyOf,object,method),
+            AutoBuild(userBlockAddr,userNumBlocks,sizeof(T),OnDelete,OnCXX0<OBJECT,METHOD>,args())
+            {
+
+            }
+            
             //! cleanup
             inline virtual ~AutoBuilt() noexcept
             {
@@ -224,8 +271,8 @@ namespace Yttrium
                 new (addr) MutableType(u,v);
             }
 
-            template <typename U, typename V, typename W>
-            static inline void OnBuild3(void * const addr, void * const args)
+            template <typename U, typename V, typename W> static inline
+            void OnBuild3(void * const addr, void * const args)
             {
                 assert(0!=args);
                 AutoBuiltArgs &data = *static_cast<AutoBuilt *>(args); assert(data.arg1);
@@ -233,6 +280,19 @@ namespace Yttrium
                 V & v =  *static_cast<V*>(data.arg2);                  assert(data.arg3);
                 W & w =  *static_cast<W*>(data.arg3);
                 new (addr) MutableType(u,v,w);
+            }
+
+            template <typename OBJECT, typename METHOD> static inline
+            void OnCXX0(void * const addr, void * const args)
+            {
+                assert(0!=args);
+                AutoBuiltArgs & data   = *static_cast<AutoBuilt *>(args);   assert(data.arg1);
+                OBJECT        & object = *static_cast<OBJECT *>(data.arg1); assert(data.meth);
+                union {
+                    Meth   m;
+                    METHOD M;
+                } alias = { data.meth }; assert(alias.M);
+                new (addr) MutableType(object,alias.M);
             }
 
             template <typename ARR>

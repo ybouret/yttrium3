@@ -53,6 +53,7 @@ namespace Yttrium
             assert(userDeleteFcn);
             assert(userBuild1Fcn);
 
+            
             try {
                 char * p = (char *)blockAddr;
                 while(numBlocks<userNumBlocks)
