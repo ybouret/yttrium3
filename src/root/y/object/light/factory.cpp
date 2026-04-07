@@ -43,6 +43,21 @@ namespace Yttrium
         Core::ListToPool::Make(*this,list);
     }
 
+    size_t LightObject:: Factory:: Node :: count() const noexcept
+    {
+        return size;
+    }
+
+
+    void LightObject:: Factory:: Node :: cache(const size_t n)
+    {
+        for(size_t i=n;i>0;--i)
+        {
+            store( (Memory::Page *)arena.acquire() );
+        }
+    }
+
+
 
 
     void * LightObject:: Factory:: Node:: acquireBlock()
@@ -125,8 +140,7 @@ namespace Yttrium
             // need a new node
             //------------------------------------------------------------------
             const size_t minBlockSize = Max(blockSize,sizeof(Memory::Page));
-            const size_t theBlockSize = minBlockSize; // TODO: align
-            Node * const node         = nHouse.produce(blockSize,blocks[theBlockSize]);
+            Node * const node         = nHouse.produce(blockSize,blocks[minBlockSize]);
             return slot.pushHead(acquiring=node)->acquireBlock();
         }
     }
@@ -156,8 +170,6 @@ namespace Yttrium
     void LightObject:: Factory:: gc(const uint8_t amount) noexcept
     {
         Y_Lock(access);
-        releasing = 0;
-        acquiring = 0;
         for(size_t i=0;i<TableSize;++i)
         {
             Slot &slot = slots[i];
@@ -166,6 +178,22 @@ namespace Yttrium
                 node->gc(amount);
             }
         }
+    }
+
+
+    LightObject:: Factory ::Node * LightObject:: Factory :: operator[](const size_t blockSize)
+    {
+        Y_Lock(access);
+        Slot &slot = slots[blockSize&TableMask];
+        for(Node * node=slot.head;node;node=node->next)
+        {
+            if(blockSize==node->blockSize) {
+                return slot.moveToHead(node);
+            }
+        }
+        const size_t minBlockSize = Max(blockSize,sizeof(Memory::Page));
+        return slot.pushHead(nHouse.produce(blockSize,blocks[minBlockSize]));
+
     }
 
 

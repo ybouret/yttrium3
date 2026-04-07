@@ -15,7 +15,7 @@
 #include "y/singleton.hpp"
 #include "y/concurrent/life-time.hpp"
 #include "y/ability/logging.hpp"
-#include "y/ability/collectable.hpp"
+#include "y/ability/caching.hpp"
 
 namespace Yttrium
 {
@@ -54,7 +54,7 @@ namespace Yttrium
         //! Node holding blocks of same blockSize, LEVEL-2 cache
         //
         //______________________________________________________________________
-        class Node : public Pool, public Collectable
+        class Node : public Pool, public Caching
         {
         public:
             //__________________________________________________________________
@@ -74,8 +74,10 @@ namespace Yttrium
             //
             // Interface
             //__________________________________________________________________
-            virtual void gc(const uint8_t) noexcept;
-
+            virtual void   gc(const uint8_t) noexcept;
+            virtual size_t count() const noexcept;
+            virtual void   cache(const size_t);
+            
             //__________________________________________________________________
             //
             // Methods
@@ -131,6 +133,9 @@ namespace Yttrium
 
         //! release block and keep it \param blockAddr addres \param blockSize block size
         void   store(void * const blockAddr, const size_t blockSize) noexcept;
+
+        Node * operator[](const size_t blockSize);
+        
 
     private:
         Y_Disable_Copy_And_Assign(Factory); //!< discarded

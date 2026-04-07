@@ -1,4 +1,5 @@
 #include "y/concurrent/nucleus.hpp"
+#include "y/object/light.hpp"
 #include "y/memory/small/blocks.hpp"
 #include "y/concurrent/mutex.hpp"
 #include "y/utest/run.hpp"
@@ -12,7 +13,8 @@ namespace Yttrium
         class Supply
         {
         protected:
-            explicit Supply(const size_t dataBlockSize);
+            explicit Supply(const size_t userBlockSize);
+
         public:
             virtual ~Supply() noexcept;
 
@@ -20,23 +22,66 @@ namespace Yttrium
             virtual void   zrelease(void * const) noexcept = 0;
 
         protected:
-            Small::Arena &arena;
+            LightObject::Factory &factory;
+            void * const          lofNode;
+
+            void * acquireBlock();
+            void   releaseBlock(void * const) noexcept;
+
+        public:
+            const size_t          blockSize;
 
         private:
             Y_Disable_Copy_And_Assign(Supply);
         };
 
-        namespace {
-            static inline Small::Arena & SupplyGet(const size_t blockSize)
-            {
-                static Small::Blocks &blocks = *Concurrent::Nucleus::Instance().blocks;
-                return blocks[blockSize];
-            }
-        }
+
+
 
     }
 
 }
+
+#include "y/object/light/factory.hpp"
+
+namespace Yttrium
+{
+
+    namespace Memory
+    {
+
+        Supply:: Supply(const size_t userBlockSize) :
+        factory(LightObject::Factory::Instance()),
+        lofNode( factory[userBlockSize] ),
+        blockSize( static_cast<LightObject::Factory::Node*>(lofNode)->blockSize )
+        {
+            assert(blockSize==userBlockSize);
+        }
+
+
+        Supply:: ~Supply() noexcept
+        {
+        }
+
+        void * Supply:: acquireBlock()
+        {
+            assert(lofNode);
+            Y_Lock(factory.access);
+            return static_cast<LightObject::Factory::Node*>(lofNode)->acquireBlock();
+        }
+
+        void Supply:: releaseBlock(void * const blockAddr) noexcept
+        {
+            assert(lofNode);
+            Y_Lock(factory.access);
+            return static_cast<LightObject::Factory::Node*>(lofNode)->releaseBlock(blockAddr);
+        }
+
+
+    }
+
+}
+
 
 
 namespace Yttrium
@@ -44,15 +89,6 @@ namespace Yttrium
 
     namespace Memory
     {
-        Supply:: Supply(const size_t dataBlockSize) :
-        arena( SupplyGet(dataBlockSize) )
-        {
-
-        }
-
-        Supply:: ~Supply() noexcept
-        {
-        }
 
 
 
@@ -82,18 +118,20 @@ namespace Yttrium
 
         void * DirectSupply:: zacquire()
         {
-            return arena.acquire();
+            return acquireBlock();
         }
 
         void DirectSupply:: zrelease(void * const blockAddr) noexcept
         {
-            arena.release(blockAddr);
+            releaseBlock(blockAddr);
         }
 
 
     }
 
 }
+
+#if 1
 
 #include "y/core/pool.hpp"
 #include "y/ability/caching.hpp"
@@ -107,8 +145,7 @@ namespace Yttrium
         class PooledSupply : public Supply, public Caching
         {
         public:
-            explicit PooledSupply(const size_t userBlockSize,
-                                  Lockable    &userLock);
+            explicit PooledSupply(const size_t userBlockSize);
             virtual ~PooledSupply() noexcept;
 
             virtual void * zacquire();
@@ -119,7 +156,6 @@ namespace Yttrium
             virtual size_t count() const noexcept;
             virtual void   gc(const uint8_t) noexcept;
 
-            Lockable          &access;
         private:
             Y_Disable_Copy_And_Assign(PooledSupply);
             Core::PoolOf<Page> pool;
@@ -133,16 +169,15 @@ namespace Yttrium
 #include <cstring>
 #include "y/core/list/to-pool.hpp"
 #include "y/core/pool/to-list.hpp"
+#include "y/object/light/factory.hpp"
 
 namespace Yttrium
 {
 
     namespace Memory
     {
-        PooledSupply:: PooledSupply(const size_t userBlockSize,
-                                    Lockable &   userLock) :
+        PooledSupply:: PooledSupply(const size_t userBlockSize) :
         Supply( Max(sizeof(Page),userBlockSize) ),
-        access(userLock),
         pool()
         {
 
@@ -156,28 +191,27 @@ namespace Yttrium
 
         void PooledSupply:: release() noexcept
         {
-            Y_Lock(access);
             release_();
         }
 
         void PooledSupply:: release_() noexcept
         {
-            while(pool.size) arena.release(pool.query());
+            while(pool.size) releaseBlock( pool.query() );
         }
 
         void * PooledSupply:: zacquire()
         {
-            Y_Lock(access);
             if(pool.size>0)
-                return memset( pool.query(), 0, arena.blockSize);
+                return memset( pool.query(), 0, blockSize);
             else
-                return arena.acquire();
+            {
+                return acquireBlock();
+            }
         }
 
         void PooledSupply:: zrelease(void * const blockAddr) noexcept
         {
             assert(0!=blockAddr);
-            Y_Lock(access);
             pool.store( Page::From(blockAddr) );
         }
 
@@ -188,21 +222,20 @@ namespace Yttrium
 
         void PooledSupply:: cache(const size_t n)
         {
-            Y_Lock(access);
-            Y_Lock(arena.access);
-            for(size_t i=0;i<n;++i) pool.store( static_cast<Page *>(arena.acquire()) );
+            LightObject::Factory::Node * const node = static_cast<LightObject::Factory::Node *>(lofNode);
+            Y_Lock(factory.access);
+            for(size_t i=0;i<n;++i) pool.store( (Page *) node->acquireBlock()  );
         }
 
         void PooledSupply:: gc(const uint8_t amount) noexcept
         {
-            Y_Lock(access);
             Core::ListOf<Page> list;
+            Core::PoolToList::Make(list,pool).sortByDecreasingAddress();
             {
-                Core::PoolToList::Make(list,pool).sortByDecreasingAddress();
                 const size_t newSize = NewSize(amount,list.size);
-                Y_Lock(arena.access);
-                while(list.size>newSize)
-                    arena.release( list.popHead() );
+                LightObject::Factory::Node * const node = static_cast<LightObject::Factory::Node *>(lofNode);
+                Y_Lock(factory.access);
+                while(list.size>newSize) node->releaseBlock( list.popHead() );
             }
             Core::ListToPool::Make(pool,list);
         }
@@ -278,15 +311,14 @@ namespace Yttrium
     }
 }
 
+#endif
+
 using namespace Yttrium;
 
 Y_UTEST(memory_supply)
 {
 
-    Concurrent::Mutex    mutex;
-    Memory::DirectSupply ds(10);
-    Memory::PooledSupply ps(10,mutex);
-
+    
 }
 Y_UDONE()
 

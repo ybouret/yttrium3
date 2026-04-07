@@ -13,6 +13,7 @@ Y_UTEST(concurrent_life_time)
     Y_Show_LifeTimeFor(MemoryDyadic);
     Y_Show_LifeTimeFor(MemoryArchon);
     Y_Show_LifeTimeFor(ObjectFactory);
+    Y_Show_LifeTimeFor(LightObjectFactory);
 
 }
 Y_UDONE()
