@@ -9,6 +9,7 @@ Y_UTEST(string)
     Y_SIZEOF(Core::String<char>);
     Y_SIZEOF(Core::String<uint32_t>);
 
+    String s = "Hello"; std::cerr << s << std::endl;
     
 
 }

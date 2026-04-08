@@ -7,13 +7,21 @@
 
 #include "y/object/counted.hpp"
 #include "y/type/destroy.hpp"
+#include "y/type/with-at-least.hpp"
 #include <iosfwd>
 
 namespace Yttrium
 {
 
+    enum StringInit
+    {
+        InitEmptyString,
+        InitBlankString
+    };
+
     namespace Core
     {
+
 
 
 
@@ -25,6 +33,7 @@ namespace Yttrium
             class Code;
 
             String();
+            String(const WithAtLeast_ &, const size_t, const StringInit);
             String(const String &);
             String(const T * const);
             String(const T * const, const size_t);
@@ -51,8 +60,9 @@ namespace Yttrium
             inline friend String operator + (const T         lhs, const String &  rhs) { return Add(lhs,rhs); }
 
 
-            //String & operator+=(const String);
-
+            String & operator+=(const String);
+            String & operator+=(const T * const);
+            String & operator+=(const T);
 
 
         private:

@@ -13,6 +13,17 @@ template <> String<CH>:: String(const String &s) : BaseClass(), code( new Code(*
 
 }
 
+template <> String<CH>:: String(const WithAtLeast_ &, const size_t n, const StringInit flag) :
+BaseClass(), code( new Code(n) )
+{
+    switch(flag)
+    {
+        case InitBlankString: Coerce(code->size) = n; break;
+        case InitEmptyString: break;
+    }
+}
+
+
 
 template <> String<CH> & String<CH>:: operator=( const String &rhs )
 {
@@ -102,6 +113,8 @@ BaseClass(), code( new Code(lhsSize+rhsSize) )
     code->cat(rhs,rhsSize);
 }
 
+// Additions
+
 template <> String<CH> String<CH>:: Add(const String &lhs, const String &rhs)
 {
     return String(lhs.code->entry,lhs.code->size,
@@ -131,3 +144,21 @@ template <> String<CH> String<CH>:: Add(const CH C, const String &rhs)
     return String(&C,1,
                   rhs.code->entry,rhs.code->size);
 }
+
+
+// in place additions
+
+template <> String<CH> & String<CH>:: operator+=( const CH C )
+{
+    if(code->size<code->capacity)
+    {
+        code->entry[ Coerce(code->size)++ ] = C;
+        assert(code->sanity());
+        return *this;
+    }
+    else
+    {
+        String temp = Add(*this,C);
+        return xch(temp);
+    }
+ }
