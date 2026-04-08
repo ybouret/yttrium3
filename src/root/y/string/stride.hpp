@@ -147,6 +147,15 @@ namespace Yttrium
                 assert(sanity());
             }
 
+            inline void pre(const T * const text, const size_t tlen) noexcept
+            {
+                assert(sanity());
+                assert(tlen == StringLength(text));
+                assert(size+tlen<=capacity);
+
+                assert(sanity());
+            }
+
             //! clear content \return *this
             inline void clear() noexcept
             {
@@ -186,7 +195,7 @@ namespace Yttrium
                 assert( other.sanity() );
                 assert(capacity>=other.size);
 
-                memcpy(entry,other.entry,(Coerce(size)=other.size)*sizeof(T));
+                memmove(entry,other.entry,(Coerce(size)=other.size)*sizeof(T));
                 memset(entry+size,0,(count-size)*sizeof(T));
 
                 assert( sanity() );

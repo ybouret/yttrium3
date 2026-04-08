@@ -103,6 +103,12 @@ template <> String<CH> & String<CH>:: xch(String &other) noexcept
     return *this;
 }
 
+//------------------------------------------------------------------------------
+//
+//
+// addition constructor
+//
+//------------------------------------------------------------------------------
 template <> String<CH> :: String(const CH * lhs, const size_t lhsSize,
                                  const CH * rhs, const size_t rhsSize) :
 BaseClass(), code( new Code(lhsSize+rhsSize) )
@@ -113,8 +119,13 @@ BaseClass(), code( new Code(lhsSize+rhsSize) )
     code->cat(rhs,rhsSize);
 }
 
+//------------------------------------------------------------------------------
+//
+//
 // Additions
-
+//
+//
+//------------------------------------------------------------------------------
 template <> String<CH> String<CH>:: Add(const String &lhs, const String &rhs)
 {
     return String(lhs.code->entry,lhs.code->size,
@@ -146,8 +157,13 @@ template <> String<CH> String<CH>:: Add(const CH C, const String &rhs)
 }
 
 
+//------------------------------------------------------------------------------
+//
+//
 // in place additions
-
+//
+//
+//------------------------------------------------------------------------------
 template <> String<CH> & String<CH>:: operator+=( const CH C )
 {
     if(code->size<code->capacity)
