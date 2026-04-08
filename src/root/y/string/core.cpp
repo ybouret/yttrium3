@@ -1,8 +1,7 @@
 #include "y/string/core.hpp"
 #include "y/object/light.hpp"
 #include "y/string/stride.hpp"
-#include "y/system/error.hpp"
-#include <cerrno>
+#include "y/swap.hpp"
 
 namespace Yttrium
 {
@@ -14,42 +13,48 @@ namespace Yttrium
         class String<T>:: Code : public LightObject, public Stride<T>
         {
         public:
-            static const size_t _0 = 0;
+            typedef Stride<T> StrideType;
 
-            inline virtual ~Code() noexcept {}
-
-            inline explicit Code() : LightObject(), Stride<T>(_0) {}
-
-            inline explicit Code(const Code &code) :
-            LightObject(), Stride<T>(code)
+            inline virtual ~Code() noexcept
             {
 
             }
 
 
+            inline explicit Code(const Code &code) :
+            LightObject(), StrideType(code)
+            {
+
+            }
+
+            inline explicit Code(const size_t n) :
+            LightObject(), StrideType(n)
+            {
+
+            }
+
+            inline explicit Code(const T * const text) :
+            LightObject(), StrideType(text)
+            {
+
+            }
+
+
+            inline explicit Code(const T * const buffer,
+                                 const size_t    buflen) :
+            LightObject(), StrideType(buffer,buflen)
+            {
+            }
+
+
+
+
+
+
         private:
             Y_Disable_Assign(Code);
         };
-
-        namespace {
-            template <typename T> struct GetLegacyString
-            {
-                static inline const char * From(const typename String<T>::Code * const)
-                {
-                    Libc::Error::Critical(EINVAL,"c_str() not valid for this class");
-                    return 0;
-                }
-            };
-
-            template <> struct GetLegacyString<char>
-            {
-                static inline const char * From(const typename String<char>::Code * const code)
-                {
-                    assert(code);
-                    return code->entry;
-                }
-            };
-        }
+        
 
 
 

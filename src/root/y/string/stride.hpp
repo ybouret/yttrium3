@@ -77,6 +77,23 @@ namespace Yttrium
                 assert(sanity());
             }
 
+
+            //! setup with buffer \param text user data
+            explicit Stride(const T * const buffer,
+                            const size_t    buflen) :
+            capacity( buflen ),
+            size( capacity ),
+            Y_Stride_Acquire()
+            {
+                Y_Stride_Upgrade();
+                assert(!(0==buffer&&buflen>0));
+                memcpy(entry,buffer,size*sizeof(T));
+                assert(sanity());
+            }
+
+
+
+
             //! duplicate \param s another stride
             explicit Stride(const Stride &s) :
             capacity(s.size),
@@ -92,9 +109,9 @@ namespace Yttrium
             inline virtual ~Stride() noexcept
             {
                 static Memory::Allocator &mgr = StrideIO::AllocatorLocation();
-                mgr.releaseAs(Coerce(entry),Coerce(count),Coerce(bytes));
+                clear(); assert(0==size);
                 Coerce(capacity) = 0;
-                Coerce(size)     = 0;
+                mgr.releaseAs(Coerce(entry),Coerce(count),Coerce(bytes));
             }
 
 
