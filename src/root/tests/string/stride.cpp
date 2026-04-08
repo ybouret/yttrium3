@@ -20,6 +20,9 @@ Y_UTEST(string_stride)
         std::cerr << s.skip(3) << std::endl;
     }
 
+    Y_SIZEOF(Stride<char>);
+    Y_SIZEOF(Stride<uint32_t>);
+
 
 
 }

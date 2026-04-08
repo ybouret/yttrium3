@@ -15,24 +15,43 @@ namespace Yttrium
 
     namespace Core
     {
+        //! common functions for Stride
         struct Stride
         {
-            static Memory::Allocator & AllocatorInstance();
-            static Memory::Allocator & AllocatorLocation() noexcept;
+            static Memory::Allocator & AllocatorInstance();          //!< \return pooled allocator
+            static Memory::Allocator & AllocatorLocation() noexcept; //!< \return pooled allocator
         };
     }
 
+    //! helper to setup Stride memory
 #define Y_Stride_Acquire()  \
 /**/    count(capacity+1),  \
 /**/    bytes(0),           \
 /**/    entry( Core::Stride::AllocatorInstance().acquireAs<T>(Coerce(count),Coerce(bytes)) )
 
+    //! post constructor upgrade
 #define Y_Stride_Upgrade() Coerce(capacity) = count-1
 
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Content of strings
+    //
+    //
+    //__________________________________________________________________________
     template <typename T>
     class Stride
     {
     public:
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+
+        //! setup with memory \param n minimal count
         inline explicit Stride(const size_t n) :
         capacity(n),
         size(0),
@@ -41,6 +60,7 @@ namespace Yttrium
             Y_Stride_Upgrade();
         }
 
+        //! setup with buffer \param text user data
         explicit Stride(const T * const text) :
         capacity( StringLength(text) ),
         size( capacity ),
@@ -51,6 +71,7 @@ namespace Yttrium
             assert(sanity());
         }
 
+        //! duplicate \param s another stride
         explicit Stride(const Stride &s) :
         capacity(s.size),
         size(s.size),
@@ -61,6 +82,7 @@ namespace Yttrium
             assert(sanity());
         }
 
+        //! cleanup
         inline virtual ~Stride() noexcept
         {
             static Memory::Allocator &mgr = Core::Stride::AllocatorLocation();
@@ -70,12 +92,20 @@ namespace Yttrium
         }
 
 
-
+        //! display
         inline friend std::ostream & operator<<(std::ostream &os, const Stride &self)
         {
             return Core::Display(os,self.entry,self.size) <<  '#' << self.size << '/' << self.capacity;
         }
 
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+
+        //! check sanity \return true if excess memory is zeroed
         inline bool sanity() const noexcept
         {
             assert(size<=capacity);
@@ -83,6 +113,7 @@ namespace Yttrium
             return Y_TRUE == Yttrium_Zeroed(entry+size,(count-size)*sizeof(T));
         }
 
+        //! catenate \param text data \param tlen data size \return *this
         inline Stride & cat(const T * const text, const size_t tlen) noexcept
         {
             assert(sanity());
@@ -94,6 +125,7 @@ namespace Yttrium
             return *this;
         }
 
+        //! clear content \return *this
         inline Stride & clear() noexcept
         {
             assert( sanity() );
@@ -103,6 +135,7 @@ namespace Yttrium
             return *this;
         }
 
+        //! trim chars \param n chars to trim \return *this
         inline Stride & trim(size_t n) noexcept
         {
             assert( sanity() );
@@ -116,6 +149,7 @@ namespace Yttrium
             return *this;
         }
 
+        //! skip chars \param n chars to skip \return *this
         inline Stride & skip(const size_t n) noexcept
         {
             assert( sanity() );
@@ -126,13 +160,20 @@ namespace Yttrium
             return *this;
         }
 
-        const size_t capacity;
-        const size_t size;
-        const size_t count;
-        const size_t bytes;
-        T *   const  entry;
+        //______________________________________________________________________
+        //
+        //
+        // Members
+        //
+        //______________________________________________________________________
+        const size_t capacity; //!< maximum number of chars
+        const size_t size;     //!< current number of chars
+        const size_t count;    //!< capacity+1
+        const size_t bytes;    //!< count * sizeof(chars)
+        T *   const  entry;    //!< chars
+
     private:
-        Y_Disable_Assign(Stride);
+        Y_Disable_Assign(Stride); //!< discarded
 
     };
 

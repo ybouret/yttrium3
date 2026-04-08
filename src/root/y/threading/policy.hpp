@@ -10,6 +10,8 @@ namespace Yttrium
 {
     namespace Threading
     {
+        
+        //! base class for Threading Policies
         class Policy : public Lockable
         {
         protected:
