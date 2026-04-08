@@ -60,10 +60,10 @@ namespace Yttrium
             inline friend String operator + (const T         lhs, const String &  rhs) { return Add(lhs,rhs); }
 
 
-            String & operator+=(const String);
+            String & operator+=(const String &);
             String & operator+=(const T * const);
             String & operator+=(const T);
-
+            
 
         private:
             Code * code;

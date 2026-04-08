@@ -142,7 +142,7 @@ namespace Yttrium
                 assert(sanity());
                 assert(tlen == StringLength(text));
                 assert(size+tlen<=capacity);
-                memcpy(entry+size,text,tlen*sizeof(T));
+                memmove(entry+size,text,tlen*sizeof(T));
                 Coerce(size) += tlen;
                 assert(sanity());
             }

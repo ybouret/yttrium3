@@ -152,13 +152,42 @@ template <> String<CH> & String<CH>:: operator+=( const CH C )
 {
     if(code->size<code->capacity)
     {
-        code->entry[ Coerce(code->size)++ ] = C;
-        assert(code->sanity());
+        code->cat(&C,1);
         return *this;
     }
     else
     {
-        String temp = Add(*this,C);
-        return xch(temp);
+        String tmp = Add(*this,C);
+        return xch(tmp);
     }
  }
+
+template <> String<CH> & String<CH>:: operator+=( const String &s )
+{
+    if(code->capacity-code->size>=s.code->size)
+    {
+        code->cat(s.code->entry,s.code->size);
+        return *this;
+    }
+    else
+    {
+        String tmp = Add(*this,s);
+        return xch(tmp);
+    }
+}
+
+
+template <> String<CH> & String<CH>:: operator+=( const CH * const text )
+{
+    const size_t tlen = StringLength(text);
+    if(code->capacity-code->size>=tlen)
+    {
+        code->cat(text,tlen);
+        return *this;
+    }
+    else
+    {
+        String tmp = Add(*this,text);
+        return xch(tmp);
+    }
+}
