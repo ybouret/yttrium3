@@ -11,6 +11,8 @@ Y_UTEST(string)
 
     Y_CHECK(Y_Is_SuperSubClass_Strict(LegacyString,String));
 
+    //String s;
+
 }
 Y_UDONE()
 

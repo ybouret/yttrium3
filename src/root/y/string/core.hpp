@@ -24,22 +24,11 @@ namespace Yttrium
             Y_Disable_Copy_And_Assign(CountedLegacyString);
         };
 
-        template <typename T> struct StringBase
-        {
-            typedef CountedObject Type;
-        };
-
-        template <> struct StringBase<char>
-        {
-            typedef CountedLegacyString Type;
-        };
-
 
         template <typename T>
-        class String : public StringBase<T>::Type
+        class String : public CountedLegacyString
         {
         public:
-            typedef typename StringBase<T>::Type StringBaseType;
             class Code;
 
             String();
@@ -47,6 +36,7 @@ namespace Yttrium
             String & operator=(const String &);
             virtual ~String() noexcept;
 
+            virtual const char * c_str() const noexcept;
 
 
         private:

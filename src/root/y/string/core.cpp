@@ -1,6 +1,8 @@
 #include "y/string/core.hpp"
 #include "y/object/light.hpp"
 #include "y/string/stride.hpp"
+#include "y/system/error.hpp"
+#include <cerrno>
 
 namespace Yttrium
 {
@@ -28,6 +30,29 @@ namespace Yttrium
         private:
             Y_Disable_Assign(Code);
         };
+
+        namespace {
+            template <typename T> struct GetLegacyString
+            {
+                static inline const char * From(const typename String<T>::Code * const)
+                {
+                    Libc::Error::Critical(EINVAL,"c_str() not valid for this class");
+                    return 0;
+                }
+            };
+
+            template <> struct GetLegacyString<char>
+            {
+                static inline const char * From(const typename String<char>::Code * const code)
+                {
+                    assert(code);
+                    return code->entry;
+                }
+            };
+        }
+
+
+
 
 #undef  CH
 
