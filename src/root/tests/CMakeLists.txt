@@ -12,6 +12,7 @@ memory/plastic
 pointer
 ascii
 threading
+string
 )
 
 Y_LinkLibraries(test-root)
@@ -85,4 +86,6 @@ Y_UTEST(threading:gmt)
 Y_UTEST(threading:stc)
 Y_UTEST(threading:mth)
 Y_UTEST(threading:mto)
+
+Y_UTEST(string:stride)
 

@@ -9,16 +9,16 @@ namespace Yttrium
 {
 
     template <typename T> static inline
-    size StringLength(const T * s) noexcept
+    size_t StringLength(const T * s) noexcept
     {
         if(!s)
             return 0;
         else
         {
-            size_t res = 0;
-            while( 0 != *(s++) )
-                ++res;
-            return res;
+            const T * const t = s;
+            while( 0 != *s )
+                ++s;
+            return s-t;
         }
     }
 }
