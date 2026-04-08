@@ -5,24 +5,21 @@
 namespace Yttrium
 {
 
-    CoreStride:: CoreStride() noexcept
+    namespace Core
     {
-    }
 
-    CoreStride:: ~CoreStride() noexcept
-    {
-    }
 
-    Memory::Allocator & CoreStride:: AllocatorInstance()
-    {
-        static Memory::Allocator &mgr = Memory::Pooled::Instance();
-        return mgr;
-    }
+        Memory::Allocator &  Stride:: AllocatorInstance()
+        {
+            static Memory::Allocator &mgr = Memory::Pooled::Instance();
+            return mgr;
+        }
 
-    Memory::Allocator & CoreStride:: AllocatorLocation() noexcept
-    {
-        static Memory::Allocator &mgr = Memory::Pooled::Location();
-        return mgr;
+        Memory::Allocator &  Stride:: AllocatorLocation() noexcept
+        {
+            static Memory::Allocator &mgr = Memory::Pooled::Location();
+            return mgr;
+        }
     }
 
 }

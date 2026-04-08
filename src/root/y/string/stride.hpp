@@ -7,32 +7,30 @@
 #include "y/memory/allocator.hpp"
 #include "y/string/length.hpp"
 #include "y/core/display.hpp"
+#include "y/libc/block/zeroed.h"
 #include <cstring>
+
 namespace Yttrium
 {
 
-    class CoreStride
+    namespace Core
     {
-    public:
-        explicit CoreStride() noexcept;
-        virtual ~CoreStride() noexcept;
-
-        static Memory::Allocator & AllocatorInstance();
-        static Memory::Allocator & AllocatorLocation() noexcept;
-
-    private:
-        Y_Disable_Copy_And_Assign(CoreStride);
-    };
+        struct Stride
+        {
+            static Memory::Allocator & AllocatorInstance();
+            static Memory::Allocator & AllocatorLocation() noexcept;
+        };
+    }
 
 #define Y_Stride_Acquire()  \
 /**/    count(capacity+1),  \
 /**/    bytes(0),           \
-/**/    entry( AllocatorInstance().acquireAs<T>(Coerce(count),Coerce(bytes)) )
+/**/    entry( Core::Stride::AllocatorInstance().acquireAs<T>(Coerce(count),Coerce(bytes)) )
 
 #define Y_Stride_Upgrade() Coerce(capacity) = count-1
 
     template <typename T>
-    class Stride : public CoreStride
+    class Stride
     {
     public:
         inline explicit Stride(const size_t n) :
@@ -50,29 +48,59 @@ namespace Yttrium
         {
             Y_Stride_Upgrade();
             memcpy(entry,text,size*sizeof(T));
+            assert(sanity());
         }
 
+        explicit Stride(const Stride &s) :
+        capacity(s.size),
+        size(s.size),
+        Y_Stride_Acquire()
+        {
+            Y_Stride_Upgrade();
+            memcpy(entry,s.entry,size*sizeof(T));
+            assert(sanity());
+        }
 
         inline virtual ~Stride() noexcept
         {
-            static Memory::Allocator &mgr = AllocatorLocation();
+            static Memory::Allocator &mgr = Core::Stride::AllocatorLocation();
             mgr.releaseAs(Coerce(entry),Coerce(count),Coerce(bytes));
             Coerce(capacity) = 0;
             Coerce(size)     = 0;
         }
+
+
 
         inline friend std::ostream & operator<<(std::ostream &os, const Stride &self)
         {
             return Core::Display(os,self.entry,self.size) <<  '#' << self.size << '/' << self.capacity;
         }
 
+        inline bool sanity() const noexcept
+        {
+            assert(size<=capacity);
+            assert(capacity==count-1);
+            return Y_TRUE == Yttrium_Zeroed(entry+size,(count-size)*sizeof(T));
+        }
+
+        inline Stride & cat(const T * const text, const size_t tlen) noexcept
+        {
+            assert(sanity());
+            assert(tlen == StringLength(text));
+            assert(size+tlen<=capacity);
+            memcpy(entry+size,text,tlen*sizeof(T));
+            Coerce(size) += tlen;
+            assert(sanity());
+            return *this;
+        }
+
         const size_t capacity;
-        size_t       size;
+        const size_t size;
         const size_t count;
         const size_t bytes;
         T *   const  entry;
     private:
-        Y_Disable_Copy_And_Assign(Stride);
+        Y_Disable_Assign(Stride);
 
     };
 

@@ -8,8 +8,16 @@ Y_UTEST(string_stride)
 
     const char text[] = "Hello";
     std::cerr << text << " / " << StringLength(text) << std::endl;
+
     { Stride<char> s(10);   std::cerr << "stride=" << s << std::endl; }
     { Stride<char> s(text); std::cerr << "stride=" << s << std::endl;}
+
+    {
+        Stride<char> s(20);
+        s.cat(text,StringLength(text)); std::cerr << s << std::endl;
+        s.cat(",World",6);              std::cerr << s << std::endl;
+    }
+
 
 
 }
