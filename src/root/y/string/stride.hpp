@@ -15,167 +15,185 @@ namespace Yttrium
 
     namespace Core
     {
+        //__________________________________________________________________________
+        //
+        //
         //! common functions for Stride
-        struct Stride
+        //
+        //__________________________________________________________________________
+        struct StrideIO
         {
             static Memory::Allocator & AllocatorInstance();          //!< \return pooled allocator
             static Memory::Allocator & AllocatorLocation() noexcept; //!< \return pooled allocator
         };
-    }
 
-    //! helper to setup Stride memory
+
+        //! helper to setup Stride memory
 #define Y_Stride_Acquire()  \
 /**/    count(capacity+1),  \
 /**/    bytes(0),           \
-/**/    entry( Core::Stride::AllocatorInstance().acquireAs<T>(Coerce(count),Coerce(bytes)) )
+/**/    entry( StrideIO::AllocatorInstance().acquireAs<T>(Coerce(count),Coerce(bytes)) ), \
+/**/    cxx(entry-1)
 
-    //! post constructor upgrade
+        //! post constructor upgrade
 #define Y_Stride_Upgrade() Coerce(capacity) = count-1
 
-    //__________________________________________________________________________
-    //
-    //
-    //
-    //! Content of strings
-    //
-    //
-    //__________________________________________________________________________
-    template <typename T>
-    class Stride
-    {
-    public:
-        //______________________________________________________________________
+        //__________________________________________________________________________
         //
         //
-        // C++
         //
-        //______________________________________________________________________
-
-        //! setup with memory \param n minimal count
-        inline explicit Stride(const size_t n) :
-        capacity(n),
-        size(0),
-        Y_Stride_Acquire()
-        {
-            Y_Stride_Upgrade();
-        }
-
-        //! setup with buffer \param text user data
-        explicit Stride(const T * const text) :
-        capacity( StringLength(text) ),
-        size( capacity ),
-        Y_Stride_Acquire()
-        {
-            Y_Stride_Upgrade();
-            memcpy(entry,text,size*sizeof(T));
-            assert(sanity());
-        }
-
-        //! duplicate \param s another stride
-        explicit Stride(const Stride &s) :
-        capacity(s.size),
-        size(s.size),
-        Y_Stride_Acquire()
-        {
-            Y_Stride_Upgrade();
-            memcpy(entry,s.entry,size*sizeof(T));
-            assert(sanity());
-        }
-
-        //! cleanup
-        inline virtual ~Stride() noexcept
-        {
-            static Memory::Allocator &mgr = Core::Stride::AllocatorLocation();
-            mgr.releaseAs(Coerce(entry),Coerce(count),Coerce(bytes));
-            Coerce(capacity) = 0;
-            Coerce(size)     = 0;
-        }
-
-
-        //! display
-        inline friend std::ostream & operator<<(std::ostream &os, const Stride &self)
-        {
-            return Core::Display(os,self.entry,self.size) <<  '#' << self.size << '/' << self.capacity;
-        }
-
-        //______________________________________________________________________
+        //! Content of strings
         //
         //
-        // Methods
-        //
-        //______________________________________________________________________
-
-        //! check sanity \return true if excess memory is zeroed
-        inline bool sanity() const noexcept
+        //__________________________________________________________________________
+        template <typename T>
+        class Stride
         {
-            assert(size<=capacity);
-            assert(capacity==count-1);
-            return Y_TRUE == Yttrium_Zeroed(entry+size,(count-size)*sizeof(T));
-        }
+        public:
+            //______________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //______________________________________________________________________
 
-        //! catenate \param text data \param tlen data size \return *this
-        inline Stride & cat(const T * const text, const size_t tlen) noexcept
-        {
-            assert(sanity());
-            assert(tlen == StringLength(text));
-            assert(size+tlen<=capacity);
-            memcpy(entry+size,text,tlen*sizeof(T));
-            Coerce(size) += tlen;
-            assert(sanity());
-            return *this;
-        }
-
-        //! clear content \return *this
-        inline Stride & clear() noexcept
-        {
-            assert( sanity() );
-            memset(entry,0,size*sizeof(T));
-            Coerce(size) = 0;
-            assert(sanity());
-            return *this;
-        }
-
-        //! trim chars \param n chars to trim \return *this
-        inline Stride & trim(size_t n) noexcept
-        {
-            assert( sanity() );
-            if(n>=size) return clear();
-            while(n-- > 0)
+            //! setup with memory \param n minimal count
+            inline explicit Stride(const size_t n) :
+            capacity(n),
+            size(0),
+            Y_Stride_Acquire()
             {
-                assert(size>0);
-                entry[--Coerce(size)] = 0;
+                Y_Stride_Upgrade();
+            }
+
+            //! setup with buffer \param text user data
+            explicit Stride(const T * const text) :
+            capacity( StringLength(text) ),
+            size( capacity ),
+            Y_Stride_Acquire()
+            {
+                Y_Stride_Upgrade();
+                memcpy(entry,text,size*sizeof(T));
                 assert(sanity());
             }
-            return *this;
-        }
 
-        //! skip chars \param n chars to skip \return *this
-        inline Stride & skip(const size_t n) noexcept
-        {
-            assert( sanity() );
-            if(n>=size) return clear();
-            memmove(entry,entry+n,(Coerce(size) -= n)*sizeof(T));
-            memset(entry+size,0,n*sizeof(T));
-            assert( sanity() );
-            return *this;
-        }
+            //! duplicate \param s another stride
+            explicit Stride(const Stride &s) :
+            capacity(s.size),
+            size(s.size),
+            Y_Stride_Acquire()
+            {
+                Y_Stride_Upgrade();
+                memcpy(entry,s.entry,size*sizeof(T));
+                assert(sanity());
+            }
 
-        //______________________________________________________________________
-        //
-        //
-        // Members
-        //
-        //______________________________________________________________________
-        const size_t capacity; //!< maximum number of chars
-        const size_t size;     //!< current number of chars
-        const size_t count;    //!< capacity+1
-        const size_t bytes;    //!< count * sizeof(chars)
-        T *   const  entry;    //!< chars
+            //! cleanup
+            inline virtual ~Stride() noexcept
+            {
+                static Memory::Allocator &mgr = StrideIO::AllocatorLocation();
+                mgr.releaseAs(Coerce(entry),Coerce(count),Coerce(bytes));
+                Coerce(capacity) = 0;
+                Coerce(size)     = 0;
+            }
 
-    private:
-        Y_Disable_Assign(Stride); //!< discarded
 
-    };
+            //! display, mostly for Debug
+            inline friend std::ostream & operator<<(std::ostream &os, const Stride &self)
+            {
+                return Core::Display(os,self.entry,self.size) <<  '#' << self.size << '/' << self.capacity;
+            }
+
+            //______________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //______________________________________________________________________
+
+            //! check sanity \return true if excess memory is zeroed
+            inline bool sanity() const noexcept
+            {
+                assert(size<=capacity);
+                assert(capacity==count-1);
+                return Y_TRUE == Yttrium_Zeroed(entry+size,(count-size)*sizeof(T));
+            }
+
+            //! catenate \param text data \param tlen data size \return *this
+            inline void cat(const T * const text, const size_t tlen) noexcept
+            {
+                assert(sanity());
+                assert(tlen == StringLength(text));
+                assert(size+tlen<=capacity);
+                memcpy(entry+size,text,tlen*sizeof(T));
+                Coerce(size) += tlen;
+                assert(sanity());
+            }
+
+            //! clear content \return *this
+            inline void clear() noexcept
+            {
+                assert( sanity() );
+                memset(entry,0,size*sizeof(T));
+                Coerce(size) = 0;
+                assert(sanity());
+            }
+
+            //! trim chars \param n chars to trim \return *this
+            inline void trim(size_t n) noexcept
+            {
+                assert( sanity() );
+                if(n>=size) return clear();
+                while(n-- > 0)
+                {
+                    assert(size>0);
+                    entry[--Coerce(size)] = 0;
+                    assert(sanity());
+                }
+            }
+
+            //! skip chars \param n chars to skip \return *this
+            inline void skip(const size_t n) noexcept
+            {
+                assert( sanity() );
+                if(n>=size) return clear();
+                memmove(entry,entry+n,(Coerce(size) -= n)*sizeof(T));
+                memset(entry+size,0,n*sizeof(T));
+                assert( sanity() );
+            }
+
+            inline void steal(const Stride &other) noexcept
+            {
+                assert(this != &other);
+                assert( sanity() );
+                assert( other.sanity() );
+                assert(capacity>=other.size);
+
+                memcpy(entry,other.entry,(Coerce(size)=other.size)*sizeof(T));
+                memset(entry+size,0,(count-size)*sizeof(T));
+
+                assert( sanity() );
+            }
+
+            //______________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //______________________________________________________________________
+            const size_t capacity; //!< maximum number of chars
+            const size_t size;     //!< current number of chars
+            const size_t count;    //!< capacity+1
+            const size_t bytes;    //!< count * sizeof(chars)
+            T *   const  entry;    //!< chars
+            T *   const  cxx;      //!< entry-1
+
+        private:
+            Y_Disable_Assign(Stride); //!< discarded
+
+        };
+
+    }
 
 }
 

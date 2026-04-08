@@ -88,4 +88,5 @@ Y_UTEST(threading:mth)
 Y_UTEST(threading:mto)
 
 Y_UTEST(string:stride)
+Y_UTEST(string)
 

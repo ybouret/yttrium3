@@ -9,13 +9,13 @@ namespace Yttrium
     {
 
 
-        Memory::Allocator &  Stride:: AllocatorInstance()
+        Memory::Allocator &  StrideIO:: AllocatorInstance()
         {
             static Memory::Allocator &mgr = Memory::Pooled::Instance();
             return mgr;
         }
 
-        Memory::Allocator &  Stride:: AllocatorLocation() noexcept
+        Memory::Allocator &  StrideIO:: AllocatorLocation() noexcept
         {
             static Memory::Allocator &mgr = Memory::Pooled::Location();
             return mgr;
