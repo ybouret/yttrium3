@@ -94,6 +94,38 @@ namespace Yttrium
             return *this;
         }
 
+        inline Stride & clear() noexcept
+        {
+            assert( sanity() );
+            memset(entry,0,size*sizeof(T));
+            Coerce(size) = 0;
+            assert(sanity());
+            return *this;
+        }
+
+        inline Stride & trim(size_t n) noexcept
+        {
+            assert( sanity() );
+            if(n>=size) return clear();
+            while(n-- > 0)
+            {
+                assert(size>0);
+                entry[--Coerce(size)] = 0;
+                assert(sanity());
+            }
+            return *this;
+        }
+
+        inline Stride & skip(const size_t n) noexcept
+        {
+            assert( sanity() );
+            if(n>=size) return clear();
+            memmove(entry,entry+n,(Coerce(size) -= n)*sizeof(T));
+            memset(entry+size,0,n*sizeof(T));
+            assert( sanity() );
+            return *this;
+        }
+
         const size_t capacity;
         const size_t size;
         const size_t count;

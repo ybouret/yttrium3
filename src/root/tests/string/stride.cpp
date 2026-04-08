@@ -16,6 +16,8 @@ Y_UTEST(string_stride)
         Stride<char> s(20);
         s.cat(text,StringLength(text)); std::cerr << s << std::endl;
         s.cat(",World",6);              std::cerr << s << std::endl;
+        std::cerr << s.trim(4) << std::endl;
+        std::cerr << s.skip(3) << std::endl;
     }
 
 
