@@ -1,4 +1,6 @@
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "y/calculus/meta2.hpp"
 #include "y/utest/run.hpp"
 #include "y/core/rand.hpp"

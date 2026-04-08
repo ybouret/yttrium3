@@ -63,6 +63,21 @@ extern "C" {
 }
 #endif
 
+#if defined(_MSC_VER)
+
+#if (_MSC_VER<=1916)
+
+#pragma warning ( disable : 4625 ) 
+#pragma warning ( disable : 4626 ) 
+#pragma warning ( disable : 5026 ) 
+#pragma warning ( disable : 5027 ) 
+#pragma warning ( disable : 4774 ) 
+#pragma warning ( disable : 4571 )
+
+#endif
+
+
+#endif
 
 
 #endif // !Y_Platform_Included

@@ -3,6 +3,7 @@
 #ifndef Y_Type_Pick_Included
 #define Y_Type_Pick_Included 1
 
+#include "y/config/platform.h"
 
 namespace Yttrium
 {
