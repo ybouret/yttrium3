@@ -1,5 +1,5 @@
 
-#include "y/calculus/required-bytes-for.hpp"
+#include "y/calculus/required-bytes.hpp"
 
 namespace Yttrium
 {
@@ -36,7 +36,7 @@ namespace Yttrium
             if(x<=lim1) return 1;
             if(x<=lim2) return 2;
             if(x<=lim3) return 3;
-            return 2;
+            return 4;
         }
 
 

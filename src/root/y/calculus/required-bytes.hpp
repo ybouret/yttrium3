@@ -1,8 +1,8 @@
 
 //! \file
 
-#ifndef Y_Calculus_RequiredBytesFor_Included
-#define Y_Calculus_RequiredBytesFor_Included 1
+#ifndef Y_Calculus_RequiredBytes_Included
+#define Y_Calculus_RequiredBytes_Included 1
 
 #include "y/config/setup.hpp"
 
@@ -20,5 +20,5 @@ namespace Yttrium
     }
 }
 
-#endif // !Y_Calculus_RequiredBytesFor_Included
+#endif // !Y_Calculus_RequiredBytes_Included
 
