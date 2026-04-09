@@ -30,6 +30,11 @@ namespace Yttrium
             static uint16_t * From(uint64_t &x) noexcept;
         };
 
+        template <> struct SplitWord:: Make<uint32_t>
+        {
+            static uint32_t * From(uint64_t &x) noexcept;
+        };
+
     }
 
 }

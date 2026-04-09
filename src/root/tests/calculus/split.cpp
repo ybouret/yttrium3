@@ -78,5 +78,21 @@ Y_UTEST(calculus_split)
         }
     }
 
+    std::cerr << "-- Split To 32-Bits" << std::endl;
+    {
+        std::cerr << "\t-- from 64 bits" << std::endl;
+        for(size_t j=0;j<=64;++j)
+        {
+            for(size_t iter=0;iter<CYCLES;++iter)
+            {
+                const uint64_t   i = ran.gen<uint64_t>(j);
+                uint64_t         x = (uint64_t) i;
+                uint32_t * const p = Calculus::SplitWord::Make<uint32_t>::From(x);
+                const uint64_t   w[2] = { p[0], p[1] };
+                Y_ASSERT( (w[0] | (w[1] << 32) ) == i );
+            }
+        }
+    }
+
 }
 Y_UDONE()

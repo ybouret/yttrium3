@@ -72,6 +72,15 @@ namespace Yttrium
             p[3]  = u[3];
             return p;
         }
+
+        uint32_t * SplitWord:: Make<uint32_t>::From(uint64_t &x) noexcept
+        {
+            uint32_t * const p    = (uint32_t *) &x;
+            const uint32_t   u[2] = { (uint32_t) x, (uint32_t) (x>>32) };
+            p[0]  = u[0];
+            p[1]  = u[1];
+            return p;
+        }
     }
 
 }
