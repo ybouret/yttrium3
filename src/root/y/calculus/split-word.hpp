@@ -10,23 +10,31 @@ namespace Yttrium
     namespace Calculus
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Operations on Words
+        //
+        //
+        //______________________________________________________________________
         struct SplitWord
         {
             template <typename T> struct Make;
 
-            static void Expand(uint8_t  * const target, const uint16_t &source) noexcept;
-            static void Expand(uint8_t  * const target, const uint32_t &source) noexcept;
-            static void Expand(uint8_t  * const target, const uint64_t &source) noexcept;
-            static void Expand(uint16_t * const target, const uint32_t &source) noexcept;
-            static void Expand(uint16_t * const target, const uint64_t &source) noexcept;
-            static void Expand(uint32_t * const target, const uint64_t &source) noexcept;
+            static void Expand(uint8_t  * const target, const uint16_t &source) noexcept; //!< expand \param target small area \param source large word
+            static void Expand(uint8_t  * const target, const uint32_t &source) noexcept; //!< expand \param target small area \param source large word
+            static void Expand(uint8_t  * const target, const uint64_t &source) noexcept; //!< expand \param target small area \param source large word
+            static void Expand(uint16_t * const target, const uint32_t &source) noexcept; //!< expand \param target small area \param source large word
+            static void Expand(uint16_t * const target, const uint64_t &source) noexcept; //!< expand \param target small area \param source large word
+            static void Expand(uint32_t * const target, const uint64_t &source) noexcept; //!< expand \param target small area \param source large word
 
-            static void Gather(uint16_t & target, const uint8_t  * const source) noexcept;
-            static void Gather(uint32_t & target, const uint8_t  * const source) noexcept;
-            static void Gather(uint64_t & target, const uint8_t  * const source) noexcept;
-            static void Gather(uint32_t & target, const uint16_t * const source) noexcept;
-            static void Gather(uint64_t & target, const uint16_t * const source) noexcept;
-            static void Gather(uint64_t & target, const uint32_t * const source) noexcept;
+            static void Gather(uint16_t & target, const uint8_t  * const source) noexcept; //!< gather \param target large word \param source small area
+            static void Gather(uint32_t & target, const uint8_t  * const source) noexcept; //!< gather \param target large word \param source small area
+            static void Gather(uint64_t & target, const uint8_t  * const source) noexcept; //!< gather \param target large word \param source small area
+            static void Gather(uint32_t & target, const uint16_t * const source) noexcept; //!< gather \param target large word \param source small area
+            static void Gather(uint64_t & target, const uint16_t * const source) noexcept; //!< gather \param target large word \param source small area
+            static void Gather(uint64_t & target, const uint32_t * const source) noexcept; //!< gather \param target large word \param source small area
 
         };
 

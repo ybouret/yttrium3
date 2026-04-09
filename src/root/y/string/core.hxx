@@ -270,11 +270,8 @@ template <> String<CH> & String<CH>:: operator+=( const CH * const text )
 namespace
 {
     static inline SignType CompareStrings(const CH * lit, const size_t litSize,
-                                          const CH * big, const size_t bigSize) noexcept
+                                          const CH * big) noexcept
     {
-        assert(litSize<bigSize);
-        assert( !(0==lit&&litSize>0) );
-        assert( !(0==big&&bigSize>0) );
         for(size_t n=litSize;n>0;--n)
         {
             switch( Sign::Of(*lit,*big) )
@@ -297,12 +294,12 @@ template <> SignType String<CH>::Cmp(const CH * lhs, const size_t lhsSize,
 
     if(lhsSize<rhsSize)
     {
-        return CompareStrings(lhs,lhsSize,rhs,rhsSize);
+        return CompareStrings(lhs,lhsSize,rhs);
     }
     else
     {
         if( rhsSize<lhsSize )
-            return Sign::Opposite( CompareStrings(rhs,rhsSize,lhs,lhsSize));
+            return Sign::Opposite( CompareStrings(rhs,rhsSize,lhs));
         else
         {
             assert(lhsSize==rhsSize);
@@ -326,29 +323,29 @@ template <> SignType String<CH>::Cmp(const CH * lhs, const size_t lhsSize,
 template <> SignType String<CH>:: Cmp(const String &lhs, const String &rhs) noexcept
 {
     return Cmp(lhs.code->entry,lhs.code->size,
-                  rhs.code->entry,rhs.code->size);
+               rhs.code->entry,rhs.code->size);
 }
 
 template <> SignType String<CH>:: Cmp(const String &lhs, const CH * const rhs) noexcept
 {
     return Cmp(lhs.code->entry,lhs.code->size,
-                  rhs,StringLength(rhs));
+               rhs,StringLength(rhs));
 }
 
 template <> SignType String<CH>:: Cmp(const CH * const lhs, const String &rhs) noexcept
 {
     return Cmp(lhs,StringLength(lhs),
-                  rhs.code->entry,rhs.code->size);
+               rhs.code->entry,rhs.code->size);
 }
 
 template <> SignType String<CH>:: Cmp(const String &lhs, const CH C) noexcept
 {
     return Cmp(lhs.code->entry,lhs.code->size,
-                  &C,1);
+               &C,1);
 }
 
 template <> SignType String<CH>:: Cmp(const CH C, const String &rhs) noexcept
 {
     return Cmp(&C,1,
-                  rhs.code->entry,rhs.code->size);
+               rhs.code->entry,rhs.code->size);
 }
