@@ -1,12 +1,22 @@
 
-template <> String<CH>:: String() : code( new Code( size_t(0) ) )
-{
-}
 
 template <> String<CH>:: ~String() noexcept
 {
     Destroy(code);
 }
+
+
+//------------------------------------------------------------------------------
+//
+//
+// Constructors
+//
+//
+//------------------------------------------------------------------------------
+template <> String<CH>:: String() : code( new Code( size_t(0) ) )
+{
+}
+
 
 template <> String<CH>:: String(const String &s) :
 Container(),
@@ -35,7 +45,7 @@ template <> String<CH> & String<CH>:: operator=( const String &rhs )
     {
         if(rhs.code->size<=code->capacity)
         {
-            code->copy( *rhs.code );
+            code->copy(rhs.code->entry,rhs.code->size);
         }
         else
         {
@@ -63,8 +73,7 @@ template <> String<CH> & String<CH>:: operator=( const CH * const text )
     const size_t tlen = StringLength(text);
     if(tlen<=code->capacity)
     {
-        memmove(code->entry,text,(Coerce(code->size)=tlen)*sizeof(CH));
-        memset(code->entry+tlen,0,(code->capacity-tlen) * sizeof(CH));
+        code->copy(text,tlen);
         assert(code->sanity());
     }
     else
@@ -163,7 +172,7 @@ BaseClass(), code( new Code(lhsSize+rhsSize) )
 //------------------------------------------------------------------------------
 //
 //
-// Additions
+// Addition operators
 //
 //
 //------------------------------------------------------------------------------

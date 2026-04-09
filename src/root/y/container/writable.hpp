@@ -10,15 +10,43 @@
 namespace Yttrium
 {
 
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Writable container is a Readable container
+    //
+    //
+    //__________________________________________________________________________
     template <typename T>
     class Writable : public Readable<T>
     {
     public:
-        typedef typename Readable<T>::Type Type;
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        typedef typename Readable<T>::Type Type; //!< alias
 
-        inline explicit Writable() noexcept {}
-        inline virtual ~Writable() noexcept {}
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+        inline explicit Writable() noexcept {} //!< setup
+        inline virtual ~Writable() noexcept {} //!< cleanup
 
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+
+        //! access \param indx in [1:size()] \return indx-th item
         inline Type & operator[](const size_t indx) noexcept
         {
             assert(indx>=1); assert(indx<=this->size());
@@ -26,7 +54,7 @@ namespace Yttrium
         }
 
     private:
-        Y_Disable_Copy_And_Assign(Writable);
+        Y_Disable_Copy_And_Assign(Writable); //!< discarded
     };
 
 }

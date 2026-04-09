@@ -147,6 +147,7 @@ namespace Yttrium
                 assert(sanity());
             }
 
+            //! prepend \param text data \param tlen data size
             inline void pre(const T * const text, const size_t tlen) noexcept
             {
                 assert(sanity());
@@ -188,6 +189,22 @@ namespace Yttrium
                 assert( sanity() );
             }
 
+            //! copy buffer into this
+            /**
+             \param buffer NON OVERLAPPING buffer
+             \param buflen buffer size
+             */
+            inline void copy(const T * const buffer,
+                             const size_t    buflen) noexcept
+            {
+                assert(!(0==buffer&&buflen>0));
+                assert(sanity());
+                if(buflen<size) memset(entry+buflen,0,(size-buflen)*sizeof(T));
+                memcpy(entry,buffer,( Coerce(size)=buflen) * sizeof(T) );
+                assert(sanity());
+            }
+
+#if 0
             //! copy content \param other other.size<=capacity
             inline void copy(const Stride &other) noexcept
             {
@@ -201,6 +218,7 @@ namespace Yttrium
 
                 assert( sanity() );
             }
+#endif
 
             //______________________________________________________________________
             //

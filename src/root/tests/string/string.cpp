@@ -4,13 +4,25 @@
 
 using namespace Yttrium;
 
+namespace
+{
+    static inline
+    void show(const String &s)
+    {
+        std::cerr << '#' << std::setw(3) << s.size() << "/" << std::setw(3) << s.capacity() << ":[" << s << "]" << std::endl;
+    }
+}
 Y_UTEST(string)
 {
     Y_SIZEOF(Core::String<char>);
     Y_SIZEOF(Core::String<uint32_t>);
 
-    String s = "Hello"; std::cerr << s << std::endl;
-    
+    const char little[] = "Hello";
+    const char big[] = "A really big string that neeeds a lot of characters to build";
+
+    { String s = little; show(s); }
+    { String s = big;    show(s); }
+
 
 }
 Y_UDONE()

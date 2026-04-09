@@ -22,7 +22,7 @@ namespace Yttrium {
     {
     public:
         typedef Threading::Locker<MultiThreadedObject> Lock; //!< alias
-        static const size_t WordsPerMutex = 2;
+        static const size_t WordsPerMutex = 2;               //!< for inner memory
 
         explicit MultiThreadedObject();                   //!< setup
         virtual ~MultiThreadedObject() noexcept;          //!< cleanup
@@ -36,8 +36,7 @@ namespace Yttrium {
         Y_Disable_Assign(MultiThreadedObject); //!< discarding
         Lockable * const authorization;        //!< new Concurrent::Mutex
         void *           wksp[WordsPerMutex];  //!< put mutex here
-
-        void setupInnerMutex();
+        void setupInnerMutex();                //!< building mutex within wksp
 
     };
 

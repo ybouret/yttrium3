@@ -36,8 +36,8 @@ namespace Yttrium
         // C++
         //
         //______________________________________________________________________
-        inline explicit Readable() noexcept {}
-        inline virtual ~Readable() noexcept {}
+        inline explicit Readable() noexcept {} //!< setup
+        inline virtual ~Readable() noexcept {} //!< cleanup
 
         //______________________________________________________________________
         //
@@ -46,7 +46,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
 
-        //! access \param indx in [1:size()] \return indx-th item
+        //! const access \param indx in [1:size()] \return indx-th item
         inline ConstType & operator[](const size_t indx) const noexcept
         {
             assert(indx>=1); assert(indx<=size());
