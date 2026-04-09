@@ -103,6 +103,7 @@ Coerce(maxWords) = maxBytes >> WordShift
             {
                 Y_Apex_Keg_OnInit();
                 assert(!(0==w&&n>0));
+                assert(n==words);
                 memcpy(word,w,n*WordBytes);
                 update();
                 assert(n==words);

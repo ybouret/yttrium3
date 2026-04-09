@@ -89,7 +89,8 @@ namespace Yttrium
                     for(size_t i=nbits-1;i>0;--i)
                     {
                         res <<= 1;
-                        res |=  1;
+                        if(choice())
+                            res |=  1;
                     }
                     return res;
                 }

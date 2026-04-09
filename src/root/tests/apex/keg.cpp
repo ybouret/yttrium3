@@ -1,6 +1,9 @@
 #include "y/apex/k/add.hpp"
 #include "y/utest/run.hpp"
 #include "y/pointer/auto.hpp"
+#include "y/core/rand.hpp"
+#include "y/system/wall-time.hpp"
+#include "y/format/human-readable.hpp"
 
 using namespace Yttrium;
 using namespace Apex;
@@ -8,21 +11,36 @@ using namespace Apex;
 namespace
 {
     template <typename WORD, typename CORE> static inline
-    void TestKeg()
+    void TestKeg(Core::Rand &ran)
     {
         typedef Keg<WORD> KegType;
+        System::WallTime  chrono;
+
         std::cerr << "-- Test Keg<" << KegType::WordBits << "> / " << sizeof(CORE)*8 << std::endl;
         Y_SIZEOF(KegType);
-        Y_PRINTV(KegType::WordShift);
-        const natural_t n1  = 0x1234;
-        const natural_t n2  = 0x56789;
-        const natural_t sum = n1+n2;
-        KegType k1(0),k2(0);
-        k1.ld(n1); std::cerr << "k1=" << k1 << std::endl;
-        k2.ld(n2); std::cerr << "k2=" << k2 << std::endl;
+        
 
-        AutoPtr< Keg<WORD> > ksum = KegAdd:: Compute<WORD,CORE>(k1.word,k1.words,k2.word,k2.words);
-        std::cerr << "sum=" << ksum << " / " << Hexadecimal(sum) << std::endl;
+        const size_t nbits = sizeof(natural_t) * 8 -1;
+        uint64_t     ell = 0;
+        size_t       ops = 0;
+        do
+        {
+            ++ops;
+            const natural_t lhs = ran.gen<natural_t>( ran.in<size_t>(0,nbits));
+            const natural_t rhs = ran.gen<natural_t>( ran.in<size_t>(0,nbits));
+            const natural_t sum = lhs+rhs;
+            KegType L(0); L.ld(lhs);
+            KegType R(0); R.ld(rhs);
+            const uint64_t       mark = System::WallTime::Ticks();
+            AutoPtr< Keg<WORD> > S = KegAdd:: Compute<WORD,CORE>(L.word,L.words,R.word,R.words);
+            ell += System::WallTime::Ticks() - mark;
+            const natural_t      s = S->getNatural();
+            Y_ASSERT(sum==s);
+        } while( chrono(ell) < 0.1L );
+
+        const long double rate = (long double)ops / chrono(ell);
+        std::cerr << "\t\tadd64=" << HumanReadable( (uint64_t)rate ) << std::endl;
+
 
         std::cerr << std::endl;
     }
@@ -31,16 +49,16 @@ namespace
 
 Y_UTEST(apex_keg)
 {
-
+    Core::Rand ran;
     Y_PRINTV(KegMetrics::MaxBytes);
     std::cerr << std::endl;
     
-    TestKeg<uint8_t,uint16_t>();
-    TestKeg<uint8_t,uint32_t>();
-    TestKeg<uint8_t,uint64_t>();
-    TestKeg<uint16_t,uint32_t>();
-    TestKeg<uint16_t,uint64_t>();
-    TestKeg<uint32_t,uint64_t>();
+    TestKeg<uint8_t, uint16_t>(ran);
+    TestKeg<uint8_t, uint32_t>(ran);
+    TestKeg<uint8_t, uint64_t>(ran);
+    TestKeg<uint16_t,uint32_t>(ran);
+    TestKeg<uint16_t,uint64_t>(ran);
+    TestKeg<uint32_t,uint64_t>(ran);
 
 
 }

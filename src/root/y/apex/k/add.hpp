@@ -31,17 +31,20 @@ namespace Yttrium
                     }
                     else
                     {
+                        assert(nrw>0);
                         return new Keg<WORD>(rhs,nrw);
                     }
                 }
                 else
                 {
+                    assert(nlw>0);
                     if(nrw<=0)
                     {
-                        return new Keg<WORD>(lhs,nrw);
+                        return new Keg<WORD>(lhs,nlw);
                     }
                     else
                     {
+                        assert(nrw>0);
                         return (nlw<nrw) ? Perform<WORD,CORE>(lhs,nlw,rhs,nrw) : Perform<WORD,CORE>(rhs,nrw,lhs,nlw);
                     }
                 }
