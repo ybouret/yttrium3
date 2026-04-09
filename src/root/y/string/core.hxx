@@ -8,7 +8,11 @@ template <> String<CH>:: ~String() noexcept
     Destroy(code);
 }
 
-template <> String<CH>:: String(const String &s) : BaseClass(), code( new Code(*s.code) )
+template <> String<CH>:: String(const String &s) :
+Container(),
+BaseClass(),
+Writable<CH>(),
+code( new Code(*s.code) )
 {
 
 }

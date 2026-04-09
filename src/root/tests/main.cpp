@@ -77,6 +77,8 @@ Y_UTEST_DECL(8)
 
     Y_UTEST(string_stride);
     Y_UTEST(string);
+
+    Y_UTEST(container_iter);
 }
 Y_UTEST_EXEC()
 

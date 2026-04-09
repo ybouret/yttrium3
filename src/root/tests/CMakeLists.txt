@@ -13,6 +13,7 @@ pointer
 ascii
 threading
 string
+container
 )
 
 Y_LinkLibraries(test-root)
@@ -89,4 +90,6 @@ Y_UTEST(threading:mto)
 
 Y_UTEST(string:stride)
 Y_UTEST(string)
+
+Y_UTEST(container:iter)
 
