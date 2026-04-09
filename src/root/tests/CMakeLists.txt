@@ -14,6 +14,7 @@ ascii
 threading
 string
 container
+apex
 )
 
 Y_LinkLibraries(test-root)
@@ -96,3 +97,4 @@ Y_UTEST(string)
 
 Y_UTEST(container:iter)
 
+Y_UTEST(apex:keg)

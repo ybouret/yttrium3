@@ -81,6 +81,8 @@ Y_UTEST_DECL(8)
     Y_UTEST(string);
 
     Y_UTEST(container_iter);
+
+    Y_UTEST(apex_keg);
 }
 Y_UTEST_EXEC()
 

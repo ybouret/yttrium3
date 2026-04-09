@@ -44,6 +44,8 @@ y/stream
 y/object
 y/object/light
 y/string
+y/apex
+y/apex/k
 )
 
 add_subdirectory(tests)
