@@ -17,6 +17,8 @@ namespace Yttrium
             static size_t For(const uint8_t  &) noexcept;
             static size_t For(const uint16_t &) noexcept;
             static size_t For(const uint32_t &) noexcept;
+            static size_t For(const uint64_t &) noexcept;
+
         };
 
     }
