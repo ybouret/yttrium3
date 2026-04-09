@@ -259,26 +259,96 @@ template <> String<CH> & String<CH>:: operator+=( const CH * const text )
 }
 
 
-#if 0
 //------------------------------------------------------------------------------
 //
 //
-// in place equality
+// comparison
 //
 //
 //------------------------------------------------------------------------------
-template <> bool String<CH>:: AreEqual(const CH * lhs, const size_t lhsSize,
-                                       const CH * rhs, const size_t rhsSize) noexcept
+
+namespace
 {
-    assert(!(0==lhs&&lhsSize>0));
-    assert(!(0==rhs&&rhsSize>0));
-    if(lhsSize!=rhsSize) return false;
-    for(size_t n=lhsSize;n>0;--n,++lhs,++rhs)
+    static inline SignType CompareStrings(const CH * lit, const size_t litSize,
+                                          const CH * big, const size_t bigSize) noexcept
     {
-        if(*lhs!=*rhs) return false;
+        assert(litSize<bigSize);
+        assert( !(0==lit&&litSize>0) );
+        assert( !(0==big&&bigSize>0) );
+        for(size_t n=litSize;n>0;--n)
+        {
+            switch( Sign::Of(*lit,*big) )
+            {
+                case Negative: return Negative;
+                case Positive: return Positive;
+                case __Zero__: ++lit; ++big; continue;
+            }
+        }
+        return Negative;
     }
-    return true;
 }
-#endif
+
+template <> SignType String<CH>::Cmp(const CH * lhs, const size_t lhsSize,
+                                     const CH * rhs, const size_t rhsSize) noexcept
+{
+
+    assert( !(0==lhs&&lhsSize>0) );
+    assert( !(0==rhs&&rhsSize>0) );
+
+    if(lhsSize<rhsSize)
+    {
+        return CompareStrings(lhs,lhsSize,rhs,rhsSize);
+    }
+    else
+    {
+        if( rhsSize<lhsSize )
+            return Sign::Opposite( CompareStrings(rhs,rhsSize,lhs,lhsSize));
+        else
+        {
+            assert(lhsSize==rhsSize);
+            for(size_t n=lhsSize;n>0;--n)
+            {
+                switch( Sign::Of(*lhs,*rhs) )
+                {
+                    case Negative: return Negative;
+                    case Positive: return Positive;
+                    case __Zero__: ++lhs; ++rhs; continue;
+                }
+            }
+            return __Zero__;
+        }
+    }
 
 
+}
+
+
+template <> SignType String<CH>:: Cmp(const String &lhs, const String &rhs) noexcept
+{
+    return Cmp(lhs.code->entry,lhs.code->size,
+                  rhs.code->entry,rhs.code->size);
+}
+
+template <> SignType String<CH>:: Cmp(const String &lhs, const CH * const rhs) noexcept
+{
+    return Cmp(lhs.code->entry,lhs.code->size,
+                  rhs,StringLength(rhs));
+}
+
+template <> SignType String<CH>:: Cmp(const CH * const lhs, const String &rhs) noexcept
+{
+    return Cmp(lhs,StringLength(lhs),
+                  rhs.code->entry,rhs.code->size);
+}
+
+template <> SignType String<CH>:: Cmp(const String &lhs, const CH C) noexcept
+{
+    return Cmp(lhs.code->entry,lhs.code->size,
+                  &C,1);
+}
+
+template <> SignType String<CH>:: Cmp(const CH C, const String &rhs) noexcept
+{
+    return Cmp(&C,1,
+                  rhs.code->entry,rhs.code->size);
+}

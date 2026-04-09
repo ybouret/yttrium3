@@ -150,8 +150,9 @@ namespace Yttrium
             inline void pre(const T * const text, const size_t tlen) noexcept
             {
                 assert(sanity());
-                assert(tlen == StringLength(text));
                 assert(size+tlen<=capacity);
+
+                T * const target = entry+tlen;
 
                 assert(sanity());
             }

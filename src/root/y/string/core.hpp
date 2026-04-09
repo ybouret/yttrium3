@@ -9,6 +9,7 @@
 #include "y/type/destroy.hpp"
 #include "y/type/with-at-least.hpp"
 #include "y/container/writable.hpp"
+#include "y/type/sign.hpp"
 #include <iosfwd>
 
 namespace Yttrium
@@ -108,6 +109,25 @@ namespace Yttrium
             String & operator+=(const T);
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+#define Y_String_Cmp(OP,EXPR) \
+inline friend bool operator OP (const String  & lhs, const String  & rhs) noexcept { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP (const String  & lhs, const T * const rhs) noexcept { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP (const T * const lhs, const String  & rhs) noexcept { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP (const String  & lhs, const T         rhs) noexcept { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP (const T         lhs, const String  & rhs) noexcept { return Cmp(lhs,rhs) EXPR; }
+
+
+            Y_String_Cmp(==,  == __Zero__ )
+            Y_String_Cmp(!=,  != __Zero__ )
+            Y_String_Cmp(<,   ==  Negative)
+            Y_String_Cmp(>,   ==  Positive)
+            Y_String_Cmp(<=,  !=  Positive)
+            Y_String_Cmp(>=,  !=  Negative)
+
+
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
 
 
         private:
@@ -116,6 +136,7 @@ namespace Yttrium
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             Y_Readable_Decl();
 
+            // for additions
             String(const T * const lhs, const size_t lhsSize,
                    const T * const rhs, const size_t rhsSize);
             static String Add(const String  &, const String  &);
@@ -124,6 +145,15 @@ namespace Yttrium
             static String Add(const String  &, const T);
             static String Add(const T, const String  &);
 
+            // for comparisons
+            static SignType Cmp(const T * lhs, const size_t lhsSize,
+                                const T * rhs, const size_t rhsSize) noexcept;
+
+            static SignType Cmp(const String  &, const String  &) noexcept;
+            static SignType Cmp(const String  &, const T * const) noexcept;
+            static SignType Cmp(const T * const, const String  &) noexcept;
+            static SignType Cmp(const String  &, const T        ) noexcept;
+            static SignType Cmp(const T,         const String  &) noexcept;
 
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
