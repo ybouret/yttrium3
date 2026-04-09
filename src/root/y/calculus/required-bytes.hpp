@@ -11,16 +11,17 @@ namespace Yttrium
 {
     namespace Calculus
     {
+        //! compute bytes to hold given word
         struct RequiredBytes
         {
-            static size_t For(const uint8_t  &) noexcept;
-            static size_t For(const uint16_t &) noexcept;
-            static size_t For(const uint32_t &) noexcept;
-            static size_t For(const uint64_t &) noexcept;
+            static size_t For(const uint8_t  &) noexcept; //!< \return bytes to hold argument
+            static size_t For(const uint16_t &) noexcept; //!< \return bytes to hold argument
+            static size_t For(const uint32_t &) noexcept; //!< \return bytes to hold argument
+            static size_t For(const uint64_t &) noexcept; //!< \return bytes to hold argument
         };
-
     }
 
+    
     template <typename T> static inline
     size_t RequiredBytesFor(const T &x) noexcept
     {

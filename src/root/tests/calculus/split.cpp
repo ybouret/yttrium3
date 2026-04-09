@@ -94,5 +94,77 @@ Y_UTEST(calculus_split)
         }
     }
 
+
+    std::cerr << "-- I/O for 16 bits" << std::endl;
+    for(size_t i=0;i<=16;++i)
+    {
+        for(size_t iter=0;iter<CYCLES;++iter)
+        {
+            const uint16_t origin = ran.gen<uint16_t>(i);
+            uint16_t       gather=0;
+            {
+                uint8_t        b[2];
+                Calculus::SplitWord::Expand(b,origin);
+                Calculus::SplitWord::Gather(gather,b);
+            }
+            Y_ASSERT(origin==gather);
+        }
+    }
+
+    std::cerr << "-- I/O for 32 bits" << std::endl;
+    for(size_t i=0;i<=32;++i)
+    {
+        for(size_t iter=0;iter<CYCLES;++iter)
+        {
+            const uint32_t origin = ran.gen<uint32_t>(i);
+            uint32_t       gather=0;
+            {
+                uint8_t        b[4];
+                Calculus::SplitWord::Expand(b,origin);
+                Calculus::SplitWord::Gather(gather,b);
+            }
+            Y_ASSERT(origin==gather);
+            {
+                uint16_t       w[2];
+                gather = 0;
+                Calculus::SplitWord::Expand(w,origin);
+                Calculus::SplitWord::Gather(gather,w);
+            }
+            Y_ASSERT(origin==gather);
+        }
+
+    }
+
+    std::cerr << "-- I/O for 64 bits" << std::endl;
+    for(size_t i=0;i<=32;++i)
+    {
+        for(size_t iter=0;iter<CYCLES;++iter)
+        {
+            const uint64_t origin = ran.gen<uint64_t>(i);
+            uint64_t       gather=0;
+            {
+                uint8_t        b[8];
+                Calculus::SplitWord::Expand(b,origin);
+                Calculus::SplitWord::Gather(gather,b);
+            }
+            Y_ASSERT(origin==gather);
+            {
+                gather = 0;
+                uint16_t      w[4];
+                Calculus::SplitWord::Expand(w,origin);
+                Calculus::SplitWord::Gather(gather,w);
+            }
+            Y_ASSERT(origin==gather);
+            {
+                gather = 0;
+                uint32_t d[2];
+                Calculus::SplitWord::Expand(d,origin);
+                Calculus::SplitWord::Gather(gather,d);
+            }
+            Y_ASSERT(origin==gather);
+        }
+    }
+
+
 }
 Y_UDONE()

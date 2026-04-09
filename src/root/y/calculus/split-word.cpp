@@ -1,8 +1,133 @@
 
 #include "y/calculus/split-word.hpp"
+#include <cassert>
 
 namespace Yttrium
 {
+
+    namespace Calculus
+    {
+        void SplitWord:: Expand(uint8_t * const target, const uint16_t &source) noexcept
+        {
+            const uint8_t u[2] = { (uint8_t)(source), (uint8_t)(source>>8) };
+            target[0]   = u[0];
+            target[1]   = u[1];
+        }
+
+        void SplitWord:: Expand(uint8_t * const target, const uint32_t &source) noexcept
+        {
+            const uint8_t u[4] = { (uint8_t)(source), (uint8_t)(source>>8), (uint8_t)(source>>16), (uint8_t)(source>>24) };
+            target[0]   = u[0];
+            target[1]   = u[1];
+            target[2]   = u[2];
+            target[3]   = u[3];
+        }
+
+        void SplitWord:: Expand(uint8_t * const target, const uint64_t &source) noexcept
+        {
+            const uint8_t u[8] =
+            {
+                (uint8_t)(source),     (uint8_t)(source>>8),  (uint8_t)(source>>16), (uint8_t)(source>>24),
+                (uint8_t)(source>>32), (uint8_t)(source>>40), (uint8_t)(source>>48), (uint8_t)(source>>56)
+            };
+            target[0]   = u[0];
+            target[1]   = u[1];
+            target[2]   = u[2];
+            target[3]   = u[3];
+            target[4]   = u[4];
+            target[5]   = u[5];
+            target[6]   = u[6];
+            target[7]   = u[7];
+        }
+
+        void SplitWord:: Expand(uint16_t * const target, const uint32_t &source) noexcept
+        {
+            const uint16_t u[2] = { (uint16_t)(source), (uint16_t)(source>>16) };
+            target[0]   = u[0];
+            target[1]   = u[1];
+        }
+
+        void SplitWord:: Expand(uint16_t * const target, const uint64_t &source) noexcept
+        {
+            const uint16_t u[4] =
+            {
+                (uint16_t)(source),
+                (uint16_t)(source>>16),
+                (uint16_t)(source>>32),
+                (uint16_t)(source>>48)
+            };
+            target[0]   = u[0];
+            target[1]   = u[1];
+            target[2]   = u[2];
+            target[3]   = u[3];
+        }
+
+        void SplitWord:: Expand(uint32_t * const target, const uint64_t &source) noexcept
+        {
+            const uint32_t u[2] = { (uint32_t)(source), (uint32_t)(source>>32) };
+            target[0]   = u[0];
+            target[1]   = u[1];
+        }
+
+
+    }
+
+    namespace Calculus
+    {
+        void SplitWord:: Gather(uint16_t & target, const uint8_t * const source) noexcept
+        {
+            assert(source);
+            const uint16_t u[2] = { source[0], source[1] };
+            target = u[0] | (u[1]<<8);
+        }
+
+        void SplitWord:: Gather(uint32_t & target, const uint8_t * const source) noexcept
+        {
+            assert(source);
+            const uint32_t u[4] = { source[0], source[1], source[2], source[3] };
+            target = u[0] | (u[1]<<8) | (u[2]<<16) | (u[3]<<24);
+        }
+
+        void SplitWord:: Gather(uint64_t & target, const uint8_t * const source) noexcept
+        {
+            assert(source);
+            const uint64_t u[8] = { source[0], source[1], source[2], source[3], source[4], source[5], source[6], source[7] };
+            target =
+            u[0]       |
+            (u[1]<<8)  |
+            (u[2]<<16) |
+            (u[3]<<24) |
+            (u[4]<<32) |
+            (u[5]<<40) |
+            (u[6]<<48) |
+            (u[7]<<56);
+        }
+
+        void SplitWord:: Gather(uint32_t & target, const uint16_t * const source) noexcept
+        {
+            assert(source);
+            const uint32_t u[2] = { source[0], source[1] };
+            target = u[0] | (u[1]<<16);
+        }
+
+        void SplitWord:: Gather(uint64_t & target, const uint16_t * const source) noexcept
+        {
+            assert(source);
+            const uint64_t u[4] = { source[0], source[1], source[2], source[3] };
+            target = u[0] | (u[1]<<16) | (u[2]<<32) | (u[3]<<48);
+        }
+
+        void SplitWord:: Gather(uint64_t & target, const uint32_t * const source) noexcept
+        {
+            assert(source);
+            const uint64_t u[2] = { source[0], source[1] };
+            target = u[0] | (u[1]<<32);
+        }
+
+
+
+    }
+
     namespace Calculus
     {
         uint8_t * SplitWord:: Make<uint8_t>::From(uint16_t &x) noexcept

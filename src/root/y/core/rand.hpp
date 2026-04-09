@@ -72,6 +72,11 @@ namespace Yttrium
                 return (*this)() <= 0.5f;
             }
 
+            //! generate random type
+            /**
+             \param nbits required bits
+             \return random type with exactly nbits
+             */
             template <typename T> inline
             T gen(const size_t nbits) noexcept
             {
