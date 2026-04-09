@@ -19,10 +19,15 @@ namespace Yttrium
 
         template <> struct SplitWord:: Make<uint8_t>
         {
-            static uint8_t * From(uint16_t &x, size_t &n) noexcept;
-            static uint8_t * From(uint32_t &x, size_t &n) noexcept;
-            static uint8_t * From(uint64_t &x, size_t &n) noexcept;
+            static uint8_t * From(uint16_t &x) noexcept;
+            static uint8_t * From(uint32_t &x) noexcept;
+            static uint8_t * From(uint64_t &x) noexcept;
+        };
 
+        template <> struct SplitWord:: Make<uint16_t>
+        {
+            static uint16_t * From(uint32_t &x) noexcept;
+            static uint16_t * From(uint64_t &x) noexcept;
         };
 
     }
