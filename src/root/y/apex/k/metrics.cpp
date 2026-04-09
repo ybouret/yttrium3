@@ -8,6 +8,8 @@ namespace Yttrium
     namespace Apex
     {
 
+        const char * const KegMetrics:: CallSign = "Apex";
+
         KegMetrics:: KegMetrics() noexcept
         {
         }
@@ -18,8 +20,11 @@ namespace Yttrium
         }
 
 
-        size_t KegMetrics:: CheckBytes(const size_t userBytes)
+        size_t KegMetrics:: CheckedBytes(const size_t userBytes)
         {
+            if(userBytes>Memory::Archon::MaxBlockBytes)
+                throw Specific::Exception(CallSign, "user bytes overflow");
+
             return userBytes;
         }
 
@@ -27,7 +32,7 @@ namespace Yttrium
         {
             static Memory::Archon & mgr = Memory::Archon::Instance();
             if(InSituMax(blockShift,Memory::Archon::MinBlockShift)>Memory::Archon::MaxBlockShift)
-                throw Specific::Exception("Apex","blockShift=%u exceeds %u", blockShift, Memory::Archon::MaxBlockShift);
+                throw Specific::Exception(CallSign,"blockShift=%u exceeds %u", blockShift, Memory::Archon::MaxBlockShift);
             return mgr.acquireBlock(blockShift);
         }
 

@@ -10,8 +10,10 @@
 #include "y/calculus/required-bytes.hpp"
 #include "y/calculus/split-word.hpp"
 #include "y/format/hexadecimal.hpp"
+#include "y/libc/block/zeroed.h"
 
 #include <iostream>
+#include <cstring>
 
 namespace Yttrium
 {
@@ -55,7 +57,7 @@ namespace Yttrium
             inline explicit Keg(const size_t userBytes) :
             bits(0),
             bytes(0),
-            maxBytes( Alignment::To<WordType>::Ceil( CheckBytes(userBytes) ) ),
+            maxBytes( Alignment::To<WordType>::Ceil( CheckedBytes(userBytes) ) ),
             words(0),
             maxWords(0),
             blockShift( CeilLog2(maxBytes)  ),
@@ -75,7 +77,8 @@ namespace Yttrium
             inline friend std::ostream & operator<<( std::ostream &os, const Keg &keg)
             {
                 Hexadecimal::Display(os,keg.word,keg.words);
-                os << "#bits=" << keg.bits << "|bytes=" << keg.bytes << "|words=" << keg.words;
+                os << "#bits=" << keg.bits << "|bytes=" << keg.bytes;
+                if(WordBytes>1) os << "|words=" << keg.words;
                 return os;
             }
 
@@ -85,6 +88,11 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
+
+            inline void zpad() noexcept
+            {
+                memset(word+words,0,(maxWords-words)*WordBytes);
+            }
 
             //! load a new integral \param n integral to load
             inline void ld( const natural_t n ) noexcept
@@ -96,6 +104,14 @@ namespace Yttrium
                 update();
             }
 
+            inline natural_t getNatural() const noexcept
+            {
+                assert(sanity());
+                natural_t n = 0;
+                Calculus::SplitWord::Gather(n,word);
+                return n;
+            }
+
 
             //__________________________________________________________________
             //
@@ -103,6 +119,11 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
+
+            inline bool sanity() const noexcept
+            {
+                return Y_TRUE == Yttrium_Zeroed(word+words,(maxWords-words)*WordBytes);
+            }
 
             //! updated all counts from current words
             inline void update() noexcept
@@ -116,12 +137,13 @@ namespace Yttrium
                     const size_t  xs = msi * WordBytes;
                     Coerce(bytes)    = Calculus::RequiredBytes::For(msw) + xs;
                     Coerce(bits)     = Calculus::RequiredBits::For(msw) + (xs<<3);
+                    assert(sanity());
                     return;
                 }
 
                 Coerce(bytes) = 0;
                 Coerce(bits)  = 0;
-                word[0]       = 0;
+                assert(sanity());
             }
 
 

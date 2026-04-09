@@ -31,8 +31,9 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            static const size_t MaxBytes = Memory::Metrics::MaxPageBytes; //!< alias
-            
+            static const size_t        MaxBytes = Memory::Metrics::MaxPageBytes; //!< alias
+            static const char * const CallSign; //!< "Apex"
+
             //__________________________________________________________________
             //
             //
@@ -48,7 +49,7 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            static size_t CheckBytes(const size_t);                            //!< \return checked bytes, exception upon error
+            static size_t CheckedBytes(const size_t);                            //!< \return checked bytes, exception upon error
             static void * AcquireWords(unsigned &blockShift);                  //!< \param blockShift input and modified \return valid block
             static void   ReleaseWords(void * const, const unsigned) noexcept; //!< releases acquired block
 
