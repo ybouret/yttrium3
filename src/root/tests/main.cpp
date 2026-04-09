@@ -33,6 +33,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(calculus_meta2);
     Y_UTEST(calculus_align);
     Y_UTEST(calculus_gc);
+    Y_UTEST(calculus_required);
 
     Y_UTEST(type_ints);
 
