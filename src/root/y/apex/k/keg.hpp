@@ -11,6 +11,7 @@
 #include "y/calculus/split-word.hpp"
 #include "y/format/hexadecimal.hpp"
 #include "y/libc/block/zeroed.h"
+#include "y/type/with-at-least.hpp"
 
 #include <iostream>
 #include <cstring>
@@ -44,7 +45,10 @@ namespace Yttrium
             static  const unsigned WordShift = IntegerLog2<WordBytes>::Value; //!< alias
             static  const size_t   WordBits  = WordBytes * 8;                 //!< alias
 
-
+            static inline size_t ComputeMaxBytes(const size_t userBytes)
+            {
+                return Alignment::To<WordType>::Ceil( CheckedBytes(userBytes) );
+            }
 
             //__________________________________________________________________
             //
@@ -53,25 +57,73 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
+
+#define Y_Apex_Keg_Alloc()         \
+blockShift( CeilLog2(maxBytes)  ), \
+word( static_cast<WordType *>(AcquireWords( Coerce(blockShift) ) ) )
+
+#define Y_Apex_Keg_OnInit()                 \
+Coerce(maxBytes) = size_t(1) << blockShift; \
+Coerce(maxWords) = maxBytes >> WordShift
+
             //! setup \param userBytes minimal bytes
             inline explicit Keg(const size_t userBytes) :
             bits(0),
             bytes(0),
-            maxBytes( Alignment::To<WordType>::Ceil( CheckedBytes(userBytes) ) ),
+            maxBytes( ComputeMaxBytes(userBytes) ),
             words(0),
             maxWords(0),
-            blockShift( CeilLog2(maxBytes)  ),
-            word( static_cast<WordType *>(AcquireWords( Coerce(blockShift) ) ) )
+            Y_Apex_Keg_Alloc()
             {
-                Coerce(maxBytes) = size_t(1) << blockShift;
-                Coerce(maxWords) = maxBytes >> WordShift;
-                assert(maxWords*sizeof(WordType)==maxBytes);
+                Y_Apex_Keg_OnInit();
             }
 
-            //! cleanup
-            inline virtual ~Keg() noexcept {
-                ReleaseWords(word,blockShift);
+#if 0
+            inline explicit Keg(const Keg &keg) :
+            bits(keg.bits),
+            bytes(keg.bytes),
+            maxBytes( ComputeMaxBytes(bytes) ),
+            words(keg.words),
+            maxWords(0),
+            Y_Apex_Keg_Alloc()
+            {
+                Y_Apex_Keg_OnInit();
+                memcpy(word,keg.word,words*WordBytes);
             }
+#endif
+
+            inline explicit Keg(const WordType * const w,
+                                const size_t           n) :
+            bits(0),
+            bytes(0),
+            maxBytes( ComputeMaxBytes(n*sizeof(WordType)) ),
+            words(n),
+            maxWords(0),
+            Y_Apex_Keg_Alloc()
+            {
+                Y_Apex_Keg_OnInit();
+                assert(!(0==w&&n>0));
+                memcpy(word,w,n*WordBytes);
+                update();
+                assert(n==words);
+            }
+
+            inline explicit Keg(const WithAtLeast_ &, const size_t numWords) :
+            bits(0),
+            bytes(0),
+            maxBytes( CheckedBytes(numWords*WordBytes) ),
+            words(0),
+            maxWords(0),
+            Y_Apex_Keg_Alloc()
+            {
+                Y_Apex_Keg_OnInit();
+                assert(maxWords>=numWords);
+            }
+
+
+
+            //! cleanup
+            inline virtual ~Keg() noexcept { ReleaseWords(word,blockShift); }
 
             //! display
             inline friend std::ostream & operator<<( std::ostream &os, const Keg &keg)
@@ -104,6 +156,7 @@ namespace Yttrium
                 update();
             }
 
+            //! \return lowest natural
             inline natural_t getNatural() const noexcept
             {
                 assert(sanity());
@@ -158,7 +211,7 @@ namespace Yttrium
             const size_t     maxBytes;   //!< maxium bytes
             const size_t     words;      //!< current words
             const size_t     maxWords;   //!< capacity in words
-            const unsigned   blockShift; //!< maxBytes = 2^blockShify
+            const unsigned   blockShift; //!< maxBytes = 2^blockShift
             WordType * const word;       //!< memory
 
         private:
