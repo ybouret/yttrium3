@@ -224,9 +224,7 @@ Y_UTEST(calculus_required)
             }
         }
 
-
-
-
+        
 
     }
     std::cerr << std::endl;

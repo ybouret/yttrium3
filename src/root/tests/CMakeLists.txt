@@ -50,6 +50,8 @@ Y_UTEST(calculus:meta2)
 Y_UTEST(calculus:align)
 Y_UTEST(calculus:gc)
 Y_UTEST(calculus:required)
+Y_UTEST(calculus:split)
+
 
 Y_UTEST(type_ints)
 
