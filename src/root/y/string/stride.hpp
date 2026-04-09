@@ -140,7 +140,6 @@ namespace Yttrium
             inline void cat(const T * const text, const size_t tlen) noexcept
             {
                 assert(sanity());
-                assert(tlen == StringLength(text));
                 assert(size+tlen<=capacity);
                 memmove(entry+size,text,tlen*sizeof(T));
                 Coerce(size) += tlen;
