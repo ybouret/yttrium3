@@ -78,7 +78,7 @@ namespace Yttrium
             }
 
 
-            //! setup with buffer \param text user data
+            //! setup with buffer \param buffer user data \param buflen data size
             explicit Stride(const T * const buffer,
                             const size_t    buflen) :
             capacity( buflen ),
@@ -136,7 +136,7 @@ namespace Yttrium
                 return Y_TRUE == Yttrium_Zeroed(entry+size,(count-size)*sizeof(T));
             }
 
-            //! catenate \param text data \param tlen data size \return *this
+            //! catenate \param text data \param tlen data size
             inline void cat(const T * const text, const size_t tlen) noexcept
             {
                 assert(sanity());
@@ -156,7 +156,7 @@ namespace Yttrium
                 assert(sanity());
             }
 
-            //! clear content \return *this
+            //! clear content
             inline void clear() noexcept
             {
                 assert( sanity() );
@@ -165,7 +165,7 @@ namespace Yttrium
                 assert(sanity());
             }
 
-            //! trim chars \param n chars to trim \return *this
+            //! trim chars \param n chars to trim
             inline void trim(size_t n) noexcept
             {
                 assert( sanity() );
@@ -178,7 +178,7 @@ namespace Yttrium
                 }
             }
 
-            //! skip chars \param n chars to skip \return *this
+            //! skip chars \param n chars to skip
             inline void skip(const size_t n) noexcept
             {
                 assert( sanity() );
@@ -188,7 +188,8 @@ namespace Yttrium
                 assert( sanity() );
             }
 
-            inline void steal(const Stride &other) noexcept
+            //! copy content \param other other.size<=capacity
+            inline void copy(const Stride &other) noexcept
             {
                 assert(this != &other);
                 assert( sanity() );

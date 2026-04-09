@@ -15,11 +15,11 @@ namespace Yttrium
         class Policy : public Lockable
         {
         protected:
-            explicit Policy() noexcept;
-            virtual ~Policy() noexcept;
+            explicit Policy() noexcept; //!< setup
+            virtual ~Policy() noexcept; //!< cleanup
 
         private:
-            Y_Disable_Copy_And_Assign(Policy);
+            Y_Disable_Copy_And_Assign(Policy); //!< discarded
         };
     }
 

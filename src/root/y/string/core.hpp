@@ -8,51 +8,94 @@
 #include "y/object/counted.hpp"
 #include "y/type/destroy.hpp"
 #include "y/type/with-at-least.hpp"
+#include "y/container/writable.hpp"
 #include <iosfwd>
 
 namespace Yttrium
 {
 
+    //__________________________________________________________________________
+    //
+    //
+    //! how to initialize zeroed strings when required
+    //
+    //__________________________________________________________________________
     enum StringInit
     {
-        InitEmptyString,
-        InitBlankString
+        InitEmptyString, //!< size = 0
+        InitBlankString  //!< size = requested
     };
 
     namespace Core
     {
 
-
-
-
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! String of given type
+        //
+        //
+        //______________________________________________________________________
         template <typename T>
-        class String : public CountedObject
+        class String : public CountedObject, public Writable<T>
         {
         public:
-            typedef CountedObject BaseClass;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef CountedObject BaseClass; //!< alias
+            Y_Args_Declare(T,Type);          //!< aliases
             class Code;
 
-            String();
-            String(const WithAtLeast_ &, const size_t, const StringInit);
-            String(const String &);
-            String(const T * const);
-            String(const T * const, const size_t);
-            String(const T);
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            String();                              //!< setup empty with minimal content
+            String(const String &);                //!< duplicate
+            String(const T * const);               //!< duplicate
+            String(const T * const, const size_t); //!< duplicate
+            String(const T);                       //!< duplicate
+            String(const WithAtLeast_ &, const size_t, const StringInit); //!< setup (with zeros)
 
-            String & operator=(const String &);
-            String & operator=(const T * const);
-            String & operator=(const T) noexcept;
+            String & operator=(const String &);   //!< assign \return *this
+            String & operator=(const T * const);  //!< assign \return *this
+            String & operator=(const T) noexcept; //!< assign \return *this
 
-            virtual ~String() noexcept;
+            virtual ~String() noexcept; //!< cleanup
 
-            String & xch(String &other) noexcept;
 
-            std::ostream & print(std::ostream &) const;
-
+            //! display
             inline friend std::ostream & operator<<(std::ostream &os, const String &s) {
                 return s.print(os);
             }
 
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
+            virtual size_t size()     const noexcept;
+            virtual size_t capacity() const noexcept;
+
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            String &       xch(String &)      noexcept; //!< no-throw exchange \return *this
+            std::ostream & print(std::ostream &) const; //!< print \return output stream
+
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             inline friend String operator + (const String &  lhs, const String &  rhs) { return Add(lhs,rhs); }
             inline friend String operator + (const String &  lhs, const T * const rhs) { return Add(lhs,rhs); }
             inline friend String operator + (const T * const lhs, const String &  rhs) { return Add(lhs,rhs); }
@@ -63,17 +106,27 @@ namespace Yttrium
             String & operator+=(const String &);
             String & operator+=(const T * const);
             String & operator+=(const T);
-            
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+
 
         private:
-            Code * code;
-            String(const T * lhs, const size_t lhsSize,
-                   const T * rhs, const size_t rhsSize);
+            Code * code; //!< inner code
+            
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            Y_Readable_Decl();
+
+            String(const T * const lhs, const size_t lhsSize,
+                   const T * const rhs, const size_t rhsSize);
             static String Add(const String  &, const String  &);
             static String Add(const String  &, const T * const);
             static String Add(const T * const, const String  &);
             static String Add(const String  &, const T);
             static String Add(const T, const String  &);
+
+
+
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         };
     }

@@ -8,7 +8,7 @@
 namespace Yttrium
 {
 
-    typedef Core::String<char> String;
+    typedef Core::String<char> String; //!< default string
 
 }
 

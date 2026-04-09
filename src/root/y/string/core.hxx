@@ -31,7 +31,7 @@ template <> String<CH> & String<CH>:: operator=( const String &rhs )
     {
         if(rhs.code->size<=code->capacity)
         {
-            code->steal( *rhs.code );
+            code->copy( *rhs.code );
         }
         else
         {
@@ -53,7 +53,7 @@ template <> String<CH> & String<CH>:: operator=( const CH C ) noexcept
     return *this;
 }
 
-template <> String<CH> & String<CH>:: operator=( const CH * const text )  
+template <> String<CH> & String<CH>:: operator=( const CH * const text )
 {
     assert(code);
     const size_t tlen = StringLength(text);
@@ -72,11 +72,8 @@ template <> String<CH> & String<CH>:: operator=( const CH * const text )
     return *this;
 }
 
-template <> std::ostream & String<CH>:: print(std::ostream &os) const
-{
-    assert(code);
-    return os << code->entry;
-}
+
+
 
 template <> String<CH>:: String(const CH * const text) :
 BaseClass(), code( new Code(text) )
@@ -97,6 +94,45 @@ BaseClass(), code( new Code(&C,1) )
 {
 }
 
+//------------------------------------------------------------------------------
+//
+//
+// Interface
+//
+//
+//------------------------------------------------------------------------------
+template <> size_t String<CH>:: size() const noexcept
+{
+    assert(code); return code->size;
+}
+
+template <> size_t String<CH>:: capacity() const noexcept
+{
+    assert(code); return code->capacity;
+}
+
+template <> String<CH>::ConstType & String<CH>:: ask(const size_t indx) const noexcept
+{
+    assert(code);
+    assert(indx>0);
+    assert(indx<=code->size);
+    return code->cxx[indx];
+}
+
+
+//------------------------------------------------------------------------------
+//
+//
+// Methods
+//
+//
+//------------------------------------------------------------------------------
+template <> std::ostream & String<CH>:: print(std::ostream &os) const
+{
+    assert(code);
+    return os << code->entry;
+}
+
 template <> String<CH> & String<CH>:: xch(String &other) noexcept
 {
     Swap(code,other.code);
@@ -108,9 +144,10 @@ template <> String<CH> & String<CH>:: xch(String &other) noexcept
 //
 // addition constructor
 //
+//
 //------------------------------------------------------------------------------
-template <> String<CH> :: String(const CH * lhs, const size_t lhsSize,
-                                 const CH * rhs, const size_t rhsSize) :
+template <> String<CH> :: String(const CH * const lhs, const size_t lhsSize,
+                                 const CH * const rhs, const size_t rhsSize) :
 BaseClass(), code( new Code(lhsSize+rhsSize) )
 {
     assert(!(0==lhs&&lhsSize>0));
@@ -176,7 +213,7 @@ template <> String<CH> & String<CH>:: operator+=( const CH C )
         String tmp = Add(*this,C);
         return xch(tmp);
     }
- }
+}
 
 template <> String<CH> & String<CH>:: operator+=( const String &s )
 {
@@ -207,3 +244,28 @@ template <> String<CH> & String<CH>:: operator+=( const CH * const text )
         return xch(tmp);
     }
 }
+
+
+#if 0
+//------------------------------------------------------------------------------
+//
+//
+// in place equality
+//
+//
+//------------------------------------------------------------------------------
+template <> bool String<CH>:: AreEqual(const CH * lhs, const size_t lhsSize,
+                                       const CH * rhs, const size_t rhsSize) noexcept
+{
+    assert(!(0==lhs&&lhsSize>0));
+    assert(!(0==rhs&&rhsSize>0));
+    if(lhsSize!=rhsSize) return false;
+    for(size_t n=lhsSize;n>0;--n,++lhs,++rhs)
+    {
+        if(*lhs!=*rhs) return false;
+    }
+    return true;
+}
+#endif
+
+

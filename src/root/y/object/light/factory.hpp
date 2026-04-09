@@ -134,6 +134,7 @@ namespace Yttrium
         //! release block and keep it \param blockAddr addres \param blockSize block size
         void   store(void * const blockAddr, const size_t blockSize) noexcept;
 
+        //! get/create inner node for given size \param blockSize block size \return node with matching block size
         Node * operator[](const size_t blockSize);
         
 
