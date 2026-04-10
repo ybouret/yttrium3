@@ -12,32 +12,67 @@ namespace Yttrium
 {
     namespace Apex
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Natural number
+        //
+        //
+        //______________________________________________________________________
         class Natural : public Number
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
             static const char * const CallSign; //!< "apn"
 
-            Natural();
-            Natural(const natural_t n);
-            Natural(const Natural &);
-            Natural & operator=(const Natural &);
-            virtual ~Natural() noexcept;
-            Y_OSTREAM_PROTO(Natural);
-            
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            Natural();                            //!< setup 0
+            Natural(const natural_t);             //!< setup to given value
+            Natural(const Natural &);             //!< duplicate
+            Natural & operator=(const Natural &); //!< assign \return *this
+            virtual ~Natural() noexcept;          //!< cleanup
+            Y_OSTREAM_PROTO(Natural);             //!< display
+
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
             virtual const char * callSign() const noexcept;
 
-            Natural & xch(Natural &) noexcept;
-            String    toHex()        const;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            Natural & xch(Natural &) noexcept; //!< no-throw exchange \return *this
+            String    toHex()        const;    //!< \return hexadecimal content
 
 
         private:
-            void * const code;
+            void * const code; //!< inner code
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             SignType Cmp(const Natural &lhs, const Natural &rhs) noexcept;
+#endif
+
         };
     }
 
-    typedef Apex::Natural apn;
+    typedef Apex::Natural apn; //!< alias
 
 }
 

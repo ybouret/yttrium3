@@ -76,6 +76,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             {
             }
 
+            //! setup \param n given natural_t
             inline explicit Keg(const CopyOf_ &, const natural_t n) :
             bits(0),
             bytes(0),
@@ -86,6 +87,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 ld(n);
             }
 
+            //! duplicate \param keg source
             inline explicit Keg(const Keg &keg) :
             KegMetrics(),
             bits(keg.bits),
@@ -97,6 +99,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 memcpy(word,keg.word,words*WordBytes);
             }
 
+            //! setup \param w foreign data \param n foreign size
             inline explicit Keg(const WordType * const w,
                                 const size_t           n) :
             bits(0),
@@ -112,6 +115,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 assert(n==words);
             }
 
+            //! setup with capacity \param numWords minimal required words
             inline explicit Keg(const WithAtLeast_ &, const size_t numWords) :
             bits(0),
             bytes(0),
@@ -143,6 +147,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             //
             //__________________________________________________________________
 
+            //! zpad
             inline void zpad() noexcept
             {
                 memset(word+words,0,(maxWords-words)*WordBytes);
@@ -168,6 +173,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             }
 
 
+            //! check sanity \return true iff zeroed trailing
             inline bool sanity() const noexcept
             {
                 return Y_TRUE == Yttrium_Zeroed(word+words,(maxWords-words)*WordBytes);
@@ -194,11 +200,12 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 assert(sanity());
             }
 
+            //! hexadecimal string \return upper case representation
             inline String toHex() const
             {
                 if(bits<=0)
                 {
-                    return "0x00";
+                    return "0x0";
                 }
                 else
                 {

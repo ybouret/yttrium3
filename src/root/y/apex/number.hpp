@@ -9,14 +9,22 @@ namespace Yttrium
 {
     namespace Apex
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! base class for numbers
+        //
+        //
+        //______________________________________________________________________
         class Number : public Identifiable
         {
         public:
-            explicit Number() noexcept;
-            virtual ~Number() noexcept;
-            
+            explicit Number() noexcept; //!< setup
+            virtual ~Number() noexcept; //!< cleanup
+
         private:
-            Y_Disable_Copy_And_Assign(Number);
+            Y_Disable_Copy_And_Assign(Number); //!< discarded
         };
     }
 }

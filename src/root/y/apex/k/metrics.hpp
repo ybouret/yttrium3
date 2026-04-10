@@ -52,9 +52,22 @@ namespace Yttrium
             static size_t CheckedBytes(const size_t);                            //!< \return checked bytes, exception upon error
             static void   ReleaseWords(void * const, const unsigned) noexcept; //!< releases acquired block
 
+            //! acquire bytes for maxBytes
+            /**
+             \param blockShift set for maxBytes
+             \param maxBytes   required content in bytes, set to 2^blockShift
+             \return new bytes
+             */
             static void * AcquireBytes(unsigned &blockShift,
                                        size_t   &maxBytes);
 
+            //! acquire memory
+            /**
+             \param blockShift set for maxBytes
+             \param maxBytes   required content in bytes, set to 2^blockShift
+             \param maxWords   set to maxBytes/sizeof(WORD)
+             \return new words
+             */
             template <typename WORD>
             static inline WORD * AcquireWords(unsigned &blockShift,
                                               size_t   &maxBytes,

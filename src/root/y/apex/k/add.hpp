@@ -18,11 +18,27 @@ namespace Yttrium
     namespace Apex
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Addition Algorithm
+        //
+        //
+        //______________________________________________________________________
         struct KegAdd
         {
         public:
-            static uint64_t Trace;
+            static uint64_t Trace; //!< optional tracing
 
+            //! compute sum
+            /**
+             \param lhs lhs words
+             \param nlw lhs size
+             \param rhs rhs words
+             \param nrw rhs size
+             \return sum
+             */
             template <typename WORD, typename CORE> static inline
             Keg<WORD> * Compute(const WORD * const lhs,
                                 const size_t       nlw,
@@ -39,20 +55,20 @@ namespace Yttrium
                     }
                     else
                     {
-                        assert(nrw>0);
+                        assert(nrw>0); assert(0!=rhs[nrw-1]);
                         return new Keg<WORD>(rhs,nrw);
                     }
                 }
                 else
                 {
-                    assert(nlw>0);
+                    assert(nlw>0); assert(0!=lhs[nlw-1]);
                     if(nrw<=0)
                     {
                         return new Keg<WORD>(lhs,nlw);
                     }
                     else
                     {
-                        assert(nrw>0);
+                        assert(nrw>0); assert(0!=rhs[nrw-1]);
                         return (nlw<nrw) ? Perform<WORD,CORE>(lhs,nlw,rhs,nrw) : Perform<WORD,CORE>(rhs,nrw,lhs,nlw);
                     }
                 }
@@ -61,6 +77,8 @@ namespace Yttrium
             }
 
         private:
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             template <typename WORD, typename CORE> static inline
             Keg<WORD> * Perform(const WORD * small,
                                 const size_t smallSize,
@@ -105,6 +123,7 @@ namespace Yttrium
 #endif
                 return keg;
             }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
         };
 
 

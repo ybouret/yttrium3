@@ -19,33 +19,53 @@ namespace
 
         std::cerr << "-- Test Keg<" << KegType::WordBits << "> / " << sizeof(CORE)*8 << std::endl;
         Y_SIZEOF(KegType);
-        
 
-        const size_t nbits = sizeof(natural_t) * 8 -1;
-        uint64_t     ell = 0;
-        size_t       ops = 0;
-        KegAdd::Trace = 0;
-        do
+        // test add
         {
-            ++ops;
-            const natural_t lhs = ran.gen<natural_t>( ran.in<size_t>(0,nbits));
-            const natural_t rhs = ran.gen<natural_t>( ran.in<size_t>(0,nbits));
-            const natural_t sum = lhs+rhs;
-            KegType L(CopyOf,lhs);
-            KegType R; R.ld(rhs);
-            const uint64_t       mark = System::WallTime::Ticks();
-            AutoPtr< Keg<WORD> > S    = KegAdd:: Compute<WORD,CORE>(L.word,L.words,R.word,R.words);
-            ell += System::WallTime::Ticks() - mark;
-            const natural_t      s = S->getNatural();
-            Y_ASSERT(sum==s);
-        } while( chrono(ell) < 0.1L );
+            const size_t nbits = sizeof(natural_t) * 8 -1;
+            uint64_t     ell = 0;
+            size_t       ops = 0;
+            KegAdd::Trace = 0;
+            do
+            {
+                ++ops;
+                const natural_t lhs = ran.gen<natural_t>( ran.in<size_t>(0,nbits));
+                const natural_t rhs = ran.gen<natural_t>( ran.in<size_t>(0,nbits));
+                const natural_t sum = lhs+rhs;
+                KegType L(CopyOf,lhs);
+                KegType R; R.ld(rhs);
+                const uint64_t       mark = System::WallTime::Ticks();
+                AutoPtr< Keg<WORD> > S    = KegAdd:: Compute<WORD,CORE>(L.word,L.words,R.word,R.words);
+                ell += System::WallTime::Ticks() - mark;
+                const natural_t      s = S->getNatural();
+                Y_ASSERT(sum==s);
+            } while( chrono(ell) < 0.1L );
 
-        const long double outer = (long double)ops / chrono(ell);
-        std::cerr << "\t\touter::add64=" << HumanReadable( (uint64_t)outer ) << std::endl;
-        if(KegAdd::Trace)
+            const long double outer = (long double)ops / chrono(ell);
+            std::cerr << "\t\touter::add64=" << HumanReadable( (uint64_t)outer ) << std::endl;
+            if(KegAdd::Trace)
+            {
+                const long double inner = (long double)ops / chrono(KegAdd::Trace);
+                std::cerr << "\t\tinner::add64=" << HumanReadable( (uint64_t)inner ) << std::endl;
+            }
+        }
+
+        // test comparisons
         {
-            const long double inner = (long double)ops / chrono(KegAdd::Trace);
-            std::cerr << "\t\tinner::add64=" << HumanReadable( (uint64_t)inner ) << std::endl;
+            std::cerr << "-- testing comparisons" << std::endl;
+            for(size_t i=0;i<=64;++i)
+            {
+                for(size_t j=0;j<=64;++j)
+                {
+                    {
+                        const natural_t lhs = ran.gen<natural_t>(i);
+                        const natural_t rhs = ran.gen<natural_t>(j);
+                        KegType L(CopyOf,lhs);
+                        KegType R(CopyOf,rhs);
+                        Y_ASSERT( Sign::Of(lhs,rhs) == KegCmp::Result(L.word,L.words,R.word,R.words) );
+                    }
+                }
+            }
         }
 
         std::cerr << std::endl;

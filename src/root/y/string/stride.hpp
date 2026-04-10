@@ -227,6 +227,7 @@ namespace Yttrium
                 assert(sanity());
             }
 
+            //! reverse content
             inline void reverse() noexcept
             {
                 size_t swaps = size>>1;

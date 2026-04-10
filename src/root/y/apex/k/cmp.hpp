@@ -12,9 +12,17 @@ namespace Yttrium
     namespace Apex
     {
 
+        //! comparison algorithm
         struct KegCmp
         {
-
+            //! compare two arrays of valid words
+            /**
+             \param lhs lhs words
+             \param nl  lhs count
+             \param rhs rhs words
+             \param nr  rhs count
+             \return comparison result
+             */
             template <typename WORD> static inline
             SignType Result(const WORD * const lhs,
                             const size_t       nl,
