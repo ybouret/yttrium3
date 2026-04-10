@@ -124,6 +124,23 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             Natural   operator++(int); //!< postfix
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
+
+            //__________________________________________________________________
+            //
+            //
+            // Subtraction
+            //
+            //__________________________________________________________________
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            static Natural Sub(const Natural &lhs, const Natural & rhs);
+            static Natural Sub(const Natural &lhs, natural_t       rhs);
+            static Natural Sub(natural_t      lhs, const Natural & rhs);
+            Natural        predecessor() const;
+            Y_Apex_Natural(-,Sub)
+            Natural & operator--();    //!< prefix
+            Natural   operator--(int); //!< postfix
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
         private:
             void * const code; //!< inner code
             Natural( const Directly_ &, void * const) noexcept;

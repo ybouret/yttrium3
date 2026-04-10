@@ -1,5 +1,6 @@
 #include "y/apex/k/sub.hpp"
-
+#include "y/system/exception.hpp"
+#include <cerrno>
 
 namespace Yttrium
 {

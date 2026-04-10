@@ -1,4 +1,5 @@
 #include "y/apex/k/add.hpp"
+#include "y/apex/k/sub.hpp"
 #include "y/apex/k/cmp.hpp"
 #include "y/utest/run.hpp"
 #include "y/pointer/auto.hpp"
@@ -20,8 +21,15 @@ namespace
         std::cerr << "-- Test Keg<" << KegType::WordBits << "> / " << sizeof(CORE)*8 << std::endl;
         Y_SIZEOF(KegType);
 
+        //----------------------------------------------------------------------
+        //
+        //
         // test add
+        //
+        //
+        //----------------------------------------------------------------------
         {
+            std::cerr << "-- testing additions" << std::endl;
             const size_t nbits = sizeof(natural_t) * 8 -1;
             uint64_t     ell = 0;
             size_t       ops = 0;
@@ -39,7 +47,7 @@ namespace
                 ell += System::WallTime::Ticks() - mark;
                 const natural_t      s = S->getNatural();
                 Y_ASSERT(sum==s);
-            } while( chrono(ell) < 0.1L );
+            } while( chrono(ell) < 0.05L );
 
             const long double outer = (long double)ops / chrono(ell);
             std::cerr << "\t\touter::add64=" << HumanReadable( (uint64_t)outer ) << std::endl;
@@ -50,7 +58,13 @@ namespace
             }
         }
 
+        //----------------------------------------------------------------------
+        //
+        //
         // test comparisons
+        //
+        //
+        //----------------------------------------------------------------------
         {
             std::cerr << "-- testing comparisons" << std::endl;
             for(size_t i=0;i<=64;++i)
@@ -67,6 +81,43 @@ namespace
                 }
             }
         }
+
+        //----------------------------------------------------------------------
+        //
+        //
+        // test sub
+        //
+        //
+        //----------------------------------------------------------------------
+        {
+            std::cerr << "-- testing subtractions" << std::endl;
+            uint64_t     ell = 0;
+            size_t       ops = 0;
+            KegSub::Trace   = 0;
+            do
+            {
+                ++ops;
+                natural_t lhs = ran.gen<natural_t>( ran.in<size_t>(0,64) );
+                natural_t rhs = ran.gen<natural_t>( ran.in<size_t>(0,64) );
+                if(lhs<rhs) Swap(lhs,rhs);
+                const natural_t dif = lhs-rhs;
+                const KegType L(CopyOf,lhs);
+                const KegType R(CopyOf,rhs);
+                Y_ASSERT(KegCmp::Result(L.word,L.words,R.word,R.words) != Negative);
+                const uint64_t       mark = System::WallTime::Ticks();
+                AutoPtr< Keg<WORD> > D = KegSub:: Compute<WORD,CORE>(L.word,L.words,R.word,R.words);
+                ell += System::WallTime::Ticks() - mark;
+                Y_ASSERT(dif == D->getNatural());
+            } while( chrono(ell) < 0.05L );
+            const long double outer = (long double)ops / chrono(ell);
+            std::cerr << "\t\touter::sub64=" << HumanReadable( (uint64_t)outer ) << std::endl;
+            if(KegSub::Trace)
+            {
+                const long double inner = (long double)ops / chrono(KegAdd::Trace);
+                std::cerr << "\t\tinner::sub64=" << HumanReadable( (uint64_t)inner ) << std::endl;
+            }
+        }
+
 
         std::cerr << std::endl;
     }
