@@ -32,6 +32,8 @@ namespace Yttrium
 
         private:
             void * const code;
+
+            SignType Cmp(const Natural &lhs, const Natural &rhs) noexcept;
         };
     }
 

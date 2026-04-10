@@ -1,4 +1,5 @@
 #include "y/apex/k/add.hpp"
+#include "y/apex/k/cmp.hpp"
 #include "y/utest/run.hpp"
 #include "y/pointer/auto.hpp"
 #include "y/core/rand.hpp"
