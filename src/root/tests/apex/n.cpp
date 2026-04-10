@@ -2,7 +2,7 @@
 #include "y/utest/run.hpp"
 #include "y/core/rand.hpp"
 #include "y/format/hexadecimal.hpp"
-
+#include "y/swap.hpp"
 using namespace Yttrium;
 using namespace Apex;
 
@@ -41,6 +41,7 @@ Y_UTEST(apex_n)
     {
         for(size_t j=0;j<=63;++j)
         {
+            for(size_t k=0;k<16;++k)
             {
                 const natural_t lhs = ran.gen<natural_t>(i);
                 const natural_t rhs = ran.gen<natural_t>(j);
@@ -61,6 +62,38 @@ Y_UTEST(apex_n)
     std::cerr << std::endl;
     for(apn i=0;i<=20;i++) std::cerr << i << ' ';
     std::cerr << std::endl;
+
+
+    (std::cerr << "-- Test Sub 64-bits " << std::endl).flush();
+    for(size_t i=0;i<=64;++i)
+    {
+        for(size_t j=0;j<=i;++j)
+        {
+            for(size_t k=0;k<16;++k)
+            {
+                natural_t lhs = ran.gen<natural_t>(i);
+                natural_t rhs = ran.gen<natural_t>(j);
+                if(lhs<rhs) Swap(lhs,rhs);
+                const natural_t dif = lhs - rhs;
+                const apn       L   = lhs;
+                const apn       R   = rhs;
+
+                { const apn     D   = L   - R; Y_ASSERT(D==dif); }
+                { const apn     D   = lhs - R; Y_ASSERT(D==dif); }
+                { const apn     D   = L - rhs; Y_ASSERT(D==dif); }
+                { apn D = L; D -= R;   Y_ASSERT(D==dif); }
+                { apn D = L; D -= rhs; Y_ASSERT(D==dif); }
+
+
+            }
+        }
+    }
+
+    for(apn i=20;i>0;--i) std::cerr << i << ' ';
+    std::cerr << std::endl;
+    for(apn i=20;i>0;i--) std::cerr << i << ' ';
+    std::cerr << std::endl;
+
 
 }
 Y_UDONE()
