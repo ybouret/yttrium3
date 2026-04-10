@@ -78,7 +78,7 @@ namespace Yttrium
         {
             assert(source);
             const uint16_t u[2] = { source[0], source[1] };
-            target = u[0] | (u[1]<<8);
+            target = (uint16_t)(u[0] | (u[1] << 8));
         }
 
         void SplitWord:: Gather(uint32_t & target, const uint8_t * const source) noexcept

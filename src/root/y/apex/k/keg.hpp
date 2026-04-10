@@ -220,8 +220,8 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                         for(size_t j=0;j<WordBytes&&n<bytes;++j,++n)
                         {
                             const uint8_t b = u[j];
-                            const uint8_t lo = (b&0xf); assert(lo<16);
-                            const uint8_t up = b>>4;    assert(up<16);
+                            const uint8_t lo = (uint8_t)(b&0xf); assert(lo<16);
+                            const uint8_t up = (uint8_t)(b>>4);  assert(up<16);
                             s += Hexadecimal::UpperChar[lo];
                             s += Hexadecimal::UpperChar[up];
                         }

@@ -18,7 +18,7 @@ namespace Yttrium
             const T * const t = s;
             while( 0 != *s )
                 ++s;
-            return s-t;
+            return (size_t)(s-t);
         }
     }
 }

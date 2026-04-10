@@ -7,6 +7,10 @@
 #include "y/container.hpp"
 #include "y/type/args.hpp"
 
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4435 )
+#endif
+
 namespace Yttrium
 {
 

@@ -233,6 +233,7 @@ namespace Yttrium
 
         private:
             size_t                upper; //!< temporary maxBlockSize
+            Y_Disable_Copy_And_Assign(MemIO);
         };
 
     }
