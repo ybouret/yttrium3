@@ -7,9 +7,8 @@
 #include "y/apex/k/keg.hpp"
 #include "y/check/static.hpp"
 
-#define Y_Apex_Add_Trace
 
-#if defined(Y_Apex_Add_Trace)
+#if defined(Y_Apex_Trace)
 #include "y/system/wall-time.hpp"
 #endif
 
@@ -91,7 +90,7 @@ namespace Yttrium
                 const size_t      WordBits = 8*sizeof(WORD);
                 const size_t      numWords    = largeSize + 1;
                 Keg<WORD> * const keg         = new Keg<WORD>(WithAtLeast,numWords);
-#if defined(Y_Apex_Add_Trace)
+#if defined(Y_Apex_Trace)
                 const uint64_t mark = System::WallTime::Ticks();
 #endif
                 {
@@ -118,7 +117,7 @@ namespace Yttrium
 
                 Coerce(keg->words) = numWords;
                 keg->update();
-#if defined(Y_Apex_Add_Trace)
+#if defined(Y_Apex_Trace)
                 Trace += System::WallTime::Ticks() - mark;
 #endif
                 return keg;

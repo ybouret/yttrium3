@@ -21,6 +21,8 @@
 #include <iostream>
 #include <cstring>
 
+#define Y_Apex_Trace
+
 namespace Yttrium
 {
     namespace Apex
