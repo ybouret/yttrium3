@@ -349,3 +349,23 @@ template <> SignType String<CH>:: Cmp(const CH C, const String &rhs) noexcept
     return Cmp(&C,1,
                rhs.code->entry,rhs.code->size);
 }
+
+//
+
+template <> String<CH> & String<CH>:: reverse() noexcept
+{
+    code->reverse();
+    return *this;
+}
+
+template <> void String<CH>:: popHead() noexcept
+{
+    assert(code);
+    code->skip1();
+}
+
+template <> void String<CH>:: popTail() noexcept
+{
+    assert(code);
+    code->trim1();
+}

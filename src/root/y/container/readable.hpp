@@ -58,6 +58,7 @@ namespace Yttrium
     private:
         Y_Disable_Copy_And_Assign(Readable); //!< discarded
 
+    protected:
         //! ask item \param indx indx in [1:size()] \return item at given index
         virtual ConstType & ask(const size_t indx) const noexcept = 0;
     };

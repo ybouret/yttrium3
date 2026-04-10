@@ -85,6 +85,8 @@ namespace Yttrium
             //__________________________________________________________________
             virtual size_t size()     const noexcept;
             virtual size_t capacity() const noexcept;
+            virtual void   popTail() noexcept;
+            virtual void   popHead() noexcept;
 
             //__________________________________________________________________
             //
@@ -94,7 +96,7 @@ namespace Yttrium
             //__________________________________________________________________
             String &       xch(String &)      noexcept; //!< no-throw exchange \return *this
             std::ostream & print(std::ostream &) const; //!< print \return output stream
-
+            String &       reverse()          noexcept; //!< reverse content \return *this, reversed
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             inline friend String operator + (const String &  lhs, const String &  rhs) { return Add(lhs,rhs); }

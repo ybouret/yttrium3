@@ -16,6 +16,8 @@
 #include "y/type/with-at-least.hpp"
 #include "y/type/copy-of.hpp"
 
+#include "y/string.hpp"
+
 #include <iostream>
 #include <cstring>
 
@@ -25,14 +27,11 @@ namespace Yttrium
     {
 
         //! helper to allocate blockShift/word
-#define Y_Apex_Keg_Alloc()         \
-blockShift( CeilLog2(maxBytes)  ), \
-word( static_cast<WordType *>(AcquireWords( Coerce(blockShift) ) ) )
+#define Y_Apex_Keg_Alloc() \
+maxWords(0),  \
+blockShift(0),\
+word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) )
 
-        //! reset maxBytes/maxWords from allocated memoru
-#define Y_Apex_Keg_OnInit()                 \
-Coerce(maxBytes) = size_t(1) << blockShift; \
-Coerce(maxWords) = maxBytes >> WordShift
 
         //______________________________________________________________________
         //
@@ -57,10 +56,7 @@ Coerce(maxWords) = maxBytes >> WordShift
             static  const unsigned WordShift = IntegerLog2<WordBytes>::Value; //!< alias
             static  const size_t   WordBits  = WordBytes * 8;                 //!< alias
 
-            static inline size_t ComputeMaxBytes(const size_t userBytes)
-            {
-                return Alignment::To<WordType>::Ceil( CheckedBytes(userBytes) );
-            }
+
 
             //__________________________________________________________________
             //
@@ -74,12 +70,10 @@ Coerce(maxWords) = maxBytes >> WordShift
             inline explicit Keg(const size_t userBytes = 0) :
             bits(0),
             bytes(0),
-            maxBytes( ComputeMaxBytes(userBytes) ),
+            maxBytes( userBytes ),
             words(0),
-            maxWords(0),
             Y_Apex_Keg_Alloc()
             {
-                Y_Apex_Keg_OnInit();
             }
 
             inline explicit Keg(const CopyOf_ &, const natural_t n) :
@@ -87,22 +81,18 @@ Coerce(maxWords) = maxBytes >> WordShift
             bytes(0),
             maxBytes(0),
             words(0),
-            maxWords(0),
             Y_Apex_Keg_Alloc()
             {
-                Y_Apex_Keg_OnInit();
                 ld(n);
             }
 
             inline explicit Keg(const Keg &keg) :
             bits(keg.bits),
             bytes(keg.bytes),
-            maxBytes( ComputeMaxBytes(bytes) ),
+            maxBytes(bytes),
             words(keg.words),
-            maxWords(0),
             Y_Apex_Keg_Alloc()
             {
-                Y_Apex_Keg_OnInit();
                 memcpy(word,keg.word,words*WordBytes);
             }
 
@@ -110,12 +100,10 @@ Coerce(maxWords) = maxBytes >> WordShift
                                 const size_t           n) :
             bits(0),
             bytes(0),
-            maxBytes( ComputeMaxBytes(n*sizeof(WordType)) ),
+            maxBytes( n*sizeof(WordType) ),
             words(n),
-            maxWords(0),
             Y_Apex_Keg_Alloc()
             {
-                Y_Apex_Keg_OnInit();
                 assert(!(0==w&&n>0));
                 assert(n==words);
                 memcpy(word,w,n*WordBytes);
@@ -128,10 +116,8 @@ Coerce(maxWords) = maxBytes >> WordShift
             bytes(0),
             maxBytes( CheckedBytes(numWords*WordBytes) ),
             words(0),
-            maxWords(0),
             Y_Apex_Keg_Alloc()
             {
-                Y_Apex_Keg_OnInit();
                 assert(maxWords>=numWords);
             }
 
@@ -181,13 +167,6 @@ Coerce(maxWords) = maxBytes >> WordShift
             }
 
 
-            //__________________________________________________________________
-            //
-            //
-            // Methods
-            //
-            //__________________________________________________________________
-
             inline bool sanity() const noexcept
             {
                 return Y_TRUE == Yttrium_Zeroed(word+words,(maxWords-words)*WordBytes);
@@ -212,6 +191,35 @@ Coerce(maxWords) = maxBytes >> WordShift
                 Coerce(bytes) = 0;
                 Coerce(bits)  = 0;
                 assert(sanity());
+            }
+
+            inline String toHex() const
+            {
+                if(bits<=0)
+                {
+                    return "0x00";
+                }
+                else
+                {
+                    String s;
+                    size_t n = 0;
+                    for(size_t i=0;i<words;++i)
+                    {
+                        uint8_t u[WordBytes];
+                        Calculus::SplitWord::Expand(u,word[i]);
+                        for(size_t j=0;j<WordBytes&&n<bytes;++j,++n)
+                        {
+                            const uint8_t b = u[j];
+                            const uint8_t lo = (b&0xf); assert(lo<16);
+                            const uint8_t up = b>>4;    assert(up<16);
+                            s += Hexadecimal::UpperChar[lo];
+                            s += Hexadecimal::UpperChar[up];
+                        }
+                        assert(s.size()>0);
+                        if(s[s.size()] == '0' ) s.popTail();
+                    }
+                    return "0x" + s.reverse();
+                }
             }
 
 

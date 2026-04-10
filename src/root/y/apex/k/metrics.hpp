@@ -50,8 +50,20 @@ namespace Yttrium
             //
             //__________________________________________________________________
             static size_t CheckedBytes(const size_t);                            //!< \return checked bytes, exception upon error
-            static void * AcquireWords(unsigned &blockShift);                  //!< \param blockShift input and modified \return valid block
             static void   ReleaseWords(void * const, const unsigned) noexcept; //!< releases acquired block
+
+            static void * AcquireBytes(unsigned &blockShift,
+                                       size_t   &maxBytes);
+
+            template <typename WORD>
+            static inline WORD * AcquireWords(unsigned &blockShift,
+                                              size_t   &maxBytes,
+                                              size_t   &maxWords)
+            {
+                WORD * const w = static_cast<WORD *>( AcquireBytes(blockShift,maxBytes) );
+                maxWords = maxBytes / sizeof(WORD);
+                return w;
+            }
 
         private:
             Y_Disable_Copy_And_Assign(KegMetrics); //!< discarded

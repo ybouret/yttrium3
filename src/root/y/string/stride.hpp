@@ -8,6 +8,7 @@
 #include "y/string/length.hpp"
 #include "y/core/display.hpp"
 #include "y/libc/block/zeroed.h"
+#include "y/swap.hpp"
 #include <cstring>
 
 namespace Yttrium
@@ -146,6 +147,7 @@ namespace Yttrium
                 assert(sanity());
             }
 
+#if 0
             //! prepend \param text data \param tlen data size
             inline void pre(const T * const text, const size_t tlen) noexcept
             {
@@ -156,6 +158,8 @@ namespace Yttrium
 
                 assert(sanity());
             }
+#endif
+            
 
             //! clear content
             inline void clear() noexcept
@@ -179,6 +183,15 @@ namespace Yttrium
                 }
             }
 
+            //! trim one char
+            inline void trim1() noexcept
+            {
+                assert(sanity());
+                assert(size>=1);
+                entry[--Coerce(size)] = 0;
+                assert(sanity());
+            }
+
             //! skip chars \param n chars to skip
             inline void skip(const size_t n) noexcept
             {
@@ -187,6 +200,16 @@ namespace Yttrium
                 memmove(entry,entry+n,(Coerce(size) -= n)*sizeof(T));
                 memset(entry+size,0,n*sizeof(T));
                 assert( sanity() );
+            }
+
+            //! skip one char
+            inline void skip1() noexcept
+            {
+                assert( sanity() );
+                assert(size>=1);
+                memmove(entry,entry+1,--Coerce(size) * sizeof(T));
+                entry[size] = 0;
+                assert(sanity());
             }
 
             //! copy buffer into this
@@ -204,21 +227,13 @@ namespace Yttrium
                 assert(sanity());
             }
 
-#if 0
-            //! copy content \param other other.size<=capacity
-            inline void copy(const Stride &other) noexcept
+            inline void reverse() noexcept
             {
-                assert(this != &other);
-                assert( sanity() );
-                assert( other.sanity() );
-                assert(capacity>=other.size);
-
-                memmove(entry,other.entry,(Coerce(size)=other.size)*sizeof(T));
-                memset(entry+size,0,(count-size)*sizeof(T));
-
-                assert( sanity() );
+                size_t swaps = size>>1;
+                T *lo = entry;
+                T *up = entry+size;
+                while(swaps-- > 0) Swap(*(lo++),*(--up));
             }
-#endif
 
             //______________________________________________________________________
             //

@@ -10,9 +10,14 @@ namespace Yttrium
 
         const char * const Natural:: CallSign = "apn";
 
-
+        const char * Natural:: callSign() const noexcept { return CallSign; }
 
         Natural:: Natural() : code( new KegType() )
+        {
+        }
+
+
+        Natural:: Natural(const natural_t n) : code( new KegType(CopyOf,n) )
         {
         }
 
@@ -24,13 +29,13 @@ namespace Yttrium
         }
 
         Natural:: Natural(const Natural &n) :
-        code( new KegType( *(KegType *)(n.code) ) )
+        code( new KegType( *static_cast<const KegType *>(n.code) ) )
         {
         }
         
         Natural & Natural:: operator=( const Natural & n )
         {
-            void * temp = new KegType( *(KegType *)(n.code) );
+            void * temp = new KegType( *static_cast<const KegType *>(n.code) );
             delete (KegType *)code;
             Coerce(code) = temp;
             return *this;
@@ -40,6 +45,16 @@ namespace Yttrium
         {
             CoerceSwap(code,n.code);
             return *this;
+        }
+
+        String Natural:: toHex() const
+        {
+            return static_cast<const KegType *>(code)->toHex();
+        }
+
+        std::ostream & operator<<(std::ostream &os, const Natural &n)
+        {
+            return os << n.toHex();
         }
 
     }

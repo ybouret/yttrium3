@@ -83,6 +83,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(container_iter);
 
     Y_UTEST(apex_keg);
+    Y_UTEST(apex_n);
 }
 Y_UTEST_EXEC()
 
