@@ -51,7 +51,9 @@ Y_UTEST(calculus_meta2)
     Y_Check_ExactLog2(30);
     std::cerr << std::endl;
 
-
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4296 )
+#endif
     Y_Check_CeilLog2(0);
     Y_Check_CeilLog2(1);
     Y_Check_CeilLog2(2);
@@ -71,7 +73,7 @@ Y_UTEST(calculus_meta2)
     {
         FILE * fp = fopen("check-ceil-log2.hxx","wt");
         size_t nt = 0;
-        for(unsigned i=0;i<=10000;i += ran.in<size_t>(10,100))
+        for(unsigned i=0;i<=10000;i += ran.in<unsigned>(10,100))
         {
             fprintf(fp,"    Y_Check_CeilLog2(%u);\n",i);
             ++nt;
