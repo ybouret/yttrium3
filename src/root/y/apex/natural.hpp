@@ -7,11 +7,33 @@
 #include "y/apex/number.hpp"
 #include "y/apex/types.hpp"
 #include "y/string.hpp"
+#include "y/type-to-type.hpp"
 
 namespace Yttrium
 {
     namespace Apex
     {
+
+
+#define Y_Apex_Natural_Cmp(OP,EXPR) \
+inline friend bool operator OP (const Natural & lhs, const Natural & rhs) noexcept { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP (const Natural & lhs, const natural_t rhs) noexcept { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP (const natural_t lhs, const Natural & rhs) noexcept { return Cmp(lhs,rhs) EXPR; }
+
+
+#define Y_Apex_Natural_Binary(OP,CALL) \
+inline friend Natural operator OP (const Natural & lhs, const Natural & rhs) { return CALL(lhs,rhs); }\
+inline friend Natural operator OP (const Natural & lhs, const natural_t rhs) { return CALL(lhs,rhs); }\
+inline friend Natural operator OP (const natural_t lhs, const Natural & rhs) { return CALL(lhs,rhs); }
+
+#define Y_Apex_Natural_Unary(OP,CALL) \
+inline Natural & operator OP##=(const Natural & rhs) { Natural tmp = CALL(*this,rhs); return xch(tmp); } \
+inline Natural & operator OP##=(const natural_t rhs) { Natural tmp = CALL(*this,rhs); return xch(tmp); }
+
+
+#define Y_Apex_Natural(OP,CALL) \
+Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
+
         //______________________________________________________________________
         //
         //
@@ -30,6 +52,8 @@ namespace Yttrium
             //
             //__________________________________________________________________
             static const char * const CallSign; //!< "apn"
+            typedef TypeToType<Natural> Directly_;
+            static const Directly_      Directly;
 
             //__________________________________________________________________
             //
@@ -60,15 +84,50 @@ namespace Yttrium
             //__________________________________________________________________
             Natural & xch(Natural &) noexcept; //!< no-throw exchange \return *this
             String    toHex()        const;    //!< \return hexadecimal content
+            natural_t lsw()          const noexcept; //!< \return least significant word
 
-
-        private:
-            void * const code; //!< inner code
-
+            //__________________________________________________________________
+            //
+            //
+            // Comparisons
+            //
+            //__________________________________________________________________
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             static SignType Cmp(const Natural &lhs, const Natural & rhs) noexcept;
             static SignType Cmp(const Natural &lhs, natural_t       rhs) noexcept;
-#endif
+            static SignType Cmp(natural_t      lhs, const Natural & rhs) noexcept;
+
+            Y_Apex_Natural_Cmp(==, == __Zero__)
+            Y_Apex_Natural_Cmp(!=, != __Zero__)
+            Y_Apex_Natural_Cmp(<,  == Negative)
+            Y_Apex_Natural_Cmp(>,  == Positive)
+            Y_Apex_Natural_Cmp(<=, != Positive)
+            Y_Apex_Natural_Cmp(>=, != Negative)
+
+
+
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+            //__________________________________________________________________
+            //
+            //
+            // Additions
+            //
+            //__________________________________________________________________
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            static Natural Add(const Natural &lhs, const Natural & rhs);
+            static Natural Add(const Natural &lhs, natural_t       rhs);
+            static Natural Add(natural_t      lhs, const Natural & rhs);
+            Natural        successor() const;
+            Y_Apex_Natural(+,Add)
+            Natural & operator++();    //!< prefix
+            Natural   operator++(int); //!< postfix
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+        private:
+            void * const code; //!< inner code
+            Natural( const Directly_ &, void * const) noexcept;
+
 
         };
     }

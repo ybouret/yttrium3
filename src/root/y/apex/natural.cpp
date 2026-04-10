@@ -8,14 +8,19 @@ namespace Yttrium
     namespace Apex
     {
 
-        const char * const Natural:: CallSign = "apn";
-
-        const char * Natural:: callSign() const noexcept { return CallSign; }
+        const char * const       Natural:: CallSign = "apn";
+        const char *             Natural:: callSign() const noexcept { return CallSign; }
+        const Natural::Directly_ Natural:: Directly = {};
 
         Natural:: Natural() : code( new KegType() )
         {
         }
 
+        Natural:: Natural(const Directly_ &, void * const handle) noexcept :
+        code( handle )
+        {
+            assert(code);
+        }
 
         Natural:: Natural(const natural_t n) : code( new KegType(CopyOf,n) )
         {
@@ -24,6 +29,7 @@ namespace Yttrium
 
         Natural:: ~Natural() noexcept
         {
+            assert(code);
             delete (KegType *)code;
             Coerce(code) = 0;
         }
@@ -36,6 +42,7 @@ namespace Yttrium
         
         Natural & Natural:: operator=( const Natural & n )
         {
+            assert(code);
             void * temp = new KegType( *static_cast<const KegType *>(n.code) );
             delete (KegType *)code;
             Coerce(code) = temp;
@@ -44,6 +51,8 @@ namespace Yttrium
 
         Natural & Natural:: xch(Natural &n) noexcept
         {
+            assert(code);
+            assert(n.code);
             CoerceSwap(code,n.code);
             return *this;
         }
@@ -56,6 +65,11 @@ namespace Yttrium
         std::ostream & operator<<(std::ostream &os, const Natural &n)
         {
             return os << n.toHex();
+        }
+
+        natural_t Natural:: lsw() const noexcept
+        {
+            return static_cast<const KegType *>(code)->getNatural();
         }
 
     }

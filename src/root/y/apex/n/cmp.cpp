@@ -14,15 +14,21 @@ namespace Yttrium
             return KegCmp::Result(l.word, l.words, r.word, r.words);
         }
 
-        SignType Natural:: Cmp(const Natural &lhs,   natural_t rhs) noexcept
+        SignType Natural:: Cmp(const Natural &lhs, natural_t rhs) noexcept
         {
-            const KegType &        lk = *static_cast<const KegType *>(lhs.code);
+            const KegType &        l = *static_cast<const KegType *>(lhs.code);
             size_t                 nr = 0;
             const _Keg::WordType * wr = Calculus::SplitWord::Make<_Keg::WordType>::From(rhs,nr);
-
+            return KegCmp::Result(l.word, l.words, wr, nr);
         }
 
-
+        SignType Natural:: Cmp(natural_t lhs, const Natural &rhs) noexcept
+        {
+            size_t                 nl = 0;
+            const _Keg::WordType * wl = Calculus::SplitWord::Make<_Keg::WordType>::From(lhs,nl);
+            const KegType &r = *static_cast<const KegType *>(rhs.code);
+            return KegCmp::Result(wl,nl,r.word,r.words);
+        }
     }
 }
 
