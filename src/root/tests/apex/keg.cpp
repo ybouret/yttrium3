@@ -23,24 +23,29 @@ namespace
         const size_t nbits = sizeof(natural_t) * 8 -1;
         uint64_t     ell = 0;
         size_t       ops = 0;
+        KegAdd::Trace = 0;
         do
         {
             ++ops;
             const natural_t lhs = ran.gen<natural_t>( ran.in<size_t>(0,nbits));
             const natural_t rhs = ran.gen<natural_t>( ran.in<size_t>(0,nbits));
             const natural_t sum = lhs+rhs;
-            KegType L(0); L.ld(lhs);
-            KegType R(0); R.ld(rhs);
+            KegType L(CopyOf,lhs);
+            KegType R; R.ld(rhs);
             const uint64_t       mark = System::WallTime::Ticks();
-            AutoPtr< Keg<WORD> > S = KegAdd:: Compute<WORD,CORE>(L.word,L.words,R.word,R.words);
+            AutoPtr< Keg<WORD> > S    = KegAdd:: Compute<WORD,CORE>(L.word,L.words,R.word,R.words);
             ell += System::WallTime::Ticks() - mark;
             const natural_t      s = S->getNatural();
             Y_ASSERT(sum==s);
         } while( chrono(ell) < 0.1L );
 
-        const long double rate = (long double)ops / chrono(ell);
-        std::cerr << "\t\tadd64=" << HumanReadable( (uint64_t)rate ) << std::endl;
-
+        const long double outer = (long double)ops / chrono(ell);
+        std::cerr << "\t\touter::add64=" << HumanReadable( (uint64_t)outer ) << std::endl;
+        if(KegAdd::Trace)
+        {
+            const long double inner = (long double)ops / chrono(KegAdd::Trace);
+            std::cerr << "\t\tinner::add64=" << HumanReadable( (uint64_t)inner ) << std::endl;
+        }
 
         std::cerr << std::endl;
     }

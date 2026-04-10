@@ -9,9 +9,12 @@
 #include "y/calculus/required-bits.hpp"
 #include "y/calculus/required-bytes.hpp"
 #include "y/calculus/split-word.hpp"
+
 #include "y/format/hexadecimal.hpp"
 #include "y/libc/block/zeroed.h"
+
 #include "y/type/with-at-least.hpp"
+#include "y/type/copy-of.hpp"
 
 #include <iostream>
 #include <cstring>
@@ -21,6 +24,15 @@ namespace Yttrium
     namespace Apex
     {
 
+        //! helper to allocate blockShift/word
+#define Y_Apex_Keg_Alloc()         \
+blockShift( CeilLog2(maxBytes)  ), \
+word( static_cast<WordType *>(AcquireWords( Coerce(blockShift) ) ) )
+
+        //! reset maxBytes/maxWords from allocated memoru
+#define Y_Apex_Keg_OnInit()                 \
+Coerce(maxBytes) = size_t(1) << blockShift; \
+Coerce(maxWords) = maxBytes >> WordShift
 
         //______________________________________________________________________
         //
@@ -57,17 +69,9 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-
-#define Y_Apex_Keg_Alloc()         \
-blockShift( CeilLog2(maxBytes)  ), \
-word( static_cast<WordType *>(AcquireWords( Coerce(blockShift) ) ) )
-
-#define Y_Apex_Keg_OnInit()                 \
-Coerce(maxBytes) = size_t(1) << blockShift; \
-Coerce(maxWords) = maxBytes >> WordShift
-
+            
             //! setup \param userBytes minimal bytes
-            inline explicit Keg(const size_t userBytes) :
+            inline explicit Keg(const size_t userBytes = 0) :
             bits(0),
             bytes(0),
             maxBytes( ComputeMaxBytes(userBytes) ),
@@ -78,7 +82,18 @@ Coerce(maxWords) = maxBytes >> WordShift
                 Y_Apex_Keg_OnInit();
             }
 
-#if 0
+            inline explicit Keg(const CopyOf_ &, const natural_t n) :
+            bits(0),
+            bytes(0),
+            maxBytes(0),
+            words(0),
+            maxWords(0),
+            Y_Apex_Keg_Alloc()
+            {
+                Y_Apex_Keg_OnInit();
+                ld(n);
+            }
+
             inline explicit Keg(const Keg &keg) :
             bits(keg.bits),
             bytes(keg.bytes),
@@ -90,7 +105,6 @@ Coerce(maxWords) = maxBytes >> WordShift
                 Y_Apex_Keg_OnInit();
                 memcpy(word,keg.word,words*WordBytes);
             }
-#endif
 
             inline explicit Keg(const WordType * const w,
                                 const size_t           n) :
@@ -216,7 +230,7 @@ Coerce(maxWords) = maxBytes >> WordShift
             WordType * const word;       //!< memory
 
         private:
-            Y_Disable_Copy_And_Assign(Keg); //!< discarded
+            Y_Disable_Assign(Keg); //!< discarded
 
         };
 

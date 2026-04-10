@@ -31,7 +31,7 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            static const size_t        MaxBytes = Memory::Metrics::MaxPageBytes; //!< alias
+            static const size_t       MaxBytes = Memory::Metrics::MaxPageBytes; //!< alias
             static const char * const CallSign; //!< "Apex"
 
             //__________________________________________________________________

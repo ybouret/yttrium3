@@ -46,6 +46,7 @@ y/object/light
 y/string
 y/apex
 y/apex/k
+y/apex/n
 )
 
 add_subdirectory(tests)
