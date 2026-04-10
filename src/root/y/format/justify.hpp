@@ -4,7 +4,6 @@
 #ifndef Y_Justify_Included
 #define Y_Justify_Included 1
 
-#if 0
 #include "y/string.hpp"
 
 namespace Yttrium
@@ -60,7 +59,6 @@ namespace Yttrium
 
 }
 
-#endif
 
 #endif // !Y_Justify_Included
 

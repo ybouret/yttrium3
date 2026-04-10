@@ -39,7 +39,9 @@ namespace Yttrium
         //
         //______________________________________________________________________
         template <typename T>
-        class String : public CountedObject, public Writable<T>
+        class String :
+        public CountedObject,
+        public Writable<T>
         {
         public:
             //__________________________________________________________________
@@ -97,6 +99,7 @@ namespace Yttrium
             String &       xch(String &)      noexcept; //!< no-throw exchange \return *this
             std::ostream & print(std::ostream &) const; //!< print \return output stream
             String &       reverse()          noexcept; //!< reverse content \return *this, reversed
+            const T *      c_str()      const noexcept; //!< pseudo universal c_str \return data
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             inline friend String operator + (const String &  lhs, const String &  rhs) { return Add(lhs,rhs); }

@@ -87,6 +87,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             }
 
             inline explicit Keg(const Keg &keg) :
+            KegMetrics(),
             bits(keg.bits),
             bytes(keg.bytes),
             maxBytes(bytes),

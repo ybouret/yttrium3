@@ -29,6 +29,7 @@ namespace Yttrium
         }
 
         Natural:: Natural(const Natural &n) :
+        Number(),
         code( new KegType( *static_cast<const KegType *>(n.code) ) )
         {
         }

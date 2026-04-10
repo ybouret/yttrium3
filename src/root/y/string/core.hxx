@@ -152,6 +152,12 @@ template <> String<CH> & String<CH>:: xch(String &other) noexcept
     return *this;
 }
 
+template <> const CH * String<CH>:: c_str() const noexcept
+{
+    assert(code);
+    return code->entry;
+}
+
 //------------------------------------------------------------------------------
 //
 //
@@ -351,7 +357,6 @@ template <> SignType String<CH>:: Cmp(const CH C, const String &rhs) noexcept
 }
 
 //
-
 template <> String<CH> & String<CH>:: reverse() noexcept
 {
     code->reverse();

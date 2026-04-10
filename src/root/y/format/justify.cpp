@@ -1,8 +1,7 @@
 
-#if 0
 #include "y/format/justify.hpp"
 #include "y/string/length.hpp"
-#include "y/check/usual.hpp"
+#include <iostream>
 
 namespace Yttrium
 {
@@ -38,7 +37,7 @@ namespace Yttrium
 
     std::ostream & Justify:: raw(std::ostream &os) const
     {
-        assert( Good(text,size) );
+        //assert( Good(text,size) );
         for(size_t i=0;i<size;++i) os << text[i];
         return os;
     }
@@ -69,5 +68,4 @@ namespace Yttrium
 
 }
 
-#endif
 
