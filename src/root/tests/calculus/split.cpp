@@ -17,9 +17,15 @@ Y_UTEST(calculus_split)
         for(uint64_t i=0;i<65536;++i)
         {
             uint16_t        x = (uint16_t)i; //std::cerr << Hexadecimal(x) << std::endl;
-            uint8_t * const p = Calculus::SplitWord::Make<uint8_t>::From(x);
+            size_t          n = 0;
+            uint8_t * const p = Calculus::SplitWord::Make<uint8_t>::From(x,n);
             const uint64_t  w[2] = { p[0], p[1] };
             Y_ASSERT( (w[0] | (w[1] << 8)) == i );
+            if(n>0)
+            {
+                Y_ASSERT(0!=w[n-1]);
+            }
+            for(size_t k=n;k<Y_Static_Size(w);++k) Y_ASSERT(0==w[k]);
         }
 
         std::cerr << "\t-- from 32 bits" << std::endl;
@@ -29,9 +35,15 @@ Y_UTEST(calculus_split)
             {
                 const uint64_t  i = ran.gen<uint32_t>(j);
                 uint32_t        x = (uint32_t) i;
-                uint8_t * const p = Calculus::SplitWord::Make<uint8_t>::From(x);
+                size_t          n = 0;
+                uint8_t * const p = Calculus::SplitWord::Make<uint8_t>::From(x,n);
                 const uint64_t w[4] = { p[0], p[1], p[2], p[3] };
                 Y_ASSERT( (w[0] | (w[1] << 8) | (w[2] << 16) | (w[3]<<24) ) == i );
+                if(n>0)
+                {
+                    Y_ASSERT(0!=w[n-1]);
+                }
+                for(size_t k=n;k<Y_Static_Size(w);++k) Y_ASSERT(0==w[k]);
             }
         }
 
@@ -42,9 +54,15 @@ Y_UTEST(calculus_split)
             {
                 const uint64_t  i = ran.gen<uint64_t>(j);
                 uint64_t        x = (uint64_t) i;
-                uint8_t * const p = Calculus::SplitWord::Make<uint8_t>::From(x);
+                size_t          n = 0;
+                uint8_t * const p = Calculus::SplitWord::Make<uint8_t>::From(x,n);
                 const uint64_t  w[8] = { p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7] };
                 Y_ASSERT( (w[0] | (w[1] << 8) | (w[2] << 16) | (w[3]<<24) | (w[4]<<32)  |  (w[5]<<40) |  (w[6]<<48) |  (w[7]<<56)  ) == i );
+                if(n>0)
+                {
+                    Y_ASSERT(0!=w[n-1]);
+                }
+                for(size_t k=n;k<Y_Static_Size(w);++k) Y_ASSERT(0==w[k]);
             }
         }
     }
@@ -58,9 +76,15 @@ Y_UTEST(calculus_split)
             {
                 const uint64_t  i = ran.gen<uint32_t>(j);
                 uint32_t        x = (uint32_t) i;
-                uint16_t * const p = Calculus::SplitWord::Make<uint16_t>::From(x);
+                size_t           n = 0;
+                uint16_t * const p = Calculus::SplitWord::Make<uint16_t>::From(x,n);
                 const uint64_t w[4] = { p[0], p[1]  };
                 Y_ASSERT( (w[0] | (w[1] << 16) ) == i );
+                if(n>0)
+                {
+                    Y_ASSERT(0!=w[n-1]);
+                }
+                for(size_t k=n;k<Y_Static_Size(w);++k) Y_ASSERT(0==w[k]);
             }
         }
 
@@ -71,9 +95,15 @@ Y_UTEST(calculus_split)
             {
                 const uint64_t   i = ran.gen<uint64_t>(j);
                 uint64_t         x = (uint64_t) i;
-                uint16_t * const p = Calculus::SplitWord::Make<uint16_t>::From(x);
+                size_t           n = 0;
+                uint16_t * const p = Calculus::SplitWord::Make<uint16_t>::From(x,n);
                 const uint64_t   w[4] = { p[0], p[1], p[2], p[3] };
                 Y_ASSERT( (w[0] | (w[1] << 16) | (w[2] << 32) | (w[3]<<48) ) == i );
+                if(n>0)
+                {
+                    Y_ASSERT(0!=w[n-1]);
+                }
+                for(size_t k=n;k<Y_Static_Size(w);++k) Y_ASSERT(0==w[k]);
             }
         }
     }
@@ -87,9 +117,15 @@ Y_UTEST(calculus_split)
             {
                 const uint64_t   i = ran.gen<uint64_t>(j);
                 uint64_t         x = (uint64_t) i;
-                uint32_t * const p = Calculus::SplitWord::Make<uint32_t>::From(x);
+                size_t           n = 0;
+                uint32_t * const p = Calculus::SplitWord::Make<uint32_t>::From(x,n);
                 const uint64_t   w[2] = { p[0], p[1] };
                 Y_ASSERT( (w[0] | (w[1] << 32) ) == i );
+                if(n>0)
+                {
+                    Y_ASSERT(0!=w[n-1]);
+                }
+                for(size_t k=n;k<Y_Static_Size(w);++k) Y_ASSERT(0==w[k]);
             }
         }
     }

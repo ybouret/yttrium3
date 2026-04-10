@@ -66,7 +66,8 @@ namespace Yttrium
             void * const code; //!< inner code
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            SignType Cmp(const Natural &lhs, const Natural &rhs) noexcept;
+            static SignType Cmp(const Natural &lhs, const Natural & rhs) noexcept;
+            static SignType Cmp(const Natural &lhs, natural_t       rhs) noexcept;
 #endif
 
         };

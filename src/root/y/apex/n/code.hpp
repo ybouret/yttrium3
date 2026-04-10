@@ -12,13 +12,13 @@ namespace Yttrium
     namespace Apex
     {
         //! system Keg setup
-        struct KegInfo
+        struct _Keg
         {
             typedef uint32_t WordType; //!< alias
             typedef uint64_t CoreType; //!< alias
         };
 
-        typedef Keg<KegInfo::WordType> KegType; //!< alias
+        typedef Keg<_Keg::WordType> KegType; //!< alias
 
         
 
