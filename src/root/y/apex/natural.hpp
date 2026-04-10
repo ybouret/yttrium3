@@ -15,22 +15,24 @@ namespace Yttrium
     {
 
 
+        //! helper to implement comparisons
 #define Y_Apex_Natural_Cmp(OP,EXPR) \
 inline friend bool operator OP (const Natural & lhs, const Natural & rhs) noexcept { return Cmp(lhs,rhs) EXPR; } \
 inline friend bool operator OP (const Natural & lhs, const natural_t rhs) noexcept { return Cmp(lhs,rhs) EXPR; } \
 inline friend bool operator OP (const natural_t lhs, const Natural & rhs) noexcept { return Cmp(lhs,rhs) EXPR; }
 
-
+        //! helper to implement binary operators
 #define Y_Apex_Natural_Binary(OP,CALL) \
 inline friend Natural operator OP (const Natural & lhs, const Natural & rhs) { return CALL(lhs,rhs); }\
 inline friend Natural operator OP (const Natural & lhs, const natural_t rhs) { return CALL(lhs,rhs); }\
 inline friend Natural operator OP (const natural_t lhs, const Natural & rhs) { return CALL(lhs,rhs); }
 
+        //! helper to implement unary operators
 #define Y_Apex_Natural_Unary(OP,CALL) \
 inline Natural & operator OP##=(const Natural & rhs) { Natural tmp = CALL(*this,rhs); return xch(tmp); } \
 inline Natural & operator OP##=(const natural_t rhs) { Natural tmp = CALL(*this,rhs); return xch(tmp); }
 
-
+        //! helper to implement operators
 #define Y_Apex_Natural(OP,CALL) \
 Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
 
@@ -51,9 +53,9 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             // Definitions
             //
             //__________________________________________________________________
-            static const char * const CallSign; //!< "apn"
-            typedef TypeToType<Natural> Directly_;
-            static const Directly_      Directly;
+            static const char * const CallSign;    //!< "apn"
+            typedef TypeToType<Natural> Directly_; //!< alias
+            static const Directly_      Directly;  //!< alias
 
             //__________________________________________________________________
             //
@@ -143,6 +145,8 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
 
         private:
             void * const code; //!< inner code
+
+            //! setup code directly
             Natural( const Directly_ &, void * const) noexcept;
 
 

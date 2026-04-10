@@ -36,9 +36,9 @@ namespace Yttrium
             //! compute sum
             /**
              \param lhs lhs words
-             \param nlw lhs size
+             \param nl  lhs size
              \param rhs rhs words
-             \param nrw rhs size
+             \param nr  rhs size
              \return sum
              */
             template <typename WORD, typename CORE> static inline

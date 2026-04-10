@@ -41,22 +41,22 @@ namespace Yttrium
         //! split to 8-bits
         template <> struct SplitWord:: Make<uint8_t>
         {
-            static uint8_t * From(uint16_t &x, size_t &n) noexcept; //!< \param x input and workspace \return bytes from x
-            static uint8_t * From(uint32_t &x, size_t &n) noexcept; //!< \param x input and workspace \return bytes from x
-            static uint8_t * From(uint64_t &x, size_t &n) noexcept; //!< \param x input and workspace \return bytes from x
+            static uint8_t * From(uint16_t &x, size_t &n) noexcept; //!< \param x input and workspace \param n number of active words \return bytes from x
+            static uint8_t * From(uint32_t &x, size_t &n) noexcept; //!< \param x input and workspace \param n number of active words \return bytes from x
+            static uint8_t * From(uint64_t &x, size_t &n) noexcept; //!< \param x input and workspace \param n number of active words \return bytes from x
         };
 
         //! split to 16-bits
         template <> struct SplitWord:: Make<uint16_t>
         {
-            static uint16_t * From(uint32_t &x, size_t &n) noexcept; //!< \param x input and workspace \return words from x
-            static uint16_t * From(uint64_t &x, size_t &n) noexcept; //!< \param x input and workspace \return words from x
+            static uint16_t * From(uint32_t &x, size_t &n) noexcept; //!< \param x input and workspace \param n number of active words \return words from x
+            static uint16_t * From(uint64_t &x, size_t &n) noexcept; //!< \param x input and workspace \param n number of active words \return words from x
         };
 
         //! split to 32-bits
         template <> struct SplitWord:: Make<uint32_t>
         {
-            static uint32_t * From(uint64_t &x, size_t &n) noexcept;//!< \param x input and workspace \return dwords from x
+            static uint32_t * From(uint64_t &x, size_t &n) noexcept;//!< \param x input and workspace \param n number of active words \return dwords from x
         };
 
     }

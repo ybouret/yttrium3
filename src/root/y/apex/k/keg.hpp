@@ -21,7 +21,7 @@
 #include <iostream>
 #include <cstring>
 
-#define Y_Apex_Trace
+#define Y_Apex_Trace //!< define to enable time trace
 
 namespace Yttrium
 {
