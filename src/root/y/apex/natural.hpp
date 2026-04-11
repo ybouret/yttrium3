@@ -67,6 +67,7 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             Natural(const natural_t);             //!< setup to given value
             Natural(const Natural &);             //!< duplicate
             Natural & operator=(const Natural &); //!< assign \return *this
+            Natural & operator=(const natural_t); //!< assign \return *this
             virtual ~Natural() noexcept;          //!< cleanup
             Y_OSTREAM_PROTO(Natural);             //!< display
 

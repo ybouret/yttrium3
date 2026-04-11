@@ -42,7 +42,7 @@ namespace
                 const natural_t rhs = ran.gen<natural_t>( ran.in<size_t>(0,nbits));
                 const natural_t sum = lhs+rhs;
                 KegType L(CopyOf,lhs);
-                KegType R; R.ld(rhs);
+                KegType R(CopyOf,rhs);
                 const uint64_t       mark = System::WallTime::Ticks();
                 AutoPtr< Keg<WORD> > S    = KegAdd:: Compute<WORD,CORE>(L.word,L.words,R.word,R.words);
                 ell += System::WallTime::Ticks() - mark;

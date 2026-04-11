@@ -86,7 +86,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             words(0),
             Y_Apex_Keg_Alloc()
             {
-                ld(n);
+                construct(n);
             }
 
             //! duplicate \param keg source
@@ -155,15 +155,32 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 memset(word+words,0,(maxWords-words)*WordBytes);
             }
 
-            //! load a new integral \param n integral to load
-            inline void ld( const natural_t n ) noexcept
+        private:
+            inline void rawLoad(const natural_t n) noexcept
             {
                 assert(maxBytes>=sizeof(n));
+                assert(sanity());
                 Calculus::SplitWord::Expand(word,n);
                 Coerce(bytes) = sizeof(natural_t);
                 Coerce(words) = sizeof(natural_t) >> WordShift;
+            }
+
+        public:
+
+            //! load a new integral \param n integral to load
+            inline void construct( const natural_t n ) noexcept
+            {
+                rawLoad(n);
                 update();
             }
+
+            inline void assign(const natural_t n) noexcept
+            {
+                rawLoad(n);
+                zpad();
+                update();
+            }
+
 
             //! \return lowest natural
             inline natural_t getNatural() const noexcept

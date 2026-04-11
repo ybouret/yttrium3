@@ -49,6 +49,13 @@ namespace Yttrium
             return *this;
         }
 
+        Natural & Natural:: operator=( const natural_t n )
+        {
+            assert(code);
+            static_cast<KegType *>(code)->assign(n);
+            return *this;
+        }
+
         Natural & Natural:: xch(Natural &n) noexcept
         {
             assert(code);
