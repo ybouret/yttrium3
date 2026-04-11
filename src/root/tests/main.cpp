@@ -35,6 +35,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(calculus_gc);
     Y_UTEST(calculus_required);
     Y_UTEST(calculus_split);
+    Y_UTEST(calculus_isqrt);
 
     Y_UTEST(type_ints);
 

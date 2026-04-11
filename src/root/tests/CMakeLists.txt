@@ -52,6 +52,7 @@ Y_UTEST(calculus:align)
 Y_UTEST(calculus:gc)
 Y_UTEST(calculus:required)
 Y_UTEST(calculus:split)
+Y_UTEST(calculus:isqrt)
 
 
 Y_UTEST(type_ints)
