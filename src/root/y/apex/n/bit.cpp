@@ -11,6 +11,12 @@ namespace Yttrium
             static_cast<KegType *>(code)->shr();
             return *this;
         }
+
+        size_t Natural:: bits() const noexcept
+        {
+            assert(code);
+            return static_cast<KegType *>(code)->bits;
+        }
     }
 
 }

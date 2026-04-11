@@ -165,8 +165,8 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             // bits
             //
             //__________________________________________________________________
-            Natural & shr() noexcept; //!< \return fast division by two
-
+            Natural & shr()        noexcept; //!< \return fast division by two
+            size_t    bits() const noexcept; //!< \return number of bits
 
         private:
             void * const code; //!< inner code
