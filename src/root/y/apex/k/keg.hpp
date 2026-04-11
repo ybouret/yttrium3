@@ -68,7 +68,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             //
             //__________________________________________________________________
 
-            
+
             //! setup \param userBytes minimal bytes
             inline explicit Keg(const size_t userBytes = 0) :
             bits(0),
@@ -274,10 +274,24 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             inline void shr() noexcept
             {
                 assert(sanity());
-                if(words>0)
+                static const WordType LowerBit = 1;
+                static const WordType UpperBit = LowerBit << (WordBits-1);
+                switch(words)
                 {
-
+                    case 0: return;
+                    case 1: word[0] >>= 1; update(); return;
+                    default: break;
                 }
+                assert(words>=2);
+                const size_t msi = words-1;
+                for(size_t i=0;i<msi;)
+                {
+                    WordType &curr = word[i++];
+                    curr >>= 1;
+                    if(0 != (word[i]&LowerBit)) curr |= UpperBit;
+                }
+                word[msi] >>= 1;
+                update();
             }
 
 

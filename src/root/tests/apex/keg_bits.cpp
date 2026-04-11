@@ -16,6 +16,13 @@ namespace
         {
             Keg<CORE> k(TwoToThePowerOf,p);
             std::cerr << k << std::endl;
+            while(k.bits)
+            {
+                k.shr();
+                std::cerr << k << std::endl;
+            }
+            k.shr();
+            std::cerr << k << std::endl;
         }
 
         std::cerr << std::endl;
