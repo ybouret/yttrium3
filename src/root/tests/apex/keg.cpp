@@ -1,6 +1,8 @@
+#include "y/apex/k/mul.hpp"
 #include "y/apex/k/add.hpp"
 #include "y/apex/k/sub.hpp"
 #include "y/apex/k/cmp.hpp"
+
 #include "y/utest/run.hpp"
 #include "y/pointer/auto.hpp"
 #include "y/core/rand.hpp"
@@ -19,7 +21,6 @@ namespace
         System::WallTime  chrono;
 
         std::cerr << "-- Test Keg<" << KegType::WordBits << "> / " << sizeof(CORE)*8 << std::endl;
-        Y_SIZEOF(KegType);
 
         //----------------------------------------------------------------------
         //
@@ -113,8 +114,43 @@ namespace
             std::cerr << "\t\touter::sub64=" << HumanReadable( (uint64_t)outer ) << std::endl;
             if(KegSub::Trace)
             {
-                const long double inner = (long double)ops / chrono(KegAdd::Trace);
+                const long double inner = (long double)ops / chrono(KegSub::Trace);
                 std::cerr << "\t\tinner::sub64=" << HumanReadable( (uint64_t)inner ) << std::endl;
+            }
+        }
+
+        //----------------------------------------------------------------------
+        //
+        //
+        // test mul
+        //
+        //
+        //----------------------------------------------------------------------
+        {
+            std::cerr << "-- testing multiplications" << std::endl;
+            uint64_t     ell = 0;
+            size_t       ops = 0;
+            KegMul::Trace    = 0;
+            do
+            {
+                ++ops;
+                const natural_t      lhs = ran.gen<natural_t>( ran.in<size_t>(0,32) );
+                const natural_t      rhs = ran.gen<natural_t>( ran.in<size_t>(0,32) );
+                const natural_t      prod = lhs * rhs;
+                const KegType        L(CopyOf,lhs);
+                const KegType        R(CopyOf,rhs);
+                const uint64_t       mark = System::WallTime::Ticks();
+                AutoPtr< Keg<WORD> > P    = KegMul:: Compute<WORD,CORE>(L.word,L.words,R.word,R.words);
+                ell += System::WallTime::Ticks() - mark;
+                Y_ASSERT(P->getNatural() == prod);
+
+            } while( chrono(ell) < 0.05L );
+            const long double outer = (long double)ops / chrono(ell);
+            std::cerr << "\t\touter::mul64=" << HumanReadable( (uint64_t)outer ) << std::endl;
+            if(KegMul::Trace)
+            {
+                const long double inner = (long double)ops / chrono(KegMul::Trace);
+                std::cerr << "\t\tinner::mul64=" << HumanReadable( (uint64_t)inner ) << std::endl;
             }
         }
 

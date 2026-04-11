@@ -143,6 +143,19 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             Natural   operator--(int); //!< postfix
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
+            //__________________________________________________________________
+            //
+            //
+            // Multiplication
+            //
+            //__________________________________________________________________
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            static Natural Mul(const Natural &lhs, const Natural & rhs);
+            static Natural Mul(const Natural &lhs, natural_t       rhs);
+            static Natural Mul(natural_t      lhs, const Natural & rhs);
+            Y_Apex_Natural(*,Mul)
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
         private:
             void * const code; //!< inner code
 

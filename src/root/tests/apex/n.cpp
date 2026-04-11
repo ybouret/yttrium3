@@ -51,7 +51,7 @@ Y_UTEST(apex_n)
                 { const apn     S   = L + R;   Y_ASSERT(S==sum); }
                 { const apn     S   = lhs + R; Y_ASSERT(S==sum); }
                 { const apn     S   = L + rhs; Y_ASSERT(S==sum); }
-                { apn S = L; S += R;  Y_ASSERT(S==sum); }
+                { apn S = L; S += R;   Y_ASSERT(S==sum); }
                 { apn S = L; S += rhs; Y_ASSERT(S==sum); }
 
             }
@@ -94,6 +94,28 @@ Y_UTEST(apex_n)
     for(apn i=20;i>0;i--) std::cerr << i << ' ';
     std::cerr << std::endl;
 
+
+    (std::cerr << "-- Test Mul 64-bits " << std::endl).flush();
+    for(size_t i=0;i<=32;++i)
+    {
+        for(size_t j=0;j<=32;++j)
+        {
+            for(size_t k=0;k<16;++k)
+            {
+                const natural_t lhs  = ran.gen<natural_t>(i);
+                const natural_t rhs  = ran.gen<natural_t>(j);
+                const natural_t prod = lhs * rhs;
+                const apn       L   = lhs;
+                const apn       R   = rhs;
+                { const apn     P   = L   * R; Y_ASSERT(P==prod); }
+                { const apn     P   = lhs * R; Y_ASSERT(P==prod); }
+                { const apn     P   = L * rhs; Y_ASSERT(P==prod); }
+                { apn P = L; P *= R;           Y_ASSERT(P==prod);  }
+                { apn P = L; P *= rhs;         Y_ASSERT(P==prod);  }
+
+            }
+        }
+    }
 
 }
 Y_UDONE()
