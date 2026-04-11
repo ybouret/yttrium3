@@ -90,7 +90,8 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             Natural & xch(Natural &) noexcept;       //!< no-throw exchange \return *this
             String    toHex()        const;          //!< \return hexadecimal content
             natural_t lsw()          const noexcept; //!< \return least significant word
-
+            void      ldz()          noexcept;       //!< set to zero
+            
             //__________________________________________________________________
             //
             //
@@ -159,14 +160,41 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             Y_Apex_Natural(*,Mul)
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
+
             //__________________________________________________________________
             //
             //
-            // bits
+            // Division
+            //
+            //__________________________________________________________________
+            static void Division(Natural * const quot,
+                                 Natural * const rem,
+                                 const Natural & numer,
+                                 const Natural & denom);
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            //static Natural Mul(const Natural &lhs, const Natural & rhs);
+            //static Natural Mul(const Natural &lhs, natural_t       rhs);
+            //static Natural Mul(natural_t      lhs, const Natural & rhs);
+            //Y_Apex_Natural(*,Mul)
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+            //__________________________________________________________________
+            //
+            //
+            // Bits
             //
             //__________________________________________________________________
             Natural & shr()        noexcept; //!< \return fast division by two
             size_t    bits() const noexcept; //!< \return number of bits
+
+            //__________________________________________________________________
+            //
+            //
+            // Arithmetic
+            //
+            //__________________________________________________________________
+            Natural abs()  const; //!< \return |*this|
+            Natural sqrt() const; //!< \return sqrt(*this)
 
         private:
             void * const code; //!< inner code

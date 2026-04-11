@@ -83,6 +83,11 @@ namespace Yttrium
             return static_cast<const KegType *>(code)->getNatural();
         }
 
+        void Natural:: ldz() noexcept
+        {
+            static_cast<KegType *>(code)->ldz();
+        }
+
     }
 
 }
