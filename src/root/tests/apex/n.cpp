@@ -117,6 +117,18 @@ Y_UTEST(apex_n)
         }
     }
 
+    (std::cerr << "-- Test Bits " << std::endl).flush();
+    for(size_t p=0;p<=40;++p)
+    {
+        apn n(TwoToThePowerOf,p);
+        std::cerr << n << std::endl;
+        while(n>0)
+        {
+            std::cerr << n.shr() << std::endl;
+        }
+    }
+
+
 }
 Y_UDONE()
 

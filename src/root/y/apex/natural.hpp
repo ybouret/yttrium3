@@ -87,8 +87,8 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             // Methods
             //
             //__________________________________________________________________
-            Natural & xch(Natural &) noexcept; //!< no-throw exchange \return *this
-            String    toHex()        const;    //!< \return hexadecimal content
+            Natural & xch(Natural &) noexcept;       //!< no-throw exchange \return *this
+            String    toHex()        const;          //!< \return hexadecimal content
             natural_t lsw()          const noexcept; //!< \return least significant word
 
             //__________________________________________________________________
@@ -159,6 +159,13 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             Y_Apex_Natural(*,Mul)
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
+            //__________________________________________________________________
+            //
+            //
+            // bits
+            //
+            //__________________________________________________________________
+            Natural & shr() noexcept; //!< \return fast division by two
 
 
         private:

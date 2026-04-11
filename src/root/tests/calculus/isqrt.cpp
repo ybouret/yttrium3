@@ -22,6 +22,9 @@ Y_UTEST(calculus_isqrt)
     TestISQRT<int>();
     TestISQRT<unsigned>();
 
+    Y_PRINTV(Calculus::IntegerSquareRoot::TableLast);
+    Y_PRINTV(Calculus::IntegerSquareRoot::TableSize);
+
 }
 Y_UDONE()
 
