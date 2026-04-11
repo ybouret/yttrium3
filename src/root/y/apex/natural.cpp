@@ -26,6 +26,10 @@ namespace Yttrium
         {
         }
 
+        Natural:: Natural(const TwoToThePowerOf_ &_, const size_t n) : code( new KegType(_,n) )
+        {
+        }
+
 
         Natural:: ~Natural() noexcept
         {

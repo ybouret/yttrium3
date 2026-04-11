@@ -15,6 +15,7 @@
 
 #include "y/type/with-at-least.hpp"
 #include "y/type/copy-of.hpp"
+#include "y/mkl/two-to-the-power-of.hpp"
 
 #include "y/string.hpp"
 
@@ -129,6 +130,24 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             }
 
 
+            //! setup to 2^n \param n exponent
+            inline explicit Keg(const TwoToThePowerOf_ &, const size_t n) :
+            bits(n+1),
+            bytes( Alignment::On<8>::Ceil(bits) / 8),
+            maxBytes( bytes ),
+            words( Alignment::To<WordType>::Ceil(bytes) / WordBytes ),
+            Y_Apex_Keg_Alloc()
+            {
+                assert(words>0);
+                const size_t msi = words-1;   // most significant index
+                WordType    &msw = word[msi]; // most significant word
+                const size_t idx = n - (msi*WordBits);
+                //std::cerr << "2^(n=" << n << ") : bits = " << bits << " : bytes=" << bytes << " : words=" << words << " : idx = " << idx << std::endl;
+                assert(idx<WordBits);
+                msw = WordType(1) << idx;
+                //update();
+            }
+
 
             //! cleanup
             inline virtual ~Keg() noexcept { ReleaseWords(word,blockShift); }
@@ -156,6 +175,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             }
 
         private:
+            //! set words with no check \param n value
             inline void rawLoad(const natural_t n) noexcept
             {
                 assert(maxBytes>=sizeof(n));
@@ -174,6 +194,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 update();
             }
 
+            //! load a new integral and zpad \param n integral to load
             inline void assign(const natural_t n) noexcept
             {
                 rawLoad(n);
@@ -246,6 +267,16 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                         if(s[s.size()] == '0' ) s.popTail();
                     }
                     return "0x" + s.reverse();
+                }
+            }
+
+            //! in place right shift
+            inline void shr() noexcept
+            {
+                assert(sanity());
+                if(words>0)
+                {
+
                 }
             }
 

@@ -30,6 +30,14 @@ namespace Yttrium
         public:
             static uint64_t Trace; //!< optional tracing
 
+            //! long multiplication algorithm
+            /**
+             \param a first array of words
+             \param p length of a
+             \param b second array of words
+             \param q length of b
+             \return product
+             */
             template <typename WORD, typename CORE> static inline
             Keg<WORD> * Compute(const WORD * a,
                                 const size_t p,

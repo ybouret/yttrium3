@@ -8,6 +8,7 @@
 #include "y/apex/types.hpp"
 #include "y/string.hpp"
 #include "y/type-to-type.hpp"
+#include "y/mkl/two-to-the-power-of.hpp"
 
 namespace Yttrium
 {
@@ -70,6 +71,7 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             Natural & operator=(const natural_t); //!< assign \return *this
             virtual ~Natural() noexcept;          //!< cleanup
             Y_OSTREAM_PROTO(Natural);             //!< display
+            Natural(const TwoToThePowerOf_ &, const size_t); //!< set as power of two
 
             //__________________________________________________________________
             //
@@ -156,6 +158,8 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             static Natural Mul(natural_t      lhs, const Natural & rhs);
             Y_Apex_Natural(*,Mul)
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+
 
         private:
             void * const code; //!< inner code
