@@ -4,7 +4,7 @@
 #ifndef Y_Core_Rand_Included
 #define Y_Core_Rand_Included 1
 
-#include "y/config/setup.hpp"
+#include "y/random/coin-flip.hpp"
 #include <cassert>
 #include <cmath>
 
@@ -20,7 +20,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Rand
+        class Rand : public Random:: CoinFlip
         {
         public:
             //__________________________________________________________________
@@ -33,6 +33,18 @@ namespace Yttrium
             explicit Rand()                noexcept; //!< setup with time(NULL)
             virtual ~Rand()                noexcept; //!< cleanup
 
+
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
+            //! uniform boolean choice \return 50% true
+            virtual bool heads() noexcept;
+
+
+
             //__________________________________________________________________
             //
             //
@@ -40,6 +52,8 @@ namespace Yttrium
             //
             //__________________________________________________________________
             float operator()() noexcept; //!< query next uniform prn \return ]0:1[
+
+
 
             //! producing index less or equal to n
             /**
@@ -66,11 +80,6 @@ namespace Yttrium
                 return (T)(lower + leq<T>(delta));
             }
 
-            //! uniform boolean choice \return 50% true
-            inline bool choice() noexcept
-            {
-                return (*this)() <= 0.5f;
-            }
 
             //! generate random type
             /**
@@ -89,7 +98,7 @@ namespace Yttrium
                     for(size_t i=nbits-1;i>0;--i)
                     {
                         res <<= 1;
-                        if(choice())
+                        if(heads())
                             res |=  1;
                     }
                     return res;

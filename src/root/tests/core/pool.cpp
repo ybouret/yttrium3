@@ -44,7 +44,7 @@ Y_UTEST(core_pool)
         std::cerr << pool << std::endl;
         for(size_t i=1;i<=N;++i)
         {
-            if(ran.choice()) pool.store( &wksp[i] ); else pool.stash( &wksp[i] );
+            if(ran.heads()) pool.store( &wksp[i] ); else pool.stash( &wksp[i] );
             std::cerr << pool << std::endl;
         }
         while(pool.size)

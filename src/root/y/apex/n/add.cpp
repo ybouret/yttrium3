@@ -6,6 +6,11 @@ namespace Yttrium
 {
     namespace Apex
     {
+        Natural Natural:: operator+() const
+        {
+            return *this;
+        }
+
         Natural Natural:: Add(const Natural &lhs, const Natural & rhs)
         {
             const KegType &l = *static_cast<const KegType *>(lhs.code);

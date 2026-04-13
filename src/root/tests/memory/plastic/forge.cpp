@@ -25,7 +25,7 @@ namespace
         while(size<nmax)
         {
             Block &b = blocks[size++];
-            if(ran.choice())
+            if(ran.heads())
             {
                 b.size   = ran.in<size_t>(0,1000);
                 b.addr   = forge.acquire(b.size);

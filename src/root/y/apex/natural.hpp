@@ -9,6 +9,7 @@
 #include "y/string.hpp"
 #include "y/type-to-type.hpp"
 #include "y/mkl/two-to-the-power-of.hpp"
+#include "y/random/coin-flip.hpp"
 
 namespace Yttrium
 {
@@ -64,14 +65,15 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             // C++
             //
             //__________________________________________________________________
-            Natural();                            //!< setup 0
-            Natural(const natural_t);             //!< setup to given value
-            Natural(const Natural &);             //!< duplicate
-            Natural & operator=(const Natural &); //!< assign \return *this
-            Natural & operator=(const natural_t); //!< assign \return *this
-            virtual ~Natural() noexcept;          //!< cleanup
-            Y_OSTREAM_PROTO(Natural);             //!< display
+            Natural();                                       //!< setup 0
+            Natural(const natural_t);                        //!< setup to given value
+            Natural(const Natural &);                        //!< duplicate
+            Natural & operator=(const Natural &);            //!< assign \return *this
+            Natural & operator=(const natural_t);            //!< assign \return *this
+            virtual ~Natural() noexcept;                     //!< cleanup
+            Y_OSTREAM_PROTO(Natural);                        //!< display
             Natural(const TwoToThePowerOf_ &, const size_t); //!< set as power of two
+            Natural(Random::CoinFlip &, const size_t);       //!< set with exact bit count, random
 
             //__________________________________________________________________
             //
@@ -127,8 +129,9 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             static Natural Add(natural_t      lhs, const Natural & rhs);
             Natural        successor() const;
             Y_Apex_Natural(+,Add)
-            Natural & operator++();    //!< prefix
-            Natural   operator++(int); //!< postfix
+            Natural & operator++();      //!< prefix
+            Natural   operator++(int);   //!< postfix
+            Natural   operator+() const;
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
 

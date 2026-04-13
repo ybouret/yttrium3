@@ -97,7 +97,7 @@ Y_UTEST(core_list)
         std::cerr << list << std::endl;
         for(size_t i=1;i<=N;++i)
         {
-            if(ran.choice()) list.pushHead( &wksp[i] ); else list.pushTail( &wksp[i] );
+            if(ran.heads()) list.pushHead( &wksp[i] ); else list.pushTail( &wksp[i] );
             std::cerr << list << std::endl;
             //Y_ASSERT( list.healthy() );
             {
@@ -106,9 +106,7 @@ Y_UTEST(core_list)
                     Core::ListOf<Node> rhs;
                     list.divide(lhs,rhs);
                     Y_ASSERT(0==list.size);
-                    //lhs.mergeTail(rhs);
-                    //lhs.mergeHead(rhs);
-                    if(ran.choice()) lhs.mergeTail(rhs); else lhs.mergeHead(rhs);
+                    if(ran.heads()) lhs.mergeTail(rhs); else lhs.mergeHead(rhs);
                 }
                 list.swapForList(lhs);
             }
@@ -138,7 +136,7 @@ Y_UTEST(core_list)
 
         for(size_t i=1;i<=N;++i)
         {
-            if(ran.choice()) list.pushHead( &wksp[i] ); else list.pushTail( &wksp[i] );
+            if(ran.heads()) list.pushHead( &wksp[i] ); else list.pushTail( &wksp[i] );
         }
         std::cerr << list << std::endl;
         list.sort(Node::Compare);

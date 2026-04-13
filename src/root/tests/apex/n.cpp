@@ -118,23 +118,38 @@ Y_UTEST(apex_n)
     }
 
     (std::cerr << "-- Test Bits " << std::endl).flush();
-    for(size_t p=0;p<=40;++p)
     {
-        apn n(TwoToThePowerOf,p);
-        std::cerr << n << std::endl;
-        while(n>0)
+        for(size_t p=0;p<=40;++p)
         {
-            std::cerr << n.shr() << std::endl;
+            apn n(TwoToThePowerOf,p);
+            std::cerr << n << std::endl;
+            while(n>0)
+            {
+                std::cerr << n.shr() << std::endl;
+            }
+        }
+        {
+            apn n = 1;
+            std::cerr << n << std::endl;
+            for(size_t p=2;p<=40;++p)
+            {
+                std::cerr << n.shl() << std::endl;
+            }
         }
     }
+
+
+    (std::cerr << "-- Test SHR/SHL 64-bits " << std::endl).flush();
     {
-        apn n = 1;
+
+        apn n(ran,10);
         std::cerr << n << std::endl;
-        for(size_t p=2;p<=40;++p)
-        {
-            std::cerr << n.shl() << std::endl;
-        }
+        size_t total = 0;
+
     }
+
+
+
 
     (std::cerr << "-- Test Div 64-bits " << std::endl).flush();
     {
@@ -193,6 +208,8 @@ Y_UTEST(apex_n)
         }
         std::cerr << ']' << std::endl;
     }
+
+
 
 
 }

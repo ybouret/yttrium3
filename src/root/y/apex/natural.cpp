@@ -30,6 +30,11 @@ namespace Yttrium
         {
         }
 
+        Natural:: Natural(Random::CoinFlip &coin, const size_t n) : code ( KegType::MakeRandom(coin,n) )
+        {
+        }
+
+
         Natural:: ~Natural() noexcept
         {
             assert(code);

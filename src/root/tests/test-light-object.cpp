@@ -54,7 +54,7 @@ Y_UTEST(light_object)
     CxxList<Node> list;
     for(size_t i = 100 + ran.in<size_t>(1,1000);i>0;--i)
     {
-        if( ran.choice() )
+        if( ran.heads() )
         {
             list.pushTail( new Node(ran) );
         }

@@ -20,6 +20,8 @@
 #include "y/string.hpp"
 #include "y/apex/k/bits.hpp"
 
+#include "y/random/coin-flip.hpp"
+
 #include <iostream>
 #include <cstring>
 
@@ -147,6 +149,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 assert(idx<WordBits);
                 msw = WordType(1) << idx;
             }
+
 
 
             //! cleanup
@@ -345,7 +348,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 return ( 0 != (word[q] & BitsData<WORD>::Table[r]) );
             }
 
-            inline bool setBit(const size_t ibit) noexcept
+            inline void setBit(const size_t ibit) noexcept
             {
                 assert(ibit<maxBytes*8);
                 const size_t q = ibit / WordBits;     assert(q<maxWords);
@@ -353,7 +356,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 word[q] |= BitsData<WORD>::Table[r];
             }
 
-            inline bool clrBit(size_t ibit) noexcept
+            inline void clrBit(size_t ibit) noexcept
             {
                 assert(ibit<maxBytes*8);
                 const size_t q = ibit / WordBits;     assert(q<maxWords);
@@ -378,6 +381,21 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                     update();
                 }
 
+            }
+
+            static Keg * MakeRandom( Random::CoinFlip &coin, const size_t nbit)
+            {
+                if(nbit<=0)
+                    return new Keg();
+                else
+                {
+                    const size_t msb = nbit-1;
+                    Keg * const  res = new Keg(TwoToThePowerOf,msb);
+                    for(size_t i=0;i<msb;++i) {
+                        if(coin.heads()) res->setBit(i);
+                    }
+                    return res;
+                }
             }
 
             inline String toBin() const

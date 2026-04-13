@@ -43,5 +43,11 @@ namespace Yttrium
         {
             return Yttrium_Randf(&seed);
         }
+
+
+        bool Rand:: heads() noexcept
+        {
+            return (*this)() <= 0.5f;
+        }
     }
 }
