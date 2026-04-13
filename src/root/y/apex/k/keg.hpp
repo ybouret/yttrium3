@@ -18,6 +18,7 @@
 #include "y/mkl/two-to-the-power-of.hpp"
 
 #include "y/string.hpp"
+#include "y/apex/k/bits.hpp"
 
 #include <iostream>
 #include <cstring>
@@ -333,6 +334,61 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 }
                 Coerce(res->words) = n;
                 res->update();
+                return res;
+            }
+
+            inline bool getBit(const size_t ibit) const noexcept
+            {
+                assert(ibit<bits);
+                const size_t q = ibit / WordBits;     assert(q<words);
+                const size_t r = ibit - q * WordBits; assert(r<WordBits);
+                return ( 0 != (word[q] & BitsData<WORD>::Table[r]) );
+            }
+
+            inline bool setBit(const size_t ibit) noexcept
+            {
+                assert(ibit<maxBytes*8);
+                const size_t q = ibit / WordBits;     assert(q<maxWords);
+                const size_t r = ibit - q * WordBits; assert(r<WordBits);
+                word[q] |= BitsData<WORD>::Table[r];
+            }
+
+            inline bool clrBit(size_t ibit) noexcept
+            {
+                assert(ibit<maxBytes*8);
+                const size_t q = ibit / WordBits;     assert(q<maxWords);
+                const size_t r = ibit - q * WordBits; assert(r<WordBits);
+                word[q] &= ~BitsData<WORD>::Table[r];
+            }
+
+
+            //! in-place right shift
+            inline void shr(const size_t n) noexcept
+            {
+                if(n>=bits)
+                    ldz();
+                else
+                {
+                    const size_t newBits = bits-n;
+                    for(size_t i=0,j=n;i<newBits;++i,++j)
+                    {
+                        if(getBit(j)) setBit(i); else clrBit(i);
+                    }
+                    for(size_t i=newBits;i<bits;++i) clrBit(i);
+                    update();
+                }
+
+            }
+
+            inline String toBin() const
+            {
+                if(words<=0) return "0";
+                String res;
+                for(size_t i=bits;i>0;)
+                {
+                    const bool b = getBit(--i);
+                    res += (b?'1':'0');
+                }
                 return res;
             }
 

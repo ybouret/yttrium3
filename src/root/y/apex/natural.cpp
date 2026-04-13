@@ -72,6 +72,11 @@ namespace Yttrium
             return static_cast<const KegType *>(code)->toHex();
         }
 
+        String Natural:: toBin() const
+        {
+            return static_cast<const KegType *>(code)->toBin();
+        }
+
         std::ostream & operator<<(std::ostream &os, const Natural &n)
         {
             return os << n.toHex();

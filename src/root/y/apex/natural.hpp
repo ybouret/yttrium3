@@ -89,6 +89,7 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             //__________________________________________________________________
             Natural & xch(Natural &) noexcept;       //!< no-throw exchange \return *this
             String    toHex()        const;          //!< \return hexadecimal content
+            String    toBin()        const;          //!< \return binary content
             natural_t lsw()          const noexcept; //!< \return least significant word
             void      ldz()          noexcept;       //!< set to zero
             
@@ -210,9 +211,10 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             // Bits
             //
             //__________________________________________________________________
-            Natural & shr()        noexcept; //!< \return fast division by two
-            Natural & shl();                 //!< \return multiplication by two
-            size_t    bits() const noexcept; //!< \return number of bits
+            Natural & shr()        noexcept;        //!< \return fast division by two
+            Natural & shl();                        //!< \return multiplication by two
+            size_t    bits() const noexcept;        //!< \return number of bits
+            Natural & shr(const size_t n) noexcept; //!< \param n bits to shift \return *this >>= n
 
             //__________________________________________________________________
             //
