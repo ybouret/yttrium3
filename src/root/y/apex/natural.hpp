@@ -171,6 +171,17 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
                                  Natural * const rem,
                                  const Natural & numer,
                                  const Natural & denom);
+
+            static void Division(Natural * const quot,
+                                 Natural * const rem,
+                                 const Natural & numer,
+                                 const natural_t denom);
+
+            static void Division(Natural * const quot,
+                                 Natural * const rem,
+                                 const natural_t numer,
+                                 const Natural & denom);
+
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             static Natural Div(const Natural &lhs, const Natural & rhs);
             static Natural Div(const Natural &lhs, natural_t       rhs);

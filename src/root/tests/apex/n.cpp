@@ -145,18 +145,43 @@ Y_UTEST(apex_n)
             (std::cerr << '.').flush();
             for(size_t j=1;j<=64;++j)
             {
-                for(size_t k=0;k<16;++k)
+                for(size_t k=0;k<8;++k)
                 {
                     const natural_t lhs  = ran.gen<natural_t>(i);
                     const natural_t rhs  = ran.gen<natural_t>(j);
-                    const natural_t q    = lhs/rhs;
+                    const natural_t quot = lhs/rhs;
+                    const natural_t rem  = lhs%rhs;
                     const apn       L    = lhs;
                     const apn       R    = rhs;
-                    apn             Quot;
-                    Natural::Division(0,0,L,R);
                     {
-                        Natural::Division(&Quot,0,L,R);
+                        apn             Quot,Rem;
+                        Natural::Division(0,0,L,R);
+                        {
+                            Natural::Division(&Quot,0,L,R);
+                            Y_ASSERT(quot == Quot);
+                        }
+
+                        {
+                            Natural::Division(0,&Rem,L,R);
+                            Y_ASSERT(rem == Rem);
+                        }
+
+                        Quot = 0;
+                        Rem  = 0;
+
+                        {
+                            Natural::Division(&Quot,&Rem,L,R);
+                            Y_ASSERT(quot == Quot);
+                            Y_ASSERT(rem == Rem);
+                        }
                     }
+
+                    { const apn Quot = L/R;       Y_ASSERT(Quot==quot); }
+                    { const apn Quot = L/rhs;     Y_ASSERT(Quot==quot); }
+                    { const apn Quot = lhs/R;     Y_ASSERT(Quot==quot); }
+                    {  apn Quot = L; Quot /= R;   Y_ASSERT(Quot==quot); }
+                    {  apn Quot = L; Quot /= rhs; Y_ASSERT(Quot==quot); }
+
                 }
             }
         }

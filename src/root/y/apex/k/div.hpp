@@ -173,21 +173,41 @@ namespace Yttrium
                     *quot = lower;
                 }
 
-
-
-
-
-
             }
 
             template <typename WORD, typename CORE> static inline
             bool GT1(const AutoPtr< Keg<WORD> > &lhs,
                      const AutoPtr< Keg<WORD> > &rhs)
             {
+                assert(lhs.isValid());
+                assert(rhs.isValid());
+
                 const AutoPtr< Keg<WORD> > dif = KegSub::Compute<WORD,CORE>(lhs->word,lhs->words,
                                                                             rhs->word,rhs->words);
                 return dif->gt1();
             }
+
+            //! quotien
+            /**
+             \param quot  optional quotient pointer
+             \param rem   optional remainder pointer
+             \param numer numerator words
+             \param nsize size of numerator
+             \param denom denominator words
+             \param dsize size of denominator
+             */
+            template <typename WORD,typename CORE> static inline
+            Keg<WORD> *Quot(const WORD * const     numer,
+                            const size_t           nsize,
+                            const WORD * const     denom,
+                            const size_t           dsize)
+            {
+                AutoPtr< Keg<WORD> > quot;
+                Compute<WORD,CORE>(&quot,0, numer, nsize, denom, dsize);
+                assert(quot.isValid());
+                return quot.yield();
+            }
+
 
         };
 
