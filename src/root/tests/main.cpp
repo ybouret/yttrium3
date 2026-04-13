@@ -83,9 +83,9 @@ Y_UTEST_DECL(8)
 
     Y_UTEST(container_iter);
 
-    Y_UTEST(apex_keg);
-    Y_UTEST(apex_keg_bits);
-    Y_UTEST(apex_n);
+    Y_UTEST(apex_k);
+    Y_UTEST(apex_k_bits);
+    Y_UTEST(apex_n64);
 }
 Y_UTEST_EXEC()
 

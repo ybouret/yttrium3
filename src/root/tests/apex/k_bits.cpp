@@ -41,7 +41,7 @@ namespace
     }
 }
 
-Y_UTEST(apex_keg_bits)
+Y_UTEST(apex_k_bits)
 {
     Core::Rand ran;
     testBits<uint8_t> (ran);

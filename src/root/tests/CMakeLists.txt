@@ -98,7 +98,7 @@ Y_UTEST(string)
 
 Y_UTEST(container:iter)
 
-Y_UTEST(apex:keg)
-Y_UTEST(apex:keg:bits)
-Y_UTEST(apex:n)
+Y_UTEST(apex:k)
+Y_UTEST(apex:k:bits)
+Y_UTEST(apex:n64)
 

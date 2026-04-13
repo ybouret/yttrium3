@@ -31,11 +31,11 @@ namespace Yttrium
             const Natural &s  = *this;
             Natural        x0 = s;
             x0.shr();
-            //while(true) {
-            //Natural x1 = (x0+s/x0)>>1;
-            //if(x1>=x0) break;
-            //x0 = x1;
-            //}
+            while(true) {
+                Natural x1 = (x0+s/x0).shr();
+                if(x1>=x0) break;
+                x0.xch(x1);
+            }
             return x0;
 
         }

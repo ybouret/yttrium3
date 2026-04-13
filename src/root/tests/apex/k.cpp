@@ -160,7 +160,7 @@ namespace
 
 }
 
-Y_UTEST(apex_keg)
+Y_UTEST(apex_k)
 {
     Core::Rand ran;
     Y_PRINTV(KegMetrics::MaxBytes);

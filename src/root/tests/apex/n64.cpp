@@ -3,10 +3,12 @@
 #include "y/core/rand.hpp"
 #include "y/format/hexadecimal.hpp"
 #include "y/swap.hpp"
+#include "y/calculus/isqrt.hpp"
+
 using namespace Yttrium;
 using namespace Apex;
 
-Y_UTEST(apex_n)
+Y_UTEST(apex_n64)
 {
     Core::Rand ran;
 
@@ -146,9 +148,9 @@ Y_UTEST(apex_n)
         const apn origin = n;
         std::cerr << n << std::endl;
         size_t total = 0;
-        for(size_t i=2+ran.in<size_t>(1,5);i>0;--i)
+        for(size_t i=2+ran.in<size_t>(1,10);i>0;--i)
         {
-            const size_t s = ran.in<size_t>(1,10);
+            const size_t s = ran.in<size_t>(1,20);
             std::cerr << n.shl(s) << std::endl;
             total += s;
         }
@@ -223,6 +225,19 @@ Y_UTEST(apex_n)
     }
 
 
+    (std::cerr << "-- Test sqrt 64-bits " << std::endl).flush();
+    {
+
+        for(size_t i=0;i<=64;++i)
+        {
+            const natural_t lhs  = ran.gen<natural_t>(i);
+            const natural_t s    = IntegerSquareRoot(lhs);
+            const apn       L    = lhs;
+            const apn       S    = L.sqrt();
+            //std::cerr << lhs << "/" << L <<  " => " << s << "/" << S << std::endl;
+            Y_ASSERT(S==s);
+        }
+    }
 
 
 }
