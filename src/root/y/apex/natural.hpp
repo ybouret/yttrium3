@@ -172,10 +172,10 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
                                  const Natural & numer,
                                  const Natural & denom);
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            //static Natural Mul(const Natural &lhs, const Natural & rhs);
-            //static Natural Mul(const Natural &lhs, natural_t       rhs);
-            //static Natural Mul(natural_t      lhs, const Natural & rhs);
-            //Y_Apex_Natural(*,Mul)
+            static Natural Div(const Natural &lhs, const Natural & rhs);
+            static Natural Div(const Natural &lhs, natural_t       rhs);
+            static Natural Div(natural_t      lhs, const Natural & rhs);
+            Y_Apex_Natural(/,Div)
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
             //__________________________________________________________________
@@ -185,6 +185,7 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             //
             //__________________________________________________________________
             Natural & shr()        noexcept; //!< \return fast division by two
+            Natural & shl();                 //!< \return multiplication by two
             size_t    bits() const noexcept; //!< \return number of bits
 
             //__________________________________________________________________

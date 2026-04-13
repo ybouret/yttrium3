@@ -127,6 +127,14 @@ Y_UTEST(apex_n)
             std::cerr << n.shr() << std::endl;
         }
     }
+    {
+        apn n = 1;
+        std::cerr << n << std::endl;
+        for(size_t p=2;p<=40;++p)
+        {
+            std::cerr << n.shl() << std::endl;
+        }
+    }
 
 
 }

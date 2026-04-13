@@ -58,7 +58,8 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             static  const size_t   WordBytes = sizeof(WordType);              //!< alias
             static  const unsigned WordShift = IntegerLog2<WordBytes>::Value; //!< alias
             static  const size_t   WordBits  = WordBytes * 8;                 //!< alias
-
+            static  const WordType LowerBit  = 1;
+            static  const WordType UpperBit  = LowerBit << (WordBits-1);
 
 
             //__________________________________________________________________
@@ -284,8 +285,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             inline void shr() noexcept
             {
                 assert(sanity());
-                static const WordType LowerBit = 1;
-                static const WordType UpperBit = LowerBit << (WordBits-1);
+
                 switch(words)
                 {
                     case 0: return;
@@ -302,6 +302,29 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 }
                 word[msi] >>= 1;
                 update();
+            }
+
+            //! shl
+            inline Keg * shl() const
+            {
+                const size_t n   = words+1;
+                Keg *        res = new Keg(WithAtLeast,n);
+                {
+                    WordType * const target = res->word;
+                    for(size_t i=words;i>0;)
+                    {
+                        const size_t   j = i;
+                        const WordType w = word[--i];
+                        if( 0 != (w&UpperBit) )
+                        {
+                            target[j] |= LowerBit;
+                        }
+                        target[i] = (w<<1);
+                    }
+                }
+                Coerce(res->words) = n;
+                res->update();
+                return res;
             }
 
 

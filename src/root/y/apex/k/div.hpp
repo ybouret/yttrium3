@@ -17,7 +17,7 @@ namespace Yttrium
         struct KegDiv
         {
 
-            template <typename WORD> static inline
+            template <typename WORD,typename CORE> static inline
             void Compute(AutoPtr< Keg<WORD> > * quot,
                          AutoPtr< Keg<WORD> > * rem,
                          const WORD * const     numer,
@@ -26,17 +26,20 @@ namespace Yttrium
                          const size_t           dsize)
             {
 
+                typedef Keg<WORD>        KegType;
+                typedef AutoPtr<KegType> KegPtr;
+
                 switch( KegCmp::Result(numer,nsize,denom,dsize) )
                 {
                     case Negative:
-                        if(quot) *quot = new Keg<WORD>();
-                        if(rem)  *rem  = new Keg<WORD>(numer,nsize);
+                        if(quot) *quot = new KegType();
+                        if(rem)  *rem  = new KegType(numer,nsize);
                         return;
                         
                     case __Zero__:
                         if(dsize<=0) throw Libc::Exception(EDOM,"%s undetermined 0/0", KegMetrics::CallSign);
-                        if(quot) *quot = new Keg<WORD>(CopyOf,1);
-                        if(rem)  *rem  = new Keg<WORD>();
+                        if(quot) *quot = new KegType(CopyOf,1);
+                        if(rem)  *rem  = new KegType();
                         return;
 
                     case Positive:
@@ -44,6 +47,14 @@ namespace Yttrium
                         break;
                 }
 
+                //--------------------------------------------------------------
+                //
+                //
+                // Generic Algorithm
+                //
+                //--------------------------------------------------------------
+                assert(nsize>=dsize);
+                KegPtr upper( new KegType(CopyOf,1) );
 
 
             }
