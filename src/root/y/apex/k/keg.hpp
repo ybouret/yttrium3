@@ -174,12 +174,12 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             static Keg * Zero()  { return new Keg(0); }           //!< \return zero
             static Keg * One()   { return new Keg(CopyOf,1); }    //!< \return one
             static Keg * Two()   { return new Keg(CopyOf,2); }    //!< \return two
-            inline bool  leqz() const noexcept { return words<=0; }
+            inline bool  leqz() const noexcept { return words<=0; } //!< \return *this <=0
             inline bool  leq1() const noexcept
-            { return (words<=0) || ( (1==words) && (word[0] <= 1) ); }
+            { return (words<=0) || ( (1==words) && (word[0] <= 1) ); } //!< \return *this <=1
 
-            inline bool gtz() const noexcept { return words>0; }
-            inline bool gt1() const noexcept { return !leq1(); }
+            inline bool gtz() const noexcept { return words>0; } //!< \return *this > 0
+            inline bool gt1() const noexcept { return !leq1(); } //!< \return *this > 1
 
             //! make zero
             void ldz() noexcept
@@ -340,6 +340,8 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 return res;
             }
 
+
+            //! get bit \param ibit bit in [0:bits-1] \return boolean value
             inline bool getBit(const size_t ibit) const noexcept
             {
                 assert(ibit<bits);
@@ -348,6 +350,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 return ( 0 != (word[q] & BitsData<WORD>::Mask[r]) );
             }
 
+            //! set bit (would need update) \param ibit in [0:maxBits-1]
             inline void setBit(const size_t ibit) noexcept
             {
                 assert(ibit<maxBytes*8);
@@ -356,6 +359,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 word[q] |= BitsData<WORD>::Mask[r];
             }
 
+            //! clear bit (would need update) \param ibit in [0:maxBits-1]
             inline void clrBit(size_t ibit) noexcept
             {
                 assert(ibit<maxBytes*8);
@@ -365,7 +369,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             }
 
 
-            //! in-place right shift
+            //! in-place right shift \param n bits to shift
             inline void shr(const size_t n) noexcept
             {
                 if(n>=bits)
@@ -382,6 +386,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 }
             }
 
+            //! left shift \param n bits to shift \return new keg with shifted bits
             inline Keg * shl(const size_t n) const
             {
                 if(bits<=0)
@@ -405,7 +410,12 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
 
             }
 
-
+            //! make random with exactly nbit
+            /**
+             \param nbit bits to ste
+             \param coin coin to choose bit
+             \return new keg with exactly nbit and randon content
+             */
             static Keg * MakeRandom( Random::CoinFlip &coin, const size_t nbit)
             {
                 if(nbit<=0)
@@ -421,6 +431,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 }
             }
 
+            //! \return binary version
             inline String toBin() const
             {
                 if(words<=0) return "0";

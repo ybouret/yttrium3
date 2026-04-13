@@ -172,6 +172,8 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             // Division
             //
             //__________________________________________________________________
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             static void Division(Natural * const quot,
                                  Natural * const rem,
                                  const Natural & numer,
@@ -187,7 +189,6 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
                                  const natural_t numer,
                                  const Natural & denom);
 
-#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             static Natural Div(const Natural &lhs, const Natural & rhs);
             static Natural Div(const Natural &lhs, natural_t       rhs);
             static Natural Div(natural_t      lhs, const Natural & rhs);
@@ -236,7 +237,7 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             // Counting
             //
             //__________________________________________________________________
-            static Natural factorial(const natural_t n);
+            static Natural factorial(const natural_t n); //!< \param n integral value \return n!
 
         private:
             void * const code; //!< inner code

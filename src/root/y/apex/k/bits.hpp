@@ -19,14 +19,14 @@ namespace Yttrium
             static const WORD   Not2[Count];            //!< ~Mask
         };
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         template<> const uint8_t  BitsData<uint8_t>:: Mask[8];
         template<> const uint16_t BitsData<uint16_t>::Mask[16];
         template<> const uint32_t BitsData<uint32_t>::Mask[32];
-
         template<> const uint8_t  BitsData<uint8_t>:: Not2[8];
         template<> const uint16_t BitsData<uint16_t>::Not2[16];
         template<> const uint32_t BitsData<uint32_t>::Not2[32];
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
     }
 }

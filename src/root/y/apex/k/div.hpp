@@ -175,6 +175,7 @@ namespace Yttrium
 
             }
 
+            //! low level test \param lhs upper value \param rhs lower value \return (lhs-rhs)>1
             template <typename WORD, typename CORE> static inline
             bool GT1(const AutoPtr< Keg<WORD> > &lhs,
                      const AutoPtr< Keg<WORD> > &rhs)
