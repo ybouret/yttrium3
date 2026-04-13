@@ -182,6 +182,12 @@ Y_UTEST(apex_n)
                     {  apn Quot = L; Quot /= R;   Y_ASSERT(Quot==quot); }
                     {  apn Quot = L; Quot /= rhs; Y_ASSERT(Quot==quot); }
 
+                    { const apn Rem = L%R;       Y_ASSERT(Rem==rem); }
+                    { const apn Rem = L%rhs;     Y_ASSERT(Rem==rem); }
+                    { const apn Rem = lhs%R;     Y_ASSERT(Rem==rem); }
+                    {  apn Rem = L; Rem %= R;    Y_ASSERT(Rem==rem); }
+                    {  apn Rem = L; Rem %= rhs;  Y_ASSERT(Rem==rem); }
+
                 }
             }
         }

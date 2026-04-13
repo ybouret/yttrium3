@@ -187,14 +187,13 @@ namespace Yttrium
                 return dif->gt1();
             }
 
-            //! quotien
+            //! quotient
             /**
-             \param quot  optional quotient pointer
-             \param rem   optional remainder pointer
              \param numer numerator words
              \param nsize size of numerator
              \param denom denominator words
              \param dsize size of denominator
+             \return quotient
              */
             template <typename WORD,typename CORE> static inline
             Keg<WORD> *Quot(const WORD * const     numer,
@@ -207,6 +206,28 @@ namespace Yttrium
                 assert(quot.isValid());
                 return quot.yield();
             }
+
+
+            //! remainder
+            /**
+             \param numer numerator words
+             \param nsize size of numerator
+             \param denom denominator words
+             \param dsize size of denominator
+             \return remainder
+             */
+            template <typename WORD,typename CORE> static inline
+            Keg<WORD> *Rem(const WORD * const     numer,
+                            const size_t           nsize,
+                            const WORD * const     denom,
+                            const size_t           dsize)
+            {
+                AutoPtr< Keg<WORD> > rem;
+                Compute<WORD,CORE>(0,&rem, numer, nsize, denom, dsize);
+                assert(rem.isValid());
+                return rem.yield();
+            }
+
 
 
         };

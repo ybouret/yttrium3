@@ -189,6 +189,21 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             Y_Apex_Natural(/,Div)
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
+
+            //__________________________________________________________________
+            //
+            //
+            // Module
+            //
+            //__________________________________________________________________
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            static Natural Modulo(const Natural &lhs, const Natural & rhs);
+            static Natural Modulo(const Natural &lhs, natural_t       rhs);
+            static Natural Modulo(natural_t      lhs, const Natural & rhs);
+            Y_Apex_Natural(%,Modulo)
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+
             //__________________________________________________________________
             //
             //
