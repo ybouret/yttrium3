@@ -345,7 +345,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 assert(ibit<bits);
                 const size_t q = ibit / WordBits;     assert(q<words);
                 const size_t r = ibit - q * WordBits; assert(r<WordBits);
-                return ( 0 != (word[q] & BitsData<WORD>::Table[r]) );
+                return ( 0 != (word[q] & BitsData<WORD>::Mask[r]) );
             }
 
             inline void setBit(const size_t ibit) noexcept
@@ -353,7 +353,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 assert(ibit<maxBytes*8);
                 const size_t q = ibit / WordBits;     assert(q<maxWords);
                 const size_t r = ibit - q * WordBits; assert(r<WordBits);
-                word[q] |= BitsData<WORD>::Table[r];
+                word[q] |= BitsData<WORD>::Mask[r];
             }
 
             inline void clrBit(size_t ibit) noexcept
@@ -361,7 +361,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 assert(ibit<maxBytes*8);
                 const size_t q = ibit / WordBits;     assert(q<maxWords);
                 const size_t r = ibit - q * WordBits; assert(r<WordBits);
-                word[q] &= ~BitsData<WORD>::Table[r];
+                word[q] &= BitsData<WORD>::Not2[r];
             }
 
 
@@ -380,8 +380,31 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                     for(size_t i=newBits;i<bits;++i) clrBit(i);
                     update();
                 }
+            }
+
+            inline Keg * shl(const size_t n) const
+            {
+                if(bits<=0)
+                    return new Keg();
+                else
+                {
+                    const size_t newBits  = n+bits;
+                    const size_t newWords = Alignment::To<WORD>::Ceil(newBits) / sizeof(WORD);
+                    Keg * const  res      =  new Keg(WithAtLeast,newWords);
+
+                    for(size_t i=0,j=n;i<bits;++i,++j)
+                    {
+                        if( getBit(i) ) res->setBit(j);
+                    }
+
+                    Coerce(res->words) = newWords;
+                    res->update();
+                    assert(newBits==res->bits);
+                    return res;
+                }
 
             }
+
 
             static Keg * MakeRandom( Random::CoinFlip &coin, const size_t nbit)
             {

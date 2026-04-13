@@ -218,6 +218,7 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             Natural & shl();                        //!< \return multiplication by two
             size_t    bits() const noexcept;        //!< \return number of bits
             Natural & shr(const size_t n) noexcept; //!< \param n bits to shift \return *this >>= n
+            Natural & shl(const size_t n);          //!< \param n bits to shift \return *this <<= n
 
             //__________________________________________________________________
             //

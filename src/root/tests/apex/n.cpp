@@ -140,12 +140,25 @@ Y_UTEST(apex_n)
 
 
     (std::cerr << "-- Test SHR/SHL 64-bits " << std::endl).flush();
+    for(size_t k=0;k<16;++k)
     {
-
-        apn n(ran,10);
+        apn       n(ran,ran.in<size_t>(1,80));
+        const apn origin = n;
         std::cerr << n << std::endl;
         size_t total = 0;
-
+        for(size_t i=2+ran.in<size_t>(1,5);i>0;--i)
+        {
+            const size_t s = ran.in<size_t>(1,10);
+            std::cerr << n.shl(s) << std::endl;
+            total += s;
+        }
+        while(total>0)
+        {
+            const size_t r = ran.in<size_t>(1,total);
+            std::cerr << n.shr(r) << std::endl;
+            total -= r;
+        }
+        Y_ASSERT(n==origin);
     }
 
 
