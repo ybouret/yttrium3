@@ -86,6 +86,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(apex_k);
     Y_UTEST(apex_k_bits);
     Y_UTEST(apex_n64);
+    Y_UTEST(apex_n);
 }
 Y_UTEST_EXEC()
 

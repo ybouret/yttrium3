@@ -92,6 +92,7 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             Natural & xch(Natural &) noexcept;       //!< no-throw exchange \return *this
             String    toHex()        const;          //!< \return hexadecimal content
             String    toBin()        const;          //!< \return binary content
+            String    toDec()        const;          //!< \return decimal constent
             natural_t lsw()          const noexcept; //!< \return least significant word
             void      ldz()          noexcept;       //!< set to zero
             
@@ -228,6 +229,14 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             //__________________________________________________________________
             Natural abs()  const; //!< \return |*this|
             Natural sqrt() const; //!< \return sqrt(*this)
+
+            //__________________________________________________________________
+            //
+            //
+            // Counting
+            //
+            //__________________________________________________________________
+            static Natural factorial(const natural_t n);
 
         private:
             void * const code; //!< inner code
