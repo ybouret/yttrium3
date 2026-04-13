@@ -5,6 +5,9 @@
 #define Y_Random_CoinFlip_Included 1
 
 #include "y/config/setup.hpp"
+#include "y/calculus/required-bits.hpp"
+#include "y/check/static.hpp"
+#include "y/type/is-signed-int.hpp"
 
 namespace Yttrium
 {
@@ -38,6 +41,24 @@ namespace Yttrium
             //__________________________________________________________________
             virtual bool heads() noexcept = 0; //!< \return true if heads show
             virtual bool tails() noexcept;     //!< \return !heads
+
+            template <typename U> inline U toss(const U umax)
+            {
+                Y_STATIC_CHECK(!IsSignedInt<U>::Value,BadType);
+                const size_t bits = RequiredBitsFor(umax);
+                while(true)
+                {
+                    U u = 0;
+                    for(size_t i=bits;i>0;--i)
+                    {
+                        u <<= 1;
+                        if(heads()) u|=1;
+                    }
+                    if(u<=umax) return u;
+                }
+            }
+
+
 
         private:
             Y_Disable_Copy_And_Assign(CoinFlip); //!< discarded

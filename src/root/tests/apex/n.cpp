@@ -1,11 +1,15 @@
 #include "y/apex/natural.hpp"
 #include "y/utest/run.hpp"
+#include "y/core/rand.hpp"
+
 
 using namespace Yttrium;
 using namespace Apex;
 
 Y_UTEST(apex_n)
 {
+    Core::Rand ran;
+
     for(natural_t n=0;n<=21;++n)
     {
         const apn f = apn::factorial(n);

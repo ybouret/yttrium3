@@ -5,7 +5,8 @@
 #ifndef Y_Calculus_RequiredBits_Included
 #define Y_Calculus_RequiredBits_Included 1
 
-#include "y/config/setup.hpp"
+
+#include "y/type/ints.hpp"
 
 namespace Yttrium
 {
@@ -19,9 +20,15 @@ namespace Yttrium
             static size_t For(const uint16_t &) noexcept; //!< \return bits to hold word
             static size_t For(const uint32_t &) noexcept; //!< \return bits to hold word
             static size_t For(const uint64_t &) noexcept; //!< \return bits to hold word
-
         };
 
+    }
+
+    template <typename T> static inline
+    size_t RequiredBitsFor(const T &x) noexcept
+    {
+        typedef typename UnsignedFor<sizeof(T)>::Alias::Type UType;
+        return Calculus::RequiredBits::For( (UType&)x );
     }
 }
 

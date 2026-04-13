@@ -66,7 +66,7 @@ namespace Yttrium
             String(const T * const, const size_t); //!< duplicate
             String(const T);                       //!< duplicate
             String(const WithAtLeast_ &, const size_t, const StringInit); //!< setup (with zeros)
-
+            
             String & operator=(const String &);   //!< assign \return *this
             String & operator=(const T * const);  //!< assign \return *this
             String & operator=(const T) noexcept; //!< assign \return *this

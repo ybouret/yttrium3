@@ -25,7 +25,7 @@ namespace Yttrium
     template <typename T> static inline
     size_t RequiredBytesFor(const T &x) noexcept
     {
-        typedef typename UnsignedFor<sizeof(T)>::Alias UType;
+        typedef typename UnsignedFor<sizeof(T)>::Alias::Type UType;
         return Calculus::RequiredBytes::For( (UType&)x );
     }
 
