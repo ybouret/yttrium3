@@ -136,6 +136,22 @@ Y_UTEST(apex_n)
         }
     }
 
+    (std::cerr << "-- Test Div 64-bits " << std::endl).flush();
+    {
+        
+        for(size_t i=0;i<=64;++i)
+        {
+            for(size_t j=1;j<=64;++j)
+            {
+                const natural_t lhs  = ran.gen<natural_t>(i);
+                const natural_t rhs  = ran.gen<natural_t>(j);
+                const apn       L   = lhs;
+                const apn       R   = rhs;
+                Natural::Division(0,0,L,R);
+            }
+        }
+    }
+
 
 }
 Y_UDONE()

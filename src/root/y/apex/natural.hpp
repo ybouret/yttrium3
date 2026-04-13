@@ -203,7 +203,11 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             //! setup code directly
             Natural( const Directly_ &, void * const) noexcept;
 
-
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            static void DivCall(Natural * const, Natural * const,
+                                const void * const, const size_t,
+                                const void * const, const size_t);
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
         };
     }
 

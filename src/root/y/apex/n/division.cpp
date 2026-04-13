@@ -6,6 +6,126 @@ namespace Yttrium
 {
     namespace Apex
     {
+        namespace
+        {
+            enum DivOuput
+            {
+                DivOutputNone,
+                DivOutputQuot,
+                DivOutputRem,
+                DivOutputBoth
+            };
+
+            static inline DivOuput DivOutputFor(const void * q, const void *r) noexcept
+            {
+                if(q)
+                {
+                    if(r)
+                    {
+                        assert(q&&r);
+                        return DivOutputBoth;
+                    }
+                    else
+                    {
+                        assert(q&&!r);
+                        return DivOutputQuot;
+                    }
+                }
+                else
+                {
+                    if( r )
+                    {
+                        assert(!q&&r);
+                        return DivOutputRem;
+                    }
+                    else
+                    {
+                        assert(!q&&!r);
+                        return DivOutputNone;
+                    }
+                }
+            }
+        }
+
+#if 0
+        void DivisionCall(Natural * const              quot,
+                          Natural * const              rem,
+                          const _Keg::WordType * const numer,
+                          const size_t                 nsize,
+                          const _Keg::WordType * const denom,
+                          const size_t                 dsize)
+        {
+            typedef _Keg::WordType WordType;
+            typedef _Keg::CoreType CoreType;
+            typedef Keg<WordType>  KegType;
+            typedef AutoPtr<KegType> KegPtr;
+            switch( DivOutputFor(quot,rem) )
+            {
+                case DivOutputNone:
+                    KegDiv::Compute<WordType,CoreType>(0,0,numer,nsize,denom,dsize);
+                    return;
+
+                case DivOutputQuot: {
+                    assert(quot);
+                    KegPtr Q = 0;
+                    KegDiv::Compute<WordType,CoreType>(&Q,0,numer,nsize,denom,dsize);
+                    delete static_cast<KegType *>(quot->code);
+
+                }
+            }
+        }
+#endif
+        
+        void Natural:: DivCall(Natural * const quot,
+                               Natural * const rem,
+                               const void * const numerAddr, const size_t nsize,
+                               const void * const denomAddr, const size_t dsize)
+        {
+            typedef _Keg::WordType   WordType;
+            typedef _Keg::CoreType   CoreType;
+            typedef Keg<WordType>    KegType;
+            typedef AutoPtr<KegType> KegPtr;
+            const WordType * const numer = static_cast<const WordType *>(numerAddr);
+            const WordType * const denom = static_cast<const WordType *>(denomAddr);
+
+            switch( DivOutputFor(quot,rem) )
+            {
+                case DivOutputNone:
+                    KegDiv::Compute<WordType,CoreType>(0,0,numer,nsize,denom,dsize);
+                    return;
+
+                case DivOutputQuot: {
+                    assert(quot);
+                    KegPtr Q = 0;
+                    KegDiv::Compute<WordType,CoreType>(&Q,0,numer,nsize,denom,dsize);
+                    assert(Q.isValid());
+                    delete static_cast<KegType *>(quot->code);
+                    Coerce(quot->code) = Q.yield();
+                } return;
+
+                case DivOutputRem: {
+                    assert(rem);
+                    KegPtr R = 0;
+                    KegDiv::Compute<WordType,CoreType>(0,&R,numer,nsize,denom,dsize);
+                    assert(R.isValid());
+                    delete static_cast<KegType *>(rem->code);
+                    Coerce(rem->code) = R.yield();
+                } return;
+
+                case DivOutputBoth: {
+                    assert(quot);
+                    KegPtr Q = 0;
+                    KegPtr R = 0;
+                    KegDiv::Compute<WordType,CoreType>(&Q,&R,numer,nsize,denom,dsize);
+                    assert(Q.isValid());
+                    assert(R.isValid());
+                    delete static_cast<KegType *>(quot->code); Coerce(quot->code) = Q.yield();
+                    delete static_cast<KegType *>(rem->code);  Coerce(rem->code)  = R.yield();
+                } return;
+
+            }
+        }
+
         void Natural:: Division(Natural * const quot,
                                 Natural * const rem,
                                 const Natural & numer,
@@ -13,13 +133,7 @@ namespace Yttrium
         {
             const KegType & N = *static_cast<const KegType *>(numer.code);
             const KegType & D = *static_cast<const KegType *>(denom.code);
-
-           // AutoPtr<KegType> *q = 0;
-           // AutoPtr<KegType> *r = 0;
-
-            KegDiv::Compute<_Keg::WordType,_Keg::CoreType>(0, 0, N.word, N.words, D.word, D.words);
-
-
+            DivCall(quot,rem, N.word, N.words, D.word, D.words);
         }
     }
 }

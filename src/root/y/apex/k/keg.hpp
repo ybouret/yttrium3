@@ -54,12 +54,12 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             // Definitions
             //
             //__________________________________________________________________
-            typedef WORD           WordType;                                   //!< storage type
+            typedef WORD           WordType;                                  //!< storage type
             static  const size_t   WordBytes = sizeof(WordType);              //!< alias
             static  const unsigned WordShift = IntegerLog2<WordBytes>::Value; //!< alias
             static  const size_t   WordBits  = WordBytes * 8;                 //!< alias
-            static  const WordType LowerBit  = 1;
-            static  const WordType UpperBit  = LowerBit << (WordBits-1);
+            static  const WordType LowerBit  = 1;                             //!< alias
+            static  const WordType UpperBit  = LowerBit << (WordBits-1);      //!< alias
 
 
             //__________________________________________________________________
@@ -143,10 +143,8 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 const size_t msi = words-1;   // most significant index
                 WordType    &msw = word[msi]; // most significant word
                 const size_t idx = n - (msi*WordBits);
-                //std::cerr << "2^(n=" << n << ") : bits = " << bits << " : bytes=" << bytes << " : words=" << words << " : idx = " << idx << std::endl;
                 assert(idx<WordBits);
                 msw = WordType(1) << idx;
-                //update();
             }
 
 
@@ -169,6 +167,12 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             //
             //__________________________________________________________________
 
+            static Keg * Zero()  { return new Keg(0); }           //!< \return zero
+            static Keg * One()   { return new Keg(CopyOf,1); }    //!< \return one
+            static Keg * Two()   { return new Keg(CopyOf,2); }    //!< \return two
+
+
+            //! make zero
             void ldz() noexcept
             {
                 assert(sanity());
@@ -179,7 +183,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 assert(sanity());
             }
 
-            //! zpad
+            //! zpad when necessary
             inline void zpad() noexcept
             {
                 memset(word+words,0,(maxWords-words)*WordBytes);
@@ -304,7 +308,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 update();
             }
 
-            //! shl
+            //! shl \return multiplied by two
             inline Keg * shl() const
             {
                 const size_t n   = words+1;
