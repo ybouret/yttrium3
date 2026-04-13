@@ -6,6 +6,7 @@
 #include "y/apex/k/cmp.hpp"
 #include "y/apex/k/mul.hpp"
 #include "y/apex/k/sub.hpp"
+#include "y/apex/k/add.hpp"
 #include "y/pointer/auto.hpp"
 #include "y/system/exception.hpp"
 #include <cerrno>
@@ -61,7 +62,7 @@ namespace Yttrium
                         if(quot) *quot = KegType::Zero();
                         if(rem)  *rem  = new KegType(numer,nsize);
                         return;
-                        
+
                     case __Zero__:
                         if(dsize<=0) throw Libc::Exception(EDOM,"%s undetermined 0/0", KegMetrics::CallSign);
                         if(quot) *quot = KegType::One();
@@ -124,13 +125,54 @@ namespace Yttrium
                     KegPtr probe = KegMul::Compute<WORD,CORE>(upper->word, upper->words, denom, dsize);
                     assert( Positive == KegCmp::Result(probe->word,probe->words,numer,nsize) );
                 }
-                
+
                 {
                     KegPtr probe = KegMul::Compute<WORD,CORE>(lower->word, lower->words, denom, dsize);
                     assert( Negative == KegCmp::Result(probe->word,probe->words,numer,nsize) );
                 }
 #endif // !defined(NDEBUG)
-                
+
+                while( GT1<WORD,CORE>(upper,lower) )
+                {
+                    KegPtr middle = KegAdd::Compute<WORD,CORE>(lower->word, lower->words, upper->word, upper->words);
+                    middle->shr();
+                    KegPtr probe = KegMul::Compute<WORD,CORE>(middle->word,middle->words,denom,dsize);
+
+                    switch( KegCmp::Result<WORD>(probe->word,probe->words,numer,nsize) )
+                    {
+                        case Negative: // middle * denom < numer
+                            lower = middle;
+                            continue;
+
+                        case __Zero__: // specific case
+                            if(quot) *quot = middle;
+                            if(rem)  *rem  = KegType::Zero();
+                            return;
+
+                        case Positive: // middle * denom > numer
+                            upper = middle;
+                            continue;
+
+                    }
+                }
+
+                // lower is quotient, positive remainder
+                upper.free();
+
+                // compute remainder to preserve lower
+                if(rem)
+                {
+                    KegPtr probe = KegMul::Compute<WORD,CORE>(lower->word,lower->words,denom,dsize);
+                    assert( Negative == KegCmp::Result<WORD>(probe->word,probe->words,numer,nsize) );
+                    KegPtr diff  = KegSub::Compute<WORD,CORE>(numer,nsize,probe->word,probe->words);
+                    *rem = diff;
+                }
+
+                if(quot)
+                {
+                    *quot = lower;
+                }
+
 
 
 
@@ -139,10 +181,10 @@ namespace Yttrium
             }
 
             template <typename WORD, typename CORE> static inline
-            bool GT1(const AutoPtr< Keg<CORE> > &lhs,
-                      const AutoPtr< Keg<CORE> > &rhs)
+            bool GT1(const AutoPtr< Keg<WORD> > &lhs,
+                     const AutoPtr< Keg<WORD> > &rhs)
             {
-                const AutoPtr< Keg<CORE> > dif = KegSub::Compute<WORD,CORE>(lhs->word,lhs->words,
+                const AutoPtr< Keg<WORD> > dif = KegSub::Compute<WORD,CORE>(lhs->word,lhs->words,
                                                                             rhs->word,rhs->words);
                 return dif->gt1();
             }

@@ -138,21 +138,29 @@ Y_UTEST(apex_n)
 
     (std::cerr << "-- Test Div 64-bits " << std::endl).flush();
     {
-        
+
+        std::cerr << '[';
         for(size_t i=0;i<=64;++i)
         {
+            (std::cerr << '.').flush();
             for(size_t j=1;j<=64;++j)
             {
                 for(size_t k=0;k<16;++k)
                 {
                     const natural_t lhs  = ran.gen<natural_t>(i);
                     const natural_t rhs  = ran.gen<natural_t>(j);
-                    const apn       L   = lhs;
-                    const apn       R   = rhs;
+                    const natural_t q    = lhs/rhs;
+                    const apn       L    = lhs;
+                    const apn       R    = rhs;
+                    apn             Quot;
                     Natural::Division(0,0,L,R);
+                    {
+                        Natural::Division(&Quot,0,L,R);
+                    }
                 }
             }
         }
+        std::cerr << ']' << std::endl;
     }
 
 
