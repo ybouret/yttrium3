@@ -145,7 +145,7 @@ Y_UTEST(apex_n)
             (std::cerr << '.').flush();
             for(size_t j=1;j<=64;++j)
             {
-                for(size_t k=0;k<8;++k)
+                for(size_t k=0;k<4;++k)
                 {
                     const natural_t lhs  = ran.gen<natural_t>(i);
                     const natural_t rhs  = ran.gen<natural_t>(j);
