@@ -5,6 +5,7 @@
 
 #include "y/apex/k/cmp.hpp"
 #include "y/apex/k/mul.hpp"
+#include "y/apex/k/sub.hpp"
 #include "y/pointer/auto.hpp"
 #include "y/system/exception.hpp"
 #include <cerrno>
@@ -129,11 +130,23 @@ namespace Yttrium
                     assert( Negative == KegCmp::Result(probe->word,probe->words,numer,nsize) );
                 }
 #endif // !defined(NDEBUG)
+                
+
 
 
 
 
             }
+
+            template <typename WORD, typename CORE> static inline
+            bool GT1(const AutoPtr< Keg<CORE> > &lhs,
+                      const AutoPtr< Keg<CORE> > &rhs)
+            {
+                const AutoPtr< Keg<CORE> > dif = KegSub::Compute<WORD,CORE>(lhs->word,lhs->words,
+                                                                            rhs->word,rhs->words);
+                return dif->gt1();
+            }
+
         };
 
     }

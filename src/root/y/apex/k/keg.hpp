@@ -170,7 +170,12 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             static Keg * Zero()  { return new Keg(0); }           //!< \return zero
             static Keg * One()   { return new Keg(CopyOf,1); }    //!< \return one
             static Keg * Two()   { return new Keg(CopyOf,2); }    //!< \return two
+            inline bool  leqz() const noexcept { return words<=0; }
+            inline bool  leq1() const noexcept
+            { return (words<=0) || ( (1==words) && (word[0] <= 1) ); }
 
+            inline bool gtz() const noexcept { return words>0; }
+            inline bool gt1() const noexcept { return !leq1(); }
 
             //! make zero
             void ldz() noexcept

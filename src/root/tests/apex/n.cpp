@@ -143,11 +143,14 @@ Y_UTEST(apex_n)
         {
             for(size_t j=1;j<=64;++j)
             {
-                const natural_t lhs  = ran.gen<natural_t>(i);
-                const natural_t rhs  = ran.gen<natural_t>(j);
-                const apn       L   = lhs;
-                const apn       R   = rhs;
-                Natural::Division(0,0,L,R);
+                for(size_t k=0;k<16;++k)
+                {
+                    const natural_t lhs  = ran.gen<natural_t>(i);
+                    const natural_t rhs  = ran.gen<natural_t>(j);
+                    const apn       L   = lhs;
+                    const apn       R   = rhs;
+                    Natural::Division(0,0,L,R);
+                }
             }
         }
     }

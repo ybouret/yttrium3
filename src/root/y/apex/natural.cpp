@@ -30,7 +30,6 @@ namespace Yttrium
         {
         }
 
-
         Natural:: ~Natural() noexcept
         {
             assert(code);
