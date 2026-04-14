@@ -25,8 +25,8 @@ namespace Yttrium
 
             FILE * const handle;
         protected:
-            const bool closeDown;
-            BufferPtr  buffer;
+            const bool   closeDown;
+            BufferPtr    buffer;
 
             void      bufferize(); // called in constructor when required
 

@@ -21,6 +21,8 @@ namespace Yttrium
             explicit InputFile(const Core::String<char> &);
             explicit InputFile(const StdIn_ &);
             virtual ~InputFile() noexcept;
+            bool query(char &C);
+
 
         private:
             Y_Disable_Copy_And_Assign(InputFile);

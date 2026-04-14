@@ -62,6 +62,27 @@ namespace Yttrium
         {
         }
 
+        bool InputFile:: query(char &C)
+        {
+            static const char fn[] = "fread";
+            Y_Giant_Lock();
+            if( feof(handle) )
+                return false;
+
+            if( fread(&C,1,1,handle) <= 0)
+            {
+                if(feof(handle))
+                    return false;
+                
+                if( !ferror(handle) )
+                    throw Specific::Exception(fn,"undefined error");
+
+                throw Libc::Exception(errno,fn);
+            }
+
+            return true;
+        }
+
     }
 
 }
