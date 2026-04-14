@@ -71,6 +71,12 @@ namespace Yttrium
         //! left append formatted info \param fmt format string \return *this
         Exception & pre(const char * const fmt, ...) noexcept Y_Printf_Check(2,3);
 
+        //! append optional 'for varName.varPart'
+        /**
+         \param varName optional varName
+         \param varPart optional varPart, used iff varName != 0
+         \return *this
+         */
         Exception & signedFor(const char * const varName, const char * const varPart) noexcept;
 
 

@@ -11,28 +11,74 @@ namespace Yttrium
 {
     namespace IO
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Decoding 64 bits from sequential data
+        //
+        //
+        //______________________________________________________________________
         class Decode64 : public U64Bits
         {
         public:
-            static const char * const CallSign;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const char * const CallSign; //!< "IO::Decode64"
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup
+            /**
+             \param b first byte, header+source (exception on invalid header)
+             \param varName optional var name
+             \param varPart optional var part
+             */
             explicit Decode64(const uint8_t b,
                               const char * const varName,
                               const char * const varPart);
-            virtual ~Decode64() noexcept;
-            Y_OSTREAM_PROTO(Decode64);
+            virtual ~Decode64() noexcept; //!< cleanup
+            Y_OSTREAM_PROTO(Decode64);    //!< display
 
-            bool ready() const noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            bool ready() const noexcept; //!< \return expected<=0
+
+            //! still decoding
+            /**
+             \param b next byte (exception if too many read bits)
+             \param varName optional var name
+             \param varPart optional var part
+             */
             void operator()(const uint8_t b,
                             const char * const varName,
                             const char * const varPart);
 
-            const uint64_t value;
-            const size_t   numExtra;
-            const size_t   expected;
-            const size_t   dataBits;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const uint64_t value;    //!< currentl decoded value
+            const size_t   numExtra; //!< initial numExtra to read
+            const size_t   expected; //!< expected read
+            const size_t   dataBits; //!< currently read data bits
         private:
-            Y_Disable_Copy_And_Assign(Decode64);
+            Y_Disable_Copy_And_Assign(Decode64); //!< discarded
         };
     }
 

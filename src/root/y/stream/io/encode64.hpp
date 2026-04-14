@@ -13,21 +13,48 @@ namespace Yttrium
     namespace IO
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Encoding 64 bits to compact array
+        //
+        //
+        //______________________________________________________________________
         class Encode64 : public U64Bits, public Memory::ReadOnlyBuffer
         {
         public:
-            static const size_t Request = 1 + Size;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const size_t Request = 1 + Size; //!< alias
 
-            explicit Encode64(uint64_t qw) noexcept;
-            virtual ~Encode64() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Encode64(uint64_t qw) noexcept; //!< encode \param qw 64 bits value
+            virtual ~Encode64()            noexcept; //!< cleanup
 
-            virtual const void * ro() const noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
+            virtual const void * ro()    const noexcept;
             virtual size_t       length() const noexcept;
         private:
-            Y_Disable_Copy_And_Assign(Encode64);
-            size_t          nOut;
-            uint8_t * const byte;
-            void *          wksp[ Alignment::WordsGEQ<Request>::Count ];
+            Y_Disable_Copy_And_Assign(Encode64); //!< discarded
+
+            size_t          nOut; //!< produced bytes
+            uint8_t * const byte; //!< content
+            void *          wksp[ Alignment::WordsGEQ<Request>::Count ]; //!< workspace
         };
     }
 }
