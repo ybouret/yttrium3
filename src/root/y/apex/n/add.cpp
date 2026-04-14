@@ -43,7 +43,7 @@ namespace Yttrium
         Natural Natural:: successor() const
         {
             static const _Keg::Word one = 1;
-            const KegType & l = *static_cast<const KegType *>(code);
+            const KegType &         l   = *static_cast<const KegType *>(code);
             return Natural(Directly,
                            KegAdd::Compute<_Keg::Word,_Keg::Core>(l.word,l.words,
                                                                   &one,1) );
