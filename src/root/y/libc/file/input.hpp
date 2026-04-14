@@ -21,7 +21,8 @@ namespace Yttrium
             explicit InputFile(const Core::String<char> &);
             explicit InputFile(const StdIn_ &);
             virtual ~InputFile() noexcept;
-            bool query(char &C);
+
+            bool     query(char &C);
 
 
         private:
