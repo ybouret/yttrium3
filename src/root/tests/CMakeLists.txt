@@ -100,6 +100,7 @@ Y_UTEST(container:iter)
 
 Y_UTEST(apex:k)
 Y_UTEST(apex:k:bits)
+Y_UTEST(apex:ksd)
 Y_UTEST(apex:n64)
 Y_UTEST(apex:n)
 

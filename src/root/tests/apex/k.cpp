@@ -14,6 +14,8 @@ using namespace Apex;
 
 namespace
 {
+    static long double tmx = 0.05L;
+
     template <typename WORD, typename CORE> static inline
     void TestKeg(Core::Rand &ran)
     {
@@ -48,7 +50,7 @@ namespace
                 ell += System::WallTime::Ticks() - mark;
                 const natural_t      s = S->getNatural();
                 Y_ASSERT(sum==s);
-            } while( chrono(ell) < 0.05L );
+            } while( chrono(ell) < tmx );
 
             const long double outer = (long double)ops / chrono(ell);
             std::cerr << "\t\touter::add64=" << HumanReadable( (uint64_t)outer ) << std::endl;
@@ -109,7 +111,7 @@ namespace
                 AutoPtr< Keg<WORD> > D = KegSub:: Compute<WORD,CORE>(L.word,L.words,R.word,R.words);
                 ell += System::WallTime::Ticks() - mark;
                 Y_ASSERT(dif == D->getNatural());
-            } while( chrono(ell) < 0.05L );
+            } while( chrono(ell) < tmx );
             const long double outer = (long double)ops / chrono(ell);
             std::cerr << "\t\touter::sub64=" << HumanReadable( (uint64_t)outer ) << std::endl;
             if(KegSub::Trace)
@@ -144,7 +146,7 @@ namespace
                 ell += System::WallTime::Ticks() - mark;
                 Y_ASSERT(P->getNatural() == prod);
 
-            } while( chrono(ell) < 0.05L );
+            } while( chrono(ell) < tmx );
             const long double outer = (long double)ops / chrono(ell);
             std::cerr << "\t\touter::mul64=" << HumanReadable( (uint64_t)outer ) << std::endl;
             if(KegMul::Trace)
@@ -154,7 +156,9 @@ namespace
             }
         }
 
-        
+
+
+
         std::cerr << std::endl;
     }
 

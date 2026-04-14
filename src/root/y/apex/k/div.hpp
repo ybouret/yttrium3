@@ -159,7 +159,7 @@ namespace Yttrium
                 // lower is quotient, positive remainder
                 upper.free();
 
-                // compute remainder to preserve lower
+                // compute remainder to preserve lower value
                 if(rem)
                 {
                     KegPtr probe = KegMul::Compute<WORD,CORE>(lower->word,lower->words,denom,dsize);
@@ -219,9 +219,9 @@ namespace Yttrium
              */
             template <typename WORD,typename CORE> static inline
             Keg<WORD> *Rem(const WORD * const     numer,
-                            const size_t           nsize,
-                            const WORD * const     denom,
-                            const size_t           dsize)
+                           const size_t           nsize,
+                           const WORD * const     denom,
+                           const size_t           dsize)
             {
                 AutoPtr< Keg<WORD> > rem;
                 Compute<WORD,CORE>(0,&rem, numer, nsize, denom, dsize);
@@ -230,6 +230,31 @@ namespace Yttrium
             }
 
 
+            template <typename WORD, typename CORE> static inline
+            void Small(WORD * const w,
+                       const size_t n,
+                       const WORD * u,
+                       WORD         denom,
+                       WORD        &rem)
+            {
+                Y_STATIC_CHECK(sizeof(WORD)<sizeof(CORE),BadSizes);
+                static const unsigned WordBits = sizeof(WORD) * 8;
+                static const CORE     _1       = 1;
+                static const CORE     WMax     = _1 << WordBits;
+
+                assert(denom>0);
+
+                const CORE iv = denom;
+                CORE       ir = 0;
+                for(size_t j=n;j>0;)
+                {
+                    --j;
+                    const CORE i = WMax * ir + static_cast<CORE>(u[j]);
+                    w[j]         = static_cast<WORD>(i/iv);
+                    ir           = i % iv;
+                }
+                rem = static_cast<WORD>(ir);
+            }
 
         };
 
