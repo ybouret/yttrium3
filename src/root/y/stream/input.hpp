@@ -1,4 +1,3 @@
-
 //! file
 
 #ifndef Y_InputStream_Included
@@ -10,15 +9,29 @@
 namespace Yttrium
 {
 
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Base class for input stream
+    //
+    //
+    //__________________________________________________________________________
     class InputStream
     {
 
     public:
-        explicit InputStream() noexcept;
-        virtual ~InputStream() noexcept;
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+        explicit InputStream() noexcept; //!< setup
+        virtual ~InputStream() noexcept; //!< cleanup
 
     private:
-        Y_Disable_Copy_And_Assign(InputStream);
+        Y_Disable_Copy_And_Assign(InputStream); //!< discarded
     };
 
 }
