@@ -26,8 +26,10 @@ namespace Yttrium
                           bool &             closeDown)
         {
             assert(fileName);
+            
             if( 0 == strcmp(fileName,Y_STDIN) )
             {
+                std::cerr << "STDIN!!" << std::endl;
                 closeDown = false;
                 if(!stdin) throw Libc::Exception(EIO,"no stdin!");
                 return stdin;
@@ -35,7 +37,8 @@ namespace Yttrium
 
             Y_Giant_Lock();
             FILE * fp = fopen(fileName,"rb");
-            if(!fp) throw Libc::Exception(errno,"fopen(%s)",fileName);
+            if(!fp)
+                throw Libc::Exception(errno,"fopen(%s)",fileName);
             closeDown = true;
             return fp;
         }
@@ -44,12 +47,14 @@ namespace Yttrium
         File(0,true)
         {
             Coerce(handle) = OpenFileRO(fileName,Coerce(closeDown));
+            if(closeDown) bufferize();
         }
 
         InputFile:: InputFile(const String &fileName) :
         File(0,true)
         {
             Coerce(handle) = OpenFileRO(fileName.c_str(),Coerce(closeDown));
+            if(closeDown) bufferize();
         }
 
 

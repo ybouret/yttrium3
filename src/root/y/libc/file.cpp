@@ -6,24 +6,56 @@ namespace Yttrium
     namespace Libc
     {
 
-        File:: ~File() noexcept
+        void File:: autoClose() noexcept
         {
-            assert(0!=handle);
-            if(closeDown)
+            if(handle && closeDown)
             {
                 (void) fclose(handle);
-                Coerce(handle) = 0;
             }
+            Coerce(handle) = 0;
+
+        }
+
+        File:: ~File() noexcept
+        {
+            autoClose();
         }
 
         File:: File(FILE * const fp, const bool autoClose) noexcept :
         handle(fp),
-        closeDown(autoClose)
+        closeDown(autoClose),
+        buffer()
         {
         }
+
 
 
     }
 
 }
 
+#include "y/libc/file/buffer.hpp"
+
+namespace Yttrium
+{
+    namespace Libc
+    {
+        void File:: bufferize()
+        {
+            assert(handle);
+            assert(buffer.isEmpty());
+            assert(closeDown);
+            
+            try
+            {
+                buffer = new FileBuffer();
+            }
+            catch(...)
+            {
+                autoClose();
+                throw;
+            }
+        }
+
+    }
+}
