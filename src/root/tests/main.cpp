@@ -92,6 +92,9 @@ Y_UTEST_DECL(8)
     Y_UTEST(apex_ksd);
     Y_UTEST(apex_n64);
     Y_UTEST(apex_n);
+
+    Y_UTEST(stream_u64);
+
 }
 Y_UTEST_EXEC()
 

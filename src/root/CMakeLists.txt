@@ -42,6 +42,7 @@ y/container/iter
 y/pointer
 y/utest
 y/stream
+y/stream/io
 y/object
 y/object/light
 y/string

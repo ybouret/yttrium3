@@ -15,6 +15,7 @@ threading
 string
 container
 apex
+stream
 )
 
 Y_LinkLibraries(test-root)
@@ -107,5 +108,4 @@ Y_UTEST(apex:ksd)
 Y_UTEST(apex:n64)
 Y_UTEST(apex:n)
 
-
-
+Y_UTEST(stream:u64)
