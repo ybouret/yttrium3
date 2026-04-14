@@ -18,7 +18,7 @@ namespace Yttrium
                 for(natural_t i=4;i<=n;++i)
                 {
                     const PreComputed I(i);
-                    AutoPtr<KegType>  tmp = KegMul::Compute<_Keg::WordType,_Keg::Core>(fac->word, fac->words, I.word, I.words);
+                    AutoPtr<KegType>  tmp = KegMul::Compute<_Keg::Word,_Keg::Core>(fac->word, fac->words, I.word, I.words);
                     fac = tmp;
                 }
                 return Natural(Directly,fac.yield());

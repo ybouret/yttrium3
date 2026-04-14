@@ -53,8 +53,8 @@ namespace Yttrium
                                const void * const numerAddr, const size_t nsize,
                                const void * const denomAddr, const size_t dsize)
         {
-            typedef _Keg::WordType   WordType;
-            typedef _Keg::Core   CoreType;
+            typedef _Keg::Word       WordType;
+            typedef _Keg::Core       CoreType;
             typedef Keg<WordType>    KegType;
             typedef AutoPtr<KegType> KegPtr;
             const WordType * const numer = static_cast<const WordType *>(numerAddr);

@@ -14,11 +14,11 @@ namespace Yttrium
         //! system Keg setup
         struct _Keg
         {
-            typedef uint32_t WordType; //!< alias
+            typedef uint32_t Word; //!< alias
             typedef uint64_t Core; //!< alias
         };
 
-        typedef Keg<_Keg::WordType> KegType; //!< alias
+        typedef Keg<_Keg::Word> KegType; //!< alias
 
         //______________________________________________________________________
         //
@@ -31,24 +31,24 @@ namespace Yttrium
         class PreComputed
         {
         public:
-            typedef _Keg::WordType WordType; //!< alias
+            typedef _Keg::Word Word; //!< alias
 
             //! setup \param n integral value
             inline PreComputed(const natural_t n) noexcept :
             value(n),
             wksp(n),
             words(0),
-            word( Calculus::SplitWord::Make<WordType>::From( Coerce(wksp), Coerce(words)))
+            word( Calculus::SplitWord::Make<Word>::From( Coerce(wksp), Coerce(words)))
             {
             }
 
             //! cleanup
             inline ~PreComputed() noexcept {}
 
-            const natural_t        value; //!< original value
-            const natural_t        wksp;  //!< value as workdpace
-            const size_t           words; //!< number of words
-            const WordType * const word;  //!< array of words
+            const natural_t    value; //!< original value
+            const natural_t    wksp;  //!< value as workdpace
+            const size_t       words; //!< number of words
+            const Word * const word;  //!< array of words
 
         private:
             Y_Disable_Copy_And_Assign(PreComputed); //!< discarded

@@ -12,8 +12,8 @@ namespace Yttrium
             const KegType &l = *static_cast<const KegType *>(lhs.code);
             const KegType &r = *static_cast<const KegType *>(rhs.code);
             return Natural(Directly,
-                           KegSub::Compute<_Keg::WordType,_Keg::Core>(l.word,l.words,
-                                                                      r.word,r.words) );
+                           KegSub::Compute<_Keg::Word,_Keg::Core>(l.word,l.words,
+                                                                  r.word,r.words) );
         }
 
 
@@ -22,8 +22,8 @@ namespace Yttrium
             const KegType &   l = *static_cast<const KegType *>(lhs.code);
             const PreComputed r(rhs);
             return Natural(Directly,
-                           KegSub::Compute<_Keg::WordType,_Keg::Core>(l.word,l.words,
-                                                                      r.word,r.words) );
+                           KegSub::Compute<_Keg::Word,_Keg::Core>(l.word,l.words,
+                                                                  r.word,r.words) );
         }
 
 
@@ -32,17 +32,17 @@ namespace Yttrium
             const PreComputed l(lhs);
             const KegType &   r = *static_cast<const KegType *>(rhs.code);
             return Natural(Directly,
-                           KegSub::Compute<_Keg::WordType,_Keg::Core>(l.word,l.words,
-                                                                      r.word,r.words) );
+                           KegSub::Compute<_Keg::Word,_Keg::Core>(l.word,l.words,
+                                                                  r.word,r.words) );
         }
 
         Natural Natural:: predecessor() const
         {
-            static const _Keg::WordType one = 1;
+            static const _Keg::Word one = 1;
             const KegType & l = *static_cast<const KegType *>(code);
             return Natural(Directly,
-                           KegSub::Compute<_Keg::WordType,_Keg::Core>(l.word,l.words,
-                                                                      &one,1) );
+                           KegSub::Compute<_Keg::Word,_Keg::Core>(l.word,l.words,
+                                                                  &one,1) );
         }
 
         Natural & Natural:: operator--()
@@ -59,7 +59,7 @@ namespace Yttrium
         }
 
     }
-    
+
 }
 
 
