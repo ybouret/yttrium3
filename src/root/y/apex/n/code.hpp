@@ -15,7 +15,7 @@ namespace Yttrium
         struct _Keg
         {
             typedef uint32_t WordType; //!< alias
-            typedef uint64_t CoreType; //!< alias
+            typedef uint64_t Core; //!< alias
         };
 
         typedef Keg<_Keg::WordType> KegType; //!< alias

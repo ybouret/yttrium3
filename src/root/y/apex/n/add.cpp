@@ -16,7 +16,7 @@ namespace Yttrium
             const KegType &l = *static_cast<const KegType *>(lhs.code);
             const KegType &r = *static_cast<const KegType *>(rhs.code);
             return Natural(Directly,
-                           KegAdd::Compute<_Keg::WordType,_Keg::CoreType>(l.word,l.words,
+                           KegAdd::Compute<_Keg::WordType,_Keg::Core>(l.word,l.words,
                                                                           r.word,r.words) );
         }
 
@@ -26,7 +26,7 @@ namespace Yttrium
             const KegType &    l = *static_cast<const KegType *>(lhs.code);
             const PreComputed  r(rhs);
             return Natural(Directly,
-                           KegAdd::Compute<_Keg::WordType,_Keg::CoreType>(l.word,l.words,
+                           KegAdd::Compute<_Keg::WordType,_Keg::Core>(l.word,l.words,
                                                                           r.word,r.words) );
         }
 
@@ -36,7 +36,7 @@ namespace Yttrium
             const PreComputed l(lhs);
             const KegType &   r = *static_cast<const KegType *>(rhs.code);
             return Natural(Directly,
-                           KegAdd::Compute<_Keg::WordType,_Keg::CoreType>(l.word,l.words,
+                           KegAdd::Compute<_Keg::WordType,_Keg::Core>(l.word,l.words,
                                                                           r.word,r.words) );
         }
 
@@ -45,7 +45,7 @@ namespace Yttrium
             static const _Keg::WordType one = 1;
             const KegType & l = *static_cast<const KegType *>(code);
             return Natural(Directly,
-                           KegAdd::Compute<_Keg::WordType,_Keg::CoreType>(l.word,l.words,
+                           KegAdd::Compute<_Keg::WordType,_Keg::Core>(l.word,l.words,
                                                                           &one,1) );
         }
 

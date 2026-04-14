@@ -9,7 +9,7 @@ namespace Yttrium
         {
             const KegType &l = *static_cast<const KegType *>(lhs.code);
             const KegType &r = *static_cast<const KegType *>(rhs.code);
-            return Natural(Directly, KegDiv::Rem<_Keg::WordType,_Keg::CoreType>(l.word,l.words, r.word,r.words) );
+            return Natural(Directly, KegDiv::Rem<_Keg::WordType,_Keg::Core>(l.word,l.words, r.word,r.words) );
         }
 
 
@@ -18,7 +18,7 @@ namespace Yttrium
             const KegType &              l = *static_cast<const KegType *>(lhs.code);
             size_t                       n = 0;
             const _Keg::WordType * const w = Calculus::SplitWord::Make<_Keg::WordType>::From(rhs,n);
-            return Natural(Directly, KegDiv::Rem<_Keg::WordType,_Keg::CoreType>(l.word,l.words,w,n) );
+            return Natural(Directly, KegDiv::Rem<_Keg::WordType,_Keg::Core>(l.word,l.words,w,n) );
         }
 
 
@@ -27,7 +27,7 @@ namespace Yttrium
             size_t                       n = 0;
             const _Keg::WordType * const w = Calculus::SplitWord::Make<_Keg::WordType>::From(lhs,n);
             const KegType &              r = *static_cast<const KegType *>(rhs.code);
-            return Natural(Directly, KegDiv::Rem<_Keg::WordType,_Keg::CoreType>(w,n,r.word,r.words) );
+            return Natural(Directly, KegDiv::Rem<_Keg::WordType,_Keg::Core>(w,n,r.word,r.words) );
         }
 
     }

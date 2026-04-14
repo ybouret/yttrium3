@@ -8,7 +8,7 @@ namespace Yttrium
         String Natural:: toDec() const
         {
             assert(code);
-            return KegDec::ToString<_Keg::WordType,_Keg::CoreType>(*static_cast<const KegType *>(code));
+            return KegDec::ToString<_Keg::WordType,_Keg::Core>(*static_cast<const KegType *>(code));
         }
     }
 }
