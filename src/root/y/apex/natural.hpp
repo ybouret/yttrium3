@@ -38,6 +38,8 @@ inline Natural & operator OP##=(const natural_t rhs) { Natural tmp = CALL(*this,
 #define Y_Apex_Natural(OP,CALL) \
 Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
 
+        class Integer;
+
         //______________________________________________________________________
         //
         //
@@ -150,6 +152,7 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             Y_Apex_Natural(-,Sub)
             Natural & operator--();    //!< prefix
             Natural   operator--(int); //!< postfix
+            Integer   operator-() const;
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
             //__________________________________________________________________
