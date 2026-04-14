@@ -10,21 +10,41 @@ namespace Yttrium
 {
     namespace Memory
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Read Only Buffer interface
+        //
+        //
+        //______________________________________________________________________
         class ReadOnlyBuffer
         {
         public:
-            explicit ReadOnlyBuffer() noexcept;
-            virtual ~ReadOnlyBuffer() noexcept;
-            Y_OSTREAM_PROTO(ReadOnlyBuffer);
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit ReadOnlyBuffer() noexcept; //!< setup
+            virtual ~ReadOnlyBuffer() noexcept; //!< cleanup
+            Y_OSTREAM_PROTO(ReadOnlyBuffer);    //!< display
 
-            virtual const void * ro()     const noexcept = 0;
-            virtual size_t       length() const noexcept = 0;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            virtual const void * ro()     const noexcept = 0; //!< \return first byte address
+            virtual size_t       length() const noexcept = 0; //!< \return available bytes
 
 
 
 
         private:
-            Y_Disable_Copy_And_Assign(ReadOnlyBuffer);
+            Y_Disable_Copy_And_Assign(ReadOnlyBuffer); //!< discarded
         };
     }
 

@@ -5,7 +5,7 @@ namespace Yttrium
 {
     namespace Memory
     {
-        ReadWriteBuffer:: ReadWriteBuffer() noexcept
+        ReadWriteBuffer:: ReadWriteBuffer() noexcept : ReadOnlyBuffer()
         {
         }
 

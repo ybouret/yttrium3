@@ -10,16 +10,36 @@ namespace Yttrium
 {
     namespace Memory
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Read-Write Buffer interface
+        //
+        //
+        //______________________________________________________________________
         class ReadWriteBuffer : public ReadOnlyBuffer
         {
         public:
-            explicit ReadWriteBuffer() noexcept;
-            virtual ~ReadWriteBuffer() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit ReadWriteBuffer() noexcept; //!< setup
+            virtual ~ReadWriteBuffer() noexcept; //!< cleanup
 
-            void * rw() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            void * rw() noexcept; //!< \return address of first writable byte
 
         private:
-            Y_Disable_Copy_And_Assign(ReadWriteBuffer);
+            Y_Disable_Copy_And_Assign(ReadWriteBuffer); //!< discarded
         };
     }
 

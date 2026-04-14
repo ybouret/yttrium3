@@ -1,11 +1,15 @@
 
+
 //! \file
 
-#ifndef Y_Memory_StaticBuffer_Included
-#define Y_Memory_StaticBuffer_Included 1
+#ifndef Y_Memory_AllocatedBuffer_Included
+#define Y_Memory_AllocatedBuffer_Included 1
 
 #include "y/memory/buffer/rw.hpp"
 #include "y/libc/block/zero.h"
+#include "y/libc/block/zeroed.h"
+#include <cassert>
+
 namespace Yttrium
 {
     namespace Memory
@@ -15,12 +19,12 @@ namespace Yttrium
         //
         //
         //
-        //! Static Buffer
+        //! Allocated Buffer
         //
         //
         //______________________________________________________________________
-        template <size_t N>
-        class StaticBuffer : public ReadWriteBuffer
+        template <typename ALLOCATOR>
+        class AllocatedBuffer : public ReadWriteBuffer
         {
         public:
             //__________________________________________________________________
@@ -31,19 +35,22 @@ namespace Yttrium
             //__________________________________________________________________
 
             //! setup empty
-            inline explicit StaticBuffer() noexcept :
+            inline explicit AllocatedBuffer(const size_t request) noexcept :
             ReadWriteBuffer(),
-            addr(0),
-            data()
+            size(request),
+            addr( AcquireMem(size) )
             {
-                Coerce(addr) = Y_BZero(data);
+                assert( Y_TRUE == Yttrium_Zeroed(addr,size) );
             }
 
             //! cleanup
-            inline virtual ~StaticBuffer() noexcept
+            inline virtual ~AllocatedBuffer() noexcept
             {
-                (void) Y_BZero(data);
-                Coerce(addr) = 0;
+                static ALLOCATOR & mgr = ALLOCATOR::Location();
+                Yttrium_BZero(addr,size);
+                mgr.release(addr,size);
+                assert(!addr);
+                assert(!size);
             }
 
             //__________________________________________________________________
@@ -53,7 +60,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             inline virtual const void * ro()     const noexcept { return addr; }
-            inline virtual size_t       length() const noexcept { return N;    }
+            inline virtual size_t       length() const noexcept { return size;    }
 
             //__________________________________________________________________
             //
@@ -62,9 +69,15 @@ namespace Yttrium
             //
             //__________________________________________________________________
         private:
-            Y_Disable_Copy_And_Assign(StaticBuffer); //!< discarded
-            void * const addr;    //!< anonymous data
-            char         data[N]; //!< real data
+            Y_Disable_Copy_And_Assign(AllocatedBuffer); //!< discarded
+            size_t size;
+            void * addr;
+
+            static inline void * AcquireMem(size_t &capa)
+            {
+                static ALLOCATOR & mgr = ALLOCATOR::Instance();
+                return mgr.acquire(capa);
+            }
         };
 
 
@@ -72,4 +85,4 @@ namespace Yttrium
 
 }
 
-#endif // !Y_Memory_StaticBuffer_Included
+#endif // !Y_Memory_AllocatedBuffer_Included
