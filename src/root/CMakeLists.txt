@@ -35,6 +35,7 @@ y/memory/page
 y/memory/plastic
 y/memory/plastic/forge
 y/memory/allocator
+y/memory/buffer
 y/ability
 y/container
 y/container/iter
