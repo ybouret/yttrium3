@@ -67,7 +67,12 @@ namespace Yttrium
             return *this;
         }
 
-
+        Integer Natural:: operator-() const
+        {
+            Integer z(*this);
+            if(bits()) Coerce(z.s) = Negative;
+            return z;
+        }
 
     }
 }

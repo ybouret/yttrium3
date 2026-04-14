@@ -23,6 +23,7 @@ namespace Yttrium
             explicit Number() noexcept; //!< setup
             virtual ~Number() noexcept; //!< cleanup
 
+            virtual void ldz() noexcept; //!< set to zero, nothrow
         private:
             Y_Disable_Copy_And_Assign(Number); //!< discarded
         };

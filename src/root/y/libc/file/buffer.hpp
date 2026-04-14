@@ -13,16 +13,31 @@ namespace Yttrium
 {
     namespace Libc
     {
-        typedef Memory::AllocatedBuffer<Memory::Archon> FileBufferType;
+        typedef Memory::AllocatedBuffer<Memory::Archon> FileBufferType; //!< alias
 
+
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! File Buffer, BUFSIZ
+        //
+        //
+        //______________________________________________________________________
         class FileBuffer : public Object, public FileBufferType
         {
         public:
-            explicit FileBuffer();
-            virtual ~FileBuffer() noexcept;
-            
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit FileBuffer();          //!< setup
+            virtual ~FileBuffer() noexcept; //!< cleanup
+
         private:
-            Y_Disable_Copy_And_Assign(FileBuffer);
+            Y_Disable_Copy_And_Assign(FileBuffer); //!< discard
         };
     }
 }

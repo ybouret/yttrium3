@@ -12,9 +12,9 @@
 namespace Yttrium
 {
 
-#define Y_STDERR ":STDERR:"
+#define Y_STDERR ":STDERR:" //!< alias
 
-    Y_Shallow_Decl(StdErr);
+    Y_Shallow_Decl(StdErr); //!< helper
 
 }
 

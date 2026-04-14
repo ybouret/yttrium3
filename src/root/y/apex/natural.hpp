@@ -84,6 +84,7 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             //
             //__________________________________________________________________
             virtual const char * callSign() const noexcept;
+            virtual void ldz()                    noexcept;
 
             //__________________________________________________________________
             //
@@ -96,7 +97,6 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             String    toBin()        const;          //!< \return binary content
             String    toDec()        const;          //!< \return decimal constent
             natural_t lsw()          const noexcept; //!< \return least significant word
-            void      ldz()          noexcept;       //!< set to zero
             
             //__________________________________________________________________
             //

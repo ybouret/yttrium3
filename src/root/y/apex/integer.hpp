@@ -20,6 +20,7 @@ namespace Yttrium
             Integer(const Integer &);
             Integer(const Natural &);
             Integer(const integer_t);
+            
 
             Integer & operator=(const Integer &);
             Integer & operator=(const Natural &);
@@ -28,10 +29,10 @@ namespace Yttrium
             virtual ~Integer() noexcept;
 
             virtual const char * callSign() const noexcept;
+            virtual void ldz()                    noexcept;
 
             Integer & xch( Integer & ) noexcept;
 
-            
 
             const SignType s;
             const Natural  n;
