@@ -123,6 +123,19 @@ namespace Yttrium
 
 
 
+    Exception & Exception:: signedFor(const char * const varName, const char * const varPart) noexcept
+    {
+        if(varName)
+        {
+            cat(" for %s",varName);
+            if(varPart)
+            {
+                cat(".%s",varPart);
+            }
+        }
+    }
+
+
     namespace Specific
     {
 

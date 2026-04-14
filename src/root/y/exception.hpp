@@ -70,8 +70,10 @@ namespace Yttrium
 
         //! left append formatted info \param fmt format string \return *this
         Exception & pre(const char * const fmt, ...) noexcept Y_Printf_Check(2,3);
-        
-        
+
+        Exception & signedFor(const char * const varName, const char * const varPart) noexcept;
+
+
 
     private:
         Y_Disable_Assign(Exception); //!< discarded
