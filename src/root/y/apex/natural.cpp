@@ -84,7 +84,10 @@ namespace Yttrium
 
         std::ostream & operator<<(std::ostream &os, const Natural &n)
         {
-            return os << n.toHex();
+            if( 0 != (os.flags() & std::ios_base::hex) )
+                return os << n.toHex();
+            else
+                return os << n.toDec();
         }
 
         natural_t Natural:: lsw() const noexcept
