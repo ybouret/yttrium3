@@ -68,6 +68,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(memory_archon);
     Y_UTEST(memory_troop);
     Y_UTEST(memory_supply);
+    Y_UTEST(memory_buffer);
 
 
 

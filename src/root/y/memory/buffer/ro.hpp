@@ -4,6 +4,7 @@
 #define Y_Memory_ReadOnlyBuffer_Included 1
 
 #include "y/config/setup.hpp"
+#include "y/ostream-proto.hpp"
 
 namespace Yttrium
 {
@@ -14,9 +15,13 @@ namespace Yttrium
         public:
             explicit ReadOnlyBuffer() noexcept;
             virtual ~ReadOnlyBuffer() noexcept;
+            Y_OSTREAM_PROTO(ReadOnlyBuffer);
 
             virtual const void * ro()     const noexcept = 0;
             virtual size_t       length() const noexcept = 0;
+
+
+
 
         private:
             Y_Disable_Copy_And_Assign(ReadOnlyBuffer);
