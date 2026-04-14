@@ -34,7 +34,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            //! setup empty
+            //! setup \param request minimal size
             inline explicit AllocatedBuffer(const size_t request) noexcept :
             ReadWriteBuffer(),
             size(request),
@@ -70,14 +70,17 @@ namespace Yttrium
             //__________________________________________________________________
         private:
             Y_Disable_Copy_And_Assign(AllocatedBuffer); //!< discarded
-            size_t size;
-            void * addr;
+            size_t size; //!< allocated bytes
+            void * addr; //!< allocated address
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             static inline void * AcquireMem(size_t &capa)
             {
                 static ALLOCATOR & mgr = ALLOCATOR::Instance();
                 return mgr.acquire(capa);
             }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            
         };
 
 
