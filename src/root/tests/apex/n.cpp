@@ -24,6 +24,7 @@ Y_UTEST(apex_n)
         const apn rhs(ran,ran.in<size_t>(0,1000));
         const apn sum = lhs + rhs;
         Y_ASSERT(sum-lhs==rhs);
+        const apn cpy = +lhs;
     }
 
     std::cerr << "-- testing mul/div" << std::endl;
