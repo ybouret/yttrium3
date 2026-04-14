@@ -55,7 +55,7 @@ namespace Yttrium
             {
                 Y_BZero(dyadicArena);
                 assert(0!=nucleus.blocks);
-                std::cerr << "Dyadic MaxCommBytes=" << MaxCommBytes << std::endl;
+                //std::cerr << "Dyadic MaxCommBytes=" << MaxCommBytes << std::endl;
             }
 
             //! cleanup

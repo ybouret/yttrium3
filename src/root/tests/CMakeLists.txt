@@ -41,6 +41,7 @@ Y_UTEST(core:pool_and_list)
 Y_UTEST(libc:sort)
 Y_UTEST(libc:strfmt)
 Y_UTEST(libc:ifile)
+Y_UTEST(libc:ofile)
 
 Y_UTEST(system:error)
 Y_UTEST(system:exception)

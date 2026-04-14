@@ -45,10 +45,11 @@ namespace Yttrium
             assert(handle);
             assert(buffer.isEmpty());
             assert(closeDown);
-            
             try
             {
                 buffer = new FileBuffer();
+                assert(buffer->length()>=BUFSIZ);
+                setvbuf(handle, (char *) buffer->ro(), _IOFBF, BUFSIZ);
             }
             catch(...)
             {
