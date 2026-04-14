@@ -59,7 +59,7 @@ namespace Yttrium
 
             //! still decoding
             /**
-             \param b next byte (exception if too many read bits)
+             \param b       next expected byte (exception if too many read bits)
              \param varName optional var name
              \param varPart optional var part
              */
