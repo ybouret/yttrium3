@@ -234,14 +234,14 @@ namespace Yttrium
             void Small(WORD * const w,
                        const size_t n,
                        const WORD * u,
-                       WORD         denom,
+                       const WORD   denom,
                        WORD        &rem)
             {
                 Y_STATIC_CHECK(sizeof(WORD)<sizeof(CORE),BadSizes);
+
                 static const unsigned WordBits = sizeof(WORD) * 8;
                 static const CORE     _1       = 1;
                 static const CORE     WMax     = _1 << WordBits;
-
                 assert(denom>0);
 
                 const CORE iv = denom;

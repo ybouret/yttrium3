@@ -64,6 +64,8 @@ namespace {
         callKSD<WORD,CORE,2>(ran);
         callKSD<WORD,CORE,3>(ran);
         callKSD<WORD,CORE,4>(ran);
+        callKSD<WORD,CORE,5>(ran);
+        callKSD<WORD,CORE,6>(ran);
 
         std::cerr << std::endl;
     }
