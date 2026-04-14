@@ -32,15 +32,12 @@ namespace {
 
 
             WORD w[n]; Y_BZero(w);
-            WORD r = 0;
-            KegDiv::Small<WORD,CORE>(w, n, u, denom,r);
+            const WORD r = KegDiv::Small<WORD,CORE>(w, n, u, denom);
             KegType quot(WithAtLeast,n);
             Coerce(quot.words) = n;
             memcpy(quot.word,w,sizeof(w));
             quot.update();
-            //std::cerr << "quot=" << KegDec::ToString<WORD,CORE>(quot) << std::endl;
-            //std::cerr << "rem =" << (uint64_t) r << std::endl;
-
+            
             std::cerr << KegDec::ToString<WORD,CORE>(quot) << "+" << (uint64_t)r;
 
             const KegType D(CopyOf,denom);

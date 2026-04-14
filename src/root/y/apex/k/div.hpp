@@ -230,12 +230,19 @@ namespace Yttrium
             }
 
 
+            //! small division algorithm
+            /**
+             \param w output
+             \param n number of words
+             \param u input
+             \param denom single word denominator
+             \return single word remainder
+             */
             template <typename WORD, typename CORE> static inline
-            void Small(WORD * const w,
+            WORD Small(WORD * const w,
                        const size_t n,
                        const WORD * u,
-                       const WORD   denom,
-                       WORD        &rem)
+                       const WORD   denom)
             {
                 Y_STATIC_CHECK(sizeof(WORD)<sizeof(CORE),BadSizes);
 
@@ -244,7 +251,7 @@ namespace Yttrium
                 static const CORE     WMax     = _1 << WordBits;
                 assert(denom>0);
 
-                const CORE iv = denom;
+                const CORE iv = static_cast<CORE>(denom);
                 CORE       ir = 0;
                 for(size_t j=n;j>0;)
                 {
@@ -253,7 +260,7 @@ namespace Yttrium
                     w[j]         = static_cast<WORD>(i/iv);
                     ir           = i % iv;
                 }
-                rem = static_cast<WORD>(ir);
+                return static_cast<WORD>(ir);
             }
 
         };

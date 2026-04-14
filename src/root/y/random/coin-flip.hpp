@@ -42,6 +42,11 @@ namespace Yttrium
             virtual bool heads() noexcept = 0; //!< \return true if heads show
             virtual bool tails() noexcept;     //!< \return !heads
 
+            //! (slow) generate a random unsigned
+            /**
+             \param umax max value
+             \return U in [0:umax]
+             */
             template <typename U> inline U toss(const U umax)
             {
                 Y_STATIC_CHECK(!IsSignedInt<U>::Value,BadType);
