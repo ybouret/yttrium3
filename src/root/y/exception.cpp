@@ -133,6 +133,7 @@ namespace Yttrium
                 cat(".%s",varPart);
             }
         }
+        return *this;
     }
 
 
