@@ -29,8 +29,8 @@ Y_UTEST(apex_n)
     std::cerr << "-- testing mul/div" << std::endl;
     for(size_t k=0;k<1024;++k)
     {
-        const apn lhs(ran,ran.in<size_t>(1,100));
-        const apn rhs(ran,ran.in<size_t>(1,100));
+        const apn lhs(ran,ran.in<size_t>(1,1000));
+        const apn rhs(ran,ran.in<size_t>(1,1000));
         const apn prod = lhs * rhs;
         Y_ASSERT(prod/rhs==lhs);
     }

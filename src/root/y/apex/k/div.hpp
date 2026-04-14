@@ -11,6 +11,7 @@
 #include "y/system/exception.hpp"
 #include <cerrno>
 
+#define Y_Apex_Use_Small_Division
 
 namespace Yttrium
 {
@@ -83,6 +84,19 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 assert(nsize>=dsize);
                 assert( Positive == KegCmp::Result(numer,nsize,denom,dsize) );
+
+#if defined(Y_Apex_Use_Small_Division)
+                if(1==dsize)
+                {
+                    const WORD d = denom[0]; assert(d>0);                   // fetch denominator
+                    KegPtr     q = new KegType(WithAtLeast,nsize);          // prepare quotiemt
+                    const WORD r = Small<WORD,CORE>(q->word,nsize,numer,d); // compute and return remainder
+                    Coerce(q->words) = nsize; q->update();                  // update quotien
+                    if(quot) *quot = q;
+                    if(rem)  *rem  = new KegType(CopyOf,r);
+                    return;
+                }
+#endif // defined(Y_Apex_Use_Small_Division)
 
                 //--------------------------------------------------------------
                 //
