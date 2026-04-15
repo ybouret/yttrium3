@@ -88,6 +88,21 @@ namespace Yttrium
             return Add(rhs,lhs);
         }
 
+        Integer  Integer:: Add(const Integer & lhs, const integer_t rhs)
+        {
+            const SignType rs = Sign::Of(rhs);
+
+            switch( Sign::Pair(lhs.s,rs) )
+            {
+
+                case Sign::ZZ:
+                    break; // => zero
+            }
+
+            // zero
+            return Integer();
+        }
+
     }
 
 }

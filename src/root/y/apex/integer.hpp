@@ -112,9 +112,10 @@ inline Integer & operator OP##= (const Natural &rhs ) { Integer tmp = CALL(*this
             // Additions
             //
             //__________________________________________________________________
-            static Integer  Add(const Integer &lhs, const Integer &rhs);
-            static Integer  Add(const Integer &lhs, const Natural &rhs);
-            static Integer  Add(const Natural &lhs, const Integer &rhs);
+            static Integer  Add(const Integer & lhs, const Integer & rhs);
+            static Integer  Add(const Integer & lhs, const Natural & rhs);
+            static Integer  Add(const Natural & lhs, const Integer & rhs);
+            static Integer  Add(const Integer & lhs, const integer_t rhs);
 
             Y_Integer_Impl(+,Add)
 
