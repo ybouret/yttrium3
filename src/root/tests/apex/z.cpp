@@ -168,6 +168,11 @@ Y_UTEST(apex_z)
             const Integer R = rhs;
             const Integer Q = lhs/rhs; Y_ASSERT(Q==q);
 
+            Y_ASSERT( L/rhs == Q );
+            Y_ASSERT( lhs/R == Q );
+
+            { Integer Quot = L; Quot /= R;   Y_ASSERT(Q==Quot); }
+            { Integer Quot = L; Quot /= rhs; Y_ASSERT(Q==Quot); }
 
             if(rhs>=0)
             {
