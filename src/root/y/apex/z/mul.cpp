@@ -1,6 +1,5 @@
 
 #include "y/apex/integer.hpp"
-#include <iostream>
 
 namespace Yttrium
 {

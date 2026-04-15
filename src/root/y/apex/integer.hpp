@@ -161,6 +161,20 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
 
             Y_Integer_Impl(*,Mul)
 
+            //__________________________________________________________________
+            //
+            //
+            // Divisions
+            //
+            //__________________________________________________________________
+            static Integer  Div(const Integer & lhs, const Integer & rhs);
+            static Integer  Div(const Integer & lhs, const Natural & rhs);
+            static Integer  Div(const Natural & lhs, const Integer & rhs);
+            static Integer  Div(const Integer & lhs, const integer_t rhs);
+            static Integer  Div(const integer_t lhs, const Integer & rhs);
+
+            Y_Integer_Impl(/,Div)
+
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             //__________________________________________________________________
             //
