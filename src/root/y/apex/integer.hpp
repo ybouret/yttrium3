@@ -46,6 +46,7 @@ namespace Yttrium
             Integer & operator=(const Natural &);          //!< assign Natural \return *this
             Integer & operator=(const integer_t) noexcept; //!< assign integral, no throw \return *this
 
+            Y_OSTREAM_PROTO(Integer);    //!< display
             virtual ~Integer() noexcept; //!< cleanup
 
             //__________________________________________________________________
@@ -72,12 +73,12 @@ namespace Yttrium
             // Comparisons
             //
             //__________________________________________________________________
-            static bool Cmp(const Integer &, const Integer &);
-            static bool Cmp(const Integer &, const Natural &);
-            static bool Cmp(const Natural &, const Integer &);
-            static bool Cmp(const Integer &, const integer_t);
-            static bool Cmp(const integer_t, const Integer &);
-            
+            static SignType Cmp(const Integer &, const Integer &) noexcept;
+            static SignType Cmp(const Integer &, const Natural &) noexcept;
+            static SignType Cmp(const Natural &, const Integer &) noexcept;
+            static SignType Cmp(const Integer &, const integer_t) noexcept;
+            static SignType Cmp(const integer_t, const Integer &) noexcept;
+
             //__________________________________________________________________
             //
             //

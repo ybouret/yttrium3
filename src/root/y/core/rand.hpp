@@ -81,7 +81,7 @@ namespace Yttrium
             }
 
 
-            //! generate random type
+            //! generate random unsigned type
             /**
              \param nbits required bits
              \return random type with exactly nbits
@@ -110,7 +110,7 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(Rand); //!< discard
-            long seed; //!< internal seed
+            long seed;                       //!< internal seed
         };
     }
 

@@ -109,5 +109,6 @@ Y_UTEST(apex:k:bits)
 Y_UTEST(apex:ksd)
 Y_UTEST(apex:n64)
 Y_UTEST(apex:n)
+Y_UTEST(apex:z)
 
 Y_UTEST(stream:u64)

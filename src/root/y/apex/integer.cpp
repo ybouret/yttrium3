@@ -9,6 +9,17 @@ namespace Yttrium
 
         const char * const Integer::CallSign = "apz";
 
+        const char * Integer:: callSign() const noexcept
+        {
+            return CallSign;
+        }
+
+        void Integer:: ldz() noexcept
+        {
+            Coerce(s) = __Zero__;
+            Coerce(n).ldz();
+        }
+
         Integer:: ~Integer() noexcept
         {
         }
@@ -81,6 +92,16 @@ namespace Yttrium
             assert( (s == __Zero__ && N.bits() == 0) || ( s== Positive && N.bits()>0) );
         }
 
-
+        std::ostream & operator<<(std::ostream &os, const Integer &z)
+        {
+            switch(z.s)
+            {
+                case Negative: return os << ('-' + z.n.toDec() );
+                case __Zero__:
+                case Positive:
+                    break;
+            }
+            return os << z.n.toDec();
+        }
     }
 }
