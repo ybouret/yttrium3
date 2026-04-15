@@ -110,8 +110,29 @@ Y_UTEST(apex_z)
         std::cerr << std::endl;
         for(apz i=10;i>=-10;i--) std::cerr << ' ' << i;
         std::cerr << std::endl;
+    }
+
+    {
+        std::cerr << "-- multiplications 64-bits" << std::endl;
+
+        for(size_t iter=0;iter<1024;++iter)
+        {
+            const integer_t lhs    = ran.in<integer_t>(imin,imax);
+            const integer_t rhs    = ran.in<integer_t>(imin,imax);
+            const integer_t prod   = lhs * rhs;
+
+            const Integer   L      = lhs;
+            const Integer   R      = rhs;
+            const Integer   P      = L*R; Y_ASSERT( P == prod );
+
+            Y_ASSERT( P == L * rhs );
+            Y_ASSERT( P == rhs * L );
+
+
+        }
 
     }
+
 
 
 }

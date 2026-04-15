@@ -147,6 +147,20 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
             Integer   operator--(int);     //!< postfix
             Integer   predecessor() const;
 
+            //__________________________________________________________________
+            //
+            //
+            // Multiplications
+            //
+            //__________________________________________________________________
+            static Integer  Mul(const Integer & lhs, const Integer & rhs);
+            static Integer  Mul(const Integer & lhs, const Natural & rhs);
+            static Integer  Mul(const Natural & lhs, const Integer & rhs);
+            static Integer  Mul(const Integer & lhs, const integer_t rhs);
+            static Integer  Mul(const integer_t lhs, const Integer & rhs);
+
+            Y_Integer_Impl(*,Mul)
+
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             //__________________________________________________________________
             //
