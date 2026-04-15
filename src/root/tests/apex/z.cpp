@@ -50,11 +50,18 @@ Y_UTEST(apex_z)
             const Integer   L      = lhs;
             const Integer   R      = rhs;
             const Integer   S      = L+R; Y_ASSERT( S == sum );
-            
+
+            Y_ASSERT( S == L+rhs );
+            Y_ASSERT( S == lhs+R );
+
+            { Integer Sum = L; Sum += R;   Y_ASSERT( S == Sum ); }
+            { Integer Sum = L; Sum += rhs; Y_ASSERT( S == Sum ); }
+
             if(rhs>=0)
             {
                 const Natural RN = (natural_t)rhs;
                 Y_ASSERT( S == L+RN );
+                { Integer Sum = L; Sum += RN; Y_ASSERT( S == Sum ); }
             }
 
             if(lhs>=0)

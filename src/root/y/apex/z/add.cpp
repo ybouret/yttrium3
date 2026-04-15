@@ -1,4 +1,5 @@
 #include "y/apex/integer.hpp"
+#include <iostream>
 
 namespace Yttrium
 {
@@ -88,11 +89,17 @@ namespace Yttrium
             return Add(rhs,lhs);
         }
 
+        namespace
+        {
+            static inline natural_t _abs_of(const integer_t z) noexcept
+            {
+                return z<0 ? (natural_t) -z : (natural_t)z;
+            }
+        }
+
         Integer  Integer:: Add(const Integer & lhs, const integer_t rhs)
         {
-            const SignType rs = Sign::Of(rhs);
-
-            switch( Sign::Pair(lhs.s,rs) )
+            switch( Sign::Pair(lhs.s,Sign::Of(rhs)) )
             {
                 case Sign::ZP:
                 case Sign::ZN:
@@ -102,15 +109,16 @@ namespace Yttrium
                 case Sign::NZ:
                     return lhs;
 
-                case Sign::PP: { const Natural sum = lhs.n+rhs; assert(sum>0); return Integer(Positive,sum); }
-                case Sign::NN: { const Natural sum = lhs.n+rhs; assert(sum>0); return Integer(Negative,sum); }
+                case Sign::PP: { const Natural sum = lhs.n+_abs_of(rhs); assert(sum>0); return Integer(Positive,sum); }
+                case Sign::NN: { const Natural sum = lhs.n+_abs_of(rhs); assert(sum>0); return Integer(Negative,sum); }
 
                 case Sign::PN:
                 {
-                    switch( Natural::Cmp(lhs.n,rhs) )
+                    const natural_t N = _abs_of(rhs);
+                    switch( Natural::Cmp(lhs.n,N) )
                     {
-                        case Negative: { const Natural delta = rhs - lhs.n; assert(delta>0); return Integer(Negative,delta); }
-                        case Positive: { const Natural delta = lhs.n - rhs; assert(delta>0); return Integer(Positive,delta); }
+                        case Negative: { const Natural delta = N - lhs.n; assert(delta>0); return Integer(Negative,delta); }
+                        case Positive: { const Natural delta = lhs.n - N; assert(delta>0); return Integer(Positive,delta); }
                         case __Zero__:
                             break; // => zero
                     }
@@ -118,10 +126,11 @@ namespace Yttrium
 
                 case Sign::NP:
                 {
+                    const natural_t N = _abs_of(rhs);
                     switch( Natural::Cmp(lhs.n,rhs) )
                     {
-                        case Negative: { const Natural delta = rhs - lhs.n; assert(delta>0); return Integer(Positive,delta); }
-                        case Positive: { const Natural delta = lhs.n - rhs; assert(delta>0); return Integer(Negative,delta); }
+                        case Negative: { const Natural delta = N - lhs.n; assert(delta>0); return Integer(Positive,delta); }
+                        case Positive: { const Natural delta = lhs.n - N; assert(delta>0); return Integer(Negative,delta); }
                         case __Zero__:
                             break; // => zero
                     }

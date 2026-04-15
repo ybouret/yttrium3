@@ -22,6 +22,7 @@ inline friend bool operator OP ( const integer_t lhs, const Integer & rhs ) noex
 inline friend Integer operator OP ( const Integer & lhs, const Integer & rhs ) { return CALL(lhs,rhs); } \
 inline friend Integer operator OP ( const Integer & lhs, const Natural & rhs ) { return CALL(lhs,rhs); } \
 inline friend Integer operator OP ( const Natural & lhs, const Integer & rhs ) { return CALL(lhs,rhs); } \
+inline friend Integer operator OP ( const Integer & lhs, const integer_t rhs ) { return CALL(lhs,rhs); } \
 inline friend Integer operator OP ( const integer_t lhs, const Integer & rhs ) { return CALL(lhs,rhs); } \
 
 #define Y_Integer_Unary(OP,CALL) \
