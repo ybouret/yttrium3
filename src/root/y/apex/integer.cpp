@@ -74,5 +74,13 @@ namespace Yttrium
             return z;
         }
 
+        Integer:: Integer(const SignType S, const Natural &N) :
+        s(S),
+        n(N)
+        {
+            assert( (s == __Zero__ && N.bits() == 0) || ( s== Positive && N.bits()>0) );
+        }
+
+
     }
 }

@@ -51,6 +51,7 @@ y/mkl
 y/apex
 y/apex/k
 y/apex/n
+y/apex/z
 )
 
 add_subdirectory(tests)

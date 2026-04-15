@@ -65,6 +65,36 @@ namespace Yttrium
             //__________________________________________________________________
             Integer & xch( Integer & ) noexcept; //!< no-throw exchange \return *this
 
+
+            //__________________________________________________________________
+            //
+            //
+            // Comparisons
+            //
+            //__________________________________________________________________
+            static bool Cmp(const Integer &, const Integer &);
+            static bool Cmp(const Integer &, const Natural &);
+            static bool Cmp(const Natural &, const Integer &);
+            static bool Cmp(const Integer &, const integer_t);
+            static bool Cmp(const integer_t, const Integer &);
+            
+            //__________________________________________________________________
+            //
+            //
+            // Additions
+            //
+            //__________________________________________________________________
+            static Integer  Add(const Integer &lhs, const Integer &rhs);
+            Integer operator+() const;
+
+            //__________________________________________________________________
+            //
+            //
+            // Subtractions
+            //
+            //__________________________________________________________________
+            Integer operator-() const;
+
             //__________________________________________________________________
             //
             //
@@ -75,7 +105,7 @@ namespace Yttrium
             const Natural  n; //!< absolute value
 
         private:
-
+            Integer(const SignType, const Natural &);
         };
     }
 
