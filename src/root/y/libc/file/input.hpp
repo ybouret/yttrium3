@@ -48,6 +48,13 @@ namespace Yttrium
              \return true iff not EOF, throw exception upon error
              */
             bool     query(char &C);
+
+            //! query block of data
+            /**
+             \param blockAddr memory
+             \param blockSize request
+             \return read bytes in blockAddr
+             */
             size_t   query(void * const blockAddr, const size_t blockSize);
 
         private:

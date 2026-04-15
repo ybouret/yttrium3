@@ -45,7 +45,13 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            void write(const char C);
+            void write(const char); //!< write one char
+
+            //! write a block of chars
+            /**
+             \param blockAddr memory, not NULL
+             \param blockSize blockSize>0
+             */
             void write(const void * const blockAddr,
                        const size_t       blockSize);
             

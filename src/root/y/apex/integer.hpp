@@ -11,6 +11,7 @@ namespace Yttrium
     namespace Apex
     {
 
+        //! helper to implement comparisons
 #define Y_Integer_Cmp(OP,EXPR) \
 inline friend bool operator OP ( const Integer & lhs, const Integer & rhs ) noexcept { return Cmp(lhs,rhs) EXPR; } \
 inline friend bool operator OP ( const Integer & lhs, const Natural & rhs ) noexcept { return Cmp(lhs,rhs) EXPR; } \
@@ -18,6 +19,7 @@ inline friend bool operator OP ( const Natural & lhs, const Integer & rhs ) noex
 inline friend bool operator OP ( const Integer & lhs, const integer_t rhs ) noexcept { return Cmp(lhs,rhs) EXPR; } \
 inline friend bool operator OP ( const integer_t lhs, const Integer & rhs ) noexcept { return Cmp(lhs,rhs) EXPR; }
 
+        //! helper to implement binary operators
 #define Y_Integer_Binary(OP,CALL) \
 inline friend Integer operator OP ( const Integer & lhs, const Integer & rhs ) { return CALL(lhs,rhs); } \
 inline friend Integer operator OP ( const Integer & lhs, const Natural & rhs ) { return CALL(lhs,rhs); } \
@@ -25,11 +27,13 @@ inline friend Integer operator OP ( const Natural & lhs, const Integer & rhs ) {
 inline friend Integer operator OP ( const Integer & lhs, const integer_t rhs ) { return CALL(lhs,rhs); } \
 inline friend Integer operator OP ( const integer_t lhs, const Integer & rhs ) { return CALL(lhs,rhs); } \
 
+        //! helper to implement unary operators
 #define Y_Integer_Unary(OP,CALL) \
 inline Integer & operator OP##= (const Integer & rhs ) { Integer tmp = CALL(*this,rhs); return xch(tmp); } \
 inline Integer & operator OP##= (const Natural & rhs ) { Integer tmp = CALL(*this,rhs); return xch(tmp); } \
 inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*this,rhs); return xch(tmp); }
 
+        //! helper to implement all operators
 #define Y_Integer_Impl(OP,CALL) Y_Integer_Binary(OP,CALL) Y_Integer_Unary(OP,CALL)
 
         //______________________________________________________________________
@@ -186,6 +190,7 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
             const Natural  n; //!< absolute value
 
         private:
+            //! specific constructor
             Integer(const SignType, const Natural &);
         };
     }
