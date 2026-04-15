@@ -119,6 +119,38 @@ namespace Yttrium
             return res;
         }
 
+        Integer Integer:: predecessor() const
+        {
+            switch(s)
+            {
+                case Positive:
+                {
+                    if(1==n)
+                        return 0;
+                    else {
+                        assert(n>=2);
+                        Integer res(*this); --Coerce(res.n); return res;
+                    }
+                }
+                case Negative: { Integer res(*this); ++Coerce(res.n); return res; }
+                case __Zero__: break;
+            }
+            return -1;
+        }
+
+        Integer & Integer:: operator--()
+        {
+            Integer tmp = predecessor();
+            return xch(tmp);
+        }
+
+        Integer Integer:: operator--(int)
+        {
+            const Integer res = *this;
+            { Integer tmp = predecessor(); (void) xch(tmp); }
+            return res;
+        }
+
     }
 
 }

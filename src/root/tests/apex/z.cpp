@@ -104,8 +104,12 @@ Y_UTEST(apex_z)
                 const Natural LN = (natural_t)lhs;
                 Y_ASSERT( D == LN-R );
             }
-
         }
+
+        for(apz i=10;i>=-10;--i) std::cerr << ' ' << i;
+        std::cerr << std::endl;
+        for(apz i=10;i>=-10;i--) std::cerr << ' ' << i;
+        std::cerr << std::endl;
 
     }
 
