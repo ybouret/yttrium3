@@ -21,11 +21,13 @@ inline friend bool operator OP ( const integer_t lhs, const Integer & rhs ) noex
 #define Y_Integer_Binary(OP,CALL) \
 inline friend Integer operator OP ( const Integer & lhs, const Integer & rhs ) { return CALL(lhs,rhs); } \
 inline friend Integer operator OP ( const Integer & lhs, const Natural & rhs ) { return CALL(lhs,rhs); } \
-inline friend Integer operator OP ( const Natural & lhs, const Integer & rhs ) { return CALL(lhs,rhs); }
+inline friend Integer operator OP ( const Natural & lhs, const Integer & rhs ) { return CALL(lhs,rhs); } \
+inline friend Integer operator OP ( const integer_t lhs, const Integer & rhs ) { return CALL(lhs,rhs); } \
 
 #define Y_Integer_Unary(OP,CALL) \
-inline Integer & operator OP##= (const Integer &rhs ) { Integer tmp = CALL(*this,rhs); return xch(tmp); } \
-inline Integer & operator OP##= (const Natural &rhs ) { Integer tmp = CALL(*this,rhs); return xch(tmp); }
+inline Integer & operator OP##= (const Integer & rhs ) { Integer tmp = CALL(*this,rhs); return xch(tmp); } \
+inline Integer & operator OP##= (const Natural & rhs ) { Integer tmp = CALL(*this,rhs); return xch(tmp); } \
+inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*this,rhs); return xch(tmp); }
 
 #define Y_Integer_Impl(OP,CALL) Y_Integer_Binary(OP,CALL) Y_Integer_Unary(OP,CALL)
 
@@ -116,6 +118,7 @@ inline Integer & operator OP##= (const Natural &rhs ) { Integer tmp = CALL(*this
             static Integer  Add(const Integer & lhs, const Natural & rhs);
             static Integer  Add(const Natural & lhs, const Integer & rhs);
             static Integer  Add(const Integer & lhs, const integer_t rhs);
+            static Integer  Add(const integer_t lhs, const Integer & rhs);
 
             Y_Integer_Impl(+,Add)
 

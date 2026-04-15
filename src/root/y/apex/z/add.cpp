@@ -94,6 +94,38 @@ namespace Yttrium
 
             switch( Sign::Pair(lhs.s,rs) )
             {
+                case Sign::ZP:
+                case Sign::ZN:
+                    return rhs;
+
+                case Sign::PZ:
+                case Sign::NZ:
+                    return lhs;
+
+                case Sign::PP: { const Natural sum = lhs.n+rhs; assert(sum>0); return Integer(Positive,sum); }
+                case Sign::NN: { const Natural sum = lhs.n+rhs; assert(sum>0); return Integer(Negative,sum); }
+
+                case Sign::PN:
+                {
+                    switch( Natural::Cmp(lhs.n,rhs) )
+                    {
+                        case Negative: { const Natural delta = rhs - lhs.n; assert(delta>0); return Integer(Negative,delta); }
+                        case Positive: { const Natural delta = lhs.n - rhs; assert(delta>0); return Integer(Positive,delta); }
+                        case __Zero__:
+                            break; // => zero
+                    }
+                } break; // => zero
+
+                case Sign::NP:
+                {
+                    switch( Natural::Cmp(lhs.n,rhs) )
+                    {
+                        case Negative: { const Natural delta = rhs - lhs.n; assert(delta>0); return Integer(Positive,delta); }
+                        case Positive: { const Natural delta = lhs.n - rhs; assert(delta>0); return Integer(Negative,delta); }
+                        case __Zero__:
+                            break; // => zero
+                    }
+                } break; // => zero
 
                 case Sign::ZZ:
                     break; // => zero
@@ -101,6 +133,11 @@ namespace Yttrium
 
             // zero
             return Integer();
+        }
+
+        Integer  Integer:: Add(const integer_t lhs, const Integer & rhs)
+        {
+            return Add(rhs,lhs);
         }
 
     }
