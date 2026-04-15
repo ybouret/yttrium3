@@ -27,7 +27,12 @@ namespace Yttrium
         class OutputFile : public File
         {
         public:
-
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
             explicit OutputFile(const char * const, const bool append=false);          //!< open regular file or Y_STD[OUT|ERR] \param append append iff true
             explicit OutputFile(const Core::String<char> &, const bool append=false);  //!< open regular file or Y_STD[OUT|ERR] \param append append iff true
             explicit OutputFile(const StdOut_ &); //!< get stdout
@@ -40,7 +45,10 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-
+            void write(const char C);
+            void write(const void * const blockAddr,
+                       const size_t       blockSize);
+            
         private:
             Y_Disable_Copy_And_Assign(OutputFile); //!< discarded
         };
