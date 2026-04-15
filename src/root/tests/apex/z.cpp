@@ -89,6 +89,9 @@ Y_UTEST(apex_z)
             const Integer   R      = rhs;
             const Integer   D      = L-R; Y_ASSERT( D == dif );
 
+            Y_ASSERT( D == L-rhs );
+            Y_ASSERT( D == lhs-R );
+
             if(rhs>=0)
             {
                 const Natural RN = (natural_t)rhs;

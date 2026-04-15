@@ -107,6 +107,18 @@ namespace Yttrium
             }
         }
 
+        Integer  Integer:: Sub(const Integer & lhs, const integer_t rhs)
+        {
+            return Add(lhs,-rhs);
+        }
+
+        Integer  Integer:: Sub(const integer_t lhs, const Integer & rhs)
+        {
+            Integer res = Add(rhs,-lhs);
+            Sign::MakeOpposite( Coerce(res.s) );
+            return res;
+        }
+
     }
 
 }
