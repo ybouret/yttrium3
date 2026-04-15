@@ -14,8 +14,8 @@ namespace Yttrium
         {
             switch( Sign::Pair(lhs.s,rhs.s) )
             {
-                case Sign::PP: { const Natural sum = lhs.n+rhs.n; return Integer(Positive,sum); }
-                case Sign::NN: { const Natural sum = lhs.n+rhs.n; return Integer(Negative,sum); }
+                case Sign::PP: { const Natural sum = lhs.n+rhs.n; assert(sum>0); return Integer(Positive,sum); }
+                case Sign::NN: { const Natural sum = lhs.n+rhs.n; assert(sum>0); return Integer(Negative,sum); }
 
                 case Sign::ZP:
                 case Sign::ZN:
@@ -29,8 +29,8 @@ namespace Yttrium
                 {
                     switch( Natural::Cmp(lhs.n,rhs.n) )
                     {
-                        case Negative: { const Natural delta = rhs.n - lhs.n; return Integer(Negative,delta); }
-                        case Positive: { const Natural delta = lhs.n - rhs.n; return Integer(Positive,delta); }
+                        case Negative: { const Natural delta = rhs.n - lhs.n; assert(delta>0); return Integer(Negative,delta); }
+                        case Positive: { const Natural delta = lhs.n - rhs.n; assert(delta>0); return Integer(Positive,delta); }
                         case __Zero__:
                             break; // => zero
                     }
@@ -40,8 +40,8 @@ namespace Yttrium
                 {
                     switch( Natural::Cmp(lhs.n,rhs.n) )
                     {
-                        case Negative: { const Natural delta = rhs.n - lhs.n; return Integer(Positive,delta); }
-                        case Positive: { const Natural delta = lhs.n - rhs.n; return Integer(Negative,delta); }
+                        case Negative: { const Natural delta = rhs.n - lhs.n; assert(delta>0); return Integer(Positive,delta); }
+                        case Positive: { const Natural delta = lhs.n - rhs.n; assert(delta>0); return Integer(Negative,delta); }
                         case __Zero__:
                             break; // => zero
                     }
@@ -55,6 +55,33 @@ namespace Yttrium
             return Integer();
         }
 
+
+        Integer Integer:: Add(const Integer &lhs, const Natural &rhs)
+        {
+            if(rhs.bits())
+            {
+                switch(lhs.s)
+                {
+                    case Negative:
+                        switch( Natural::Cmp(lhs.n,rhs) )
+                        {
+                            case Negative: { const Natural delta = rhs - lhs.n; return Integer(Positive,delta); }
+                            case Positive: { const Natural delta = lhs.n - rhs; return Integer(Negative,delta); }
+                            case __Zero__: break;
+                        }
+                        return Integer();
+
+                    case Positive:
+                    { Integer res = lhs; Coerce(res.n) += rhs; return res; }
+
+                    case __Zero__:
+                        break;
+                }
+                return rhs;
+            }
+            else
+                return lhs;
+        }
     }
 
 }

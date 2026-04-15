@@ -2,6 +2,7 @@
 #include "y/swap.hpp"
 #include "y/calculus/iabs.hpp"
 
+
 namespace Yttrium
 {
     namespace Apex
@@ -18,6 +19,18 @@ namespace Yttrium
         {
             Coerce(s) = __Zero__;
             Coerce(n).ldz();
+        }
+
+        Integer:: Integer(const SignType S, const Natural &N) :
+        s(S),
+        n(N)
+        {
+            switch(s)
+            {
+                case Negative: assert( N.bits() > 0 );  break;
+                case __Zero__: assert( 0 == N.bits() ); break;
+                case Positive: assert( N.bits() > 0 ); break;
+            }
         }
 
         Integer:: ~Integer() noexcept
@@ -85,12 +98,7 @@ namespace Yttrium
             return z;
         }
 
-        Integer:: Integer(const SignType S, const Natural &N) :
-        s(S),
-        n(N)
-        {
-            assert( (s == __Zero__ && N.bits() == 0) || ( s== Positive && N.bits()>0) );
-        }
+
 
         std::ostream & operator<<(std::ostream &os, const Integer &z)
         {
