@@ -1,5 +1,6 @@
 
 #include "y/apex/integer.hpp"
+#include <iostream>
 
 namespace Yttrium
 {
@@ -37,18 +38,18 @@ namespace Yttrium
 
         Integer  Integer:: Mul(const Integer & lhs, const Natural & rhs)
         {
+            //std::cerr << "<*>" << std::endl;
             if(rhs.bits())
             {
                 switch(lhs.s)
                 {
                     case Negative:
                     case Positive: {
-                        Integer res = lhs; Coerce(res.n) * rhs;
+                        Integer res = lhs; Coerce(res.n) *= rhs;
                         return res;
                     }
 
-                    case __Zero__:
-                        break;
+                    case __Zero__: break; // => zero
                 }
                 return 0;
             }

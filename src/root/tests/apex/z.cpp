@@ -92,6 +92,10 @@ Y_UTEST(apex_z)
             Y_ASSERT( D == L-rhs );
             Y_ASSERT( D == lhs-R );
 
+            { Integer Dif = L; Dif -= R;   Y_ASSERT( D == Dif ); }
+            { Integer Dif = L; Dif -= rhs; Y_ASSERT( D == Dif ); }
+
+
             if(rhs>=0)
             {
                 const Natural RN = (natural_t)rhs;
@@ -127,6 +131,24 @@ Y_UTEST(apex_z)
 
             Y_ASSERT( P == L * rhs );
             Y_ASSERT( P == rhs * L );
+
+            { Integer Prod = L; Prod *= R;   Y_ASSERT( Prod == prod ); }
+            { Integer Prod = L; Prod *= rhs; Y_ASSERT( Prod == prod ); }
+
+
+
+            if(rhs>=0)
+            {
+                const Natural RN = (natural_t)rhs;
+                Y_ASSERT( P == L*RN );
+                { Integer Prod = L; Prod *= RN; Y_ASSERT( Prod == prod ); }
+            }
+
+            if(lhs>=0)
+            {
+                const Natural LN = (natural_t)lhs;
+                Y_ASSERT( P == LN*R );
+            }
 
 
         }
