@@ -1,4 +1,3 @@
-
 #include "y/apex/integer.hpp"
 
 namespace Yttrium
@@ -82,6 +81,13 @@ namespace Yttrium
             else
                 return lhs;
         }
+
+
+        Integer Integer:: Add(const Natural &lhs, const Integer &rhs)
+        {
+            return Add(rhs,lhs);
+        }
+
     }
 
 }
