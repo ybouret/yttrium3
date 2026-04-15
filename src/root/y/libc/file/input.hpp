@@ -48,7 +48,7 @@ namespace Yttrium
              \return true iff not EOF, throw exception upon error
              */
             bool     query(char &C);
-
+            size_t   query(void * const blockAddr, const size_t blockSize);
 
         private:
             Y_Disable_Copy_And_Assign(InputFile); //!< discarded
