@@ -11,38 +11,75 @@ namespace Yttrium
     namespace Apex
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Integer number
+        //
+        //
+        //______________________________________________________________________
         class Integer : public Number
         {
         public:
-            static const char * const CallSign;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const char * const CallSign; //!< "apz"
 
-            Integer();
-            Integer(const Integer &);
-            Integer(const Natural &);
-            Integer(const integer_t);
-            
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            Integer();                  //!< zero
+            Integer(const Integer &);   //!< duplicate
+            Integer(const Natural &);   //!< duplicate
+            Integer(const integer_t);   //!< duplicate
 
-            Integer & operator=(const Integer &);
-            Integer & operator=(const Natural &);
-            Integer & operator=(const integer_t) noexcept;
 
-            virtual ~Integer() noexcept;
+            Integer & operator=(const Integer &);          //!< assign Integer \return *this
+            Integer & operator=(const Natural &);          //!< assign Natural \return *this
+            Integer & operator=(const integer_t) noexcept; //!< assign integral, no throw \return *this
 
+            virtual ~Integer() noexcept; //!< cleanup
+
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
             virtual const char * callSign() const noexcept;
             virtual void ldz()                    noexcept;
 
-            Integer & xch( Integer & ) noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            Integer & xch( Integer & ) noexcept; //!< no-throw exchange \return *this
 
-
-            const SignType s;
-            const Natural  n;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const SignType s; //!< sign
+            const Natural  n; //!< absolute value
 
         private:
 
         };
     }
 
-    typedef Apex::Integer mpz;
+    typedef Apex::Integer apz; //!< alias
 
 }
 

@@ -9,10 +9,10 @@
 
 namespace Yttrium
 {
-#define Y_STDIN ":STDIN:"
+#define Y_STDIN ":STDIN:"  //!< alias
 
-    Y_Shallow_Decl(StdIn);
-    
+    Y_Shallow_Decl(StdIn); //!< helper
+
 }
 
 #endif // !Y_Libc_StdIn_Included

@@ -13,20 +13,45 @@ namespace Yttrium
 {
     namespace Libc
     {
-
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Wrapper for input file
+        //
+        //
+        //______________________________________________________________________
         class InputFile : public File
         {
         public:
-            explicit InputFile(const char * const);
-            explicit InputFile(const Core::String<char> &);
-            explicit InputFile(const StdIn_ &);
-            virtual ~InputFile() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit InputFile(const char * const);         //!< open regular file or Y_STDIN
+            explicit InputFile(const Core::String<char> &); //!< open regular file of Y_STDIN
+            explicit InputFile(const StdIn_ &);             //!< find stdin
+            virtual ~InputFile() noexcept;                  //!< cleanup
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! query single char
+            /**
+             \param C output
+             \return true iff not EOF, throw exception upon error
+             */
             bool     query(char &C);
 
 
         private:
-            Y_Disable_Copy_And_Assign(InputFile);
+            Y_Disable_Copy_And_Assign(InputFile); //!< discarded
         };
 
     }

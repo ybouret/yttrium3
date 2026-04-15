@@ -11,9 +11,9 @@
 namespace Yttrium
 {
     
-#define Y_STDOUT ":STDOUT:"
+#define Y_STDOUT ":STDOUT:" //!< alias
 
-    Y_Shallow_Decl(StdOut);
+    Y_Shallow_Decl(StdOut); //!< helper
 
 }
 

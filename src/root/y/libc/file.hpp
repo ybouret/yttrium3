@@ -14,25 +14,57 @@ namespace Yttrium
     namespace Libc
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Wrapper for FILE *
+        //
+        //
+        //______________________________________________________________________
         class File : public Object
         {
         public:
-            typedef Memory::ReadWriteBuffer BufferType;
-            typedef AutoPtr<BufferType>     BufferPtr;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef Memory::ReadWriteBuffer BufferType; //!< alias
+            typedef AutoPtr<BufferType>     BufferPtr;  //!< alias
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup with
+            /**
+             \param fp        file pointer, may be NULL if post-created
+             \param mustClose set closeDoens
+             */
             explicit File(FILE * const fp, const bool mustClose) noexcept;
-            virtual ~File() noexcept;
+            virtual ~File() noexcept; //!< cleanup
 
-            FILE * const handle;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            FILE * const handle; //!< file ahndle
         protected:
-            const bool   closeDown;
-            BufferPtr    buffer;
+            const bool   closeDown; //!< close when destructed
+            BufferPtr    buffer;    //!< optional buffer
 
-            void      bufferize(); // called in constructor when required
+            void      bufferize();  //!< called in constructor when required
 
         private:
-            Y_Disable_Copy_And_Assign(File);
-            void autoClose() noexcept;
+            Y_Disable_Copy_And_Assign(File); //!< discarded
+            void autoClose() noexcept;       //!< take action when closing time
         };
 
     }
