@@ -22,6 +22,8 @@ Y_UTEST(apex_z)
             const Integer   R   = rhs;
             const SignType  result = Sign::Of(lhs,rhs);
             Y_ASSERT( result == Integer::Cmp(L,R) );
+            Y_ASSERT( result == Integer::Cmp(L,rhs) );
+            Y_ASSERT( result == Integer::Cmp(lhs,R) );
 
             if(rhs>=0)
             {

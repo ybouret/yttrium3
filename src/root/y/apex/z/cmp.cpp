@@ -61,6 +61,45 @@ namespace Yttrium
             return Sign::Opposite( Cmp(rhs,lhs) );
         }
 
+        namespace {
+            static inline natural_t _abs_of(const integer_t z) noexcept
+            {
+                return (z<0) ? (natural_t)-z : (natural_t)z;
+            }
+        }
+
+        SignType Integer:: Cmp(const Integer &lhs, const integer_t rhs) noexcept
+        {
+            const SignType  r_s = Sign::Of(rhs);
+
+            switch( Sign::Pair(lhs.s,r_s) )
+            {
+                case Sign::ZP:
+                case Sign::NP:
+                case Sign::NZ:
+                    return Negative;
+
+                case Sign::PZ:
+                case Sign::PN:
+                case Sign::ZN:
+                    return Positive;
+
+                case Sign::PP: return Natural::Cmp(lhs.n,_abs_of(rhs));
+                case Sign::NN: return Natural::Cmp(_abs_of(rhs),lhs.n);
+
+                case Sign::ZZ:
+                    break; // => zero
+            }
+
+            return __Zero__;
+        }
+
+        SignType Integer:: Cmp(const integer_t lhs, const Integer &rhs) noexcept
+        {
+            return Sign::Opposite( Cmp(rhs,lhs) );
+        }
+
+
     }
 }
 
