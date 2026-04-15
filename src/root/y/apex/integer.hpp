@@ -11,6 +11,13 @@ namespace Yttrium
     namespace Apex
     {
 
+#define Y_Integer_Cmp(OP,EXPR) \
+inline friend bool operator OP ( const Integer & lhs, const Integer & rhs ) noexcept { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP ( const Integer & lhs, const Natural & rhs ) noexcept { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP ( const Natural & lhs, const Integer & rhs ) noexcept { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP ( const Integer & lhs, const integer_t rhs ) noexcept { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP ( const integer_t lhs, const Integer & rhs ) noexcept { return Cmp(lhs,rhs) EXPR; }
+
         //______________________________________________________________________
         //
         //
@@ -67,6 +74,7 @@ namespace Yttrium
             Integer & xch( Integer & ) noexcept; //!< no-throw exchange \return *this
 
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             //__________________________________________________________________
             //
             //
@@ -78,6 +86,14 @@ namespace Yttrium
             static SignType Cmp(const Natural &, const Integer &) noexcept;
             static SignType Cmp(const Integer &, const integer_t) noexcept;
             static SignType Cmp(const integer_t, const Integer &) noexcept;
+
+            Y_Integer_Cmp(==, == __Zero__ )
+            Y_Integer_Cmp(!=, != __Zero__ )
+            Y_Integer_Cmp(<,  == Negative )
+            Y_Integer_Cmp(>,  == Positive )
+            Y_Integer_Cmp(<=, != Positive )
+            Y_Integer_Cmp(>=, != Negative )
+
 
             //__________________________________________________________________
             //
@@ -95,7 +111,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             Integer operator-() const;
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             //__________________________________________________________________
             //
             //

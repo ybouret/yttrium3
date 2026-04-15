@@ -16,10 +16,10 @@ Y_UTEST(apex_z)
 
         for(size_t iter=0;iter<1024;++iter)
         {
-            const integer_t lhs = ran.in<integer_t>(imin,imax);
-            const integer_t rhs = ran.in<integer_t>(imin,imax);
-            const Integer   L   = lhs;
-            const Integer   R   = rhs;
+            const integer_t lhs    = ran.in<integer_t>(imin,imax);
+            const integer_t rhs    = ran.in<integer_t>(imin,imax);
+            const Integer   L      = lhs;
+            const Integer   R      = rhs;
             const SignType  result = Sign::Of(lhs,rhs);
             Y_ASSERT( result == Integer::Cmp(L,R) );
             Y_ASSERT( result == Integer::Cmp(L,rhs) );
