@@ -78,7 +78,7 @@ Y_UTEST(apex_z)
     }
 
     {
-        std::cerr << "-- subtrations 64-bits" << std::endl;
+        std::cerr << "-- subtractions 64-bits" << std::endl;
 
         for(size_t iter=0;iter<1024;++iter)
         {
@@ -88,6 +88,20 @@ Y_UTEST(apex_z)
             const Integer   L      = lhs;
             const Integer   R      = rhs;
             const Integer   D      = L-R; Y_ASSERT( D == dif );
+
+            if(rhs>=0)
+            {
+                const Natural RN = (natural_t)rhs;
+                Y_ASSERT( D == L-RN );
+                { Integer Dif = L; Dif -= RN; Y_ASSERT( D == Dif ); }
+            }
+
+            if(lhs>=0)
+            {
+                const Natural LN = (natural_t)lhs;
+                Y_ASSERT( D == LN-R );
+            }
+
         }
 
     }
