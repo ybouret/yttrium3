@@ -71,7 +71,27 @@ Y_UTEST(apex_z)
 
             }
         }
+        for(apz i=-10;i<=10;++i) std::cerr << ' ' << i;
+        std::cerr << std::endl;
+        for(apz i=-10;i<=10;i++) std::cerr << ' ' << i;
+        std::cerr << std::endl;
     }
+
+    {
+        std::cerr << "-- subtrations 64-bits" << std::endl;
+
+        for(size_t iter=0;iter<1024;++iter)
+        {
+            const integer_t lhs    = ran.in<integer_t>(imin,imax);
+            const integer_t rhs    = ran.in<integer_t>(imin,imax);
+            const integer_t dif    = lhs - rhs;
+            const Integer   L      = lhs;
+            const Integer   R      = rhs;
+            const Integer   D      = L-R; Y_ASSERT( D == dif );
+        }
+
+    }
+
 
 }
 Y_UDONE()

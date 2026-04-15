@@ -123,14 +123,25 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
 
             Y_Integer_Impl(+,Add)
 
-            Integer operator+() const;
-
+            Integer operator+() const;   //!< unary
+            Integer & operator++();      //!< prefix
+            Integer   operator++(int);   //!< postfix
+            Integer   successor() const;
+            
             //__________________________________________________________________
             //
             //
             // Subtractions
             //
             //__________________________________________________________________
+            static Integer  Sub(const Integer & lhs, const Integer & rhs);
+            static Integer  Sub(const Integer & lhs, const Natural & rhs);
+            static Integer  Sub(const Natural & lhs, const Integer & rhs);
+            static Integer  Sub(const Integer & lhs, const integer_t rhs);
+            static Integer  Sub(const integer_t lhs, const Integer & rhs);
+
+            Y_Integer_Impl(-,Sub)
+
             Integer operator-() const;
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             //__________________________________________________________________
