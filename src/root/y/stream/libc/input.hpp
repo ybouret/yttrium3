@@ -7,6 +7,7 @@
 
 #include "y/stream/input.hpp"
 #include "y/libc/stdin.hpp"
+#include "y/stream/io/chars.hpp"
 
 namespace Yttrium
 {
@@ -32,7 +33,8 @@ namespace Yttrium
         template <typename NAME> inline
         explicit InputFile(const NAME &name) :
         InputStream(name),
-        code( OpenRegular(title) )
+        code( OpenRegular(title) ),
+        buff()
         {
         }
         explicit InputFile(const StdIn_ &); //!< use stdin
@@ -44,12 +46,23 @@ namespace Yttrium
         // Interface
         //
         //______________________________________________________________________
-        virtual bool query(char &);
+        virtual bool   query(char &);
+        virtual size_t query(void * const, const size_t );
+        virtual void   store(const char);
+
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+        void prefetch(size_t);
 
     private:
         Y_Disable_Copy_And_Assign(InputFile); //!< discarded
         void * const code; //!< inner code
-
+        IO::Chars    buff;
+        
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         static void * OpenRegular(const String &);
         static void * OpenStdIn();

@@ -38,12 +38,12 @@ namespace Yttrium
         //______________________________________________________________________
 
         //! setup empty
-        inline explicit CxxList() noexcept : Core::ListOf<NODE>()
+        inline explicit CxxList() noexcept : Core::ListOf<NODE>(), Releasable()
         {
         }
 
         //! duplicate \param other another list
-        inline CxxList(const CxxList &other) : Core::ListOf<NODE>()
+        inline CxxList(const CxxList &other) : Core::ListOf<NODE>(), Releasable()
         {
             try
             {
