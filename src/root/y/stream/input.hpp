@@ -5,6 +5,7 @@
 
 
 #include "y/stream/stream.hpp"
+#include "y/type/ints.hpp"
 
 namespace Yttrium
 {
@@ -58,6 +59,29 @@ namespace Yttrium
         bool peek(char &);    //!< \return true iff available char
         bool gets(String &);  //!< \return ture iff a new (maybe empty) string was read
 
+        void load(void * const       blockAddr,
+                  const size_t       blockSize,
+                  const char * const varName,
+                  const char * const varPart);
+
+
+        template <typename T>
+        T load(const char * const, const char * const);
+
+        template <typename T> inline
+        T cbr(const char * const varName,
+              const char * const varPart)
+        {
+            typedef typename UnsignedFor<sizeof(T)>::Alias::Type UType;
+            union {
+                UType u;
+                T     t;
+            } alias = { load<UType>(varName,varPart) };
+            return alias.t;
+        }
+
+        uint64_t vbr64(const char * const varName,
+                       const char * const varPart);
 
     protected:
         explicit InputStream(); //!< for virtual constructor
