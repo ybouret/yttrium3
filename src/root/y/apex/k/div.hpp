@@ -150,8 +150,7 @@ namespace Yttrium
                 while( GT1<WORD,CORE>(upper,lower) )
                 {
                     KegPtr middle = KegAdd::Compute<WORD,CORE>(lower->word, lower->words, upper->word, upper->words)->shr();
-                    //middle->shr();
-                    KegPtr probe = KegMul::Compute<WORD,CORE>(middle->word,middle->words,denom,dsize);
+                    KegPtr probe  = KegMul::Compute<WORD,CORE>(middle->word,middle->words,denom,dsize);
 
                     switch( KegCmp::Result<WORD>(probe->word,probe->words,numer,nsize) )
                     {
@@ -170,24 +169,33 @@ namespace Yttrium
 
                     }
                 }
-
                 // lower is quotient, positive remainder
+
+
+                //--------------------------------------------------------------
+                //
+                // assigning results
+                //
+                //--------------------------------------------------------------
 
                 // compute remainder to preserve lower value for quot
                 upper.free();
+                assert(lower.isValid());
                 if(rem)
                 {
-                    KegPtr probe = KegMul::Compute<WORD,CORE>(lower->word,lower->words,denom,dsize);
+                    const KegPtr probe = KegMul::Compute<WORD,CORE>(lower->word,lower->words,denom,dsize);
                     assert( Negative == KegCmp::Result<WORD>(probe->word,probe->words,numer,nsize) );
-                    KegPtr diff  = KegSub::Compute<WORD,CORE>(numer,nsize,probe->word,probe->words);
+                    const KegPtr diff  = KegSub::Compute<WORD,CORE>(numer,nsize,probe->word,probe->words);
                     *rem = diff;
-                    assert(diff->bits>0);
+                    assert(rem->isValid());
+                    assert((**rem).bits>0);
                 }
 
                 // transfer quote
-                if(quot)
-                {
+                assert(lower.isValid());
+                if(quot) {
                     *quot = lower;
+                    assert(quot->isValid());
                 }
 
                 return false;
