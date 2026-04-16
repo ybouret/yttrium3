@@ -24,19 +24,25 @@ namespace Yttrium
 
     GETCHAR:
         {
-            char C = 0;
-            if(!query(C))
+            char c = 0;
+            if(!query(c))
                 return s.size()>0;
 
-            switch(C)
+            switch(c)
             {
 
-
+                case CR:
+                    if(query(c)) {
+                        if(LF!=c)
+                            store(c);
+                    }
+                    return true;
+                    
                 case LF: return true;
                 default: break;
 
             }
-            s += C;
+            s += c;
             goto GETCHAR;
         }
 
