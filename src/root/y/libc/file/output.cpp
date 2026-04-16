@@ -88,7 +88,17 @@ namespace Yttrium
         {
             Y_Giant_Lock();
             if( fwrite(&C, 1, 1, handle) <= 0) {
-                throw Libc::Exception(errno,"fwrite(1)");
+                throw Libc::Exception(errno,"fwrite(#1)");
+            }
+        }
+
+        void OutputFile:: flush()
+        {
+            Y_Giant_Lock();
+            if( !fflush(handle) )
+            {
+                throw Libc::Exception(errno,"fflush()");
+
             }
         }
 
@@ -96,12 +106,12 @@ namespace Yttrium
         void OutputFile:: write(const void * const blockAddr,
                                 const size_t       blockSize)
         {
-            assert(blockAddr);
-            assert(blockSize);
+            assert(0!=blockAddr);
+            assert(blockSize>0);
             Y_Giant_Lock();
             if( fwrite(blockAddr,blockSize,1,handle) <= 0 )
             {
-                throw Libc::Exception(errno,"fwrite(%s)", Decimal(blockSize).c_str() );
+                throw Libc::Exception(errno,"fwrite(#%s)", Decimal(blockSize).c_str() );
             }
         }
     }

@@ -46,6 +46,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             void write(const char); //!< write one char
+            void flush();           //!< flush
 
             //! write a block of chars
             /**

@@ -1,11 +1,11 @@
+#include "y/stream/libc/output.hpp"
 #include "y/utest/run.hpp"
-#include "y/string.hpp"
 using namespace Yttrium;
 
 namespace
 {
 
-    class Base
+    class Base : public Identifiable
     {
     public:
         template <typename NAME> inline
@@ -14,7 +14,7 @@ namespace
             std::cerr << "+Base '" << label << "'" << std::endl;
         }
 
-        explicit Base() : label()
+        explicit Base() : Identifiable(), label()
         {
             std::cerr << "+Base!" << std::endl;
         }
@@ -22,6 +22,8 @@ namespace
         virtual ~Base() noexcept
         {
         }
+
+        virtual const char * callSign() const noexcept { return label.c_str(); }
 
         const String label;
     private:
@@ -110,8 +112,25 @@ namespace
 
 Y_UTEST(stream_output_file)
 {
-    Both both("hello");
-    std::cerr << "label=" << both.label << std::endl;
+    if(false)
+    {
+        Both both("hello");
+        std::cerr << "label=" << both.label << std::endl;
+    }
+
+    if(argc>1)
+    {
+        OutputFile fp(argv[1]);
+        size_t     written = 0;
+        const int  toto    = -7;
+        written += fp.vbr(toto);
+        std::cerr << "written=" << written << std::endl;
+
+        const uint32_t x = 0x12345678;
+        written += fp.cbr(x);
+
+    }
+
 }
 Y_UDONE()
 
