@@ -29,6 +29,17 @@ namespace Yttrium
             return  1 == rhs.denom && lhs == rhs.numer;
         }
 
+        bool operator==(const Rational &lhs, const Natural &rhs) noexcept
+        {
+            return lhs.denom == 1 && lhs.numer == rhs;
+        }
+
+        bool operator==(const Natural &lhs, const Rational &rhs) noexcept
+        {
+            return  1 == rhs.denom && lhs == rhs.numer;
+        }
+
+
     }
 
     namespace Apex
@@ -58,7 +69,40 @@ namespace Yttrium
             return  1 != rhs.denom || lhs != rhs.numer;
         }
 
+        bool operator!=(const Rational &lhs, const Natural &rhs) noexcept
+        {
+            return lhs.denom != 1 || lhs.numer != rhs;
+        }
+
+        bool operator!=(const Natural &lhs, const Rational &rhs) noexcept
+        {
+            return  1 != rhs.denom || lhs != rhs.numer;
+        }
+
     }
 
+
+    namespace Apex
+    {
+        SignType Rational:: Cmp(const Rational &lhs, const Rational &rhs)
+        {
+            const Integer L = lhs.numer * rhs.denom;
+            const Integer R = rhs.numer * lhs.denom;
+            return Integer::Cmp(L,R);
+        }
+
+        SignType Rational:: Cmp(const Rational &lhs, const Integer &rhs)
+        {
+            const Integer R = rhs * lhs.denom;
+            return Integer::Cmp(lhs.numer,R);
+        }
+
+        SignType Rational:: Cmp(const Integer &lhs, const Rational &rhs)
+        {
+            const Integer L = lhs * rhs.denom;
+            return Integer::Cmp(L,rhs.numer);
+        }
+    }
 }
+
 

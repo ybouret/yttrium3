@@ -9,6 +9,18 @@ namespace Yttrium
 {
     namespace Apex
     {
+
+#define Y_APQ_DECL(RET,CALL) \
+static RET CALL(const Rational &, const Rational &); \
+static RET CALL(const Rational &, const Integer  &); \
+static RET CALL(const Integer  &, const Rational &)
+
+#define Y_APQ_CMP(OP,EXPR) \
+inline friend bool operator OP (const Rational & lhs, const Rational & rhs) { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP (const Rational & lhs, const Integer  & rhs) { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP (const Integer  & lhs, const Rational & rhs) { return Cmp(lhs,rhs) EXPR; }
+
+
         //______________________________________________________________________
         //
         //
@@ -81,9 +93,22 @@ namespace Yttrium
             friend bool operator==(const Rational &, const Integer  &) noexcept;
             friend bool operator==(const Integer  &, const Rational &) noexcept;
             friend bool operator==(const Rational &, const integer_t ) noexcept;
-            friend bool operator==(const integer_t , const Rational &) noexcept;
+            friend bool operator==(const integer_t,  const Rational &) noexcept;
+            friend bool operator==(const Rational &, const Natural  &) noexcept;
+            friend bool operator==(const Natural  &, const Rational &) noexcept;
+            
+            friend bool operator!=(const Rational &, const Rational &) noexcept;
+            friend bool operator!=(const Rational &, const Integer  &) noexcept;
+            friend bool operator!=(const Integer  &, const Rational &) noexcept;
+            friend bool operator!=(const Rational &, const integer_t ) noexcept;
+            friend bool operator!=(const integer_t,  const Rational &) noexcept;
+            friend bool operator!=(const Rational &, const Natural  &) noexcept;
+            friend bool operator!=(const Natural  &, const Rational &) noexcept;
 
 
+            Y_APQ_DECL(SignType,Cmp);
+            Y_APQ_CMP(<,== Negative)
+            Y_APQ_CMP(>,== Positive)
 
             //__________________________________________________________________
             //
