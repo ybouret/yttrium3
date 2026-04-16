@@ -23,6 +23,18 @@ Y_UTEST(apex_q)
     }
 
 
+    {
+        apq a(3,2), b(6,4); Y_CHECK(a==b);
+    }
+
+    {
+        const integer_t i = -7;
+        const Integer   I = i;
+        const apq a(-14,2);
+        Y_CHECK(a==I); Y_CHECK(a==i);
+        Y_CHECK(I==a); Y_CHECK(i==a);
+    }
+
 
 }
 Y_UDONE()

@@ -70,6 +70,21 @@ namespace Yttrium
             String     toDec()              const; //!< \return decimal representation
             Rational & xch( Rational & ) noexcept; //!< \return no-throw exchange
 
+
+            //__________________________________________________________________
+            //
+            //
+            // Comparisons
+            //
+            //__________________________________________________________________
+            friend bool operator==(const Rational &, const Rational &) noexcept;
+            friend bool operator==(const Rational &, const Integer  &) noexcept;
+            friend bool operator==(const Integer  &, const Rational &) noexcept;
+            friend bool operator==(const Rational &, const integer_t ) noexcept;
+            friend bool operator==(const integer_t , const Rational &) noexcept;
+
+
+
             //__________________________________________________________________
             //
             //
