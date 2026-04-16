@@ -117,5 +117,15 @@ namespace Yttrium
         {
             return __Zero__ == s;
         }
+
+        Integer::Integer(Random::CoinFlip &coin, const size_t nbits) :
+        s(__Zero__),
+        n(coin,nbits)
+        {
+            if(n.bits())
+            {
+                if( coin.heads() ) Coerce(s) = Positive; else Coerce(s) = Negative;
+            }
+        }
     }
 }

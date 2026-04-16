@@ -61,10 +61,11 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
             // C++
             //
             //__________________________________________________________________
-            Integer();                  //!< zero
-            Integer(const Integer &);   //!< duplicate
-            Integer(const Natural &);   //!< duplicate
-            Integer(const integer_t);   //!< duplicate
+            Integer();                                 //!< zero
+            Integer(const Integer &);                  //!< duplicate
+            Integer(const Natural &);                  //!< duplicate
+            Integer(const integer_t);                  //!< duplicate
+            Integer(Random::CoinFlip &, const size_t); //!< set with exact bit count, random, random sign
 
 
             Integer & operator=(const Integer &);          //!< assign Integer \return *this
