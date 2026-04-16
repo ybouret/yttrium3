@@ -13,10 +13,30 @@ namespace Yttrium
 {
     namespace Apex
     {
-
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Greatest Common Divider algorithm
+        //
+        //
+        //______________________________________________________________________
         struct KegGCD
         {
 
+            //__________________________________________________________________
+            //
+            //
+            //! entry point
+            /**
+             \param a first array
+             \param n first array size
+             \param b second array
+             \param m second array size
+             \return GCD for every possibility
+             */
+            //
+            //__________________________________________________________________
             template <typename WORD, typename CORE> static inline
             Keg<WORD> * Compute(const WORD * const a,
                                 const size_t       n,
@@ -74,6 +94,19 @@ namespace Yttrium
                 }
             }
 
+            //__________________________________________________________________
+            //
+            //
+            //! compute for stricly positive arrays
+            /**
+             \param a first array != NULL
+             \param n first array size>0
+             \param b second array != NULL
+             \param m second array size>0
+             \return GCD 
+             */
+            //
+            //__________________________________________________________________
             template <typename WORD, typename CORE> static inline
             Keg<WORD> * Compute_(const WORD *   a,
                                  size_t         n,

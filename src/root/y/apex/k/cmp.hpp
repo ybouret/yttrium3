@@ -76,6 +76,12 @@ namespace Yttrium
                 }
             }
 
+            //! helper
+            /**
+             \param lhs compatible object
+             \param rhs compatible object
+             \return comparison
+             */
             template <typename LHS, typename RHS> static inline
             SignType ResultFor(LHS &lhs, RHS &rhs) noexcept
             {

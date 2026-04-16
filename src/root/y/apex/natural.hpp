@@ -23,6 +23,7 @@ inline friend bool operator OP (const Natural & lhs, const Natural & rhs) noexce
 inline friend bool operator OP (const Natural & lhs, const natural_t rhs) noexcept { return Cmp(lhs,rhs) EXPR; } \
 inline friend bool operator OP (const natural_t lhs, const Natural & rhs) noexcept { return Cmp(lhs,rhs) EXPR; }
 
+        //! helper to declare all possible methods
 #define Y_Apex_Natural_Decl(METH) \
 static Natural METH(const Natural & lhs, const Natural & rhs);\
 static Natural METH(const Natural & lhs, const natural_t rhs);\
@@ -93,7 +94,8 @@ Y_Apex_Natural_Unary(OP,CALL)
             //__________________________________________________________________
             virtual const char * callSign() const noexcept;
             virtual void ldz()                    noexcept;
-
+            virtual bool is0()              const noexcept;
+            
             //__________________________________________________________________
             //
             //
@@ -211,7 +213,8 @@ Y_Apex_Natural_Unary(OP,CALL)
             //__________________________________________________________________
             Natural        abs()  const; //!< \return |*this|
             Natural        sqrt() const; //!< \return sqrt(*this)
-            static Natural GCD(const Natural &, const Natural &);
+            static Natural GCD(const Natural &, const Natural &); //!< \return GCD of arguments
+
             //__________________________________________________________________
             //
             //

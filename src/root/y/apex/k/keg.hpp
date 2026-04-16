@@ -294,7 +294,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 }
             }
 
-            //! in place right shift a.k.a divide by two
+            //! in place right shift a.k.a divide by two \return this
             inline Keg * shr() noexcept
             {
                 assert(sanity());

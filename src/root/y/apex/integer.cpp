@@ -111,5 +111,11 @@ namespace Yttrium
             }
             return os << z.n.toDec();
         }
+
+
+        bool Integer:: is0() const noexcept
+        {
+            return __Zero__ == s;
+        }
     }
 }
