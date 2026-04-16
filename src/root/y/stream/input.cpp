@@ -8,4 +8,11 @@ namespace Yttrium
     InputStream:: ~InputStream() noexcept {}
 
 
+    bool InputStream:: gets(String &s)
+    {
+        s.free();
+
+        return false;
+    }
+
 }

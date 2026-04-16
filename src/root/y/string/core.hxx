@@ -132,6 +132,12 @@ template <> String<CH>::ConstType & String<CH>:: ask(const size_t indx) const no
     return code->cxx[indx];
 }
 
+template <> void String<CH>:: free() noexcept
+{
+    assert(code);
+    return code->clear();
+}
+
 
 //------------------------------------------------------------------------------
 //

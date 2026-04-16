@@ -46,6 +46,15 @@ namespace Yttrium
         virtual size_t query(void * const, const size_t ) = 0;
         virtual void   store(const char) = 0;
 
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+        bool gets(String &s);
+        
+
     protected:
         explicit InputStream(); //!< for virtual constructor
 

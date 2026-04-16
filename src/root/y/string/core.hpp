@@ -89,6 +89,8 @@ namespace Yttrium
             virtual size_t capacity() const noexcept;
             virtual void   popTail() noexcept;
             virtual void   popHead() noexcept;
+            virtual void   free()    noexcept;
+            
 
             //__________________________________________________________________
             //
