@@ -23,6 +23,12 @@ inline friend bool operator OP (const Natural & lhs, const Natural & rhs) noexce
 inline friend bool operator OP (const Natural & lhs, const natural_t rhs) noexcept { return Cmp(lhs,rhs) EXPR; } \
 inline friend bool operator OP (const natural_t lhs, const Natural & rhs) noexcept { return Cmp(lhs,rhs) EXPR; }
 
+#define Y_Apex_Natural_Decl(METH) \
+static Natural METH(const Natural & lhs, const Natural & rhs);\
+static Natural METH(const Natural & lhs, const natural_t rhs);\
+static Natural METH(const natural_t lhs, const Natural & rhs)
+
+
         //! helper to implement binary operators
 #define Y_Apex_Natural_Binary(OP,CALL) \
 inline friend Natural operator OP (const Natural & lhs, const Natural & rhs) { return CALL(lhs,rhs); }\
@@ -36,7 +42,9 @@ inline Natural & operator OP##=(const natural_t rhs) { Natural tmp = CALL(*this,
 
         //! helper to implement operators
 #define Y_Apex_Natural(OP,CALL) \
-Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
+Y_Apex_Natural_Decl(CALL);      \
+Y_Apex_Natural_Binary(OP,CALL)  \
+Y_Apex_Natural_Unary(OP,CALL)
 
         class Integer;
 
@@ -57,7 +65,7 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             // Definitions
             //
             //__________________________________________________________________
-            static const char * const CallSign;    //!< "apn"
+            static const char * const   CallSign;  //!< "apn"
             typedef TypeToType<Natural> Directly_; //!< alias
             static const Directly_      Directly;  //!< alias
 
@@ -97,14 +105,14 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             String    toBin()        const;          //!< \return binary content
             String    toDec()        const;          //!< \return decimal constent
             natural_t lsw()          const noexcept; //!< \return least significant word
-            
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             //__________________________________________________________________
             //
             //
             // Comparisons
             //
             //__________________________________________________________________
-#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             static SignType Cmp(const Natural &lhs, const Natural & rhs) noexcept;
             static SignType Cmp(const Natural &lhs, natural_t       rhs) noexcept;
             static SignType Cmp(natural_t      lhs, const Natural & rhs) noexcept;
@@ -116,27 +124,17 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             Y_Apex_Natural_Cmp(<=, != Positive)
             Y_Apex_Natural_Cmp(>=, != Negative)
 
-
-
-#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
-
             //__________________________________________________________________
             //
             //
             // Additions
             //
             //__________________________________________________________________
-#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            static Natural Add(const Natural &lhs, const Natural & rhs);
-            static Natural Add(const Natural &lhs, natural_t       rhs);
-            static Natural Add(natural_t      lhs, const Natural & rhs);
-            Natural        successor() const;
+            Natural   operator+() const;
             Y_Apex_Natural(+,Add)
+            Natural        successor() const;
             Natural & operator++();      //!< prefix
             Natural   operator++(int);   //!< postfix
-            Natural   operator+() const;
-#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
-
 
             //__________________________________________________________________
             //
@@ -144,16 +142,11 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             // Subtraction
             //
             //__________________________________________________________________
-#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            static Natural Sub(const Natural &lhs, const Natural & rhs);
-            static Natural Sub(const Natural &lhs, natural_t       rhs);
-            static Natural Sub(natural_t      lhs, const Natural & rhs);
-            Natural        predecessor() const;
+            Integer   operator-()   const;
+            Natural   predecessor() const;
             Y_Apex_Natural(-,Sub)
             Natural & operator--();    //!< prefix
             Natural   operator--(int); //!< postfix
-            Integer   operator-() const;
-#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
             //__________________________________________________________________
             //
@@ -161,12 +154,7 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             // Multiplication
             //
             //__________________________________________________________________
-#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            static Natural Mul(const Natural &lhs, const Natural & rhs);
-            static Natural Mul(const Natural &lhs, natural_t       rhs);
-            static Natural Mul(natural_t      lhs, const Natural & rhs);
             Y_Apex_Natural(*,Mul)
-#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
 
             //__________________________________________________________________
@@ -175,41 +163,31 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             // Division
             //
             //__________________________________________________________________
-
-#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            static void Division(Natural * const quot,
+            static bool Division(Natural * const quot,
                                  Natural * const rem,
                                  const Natural & numer,
                                  const Natural & denom);
 
-            static void Division(Natural * const quot,
+            static bool Division(Natural * const quot,
                                  Natural * const rem,
                                  const Natural & numer,
                                  const natural_t denom);
 
-            static void Division(Natural * const quot,
+            static bool Division(Natural * const quot,
                                  Natural * const rem,
                                  const natural_t numer,
                                  const Natural & denom);
 
-            static Natural Div(const Natural &lhs, const Natural & rhs);
-            static Natural Div(const Natural &lhs, natural_t       rhs);
-            static Natural Div(natural_t      lhs, const Natural & rhs);
             Y_Apex_Natural(/,Div)
-#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
-
 
             //__________________________________________________________________
             //
             //
-            // Module
+            // Modulo
             //
             //__________________________________________________________________
-#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            static Natural Modulo(const Natural &lhs, const Natural & rhs);
-            static Natural Modulo(const Natural &lhs, natural_t       rhs);
-            static Natural Modulo(natural_t      lhs, const Natural & rhs);
             Y_Apex_Natural(%,Modulo)
+            
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
 
@@ -249,7 +227,7 @@ Y_Apex_Natural_Binary(OP,CALL) Y_Apex_Natural_Unary(OP,CALL)
             Natural( const Directly_ &, void * const) noexcept;
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            static void DivCall(Natural * const, Natural * const,
+            static bool DivCall(Natural * const, Natural * const,
                                 const void * const, const size_t,
                                 const void * const, const size_t);
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)

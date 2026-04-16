@@ -37,9 +37,10 @@ namespace Yttrium
              \param nsize size of numerator
              \param denom denominator words
              \param dsize size of denominator
+             \return true iff numer was divisible by denom i.e remainder is 0
              */
             template <typename WORD,typename CORE> static inline
-            void Compute(AutoPtr< Keg<WORD> > * quot,
+            bool Compute(AutoPtr< Keg<WORD> > * quot,
                          AutoPtr< Keg<WORD> > * rem,
                          const WORD * const     numer,
                          const size_t           nsize,
@@ -62,17 +63,17 @@ namespace Yttrium
                     case Negative:
                         if(quot) *quot = KegType::Zero();
                         if(rem)  *rem  = new KegType(numer,nsize);
-                        return;
+                        return (nsize<=0); // divisible iff numer=0
 
                     case __Zero__:
                         if(dsize<=0) throw Libc::Exception(EDOM,"%s undetermined 0/0", KegMetrics::CallSign);
                         if(quot) *quot = KegType::One();
                         if(rem)  *rem  = KegType::Zero();
-                        return;
+                        return true; // special case
 
                     case Positive:
                         if(dsize<=0) throw Libc::Exception(EDOM,"%s division by 0",KegMetrics::CallSign);
-                        break;
+                        break; // most generic case
                 }
 
                 //--------------------------------------------------------------
@@ -94,7 +95,7 @@ namespace Yttrium
                     Coerce(q->words) = nsize; q->update();                  // update quotien
                     if(quot) *quot = q;
                     if(rem)  *rem  = new KegType(CopyOf,r);
-                    return;
+                    return (r <= 0);
                 }
 #endif // defined(Y_Apex_Use_Small_Division)
 
@@ -120,7 +121,7 @@ namespace Yttrium
                         case __Zero__: // specific case upper * denom == numer
                             if( quot ) *quot = upper;
                             if( rem  ) *rem  = KegType::Zero();
-                            return;
+                            return true;
 
                         case Positive: // upper * denom > numer
                             break;
@@ -158,10 +159,10 @@ namespace Yttrium
                             lower = middle;
                             continue;
 
-                        case __Zero__: // specific case
+                        case __Zero__: // special case
                             if(quot) *quot = middle;
                             if(rem)  *rem  = KegType::Zero();
-                            return;
+                            return true;
 
                         case Positive: // middle * denom > numer
                             upper = middle;
@@ -171,22 +172,25 @@ namespace Yttrium
                 }
 
                 // lower is quotient, positive remainder
-                upper.free();
 
-                // compute remainder to preserve lower value
+                // compute remainder to preserve lower value for quot
+                upper.free();
                 if(rem)
                 {
                     KegPtr probe = KegMul::Compute<WORD,CORE>(lower->word,lower->words,denom,dsize);
                     assert( Negative == KegCmp::Result<WORD>(probe->word,probe->words,numer,nsize) );
                     KegPtr diff  = KegSub::Compute<WORD,CORE>(numer,nsize,probe->word,probe->words);
                     *rem = diff;
+                    assert(diff->bits>0);
                 }
 
+                // transfer quote
                 if(quot)
                 {
                     *quot = lower;
                 }
 
+                return false;
             }
 
             //! low level test \param lhs upper value \param rhs lower value \return (lhs-rhs)>1
@@ -217,7 +221,7 @@ namespace Yttrium
                             const size_t           dsize)
             {
                 AutoPtr< Keg<WORD> > quot;
-                Compute<WORD,CORE>(&quot,0, numer, nsize, denom, dsize);
+                (void) Compute<WORD,CORE>(&quot,0, numer, nsize, denom, dsize);
                 assert(quot.isValid());
                 return quot.yield();
             }
@@ -238,7 +242,7 @@ namespace Yttrium
                            const size_t           dsize)
             {
                 AutoPtr< Keg<WORD> > rem;
-                Compute<WORD,CORE>(0,&rem, numer, nsize, denom, dsize);
+                (void)Compute<WORD,CORE>(0,&rem, numer, nsize, denom, dsize);
                 assert(rem.isValid());
                 return rem.yield();
             }

@@ -444,6 +444,20 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 return res;
             }
 
+            //! \return true iff even number
+            inline bool isEven() const noexcept
+            {
+                assert( sanity() );
+                return 0 == (word[0] & LowerBit);
+            }
+
+            //! \return true iff odd number
+            inline bool isOdd() const noexcept
+            {
+                assert( sanity() );
+                return 0 != (word[0] & LowerBit);
+            }
+
 
             //__________________________________________________________________
             //

@@ -69,7 +69,7 @@ namespace {
 
 }
 
-Y_UTEST(apex_ksd)
+Y_UTEST(apex_k_sd)
 {
     Core::Rand ran;
     testKSD<uint8_t,uint16_t>(ran);

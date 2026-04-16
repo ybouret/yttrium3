@@ -38,7 +38,7 @@ namespace Yttrium
                     {
 
                         AutoPtr< Keg<WORD> > q,r;
-                        KegDiv::Compute<WORD,CORE>(&q, &r, n->word, n->words, &ten, 1);
+                        (void) KegDiv::Compute<WORD,CORE>(&q, &r, n->word, n->words, &ten, 1);
                         assert(r.isValid());
                         assert(q.isValid());
                         assert(r->words<=1);
