@@ -10,15 +10,19 @@ namespace Yttrium
     namespace Apex
     {
 
-#define Y_APQ_DECL(RET,CALL) \
+#define Y_APQ_DECL(RET,CALL)                         \
 static RET CALL(const Rational &, const Rational &); \
 static RET CALL(const Rational &, const Integer  &); \
-static RET CALL(const Integer  &, const Rational &)
+static RET CALL(const Integer  &, const Rational &); \
+static RET CALL(const Rational &, const Natural  &); \
+static RET CALL(const Natural  &, const Rational &)
 
 #define Y_APQ_CMP(OP,EXPR) \
 inline friend bool operator OP (const Rational & lhs, const Rational & rhs) { return Cmp(lhs,rhs) EXPR; } \
 inline friend bool operator OP (const Rational & lhs, const Integer  & rhs) { return Cmp(lhs,rhs) EXPR; } \
-inline friend bool operator OP (const Integer  & lhs, const Rational & rhs) { return Cmp(lhs,rhs) EXPR; }
+inline friend bool operator OP (const Integer  & lhs, const Rational & rhs) { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP (const Rational & lhs, const Natural  & rhs) { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP (const Natural  & lhs, const Rational & rhs) { return Cmp(lhs,rhs) EXPR; } \
 
 
         //______________________________________________________________________
@@ -107,9 +111,10 @@ inline friend bool operator OP (const Integer  & lhs, const Rational & rhs) { re
 
 
             Y_APQ_DECL(SignType,Cmp);
-            Y_APQ_CMP(<,== Negative)
-            Y_APQ_CMP(>,== Positive)
-
+            Y_APQ_CMP(<, == Negative)
+            Y_APQ_CMP(>, == Positive)
+            Y_APQ_CMP(<=,!= Positive)
+            Y_APQ_CMP(>=,!= Negative)
             //__________________________________________________________________
             //
             //
