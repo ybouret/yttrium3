@@ -16,6 +16,8 @@ namespace Yttrium
             return Natural(Directly,G);
         }
 
+
+        
     }
 
 }

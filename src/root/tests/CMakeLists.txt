@@ -111,6 +111,7 @@ Y_UTEST(apex:k:gcd)
 Y_UTEST(apex:n64)
 Y_UTEST(apex:n)
 Y_UTEST(apex:z)
+Y_UTEST(apex:q)
 
 Y_UTEST(stream:u64)
 Y_UTEST(stream:output:file)

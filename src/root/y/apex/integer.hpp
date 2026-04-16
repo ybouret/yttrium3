@@ -11,6 +11,8 @@ namespace Yttrium
     namespace Apex
     {
 
+        class Rational;
+
         //! helper to implement comparisons
 #define Y_Integer_Cmp(OP,EXPR) \
 inline friend bool operator OP ( const Integer & lhs, const Integer & rhs ) noexcept { return Cmp(lhs,rhs) EXPR; } \
@@ -66,11 +68,12 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
             Integer(const Natural &);                  //!< duplicate
             Integer(const integer_t);                  //!< duplicate
             Integer(Random::CoinFlip &, const size_t); //!< set with exact bit count, random, random sign
-
+            Integer(const Rational &);                 //!< setup if integer
 
             Integer & operator=(const Integer &);          //!< assign Integer \return *this
             Integer & operator=(const Natural &);          //!< assign Natural \return *this
             Integer & operator=(const integer_t) noexcept; //!< assign integral, no throw \return *this
+            Integer & operator=(const Rational &);         //!< assign rational iff interger \return *this
 
             Y_OSTREAM_PROTO(Integer);    //!< display
             virtual ~Integer() noexcept; //!< cleanup
@@ -92,7 +95,7 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
             //
             //__________________________________________________________________
             Integer & xch( Integer & ) noexcept; //!< no-throw exchange \return *this
-
+            String    toDec()             const; //!< \return decimal string
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             //__________________________________________________________________

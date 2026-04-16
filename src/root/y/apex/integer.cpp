@@ -99,17 +99,21 @@ namespace Yttrium
         }
 
 
-
-        std::ostream & operator<<(std::ostream &os, const Integer &z)
+        String Integer:: toDec() const
         {
-            switch(z.s)
+            switch(s)
             {
-                case Negative: return os << ('-' + z.n.toDec() );
+                case Negative: return  ('-' + n.toDec() );
                 case __Zero__:
                 case Positive:
                     break;
             }
-            return os << z.n.toDec();
+            return n.toDec();
+        }
+
+        std::ostream & operator<<(std::ostream &os, const Integer &z)
+        {
+            return os << z.toDec();
         }
 
 
