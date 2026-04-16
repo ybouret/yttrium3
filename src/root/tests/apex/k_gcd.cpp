@@ -19,7 +19,7 @@ namespace
         typedef Keg<WORD>        KegType;
         typedef AutoPtr<KegType> KegPtr;
 
-        std::cerr << "-- GCD<" << sizeof(WORD)*8 << "," << sizeof(CORE) * 8 << ">" << std::endl;
+        //std::cerr << "-- GCD<" << sizeof(WORD)*8 << "," << sizeof(CORE) * 8 << ">" << std::endl;
 
         for(size_t i=0;i<=64;++i)
         {
@@ -28,10 +28,13 @@ namespace
                 {
                     const natural_t lhs = ran.gen<natural_t>(i);
                     const natural_t rhs = ran.gen<natural_t>(j);
-                    //const natural_t gcd = GreatestCommonDivisor(lhs,rhs);
+                    const natural_t gcd = GreatestCommonDivisor(lhs,rhs);
+
+                    const KegType   kGCD(CopyOf,gcd);
                     const KegType   L(CopyOf,lhs);
                     const KegType   R(CopyOf,rhs);
-                    KegPtr          G = KegGCD:: Compute<WORD,CORE>(L.word,L.words,R.word,R.words);
+                    const KegPtr G = KegGCD:: Compute<WORD,CORE>(L.word,L.words,R.word,R.words);
+                    Y_ASSERT( KegCmp::ResultFor(*G,kGCD) == __Zero__ );
                 }
             }
         }

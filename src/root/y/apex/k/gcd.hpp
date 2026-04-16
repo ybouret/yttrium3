@@ -128,7 +128,7 @@ namespace Yttrium
                 KegPtr A = new Keg<WORD>(a,n);
                 KegPtr B = new Keg<WORD>(b,m);
 
-                std::cerr << "GCD(" << KegDec::ToString<WORD,CORE>(*A) << "," << KegDec::ToString<WORD,CORE>(*B) << ")" << std::endl;
+                //std::cerr << "GCD(" << KegDec::ToString<WORD,CORE>(*A) << "," << KegDec::ToString<WORD,CORE>(*B) << ")" << std::endl;
 
 
                 // iterative look up
@@ -137,10 +137,10 @@ namespace Yttrium
                     assert(A.isValid());
                     assert(B.isValid());
                     KegPtr R = KegDiv::Rem<WORD,CORE>(A->word,A->words,B->word,B->words); // R = A%B
-                    //A = B;
-                    //B = R;
-                    //if(B->bits<=0) return A.yield();
-                    return 0;
+                    A = B; assert(A.isValid());
+                    B = R; assert(B.isValid());
+                    if(B->bits<=0)
+                        return A.yield();
                 }
             }
 
