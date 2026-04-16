@@ -44,6 +44,7 @@ y/pointer
 y/utest
 y/stream
 y/stream/io
+y/stream/libc
 y/object
 y/object/light
 y/string

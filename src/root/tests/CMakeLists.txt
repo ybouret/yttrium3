@@ -113,3 +113,5 @@ Y_UTEST(apex:n)
 Y_UTEST(apex:z)
 
 Y_UTEST(stream:u64)
+Y_UTEST(stream:output:file)
+
