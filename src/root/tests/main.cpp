@@ -95,6 +95,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(apex_k_gcd);
     Y_UTEST(apex_n64);
     Y_UTEST(apex_n);
+    Y_UTEST(apex_n_red);
     Y_UTEST(apex_z);
     Y_UTEST(apex_q);
 

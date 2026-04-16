@@ -1,4 +1,5 @@
 #include "y/apex/rational.hpp"
+#include "y/core/max.hpp"
 #include "y/system/exception.hpp"
 #include <cerrno>
 
@@ -105,20 +106,7 @@ namespace Yttrium
         }
 
 
-        void Rational:: reduce()
-        {
-            if( denom.is0() ) throw Libc::Exception(EDOM,"%s with zero denominator", CallSign);
-
-            const Natural g = Natural::GCD(numer.n,denom);
-            if(g>1)
-            {
-                Natural nn = numer.n / g;
-                Natural dd = denom   / g;
-                Coerce(numer.n).xch(nn);
-                Coerce(denom).xch(dd);
-            }
-
-        }
+        
 
         Rational:: Rational(const Integer &n, const Natural &d) :
         Number(),
@@ -157,6 +145,14 @@ namespace Yttrium
         Number(),
         numer(f.numer),
         denom(f.denom)
+        {
+            reduce();
+        }
+
+        Rational:: Rational(Random::CoinFlip &coin, const size_t nbits, const size_t dbits) :
+        Number(),
+        numer(coin,nbits),
+        denom(coin,Max<size_t>(1,dbits))
         {
             reduce();
         }

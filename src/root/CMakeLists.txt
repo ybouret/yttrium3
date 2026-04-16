@@ -53,6 +53,7 @@ y/apex
 y/apex/k
 y/apex/n
 y/apex/z
+y/apex/q
 )
 
 add_subdirectory(tests)

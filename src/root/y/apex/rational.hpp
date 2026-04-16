@@ -45,6 +45,8 @@ namespace Yttrium
             Rational(const integer_t, const Natural &); //!< setup as fraction
             Rational(const integer_t, const natural_t); //!< setup as fraction
             Rational(const Fraction);                   //!< setup as fraction
+            Rational(Random::CoinFlip &, const size_t, const size_t); //!< setup random
+
 
             virtual ~Rational() noexcept; //!< cleanup
             Y_OSTREAM_PROTO(Rational);    //!< display

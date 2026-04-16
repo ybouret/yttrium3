@@ -35,8 +35,6 @@ Y_UTEST(apex_n)
         const apn prod = lhs * rhs;
         Y_ASSERT(prod/rhs==lhs);
         const apn m = lhs % rhs;
-        
-
     }
 
 }

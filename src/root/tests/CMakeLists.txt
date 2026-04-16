@@ -110,6 +110,7 @@ Y_UTEST(apex:k:sd)
 Y_UTEST(apex:k:gcd)
 Y_UTEST(apex:n64)
 Y_UTEST(apex:n)
+Y_UTEST(apex:n:red)
 Y_UTEST(apex:z)
 Y_UTEST(apex:q)
 
