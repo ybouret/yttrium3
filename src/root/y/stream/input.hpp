@@ -42,9 +42,9 @@ namespace Yttrium
         // Interface
         //
         //______________________________________________________________________
-        virtual bool   query(char &)     = 0;
-        virtual size_t query(void * const, const size_t ) = 0;
-        virtual void   store(const char) = 0;
+        virtual bool   query(char &)                      = 0; //!< \return true if new char is available
+        virtual size_t query(void * const, const size_t ) = 0; //!< \return read in block
+        virtual void   store(const char)                  = 0; //!< store single back back into the stream
 
         //______________________________________________________________________
         //

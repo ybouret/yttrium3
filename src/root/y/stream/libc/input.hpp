@@ -56,12 +56,12 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
-        void prefetch(size_t);
+        void prefetch(size_t); //!< pre-fetch chars, mostly to debug
 
     private:
         Y_Disable_Copy_And_Assign(InputFile); //!< discarded
         void * const code; //!< inner code
-        IO::Chars    buff;
+        IO::Chars    buff; //!< inner buffer
         
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         static void * OpenRegular(const String &);
