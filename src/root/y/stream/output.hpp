@@ -43,9 +43,9 @@ namespace Yttrium
         // Interface
         //
         //______________________________________________________________________
-        virtual void write(const char) = 0;                       //!< write single char
+        virtual void write(const char)                       = 0; //!< write single char
         virtual void write(const void * const, const size_t) = 0; //!< write block of bytes
-        virtual void flush()           = 0;                       //!< flush state
+        virtual void flush()                                 = 0; //!< flush state
 
 
         //______________________________________________________________________
@@ -56,6 +56,7 @@ namespace Yttrium
         //______________________________________________________________________
         size_t vbr64(const uint64_t); //!< write variable byte rate 64 bits \return written bytes
 
+        //! variable byte rate output \param x integral value \return written bytes
         template <typename T> inline
         size_t vbr(const T &x)
         {
@@ -67,6 +68,7 @@ namespace Yttrium
             return vbr64(alias.u);
         }
 
+        //! constrant byte rate output \param x integral value \return written bytes
         template <typename T> inline
         size_t cbr(const T &x)
         {
@@ -78,10 +80,10 @@ namespace Yttrium
             return emit(alias.u);
         }
 
-        size_t emit(const uint8_t  &);
-        size_t emit(const uint16_t &);
-        size_t emit(const uint32_t &);
-        size_t emit(const uint64_t &);
+        size_t emit(const uint8_t  &); //!< emit one byte    \return 1
+        size_t emit(const uint16_t &); //!< emit two bytes   \return 2
+        size_t emit(const uint32_t &); //!< emit four bytes  \return 4
+        size_t emit(const uint64_t &); //!< emit eight bytes \return 8
 
 
     protected:
