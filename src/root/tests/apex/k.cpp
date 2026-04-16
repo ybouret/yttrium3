@@ -2,6 +2,7 @@
 #include "y/apex/k/add.hpp"
 #include "y/apex/k/sub.hpp"
 #include "y/apex/k/cmp.hpp"
+#include "y/apex/k/div.hpp"
 
 #include "y/utest/run.hpp"
 #include "y/pointer/auto.hpp"
@@ -14,7 +15,7 @@ using namespace Apex;
 
 namespace
 {
-    static long double tmx = 0.05L;
+    static long double tmx = 0.01L;
 
     template <typename WORD, typename CORE> static inline
     void TestKeg(Core::Rand &ran)
@@ -22,7 +23,7 @@ namespace
         typedef Keg<WORD> KegType;
         System::WallTime  chrono;
 
-        std::cerr << "-- Test Keg<" << KegType::WordBits << "> / " << sizeof(CORE)*8 << std::endl;
+        std::cerr << "-- \tTest Keg<" << KegType::WordBits << "> / " << sizeof(CORE)*8 << " \t--" << std::endl;
 
         //----------------------------------------------------------------------
         //
@@ -156,7 +157,56 @@ namespace
             }
         }
 
+        //----------------------------------------------------------------------
+        //
+        //
+        // test div
+        //
+        //
+        //----------------------------------------------------------------------
+        {
+            std::cerr << "-- testing divisions" << std::endl;
 
+            (std::cerr << '[').flush();
+            for(size_t i=0;i<=64;++i)
+            {
+                if(0==(i&0x1))
+                    (std::cerr << '.').flush();
+                for(size_t j=1;j<=64;++j)
+                {
+                    for(size_t iter=0;iter<8;++iter)
+                    {
+                        const natural_t      lhs  = ran.gen<natural_t>( i );
+                        const natural_t      rhs  = ran.gen<natural_t>( j );
+                        const natural_t      quot = lhs/rhs;
+                        const natural_t      rem  = lhs%rhs;
+
+                        const KegType        L(CopyOf,lhs);
+                        const KegType        R(CopyOf,rhs);
+                        const KegType        kQuot(CopyOf,quot);
+                        const KegType        kRem(CopyOf,rem);
+
+                        {
+                            AutoPtr<KegType>     Quot;
+                            KegDiv::Compute<WORD,CORE>(&Quot,0,L.word,L.words,R.word,R.words);
+                            Y_ASSERT(Quot.isValid());
+                            Y_ASSERT( __Zero__ == KegCmp::ResultFor(kQuot,*Quot) );
+                        }
+
+                        {
+                            AutoPtr<KegType>  Rem;
+                            KegDiv::Compute<WORD,CORE>(0,&Rem,L.word,L.words,R.word,R.words);
+                            Y_ASSERT(Rem.isValid());
+                            Y_ASSERT( __Zero__ == KegCmp::ResultFor(kRem,*Rem) );
+                        }
+
+
+                    }
+                }
+            }
+            std::cerr << ']' << std::endl;
+
+        }
 
 
         std::cerr << std::endl;
@@ -167,16 +217,18 @@ namespace
 Y_UTEST(apex_k)
 {
     Core::Rand ran;
-    Y_PRINTV(KegMetrics::MaxBytes);
-    std::cerr << std::endl;
-    
+
+    if(argc>1)
+    {
+        tmx = atof(argv[1]);
+    }
+
     TestKeg<uint8_t, uint16_t>(ran);
     TestKeg<uint8_t, uint32_t>(ran);
     TestKeg<uint8_t, uint64_t>(ran);
     TestKeg<uint16_t,uint32_t>(ran);
     TestKeg<uint16_t,uint64_t>(ran);
     TestKeg<uint32_t,uint64_t>(ran);
-
 
 }
 Y_UDONE()

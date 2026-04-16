@@ -40,12 +40,12 @@ namespace Yttrium
              \return true iff numer was divisible by denom i.e remainder is 0
              */
             template <typename WORD,typename CORE> static inline
-            bool Compute(AutoPtr< Keg<WORD> > * quot,
-                         AutoPtr< Keg<WORD> > * rem,
-                         const WORD * const     numer,
-                         const size_t           nsize,
-                         const WORD * const     denom,
-                         const size_t           dsize)
+            bool Compute(AutoPtr< Keg<WORD> > * const quot,
+                         AutoPtr< Keg<WORD> > * const rem,
+                         const WORD * const           numer,
+                         const size_t                 nsize,
+                         const WORD * const           denom,
+                         const size_t                 dsize)
             {
 
                 typedef Keg<WORD>        KegType;
@@ -61,14 +61,14 @@ namespace Yttrium
                 switch( KegCmp::Result(numer,nsize,denom,dsize) )
                 {
                     case Negative:
-                        if(quot) *quot = KegType::Zero();
-                        if(rem)  *rem  = new KegType(numer,nsize);
+                        if(quot) { *quot = KegType::Zero();          assert(quot->isValid()); }
+                        if(rem)  { *rem  = new KegType(numer,nsize); assert(rem->isValid());  }
                         return (nsize<=0); // divisible iff numer=0
 
                     case __Zero__:
                         if(dsize<=0) throw Libc::Exception(EDOM,"%s undetermined 0/0", KegMetrics::CallSign);
-                        if(quot) *quot = KegType::One();
-                        if(rem)  *rem  = KegType::Zero();
+                        if(quot) { *quot = KegType::One();  assert( quot->isValid() ); }
+                        if(rem)  { *rem  = KegType::Zero(); assert( rem->isValid() );  }
                         return true; // special case
 
                     case Positive:
@@ -93,8 +93,8 @@ namespace Yttrium
                     KegPtr     q = new KegType(WithAtLeast,nsize);          // prepare quotiemt
                     const WORD r = Small<WORD,CORE>(q->word,nsize,numer,d); // compute and return remainder
                     Coerce(q->words) = nsize; q->update();                  // update quotien
-                    if(quot) *quot = q;
-                    if(rem)  *rem  = new KegType(CopyOf,r);
+                    if(quot) { *quot = q;                     assert(quot->isValid()); }
+                    if(rem)  { *rem  = new KegType(CopyOf,r); assert(rem->isValid());  }
                     return (r <= 0);
                 }
 #endif // defined(Y_Apex_Use_Small_Division)
@@ -119,8 +119,8 @@ namespace Yttrium
                             goto FIND_UPPER;
 
                         case __Zero__: // specific case upper * denom == numer
-                            if( quot ) *quot = upper;
-                            if( rem  ) *rem  = KegType::Zero();
+                            if( quot ) { *quot = upper;           assert(quot->isValid()); }
+                            if( rem  ) { *rem  = KegType::Zero(); assert(rem->isValid());  }
                             return true;
 
                         case Positive: // upper * denom > numer
@@ -149,8 +149,8 @@ namespace Yttrium
 
                 while( GT1<WORD,CORE>(upper,lower) )
                 {
-                    KegPtr middle = KegAdd::Compute<WORD,CORE>(lower->word, lower->words, upper->word, upper->words);
-                    middle->shr();
+                    KegPtr middle = KegAdd::Compute<WORD,CORE>(lower->word, lower->words, upper->word, upper->words)->shr();
+                    //middle->shr();
                     KegPtr probe = KegMul::Compute<WORD,CORE>(middle->word,middle->words,denom,dsize);
 
                     switch( KegCmp::Result<WORD>(probe->word,probe->words,numer,nsize) )

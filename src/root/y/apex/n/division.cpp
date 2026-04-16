@@ -97,6 +97,12 @@ namespace Yttrium
                     return divisible;
                 }
             }
+
+#if defined(__GNUC__) && !defined(__clang__)
+            // never get here
+            return false;
+#endif
+            
         }
 
         bool Natural:: Division(Natural * const quot,

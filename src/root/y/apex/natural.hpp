@@ -209,9 +209,9 @@ Y_Apex_Natural_Unary(OP,CALL)
             // Arithmetic
             //
             //__________________________________________________________________
-            Natural abs()  const; //!< \return |*this|
-            Natural sqrt() const; //!< \return sqrt(*this)
-
+            Natural        abs()  const; //!< \return |*this|
+            Natural        sqrt() const; //!< \return sqrt(*this)
+            static Natural GCD(const Natural &, const Natural &);
             //__________________________________________________________________
             //
             //

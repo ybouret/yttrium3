@@ -294,15 +294,15 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 }
             }
 
-            //! in place right shift
-            inline void shr() noexcept
+            //! in place right shift a.k.a divide by two
+            inline Keg * shr() noexcept
             {
                 assert(sanity());
 
                 switch(words)
                 {
-                    case 0: return;
-                    case 1: word[0] >>= 1; update(); return;
+                    case 0:                           return this;
+                    case 1:  word[0] >>= 1; update(); return this;
                     default: break;
                 }
                 assert(words>=2);
@@ -315,6 +315,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 }
                 word[msi] >>= 1;
                 update();
+                return this;
             }
 
             //! shl \return multiplied by two

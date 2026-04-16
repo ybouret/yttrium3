@@ -73,8 +73,13 @@ namespace Yttrium
                         }
                         return __Zero__;
                     }
-
                 }
+            }
+
+            template <typename LHS, typename RHS> static inline
+            SignType ResultFor(LHS &lhs, RHS &rhs) noexcept
+            {
+                return Result(lhs.word,lhs.words,rhs.word,rhs.words);
             }
 
         };
