@@ -32,6 +32,20 @@ Y_UTEST(stream_input_file)
             std::cerr << "-- done/block" << std::endl;
         }
 
+        std::cerr << "-- string wise --" << std::endl;
+        {
+            InputFile fp(argv[1]);
+            String    s;
+            unsigned  i=0;
+            while( fp.gets(s) )
+            {
+                ++i;
+                std::cerr << std::setw(3) << i << ": '" << s << "'" << std::endl;
+            }
+            std::cerr << "-- done/string" << std::endl;
+
+        }
+
 
     }
 }

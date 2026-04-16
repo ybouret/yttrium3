@@ -22,7 +22,7 @@ namespace Yttrium
     {
         s.free();
 
-        GETCHAR:
+    GETCHAR:
         {
             char C = 0;
             if(!query(C))
@@ -30,8 +30,10 @@ namespace Yttrium
 
             switch(C)
             {
-                default:
-                    break;
+
+
+                case LF: return true;
+                default: break;
 
             }
             s += C;
