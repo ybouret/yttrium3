@@ -21,6 +21,9 @@ namespace Yttrium
     {
 
     public:
+        static const char CR =  '\r';
+        static const char LF =  '\n';
+        
         //______________________________________________________________________
         //
         //
@@ -52,8 +55,9 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
-        bool gets(String &s);
-        
+        bool peek(char &);    //!< \return true iff available char
+        bool gets(String &);  //!< \return ture iff a new (maybe empty) string was read
+
 
     protected:
         explicit InputStream(); //!< for virtual constructor
