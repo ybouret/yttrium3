@@ -43,7 +43,7 @@ namespace Yttrium
                         assert(q.isValid());
                         assert(r->words<=1);
                         assert(r->word[0]<ten);
-                        res += '0' + r->word[0];
+                        res += (char)('0' + r->word[0]);
                         if(q->bits) {
                             n.xch(q);
                             goto NEXT_CHAR;

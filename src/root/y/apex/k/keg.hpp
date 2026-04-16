@@ -143,11 +143,12 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             Y_Apex_Keg_Alloc()
             {
                 assert(words>0);
+                static const WordType _1 = 1;
                 const size_t msi = words-1;   // most significant index
                 WordType    &msw = word[msi]; // most significant word
                 const size_t idx = n - (msi*WordBits);
                 assert(idx<WordBits);
-                msw = WordType(1) << idx;
+                msw = (WordType)( _1 << idx );
             }
 
 
@@ -160,7 +161,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             {
                 Hexadecimal::Display(os,keg.word,keg.words);
                 os << "#bits=" << keg.bits << "|bytes=" << keg.bytes;
-                if(WordBytes>1) os << "|words=" << keg.words;
+                // if(WordBytes>1) os << "|words=" << keg.words;
                 return os;
             }
 
@@ -333,7 +334,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                         {
                             target[j] |= LowerBit;
                         }
-                        target[i] = (w<<1);
+                        target[i] = (WordType)(w<<1);
                     }
                 }
                 Coerce(res->words) = n;

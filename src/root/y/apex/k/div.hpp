@@ -282,9 +282,9 @@ namespace Yttrium
                 for(size_t j=n;j>0;)
                 {
                     --j;
-                    const CORE i = WMax * ir + static_cast<CORE>(u[j]);
+                    const CORE i = (CORE)(static_cast<CORE>(WMax * ir) + static_cast<CORE>(u[j]));
                     w[j]         = static_cast<WORD>(i/iv);
-                    ir           = i % iv;
+                    ir           = static_cast<CORE>(i%iv);
                 }
                 return static_cast<WORD>(ir);
             }
