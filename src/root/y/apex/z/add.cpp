@@ -126,7 +126,7 @@ namespace Yttrium
                 case Sign::NP:
                 {
                     const natural_t N = _abs_of(rhs);
-                    switch( Natural::Cmp(lhs.n,rhs) )
+                    switch( Natural::Cmp(lhs.n,N) )
                     {
                         case Negative: { const Natural delta = N - lhs.n; assert(delta>0); return Integer(Positive,delta); }
                         case Positive: { const Natural delta = lhs.n - N; assert(delta>0); return Integer(Negative,delta); }

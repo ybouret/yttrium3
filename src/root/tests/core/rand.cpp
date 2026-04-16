@@ -21,7 +21,7 @@ Y_UTEST(core_rand)
         ++count;
         sum +=  ran.toss<unsigned>(10);
     }
-    const double ave = sum / count;
+    const double ave = sum / (double)count;
     std::cerr << "ave=" << ave << std::endl;
 
 }

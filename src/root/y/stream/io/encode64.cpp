@@ -31,7 +31,7 @@ namespace Yttrium
 
             // write header
             nOut     = 1+numExtra;
-            byte[0]  = ((uint8_t) numExtra) << SourceBits;
+            byte[0] = (uint8_t)(((uint8_t)numExtra) << SourceBits);
 
             // write SourceBits of qw
             byte[0] |= (uint8_t)(data&SourceMask);

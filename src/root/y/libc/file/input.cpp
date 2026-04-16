@@ -1,3 +1,6 @@
+#if defined(_MSC_VER)
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 
 #include "y/libc/file/input.hpp"
 #include "y/system/exception.hpp"
