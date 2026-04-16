@@ -14,9 +14,10 @@ namespace Yttrium
         typedef int64_t  integer_t; //!< alias
     }
 
+    //! light-weight fraction
     struct Fraction {
-        Apex::natural_t numer;
-        Apex::natural_t denom;
+        Apex::natural_t numer; //!< numerator
+        Apex::natural_t denom; //!< denominator
     };
 
 

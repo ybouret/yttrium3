@@ -4,7 +4,7 @@
 namespace Yttrium
 {
 
-    InputStream::  InputStream() noexcept {}
+    InputStream::  InputStream() : Stream() {}
     InputStream:: ~InputStream() noexcept {}
 
 

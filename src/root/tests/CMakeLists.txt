@@ -115,4 +115,6 @@ Y_UTEST(apex:q)
 
 Y_UTEST(stream:u64)
 Y_UTEST(stream:output:file)
+Y_UTEST(stream:input:file)
+
 

@@ -100,6 +100,7 @@ Y_UTEST_DECL(8)
 
     Y_UTEST(stream_u64);
     Y_UTEST(stream_output_file);
+    Y_UTEST(stream_input_file);
 
 }
 Y_UTEST_EXEC()

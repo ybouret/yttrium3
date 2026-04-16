@@ -4,7 +4,7 @@
 #define Y_InputStream_Included
 
 
-#include "y/config/setup.hpp"
+#include "y/stream/stream.hpp"
 
 namespace Yttrium
 {
@@ -17,7 +17,7 @@ namespace Yttrium
     //
     //
     //__________________________________________________________________________
-    class InputStream
+    class InputStream : public Stream
     {
 
     public:
@@ -27,8 +27,25 @@ namespace Yttrium
         // C++
         //
         //______________________________________________________________________
-        explicit InputStream() noexcept; //!< setup
+
+        //! setup \param name for title
+        template <typename NAME> inline
+        explicit InputStream(const NAME &name) : Stream(name)
+        {
+        }
+        
         virtual ~InputStream() noexcept; //!< cleanup
+
+        //______________________________________________________________________
+        //
+        //
+        // Interface
+        //
+        //______________________________________________________________________
+        virtual bool query(char &) = 0;
+
+    protected:
+        explicit InputStream(); //!< for virtual constructor
 
     private:
         Y_Disable_Copy_And_Assign(InputStream); //!< discarded

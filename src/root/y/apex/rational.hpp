@@ -40,14 +40,14 @@ namespace Yttrium
             Rational(const Integer  &);  //!< duplicate
             Rational(const integer_t);   //!< duplicate
 
-            Rational(const Integer &, const Natural &);
-            Rational(const Integer &, const natural_t);
-            Rational(const integer_t, const Natural &);
-            Rational(const integer_t, const natural_t);
-            Rational(const Fraction);
+            Rational(const Integer &, const Natural &); //!< setup as fraction
+            Rational(const Integer &, const natural_t); //!< setup as fraction
+            Rational(const integer_t, const Natural &); //!< setup as fraction
+            Rational(const integer_t, const natural_t); //!< setup as fraction
+            Rational(const Fraction);                   //!< setup as fraction
 
-            virtual ~Rational() noexcept;
-            Y_OSTREAM_PROTO(Rational);
+            virtual ~Rational() noexcept; //!< cleanup
+            Y_OSTREAM_PROTO(Rational);    //!< display
 
             //__________________________________________________________________
             //
@@ -65,9 +65,9 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            String     toDec() const;
-            Rational & xch( Rational & ) noexcept;
-            
+            String     toDec()              const; //!< \return decimal representation
+            Rational & xch( Rational & ) noexcept; //!< \return no-throw exchange
+
             //__________________________________________________________________
             //
             //
@@ -78,11 +78,11 @@ namespace Yttrium
             const Natural denom; //!< denominator >= 1
 
         private:
-            void reduce();
+            void reduce(); //!< to irreducible form
         };
     }
 
-    typedef Apex::Rational apq;
+    typedef Apex::Rational apq; //!< alias
 
 }
 
