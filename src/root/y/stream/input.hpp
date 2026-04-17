@@ -100,7 +100,7 @@ namespace Yttrium
             return alias.t;
         }
 
-        //! decode variable byte rate 64 bits
+        //! decode variable byte rate 64 bits to unsigned type
         /**
          \param varName   optional variable name
          \param varPart   optional variable part
@@ -113,9 +113,13 @@ namespace Yttrium
         T vbr(const char * const varName,
               const char * const varPart)
         {
-            // load compact 64 bits
+            typedef typename UnsignedFor<sizeof(T)>::Alias::Type UType;
             const uint64_t qw = vbr64(varName,varPart);
-            return 0;
+            union {
+                UType u;
+                T     t;
+            } alias = { make<UType>(qw,varName,varPart) };
+            return alias.t;
         }
 
     protected:
@@ -123,6 +127,10 @@ namespace Yttrium
 
     private:
         Y_Disable_Copy_And_Assign(InputStream); //!< discarded
+
+        template <typename T>
+        T make(const uint64_t, const char * const, const char * const);
+
 
     };
 

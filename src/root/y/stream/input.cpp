@@ -121,7 +121,40 @@ namespace Yttrium
 
 
 
+    template <>
+    uint8_t InputStream:: make<uint8_t>(const uint64_t     qw,
+                                        const char * const varName,
+                                        const char * const varPart)
+    {
+        if(qw>0xff) { Specific::Exception excp(title.c_str(),"read more than 0xff"); throw excp.signedFor(varName,varPart); }
+        return (uint8_t) qw;
+    }
 
+    template <>
+    uint16_t InputStream:: make<uint16_t>(const uint64_t     qw,
+                                        const char * const varName,
+                                        const char * const varPart)
+    {
+        if(qw>0xffff) { Specific::Exception excp(title.c_str(),"read more than 0xffff"); throw excp.signedFor(varName,varPart); }
+        return (uint16_t) qw;
+    }
+
+    template <>
+    uint32_t InputStream:: make<uint32_t>(const uint64_t     qw,
+                                          const char * const varName,
+                                          const char * const varPart)
+    {
+        if(qw>0xffffffff) { Specific::Exception excp(title.c_str(),"read more than 0xffffffff"); throw excp.signedFor(varName,varPart); }
+        return (uint32_t) qw;
+    }
+
+    template <>
+    uint64_t InputStream:: make<uint64_t>(const uint64_t qw,
+                                          const char * const,
+                                          const char * const)
+    {
+        return qw;
+    }
 
 
 }
