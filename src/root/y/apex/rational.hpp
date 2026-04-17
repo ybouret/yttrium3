@@ -15,7 +15,9 @@ static RET CALL(const Rational &, const Rational &); \
 static RET CALL(const Rational &, const Integer  &); \
 static RET CALL(const Integer  &, const Rational &); \
 static RET CALL(const Rational &, const Natural  &); \
-static RET CALL(const Natural  &, const Rational &)
+static RET CALL(const Natural  &, const Rational &); \
+static RET CALL(const Rational &, const integer_t ); \
+static RET CALL(const integer_t,  const Rational &); \
 
 #define Y_APQ_CMP(OP,EXPR) \
 inline friend bool operator OP (const Rational & lhs, const Rational & rhs) { return Cmp(lhs,rhs) EXPR; } \
