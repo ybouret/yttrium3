@@ -89,8 +89,11 @@ namespace Yttrium
             {
                 return Rational(nn,lhs.denom);
             }
+        }
 
-
+        Rational Rational:: Mul(const Integer &lhs, const Rational &rhs)
+        {
+            return Mul(rhs,lhs);
         }
     }
 
