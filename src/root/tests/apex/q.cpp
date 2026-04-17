@@ -158,7 +158,19 @@ Y_UTEST(apex_q)
             S -= rhs;              Y_ASSERT(lhs == S);
         }
 
-        
+
+        {
+            const apq       lhs(ran,ran.in<size_t>(0,12), ran.in<size_t>(1,12) );
+            const integer_t rhs = ran.in<integer_t>(-100,100);
+            const apq sum = lhs + rhs;
+            Y_ASSERT(rhs+lhs==sum);
+            Y_ASSERT(sum - lhs == rhs); // with conversion!
+            Y_ASSERT(sum - rhs == lhs);
+            apq S = lhs; S += rhs; Y_ASSERT(sum == S);
+            S -= rhs;              Y_ASSERT(lhs == S);
+        }
+
+
 
     }
 

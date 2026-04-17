@@ -115,7 +115,20 @@ namespace Yttrium
 
     }
 
-    
+    namespace Apex
+    {
+        Rational Rational:: Sub(const Rational &lhs, const integer_t rhs)
+        {
+            return Add(lhs,-rhs);
+        }
+
+        Rational Rational:: Sub(const integer_t lhs, const Rational &rhs)
+        {
+            Rational delta = Add(rhs,-lhs);
+            Sign::MakeOpposite( Coerce(delta.numer.s) );
+            return delta;
+        }
+    }
 
 
 }

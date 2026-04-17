@@ -104,5 +104,43 @@ namespace Yttrium
     }
 
 
+    namespace Apex
+    {
+        Rational Rational:: Add(const Rational &lhs, const integer_t rhs)
+        {
+            switch( Sign::Pair(lhs.numer.s, Sign::Of(rhs) ) )
+            {
+                case Sign::PZ:
+                case Sign::NZ:
+                    return lhs;
+
+                case Sign::ZP:
+                case Sign::ZN:
+                    return rhs;
+
+                case Sign::PP:
+                case Sign::NP: {
+                    const Integer nn = lhs.numer + ( (natural_t)rhs * lhs.denom );
+                    return Rational(nn,lhs.denom);
+                }
+
+                case Sign::NN:
+                case Sign::PN: {
+                    const Integer nn = lhs.numer - ( (natural_t)(-rhs) * lhs.denom );
+                    return Rational(nn,lhs.denom);
+                }
+
+                case Sign::ZZ:
+                    break; // => zero
+            }
+            return Rational();
+        }
+
+        Rational Rational:: Add(const integer_t lhs, const Rational &rhs)
+        {
+            return Add(rhs,lhs);
+        }
+    }
+
 
 }
