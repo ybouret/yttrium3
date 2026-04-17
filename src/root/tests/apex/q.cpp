@@ -118,10 +118,24 @@ Y_UTEST(apex_q)
         Y_CHECK( Positive == apq::Cmp(q3_2,i1) );
         Y_CHECK( Negative == apq::Cmp(qm3_2,i1) );
         Y_CHECK( Negative == apq::Cmp(qm1_2,i1) );
-
-
     }
 
+
+    std::cerr << std::endl << "-- add/sub" << std::endl;
+    for(size_t iter=0;iter<1024;++iter)
+    {
+        {
+            const apq lhs(ran,ran.in<size_t>(0,12), ran.in<size_t>(1,12) );
+            const apq rhs(ran,ran.in<size_t>(0,12), ran.in<size_t>(1,12) );
+            const apq sum = lhs + rhs;
+            //std::cerr << lhs << " + " << rhs << " = " << sum << std::endl;
+            Y_ASSERT(rhs+lhs==sum);
+            Y_ASSERT(sum - lhs == rhs);
+            Y_ASSERT(sum - rhs == lhs);
+            apq S = lhs; S += rhs; Y_ASSERT(sum == S);
+        }
+        
+    }
 
 }
 Y_UDONE()

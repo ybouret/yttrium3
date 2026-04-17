@@ -25,7 +25,23 @@ inline friend bool operator OP (const Rational & lhs, const Integer  & rhs) { re
 inline friend bool operator OP (const Integer  & lhs, const Rational & rhs) { return Cmp(lhs,rhs) EXPR; } \
 inline friend bool operator OP (const Rational & lhs, const Natural  & rhs) { return Cmp(lhs,rhs) EXPR; } \
 inline friend bool operator OP (const Natural  & lhs, const Rational & rhs) { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP (const Rational & lhs, const integer_t  rhs) { return Cmp(lhs,rhs) EXPR; } \
+inline friend bool operator OP (const integer_t  lhs, const Rational & rhs) { return Cmp(lhs,rhs) EXPR; }
 
+#define Y_APQ_Binary(OP,CALL) \
+inline friend Rational operator OP (const Rational & lhs, const Rational & rhs) { return CALL(lhs,rhs); } \
+inline friend Rational operator OP (const Rational & lhs, const Integer  & rhs) { return CALL(lhs,rhs); } \
+inline friend Rational operator OP (const Integer  & lhs, const Rational & rhs) { return CALL(lhs,rhs); } \
+inline friend Rational operator OP (const Rational & lhs, const Natural  & rhs) { return CALL(lhs,rhs); } \
+inline friend Rational operator OP (const Natural  & lhs, const Rational & rhs) { return CALL(lhs,rhs); } \
+inline friend Rational operator OP (const Rational & lhs, const integer_t  rhs) { return CALL(lhs,rhs); } \
+inline friend Rational operator OP (const integer_t  lhs, const Rational & rhs) { return CALL(lhs,rhs); }
+
+#define Y_APQ_Unary(OP,CALL) \
+inline Rational & operator OP##= ( const Rational &rhs ) { Rational tmp = CALL(*this,rhs); return xch(tmp); }
+
+#define Y_APQ_Impl(OP,CALL) \
+Y_APQ_DECL(Rational,CALL) Y_APQ_Binary(OP,CALL) Y_APQ_Unary(OP,CALL)
 
         //______________________________________________________________________
         //
@@ -118,6 +134,24 @@ inline friend bool operator OP (const Natural  & lhs, const Rational & rhs) { re
             Y_APQ_CMP(>, == Positive)
             Y_APQ_CMP(<=,!= Positive)
             Y_APQ_CMP(>=,!= Negative)
+
+            //__________________________________________________________________
+            //
+            //
+            // Additions
+            //
+            //__________________________________________________________________
+            Y_APQ_Impl(+,Add)
+            Rational operator+() const;
+
+            //__________________________________________________________________
+            //
+            //
+            // Subtractions
+            //
+            //__________________________________________________________________
+            Y_APQ_Impl(-,Sub)
+            Rational operator-() const;
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             
