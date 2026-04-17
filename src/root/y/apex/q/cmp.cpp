@@ -156,8 +156,25 @@ namespace Yttrium
     {
         SignType Rational:: Cmp(const Rational &lhs, const Natural &rhs)
         {
-            const Integer R = rhs * lhs.denom;
-            return Integer::Cmp(lhs.numer,R);
+
+            if( rhs.is0() )
+            {
+                return lhs.numer.s;
+            }
+            else
+            {
+                assert(rhs>0);
+                switch(lhs.numer.s)
+                {
+                    case Negative:
+                    case __Zero__:
+                        return Negative;
+                    case Positive:
+                        break;
+                }
+                const Integer R = rhs * lhs.denom;
+                return Integer::Cmp(lhs.numer,R);
+            }
         }
 
         SignType Rational:: Cmp(const Natural &lhs, const Rational &rhs)
