@@ -170,9 +170,17 @@ Y_UTEST(apex_q)
             S -= rhs;              Y_ASSERT(lhs == S);
         }
 
-
-
     }
+
+    for(Rational q(-10,3); q <= 5; ++q) std::cerr << ' ' << q;
+    std::cerr << std::endl;
+    for(Rational q(-10,3); q <= 5; q++) std::cerr << ' ' << q;
+    std::cerr << std::endl;
+
+    for(Rational q(10,3); q >= -5; --q) std::cerr << ' ' << q;
+    std::cerr << std::endl;
+    for(Rational q(10,3); q >= -5; q--) std::cerr << ' ' << q;
+    std::cerr << std::endl;
 
 }
 Y_UDONE()

@@ -143,6 +143,9 @@ Y_APQ_DECL(Rational,CALL) Y_APQ_Binary(OP,CALL) Y_APQ_Unary(OP,CALL)
             //__________________________________________________________________
             Y_APQ_Impl(+,Add)
             Rational operator+() const;
+            Rational & operator++();      //!< prefix
+            Rational   operator++(int);   //!< postfix
+            Rational   successor() const;
 
             //__________________________________________________________________
             //
@@ -152,6 +155,9 @@ Y_APQ_DECL(Rational,CALL) Y_APQ_Binary(OP,CALL) Y_APQ_Unary(OP,CALL)
             //__________________________________________________________________
             Y_APQ_Impl(-,Sub)
             Rational operator-() const;
+            Rational & operator--();        //!< prefix
+            Rational   operator--(int);     //!< postfix
+            Rational   predecessor() const;
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             

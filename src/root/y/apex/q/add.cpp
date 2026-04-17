@@ -142,5 +142,27 @@ namespace Yttrium
         }
     }
 
+    namespace Apex
+    {
+
+        Rational Rational:: successor() const
+        {
+            const Integer nn = numer+denom;
+            return Rational(nn,denom);
+        }
+
+        Rational & Rational:: operator++()
+        {
+            Rational tmp = successor();
+            return xch(tmp);
+        }
+
+        Rational Rational:: operator++(int)
+        {
+            const Rational res = *this;
+            { Rational tmp = successor(); (void) xch(tmp); }
+            return res;
+        }
+    }
 
 }
