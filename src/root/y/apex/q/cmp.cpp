@@ -186,8 +186,37 @@ namespace Yttrium
 
     namespace Apex
     {
+
+
         SignType Rational:: Cmp(const Rational &lhs, const integer_t rhs)
         {
+
+            switch( Sign::Pair(lhs.numer.s, Sign::Of(rhs) ) )
+            {
+
+                case Sign::PZ:
+                case Sign::PN:
+                case Sign::ZN:
+                    return Positive;
+
+                case Sign::ZP:
+                case Sign::NP:
+                case Sign::NZ:
+                    return Negative;
+
+                case Sign::ZZ: break; // => zero
+
+                case Sign::PP: {
+                    const Natural R = lhs.denom * (natural_t) rhs;
+                    return Natural::Cmp(lhs.numer.n,R);
+                }
+
+                case Sign::NN: {
+                    const Natural R = lhs.denom * (natural_t) -rhs;
+                    return Natural::Cmp(R,lhs.numer.n);
+                }
+            }
+            
             return __Zero__;
         }
 

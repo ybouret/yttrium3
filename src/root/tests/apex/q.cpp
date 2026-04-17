@@ -9,6 +9,7 @@ Y_UTEST(apex_q)
 {
     Core::Rand ran;
 
+    std::cerr << std::endl << "-- reduction" << std::endl;
     { apq q; std::cerr << q << std::endl; }
 
     {
@@ -23,6 +24,7 @@ Y_UTEST(apex_q)
     }
 
 
+    std::cerr << std::endl << "-- equalities" << std::endl;
     {
         apq a(3,2), b(6,4); Y_CHECK(a==b);
     }
@@ -35,6 +37,7 @@ Y_UTEST(apex_q)
         Y_CHECK(I==a); Y_CHECK(i==a);
     }
 
+    std::cerr << std::endl << "-- comparisons" << std::endl;
     {
         const apq zero;
         const apq half(1,2);
@@ -95,6 +98,27 @@ Y_UTEST(apex_q)
         Y_CHECK( Negative == apq::Cmp(q1_2,n1) );
         Y_CHECK( Negative == apq::Cmp(qm1_2,n0) );
         Y_CHECK( Negative == apq::Cmp(qm1_2,n1) );
+
+    }
+
+    {
+        const apq       q0, q1 = 1, qm1 = -1;
+        const integer_t i0 = 0, i1 = 1, im1 = -1;
+        const apq       q1_2(1,2), qm1_2(-1,2);
+        const apq       q3_2(3,2), qm3_2(-3,2);
+
+
+        Y_CHECK( __Zero__ == apq::Cmp(q0,i0) );
+        Y_CHECK( __Zero__ == apq::Cmp(q1,i1) );
+        Y_CHECK( __Zero__ == apq::Cmp(qm1,im1) );
+
+        Y_CHECK( Positive == apq::Cmp(q1_2,i0) );
+        Y_CHECK( Positive == apq::Cmp(qm1_2,im1) );
+        Y_CHECK( Negative == apq::Cmp(qm1_2,i0) );
+        Y_CHECK( Positive == apq::Cmp(q3_2,i1) );
+        Y_CHECK( Negative == apq::Cmp(qm3_2,i1) );
+        Y_CHECK( Negative == apq::Cmp(qm1_2,i1) );
+
 
     }
 
