@@ -198,6 +198,7 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
         private:
             //! specific constructor
             Integer(const SignType, const Natural &);
+            friend class Rational;
         };
     }
 

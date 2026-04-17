@@ -191,6 +191,7 @@ Y_APQ_DECL(Rational,CALL) Y_APQ_Binary(OP,CALL) Y_APQ_Unary(OP,CALL)
 
         private:
             void reduce(); //!< to irreducible form
+            Rational(const SignType, const Natural &, const Natural &);
         };
     }
 

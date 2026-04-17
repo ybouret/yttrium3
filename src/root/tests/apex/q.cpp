@@ -182,6 +182,17 @@ Y_UTEST(apex_q)
     for(Rational q(10,3); q >= -5; q--) std::cerr << ' ' << q;
     std::cerr << std::endl;
 
+
+    std::cerr << std::endl << "-- mul/div" << std::endl;
+    for(size_t iter=0;iter<1024;++iter)
+    {
+        const apq lhs(ran,ran.in<size_t>(0,12), ran.in<size_t>(1,12) );
+        const apq rhs(ran,ran.in<size_t>(1,12), ran.in<size_t>(1,12) );
+        const apq rho = lhs / rhs;
+        const apq org = rho * rhs;
+        Y_ASSERT(org==lhs);
+        
+    }
 }
 Y_UDONE()
 

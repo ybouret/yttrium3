@@ -162,7 +162,13 @@ namespace Yttrium
             reduce();
         }
 
-
+        Rational:: Rational(const SignType s, const Natural &an, const Natural &d):
+        Number(),
+        numer(s,an),
+        denom(d)
+        {
+            reduce();
+        }
 
     }
 
