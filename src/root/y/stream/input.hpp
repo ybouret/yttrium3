@@ -109,11 +109,21 @@ namespace Yttrium
         uint64_t vbr64(const char * const varName,
                        const char * const varPart);
 
+        template <typename T> inline
+        T vbr(const char * const varName,
+              const char * const varPart)
+        {
+            // load compact 64 bits
+            const uint64_t qw = vbr64(varName,varPart);
+            return 0;
+        }
+
     protected:
         explicit InputStream(); //!< for virtual constructor
 
     private:
         Y_Disable_Copy_And_Assign(InputStream); //!< discarded
+
     };
 
 }
