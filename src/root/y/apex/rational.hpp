@@ -93,6 +93,7 @@ Y_APQ_DECL(Rational,CALL) Y_APQ_Binary(OP,CALL) Y_APQ_Unary(OP,CALL)
             //__________________________________________________________________
             virtual void         ldz()            noexcept;
             virtual bool         is0()      const noexcept;
+            virtual bool         is1()      const noexcept;
             virtual const char * callSign() const noexcept;
 
             //__________________________________________________________________
@@ -158,6 +159,24 @@ Y_APQ_DECL(Rational,CALL) Y_APQ_Binary(OP,CALL) Y_APQ_Unary(OP,CALL)
             Rational & operator--();        //!< prefix
             Rational   operator--(int);     //!< postfix
             Rational   predecessor() const;
+
+            //__________________________________________________________________
+            //
+            //
+            // Multiplications
+            //
+            //__________________________________________________________________
+            Y_APQ_Impl(*,Mul)
+
+
+            //__________________________________________________________________
+            //
+            //
+            // Divisions
+            //
+            //__________________________________________________________________
+            Y_APQ_Impl(/,Div)
+
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             

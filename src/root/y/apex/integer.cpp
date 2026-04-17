@@ -131,5 +131,10 @@ namespace Yttrium
                 if( coin.heads() ) Coerce(s) = Positive; else Coerce(s) = Negative;
             }
         }
+
+        bool Integer:: is1() const noexcept
+        {
+            return Positive == s && n.is1();
+        }
     }
 }

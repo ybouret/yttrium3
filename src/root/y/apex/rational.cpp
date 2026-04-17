@@ -33,6 +33,11 @@ namespace Yttrium
             return __Zero__ == numer.s;
         }
 
+        bool Rational:: is1() const noexcept
+        {
+            return numer.is1() && denom.is1();
+        }
+
 
         String Rational:: toDec() const
         {
@@ -156,6 +161,8 @@ namespace Yttrium
         {
             reduce();
         }
+
+
 
     }
 

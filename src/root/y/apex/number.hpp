@@ -25,7 +25,8 @@ namespace Yttrium
 
             virtual void ldz()       noexcept = 0; //!< set to zero, nothrow
             virtual bool is0() const noexcept = 0; //!< \return test against zero
-            
+            virtual bool is1() const noexcept = 0; //!< \return test against one
+
         private:
             Y_Disable_Copy_And_Assign(Number); //!< discarded
         };

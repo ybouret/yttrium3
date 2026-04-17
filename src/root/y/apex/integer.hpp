@@ -87,6 +87,7 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
             virtual const char * callSign() const noexcept;
             virtual void ldz()                    noexcept;
             virtual bool is0()              const noexcept;
+            virtual bool is1()              const noexcept;
 
             //__________________________________________________________________
             //

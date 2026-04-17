@@ -95,6 +95,7 @@ Y_Apex_Natural_Unary(OP,CALL)
             virtual const char * callSign() const noexcept;
             virtual void ldz()                    noexcept;
             virtual bool is0()              const noexcept;
+            virtual bool is1()              const noexcept;
             
             //__________________________________________________________________
             //
