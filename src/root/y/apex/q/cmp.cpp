@@ -107,14 +107,40 @@ namespace Yttrium
                 case Sign::NN:
                     break;
             }
-            
+
             const Integer L = lhs.numer * rhs.denom;
             const Integer R = rhs.numer * lhs.denom;
             return Integer::Cmp(L,R);
         }
 
+    }
+
+    namespace Apex
+    {
         SignType Rational:: Cmp(const Rational &lhs, const Integer &rhs)
         {
+
+            switch( Sign::Pair(lhs.numer.s,rhs.s))
+            {
+
+                case Sign::PZ:
+                case Sign::PN:
+                case Sign::ZN:
+                    return Positive;
+
+                case Sign::ZP:
+                case Sign::NP:
+                case Sign::NZ:
+                    return Negative;
+
+                case Sign::ZZ:
+                    return __Zero__;
+
+                case Sign::PP:
+                case Sign::NN:
+                    break;
+            }
+
             const Integer R = rhs * lhs.denom;
             return Integer::Cmp(lhs.numer,R);
         }
@@ -124,6 +150,10 @@ namespace Yttrium
             return Sign::Opposite( Cmp(rhs,lhs) );
         }
 
+    }
+
+    namespace Apex
+    {
         SignType Rational:: Cmp(const Rational &lhs, const Natural &rhs)
         {
             const Integer R = rhs * lhs.denom;
@@ -135,6 +165,10 @@ namespace Yttrium
             return Sign::Opposite( Cmp(rhs,lhs) );
         }
 
+    }
+
+    namespace Apex
+    {
         SignType Rational:: Cmp(const Rational &lhs, const integer_t rhs)
         {
             return __Zero__;

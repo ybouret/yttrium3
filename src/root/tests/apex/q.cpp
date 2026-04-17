@@ -56,6 +56,32 @@ Y_UTEST(apex_q)
 
         Y_CHECK( Negative == apq::Cmp(third,half) );
         Y_CHECK( Negative == apq::Cmp(minus_two_third,minus_fourth) );
+    }
+
+
+    {
+        const apq q0;
+        const apz z0;
+        const apz z1 = 1;
+        const apz zm1 = -1;
+        const apq q1  = 1;
+        const apq qm1 = -1;
+        const apq q1_2(1,2), qm1_2(-1,2), q3_2(3,2), qm3_2(-3,2);
+
+
+        Y_CHECK( __Zero__ == apq::Cmp(q0,z0) );
+        Y_CHECK( __Zero__ == apq::Cmp(z0,q0) );
+        Y_CHECK( __Zero__ == apq::Cmp(q1,z1) );
+        Y_CHECK( __Zero__ == apq::Cmp(z1,q1) );
+
+        Y_CHECK( __Zero__ == apq::Cmp(qm1,zm1) );
+        Y_CHECK( __Zero__ == apq::Cmp(zm1,qm1) );
+
+        Y_CHECK( Positive == apq::Cmp(q1_2,z0)   );
+        Y_CHECK( Positive == apq::Cmp(q3_2,z1)   );
+        Y_CHECK( Negative == apq::Cmp(qm3_2,zm1) );
+        Y_CHECK( Negative == apq::Cmp(qm1_2,z0)  );
+        Y_CHECK( Positive == apq::Cmp(q1_2,zm1)   );
 
 
     }
