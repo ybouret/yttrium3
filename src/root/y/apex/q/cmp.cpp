@@ -87,7 +87,27 @@ namespace Yttrium
         SignType Rational:: Cmp(const Rational &lhs, const Rational &rhs)
         {
 
+            switch( Sign::Pair(lhs.numer.s,rhs.numer.s))
+            {
 
+                case Sign::PZ:
+                case Sign::PN:
+                case Sign::ZN:
+                    return Positive;
+
+                case Sign::ZP:
+                case Sign::NP:
+                case Sign::NZ:
+                    return Negative;
+
+                case Sign::ZZ:
+                    return __Zero__;
+
+                case Sign::PP:
+                case Sign::NN:
+                    break;
+            }
+            
             const Integer L = lhs.numer * rhs.denom;
             const Integer R = rhs.numer * lhs.denom;
             return Integer::Cmp(L,R);
