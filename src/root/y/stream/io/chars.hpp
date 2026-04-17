@@ -10,35 +10,69 @@ namespace Yttrium
 {
     namespace IO
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! lightweight dynamic char for I/O
+        //
+        //
+        //______________________________________________________________________
         class Char : public LightObject
         {
         public:
-            typedef CxxList<Char> List;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef CxxList<Char> List; //!< alias
 
-            Char(const char) noexcept;
-            virtual ~Char() noexcept;
-            Char(const Char &) noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            Char(const char)   noexcept; //!< setup
+            Char(const Char &) noexcept; //!< duplicate
+            virtual ~Char()    noexcept; //!< cleanup
 
-            char &       operator*()       noexcept;
-            const char & operator*() const noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            char &       operator*()       noexcept; //!< access \return data
+            const char & operator*() const noexcept; //!< access, const \return data
 
         private:
             Y_Disable_Assign(Char); //!< discarded
-            char   data;
+            char   data;            //!< inner data
         public:
-            Char * next;
-            Char * prev;
+            Char * next; //!< for list
+            Char * prev; //!< for list
         };
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Used as I/O buffer
+        //
+        //
+        //______________________________________________________________________
         class Chars : public LightObject, public Char::List
         {
         public:
-            explicit Chars() noexcept;
-            virtual ~Chars() noexcept;
-            Chars(const Chars &);
+            explicit Chars() noexcept; //!< setup
+            virtual ~Chars() noexcept; //!< cleanup
+            Chars(const Chars &);      //!< duplicate content
 
         private:
-            Y_Disable_Assign(Chars);
+            Y_Disable_Assign(Chars); //!< discarde
         };
 
 

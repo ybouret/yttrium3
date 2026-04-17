@@ -89,6 +89,7 @@ inline friend bool operator OP (const Natural  & lhs, const Rational & rhs) { re
             Rational & xch( Rational & ) noexcept; //!< \return no-throw exchange
 
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             //__________________________________________________________________
             //
             //
@@ -117,6 +118,9 @@ inline friend bool operator OP (const Natural  & lhs, const Rational & rhs) { re
             Y_APQ_CMP(>, == Positive)
             Y_APQ_CMP(<=,!= Positive)
             Y_APQ_CMP(>=,!= Negative)
+
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            
             //__________________________________________________________________
             //
             //

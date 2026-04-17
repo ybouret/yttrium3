@@ -22,9 +22,15 @@ namespace Yttrium
     {
 
     public:
-        static const char CR =  '\r';
-        static const char LF =  '\n';
-        
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        static const char CR =  '\r'; //!< alias
+        static const char LF =  '\n'; //!< alias
+
         //______________________________________________________________________
         //
         //
@@ -59,15 +65,29 @@ namespace Yttrium
         bool peek(char &);    //!< \return true iff available char
         bool gets(String &);  //!< \return ture iff a new (maybe empty) string was read
 
+        //! try to load exact block size
+        /**
+         \param blockAddr memory region
+         \param blockSize mandatory block size > 0
+         \param varName   optional variable name
+         \param varPart   optional variable part
+         */
         void load(void * const       blockAddr,
                   const size_t       blockSize,
                   const char * const varName,
                   const char * const varPart);
 
 
+        //! \return load for uint[8|16|32|64]_t
         template <typename T>
         T load(const char * const, const char * const);
 
+        //! load constant byte rate integral
+        /**
+         \param varName   optional variable name
+         \param varPart   optional variable part
+         \return read integral type
+         */
         template <typename T> inline
         T cbr(const char * const varName,
               const char * const varPart)
@@ -80,6 +100,12 @@ namespace Yttrium
             return alias.t;
         }
 
+        //! decode variable byte rate 64 bits
+        /**
+         \param varName   optional variable name
+         \param varPart   optional variable part
+         \return decoded 64 bits from [0:9] bytes
+         */
         uint64_t vbr64(const char * const varName,
                        const char * const varPart);
 
