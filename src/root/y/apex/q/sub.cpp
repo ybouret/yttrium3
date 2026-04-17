@@ -36,12 +36,16 @@ namespace Yttrium
                 case Sign::NN:
                     break;
             }
-            
+
             const Integer nn = lhs.numer * rhs.denom - rhs.numer * lhs.denom;
             const Natural dd = rhs.denom * lhs.denom;
             return Rational(nn,dd);
         }
 
+    }
+
+    namespace Apex
+    {
         Rational Rational:: Sub(const Rational &lhs, const Integer &rhs)
         {
             switch( Sign::Pair(lhs.numer.s,rhs.s) )
@@ -78,6 +82,40 @@ namespace Yttrium
         }
 
     }
+
+    namespace Apex
+    {
+        Rational Rational:: Sub(const Rational &lhs, const Natural &rhs)
+        {
+            if(rhs.is0())
+            {
+                return lhs;
+            }
+            else
+            {
+                assert(rhs>0);
+                switch(lhs.numer.s)
+                {
+                    case __Zero__: { Rational res = rhs; Sign::MakeOpposite( Coerce(res.numer.s) ); return res; }
+                    case Negative:
+                    case Positive:
+                        break;
+                }
+                const Integer nn = lhs.numer - (rhs * lhs.denom);
+                return Rational(nn,lhs.denom);
+            }
+        }
+
+        Rational Rational:: Sub(const Natural &lhs, const Rational &rhs)
+        {
+            Rational delta = Sub(rhs,lhs);
+            Sign::MakeOpposite( Coerce(delta.numer.s) );
+            return delta;
+        }
+
+    }
+
+    
 
 
 }

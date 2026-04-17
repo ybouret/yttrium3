@@ -37,6 +37,10 @@ namespace Yttrium
             return Rational(nn,dd);
         }
 
+    }
+
+    namespace Apex
+    {
         Rational Rational:: Add(const Rational &lhs, const Integer &rhs)
         {
             switch( Sign::Pair(lhs.numer.s,rhs.s) )
@@ -67,8 +71,38 @@ namespace Yttrium
         {
             return Add(rhs,lhs);
         }
+    }
+
+    namespace Apex
+    {
+        Rational Rational:: Add(const Rational &lhs, const Natural &rhs)
+        {
+            if( rhs.is0() )
+            {
+                return lhs;
+            }
+            else
+            {
+                switch(lhs.numer.s)
+                {
+                    case __Zero__:
+                        return rhs;
+                    case Positive:
+                    case Negative:
+                        break;
+                }
+                const Integer nn = lhs.numer + rhs * lhs.denom;
+                return Rational(nn,lhs.denom);
+            }
+        }
+
+        Rational Rational:: Add(const Natural &lhs, const Rational &rhs)
+        {
+            return Add(rhs,lhs);
+        }
 
     }
+
 
 
 }
