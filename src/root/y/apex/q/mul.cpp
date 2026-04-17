@@ -58,5 +58,41 @@ namespace Yttrium
         }
     }
 
+
+    namespace Apex
+    {
+        Rational Rational::Mul(const Rational &lhs, const Integer &rhs)
+        {
+            switch( Sign::Pair(lhs.numer.s,rhs.s))
+            {
+                case Sign::NZ:
+                case Sign::PZ:
+                case Sign::ZN:
+                case Sign::ZP:
+                case Sign::ZZ:
+                    return Rational();
+
+                case Sign::NN:
+                case Sign::NP:
+                case Sign::PN:
+                case Sign::PP:
+                    break;
+            }
+
+            const Integer nn = lhs.numer * rhs;
+            if(lhs.denom.is1())
+            {
+                assert(1==lhs.denom);
+                return Rational(nn);
+            }
+            else
+            {
+                return Rational(nn,lhs.denom);
+            }
+
+
+        }
+    }
+
 }
 
