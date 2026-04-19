@@ -186,6 +186,31 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
             Y_Integer_Impl(/,Div)
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+            //__________________________________________________________________
+            //
+            //
+            // Cast
+            //
+            //__________________________________________________________________
+            template <typename T> inline
+            bool tryCast(T &result) const noexcept
+            {
+                static const IntToType< IsSignedInt<T>::Value > Choice = {};
+                return tryCast<T>(result,Choice);
+            }
+
+            template <typename T> inline
+            T cast(const char * const varName, const char * const varPart)
+            {
+                T res = 0;
+                if(!tryCast(res)) {
+                    Specific::Exception excp(CallSign,"cast overflow");
+                    throw excp.signedFor(varName,varPart);
+                }
+                return res;
+            }
+
             //__________________________________________________________________
             //
             //
@@ -199,6 +224,34 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
             //! specific constructor
             Integer(const SignType, const Natural &);
             friend class Rational;
+
+            //! unsigned
+            template <typename T> inline
+            bool tryCast(T &result, const IntToType<false> &) const noexcept
+            {
+                static const natural_t MaxValue = (natural_t) IntegerFor<T>::Maximum;
+                if( *this > MaxValue ) return false;
+                const natural_t self = n.lsw(); assert(self<MaxValue);
+                result = (T)self;
+                return true;
+            }
+
+            //! signed
+            template <typename T> inline
+            bool tryCast(T &result, const IntToType<true> &) const noexcept
+            {
+                static const integer_t MinValue = (integer_t) IntegerFor<T>::Maximum;
+                static const integer_t MaxValue = (integer_t) IntegerFor<T>::Maximum;
+                if(*this<MinValue||*this>MaxValue) return false;
+
+                switch(s)
+                {
+                    case Negative: result = - (T) n.lsw(); break;
+                    case __Zero__: result = 0;             break;
+                    case Positive: result =   (T) n.lsw(); break;
+                }
+                return true;
+            }
         };
     }
 

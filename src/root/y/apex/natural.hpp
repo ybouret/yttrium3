@@ -10,6 +10,7 @@
 #include "y/type-to-type.hpp"
 #include "y/mkl/two-to-the-power-of.hpp"
 #include "y/random/coin-flip.hpp"
+#include "y/exception.hpp"
 
 namespace Yttrium
 {
@@ -225,6 +226,33 @@ Y_Apex_Natural_Unary(OP,CALL)
             //__________________________________________________________________
             static Natural factorial(const natural_t n); //!< \param n integral value \return n!
 
+            //__________________________________________________________________
+            //
+            //
+            // Cast
+            //
+            //__________________________________________________________________
+            template <typename T> inline
+            bool tryCast(T &result) const noexcept
+            {
+                static const natural_t MaxValue = (natural_t) IntegerFor<T>::Maximum;
+                if( *this > MaxValue ) return false;
+                const natural_t self = lsw(); assert(self<MaxValue);
+                result = (T)self;
+                return true;
+            }
+
+            template <typename T> inline
+            T cast(const char * const varName, const char * const varPart)
+            {
+                T res = 0;
+                if(!tryCast(res)) {
+                    Specific::Exception excp(CallSign,"cast overflow");
+                    throw excp.signedFor(varName,varPart);
+                }
+                return res;
+            }
+
         private:
             void * const code; //!< inner code
 
@@ -235,6 +263,9 @@ Y_Apex_Natural_Unary(OP,CALL)
             static bool DivCall(Natural * const, Natural * const,
                                 const void * const, const size_t,
                                 const void * const, const size_t);
+
+
+
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
         };
     }
