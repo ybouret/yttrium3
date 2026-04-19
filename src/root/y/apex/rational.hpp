@@ -186,8 +186,8 @@ Y_APQ_DECL(Rational,CALL) Y_APQ_Binary(OP,CALL) Y_APQ_Unary(OP,CALL)
             // Methods
             //
             //__________________________________________________________________
-            Rational abs() const;
-            
+            Rational abs() const; //!< \return |*this|
+
             //__________________________________________________________________
             //
             //
@@ -199,6 +199,8 @@ Y_APQ_DECL(Rational,CALL) Y_APQ_Binary(OP,CALL) Y_APQ_Unary(OP,CALL)
 
         private:
             void reduce(); //!< to irreducible form
+
+            //! helper for inner operations
             Rational(const SignType, const Natural &, const Natural &);
         };
     }

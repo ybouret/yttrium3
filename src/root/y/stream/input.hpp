@@ -109,6 +109,12 @@ namespace Yttrium
         uint64_t vbr64(const char * const varName,
                        const char * const varPart);
 
+        //! decode previously encoded type
+        /**
+         \param varName optional var name
+         \param varPart optional var part
+         \return decoded value
+         */
         template <typename T> inline
         T vbr(const char * const varName,
               const char * const varPart)
@@ -128,6 +134,7 @@ namespace Yttrium
     private:
         Y_Disable_Copy_And_Assign(InputStream); //!< discarded
 
+        //! \return checked value from read 64 bits
         template <typename T>
         T make(const uint64_t, const char * const, const char * const);
 

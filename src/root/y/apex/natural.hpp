@@ -232,6 +232,12 @@ Y_Apex_Natural_Unary(OP,CALL)
             // Cast
             //
             //__________________________________________________________________
+
+            //! try to cast
+            /**
+             \param result target
+             \return true iff possible cast
+             */
             template <typename T> inline
             bool tryCast(T &result) const noexcept
             {
@@ -242,6 +248,12 @@ Y_Apex_Natural_Unary(OP,CALL)
                 return true;
             }
 
+            //! cast with checking
+            /**
+             \param varName optional var name
+             \param varPart optional var part
+             \return casted value
+             */
             template <typename T> inline
             T cast(const char * const varName, const char * const varPart)
             {

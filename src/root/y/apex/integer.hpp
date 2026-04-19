@@ -193,6 +193,12 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
             // Cast
             //
             //__________________________________________________________________
+
+            //! try to cast
+            /**
+             \param result target
+             \return true iff possible cast
+             */
             template <typename T> inline
             bool tryCast(T &result) const noexcept
             {
@@ -200,6 +206,12 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
                 return tryCast<T>(result,Choice);
             }
 
+            //! cast with checking
+            /**
+             \param varName optional var name
+             \param varPart optional var part
+             \return casted value
+             */
             template <typename T> inline
             T cast(const char * const varName, const char * const varPart)
             {
@@ -225,6 +237,7 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
             Integer(const SignType, const Natural &);
             friend class Rational;
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             //! unsigned
             template <typename T> inline
             bool tryCast(T &result, const IntToType<false> &) const noexcept
@@ -252,6 +265,8 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
                 }
                 return true;
             }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            
         };
     }
 
