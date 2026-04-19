@@ -173,6 +173,21 @@ namespace Yttrium
             return Rational();
         }
 
+        Rational Rational:: Div(const Rational &lhs, const Natural &rhs)
+        {
+
+            switch(rhs.bits())
+            {
+                case 0: throw Libc:: Exception(EDOM,"%s: division by zero %s",CallSign,Natural::CallSign);
+                case 1: assert(1==rhs); return lhs;
+                default:
+                    break;
+            }
+
+            const Natural dd = lhs.denom * rhs;
+            return Rational(lhs.numer,dd);
+        }
+        
     }
 
 

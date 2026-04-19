@@ -251,6 +251,15 @@ Y_UTEST(apex_q)
         }
 
 
+        {
+            const apn n = ran.in<natural_t>(1,1000);
+            const apq q = n;
+            const apq x(ran,ran.in<size_t>(1,12), ran.in<size_t>(1,12) );
+            const apq rho = x/q;
+            Y_ASSERT(x/n == rho);
+        }
+
+
 
     }
 }
