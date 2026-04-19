@@ -39,6 +39,10 @@ namespace Yttrium
             return Rational();
         }
 
+    }
+
+    namespace Apex
+    {
         Rational Rational:: Div(const Rational &lhs, const Integer &rhs)
         {
             switch( Sign::Pair(lhs.numer.s,rhs.s))
@@ -97,8 +101,45 @@ namespace Yttrium
             return Rational();
         }
 
-
     }
+
+    namespace Apex
+    {
+
+        Rational Rational:: Div(const Rational &lhs, const integer_t rhs)
+        {
+            switch( Sign::Pair(lhs.numer.s,Sign::Of(rhs)))
+            {
+                case Sign::NZ:
+                case Sign::PZ:
+                case Sign::ZZ:
+                    throw Libc:: Exception(EDOM,"%s: division by zero integer_t",CallSign);
+
+                case Sign::ZP:
+                case Sign::ZN:
+                    break; //!< zero
+
+                case Sign::PP:
+                case Sign::NP:
+                {
+                    const Natural dd = lhs.denom * (natural_t)rhs;
+                    return Rational(lhs.numer.s,dd);
+                }
+
+                case Sign::PN:
+                case Sign::NN:
+                {
+                    const Natural dd = lhs.denom * (natural_t)-rhs;
+                    return Rational(lhs.numer.s,dd);
+                }
+                    
+            }
+            return Rational();
+        }
+    }
+
+
+
 
 }
 
