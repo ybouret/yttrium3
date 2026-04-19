@@ -172,7 +172,10 @@ namespace Yttrium
 
             return Rational();
         }
+    }
 
+    namespace Apex
+    {
         Rational Rational:: Div(const Rational &lhs, const Natural &rhs)
         {
 
@@ -187,7 +190,31 @@ namespace Yttrium
             const Natural dd = lhs.denom * rhs;
             return Rational(lhs.numer,dd);
         }
-        
+
+
+        Rational Rational:: Div(const Natural &lhs, const Rational &rhs)
+        {
+            switch(rhs.numer.s)
+            {
+                case __Zero__: throw Libc:: Exception(EDOM,"%s: division by zero %s",Natural::CallSign,CallSign);
+                case Positive:
+                case Negative:
+                    break;
+            }
+
+            switch(lhs.bits())
+            {
+                case 0: return Rational();
+                case 1: return Rational(rhs.numer.s,rhs.denom,rhs.numer.n);
+                default:
+                    break;
+            }
+
+            const Natural nn = lhs * rhs.denom;
+            return Rational(rhs.numer.s,nn,rhs.numer.n);
+
+        }
+
     }
 
 
