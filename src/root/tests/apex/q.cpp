@@ -184,7 +184,7 @@ Y_UTEST(apex_q)
 
 
     std::cerr << std::endl << "-- mul/div" << std::endl;
-    for(size_t iter=0;iter<1024;++iter)
+    for(size_t iter=0;iter<2048;++iter)
     {
         {
             const apq lhs(ran,ran.in<size_t>(0,12), ran.in<size_t>(1,12) );
@@ -207,6 +207,25 @@ Y_UTEST(apex_q)
             const apq q = z;
             const apq x(ran,ran.in<size_t>(1,12), ran.in<size_t>(1,12) );
             Y_ASSERT(q/x==z/x);
+        }
+
+        {
+            const integer_t z = ran.in<integer_t>(-1000,1000);
+            const apq       q = z;
+            const apq       x(ran,ran.in<size_t>(1,12), ran.in<size_t>(1,12) );
+
+            const apq prod = q * x;
+            Y_ASSERT( z * x == prod);
+            Y_ASSERT( x * z == prod);
+        }
+
+        {
+            const apn n = ran.in<natural_t>(0,1000);
+            const apq q = n;
+            const apq x(ran,ran.in<size_t>(1,12), ran.in<size_t>(1,12) );
+            const apq prod = q * x;
+            Y_ASSERT( n * x == prod);
+            Y_ASSERT( x * n == prod);
         }
 
 

@@ -97,5 +97,69 @@ namespace Yttrium
         }
     }
 
+    namespace Apex
+    {
+        Rational Rational::Mul(const Rational &lhs, const integer_t rhs)
+        {
+            switch( Sign::Pair(lhs.numer.s,Sign::Of(rhs)) )
+            {
+                case Sign::NZ:
+                case Sign::PZ:
+                case Sign::ZN:
+                case Sign::ZP:
+                case Sign::ZZ:
+                    return Rational();
+
+                case Sign::NN:
+                case Sign::NP:
+                case Sign::PN:
+                case Sign::PP:
+                    break;
+            }
+
+            const Integer nn = lhs.numer * rhs;
+            if(lhs.denom.is1())
+            {
+                assert(1==lhs.denom);
+                return Rational(nn);
+            }
+            else
+            {
+                return Rational(nn,lhs.denom);
+            }
+        }
+
+        Rational Rational:: Mul(const integer_t lhs, const Rational &rhs)
+        {
+            return Mul(rhs,lhs);
+        }
+
+
+    }
+
+    namespace Apex
+    {
+        Rational Rational::Mul(const Rational &lhs, const Natural &rhs)
+        {
+
+            switch( rhs.bits() )
+            {
+                case 0: return Rational();
+                case 1: return lhs;
+                default:
+                    break;
+            }
+            const Integer nn = lhs.numer * rhs;
+            return Rational(nn,lhs.denom);
+
+        }
+
+        Rational Rational:: Mul(const Natural &lhs, const Rational &rhs)
+        {
+            return Mul(rhs,lhs);
+        }
+    }
 }
+
+
 

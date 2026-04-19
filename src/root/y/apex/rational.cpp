@@ -170,6 +170,18 @@ namespace Yttrium
             reduce();
         }
 
+
+        Rational Rational:: abs() const
+        {
+            switch(numer.s)
+            {
+                case Positive: return *this;
+                case Negative: { Rational _ = *this; Coerce(_.numer.s) = Positive; return _; }
+                case __Zero__: break;
+            }
+            return Rational();
+        }
+
     }
 
 }
