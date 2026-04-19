@@ -122,18 +122,21 @@ namespace Yttrium
                 case Sign::PP:
                 case Sign::NP:
                 {
+                    assert(rhs>0);
                     const Natural dd = lhs.denom * (natural_t)rhs;
-                    return Rational(lhs.numer.s,dd);
+                    return Rational(lhs.numer,dd);
                 }
 
                 case Sign::PN:
                 case Sign::NN:
                 {
+                    assert(rhs<0);
                     const Natural dd = lhs.denom * (natural_t)-rhs;
-                    return Rational( Sign::Opposite(lhs.numer.s),dd);
+                    return Rational(Sign::Opposite(lhs.numer.s),lhs.numer.n,dd);
                 }
-
             }
+
+
             return Rational();
         }
 
@@ -146,17 +149,19 @@ namespace Yttrium
                 case Sign::ZZ:
                     throw Libc:: Exception(EDOM,"integer_t: division by zero %s",CallSign);
 
-                case Sign::NP:
+                case Sign::PN:
                 case Sign::PP:
                 {
+                    assert(lhs>0);
                     const Natural nn = rhs.denom * (natural_t) lhs;
                     return Rational(rhs.numer.s,nn,rhs.numer.n);
                 }
 
-                case Sign::PN:
                 case Sign::NN:
+                case Sign::NP:
                 {
-                    const Natural nn = rhs.denom * (natural_t) lhs;
+                    assert(lhs<0);
+                    const Natural nn = rhs.denom * ( (natural_t) -lhs );
                     return Rational( Sign::Opposite(rhs.numer.s),nn,rhs.numer.n);
                 }
 

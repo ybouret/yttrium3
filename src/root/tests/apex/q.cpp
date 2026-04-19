@@ -220,6 +220,28 @@ Y_UTEST(apex_q)
         }
 
         {
+            integer_t z = ran.in<integer_t>(-1000,1000);
+            while(!z)
+                z = ran.in<integer_t>(-1000,1000);
+            const apq q = z;
+            const apq x(ran,ran.in<size_t>(1,12), ran.in<size_t>(1,12) );
+
+            const apq rho = x/q;
+            Y_ASSERT( x/z == rho);
+        }
+
+        {
+            const integer_t z = ran.in<integer_t>(-1000,1000);
+            const apq       q = z;
+            const apq       x(ran,ran.in<size_t>(1,12), ran.in<size_t>(1,12) );
+
+            const apq rho = q / x;
+            Y_ASSERT( z / x == rho);
+        }
+
+
+
+        {
             const apn n = ran.in<natural_t>(0,1000);
             const apq q = n;
             const apq x(ran,ran.in<size_t>(1,12), ran.in<size_t>(1,12) );
@@ -227,6 +249,7 @@ Y_UTEST(apex_q)
             Y_ASSERT( n * x == prod);
             Y_ASSERT( x * n == prod);
         }
+
 
 
     }
