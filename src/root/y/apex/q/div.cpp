@@ -15,7 +15,7 @@ namespace Yttrium
                 case Sign::NZ:
                 case Sign::PZ:
                 case Sign::ZZ:
-                    throw Libc:: Exception(EDOM,"%s division by zero",CallSign);
+                    throw Libc:: Exception(EDOM,"%s: division by zero %s",CallSign, CallSign);
 
                 case Sign::ZP:
                 case Sign::ZN:
@@ -36,9 +36,67 @@ namespace Yttrium
                     return Rational(Negative,an,dd);
                 }
             }
-            
             return Rational();
         }
+
+        Rational Rational:: Div(const Rational &lhs, const Integer &rhs)
+        {
+            switch( Sign::Pair(lhs.numer.s,rhs.s))
+            {
+                case Sign::NZ:
+                case Sign::PZ:
+                case Sign::ZZ:
+                    throw Libc:: Exception(EDOM,"%s: division by zero %s",CallSign, Integer::CallSign);
+
+                case Sign::ZP:
+                case Sign::ZN:
+                    break; //!< zero
+
+                case Sign::PP:
+                case Sign::NN:
+                {
+                    const Natural dd = lhs.denom * rhs.n;
+                    return Rational(Positive,lhs.numer.n,dd);
+                };
+
+                case Sign::NP:
+                case Sign::PN: {
+                    const Natural dd = lhs.denom * rhs.n;
+                    return Rational(Negative,lhs.numer.n,dd);
+                }
+            }
+            return Rational();
+        }
+
+        Rational Rational:: Div(const Integer &lhs, const Rational &rhs)
+        {
+            switch( Sign::Pair(lhs.s,rhs.numer.s))
+            {
+                case Sign::NZ:
+                case Sign::PZ:
+                case Sign::ZZ:
+                    throw Libc:: Exception(EDOM,"%s: division by zero %s",Integer::CallSign, CallSign);
+
+                case Sign::ZP:
+                case Sign::ZN:
+                    break;
+
+                case Sign::PP:
+                case Sign::NN:
+                {
+                    const Natural an = lhs.n * rhs.denom;
+                    return Rational(Positive,an,rhs.numer.n);
+                };
+
+                case Sign::NP:
+                case Sign::PN: {
+                    const Natural an = lhs.n * rhs.denom;
+                    return Rational(Negative,an,rhs.numer.n);
+                }
+            }
+            return Rational();
+        }
+
 
     }
 

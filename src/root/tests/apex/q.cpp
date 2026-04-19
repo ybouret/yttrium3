@@ -186,12 +186,30 @@ Y_UTEST(apex_q)
     std::cerr << std::endl << "-- mul/div" << std::endl;
     for(size_t iter=0;iter<1024;++iter)
     {
-        const apq lhs(ran,ran.in<size_t>(0,12), ran.in<size_t>(1,12) );
-        const apq rhs(ran,ran.in<size_t>(1,12), ran.in<size_t>(1,12) );
-        const apq rho = lhs / rhs;
-        const apq org = rho * rhs;
-        Y_ASSERT(org==lhs);
-        
+        {
+            const apq lhs(ran,ran.in<size_t>(0,12), ran.in<size_t>(1,12) );
+            const apq rhs(ran,ran.in<size_t>(1,12), ran.in<size_t>(1,12) );
+            const apq rho = lhs / rhs;
+            const apq org = rho * rhs;
+            Y_ASSERT(org==lhs);
+        }
+
+        {
+            const apq lhs(ran,ran.in<size_t>(0,12), ran.in<size_t>(1,12) );
+            const apz rhs(ran,ran.in<size_t>(1,12));
+            const apq prod = lhs * rhs;
+            Y_ASSERT(rhs*lhs==prod);
+            Y_ASSERT(prod/rhs==lhs);
+        }
+
+        {
+            const apz z(ran,ran.in<size_t>(1,12));
+            const apq q = z;
+            const apq x(ran,ran.in<size_t>(1,12), ran.in<size_t>(1,12) );
+            Y_ASSERT(q/x==z/x);
+        }
+
+
     }
 }
 Y_UDONE()
