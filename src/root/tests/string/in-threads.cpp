@@ -45,7 +45,7 @@ namespace
     {
     public:
 
-        Testing() : mutex(), cond(), ready(0)
+        Testing() : mutex(), cond(), ready(0), list()
         {}
 
         ~Testing() noexcept
