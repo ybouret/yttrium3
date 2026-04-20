@@ -114,6 +114,7 @@ Y_UTEST(apex:n)
 Y_UTEST(apex:n:red)
 Y_UTEST(apex:z)
 Y_UTEST(apex:q)
+Y_UTEST(apex:in_threads)
 
 Y_UTEST(stream:u64)
 Y_UTEST(stream:output:file)

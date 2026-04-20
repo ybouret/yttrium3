@@ -1,7 +1,7 @@
-#include "y/string.hpp"
+#include "y/apex/rational.hpp"
+#include "y/utest/run.hpp"
 #include "y/concurrent/threaded.hpp"
 #include "y/memory/auto-built.hpp"
-#include "y/utest/run.hpp"
 #include "y/calculus/alignment.hpp"
 #include "y/libc/block/zero.h"
 #include "y/concurrent/mutex.hpp"
@@ -11,36 +11,13 @@
 #include "y/system/wall-time.hpp"
 #include "y/check/crc32.hpp"
 
+
 using namespace Yttrium;
 
-
-namespace
-{
-
-    class Node : public String
-    {
-    public:
-        typedef CxxList<Node> List;
-
-        explicit Node(const String &s) : String(s), next(0), prev(0)
-        {
-
-        }
-
-        virtual ~Node() noexcept
-        {
-        }
-
-
-        Node * next;
-        Node * prev;
-
-    private:
-        Y_Disable_Copy_And_Assign(Node);
-    };
+namespace  {
 
     static const size_t NumThreads = 8;
-    
+
     class Testing
     {
     public:
@@ -56,7 +33,7 @@ namespace
         {
             long seed = 0;
             mutex.lock();
-            (std::cerr << "Entering #" << ready+1 << std::endl).flush();
+            (std::cerr << "Apex: Entering #" << ready+1 << std::endl).flush();
             if(++ready<NumThreads)
             {
                 cond.wait(mutex);
@@ -64,27 +41,30 @@ namespace
             else
             {
                 cond.broadcast();
-                (std::cerr << "synchronized!" << std::endl).flush();
+                (std::cerr << "Apex: synchronized!" << std::endl).flush();
             }
             {
                 const uint64_t t = System::WallTime::Ticks();
-                seed = (long) CRC32::Run(t);
+                seed  = (long) CRC32::Run(t);
             }
             mutex.unlock();
             Core::Rand ran(seed);
 
-            Node::List mine;
-            for(const Node * node=list.head;node;node=node->next)
+            for(size_t iter=0;iter<256;++iter)
             {
-                const String & s    = *node;
-                Node * const   temp = new Node(s);
-                if( ran.heads() ) mine.pushTail(temp); else mine.pushHead(temp);
+                const apq lhs(ran, ran.in<size_t>(0,20), ran.in<size_t>(1,20) );
+                const apq rhs(ran, ran.in<size_t>(1,20), ran.in<size_t>(1,20) );
+                const apq sum  = lhs + rhs;
+                const apq dif  = lhs - rhs;
+                const apq prod = lhs * rhs;
+                const apq rho  = lhs/rhs;
+                if( ran() > 0.9f )
+                {
+                    Y_Lock(mutex);
+                    (std::cerr << prod << std::endl).flush();
+                }
             }
 
-            {
-                Y_Lock(mutex);
-                (std::cerr << "duplicated #" << mine.size << std::endl).flush();
-            }
 
 
         }
@@ -92,36 +72,23 @@ namespace
         Concurrent::Mutex      mutex;
         Concurrent::Condition  cond;
         size_t                 ready;
-        Node::List             list;
 
     private:
         Y_Disable_Copy_And_Assign(Testing);
 
     };
+
 }
 
-#include "y/stream/libc/input.hpp"
-Y_UTEST(string_in_threads)
+
+Y_UTEST(apex_in_threads)
 {
     static const size_t Requested = sizeof(Concurrent::Threaded) * NumThreads;
     static void * wksp[ Alignment::WordsGEQ<Requested>::Count ];
 
 
     Testing testing;
-    if(argc>1)
-    {
-        InputFile fp(argv[1]);
-        String    line;
-        while( fp.gets(line) )
-        {
-            testing.list.pushTail( new Node(line) );
-        }
-    }
-    std::cerr << testing.list << std::endl;
-
-
     Memory::AutoBuilt<Concurrent::Threaded> threads(testing, & Testing::Run, Y_BZero(wksp), NumThreads);
-
 }
 Y_UDONE()
 
