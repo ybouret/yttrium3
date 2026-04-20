@@ -129,6 +129,9 @@ Y_UTEST(stream_output_file)
         const uint32_t x = 0x12345678;
         written += fp.cbr(x);
 
+        fp("%s","aaaaaaa");
+        
+
     }
 
 }

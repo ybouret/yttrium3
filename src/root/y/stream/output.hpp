@@ -86,6 +86,11 @@ namespace Yttrium
         size_t emit(const uint32_t &); //!< emit four bytes  \return 4
         size_t emit(const uint64_t &); //!< emit eight bytes \return 8
 
+        //! formatted output
+        /**
+         \param fmt C-style format
+         \return *this
+         */
         OutputStream & operator()(const char * const fmt,...) Y_Printf_Check(2,3);
 
     protected:

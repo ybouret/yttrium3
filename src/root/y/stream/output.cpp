@@ -6,7 +6,7 @@ namespace Yttrium
 
     OutputStream:: OutputStream() : Stream()
     {
-        
+
     }
 
     OutputStream:: ~OutputStream() noexcept
@@ -79,15 +79,47 @@ namespace Yttrium
 }
 
 #include "y/libc/str/fmt.h"
+#include "y/memory/buffer/allocated.hpp"
+#include "y/memory/allocator/archon.hpp"
+#include "y/system/exception.hpp"
+#include <cerrno>
+
 
 namespace Yttrium
 {
     OutputStream & OutputStream:: operator()(const char * const fmt,...)
     {
+        typedef Memory::AllocatedBuffer<Memory::Archon> BufferType;
+        static const size_t DefaultSize = 256;
         assert(fmt);
+
+        size_t size = DefaultSize;
+        while(true)
         {
-            //Yttrium_Strfmt(<#char *const buffer#>, <#const size_t buflen#>, <#const char *const fmt#>, <#va_list *const app#>)
+            BufferType buff(size);
+            char * const buffer = static_cast<char *>( buff.rw() );
+            const size_t buflen = buff.length();
+            int          res    = 0;
+            {
+                Y_Giant_Lock();
+                va_list ap;
+                va_start(ap,fmt);
+                res = Yttrium_Strfmt(buffer,buflen,fmt,&ap);
+                va_end(ap);
+                if(res<0)
+                    throw Libc::Exception(errno,"vsnprintf");
+            }
+
+            const size_t n = (size_t)res;
+            if(n>=size)
+            {
+                size <<= 1;
+                continue;
+            }
+
+            write(buffer,n);
+            return *this;
         }
-        return *this;
+
     }
 }
