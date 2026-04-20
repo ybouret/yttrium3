@@ -40,6 +40,7 @@ y/memory/buffer
 y/ability
 y/container
 y/container/iter
+y/container/contiguous
 y/pointer
 y/utest
 y/stream

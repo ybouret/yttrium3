@@ -141,8 +141,10 @@ inline friend bool operator OP (const T         lhs, const String  & rhs) noexce
             Code * code; //!< inner code
             
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+        protected:
             Y_Readable_Decl();
 
+        private:
             // for additions
             String(const T * const lhs, const size_t lhsSize,
                    const T * const rhs, const size_t rhsSize);
