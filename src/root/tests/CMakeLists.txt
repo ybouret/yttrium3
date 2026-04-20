@@ -101,6 +101,7 @@ Y_UTEST(threading:mto)
 
 Y_UTEST(string:stride)
 Y_UTEST(string)
+Y_UTEST(string:in_threads)
 
 Y_UTEST(container:iter)
 
