@@ -106,6 +106,7 @@ Y_UTEST(string:in_threads)
 Y_UTEST(container:iter)
 Y_UTEST(container:contiguous:ro)
 Y_UTEST(container:contiguous:rw)
+Y_UTEST(container:cxx:array)
 
 Y_UTEST(apex:k)
 Y_UTEST(apex:k:bits)

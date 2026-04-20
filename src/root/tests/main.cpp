@@ -91,6 +91,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(container_iter);
     Y_UTEST(container_contiguous_ro);
     Y_UTEST(container_contiguous_rw);
+    Y_UTEST(container_cxx_array);
 
     Y_UTEST(apex_k);
     Y_UTEST(apex_k_bits);

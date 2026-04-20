@@ -107,7 +107,6 @@ namespace Yttrium
 
         void AutoBuild:: deleteAll() noexcept
         {
-            assert(blockAddr);
             assert(blockSize>0);
             assert(deleteFcn!=0);
             char *   p = static_cast<char *>(blockAddr) + (numBlocks*blockSize);

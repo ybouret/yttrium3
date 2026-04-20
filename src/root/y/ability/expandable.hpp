@@ -1,22 +1,25 @@
+
+
 //! \file
 
-#ifndef Y_Container_Included
-#define Y_Container_Included 1
+#ifndef Y_Expandable_Included
+#define Y_Expandable_Included 1
 
 #include "y/config/setup.hpp"
 
+
 namespace Yttrium
 {
-
     //__________________________________________________________________________
     //
     //
     //
-    //! base class for containers
+    //! Expandable interface based on Releasable/Collectable
     //
     //
     //__________________________________________________________________________
-    class Container
+    template <typename RELEASABLE>
+    class Expandable : public RELEASABLE
     {
         //______________________________________________________________________
         //
@@ -25,10 +28,10 @@ namespace Yttrium
         //
         //______________________________________________________________________
     protected:
-        explicit Container() noexcept;
+        inline explicit Expandable() noexcept  : RELEASABLE {} //!< setup
 
     public:
-        virtual ~Container() noexcept;
+        inline virtual ~Expandable() noexcept {} //!< cleanup
 
         //______________________________________________________________________
         //
@@ -36,8 +39,8 @@ namespace Yttrium
         // Interface
         //
         //______________________________________________________________________
-        virtual size_t size()     const noexcept = 0; //!< \return current item count
-        virtual size_t capacity() const noexcept = 0; //!< \return maximum item count
+        virtual void reserve(const size_t n) = 0;
+
 
         //______________________________________________________________________
         //
@@ -45,13 +48,18 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
-        static size_t NextCapacity(const size_t n);
+        inline void ensure(const size_t minCapacity)
+        {
+            const size_t capa = this->capacity();
+            if(capa<minCapacity) reserve(minCapacity-capa)
+        }
         
+
     private:
-        Y_Disable_Copy_And_Assign(Container); //!< discarded
+        Y_Disable_Copy_And_Assign(Expandable); //!< discarding
     };
 
 }
 
-#endif // !Y_Container_Included
+#endif // !Y_Expandable_Included
 

@@ -6,6 +6,7 @@
 
 #include "y/container.hpp"
 #include "y/type/args.hpp"
+#include <iostream>
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4435 )
@@ -57,6 +58,17 @@ namespace Yttrium
             return ask(indx);
         }
 
+        inline friend std::ostream & operator<<(std::ostream &os, const Readable &self)
+        {
+            os << '[';
+            const size_t n = self.size();
+            if(n>0)
+            {
+                os << self[1];
+                for(size_t i=2;i<=n;++i) os << ';' << self[i];
+            }
+            return os << ']';
+        }
 
 
     private:

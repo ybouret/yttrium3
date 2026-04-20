@@ -41,6 +41,7 @@ y/ability
 y/container
 y/container/iter
 y/container/contiguous
+y/container/cxx
 y/pointer
 y/utest
 y/stream

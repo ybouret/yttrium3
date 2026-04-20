@@ -89,7 +89,7 @@ namespace Yttrium
         static const char * const CallSign;                              //!< "Object::Factory"
         static const Longevity    LifeTime = LifeTimeFor::ObjectFactory; //!< alias
         typedef ClassLockPolicy   Policy;                                //!< alias
-        typedef void *            CompressType;                          //!< type to align Small::Blocks to
+        typedef void *            CompressType;                          //!< type to align Small::Blocks to compress used Arenas
         
         //! named memory model
         enum Model
