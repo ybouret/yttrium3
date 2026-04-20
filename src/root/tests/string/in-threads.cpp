@@ -7,6 +7,7 @@
 #include "y/concurrent/mutex.hpp"
 #include "y/concurrent/condition.hpp"
 #include "y/core/list/cxx.hpp"
+#include "y/core/rand.hpp"
 
 using namespace Yttrium;
 
@@ -52,6 +53,7 @@ namespace
 
         void Run()
         {
+            Core::Rand ran;
             mutex.lock();
             (std::cerr << "Entering #" << ready+1 << std::endl).flush();
             if(++ready<NumThreads)
@@ -64,6 +66,20 @@ namespace
                 (std::cerr << "synchronized!" << std::endl).flush();
             }
             mutex.unlock();
+
+            Node::List mine;
+            for(const Node * node=list.head;node;node=node->next)
+            {
+                const String & s    = *node;
+                Node * const   temp = new Node(s);
+                if( ran.heads() ) mine.pushTail(temp); else mine.pushHead(temp);
+            }
+
+            {
+                Y_Lock(mutex);
+                (std::cerr << "duplicated #" << mine.size << std::endl).flush();
+            }
+
 
         }
 
