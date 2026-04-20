@@ -16,7 +16,7 @@ namespace Yttrium
 
     //! light-weight fraction
     struct Fraction {
-        Apex::natural_t numer; //!< numerator
+        Apex::integer_t numer; //!< numerator
         Apex::natural_t denom; //!< denominator
     };
 

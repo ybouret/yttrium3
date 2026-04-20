@@ -47,10 +47,6 @@ namespace Yttrium
             s += c;
             goto GETCHAR;
         }
-
-
-
-        return false;
     }
 
     void InputStream:: load(void * const       blockAddr,
@@ -86,7 +82,7 @@ namespace Yttrium
         load(u,2,varName,varPart);
         const uint16_t u0 = u[0];
         const uint16_t u1 = u[1];
-        return u0 | (u1<<8);
+        return (uint16_t)(u0 | (u1<<8));
     }
 
     template <>

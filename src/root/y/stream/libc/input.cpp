@@ -61,10 +61,10 @@ namespace Yttrium
                                       const size_t        size) noexcept
         {
             assert(size<=buff.size);
-            uint8_t * p = (uint8_t *)data;
+            char * p = (char *)data;
             for(size_t n=size;n>0;--n)
             {
-                *(p++) = **buff.head; delete buff.popHead();
+                *(p++) =  **buff.head; delete buff.popHead();
             }
             return size;
         }
