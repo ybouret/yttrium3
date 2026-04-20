@@ -43,7 +43,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            //! no argument new type setup \param where new type locaction
+            //! no argument new type setup \param where new type location
             inline explicit Embedded(void * const where) :
             addr( new ( Init(where) ) MutableType() )
             {

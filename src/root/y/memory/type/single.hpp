@@ -19,7 +19,7 @@ namespace Yttrium
         //
         //
         //
-        //! Zombie(s) objects
+        //! Zombie object
         //
         //
         //______________________________________________________________________
@@ -62,10 +62,10 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            //! access static memory \return first zombie address
+            //! access static memory \return  zombie address
             inline MutableType * operator()(void)       noexcept { return addr; }
 
-            //! access static const memory \return first zombie address
+            //! access static const memory \return zombie address
             inline ConstType   * operator()(void) const noexcept { return addr; }
 
         private:

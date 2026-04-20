@@ -27,6 +27,8 @@ namespace Yttrium
         //
         //______________________________________________________________________
         typedef typename READABLE::ConstType ConstType; //!< alias
+        typedef typename READABLE::Type      Type; //!< alias
+
         using READABLE::size;
         using READABLE::ask;
 

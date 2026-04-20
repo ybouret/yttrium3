@@ -3,6 +3,7 @@
 #ifndef Y_CxxArray_Included
 #define Y_CxxArray_Included 1
 
+#include "y/container/cxx/container.hpp"
 #include "y/container.hpp"
 #include "y/container/contiguous/rw.hpp"
 #include "y/container/writable.hpp"
@@ -13,6 +14,8 @@
 
 namespace Yttrium
 {
+
+
 
     template <typename T>
     class CxxArray : public ReadWriteContiguous< Writable<T> >
@@ -35,6 +38,12 @@ namespace Yttrium
         {
         }
 
+        template <typename ARR>
+        inline explicit CxxArray(const CopyOf_ &_, const ARR &arr) :
+        code( new Code(_,arr) )
+        {
+        }
+
 
         inline virtual ~CxxArray() noexcept
         {
@@ -54,39 +63,42 @@ namespace Yttrium
         }
     private:
         class Code;
-        Y_Disable_Assign(CxxArray);
+        Y_Disable_Copy_And_Assign(CxxArray);
         Code * const code;
 
-        typedef Memory::Troop<MutableType,Object> CodeMemory;
-        typedef Memory::AutoBuilt<Type>           CodeMaster;
 
-        class Code : public CodeMemory, public CodeMaster
+        typedef CxxContainer              CodeObject;
+        typedef Memory::Troop<MutableType> CodeMemory;
+        typedef Memory::AutoBuilt<Type>    CodeMaster;
+
+        class Code : public CodeObject, public CodeMemory, public CodeMaster
         {
         public:
             using CodeMemory::addr;
 
             inline explicit Code(const size_t n) :
-            CodeMemory(n),
-            CodeMaster(addr,n),
-            size(n)
+            CodeObject(n),
+            CodeMemory(size),
+            CodeMaster(addr,size)
             {
             }
 
             inline explicit Code(const size_t n, ConstType &value) :
-            CodeMemory(n),
-            CodeMaster(addr,n,value),
-            size(n)
+            CodeObject(n),
+            CodeMemory(size),
+            CodeMaster(addr,size,value)
             {
             }
 
-
-
-            inline virtual ~Code() noexcept
+            template <typename ARR>
+            inline explicit Code(const CopyOf_ &, const ARR &arr) :
+            CodeObject( arr.size() ),
+            CodeMemory( size ),
+            CodeMaster(Procedural,addr,size,arr)
             {
-                Coerce(size) = 0;
             }
 
-            const size_t size;
+            inline virtual ~Code() noexcept             { Coerce(size) = 0; }
 
         private:
             Y_Disable_Copy_And_Assign(Code);

@@ -3,9 +3,8 @@
 #ifndef Y_Memory_Troop_Included
 #define Y_Memory_Troop_Included 1
 
-#include "y/object.hpp"
-#include "y/type/args.hpp"
 #include "y/memory/allocator.hpp"
+#include "y/type/args.hpp"
 
 namespace Yttrium
 {
@@ -25,15 +24,13 @@ namespace Yttrium
             Y_Disable_Copy_And_Assign(TroopGear);
         };
 
-        template <typename T,
-        typename OBJECT = Object>
-        class Troop : public OBJECT, public TroopGear
+        template <typename T>
+        class Troop :  public TroopGear
         {
         public:
             Y_Args_Expose(T,Type);
 
             inline explicit Troop(const size_t minCapacity) :
-            OBJECT(),
             bytes(0),
             capacity(minCapacity),
             addr( static_cast<MutableType *>( Acquire(Coerce(capacity), Coerce(bytes), sizeof(T))) ),
