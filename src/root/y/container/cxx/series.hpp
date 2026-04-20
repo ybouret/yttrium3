@@ -5,7 +5,7 @@
 #define Y_CxxSeries_Included 1
 
 #include "y/container/cxx/container.hpp"
-#include "y/container/contiguous/rw.hpp"
+#include "y/container/contiguous/writable.hpp"
 #include "y/container/writable.hpp"
 #include "y/container/sequence.hpp"
 #include "y/ability/random-access.hpp"
@@ -17,18 +17,19 @@
 #include "y/libc/block/zero.h"
 #include "y/libc/block/move.h"
 #include "y/libc/block/copy.h"
-
+#include "y/ability/recyclable.hpp"
 
 
 namespace Yttrium
 {
 
     template <typename T>
-    class CxxSeries : public Sequence<T,ReadWriteContiguous< Writable<T> > >
+    class CxxSeries : public Sequence<T, ContiguousWritable<T> >, public Recyclable
     {
     public:
         Y_Args_Declare(T,Type);
-        
+        typedef Sequence<T, ContiguousWritable<T> > SequenceType;
+
         inline explicit CxxSeries(const size_t minCapacity) : code( new Code(minCapacity) )
         {
         }
@@ -51,6 +52,20 @@ namespace Yttrium
             assert(code); code->pushHead(args);
         }
 
+        virtual void popTail() noexcept
+        {
+            assert(code); code->popTail();
+        }
+
+        virtual void popHead() noexcept
+        {
+            assert(code); code->popHead();
+        }
+
+        virtual void free() noexcept
+        {
+            assert(code); code->free();
+        }
 
 
     protected:
@@ -80,9 +95,23 @@ namespace Yttrium
 
             inline virtual ~Code() noexcept { free(); }
 
+            inline void popTail() noexcept
+            {
+                assert(size>0);
+                Yttrium_BZero(Destructed(&addr[--Coerce(size)]), sizeof(T));
+
+            }
+
+            inline void popHead() noexcept
+            {
+                assert(size>0);
+                MutableType * const target = addr;
+                Yttrium_BMove(Destructed(target),target+1,--Coerce(size) * sizeof(T) );
+                Yttrium_BZero(target+size,sizeof(T));
+            }
+
             inline void free() noexcept {
-                while(size>0) Destruct(&addr[--Coerce(size)]);
-                Yttrium_BZero(addr,bytes);
+                while(size>0) popTail();
             }
 
             template <typename ARGS>

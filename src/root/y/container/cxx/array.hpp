@@ -5,8 +5,7 @@
 
 #include "y/container/cxx/container.hpp"
 #include "y/container.hpp"
-#include "y/container/contiguous/rw.hpp"
-#include "y/container/writable.hpp"
+#include "y/container/contiguous/writable.hpp"
 #include "y/memory/troop.hpp"
 #include "y/memory/auto-built.hpp"
 #include "y/type/destroy.hpp"
@@ -18,7 +17,7 @@ namespace Yttrium
 
 
     template <typename T>
-    class CxxArray : public ReadWriteContiguous< Writable<T> >
+    class CxxArray : public ContiguousWritable<T>
     {
     public:
         Y_Args_Declare(T,Type);

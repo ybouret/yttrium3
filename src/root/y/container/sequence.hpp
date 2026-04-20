@@ -19,6 +19,10 @@ namespace Yttrium
         virtual void pushTail(ParamType) = 0;
         virtual void pushHead(ParamType) = 0;
 
+        virtual void popTail() noexcept = 0;
+        virtual void popHead() noexcept = 0;
+
+
     private:
         Y_Disable_Copy_And_Assign(Sequence);
     };

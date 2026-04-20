@@ -1,12 +1,9 @@
-
-
 //! \file
 
 #ifndef Y_ReadWriteContiguous_Included
 #define Y_ReadWriteContiguous_Included 1
 
 #include "y/container/iter/linear.hpp"
-
 
 
 namespace Yttrium
