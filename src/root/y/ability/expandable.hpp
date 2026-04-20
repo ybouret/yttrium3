@@ -28,7 +28,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
     protected:
-        inline explicit Expandable() noexcept  : RELEASABLE {} //!< setup
+        inline explicit Expandable() noexcept  : RELEASABLE() {} //!< setup
 
     public:
         inline virtual ~Expandable() noexcept {} //!< cleanup
@@ -39,7 +39,7 @@ namespace Yttrium
         // Interface
         //
         //______________________________________________________________________
-        virtual void reserve(const size_t n) = 0;
+        virtual void reserve(const size_t n) = 0; //!< reserve space \param n items to provide for
 
 
         //______________________________________________________________________
@@ -48,6 +48,8 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
+
+        //! ensure capacity \param minCapacity minimal required capacity
         inline void ensure(const size_t minCapacity)
         {
             const size_t capa = this->capacity();

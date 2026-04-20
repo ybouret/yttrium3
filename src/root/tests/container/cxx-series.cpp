@@ -9,9 +9,10 @@ using namespace Yttrium;
 Y_UTEST(container_cxx_series)
 {
     Core::Rand     ran;
-    CxxSeries<apz> ics(10);
+    const int      n = 10;
+    CxxSeries<apz> ics(n);
 
-    for(int i=0;i<10;++i)
+    for(int i=0;i<n;++i)
     {
         if(ran.heads()) ics.pushTail(i); else ics.pushHead(i);
         std::cerr << ics << std::endl;
@@ -20,11 +21,38 @@ Y_UTEST(container_cxx_series)
     Random::Shuffle(ran, ics(), ics.size() );
     std::cerr << ics << std::endl;
 
+
     while( ics.size() > 0 )
     {
         if(ran.heads()) ics.popHead(); else ics.popTail();
         std::cerr << ics << std::endl;
     }
+
+    for(int i=0;i<n;++i)
+    {
+        if(ran.heads()) ics.pushTail(i); else ics.pushHead(i);
+        std::cerr << ics << std::endl;
+    }
+
+    while(ics.size())
+    {
+        const size_t i = ran.in<size_t>(1,ics.size());
+        ics.remove(i);
+        std::cerr << "remove #" << std::setw(2) << i << " => " << ics << std::endl;
+    }
+
+    for(int i=0;i<n;++i)
+    {
+        if(ran.heads()) ics.pushTail(i); else ics.pushHead(i);
+        std::cerr << ics << std::endl;
+    }
+
+    for(size_t i=1;i<=ics.size();++i)
+    {
+        ics.demote(i);
+        std::cerr << "demote #" << std::setw(2) << i << " => " << ics << std::endl;
+    }
+
 
 }
 Y_UDONE()

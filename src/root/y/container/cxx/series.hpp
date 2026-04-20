@@ -24,7 +24,10 @@ namespace Yttrium
 {
 
     template <typename T>
-    class CxxSeries : public Sequence<T, ContiguousWritable<T> >, public Recyclable
+    class CxxSeries :
+    public Sequence<T, ContiguousWritable<T> >,
+    public Recyclable,
+    public RandomAccess<T>
     {
     public:
         Y_Args_Declare(T,Type);
@@ -67,6 +70,21 @@ namespace Yttrium
             assert(code); code->free();
         }
 
+        virtual void remove(const size_t indx) noexcept
+        {
+            assert(code); code->remove(indx);
+        }
+
+        virtual void insert(const size_t indx, const ParamType args)
+        {
+        }
+
+        virtual void demote(const size_t indx) noexcept
+        {
+            assert(code); code->demote(indx);
+        }
+
+
 
     protected:
         virtual ConstType &ask(const size_t indx) const noexcept
@@ -89,6 +107,7 @@ namespace Yttrium
             using CodeMemory::addr;
             using CodeMemory::bytes;
             using CodeMemory::capacity;
+            using CodeMemory::cxx;
 
             inline explicit Code(const size_t minCapacity) :
             CodeObject(0), CodeMemory(minCapacity) {}
@@ -130,6 +149,28 @@ namespace Yttrium
                 MutableType * const temp = new (static_cast<MutableType *>(Y_BZero(wksp))) MutableType(args);
                 Yttrium_BMove(addr+1,addr,sizeof(T) * Coerce(size)++ );
                 Yttrium_BCopy(addr,temp,sizeof(T));
+            }
+
+            inline void remove(const size_t indx) noexcept
+            {
+                assert(indx>=1);
+                assert(indx<=size);
+                MutableType * const target = cxx+indx;
+                Yttrium_BMove(Destructed(target),target+1, (Coerce(size)-- - indx) * sizeof(T) );
+                Yttrium_BZero(addr+size,sizeof(T));
+            }
+
+            inline void demote(const size_t indx) noexcept
+            {
+                assert(indx>=1);
+                assert(indx<=size);
+                assert(cxx+1==addr);
+                void *              wksp[ Alignment::WordsFor<T>::Count ];
+                void * const        temp   = Y_BZero(wksp);
+                MutableType * const target = cxx+indx;
+                Yttrium_BCopy(temp,target,sizeof(T));
+                Yttrium_BMove(target,target+1,(size-indx)*sizeof(T));
+                Yttrium_BCopy(cxx+size,temp,sizeof(T));
             }
 
         private:

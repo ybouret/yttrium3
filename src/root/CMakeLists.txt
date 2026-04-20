@@ -10,6 +10,7 @@ y/libc
 y/libc/block
 y/libc/str
 y/libc/file
+y/libc/ram
 y/xml
 y/core
 y/core/pool
