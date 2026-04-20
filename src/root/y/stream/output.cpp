@@ -77,3 +77,17 @@ namespace Yttrium
     }
 
 }
+
+#include "y/libc/str/fmt.h"
+
+namespace Yttrium
+{
+    OutputStream & OutputStream:: operator()(const char * const fmt,...)
+    {
+        assert(fmt);
+        {
+            //Yttrium_Strfmt(<#char *const buffer#>, <#const size_t buflen#>, <#const char *const fmt#>, <#va_list *const app#>)
+        }
+        return *this;
+    }
+}

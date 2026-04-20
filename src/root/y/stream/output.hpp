@@ -6,6 +6,7 @@
 
 #include "y/stream/stream.hpp"
 #include "y/type/ints.hpp"
+#include "y/check/printf.h"
 
 namespace Yttrium
 {
@@ -85,6 +86,7 @@ namespace Yttrium
         size_t emit(const uint32_t &); //!< emit four bytes  \return 4
         size_t emit(const uint64_t &); //!< emit eight bytes \return 8
 
+        OutputStream & operator()(const char * const fmt,...) Y_Printf_Check(2,3);
 
     protected:
         explicit OutputStream(); //!< setup for virtual constructor
