@@ -75,10 +75,7 @@ namespace Yttrium
             assert(code); code->remove(indx);
         }
 
-        virtual void insert(const size_t indx, const ParamType args)
-        {
-        }
-
+        
         virtual void demote(const size_t indx) noexcept
         {
             assert(code); code->demote(indx);
@@ -172,6 +169,8 @@ namespace Yttrium
                 Yttrium_BMove(target,target+1,(size-indx)*sizeof(T));
                 Yttrium_BCopy(cxx+size,temp,sizeof(T));
             }
+
+
 
         private:
             Y_Disable_Copy_And_Assign(Code);

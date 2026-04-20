@@ -23,8 +23,7 @@ namespace Yttrium
 
         virtual void remove(const size_t indx) noexcept        = 0;
         virtual void demote(const size_t indx) noexcept        = 0;
-        virtual void insert(const size_t indx, ParamType data) = 0;
-
+        
 
     private:
         Y_Disable_Copy_And_Assign(RandomAccess);
