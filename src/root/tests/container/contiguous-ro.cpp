@@ -5,16 +5,15 @@
 
 using namespace Yttrium;
 
-Y_UTEST(container_contiguous)
+Y_UTEST(container_contiguous_ro)
 {
 
     ReadOnlyContiguous<String> ros;
     (String&)ros = "Hello";
 
     std::cerr << ros << std::endl;
-
-    Iter::Test::ForwardConst(ros);
-    Iter::Test::ReverseConst(ros);
+    
+    Iter::Test::BothConst(ros);
 
 }
 Y_UDONE()

@@ -4,7 +4,6 @@
 #ifndef Y_ReadOnlyContiguous_Included
 #define Y_ReadOnlyContiguous_Included 1
 
-#include "y/container.hpp"
 #include "y/container/iter/linear.hpp"
 
 
