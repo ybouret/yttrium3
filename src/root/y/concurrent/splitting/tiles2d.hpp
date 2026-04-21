@@ -37,12 +37,24 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
-                typedef V2D<T>              vertex_t;
-                typedef Leap2D<T>           Leap; //!< alias
-                typedef Tile2D<T>           Tile; //!< alias
-                typedef Memory::Troop<Tile> Code; //!< alias
+                typedef V2D<T>              vertex_t; //!< alias
+                typedef Leap2D<T>           Leap;     //!< alias
+                typedef Tile2D<T>           Tile;     //!< alias
+                typedef Memory::Troop<Tile> Code;     //!< alias
 
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
 
+                //! setup
+                /**
+                 \param n parallelism
+                 \param lo lower coordinate
+                 \param up upper coordinate
+                 */
                 inline explicit Tiles2D(const size_t n, const vertex_t lo, const vertex_t up) :
                 Leap(lo,up),
                 code( new Code(n) ),
@@ -52,6 +64,7 @@ namespace Yttrium
                     setup();
                 }
 
+                //! setup empty \param n parallelism
                 inline explicit Tiles2D(const size_t n) :
                 Leap(),
                 code( new Code(n) ),
@@ -61,6 +74,7 @@ namespace Yttrium
                     setup();
                 }
 
+                //! cleanup
                 inline virtual ~Tiles2D() noexcept
                 {
                     assert(code); Destroy(code);
@@ -81,7 +95,9 @@ namespace Yttrium
                 // Methods
                 //
                 //______________________________________________________________
-                void remap(const vertex_t lo, const vertex_t up) noexcept
+
+                //! remap if necessary \param lo new lower \param up new upper
+                inline void remap(const vertex_t lo, const vertex_t up) noexcept
                 {
                     {
                         Leap &     self = *this;
@@ -96,9 +112,9 @@ namespace Yttrium
                 }
 
             private:
-                Y_Disable_Copy_And_Assign(Tiles2D);
-                Code * const code; //!< inner code
-                const size_t ncpu; //!< parallelism
+                Y_Disable_Copy_And_Assign(Tiles2D); //!< discarded
+                Code * const code;                  //!< inner code
+                const size_t ncpu;                  //!< parallelism
 
                 inline virtual const Tile & ask(const size_t indx) const noexcept
                 {
