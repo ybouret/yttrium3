@@ -22,6 +22,7 @@ template <> String<CH>:: String(const String &s) :
 Container(),
 DynamicClass(),
 SequenceType(),
+Recyclable(),
 code( new Code(*s.code) )
 {
 

@@ -140,7 +140,17 @@ namespace Yttrium
             void copy(const READABLE &arr) {
                 assert(0==size); assert(capacity>=arr.size());
                 const size_t n = arr.size();
-                try { for(size_t i=1;i<=n;++i) pushTail(arr[i]); } catch(...) { free(); throw; }
+                try        { for(size_t i=1;i<=n;++i) pushTail(arr[i]); }
+                catch(...) { free(); throw; }
+            }
+
+            //! replicate range \param i first iterator \param n range size
+            template <typename ITERATOR> inline
+            void replicate(ITERATOR i, size_t n)
+            {
+                assert(0==size); assert(capacity>=n);
+                try        { while( n-- > 0 ) pushTail( *(i++) ); }
+                catch(...) { free(); throw; }
             }
 
             //! capture memory in empty space \param troop source

@@ -8,6 +8,8 @@
 #include "y/memory/troop.hpp"
 #include "y/type/destroy.hpp"
 #include "y/type/copy-of.hpp"
+#include "y/type/replicate.hpp"
+
 #include "y/object.hpp"
 
 namespace Yttrium
@@ -73,6 +75,19 @@ namespace Yttrium
         {
         }
 
+        //! replicate \param _ helper \param i first iterator \param n range size
+        template <typename ITERATOR>
+        inline explicit CxxArray(const Replicate_ &_, ITERATOR i, const size_t n) :
+        code( new Code(_,i,n) )
+        {}
+
+        //! replicate full sequence \param _ helper \param seq source
+        template <typename SEQUENCE>
+        inline explicit CxxArray(const Replicate_ &_, SEQUENCE &seq) :
+        code( new Code(_,seq.begin(),seq.size()) )
+        {}
+
+
         //! cleanup
         inline virtual ~CxxArray() noexcept
         {
@@ -128,6 +143,12 @@ namespace Yttrium
             template <typename READABLE>
             inline explicit Code(const CopyOf_ &, const READABLE &arr) : CodeMemory(arr.size()) {
                 this->copy(arr);
+            }
+
+            template <typename ITERATOR>
+            inline explicit Code(const Replicate_ &, ITERATOR i, const size_t n) : CodeMemory(n)
+            {
+                this->replicate(i,n);
             }
 
             inline virtual ~Code() noexcept {}

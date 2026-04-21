@@ -9,6 +9,7 @@
 #include "y/memory/troop/joint.hpp"
 #include "y/type/destroy.hpp"
 #include "y/type/copy-of.hpp"
+#include "y/type/replicate.hpp"
 #include "y/libc/block/zero.h"
 #include "y/libc/block/copy.h"
 #include "y/ability/recyclable.hpp"
@@ -61,6 +62,18 @@ namespace Yttrium
         code( new Code(_,arr) )
         {
         }
+
+        //! replicate \param _ helper \param i first iterator \param n range size
+        template <typename ITERATOR>
+        inline explicit CxxSeries(const Replicate_ &_, ITERATOR i, const size_t n) :
+        code( new Code(_,i,n) )
+        {}
+
+        //! replicate full sequence \param _ helper \param seq source
+        template <typename SEQUENCE>
+        inline explicit CxxSeries(const Replicate_ &_, SEQUENCE &seq) :
+        code( new Code(_,seq.begin(),seq.size()) )
+        {}
 
         //______________________________________________________________________
         //
@@ -145,11 +158,19 @@ namespace Yttrium
         public:
             inline explicit Code(const size_t n) : Object(), CodeMemory(n) {}
             inline virtual ~Code() noexcept {}
+
             template <typename READABLE>
             inline explicit Code(const CopyOf_ &_, const READABLE &arr) :
             Object(), CodeMemory(_,arr)
             {
             }
+
+            template <typename ITERATOR>
+            inline explicit Code(const Replicate_ &_, ITERATOR i, const size_t n) :
+            Object(), CodeMemory(_,i,n)
+            {
+            }
+
 
         private:
             Y_Disable_Copy_And_Assign(Code);

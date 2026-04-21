@@ -147,7 +147,7 @@ namespace Yttrium
                 assert(sanity());
             }
 
-            //! prepend \param text data \param tlen data size
+            //! prepend \param ch character
             inline void pre(const T ch) noexcept
             {
                 assert(sanity());

@@ -11,6 +11,7 @@
 #include "y/container/contiguous/writable.hpp"
 #include "y/container/sequence.hpp"
 #include "y/type/sign.hpp"
+#include "y/ability/recyclable.hpp"
 #include <iosfwd>
 
 namespace Yttrium
@@ -42,7 +43,8 @@ namespace Yttrium
         template <typename T>
         class String :
         public CountedObject,
-        public Sequence<T,ContiguousWritable<T> >
+        public Sequence<T,ContiguousWritable<T> >,
+        public Recyclable
         {
         public:
             //__________________________________________________________________
@@ -52,8 +54,8 @@ namespace Yttrium
             //
             //__________________________________________________________________
             typedef CountedObject                       DynamicClass; //!< alias
-            typedef Sequence<T,ContiguousWritable<T> >  SequenceType;
-            Y_Args_Declare(T,Type);            //!< aliases
+            typedef Sequence<T,ContiguousWritable<T> >  SequenceType; //!< alias
+            Y_Args_Declare(T,Type);                                   //!< aliases
             class Code;
 
             //__________________________________________________________________
