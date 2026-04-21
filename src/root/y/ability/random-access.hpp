@@ -9,24 +9,27 @@
 namespace Yttrium
 {
 
-    template <typename T>
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Random Access API...
+    //
+    //
+    //__________________________________________________________________________
     class RandomAccess
     {
     public:
-        Y_Args_Declare(T,Type);
 
-        inline RandomAccess() noexcept  {}
-
-        inline virtual ~RandomAccess() noexcept
-        {
-        }
+        explicit RandomAccess() noexcept {} //!< setup
+        virtual ~RandomAccess() noexcept {} //!< cleanup
 
         virtual void remove(const size_t indx) noexcept        = 0;
         virtual void demote(const size_t indx) noexcept        = 0;
         
 
     private:
-        Y_Disable_Copy_And_Assign(RandomAccess);
+        Y_Disable_Copy_And_Assign(RandomAccess); //!< discarded
     };
 
 }

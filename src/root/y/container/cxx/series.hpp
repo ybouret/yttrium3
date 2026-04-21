@@ -4,21 +4,16 @@
 #ifndef Y_CxxSeries_Included
 #define Y_CxxSeries_Included 1
 
-#include "y/container/cxx/container.hpp"
 #include "y/container/contiguous/writable.hpp"
-#include "y/container/writable.hpp"
 #include "y/container/sequence.hpp"
 #include "y/ability/random-access.hpp"
-#include "y/memory/troop.hpp"
+#include "y/memory/troop/joint.hpp"
 #include "y/type/destroy.hpp"
-#include "y/type/destruct.hpp"
 #include "y/type/copy-of.hpp"
-#include "y/calculus/alignment.hpp"
 #include "y/libc/block/zero.h"
-#include "y/libc/block/move.h"
 #include "y/libc/block/copy.h"
 #include "y/ability/recyclable.hpp"
-
+#include "y/object.hpp"
 
 namespace Yttrium
 {
@@ -95,86 +90,19 @@ namespace Yttrium
         Y_Disable_Copy_And_Assign(CxxSeries);
         Code * const code;
 
-        typedef CxxContainer               CodeObject;
-        typedef Memory::Troop<MutableType> CodeMemory;
+        typedef Memory::JointTroop<MutableType> CodeMemory;
 
-        class Code : public CodeObject, public CodeMemory
+        class Code : public Object, public CodeMemory
         {
         public:
-            using CodeMemory::addr;
-            using CodeMemory::bytes;
-            using CodeMemory::capacity;
-            using CodeMemory::cxx;
-
-            inline explicit Code(const size_t minCapacity) :
-            CodeObject(0), CodeMemory(minCapacity) {}
-
-            inline virtual ~Code() noexcept { free(); }
-
-            inline void popTail() noexcept
-            {
-                assert(size>0);
-                Yttrium_BZero(Destructed(&addr[--Coerce(size)]), sizeof(T));
-
-            }
-
-            inline void popHead() noexcept
-            {
-                assert(size>0);
-                MutableType * const target = addr;
-                Yttrium_BMove(Destructed(target),target+1,--Coerce(size) * sizeof(T) );
-                Yttrium_BZero(target+size,sizeof(T));
-            }
-
-            inline void free() noexcept {
-                while(size>0) popTail();
-            }
-
-            template <typename ARGS>
-            inline void pushTail(const ARGS &args)
-            {
-                assert(size<capacity);
-                new (addr+size) MutableType(args);
-                ++Coerce(size);
-            }
-
-            template <typename ARGS>
-            inline void pushHead(const ARGS &args)
-            {
-                assert(size<capacity);
-                void *              wksp[ Alignment::WordsFor<T>::Count ];
-                MutableType * const temp = new (static_cast<MutableType *>(Y_BZero(wksp))) MutableType(args);
-                Yttrium_BMove(addr+1,addr,sizeof(T) * Coerce(size)++ );
-                Yttrium_BCopy(addr,temp,sizeof(T));
-            }
-
-            inline void remove(const size_t indx) noexcept
-            {
-                assert(indx>=1);
-                assert(indx<=size);
-                MutableType * const target = cxx+indx;
-                Yttrium_BMove(Destructed(target),target+1, (Coerce(size)-- - indx) * sizeof(T) );
-                Yttrium_BZero(addr+size,sizeof(T));
-            }
-
-            inline void demote(const size_t indx) noexcept
-            {
-                assert(indx>=1);
-                assert(indx<=size);
-                assert(cxx+1==addr);
-                void *              wksp[ Alignment::WordsFor<T>::Count ];
-                void * const        temp   = Y_BZero(wksp);
-                MutableType * const target = cxx+indx;
-                Yttrium_BCopy(temp,target,sizeof(T));
-                Yttrium_BMove(target,target+1,(size-indx)*sizeof(T));
-                Yttrium_BCopy(cxx+size,temp,sizeof(T));
-            }
-
-
+            inline explicit Code(const size_t n) : Object(), CodeMemory(n) {}
+            inline virtual ~Code() noexcept {}
 
         private:
             Y_Disable_Copy_And_Assign(Code);
         };
+
+
 
     };
 
