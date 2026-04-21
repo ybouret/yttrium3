@@ -1,11 +1,12 @@
 
+
 //! \file
 
-#ifndef Y_ContiguousWritable_Included
-#define Y_ContiguousWritable_Included 1
+#ifndef Y_ContiguousReadable_Included
+#define Y_ContiguousReadable_Included 1
 
-#include "y/container/contiguous/rw.hpp"
-#include "y/container/writable.hpp"
+#include "y/container/contiguous/ro.hpp"
+#include "y/container/readable.hpp"
 
 
 namespace Yttrium
@@ -20,7 +21,7 @@ namespace Yttrium
     //
     //__________________________________________________________________________
     template <typename T>
-    class ContiguousWritable  : public ReadWriteContiguous< Writable<T> >
+    class ContiguousReadable : public ReadOnlyContiguous< Readable<T> >
     {
     public:
         //______________________________________________________________________
@@ -31,14 +32,14 @@ namespace Yttrium
         //______________________________________________________________________
 
         //! setup
-        inline explicit ContiguousWritable() noexcept : ReadWriteContiguous< Writable<T> >() {}
+        inline explicit ContiguousReadable() noexcept : ReadOnlyContiguous< Readable<T> >() {}
 
         //! cleanup
-        inline virtual ~ContiguousWritable() noexcept {}
+        inline virtual ~ContiguousReadable() noexcept {}
 
     private:
-        Y_Disable_Copy_And_Assign(ContiguousWritable); //!< discarded
+        Y_Disable_Copy_And_Assign(ContiguousReadable); //!< discarded
     };
 }
 
-#endif // !Y_ContiguousWritable_Included
+#endif // !Y_ContiguousReadable_Included

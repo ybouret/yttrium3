@@ -22,8 +22,8 @@ namespace Yttrium
 
                 inline explicit Tile1D(const size_t sz,
                                        const size_t rk,
-                                       const T      dataLength,
-                                       const T      dataOffset) :
+                                       const T      dataOffset,
+                                       const T      dataLength) :
                 Member(sz,rk),
                 offset(dataOffset),
                 length( part<T>(dataLength, Coerce(offset) ) ),

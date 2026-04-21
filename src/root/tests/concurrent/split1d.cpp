@@ -1,4 +1,4 @@
-#include "y/concurrent/splitting/tile1d.hpp"
+#include "y/concurrent/splitting/tiles1d.hpp"
 #include "y/utest/run.hpp"
 #include <typeinfo>
 
@@ -16,8 +16,12 @@ namespace {
             std::cerr << "-- size=" << size << std::endl;
             for(size_t rank=0;rank<size;++rank)
             {
-                Concurrent::Splitting::Tile1D<T> tile(size,rank,length,offset);
+                Concurrent::Splitting::Tile1D<T> tile(size,rank,offset,length);
                 std::cerr << "\t" << tile.c_str() << ": " << tile << std::endl;
+            }
+            {
+                Concurrent::Splitting::Tiles1D<T> tiles(size,offset,length);
+                std::cerr << tiles << std::endl;
             }
         }
 
