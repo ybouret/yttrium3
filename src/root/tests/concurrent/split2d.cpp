@@ -22,10 +22,8 @@ namespace {
             {
                 Concurrent::Splitting::Tile2D<T> tile(size,rank,leap);
                 std::cerr << "\t" << tile.c_str() << ": " << tile << std::endl;
-                for(T i=1;i<=tile.size;++i)
-                {
-                    std::cerr << "\t\t" << tile[i] << std::endl;
-                }
+                //for(T i=1;i<=tile.size;++i) std::cerr << "\t\t" << tile[i] << std::endl;
+
             }
         }
 

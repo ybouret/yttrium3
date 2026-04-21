@@ -3,7 +3,7 @@
 #ifndef Y_Concurrent_Splitting_Tile1D_Included
 #define Y_Concurrent_Splitting_Tile1D_Included 1
 
-#include "y/concurrent/member.hpp"
+#include "y/concurrent/subdivision.hpp"
 #include <iostream>
 
 namespace Yttrium
@@ -23,7 +23,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             template <typename T>
-            class Tile1D : public Member
+            class Tile1D : public Subdivision
             {
             public:
                 //______________________________________________________________
@@ -52,7 +52,7 @@ namespace Yttrium
                                        const size_t rk,
                                        const T      dataOffset,
                                        const T      dataLength) :
-                Member(sz,rk),
+                Subdivision(sz,rk),
                 offset(dataOffset),
                 length( part<T>(dataLength, Coerce(offset) ) ),
                 utmost(offset+length-_1)
@@ -71,6 +71,14 @@ namespace Yttrium
                     else
                         return os << '|' << self.offset << ':' << self.utmost << '|' << '=' << self.length;
                 }
+
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
+                inline virtual bool isEmpty() const noexcept { return length<=0; }
 
                 //______________________________________________________________
                 //
