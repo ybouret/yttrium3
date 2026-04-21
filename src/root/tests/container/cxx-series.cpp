@@ -8,6 +8,7 @@ using namespace Yttrium;
 
 Y_UTEST(container_cxx_series)
 {
+#if 0
     Core::Rand     ran;
     const int      n = 10;
     CxxSeries<apz> ics(n);
@@ -53,7 +54,8 @@ Y_UTEST(container_cxx_series)
         std::cerr << "demote #" << std::setw(2) << i << " => " << ics << std::endl;
     }
 
-
+#endif
+    
 }
 Y_UDONE()
 

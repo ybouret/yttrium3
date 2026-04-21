@@ -3,13 +3,12 @@
 #ifndef Y_CxxArray_Included
 #define Y_CxxArray_Included 1
 
-#include "y/container/cxx/container.hpp"
 #include "y/container.hpp"
 #include "y/container/contiguous/writable.hpp"
 #include "y/memory/troop.hpp"
-#include "y/memory/auto-built.hpp"
 #include "y/type/destroy.hpp"
 #include "y/type/copy-of.hpp"
+#include "y/object.hpp"
 
 namespace Yttrium
 {
@@ -37,8 +36,8 @@ namespace Yttrium
         {
         }
 
-        template <typename ARR>
-        inline explicit CxxArray(const CopyOf_ &_, const ARR &arr) :
+        template <typename READABLE>
+        inline explicit CxxArray(const CopyOf_ &_, const READABLE &arr) :
         code( new Code(_,arr) )
         {
         }
@@ -66,38 +65,34 @@ namespace Yttrium
         Code * const code;
 
 
-        typedef CxxContainer              CodeObject;
         typedef Memory::Troop<MutableType> CodeMemory;
-        typedef Memory::AutoBuilt<Type>    CodeMaster;
 
-        class Code : public CodeObject, public CodeMemory, public CodeMaster
+        class Code : public Object, public CodeMemory
         {
         public:
             using CodeMemory::addr;
+            using CodeMemory::size;
 
             inline explicit Code(const size_t n) :
-            CodeObject(n),
-            CodeMemory(size),
-            CodeMaster(addr,size)
+            CodeMemory(n)
             {
+                while(size<n) this->pushTail();
             }
 
             inline explicit Code(const size_t n, ConstType &value) :
-            CodeObject(n),
-            CodeMemory(size),
-            CodeMaster(addr,size,value)
+            CodeMemory(n)
             {
+                while(size<n) this->pushTail(value);
             }
 
-            template <typename ARR>
-            inline explicit Code(const CopyOf_ &, const ARR &arr) :
-            CodeObject( arr.size() ),
-            CodeMemory( size ),
-            CodeMaster(Procedural,addr,size,arr)
+            template <typename READABLE>
+            inline explicit Code(const CopyOf_ &, const READABLE &arr) :
+            CodeMemory(arr.size())
             {
+                this->copy(arr);
             }
 
-            inline virtual ~Code() noexcept             { Coerce(size) = 0; }
+            inline virtual ~Code() noexcept {}
 
         private:
             Y_Disable_Copy_And_Assign(Code);
