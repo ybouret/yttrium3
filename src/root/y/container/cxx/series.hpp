@@ -123,6 +123,14 @@ namespace Yttrium
         Y_Disable_Copy_And_Assign(CxxSeries); //!< discarded
         Code * const code;                    //!< inner code
 
+        inline virtual ConstType & getTail() const noexcept {
+            assert(code); assert(code->size); return code->cxx[code->size];
+        }
+
+        inline virtual ConstType & getHead() const noexcept {
+            assert(code); assert(code->size); return code->addr[0];
+        }
+
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         typedef Memory::JointTroop<MutableType> CodeMemory;
         class Code : public Object, public CodeMemory
