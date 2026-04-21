@@ -247,7 +247,7 @@ namespace Yttrium
                                        const size_t     rk,
                                        const Leap2D<T> &leap) noexcept :
                 Tile1D<T>(sz,rk,0,leap.items),
-                nseg(0),
+                span(0),
                 get(0),
                 cxx(0),
                 wksp()
@@ -267,8 +267,8 @@ namespace Yttrium
                         return os << Member::Empty;
                     else
                     {
-                        assert(self.nseg>0);
-                        return os << '|' << self[1].start << "->" << self[self.nseg].finish() << '|' << '=' << self.length << "/#" << self.nseg;
+                        assert(self.span>0);
+                        return os << '|' << self[1].start << "->" << self[self.span].finish() << '|' << '=' << self.length << "/#" << self.span;
                     }
                 }
 
@@ -283,7 +283,7 @@ namespace Yttrium
                 inline Segment operator[](const T indx) const noexcept
                 {
                     assert(indx>=1);
-                    assert(indx<=nseg);
+                    assert(indx<=span);
                     assert(get);
                     return (*this.*get)(indx);
                 }
@@ -294,7 +294,7 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                const T nseg; //!< number of segment(s)
+                const T span; //!< number of segment(s)
             private:
                 Y_Disable_Copy_And_Assign(Tile2D); //!< discarded
                 Get const       get;               //!< get method
@@ -311,14 +311,14 @@ namespace Yttrium
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
                 inline Segment get1(const T) const noexcept
                 {
-                    assert(1==nseg);
+                    assert(1==span);
                     assert(cxx);
                     return cxx[1];
                 }
 
                 inline Segment get2(const T i) const noexcept
                 {
-                    assert(2==nseg);
+                    assert(2==span);
                     assert(cxx);
                     assert(i>=1);
                     assert(i<=2);
@@ -327,24 +327,24 @@ namespace Yttrium
 
                 inline Segment getN(const T i) const noexcept
                 {
-                    assert(nseg>=3);
+                    assert(span>=3);
                     assert(cxx);
                     assert(i>=1);
-                    assert(i<=nseg);
+                    assert(i<=span);
                     if(i<=1)
                     {
                         return cxx[1];
                     }
                     else
                     {
-                        if(i>=nseg)
+                        if(i>=span)
                         {
                             return cxx[3];
                         }
                         else
                         {
                             assert(i>=2);
-                            assert(i<nseg);
+                            assert(i<span);
                             return Segment(cxx[2],i);
                         }
                     }
@@ -359,9 +359,9 @@ namespace Yttrium
                     Coerce(cxx)        = static_cast<Segment*>( Y_BZero(wksp) )-1;
                     const vertex_t ini = leap.at(this->offset);
                     const vertex_t end = leap.at(this->utmost); assert(end.y>=ini.y);
-                    Coerce(nseg)       = _1 + end.y - ini.y;    assert(nseg>=1);
+                    Coerce(span)       = _1 + end.y - ini.y;    assert(span>=1);
 
-                    switch( nseg )
+                    switch( span )
                     {
                         case 1: // one segment from ini to end
                             new ( cxx+1 ) Segment(ini,_1+end.x-ini.x);
@@ -374,7 +374,7 @@ namespace Yttrium
                             Coerce(get) = & Tile2D::get2;
                             break;
 
-                        default: assert(nseg>=3);
+                        default: assert(span>=3);
                             new ( cxx+1 ) Segment(ini,_1+leap.upper.x-ini.x);                              // first segment
                             new ( cxx+2 ) Segment( vertex_t(leap.lower.x,ini.y-_1),leap.width.x);          // bulk segment, offseted
                             new ( cxx+3 ) Segment( vertex_t(leap.lower.x,end.y), _1+end.x - leap.lower.x); // last segment
