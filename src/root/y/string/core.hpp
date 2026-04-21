@@ -8,7 +8,8 @@
 #include "y/object/counted.hpp"
 #include "y/type/destroy.hpp"
 #include "y/type/with-at-least.hpp"
-#include "y/container/writable.hpp"
+#include "y/container/contiguous/writable.hpp"
+#include "y/container/sequence.hpp"
 #include "y/type/sign.hpp"
 #include <iosfwd>
 
@@ -41,7 +42,7 @@ namespace Yttrium
         template <typename T>
         class String :
         public CountedObject,
-        public Writable<T>
+        public Sequence<T,ContiguousWritable<T> >
         {
         public:
             //__________________________________________________________________
@@ -50,8 +51,9 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            typedef CountedObject BaseClass; //!< alias
-            Y_Args_Declare(T,Type);          //!< aliases
+            typedef CountedObject                       DynamicClass; //!< alias
+            typedef Sequence<T,ContiguousWritable<T> >  SequenceType;
+            Y_Args_Declare(T,Type);            //!< aliases
             class Code;
 
             //__________________________________________________________________
@@ -87,9 +89,11 @@ namespace Yttrium
             //__________________________________________________________________
             virtual size_t size()     const noexcept;
             virtual size_t capacity() const noexcept;
+            virtual void   free()           noexcept;
             virtual void   popTail()        noexcept;
             virtual void   popHead()        noexcept;
-            virtual void   free()           noexcept;
+            virtual void   pushHead(ParamType);
+            virtual void   pushTail(ParamType);
 
 
             //__________________________________________________________________
@@ -143,6 +147,8 @@ inline friend bool operator OP (const T         lhs, const String  & rhs) noexce
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         protected:
             Y_Readable_Decl();
+            virtual ConstType & getHead() const noexcept;
+            virtual ConstType & getTail() const noexcept;
 
         private:
             // for additions

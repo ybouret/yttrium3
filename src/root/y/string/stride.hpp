@@ -147,19 +147,16 @@ namespace Yttrium
                 assert(sanity());
             }
 
-#if 0
             //! prepend \param text data \param tlen data size
-            inline void pre(const T * const text, const size_t tlen) noexcept
+            inline void pre(const T ch) noexcept
             {
                 assert(sanity());
-                assert(size+tlen<=capacity);
-
-                T * const target = entry+tlen;
-
+                assert(size<capacity);
+                memcpy(entry+1,entry,(Coerce(size)++)*sizeof(T));
+                *entry = ch;
                 assert(sanity());
             }
-#endif
-            
+
 
             //! clear content
             inline void clear() noexcept

@@ -55,6 +55,13 @@ namespace Yttrium
         //! cleanup
         inline virtual ~CxxSeries() noexcept { assert(code); Destroy(code); }
 
+        //! duplicate \param _ helper \param arr readable array
+        template <typename READABLE>
+        inline explicit CxxSeries(const CopyOf_ &_, const READABLE &arr) :
+        code( new Code(_,arr) )
+        {
+        }
+
         //______________________________________________________________________
         //
         //
@@ -138,6 +145,11 @@ namespace Yttrium
         public:
             inline explicit Code(const size_t n) : Object(), CodeMemory(n) {}
             inline virtual ~Code() noexcept {}
+            template <typename READABLE>
+            inline explicit Code(const CopyOf_ &_, const READABLE &arr) :
+            Object(), CodeMemory(_,arr)
+            {
+            }
 
         private:
             Y_Disable_Copy_And_Assign(Code);

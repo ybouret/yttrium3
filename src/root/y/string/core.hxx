@@ -20,15 +20,17 @@ template <> String<CH>:: String() : code( new Code( size_t(0) ) )
 
 template <> String<CH>:: String(const String &s) :
 Container(),
-BaseClass(),
-Writable<CH>(),
+DynamicClass(),
+SequenceType(),
 code( new Code(*s.code) )
 {
 
 }
 
 template <> String<CH>:: String(const WithAtLeast_ &, const size_t n, const StringInit flag) :
-BaseClass(), code( new Code(n) )
+DynamicClass(),
+SequenceType(),
+code( new Code(n) )
 {
     switch(flag)
     {
@@ -89,21 +91,26 @@ template <> String<CH> & String<CH>:: operator=( const CH * const text )
 
 
 template <> String<CH>:: String(const CH * const text) :
-BaseClass(), code( new Code(text) )
+DynamicClass(),
+SequenceType(),
+code( new Code(text) )
 {
 }
 
 
 template <> String<CH>:: String(const CH * const buffer,
                                 const size_t     buflen) :
-BaseClass(),
+DynamicClass(),
+SequenceType(),
 code( new Code(buffer,buflen) )
 {
 }
 
 
 template <> String<CH>:: String(const CH C) :
-BaseClass(), code( new Code(&C,1) )
+DynamicClass(),
+SequenceType(),
+code( new Code(&C,1) )
 {
 }
 
@@ -137,6 +144,22 @@ template <> void String<CH>:: free() noexcept
     assert(code);
     return code->clear();
 }
+
+template <> void String<CH>:: popTail() noexcept
+{
+    assert(code);
+    assert(code->size>0);
+    code->trim(1);
+}
+
+template <> void String<CH>:: popHead() noexcept
+{
+    assert(code);
+    assert(code->size>0);
+    code->skip(1);
+}
+
+
 
 
 //------------------------------------------------------------------------------
@@ -173,7 +196,9 @@ template <> const CH * String<CH>:: c_str() const noexcept
 //------------------------------------------------------------------------------
 template <> String<CH> :: String(const CH * const lhs, const size_t lhsSize,
                                  const CH * const rhs, const size_t rhsSize) :
-BaseClass(), code( new Code(lhsSize+rhsSize) )
+DynamicClass(),
+SequenceType(),
+code( new Code(lhsSize+rhsSize) )
 {
     assert(!(0==lhs&&lhsSize>0));
     assert(!(0==rhs&&rhsSize>0));
@@ -369,14 +394,46 @@ template <> String<CH> & String<CH>:: reverse() noexcept
     return *this;
 }
 
-template <> void String<CH>:: popHead() noexcept
+//------------------------------------------------------------------------------
+//
+//
+// end of interface
+//
+//
+//------------------------------------------------------------------------------
+template <> void String<CH>::pushTail(ParamType c)
 {
     assert(code);
-    code->skip1();
+    *this += c;
 }
 
-template <> void String<CH>:: popTail() noexcept
+
+
+template <> void String<CH>::pushHead(ParamType c)
 {
     assert(code);
-    code->trim1();
+    if(code->size<code->capacity)
+    {
+        code->pre(c);
+    }
+    else
+    {
+        String tmp = Add(c,*this);
+       (void) xch(tmp);
+    }
+}
+
+template <> String<CH>::ConstType & String<CH>:: getHead() const noexcept
+{
+    assert(code);
+    assert(code->size>0);
+    return code->entry[0];
+}
+
+
+template <> String<CH>::ConstType & String<CH>:: getTail() const noexcept
+{
+    assert(code);
+    assert(code->size>0);
+    return code->cxx[code->size];
 }
