@@ -11,6 +11,8 @@ namespace Yttrium
     namespace Concurrent
     {
 
+        const char * const Member:: Empty = "(empty)";
+        
         Member:: ~Member() noexcept
         {
         }

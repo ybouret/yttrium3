@@ -25,6 +25,7 @@ y/concurrent/nucleus
 y/concurrent/sys
 y/concurrent/singleton
 y/concurrent/windows
+y/concurrent/splitting
 y/threading
 y/calculus
 y/type

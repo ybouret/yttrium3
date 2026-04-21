@@ -30,10 +30,10 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            static const unsigned TagSize = 16;                                //!< alias
-            static const unsigned Digits  = (TagSize-2)/2;                     //!< alias
-            static const size_t   MaxSize = Integer10ToThe<Digits>::Value - 1; //!< alias
-
+            static const unsigned     TagSize = 16;                                //!< alias
+            static const unsigned     Digits  = (TagSize-2)/2;                     //!< alias
+            static const size_t       MaxSize = Integer10ToThe<Digits>::Value - 1; //!< alias
+            static const char * const Empty; //!< "(empty)"
 
             //__________________________________________________________________
             //
@@ -99,7 +99,7 @@ namespace Yttrium
              \return length
              */
             template <typename T> inline
-            T part(T extent, T &travel) const noexcept
+            T part(const T extent, T &travel) const noexcept
             {
                 return Part(size,indx,extent,travel);
             }
