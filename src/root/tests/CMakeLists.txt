@@ -73,6 +73,7 @@ Y_UTEST(concurrent:fake_lock)
 Y_UTEST(concurrent:condition)
 Y_UTEST(concurrent:member)
 Y_UTEST(concurrent:split1d)
+Y_UTEST(concurrent:split2d)
 
 Y_UTEST(memory:small:chunk)
 Y_UTEST(memory:small:arena)

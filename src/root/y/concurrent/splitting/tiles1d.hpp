@@ -46,6 +46,15 @@ namespace Yttrium
                 length(dataLength) {
                 }
 
+                //! setup empty
+
+                inline Leap1D() noexcept :
+                offset(0),
+                length(0) {
+                }
+
+
+
                 //! duplicate \param other another leap
                 inline Leap1D(const Leap1D &other) noexcept :
                 offset(other.offset),
@@ -138,6 +147,18 @@ namespace Yttrium
                     assert(ncpu>0);
                     setup();
                 }
+
+                //! setup empty (would remap) \param n ncpu > 0
+                inline explicit Tiles1D(const size_t n) :
+                Leap(),
+                code( new Code(n) ),
+                ncpu(n)
+                {
+                    assert(ncpu>0);
+                    setup();
+                }
+
+
 
                 //! cleanup
                 inline virtual ~Tiles1D() noexcept { assert(code); Destroy(code); }
