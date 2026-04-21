@@ -79,6 +79,38 @@ namespace Yttrium
             }
 
 
+            template <typename WORD, typename CORE> static inline
+            Keg<WORD> * Square(const WORD * a,
+                               const size_t p)
+            {
+                static const size_t WordBits = sizeof(WORD) *8 ;
+                if(p<=0) return new Keg<WORD>();
+                assert(a!=0);
+                assert(p>0);
+                const size_t   n   = p<<1;
+                Keg<WORD> *    res = new Keg<WORD>(WithAtLeast,n);
+
+                {
+                    WORD * product = res->word;
+                    const WORD * b = a;
+                    for(size_t j=p;j>0;--j,++product)
+                    {
+                        const CORE B     = static_cast<CORE>(*(b++));
+                        CORE       carry = 0;
+                        for(size_t i=0;i<p;++i)
+                        {
+                            carry     += static_cast<CORE>(product[i]) + static_cast<CORE>(a[i]) * B;
+                            product[i] = static_cast<WORD>(carry);
+                            carry >>= WordBits;
+                        }
+                        product[p] =  static_cast<WORD>(carry);
+                    }
+                }
+                Coerce(res->words) = n;
+                res->update();
+                return res;
+            }
+
         };
 
     }

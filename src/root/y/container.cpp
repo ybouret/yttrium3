@@ -24,6 +24,10 @@ namespace Yttrium
         return Max(MinimumCapacity,n+increase);
     }
 
+    size_t Container:: available() const noexcept
+    {
+        return capacity() - size();
+    }
 
 }
 

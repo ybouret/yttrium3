@@ -153,13 +153,17 @@ namespace Yttrium
                 catch(...) { free(); throw; }
             }
 
-            //! capture memory in empty space \param troop source
+            //! capture memory in remaining space \param troop source
             inline void capture(Troop &troop) noexcept {
-                assert(capacity>=troop.size); assert(0==size); assert(this != &troop );
-                const size_t blockSize = (Coerce(size)=troop.size) * sizeof(T);
-                Yttrium_BCopy(addr,troop.addr,blockSize);
-                Yttrium_BZero(troop.addr,blockSize);
+                assert(capacity-size>=troop.size);  assert(this != &troop );
+                {
+                    const size_t blockSize = troop.size * sizeof(T);
+                    Yttrium_BCopy(addr+size,troop.addr,blockSize);
+                    Yttrium_BZero(troop.addr,blockSize);
+                }
+                Coerce(size) += troop.size;
                 Coerce(troop.size) = 0;
+
             }
 
             //__________________________________________________________________
