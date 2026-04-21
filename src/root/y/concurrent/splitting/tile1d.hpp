@@ -14,12 +14,40 @@ namespace Yttrium
         namespace Splitting
         {
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! 1D Tile
+            //
+            //
+            //__________________________________________________________________
             template <typename T>
             class Tile1D : public Member
             {
             public:
-                static const T _1 = 1;
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                static const T _1 = 1; //!< alias
 
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+
+                //! setup
+                /**
+                 \param sz size
+                 \param rk rank
+                 \param dataOffset data offset
+                 \param dataLength data length
+                 */
                 inline explicit Tile1D(const size_t sz,
                                        const size_t rk,
                                        const T      dataOffset,
@@ -32,10 +60,10 @@ namespace Yttrium
 
                 }
 
-                inline virtual ~Tile1D() noexcept
-                {
-                }
+                //! cleanup
+                inline virtual ~Tile1D() noexcept {}
 
+                //! display
                 inline friend std::ostream & operator<<(std::ostream &os, const Tile1D &self)
                 {
                     if(self.length<=0)
@@ -44,13 +72,18 @@ namespace Yttrium
                         return os << '|' << self.offset << ':' << self.utmost << '|' << '=' << self.length;
                 }
 
-
-                const T offset;
-                const T length;
-                const T utmost;
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                const T offset; //!< offset
+                const T length; //!< length (0 means empty!)
+                const T utmost; //!< meaningful iff length>0
 
             private:
-                Y_Disable_Copy_And_Assign(Tile1D);
+                Y_Disable_Copy_And_Assign(Tile1D); //!< discarded
             };
 
         }
