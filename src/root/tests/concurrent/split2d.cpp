@@ -1,5 +1,5 @@
 
-#include "y/concurrent/splitting/tile2d.hpp"
+#include "y/concurrent/splitting/tiles2d.hpp"
 #include "y/utest/run.hpp"
 #include <typeinfo>
 
@@ -12,7 +12,10 @@ namespace {
     static inline void Test2D(const T nx, const T ny)
     {
         typedef V2D<T> vertex_t;
-        const Concurrent::Splitting::Leap2D<T> leap(vertex_t(1,1), vertex_t(nx,ny) );
+        const vertex_t lo(1,1);
+        const vertex_t up(nx,ny);
+
+        const Concurrent::Splitting::Leap2D<T> leap(lo,up);
         std::cerr << leap.lower << " => " << leap.upper << " : " << leap.items << std::endl;
 
         for(size_t size=1;size<=8;++size)
@@ -22,7 +25,16 @@ namespace {
             {
                 Concurrent::Splitting::Tile2D<T> tile(size,rank,leap);
                 std::cerr << "\t" << tile.c_str() << ": " << tile << std::endl;
-                
+            }
+
+            {
+                Concurrent::Splitting::Tiles2D<T> tiles(size,lo,up);
+                std::cerr << "\t" << tiles << std::endl;
+            }
+
+            {
+                Concurrent::Splitting::Tiles2D<T> tiles(size);
+                tiles.remap(lo,up);
             }
         }
 

@@ -190,7 +190,7 @@ namespace Yttrium
                 //______________________________________________________________
                 //
                 //
-                // Interfae
+                // Interface
                 //
                 //______________________________________________________________
                 inline virtual size_t size()     const noexcept { return ncpu; }

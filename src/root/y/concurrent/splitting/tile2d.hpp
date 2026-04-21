@@ -63,8 +63,25 @@ namespace Yttrium
                 {
                 }
 
+                //! duplicate \param leap another Leap2D
+                inline Leap2D(const Leap2D &leap) noexcept :
+                lower(leap.lower),
+                upper(leap.upper),
+                width(leap.width),
+                items(leap.items)
+                {
+                }
+
+
                 //! cleanup
-                inline virtual ~Leap2D() noexcept {}
+                inline virtual ~Leap2D() noexcept
+                {
+                    const vertex_t _v0(0,0);
+                    Coerce(lower) = _v0;
+                    Coerce(upper) = _v0;
+                    Coerce(width) = _v0;
+                    Coerce(items) = 0;
+                }
 
                 //______________________________________________________________
                 //
