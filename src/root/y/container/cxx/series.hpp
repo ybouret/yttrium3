@@ -6,7 +6,6 @@
 
 #include "y/container/contiguous/writable.hpp"
 #include "y/container/sequence.hpp"
-#include "y/ability/random-access.hpp"
 #include "y/memory/troop/joint.hpp"
 #include "y/type/destroy.hpp"
 #include "y/type/copy-of.hpp"
@@ -21,8 +20,7 @@ namespace Yttrium
     template <typename T>
     class CxxSeries :
     public Sequence<T, ContiguousWritable<T> >,
-    public Recyclable,
-    public RandomAccess<T>
+    public Recyclable
     {
     public:
         Y_Args_Declare(T,Type);

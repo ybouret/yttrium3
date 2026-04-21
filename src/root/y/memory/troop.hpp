@@ -14,25 +14,69 @@ namespace Yttrium
     namespace Memory
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Managing data for Troop
+        //
+        //
+        //______________________________________________________________________
         class TroopGear
         {
         public:
-            explicit TroopGear() noexcept;
-            virtual ~TroopGear() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit TroopGear() noexcept; //!< setup
+            virtual ~TroopGear() noexcept; //!< cleanup
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            //__________________________________________________________________
+            //
+            //
+            // Helpers
+            //
+            //__________________________________________________________________
             static void * Acquire(size_t &count, size_t &bytes, const size_t bytesPerItem);
             static void   Release(void * const addr, size_t &count, size_t &bytes) noexcept;
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         private:
-            Y_Disable_Copy_And_Assign(TroopGear);
+            Y_Disable_Copy_And_Assign(TroopGear); //!< discarded
         };
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Basic linear memory management
+        //
+        //
+        //______________________________________________________________________
         template <typename T>
         class Troop : public TroopGear
         {
         public:
-            Y_Args_Expose(T,Type);
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            Y_Args_Expose(T,Type); //!< aliases
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup \param minCapacity minimal capacity
             inline explicit Troop(const size_t minCapacity) :
             size(0),
             capacity(minCapacity),
@@ -42,6 +86,7 @@ namespace Yttrium
             {
             }
 
+            //! cleanup
             inline virtual ~Troop() noexcept
             {
                 if(addr) {
@@ -55,6 +100,14 @@ namespace Yttrium
                 assert(0==bytes);
             }
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! push new default element at tail
             inline void pushTail() {
                 assert(size<capacity);
                 MutableType * const target = addr+size;
@@ -63,6 +116,7 @@ namespace Yttrium
 
             }
 
+            //! push any compatile element at tail \param args any compatible argument
             template <typename ARGS> inline
             void pushTail(ARGS &args) {
                 assert(size<capacity);
@@ -71,14 +125,17 @@ namespace Yttrium
                 catch(...) { Yttrium_BZero(target,sizeof(T)); throw;         }
             }
 
+            //! remove tail element
             inline void popTail() noexcept {
                 assert(size>0);
                 (void) Yttrium_BZero( Destructed(& addr[--Coerce(size)]), sizeof(T) );
             }
 
+            //! remove all elements (memory is kept)
             inline void free() noexcept { while(size>0) popTail(); }
 
-            
+
+            //! sequential copy \param arr readable source
             template <typename READABLE> inline
             void copy(const READABLE &arr) {
                 assert(0==size); assert(capacity>=arr.size());
@@ -86,14 +143,21 @@ namespace Yttrium
                 try { for(size_t i=1;i<=n;++i) pushTail(arr[i]); } catch(...) { free(); throw; }
             }
 
+            //! capture memory in empty space \param troop source
             inline void capture(Troop &troop) noexcept {
-                assert(capacity>=troop.size); assert(0==size);
+                assert(capacity>=troop.size); assert(0==size); assert(this != &troop );
                 const size_t blockSize = (Coerce(size)=troop.size) * sizeof(T);
                 Yttrium_BCopy(addr,troop.addr,blockSize);
                 Yttrium_BZero(troop.addr,blockSize);
                 Coerce(troop.size) = 0;
             }
 
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
             const size_t        size;     //!< current size
             const size_t        capacity; //!< maximum capacity
             const size_t        bytes;    //!< allocated bytes
@@ -101,7 +165,7 @@ namespace Yttrium
             MutableType * const cxx;      //!< C++ address [1:count]
 
         private:
-            Y_Disable_Copy_And_Assign(Troop);
+            Y_Disable_Copy_And_Assign(Troop); //!< discarded
         };
 
     }

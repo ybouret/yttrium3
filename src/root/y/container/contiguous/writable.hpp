@@ -10,15 +10,34 @@
 
 namespace Yttrium
 {
+
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Default Contiguous interface
+    //
+    //
+    //__________________________________________________________________________
     template <typename T>
     class ContiguousWritable  : public ReadWriteContiguous< Writable<T> >
     {
     public:
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+
+        //! setup
         inline explicit ContiguousWritable() noexcept : ReadWriteContiguous< Writable<T> >() {}
+
+        //! cleanu
         inline virtual ~ContiguousWritable() noexcept {}
 
     private:
-        Y_Disable_Copy_And_Assign(ContiguousWritable);
+        Y_Disable_Copy_And_Assign(ContiguousWritable); //!< discarded
     };
 }
 

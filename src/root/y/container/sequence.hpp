@@ -7,24 +7,51 @@
 
 namespace Yttrium
 {
+
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Sequence interface
+    //
+    //
+    //__________________________________________________________________________
     template <typename T, typename WRITABLE>
     class Sequence : public WRITABLE
     {
     public:
-        Y_Args_Declare(T,Type);
-        
-        inline explicit Sequence() noexcept : WRITABLE() {}
-        inline virtual ~Sequence() noexcept {}
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        Y_Args_Declare(T,Type); //!< aliases
 
-        virtual void pushTail(ParamType) = 0;
-        virtual void pushHead(ParamType) = 0;
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+        inline explicit Sequence() noexcept : WRITABLE() {} //!< setup
+        inline virtual ~Sequence() noexcept {}              //!< cleanup
 
-        virtual void popTail() noexcept = 0;
-        virtual void popHead() noexcept = 0;
+        //______________________________________________________________________
+        //
+        //
+        // Interface
+        //
+        //______________________________________________________________________
+        virtual void pushTail(ParamType) = 0; //!< push new element at tail
+        virtual void pushHead(ParamType) = 0; //!< push new element at head
+
+        virtual void popTail() noexcept = 0; //!< remove element at tail
+        virtual void popHead() noexcept = 0; //!< remove element at head
 
 
     private:
-        Y_Disable_Copy_And_Assign(Sequence);
+        Y_Disable_Copy_And_Assign(Sequence); //!< discarded
     };
 }
 

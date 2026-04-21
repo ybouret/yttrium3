@@ -12,25 +12,47 @@ namespace Yttrium
     namespace Memory
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Troop with operation on head
+        //
+        //
+        //______________________________________________________________________
         template <typename T>
         class JointTroop : public Troop<T>
         {
         public:
-            Y_Args_Expose(T,Type);
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            Y_Args_Expose(T,Type); //!< aliases
             using Troop<T>::addr;
             using Troop<T>::size;
             using Troop<T>::capacity;
             using Troop<T>::cxx;
 
-            inline explicit JointTroop(const size_t n) : Troop<T>(n)
-            {
-            }
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            inline explicit JointTroop(const size_t n) : Troop<T>(n) {} //!< setup \param n minimal capacity
+            inline virtual ~JointTroop() noexcept                    {} //!< cleanup
 
-            inline virtual ~JointTroop() noexcept
-            {
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
 
-            }
-
+            //! push any compatible value at head \param args compatible value
             template <typename ARGS>
             inline void pushHead(const ARGS &args)
             {
@@ -42,6 +64,7 @@ namespace Yttrium
                 Y_BZero(wksp);
             }
 
+            //! remove head element
             inline void popHead() noexcept
             {
                 assert(size>0);
@@ -50,6 +73,7 @@ namespace Yttrium
                 Yttrium_BZero(target+size,sizeof(T));
             }
 
+            //! remove indx-th element \param indx in [1:size]
             inline void remove(const size_t indx) noexcept
             {
                 assert(indx>=1);
@@ -59,6 +83,7 @@ namespace Yttrium
                 Yttrium_BZero(addr+size,sizeof(T));
             }
 
+            //! demote indx-th element \param indx in [1:size]
             inline void demote(const size_t indx) noexcept
             {
                 assert(indx>=1);
@@ -75,7 +100,7 @@ namespace Yttrium
 
 
         private:
-            Y_Disable_Copy_And_Assign(JointTroop);
+            Y_Disable_Copy_And_Assign(JointTroop); //!< discarded
         };
     }
 
