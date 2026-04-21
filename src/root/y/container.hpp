@@ -45,8 +45,14 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
+
+        //! compute next capacity
+        /**
+         \param n current capacity
+         \return logarithmicly increased required capacity
+         */
         static size_t NextCapacity(const size_t n);
-        
+
     private:
         Y_Disable_Copy_And_Assign(Container); //!< discarded
     };

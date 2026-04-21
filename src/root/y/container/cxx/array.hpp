@@ -117,22 +117,16 @@ namespace Yttrium
             using CodeMemory::addr;
             using CodeMemory::size;
 
-            inline explicit Code(const size_t n) :
-            CodeMemory(n)
-            {
+            inline explicit Code(const size_t n) : CodeMemory(n) {
                 while(size<n) this->pushTail();
             }
 
-            inline explicit Code(const size_t n, ConstType &value) :
-            CodeMemory(n)
-            {
+            inline explicit Code(const size_t n, ConstType &value) : CodeMemory(n) {
                 while(size<n) this->pushTail(value);
             }
 
             template <typename READABLE>
-            inline explicit Code(const CopyOf_ &, const READABLE &arr) :
-            CodeMemory(arr.size())
-            {
+            inline explicit Code(const CopyOf_ &, const READABLE &arr) : CodeMemory(arr.size()) {
                 this->copy(arr);
             }
 

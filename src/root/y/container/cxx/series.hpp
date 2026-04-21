@@ -17,23 +17,50 @@
 namespace Yttrium
 {
 
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Series of Objects within fixed capacity
+    //
+    //
+    //__________________________________________________________________________
     template <typename T>
     class CxxSeries :
     public Sequence<T, ContiguousWritable<T> >,
     public Recyclable
     {
     public:
-        Y_Args_Declare(T,Type);
-        typedef Sequence<T, ContiguousWritable<T> > SequenceType;
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        Y_Args_Declare(T,Type);                                   //!< aliases
+        typedef Sequence<T, ContiguousWritable<T> > SequenceType; //!< alias
 
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+
+        //! setup \param minCapacity minimal capacity
         inline explicit CxxSeries(const size_t minCapacity) : code( new Code(minCapacity) )
         {
         }
-        
 
+        //! cleanup
         inline virtual ~CxxSeries() noexcept { assert(code); Destroy(code); }
 
-
+        //______________________________________________________________________
+        //
+        //
+        // Interfacce
+        //
+        //______________________________________________________________________
         inline virtual size_t size()     const noexcept { assert(code); return code->size; }
         inline virtual size_t capacity() const noexcept { assert(code); return code->capacity; }
 
@@ -63,12 +90,13 @@ namespace Yttrium
             assert(code); code->free();
         }
 
+        //! todo
         virtual void remove(const size_t indx) noexcept
         {
             assert(code); code->remove(indx);
         }
 
-        
+        //! todo
         virtual void demote(const size_t indx) noexcept
         {
             assert(code); code->demote(indx);
@@ -83,13 +111,20 @@ namespace Yttrium
             assert(indx>=1); assert(indx<=code->size);
             return code->cxx[indx];
         }
+
+        //______________________________________________________________________
+        //
+        //
+        // Members
+        //
+        //______________________________________________________________________
     private:
         class Code;
-        Y_Disable_Copy_And_Assign(CxxSeries);
-        Code * const code;
+        Y_Disable_Copy_And_Assign(CxxSeries); //!< discarded
+        Code * const code;                    //!< inner code
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         typedef Memory::JointTroop<MutableType> CodeMemory;
-
         class Code : public Object, public CodeMemory
         {
         public:
@@ -99,7 +134,7 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(Code);
         };
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
 
     };

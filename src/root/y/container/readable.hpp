@@ -58,6 +58,7 @@ namespace Yttrium
             return ask(indx);
         }
 
+        //! default display
         inline friend std::ostream & operator<<(std::ostream &os, const Readable &self)
         {
             os << '[';
