@@ -119,6 +119,20 @@ Y_UTEST(apex_n64)
         }
     }
 
+    (std::cerr << "-- Test Mod2 64-bits " << std::endl).flush();
+    for(size_t i=0;i<=32;++i)
+    {
+        for(size_t k=0;k<128;++k)
+        {
+            const natural_t lhs = ran.gen<natural_t>(i);
+            const natural_t l2  = lhs*lhs;
+            const apn       L   = lhs;
+            const apn       L2  = L.mod2();
+            Y_ASSERT(L2==l2);
+        }
+    }
+
+
     (std::cerr << "-- Test Bits " << std::endl).flush();
     {
         for(size_t p=0;p<=40;++p)

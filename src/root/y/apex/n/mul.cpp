@@ -36,6 +36,11 @@ namespace Yttrium
                                                                   r.word,r.words) );
         }
 
+        Natural Natural:: mod2() const
+        {
+            const KegType & k = *static_cast<const KegType *>(code);
+            return Natural(Directly, KegMul::Square<_Keg::Word,_Keg::Core>(k.word,k.words) );
+        }
 
 
 
