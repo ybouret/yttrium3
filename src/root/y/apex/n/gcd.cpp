@@ -16,6 +16,25 @@ namespace Yttrium
             return Natural(Directly,G);
         }
 
+
+
+        Natural Natural:: LCM(const Natural &lhs, const Natural &rhs)
+        {
+            if(lhs.is0() || rhs.is0() )
+            {
+                return Natural();
+            }
+            else
+            {
+                const KegType & L = *static_cast<const KegType *>(lhs.code);
+                const KegType & R = *static_cast<const KegType *>(rhs.code);
+                const Natural   G(Directly,KegGCD:: Compute_<_Keg::Word,_Keg::Core>(L.word,L.words,R.word,R.words));
+                const Natural   P = lhs * rhs;
+                return G.is1() ? P : P/G;
+            }
+        }
+
+
     }
 
 }

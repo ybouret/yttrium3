@@ -216,6 +216,7 @@ Y_Apex_Natural_Unary(OP,CALL)
             Natural        abs()  const; //!< \return |*this|
             Natural        sqrt() const; //!< \return sqrt(*this)
             static Natural GCD(const Natural &, const Natural &); //!< \return GCD of arguments
+            static Natural LCM(const Natural &, const Natural &); //!< \return LCM of arguments
             static void    Reduce(Natural &, Natural &); //!< representation reduction
             Natural        mod2() const; //!< \return |*this|^2
                                          

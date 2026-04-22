@@ -16,6 +16,7 @@ string
 container
 apex
 stream
+coven
 )
 
 Y_LinkLibraries(test-root)
