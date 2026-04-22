@@ -89,16 +89,10 @@ namespace Yttrium
             //! cleanup
             inline virtual ~Troop() noexcept
             {
-                if(addr) {
-                    free();
-                    Release(addr,Coerce(capacity),Coerce(bytes));
-                    Coerce(addr) = 0;
-                }
-                Coerce(cxx)  = 0;
-                assert(0==addr);
-                assert(0==capacity);
-                assert(0==bytes);
+                release();
             }
+
+
 
             //__________________________________________________________________
             //
@@ -164,6 +158,29 @@ namespace Yttrium
                 Coerce(size) += troop.size;
                 Coerce(troop.size) = 0;
 
+            }
+
+
+            //! force release of memory, use with caution
+            inline void release() noexcept
+            {
+                if(addr)
+                {
+                    free();
+                    Release(addr,Coerce(capacity),Coerce(bytes));
+                    Coerce(addr) = 0;
+                    Coerce(cxx)  = addr-1;
+                    assert(0==capacity);
+                    assert(0==size);
+                    assert(0==bytes);
+                }
+                else
+                {
+                    assert(0==capacity);
+                    assert(0==size);
+                    assert(0==bytes);
+                    assert(addr-1==cxx);
+                }
             }
 
             //__________________________________________________________________

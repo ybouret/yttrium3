@@ -78,7 +78,7 @@ namespace Yttrium
                 return res;
             }
 
-
+            //! \param a array of word \param p number of words \return a^2
             template <typename WORD, typename CORE> static inline
             Keg<WORD> * Square(const WORD * a,
                                const size_t p)

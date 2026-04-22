@@ -193,9 +193,9 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
             // Arithmetic
             //
             //__________________________________________________________________
-            Integer sqrt() const;
-            Integer mod2() const;
-            Integer abs()  const;
+            Integer sqrt() const; //!< \return sqrt(*this)
+            Integer mod2() const; //!< \return |*this|^2
+            Integer abs()  const; //!< \return |*this|
 
 
             //__________________________________________________________________

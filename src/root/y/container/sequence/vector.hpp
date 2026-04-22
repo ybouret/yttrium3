@@ -11,12 +11,27 @@
 #include "y/type/replicate.hpp"
 #include "y/type/destroy.hpp"
 #include "y/type/with-at-least.hpp"
+#include "y/ability/recyclable.hpp"
+#include "y/ability/releasable.hpp"
+#include "y/ability/expandable.hpp"
+#include "y/swap.hpp"
 
 namespace Yttrium
 {
 
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Vector
+    //
+    //
+    //__________________________________________________________________________
     template <typename T>
-    class Vector : public Sequence<T,ContiguousWritable<T> >
+    class Vector :
+    public Sequence<T,ContiguousWritable<T>>,
+    public Expandable<Releasable>,
+    public Recyclable
     {
     public:
         //______________________________________________________________________
@@ -43,9 +58,40 @@ namespace Yttrium
         }
 
 
+        //! duplicate \param _ helper \param arr readable array
+        template <typename READABLE>
+        inline explicit Vector(const CopyOf_ &_, const READABLE &arr) :
+        code( new Code(_,arr) )
+        {
+        }
+
+        //! replicate \param _ helper \param i first iterator \param n range size
+        template <typename ITERATOR>
+        inline explicit Vector(const Replicate_ &_, ITERATOR i, const size_t n) :
+        code( new Code(_,i,n) )
+        {}
+
+        //! replicate full sequence \param _ helper \param seq source
+        template <typename SEQUENCE>
+        inline explicit Vector(const Replicate_ &_, SEQUENCE &seq) :
+        code( new Code(_,seq.begin(),seq.size()) )
+        {}
+
+
         inline virtual ~Vector() noexcept
         {
             assert(code); Destroy(code);
+        }
+
+        Vector & operator=( const Vector &other )
+        {
+            if( this != &other )
+            {
+                Vector temp(Replicate,*this);
+                return xch(temp);
+            }
+            else
+                return *this;
         }
 
         //______________________________________________________________________
@@ -54,8 +100,10 @@ namespace Yttrium
         // Interface
         //
         //______________________________________________________________________
-        inline virtual size_t size()     const noexcept { assert(code); return code->size; }
-        inline virtual size_t capacity() const noexcept { assert(code); return code->capacity; }
+        inline virtual size_t size()     const noexcept { assert(code); return code->size;      }
+        inline virtual size_t capacity() const noexcept { assert(code); return code->capacity;  }
+        inline virtual void   free()           noexcept { assert(code); return code->free();    }
+        inline virtual void   release()        noexcept { assert(code); return code->release(); }
 
         inline virtual void   popTail()  noexcept { assert(code); code->popTail(); }
         inline virtual void   popHead()  noexcept { assert(code); code->popHead(); }
@@ -69,13 +117,8 @@ namespace Yttrium
             {
                 void *              wksp[ Alignment::WordsFor<T>::Count ];
                 MutableType * const data = new ( Y_BZero(wksp) ) MutableType(args);
-                {
-                    Code * const temp = new Code( Container::NextCapacity(code->capacity) );
-                    temp->capture( *code ); assert(0==code->size);
-                    delete code; Coerce(code) = temp;
-                }
-                Yttrium_BCopy(code->addr+Coerce(code->size)++,data,sizeof(T));
-                Y_BZero(wksp);
+                trade(new Code( Container::NextCapacity(code->capacity) ) );
+                Yttrium_BCopy(code->addr+Coerce(code->size)++,data,sizeof(T)); Y_BZero(wksp);
             }
 
         }
@@ -90,11 +133,24 @@ namespace Yttrium
                 void *              wksp[ Alignment::WordsFor<T>::Count ];
                 MutableType * const data = new ( Y_BZero(wksp) ) MutableType(args);
                 Code * const        temp = new Code( Container::NextCapacity(code->capacity) );
-                Yttrium_BCopy(temp->addr+Coerce(temp->size)++,data,sizeof(T));
-                Y_BZero(wksp);
-                temp->capture(*code); assert(0==code->size);
-                delete code; Coerce(code) = temp;
+                Yttrium_BCopy(temp->addr+Coerce(temp->size)++,data,sizeof(T)); Y_BZero(wksp);
+                trade(temp);
             }
+        }
+
+        inline virtual void reserve(const size_t n)
+        {
+            assert(code); trade( new Code(code->capacity+n) );
+        }
+
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+        inline Vector & xch(Vector &other) noexcept {
+            CoerceSwap(code,other.code); return *this;
         }
 
 
@@ -103,6 +159,14 @@ namespace Yttrium
         Y_Disable_Copy(Vector);
         Code * const code;
 
+        inline void trade(Code * const temp) noexcept
+        {
+            assert(temp!=code);
+            temp->capture(*code);
+            delete code;
+            Coerce(code) = temp;
+        }
+
         inline virtual ConstType &ask(const size_t indx) const noexcept {
             assert(code);
             assert(indx>=1); assert(indx<=code->size);
@@ -110,11 +174,11 @@ namespace Yttrium
         }
 
         inline virtual ConstType & getTail() const noexcept {
-            assert(code); assert(code->size); return code->cxx[code->size];
+            assert(code); assert(code->size); assert(code->addr); return code->cxx[code->size];
         }
 
         inline virtual ConstType & getHead() const noexcept {
-            assert(code); assert(code->size); return code->addr[0];
+            assert(code); assert(code->size);  assert(code->addr); return code->addr[0];
         }
 
 
@@ -137,7 +201,6 @@ namespace Yttrium
             Object(), CodeMemory(_,i,n)
             {
             }
-
 
         private:
             Y_Disable_Copy_And_Assign(Code);

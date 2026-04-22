@@ -45,7 +45,7 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
-        size_t available() const noexcept;
+        size_t available() const noexcept; //!< \return capacity() - size()
 
         //! compute next capacity
         /**

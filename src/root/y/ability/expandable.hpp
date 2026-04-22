@@ -53,7 +53,7 @@ namespace Yttrium
         inline void ensure(const size_t minCapacity)
         {
             const size_t capa = this->capacity();
-            if(capa<minCapacity) reserve(minCapacity-capa)
+            if(capa<minCapacity) reserve(minCapacity-capa);
         }
         
 
