@@ -105,11 +105,14 @@ namespace Yttrium
             }
 
 
-            //std::cerr << "[+]=" << numPos << " [-]=" << numNeg << " g=" << g << ", firstSign=" << firstSign << std::endl;
-
-
-            unsigned flags = IS_READY;
-            switch(g.bits())
+            //------------------------------------------------------------------
+            //
+            //
+            // check main status
+            //
+            //
+            //------------------------------------------------------------------
+            switch(numPos+numNeg)
             {
                 case 0:
                     assert(0==g);
@@ -119,26 +122,34 @@ namespace Yttrium
                     assert(!pnz);
                     return false;
 
-                case 1:
-                    assert(1==g);
-                    assert(numPos>0||numNeg>0);
+                case 1: //specific case
+                    assert(0!=g);
                     assert(__Zero__!=firstSign);
-                    break;
+                    assert(pnz);
+                    *pnz = 1;
+                    return true;
 
                 default:
-                    assert(1<g);
-                    assert(numPos>0||numNeg>0);
-                    assert(__Zero__!=firstSign);
-                    flags |= SIMPLIFY;
                     break;
             }
 
-            flags |= ChangeSigns(numPos,numNeg,firstSign);
+            //------------------------------------------------------------------
+            //
+            //
+            // detect and perform operations
+            //
+            //
+            //------------------------------------------------------------------
+            assert(g>0);
+            assert(g.bits()>=1);
+            assert(numPos>0||numNeg>0);
+            assert(pnz);
+            assert(__Zero__!=firstSign);
 
+            const unsigned flags = ( (g.bits()>1) ? SIMPLIFY : IS_READY ) | ChangeSigns(numPos,numNeg,firstSign);
             switch(flags)
             {
                 case SIMPLIFY:
-                    std::cerr << "[SIMPLIFY]" << std::endl;
                     for(size_t i=size;i>0;--i)
                     {
                         apz &z = array[i];
@@ -154,12 +165,10 @@ namespace Yttrium
                     break;
 
                 case OPPOSITE:
-                    std::cerr << "[OPPOSITE]" << std::endl;
                     for(size_t i=size;i>0;--i) Sign::MakeOpposite( Coerce(array[i].s) );
                     break;
 
                 case BOTH_OPS:
-                    std::cerr << "[BOTH_OPS]" << std::endl;
                     for(size_t i=size;i>0;--i)
                     {
                         apz &z = array[i];
@@ -174,7 +183,6 @@ namespace Yttrium
 
                 default:
                     assert(IS_READY==flags);
-                    std::cerr << "[IS_READY]" << std::endl;
                     break;
             }
 

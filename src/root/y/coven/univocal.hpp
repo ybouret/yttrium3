@@ -12,10 +12,26 @@ namespace Yttrium
     {
         
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Computing univocal vector representations
+        //
+        //
+        //______________________________________________________________________
         struct Univocal
         {
 
-            static bool Make( Writable<apz> &arr );
+            //! make univocal apz vector
+            /**
+             \param array any apz vector
+             \return true if not nul or empty vector
+             */
+            static bool Make( Writable<apz> &array );
+
+
+            static bool Make( Writable<apz> &target, const Readable<apq> &source );
 
         };
 
