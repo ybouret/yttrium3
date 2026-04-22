@@ -60,6 +60,7 @@ y/apex/n
 y/apex/z
 y/apex/q
 y/coven
+y/coven/univocal
 )
 
 add_subdirectory(tests)

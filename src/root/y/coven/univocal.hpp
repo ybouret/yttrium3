@@ -23,6 +23,16 @@ namespace Yttrium
         struct Univocal
         {
 
+            static const unsigned LEFT_UNTOUCHED = 0x00;
+            static const unsigned SIMPLIFICATION = 0x01;
+            static const unsigned OPPOSITE_SIGNS = 0x02;
+            static const unsigned COUPLED_UPDATE = SIMPLIFICATION | OPPOSITE_SIGNS;
+
+            static
+            unsigned OppositeSigns(const size_t numPos,
+                                   const size_t numNeg,
+                                   const SignType firstSign) noexcept;
+
             //! make univocal apz vector
             /**
              \param array any apz vector

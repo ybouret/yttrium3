@@ -6,32 +6,24 @@ namespace Yttrium
     namespace Coven
     {
 
-        namespace
+
+        unsigned Univocal:: OppositeSigns(const size_t numPos,
+                                          const size_t numNeg,
+                                          const SignType firstSign) noexcept
         {
-            static const unsigned IS_READY = 0x00;
-            static const unsigned SIMPLIFY = 0x01;
-            static const unsigned OPPOSITE = 0x02;
-            static const unsigned BOTH_OPS = SIMPLIFY | OPPOSITE;
-
-            static inline
-            unsigned ChangeSigns(const size_t numPos,
-                                 const size_t numNeg,
-                                 const SignType firstSign) noexcept
+            assert(numPos>0||numNeg>0);
+            assert(__Zero__!=firstSign);
+            if( (numNeg>numPos) || ( (numPos==numNeg) && firstSign == Negative ) )
             {
-                assert(numPos>0||numNeg>0);
-                assert(__Zero__!=firstSign);
-                if( (numNeg>numPos) || ( (numPos==numNeg) && firstSign == Negative ) )
-                {
-                    //std::cerr << "should opposite" << std::endl;
-                    return OPPOSITE;
-                }
-                else
-                {
-                    return IS_READY;
-                }
+                return OPPOSITE_SIGNS;
             }
+            else
+            {
+                return LEFT_UNTOUCHED;
+            }
+        }
 
-        };
+
 
 
         bool Univocal:: Make( Writable<apz> & array )
@@ -146,10 +138,13 @@ namespace Yttrium
             assert(pnz);
             assert(__Zero__!=firstSign);
 
-            const unsigned flags = ( (g.bits()>1) ? SIMPLIFY : IS_READY ) | ChangeSigns(numPos,numNeg,firstSign);
+            const unsigned flags
+            = ( (g.bits()>1) ? SIMPLIFICATION : LEFT_UNTOUCHED )
+            |     OppositeSigns(numPos,numNeg,firstSign);
+
             switch(flags)
             {
-                case SIMPLIFY:
+                case SIMPLIFICATION:
                     for(size_t i=size;i>0;--i)
                     {
                         apz &z = array[i];
@@ -164,11 +159,11 @@ namespace Yttrium
                     }
                     break;
 
-                case OPPOSITE:
+                case OPPOSITE_SIGNS:
                     for(size_t i=size;i>0;--i) Sign::MakeOpposite( Coerce(array[i].s) );
                     break;
 
-                case BOTH_OPS:
+                case COUPLED_UPDATE:
                     for(size_t i=size;i>0;--i)
                     {
                         apz &z = array[i];
@@ -182,7 +177,7 @@ namespace Yttrium
                     break;
 
                 default:
-                    assert(IS_READY==flags);
+                    assert(LEFT_UNTOUCHED==flags);
                     break;
             }
 
