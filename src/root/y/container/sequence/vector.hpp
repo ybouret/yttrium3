@@ -62,7 +62,7 @@ namespace Yttrium
 
         //! duplicate \param _ helper \param arr readable array
         template <typename READABLE>
-        inline explicit Vector(const CopyOf_ &_, const READABLE &arr) :
+        inline explicit Vector(const CopyOf_ &_, READABLE &arr) :
         code( new Code(_,arr) )
         {
         }
@@ -195,10 +195,10 @@ namespace Yttrium
 
             template <typename READABLE>
             inline explicit Code(const CopyOf_  &,
-                                 const READABLE &arr) :
+                                 READABLE       &arr) :
             Object(), CodeMemory(arr.size())
             {
-                //this->copy(arr);
+                this->copy(arr);
             }
 
             template <typename ITERATOR>

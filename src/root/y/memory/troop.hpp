@@ -131,7 +131,7 @@ namespace Yttrium
 
             //! sequential copy \param arr readable source
             template <typename READABLE> inline
-            void copy(const READABLE &arr) {
+            void copy(READABLE &arr) {
                 assert(0==size); assert(capacity>=arr.size());
                 const size_t n = arr.size();
                 try        { for(size_t i=1;i<=n;++i) pushTail(arr[i]); }
