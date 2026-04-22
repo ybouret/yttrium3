@@ -81,6 +81,11 @@ Y_APQ_DECL(Rational,CALL) Y_APQ_Binary(OP,CALL) Y_APQ_Unary(OP,CALL)
             Rational(const Fraction);                   //!< setup as fraction
             Rational(Random::CoinFlip &, const size_t, const size_t); //!< setup random
 
+            Rational & operator=(const Rational &);         //!<  assign \return *this
+            Rational & operator=(const Integer  &);         //!<  assign \return *this
+            Rational & operator=(const Natural  &);         //!<  assign \return *this
+            Rational & operator=(const integer_t ) noexcept;//!<  assign \return *this
+
 
             virtual ~Rational() noexcept; //!< cleanup
             Y_OSTREAM_PROTO(Rational);    //!< display

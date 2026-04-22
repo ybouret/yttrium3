@@ -23,11 +23,18 @@ namespace Yttrium
         struct Univocal
         {
 
-            static const unsigned LEFT_UNTOUCHED = 0x00;
-            static const unsigned SIMPLIFICATION = 0x01;
-            static const unsigned OPPOSITE_SIGNS = 0x02;
-            static const unsigned COUPLED_UPDATE = SIMPLIFICATION | OPPOSITE_SIGNS;
+            static const unsigned LEFT_UNTOUCHED = 0x00;                            //!< alias
+            static const unsigned SIMPLIFICATION = 0x01;                            //!< alias
+            static const unsigned OPPOSITE_SIGNS = 0x02;                            //!< alias
+            static const unsigned COUPLED_UPDATE = SIMPLIFICATION | OPPOSITE_SIGNS; //!< alias
 
+            //! check if opposite signs are to be taken
+            /**
+             \param numPos    number of positive signs
+             \param numNeg    number of negative signs
+             \param firstSign first non zero sign if found
+             \return (numNeg>numPos) || ( (numPos==numNeg) && firstSign == Negative )
+             */
             static
             unsigned OppositeSigns(const size_t numPos,
                                    const size_t numNeg,
@@ -40,7 +47,12 @@ namespace Yttrium
              */
             static bool Make( Writable<apz> &array );
 
-
+            //! make univocal apz vector from apq vector
+            /**
+             \param source any      apq vector
+             \param target univocal apz vector
+             \return true if not nul or empty vector
+             */
             static bool Make( Writable<apz> &target, const Readable<apq> &source );
 
         };

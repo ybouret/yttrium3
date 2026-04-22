@@ -200,4 +200,19 @@ namespace Yttrium
 
     }
 
+    namespace Apex
+    {
+
+        Rational & Rational:: operator=(const Rational &q) { Rational _(q); return xch(_); }
+        Rational & Rational:: operator=(const Integer  &z) { Rational _(z); return xch(_); }
+        Rational & Rational:: operator=(const Natural  &n) { Rational _(n); return xch(_); }
+
+        Rational & Rational:: operator=(const integer_t i) noexcept
+        {
+            Coerce(numer) = i;
+            Coerce(denom) = 1;
+            return *this;
+        }
+    }
+
 }
