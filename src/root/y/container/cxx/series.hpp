@@ -125,8 +125,7 @@ namespace Yttrium
 
 
     protected:
-        virtual ConstType &ask(const size_t indx) const noexcept
-        {
+        virtual ConstType &ask(const size_t indx) const noexcept {
             assert(code);
             assert(indx>=1); assert(indx<=code->size);
             return code->cxx[indx];

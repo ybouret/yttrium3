@@ -58,7 +58,7 @@ namespace Yttrium
             {
                 assert(size<capacity);
                 void *              wksp[ Alignment::WordsFor<T>::Count ];
-                MutableType * const temp = new (static_cast<MutableType *>(Y_BZero(wksp))) MutableType(args);
+                MutableType * const temp = new ( Y_BZero(wksp) ) MutableType(args);
                 Yttrium_BMove(addr+1,addr,sizeof(T) * Coerce(size)++ );
                 Yttrium_BCopy(addr,temp,sizeof(T));
                 Y_BZero(wksp);

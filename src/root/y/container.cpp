@@ -4,6 +4,7 @@
 #include <cerrno>
 #include "y/calculus/alignment.hpp"
 #include "y/core/max.hpp"
+#include "y/core/min.hpp"
 
 namespace Yttrium
 {
@@ -20,7 +21,7 @@ namespace Yttrium
         static const size_t MinimumCapacity = 8;
         static const size_t MaximumCapacity = IntegerFor<size_t>::Maximum;
         if(n>=MaximumCapacity) throw Libc::Exception(EDOM,"Container Reached Maximum Capacity");
-        const size_t increase = Max(Alignment::SystemMemory::Ceil(n>>1),MaximumCapacity-n);
+        const size_t increase = Min(Alignment::SystemMemory::Ceil(n>>1),MaximumCapacity-n);
         return Max(MinimumCapacity,n+increase);
     }
 

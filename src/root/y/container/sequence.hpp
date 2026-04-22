@@ -3,7 +3,7 @@
 #ifndef Y_Sequence_Included
 #define Y_Sequence_Included 1
 
-#include "y/config/setup.hpp"
+#include "y/type/args.hpp"
 
 namespace Yttrium
 {

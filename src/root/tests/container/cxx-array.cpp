@@ -7,7 +7,6 @@ using namespace Yttrium;
 
 Y_UTEST(container_cxx_array)
 {
-#if 1
 
     { CxxArray<int>   iarr(0); std::cerr << iarr << std::endl; }
     { CxxArray<float> farr(6); std::cerr << farr << ", capa=" << farr.capacity() << std::endl; }
@@ -19,7 +18,6 @@ Y_UTEST(container_cxx_array)
         for(size_t i=arr.size();i>0;--i) arr[i] = i;
         Iter::Test::All(arr);
     }
-#endif
     
 }
 Y_UDONE()
