@@ -81,17 +81,17 @@ namespace Yttrium
 
 
         //! cleanup
-        inline virtual ~Vector() noexcept
-        {
-            assert(code); Destroy(code);
+        inline virtual ~Vector() noexcept { assert(code); Destroy(code); }
+
+        //! assign by copy/exchange \param v another vector \return *this
+        Vector & operator=(const Vector &v) {
+            Vector temp(CopyOf,v); return xch(temp);
         }
 
         //! assign by copy/exchange \param other compatible readadble \return *this
         template <typename READABLE>
-        Vector & operator=( READABLE &other )
-        {
-            Vector temp(CopyOf,other);
-            return xch(temp);
+        Vector & operator=( READABLE &other ) {
+            Vector temp(CopyOf,other); return xch(temp);
         }
 
         //______________________________________________________________________
@@ -194,15 +194,18 @@ namespace Yttrium
             inline virtual ~Code() noexcept {}
 
             template <typename READABLE>
-            inline explicit Code(const CopyOf_ &_, const READABLE &arr) :
-            Object(), CodeMemory(_,arr)
+            inline explicit Code(const CopyOf_  &,
+                                 const READABLE &arr) :
+            Object(), CodeMemory(arr.size())
             {
+                //this->copy(arr);
             }
 
             template <typename ITERATOR>
-            inline explicit Code(const Replicate_ &_, ITERATOR i, const size_t n) :
-            Object(), CodeMemory(_,i,n)
+            inline explicit Code(const Replicate_ &, ITERATOR i, const size_t n) :
+            Object(), CodeMemory(n)
             {
+                this->replicate(i,n);
             }
 
         private:
