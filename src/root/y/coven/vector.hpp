@@ -23,7 +23,8 @@ namespace Yttrium
             virtual ~Vector() noexcept;
             Vector(const Vector &);
             Vector & operator=(const Vector &);
-            
+
+            void ldz() noexcept;
             void update();
 
             const size_t ncof; //!< number of non-zero coefs
