@@ -70,7 +70,7 @@ namespace Yttrium
 
         //! duplicate \param _ helper \param arr readable array
         template <typename READABLE>
-        inline explicit CxxArray(const CopyOf_ &_, const READABLE &arr) :
+        inline explicit CxxArray(const CopyOf_ &_, READABLE &arr) :
         code( new Code(_,arr) )
         {
         }
@@ -142,7 +142,7 @@ namespace Yttrium
             }
 
             template <typename READABLE>
-            inline explicit Code(const CopyOf_ &, const READABLE &arr) : CodeMemory(arr.size()) {
+            inline explicit Code(const CopyOf_ &, READABLE &arr) : CodeMemory(arr.size()) {
                 this->copy(arr);
             }
 

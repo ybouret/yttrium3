@@ -28,7 +28,8 @@ namespace Yttrium
         // Definitions
         //
         //______________________________________________________________________
-        typedef typename Readable<T>::Type Type; //!< alias
+        typedef typename Readable<T>::Type      Type; //!< alias
+        typedef typename Readable<T>::ConstType ConstType; //!< alias
 
         //______________________________________________________________________
         //
@@ -51,6 +52,13 @@ namespace Yttrium
         {
             assert(indx>=1); assert(indx<=this->size());
             return (Type&)(this->ask(indx));
+        }
+
+        //! const access \param indx in [1:size()] \return indx-th item
+        inline ConstType & operator[](const size_t indx) const noexcept
+        {
+            assert(indx>=1); assert(indx<=this->size());
+            return  this->ask(indx);
         }
 
     private:
