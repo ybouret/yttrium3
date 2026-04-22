@@ -182,6 +182,22 @@ namespace Yttrium
             return Rational();
         }
 
+        Rational Rational:: mod2() const
+        {
+            switch(numer.s)
+            {
+                case Positive:
+                case Negative:  {
+                    const Natural nn = numer.n.mod2();
+                    const Natural dd = denom.mod2();
+                    return Rational(Positive,nn,dd);
+                }
+
+                case __Zero__: break;
+            }
+            return Rational();
+        }
+
     }
 
 }

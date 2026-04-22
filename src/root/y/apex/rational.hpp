@@ -186,7 +186,9 @@ Y_APQ_DECL(Rational,CALL) Y_APQ_Binary(OP,CALL) Y_APQ_Unary(OP,CALL)
             // Methods
             //
             //__________________________________________________________________
-            Rational abs() const; //!< \return |*this|
+            Rational abs()  const; //!< \return |*this|
+            Rational mod2() const; //!< \return |*this|^2
+            
 
             //__________________________________________________________________
             //

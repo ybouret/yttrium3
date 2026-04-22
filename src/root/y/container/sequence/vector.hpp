@@ -50,8 +50,10 @@ namespace Yttrium
         //
         //______________________________________________________________________
 
+        //! setup empty
         inline explicit Vector() : code( new Code(0) ) {}
 
+        //! setup \param n with memory for at least n items
         inline explicit Vector(const WithAtLeast_ &, const size_t n) : code( new Code(n) )
         {
             assert( capacity() >= n );
@@ -78,20 +80,18 @@ namespace Yttrium
         {}
 
 
+        //! cleanup
         inline virtual ~Vector() noexcept
         {
             assert(code); Destroy(code);
         }
 
-        Vector & operator=( const Vector &other )
+        //! assign by copy/exchange \param other compatible readadble \return *this
+        template <typename READABLE>
+        Vector & operator=( READABLE &other )
         {
-            if( this != &other )
-            {
-                Vector temp(Replicate,*this);
-                return xch(temp);
-            }
-            else
-                return *this;
+            Vector temp(CopyOf,other);
+            return xch(temp);
         }
 
         //______________________________________________________________________
@@ -149,6 +149,8 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
+
+        //! no-throw exchange \param other another vector \return *this
         inline Vector & xch(Vector &other) noexcept {
             CoerceSwap(code,other.code); return *this;
         }
@@ -156,9 +158,10 @@ namespace Yttrium
 
     private:
         class Code;
-        Y_Disable_Copy(Vector);
-        Code * const code;
+        Y_Disable_Copy(Vector); //!< discarded
+        Code * const code;      //!< inner memory
 
+        //! trade code \param temp will be new captured code
         inline void trade(Code * const temp) noexcept
         {
             assert(temp!=code);
