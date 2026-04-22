@@ -36,6 +36,13 @@ namespace Yttrium
 
         bool Univocal:: Make( Writable<apz> & array )
         {
+            //------------------------------------------------------------------
+            //
+            //
+            // check according to dimensions
+            //
+            //
+            //------------------------------------------------------------------
             const size_t size = array.size();
             switch(size)
             {
@@ -54,40 +61,49 @@ namespace Yttrium
                     break;
             } assert(size>=2);
 
-            const apz   &last      = array[size];
-            SignType     firstSign = last.s;
-            size_t       numPos    = 0;
-            size_t       numNeg    = 0;
-            apn          g         = last.n;
-            {
-                bool         hasGCD    = false;
-                switch(firstSign)
-                {
-                    case Positive: ++numPos; hasGCD = true; break;
-                    case Negative: ++numNeg; hasGCD = true; break;
-                    case __Zero__: break;
-                }
+            //------------------------------------------------------------------
+            //
+            //
+            // Initialize study
+            //
+            //
+            //------------------------------------------------------------------
+            apz         &last      = array[size]; // last value to start with
+            SignType     firstSign = last.s;      // initialize
+            size_t       numPos    = 0;           // #positive
+            size_t       numNeg    = 0;           // #negative
+            apn          g         = last.n;      // default gcd
+            apz *        pnz       = 0;           // pointer to last non zero
 
-                for(size_t i=size-1;i>0;--i)
-                {
-                    const apz &z = array[i];
-                    switch(z.s)
-                    {
-                        case Positive: ++numPos; firstSign = Positive; break;
-                        case Negative: ++numNeg; firstSign = Negative; break;
-                        case __Zero__: continue;
-                    }
-                    if(hasGCD)
-                    {
-                        g = apn::GCD(g,z.n);
-                    }
-                    else
-                    {
-                        g      = z.n;
-                        hasGCD = true;
-                    }
-                }
+            switch(firstSign)
+            {
+                case Positive: ++numPos; pnz = &last; break;
+                case Negative: ++numNeg; pnz = &last; break;
+                case __Zero__: break;
             }
+
+            //------------------------------------------------------------------
+            //
+            //
+            // update on remaining dimensions
+            //
+            //
+            //------------------------------------------------------------------
+            for(size_t i=size-1;i>0;--i)
+            {
+                apz &z = array[i];
+                switch(z.s)
+                {
+                    case Positive: ++numPos; firstSign = Positive; break;
+                    case Negative: ++numNeg; firstSign = Negative; break;
+                    case __Zero__: continue;
+                }
+                if(pnz)
+                    g = apn::GCD(g, (pnz = &z)->n);
+                else
+                    g = (pnz = &z)->n;
+            }
+
 
             //std::cerr << "[+]=" << numPos << " [-]=" << numNeg << " g=" << g << ", firstSign=" << firstSign << std::endl;
 
@@ -100,6 +116,7 @@ namespace Yttrium
                     assert(0==numPos);
                     assert(0==numNeg);
                     assert(__Zero__==firstSign);
+                    assert(!pnz);
                     return false;
 
                 case 1:
