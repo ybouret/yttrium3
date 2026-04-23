@@ -10,6 +10,7 @@ namespace Yttrium
         Family:: Family(VCache &vc) noexcept:
         Object(),
         Metrics(vc),
+        Recyclable(),
         list(),
         pool(vc),
         quality( computeQuality(list.size) ),
@@ -22,6 +23,7 @@ namespace Yttrium
         Family:: Family( const Family & other) :
         Object(),
         Metrics(other),
+        Recyclable(),
         list(),
         pool(other.pool),
         quality(other.quality),
@@ -63,7 +65,7 @@ namespace Yttrium
 
             Coerce(list).pushTail(v);
             Coerce(quality) = computeQuality(list.size);
-
+            
         }
 
 
