@@ -83,6 +83,36 @@ namespace Yttrium
         inline explicit List() noexcept : list(), pool() {}
         inline virtual ~List() noexcept { release_(); }
 
+        //! duplicate \param _ helper \param arr readable array
+        template <typename READABLE>
+        inline explicit List(const CopyOf_ &_, READABLE &arr) :
+        list(), pool()
+        {
+            try
+            {
+                const size_t n = arr.size();
+                for(size_t i=1;i<=n;++i)
+                    list.pushTail( new ( CreateZombie() ) Node(arr[i]) );
+            }
+            catch(...) { release_(); throw; }
+        }
+
+        //! replicate \param _ helper \param i first iterator \param n range size
+        template <typename ITERATOR>
+        inline explicit List(const Replicate_ &_, ITERATOR i, const size_t n) :
+        list(), pool()
+        {
+            replicate(i,n);
+        }
+
+        //! replicate full sequence \param _ helper \param seq source
+        template <typename SEQUENCE>
+        inline explicit List(const Replicate_ &_, SEQUENCE &seq) :
+        list(), pool()
+        {
+            replicate(seq.begin(),seq.size());
+        }
+
         //______________________________________________________________________
         //
         //
@@ -91,6 +121,11 @@ namespace Yttrium
         //______________________________________________________________________
         inline virtual size_t size()     const noexcept { return list.size; }
         inline virtual size_t capacity() const noexcept { return list.size+pool.size; }
+
+
+
+
+
 
         inline void reserve(const size_t n) {
             for(size_t i=n;i>0;--i) pool.store( CreateZombie() );
@@ -165,6 +200,16 @@ namespace Yttrium
 
         inline virtual ConstType & getHead() const noexcept {
             assert(list.head); return **list.head;
+        }
+
+        template <typename ITERATOR> inline
+        void replicate( ITERATOR i, size_t n)
+        {
+            try {
+                while(n-- > 0)
+                    list.pushTail( new ( CreateZombie() ) Node(*(i++)) );
+            }
+            catch(...) { release_(); throw; }
         }
 
 
