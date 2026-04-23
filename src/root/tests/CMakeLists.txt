@@ -129,3 +129,8 @@ Y_UTEST(stream:output:file)
 Y_UTEST(stream:input:file)
 Y_UTEST(stream:io64)
 
+Y_UTEST(coven:univocal)
+Y_UTEST(coven:vector)
+Y_UTEST(coven:vcache)
+
+

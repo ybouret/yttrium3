@@ -3,16 +3,14 @@
 
 namespace Yttrium
 {
-
     namespace Coven
     {
-
         Vector:: ~Vector() noexcept
         {
         }
 
         Vector:: Vector(const Metrics &metrics) :
-        Object(), Metrics(metrics), IVector(dimensions),
+        Object(), Metrics(metrics), zVector(dimensions),
         ncof(0),
         mod2(0),
         next(0),
@@ -25,7 +23,7 @@ namespace Yttrium
         Container(),
         Object(),
         Metrics(v),
-        IVector(CopyOf,v),
+        zVector(CopyOf,v),
         ncof(v.ncof),
         mod2(v.mod2),
         next(0),
@@ -37,18 +35,18 @@ namespace Yttrium
         {
             Coerce(ncof) = 0;
             Coerce(mod2).ldz();
-            IVector &self = *this;
+            zVector &self = *this;
             for(size_t i=self.size();i>0;--i) self[i].ldz();
         }
 
         void Vector:: update()
         {
-            const IVector &self = *this;
+            const zVector &self = *this;
             try
             {
                 Coerce(ncof) = 0;
-                apn & n2 = Coerce(mod2);
-                n2.ldz();
+                apn &  nrm2  = Coerce(mod2);
+                nrm2.ldz();
                 for(size_t i=dimensions;i>0;--i)
                 {
                     const apz &z = self[i];
@@ -58,7 +56,7 @@ namespace Yttrium
                         case Positive:
                         case Negative:
                             ++Coerce(ncof);
-                            n2 += z.n.mod2();
+                            nrm2 += z.n.mod2();
                             continue;
                     }
                 }
@@ -70,6 +68,28 @@ namespace Yttrium
             }
         }
 
+    }
+}
+
+#include "y/coven/univocal.hpp"
+
+namespace Yttrium
+{
+    namespace Coven
+    {
+        bool Vector:: univocal()
+        {
+            if( Univocal::Make(*this) )
+            {
+                update();
+                return true;
+            }
+            else
+            {
+                ldz();
+                return false;
+            }
+        }
 
     }
 

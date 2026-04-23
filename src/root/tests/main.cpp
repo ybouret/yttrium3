@@ -114,6 +114,8 @@ Y_UTEST_DECL(8)
     Y_UTEST(stream_io64);
     
     Y_UTEST(coven_univocal);
+    Y_UTEST(coven_vector);
+    Y_UTEST(coven_vcache);
 }
 Y_UTEST_EXEC()
 
