@@ -226,7 +226,8 @@ Y_Apex_Natural_Unary(OP,CALL)
             // Counting
             //
             //__________________________________________________________________
-            static Natural factorial(const natural_t n); //!< \param n integral value \return n!
+            static Natural Factorial(const natural_t n);               //!< \param n integral value \return n!
+            static Natural Comb(const natural_t n, const natural_t k); //!< \param n n>=0 \param k 0<=k<=n \return (n,k)
 
             //__________________________________________________________________
             //
@@ -257,7 +258,7 @@ Y_Apex_Natural_Unary(OP,CALL)
              \return casted value
              */
             template <typename T> inline
-            T cast(const char * const varName, const char * const varPart)
+            T cast(const char * const varName, const char * const varPart) const
             {
                 T res = 0;
                 if(!tryCast(res)) {

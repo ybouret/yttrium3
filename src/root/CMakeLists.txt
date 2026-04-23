@@ -61,6 +61,8 @@ y/apex/z
 y/apex/q
 y/coven
 y/coven/univocal
+y/counting
+y/counting/c
 )
 
 add_subdirectory(tests)

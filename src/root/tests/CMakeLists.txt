@@ -17,6 +17,7 @@ container
 apex
 stream
 coven
+counting
 )
 
 Y_LinkLibraries(test-root)
@@ -134,4 +135,5 @@ Y_UTEST(coven:vector)
 Y_UTEST(coven:vcache)
 Y_UTEST(coven:family)
 
+Y_UTEST(counting:perm)
 

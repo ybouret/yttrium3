@@ -224,7 +224,7 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
              \return casted value
              */
             template <typename T> inline
-            T cast(const char * const varName, const char * const varPart)
+            T cast(const char * const varName, const char * const varPart) const
             {
                 T res = 0;
                 if(!tryCast(res)) {

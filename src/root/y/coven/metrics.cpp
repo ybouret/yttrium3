@@ -21,7 +21,6 @@ namespace Yttrium
         hyperSize(dimension-1)
         {
             assert(dimension>0);
-            assert(hyperSize>=0);
         }
 
         const char * Metrics:: HumanReadableQuality(const Quality quality) noexcept

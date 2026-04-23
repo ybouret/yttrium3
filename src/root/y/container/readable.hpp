@@ -7,6 +7,7 @@
 #include "y/container.hpp"
 #include "y/type/args.hpp"
 #include <iostream>
+#include <cassert>
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4435 )

@@ -10,12 +10,20 @@ Y_UTEST(apex_n)
 {
     Core::Rand ran;
 
+    std::cerr << "-- testing Factorial" << std::endl;
     for(natural_t n=0;n<=21;++n)
     {
-        const apn f = apn::factorial(n);
+        const apn f = apn::Factorial(n);
         std::cerr << std::setw(2) << n << "! = " << std::setw(20) << f << " #bits=" << f.bits() << std::endl;
     }
-
+    
+    std::cerr << "-- testing Comb" << std::endl;
+    for(size_t n=0;n<=10;++n)
+    {
+        std::cerr << std::setw(2) << n << ":";
+        for(size_t k=0;k<=n;++k) std::cerr << ' ' << apn::Comb(n,k);
+        std::cerr << std::endl;
+    }
 
     std::cerr << "-- testing add/sub" << std::endl;
     for(size_t k=0;k<1024;++k)
@@ -36,6 +44,9 @@ Y_UTEST(apex_n)
         Y_ASSERT(prod/rhs==lhs);
         const apn m = lhs % rhs;
     }
+
+
+
 
 }
 Y_UDONE()
