@@ -29,8 +29,8 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            Y_Args_Expose(T,Type); //!< aliases
-            typedef Troop<T,OBJECT> TroopType;
+            Y_Args_Expose(T,Type);             //!< aliases
+            typedef Troop<T,OBJECT> TroopType; //!< alias
             using TroopType::size;
             
             //__________________________________________________________________
@@ -39,11 +39,14 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
+
+            //! setup to 'zero' and fix size \param n fixed size
             inline explicit LegacyTroop(const size_t n) : TroopType(n)
             {
                 Coerce(size) = n;
             }
 
+            //! cleanup (set size=0)
             inline virtual ~ LegacyTroop() noexcept
             {
                 Coerce(size) = 0;
@@ -52,7 +55,7 @@ namespace Yttrium
 
 
         private:
-            Y_Disable_Copy_And_Assign(LegacyTroop);
+            Y_Disable_Copy_And_Assign(LegacyTroop); //!< discarded
         };
 
     }

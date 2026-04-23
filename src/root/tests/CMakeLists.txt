@@ -136,4 +136,5 @@ Y_UTEST(coven:vcache)
 Y_UTEST(coven:family)
 
 Y_UTEST(counting:perm)
+Y_UTEST(counting:comb)
 

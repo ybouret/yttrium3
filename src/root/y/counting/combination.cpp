@@ -1,7 +1,7 @@
 
 #include "y/counting/combination.hpp"
 #include "y/exception.hpp"
-#include "y/memory/troop.hpp"
+#include "y/memory/troop/legacy.hpp"
 #include "y/counting/c/comb.h"
 
 namespace Yttrium
@@ -31,14 +31,14 @@ namespace Yttrium
         return np.cast<Cardinality>(Combination::CallSign,0);
     }
 
-#if 0
-    class Combination:: Code : public Memory::SchoolOf<size_t>
+    class Combination:: Code : public Memory::LegacyTroop<size_t,Object>
     {
     public:
+        typedef Memory::LegacyTroop<size_t,Object> CodeMemory;
 
         inline explicit Code(const size_t n,
                              const size_t k) :
-        Memory::SchoolOf<size_t>(k),
+        CodeMemory(k),
         comb()
         {
             Y_Comb_Init(&comb,n,k);
@@ -91,13 +91,12 @@ namespace Yttrium
         return code->comb.k;
     }
 
-    const size_t & Combination:: getItemAt(const size_t i) const noexcept
+    const size_t & Combination:: ask(const size_t i) const noexcept
     {
         assert(i>0);
         assert(i<=code->comb.k);
         return code->cxx[i];
     }
 
-#endif
-
+    
 }

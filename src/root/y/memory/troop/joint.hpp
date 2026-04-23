@@ -30,8 +30,8 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            Y_Args_Expose(T,Type); //!< aliases
-            typedef Troop<T,OBJECT> TroopType;
+            Y_Args_Expose(T,Type);             //!< aliases
+            typedef Troop<T,OBJECT> TroopType; //!< alias
             using TroopType::addr;
             using TroopType::size;
             using TroopType::capacity;
