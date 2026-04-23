@@ -120,6 +120,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
 
+        //! no-throw exchange \param other another array \return *this
         inline CxxArray & xch( CxxArray &other ) noexcept
         {
             CoerceSwap(code,other.code); return *this;

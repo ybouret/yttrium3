@@ -9,7 +9,7 @@ Y_UTEST(coven_family)
 {
     Core::Rand    ran;
 
-    for(size_t dims=1; dims <= 4; ++dims)
+    for(size_t dims=1; dims <= 5; ++dims)
     {
         std::cerr << "-- dimension = " << dims << std::endl;
         Coven::Metrics metrics(dims);
@@ -18,19 +18,23 @@ Y_UTEST(coven_family)
 
         CxxArray<int>  a(dims);
 
-        do
+        for(size_t iter=0;iter<=3;++iter)
         {
-            for(size_t i=dims;i>0;--i)
+            do
             {
-                a[i] = ran.in<int>(-10,10);
-            }
-            Coven::Vector * v = family.accepted(a);
-            if(v)
-                family.grow(v);
+                for(size_t i=dims;i>0;--i)
+                {
+                    a[i] = ran.in<int>(-10,10);
+                }
+                Coven::Vector * v = family.accepted(a);
+                if(v)
+                    family.grow(v);
 
-        } while( family.list.size != dims );
+            } while( family.list.size != dims );
 
-        family.writeXML(std::cerr);
+            family.writeXML(std::cerr);
+            family.free();
+        }
 
         std::cerr << std::endl;
     }

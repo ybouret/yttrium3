@@ -138,16 +138,11 @@ namespace Yttrium
                 return univocal();
             }
 
-            void exchange(Vector &v) noexcept
-            {
-                xch(v);
-                CoerceSwap(ncof,v.ncof);
-                Coerce(mod2).xch( Coerce(v.mod2) );
-            }
 
-            void ldz() noexcept; //!< zero everything
-            void update();       //!< simple update
-            bool univocal();     //!< univocal+update \return true iff not empty/nul
+            void exchange(Vector &) noexcept; //!< exchange contents
+            void ldz()              noexcept; //!< zero everything
+            void update();                    //!< simple update
+            bool univocal();                  //!< univocal+update \return true iff not empty/nul
 
             //__________________________________________________________________
             //

@@ -82,8 +82,29 @@ namespace Yttrium
 
         }
 
-        
+        Vector * Family:: acceptedFrom(const Vector *V, Vector * const Q)
+        {
+            assert(Q);
+            while(V)
+            {
+                Vector &Qnew = getWorkspace();
+                if(!V->keepOrtho(Qnew,*Q))
+                {
+                    pool.store(Q);
+                    return 0;
+                }
 
+                Q->exchange(Qnew);
+                V = V->next;
+            }
+
+            return Q;
+        }
+
+        Vector &Family:: getWorkspace()
+        {
+            return *(wksp ? wksp : ( Coerce(wksp) = pool.query()));
+        }
 
     }
 

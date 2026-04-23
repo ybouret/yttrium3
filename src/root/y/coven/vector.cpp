@@ -128,6 +128,12 @@ namespace Yttrium
             return os << " # |#" << v.ncof << "|^2=" << v.mod2;
         }
 
+        void Vector:: exchange(Vector &v) noexcept
+        {
+            xch(v);
+            CoerceSwap(ncof,v.ncof);
+            Coerce(mod2).xch( Coerce(v.mod2) );
+        }
     }
 }
 

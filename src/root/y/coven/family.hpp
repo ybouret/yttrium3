@@ -61,6 +61,11 @@ namespace Yttrium
             template <typename READABLE>
             Vector * accepted(READABLE &a)
             {
+                //--------------------------------------------------------------
+                //
+                // filtering possibilities
+                //
+                //--------------------------------------------------------------
                 switch(quality)
                 {
                     case Degenerate:
@@ -79,43 +84,32 @@ namespace Yttrium
                 assert(list.size>0);
                 assert(list.size<dimension);
 
+                //--------------------------------------------------------------
+                //
+                // performing iterative projections
+                //
+                //--------------------------------------------------------------
                 Vector * Q = pool.query();
                 try {
+
+                    //----------------------------------------------------------
                     // check against the first vector
+                    //----------------------------------------------------------
                     const Vector * const V = list.head; assert(V);
                     if( !V->keepOrtho(*Q,a) ) {
                         pool.store(Q); return 0;
                     }
 
+                    //----------------------------------------------------------
                     // check against remaining vectors
+                    //----------------------------------------------------------
                     return acceptedFrom(V->next,Q);
                 }
                 catch(...) { pool.store(Q); throw; }
             }
 
-            Vector * acceptedFrom(const Vector *V, Vector * const Q)
-            {
-                assert(Q);
-                while(V)
-                {
-                    Vector &Qnew = workspace();
-                    if(!V->keepOrtho(Qnew,*Q))
-                    {
-                        pool.store(Q);
-                        return 0;
-                    }
 
-                    Q->exchange(Qnew);
-                    V = V->next;
-                }
-                
-                return Q;
-            }
 
-            Vector &workspace()
-            {
-                return *(wksp ? wksp : ( Coerce(wksp) = pool.query()));
-            }
 
             //! insert an accepted vector \param v valid vector (from accepted)
             void grow(Vector * const v) noexcept;
@@ -129,7 +123,7 @@ namespace Yttrium
             //__________________________________________________________________
             const Vectors  list;    //!< current vectors
             VCache       & pool;    //!< PERSISTENT cache
-            Vector * const wksp;
+            Vector * const wksp;    //!< workspace (found when dimension>=3)
             const Quality  quality; //!< current quality
             Family *       next;    //!< for list/pool
             Family *       prev;    //!< for list
@@ -141,6 +135,7 @@ namespace Yttrium
             
 
             void free_() noexcept;
+
             template <typename READABLE> inline
             Vector * acceptedFirst( READABLE &a )
             {
@@ -155,6 +150,10 @@ namespace Yttrium
                     }
                 } catch(...) { pool.store(Q); throw; }
             }
+
+            Vector * acceptedFrom(const Vector *, Vector * const);
+            Vector & getWorkspace();
+
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
         };
     }
