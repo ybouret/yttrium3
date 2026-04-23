@@ -10,7 +10,7 @@ namespace Yttrium
         }
 
         Vector:: Vector(const Metrics &metrics) :
-        Object(), Metrics(metrics), zVector(dimensions),
+        Object(), Metrics(metrics), zVector(dimension),
         ncof(0),
         mod2(0),
         next(0),
@@ -31,6 +31,23 @@ namespace Yttrium
         {
         }
 
+        Vector & Vector:: operator=( const Vector &source )
+        {
+            try
+            {
+                Coerce(ncof) = source.ncof;
+                Coerce(mod2) = source.mod2;
+                for(size_t i=dimension;i>0;--i)
+                    (*this)[i] = source[i];
+            }
+            catch(...)
+            {
+                ldz();
+                throw;
+            }
+            return *this;
+        }
+
         void Vector:: ldz() noexcept
         {
             Coerce(ncof) = 0;
@@ -47,7 +64,7 @@ namespace Yttrium
                 Coerce(ncof) = 0;
                 apn &  nrm2  = Coerce(mod2);
                 nrm2.ldz();
-                for(size_t i=dimensions;i>0;--i)
+                for(size_t i=dimension;i>0;--i)
                 {
                     const apz &z = self[i];
                     switch(z.s)

@@ -30,7 +30,7 @@ namespace Yttrium
         Vector * VCache:: query()
         {
             Y_Lock(*this);
-            assert(0==vpool.size || dimensions==vpool.head->dimensions);
+            assert(0==vpool.size || dimension==vpool.head->dimension);
             return vpool.size ? vpool.query() : new Vector(*this);
         }
 
@@ -38,8 +38,26 @@ namespace Yttrium
         {
             Y_Lock(*this);
             assert(v);
-            assert(dimensions==v->dimensions);
+            assert(dimension==v->dimension);
             vpool.store(v)->ldz();
+        }
+
+
+        Vector * VCache:: query(const Vector &source)
+        {
+            Y_Lock(*this);
+            assert(dimension==source.dimension);
+            assert(dimension==source.size());
+            if(vpool.size)
+            {
+                Vector * const target = vpool.query();
+                try { return & ( *target = source ); }
+                catch(...)   { store(target); throw; }
+            }
+            else
+            {
+                return new Vector(source);
+            }
         }
 
 

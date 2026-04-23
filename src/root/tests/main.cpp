@@ -116,6 +116,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(coven_univocal);
     Y_UTEST(coven_vector);
     Y_UTEST(coven_vcache);
+    Y_UTEST(coven_family);
 }
 Y_UTEST_EXEC()
 

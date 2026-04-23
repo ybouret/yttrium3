@@ -132,5 +132,6 @@ Y_UTEST(stream:io64)
 Y_UTEST(coven:univocal)
 Y_UTEST(coven:vector)
 Y_UTEST(coven:vcache)
+Y_UTEST(coven:family)
 
 

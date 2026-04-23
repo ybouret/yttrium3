@@ -52,16 +52,17 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
-            // Methods
+            // Methods, LOCKED
             //
             //__________________________________________________________________
             Vector * query();                        //!< query \return cached/new vector
             void     store(Vector * const) noexcept; //!< store used vector
+            Vector * query(const Vector &);          //!< duplicate \return cached/new duplicated vector
 
             //__________________________________________________________________
             //
             //
-            // Interface 
+            // Interface, LOCKDE
             //
             //__________________________________________________________________
             virtual size_t count() const noexcept;

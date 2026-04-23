@@ -24,6 +24,22 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
+            // Definitions
+            //
+            //__________________________________________________________________
+            enum Quality
+            {
+                Degenerate,
+                Fragmental,
+                HyperPlane,
+                TotalSpace
+            };
+
+            static const char * HumanReadableQuality(const Quality) noexcept;
+
+            //__________________________________________________________________
+            //
+            //
             // C++
             //
             //__________________________________________________________________
@@ -31,13 +47,23 @@ namespace Yttrium
             virtual ~Metrics()                  noexcept; //!< cleanup
             Metrics(const Metrics &)            noexcept; //!< duplicate
 
+
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            Quality computeQuality(const size_t size) const noexcept;
+
             //__________________________________________________________________
             //
             //
             // Members
             //
             //__________________________________________________________________
-            const size_t dimensions; //!< dimensions of space
+            const size_t dimension; //!< dimension of space
+            const size_t hyperSize; //!< dimension-1
 
         private:
             Y_Disable_Assign(Metrics); //!< discarded

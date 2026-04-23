@@ -61,10 +61,10 @@ namespace Yttrium
             template <typename READABLE> inline
             apz dot( READABLE &a ) const
             {
-                assert(a.size() == dimensions);
+                assert(a.size() == dimension);
                 const zVector &b = *this;
                 apz            sum;
-                for(size_t i=dimensions;i>0;--i) sum += b[i] * a[i];
+                for(size_t i=dimension;i>0;--i) sum += b[i] * a[i];
                 return sum;
             }
 
@@ -80,8 +80,8 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 // sanity check
                 //--------------------------------------------------------------
-                assert(A.size() == dimensions);
-                assert(Q.size() == dimensions);
+                assert(A.size() == dimension);
+                assert(Q.size() == dimension);
 
                 //--------------------------------------------------------------
                 // compute integer, raw orthogonal component
@@ -91,7 +91,7 @@ namespace Yttrium
                     const apz      d  = dot(A);
 
                     //! Q = A - (<A|V>/V^2) V
-                    for(size_t i=dimensions;i>0;--i) {
+                    for(size_t i=dimension;i>0;--i) {
                         apz &q = (Q[i]=A[i]); q *= mod2; q -= d * V[i];
                     }
                 }
@@ -100,6 +100,18 @@ namespace Yttrium
                 // check and compute
                 //--------------------------------------------------------------
                 return Q.univocal();
+            }
+
+            template <typename READABLE> inline
+            bool ld(READABLE &A)
+            {
+                assert(A.size() == dimension);
+                try
+                {
+                    for(size_t i=dimension;i>0;--i) (*this)[i] = A[i];
+                }
+                catch(...) { ldz(); throw; }
+                return univocal();
             }
 
 
