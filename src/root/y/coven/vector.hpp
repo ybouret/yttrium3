@@ -53,6 +53,16 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
+            //! strategic comparison
+            /**
+             - first compare by DECREASING ncof to detect orthogonality as fast as possible
+             - then  compare by INCREASING mod2 to produce smaller coefficients
+             - and then by LEXICOGRAPHIC order to ensure uniqueness
+             \return comparison value
+             **/
+            static SignType Compare(const Vector & , const Vector & ) noexcept;
+
+
             //! generic dot product
             /**
              \param a compatible array with same metrics
@@ -64,7 +74,16 @@ namespace Yttrium
                 assert(a.size() == dimension);
                 const zVector &b = *this;
                 apz            sum;
-                for(size_t i=dimension;i>0;--i) sum += b[i] * a[i];
+                for(size_t i=dimension;i>0;--i)
+                {
+                    const apz p = b[i]*a[i];
+                    switch(p.s)
+                    {
+                        case __Zero__: continue;
+                        case Positive: sum += p.n; continue;
+                        case Negative: sum -= p.n; continue;
+                    }
+                }
                 return sum;
             }
 

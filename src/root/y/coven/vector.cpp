@@ -85,6 +85,42 @@ namespace Yttrium
             }
         }
 
+        SignType Vector:: Compare(const Vector &lhs, const Vector &rhs) noexcept
+        {
+            assert(lhs.size()==rhs.size());
+
+            // decreasing ncof
+            switch( Sign::Of(lhs.ncof,rhs.ncof) )
+            {
+                case Negative: return Positive;
+                case Positive: return Negative;
+                case __Zero__: break;
+            }
+
+            // increasing mod2
+            switch( apn::Cmp(lhs.mod2,rhs.mod2) )
+            {
+                case Negative: return Negative;
+                case Positive: return Positive;
+                case __Zero__: break;
+            }
+
+            {
+                const size_t n = lhs.size();
+                for(size_t i=1;i<=n;++i)
+                {
+                    switch( apz::Cmp(lhs[i],rhs[i]))
+                    {
+                        case Negative: return Negative;
+                        case Positive: return Positive;
+                        case __Zero__: continue;
+                    }
+                }
+            }
+
+            return __Zero__;
+        }
+
     }
 }
 

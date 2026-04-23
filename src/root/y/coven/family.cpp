@@ -65,6 +65,9 @@ namespace Yttrium
 
             Coerce(list).pushTail(v);
             Coerce(quality) = computeQuality(list.size);
+
+            while(v->prev && Vector::Compare(*(v->prev),*v) != Positive )
+                Coerce(list).towardsHead(v);
             
         }
 
