@@ -89,15 +89,15 @@ namespace Yttrium
         {
             assert(lhs.size()==rhs.size());
 
-            // decreasing ncof
+            // using ncof
             switch( Sign::Of(lhs.ncof,rhs.ncof) )
             {
-                case Negative: return Positive;
-                case Positive: return Negative;
+                case Negative: return Negative;
+                case Positive: return Positive;
                 case __Zero__: break;
             }
 
-            // increasing mod2
+            // using mod2
             switch( apn::Cmp(lhs.mod2,rhs.mod2) )
             {
                 case Negative: return Negative;
@@ -105,6 +105,7 @@ namespace Yttrium
                 case __Zero__: break;
             }
 
+            // using lexicographic
             {
                 const size_t n = lhs.size();
                 for(size_t i=1;i<=n;++i)
@@ -124,7 +125,7 @@ namespace Yttrium
         std::ostream & operator<<(std::ostream &os, const Vector &v)
         {
             { const zVector &zv = v; os << zv; }
-            return os << " // |#" << v.ncof << "|^2=" << v.mod2;
+            return os << " # |#" << v.ncof << "|^2=" << v.mod2;
         }
 
     }

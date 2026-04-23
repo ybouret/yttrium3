@@ -56,14 +56,13 @@ namespace Yttrium
 
             //! strategic comparison
             /**
-             - first compare by DECREASING ncof to detect orthogonality as fast as possible
+             - first compare by INCREASING ncof to detect orthogonality as fast as possible
              - then  compare by INCREASING mod2 to produce smaller coefficients
              - and then by LEXICOGRAPHIC order to ensure uniqueness
              \return comparison value
              **/
             static SignType Compare(const Vector & , const Vector & ) noexcept;
-
-
+            
             //! optimized dot product
             /**
              \param a compatible array with same metrics
@@ -125,7 +124,7 @@ namespace Yttrium
             //! load compatible array and check univocal
             /**
              \param A source vector
-             \return true iff A is was empty
+             \return true iff A  was not empty
              */
             template <typename READABLE> inline
             bool ld(READABLE &A)
@@ -139,6 +138,12 @@ namespace Yttrium
                 return univocal();
             }
 
+            void exchange(Vector &v) noexcept
+            {
+                xch(v);
+                CoerceSwap(ncof,v.ncof);
+                Coerce(mod2).xch( Coerce(v.mod2) );
+            }
 
             void ldz() noexcept; //!< zero everything
             void update();       //!< simple update

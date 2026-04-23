@@ -79,9 +79,42 @@ namespace Yttrium
                 assert(list.size>0);
                 assert(list.size<dimension);
 
-                
+                Vector * Q = pool.query();
+                try {
+                    // check against the first vector
+                    const Vector * const V = list.head; assert(V);
+                    if( !V->keepOrtho(*Q,a) ) {
+                        pool.store(Q); return 0;
+                    }
 
-                return 0;
+                    // check against remaining vectors
+                    return acceptedFrom(V->next,Q);
+                }
+                catch(...) { pool.store(Q); throw; }
+            }
+
+            Vector * acceptedFrom(const Vector *V, Vector * const Q)
+            {
+                assert(Q);
+                while(V)
+                {
+                    Vector &Qnew = workspace();
+                    if(!V->keepOrtho(Qnew,*Q))
+                    {
+                        pool.store(Q);
+                        return 0;
+                    }
+
+                    Q->exchange(Qnew);
+                    V = V->next;
+                }
+                
+                return Q;
+            }
+
+            Vector &workspace()
+            {
+                return *(wksp ? wksp : ( Coerce(wksp) = pool.query()));
             }
 
             //! insert an accepted vector \param v valid vector (from accepted)
@@ -96,6 +129,7 @@ namespace Yttrium
             //__________________________________________________________________
             const Vectors  list;    //!< current vectors
             VCache       & pool;    //!< PERSISTENT cache
+            Vector * const wksp;
             const Quality  quality; //!< current quality
             Family *       next;    //!< for list/pool
             Family *       prev;    //!< for list
@@ -104,20 +138,22 @@ namespace Yttrium
             Y_Disable_Assign(Family); //!< discarded
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            
+
             void free_() noexcept;
             template <typename READABLE> inline
             Vector * acceptedFirst( READABLE &a )
             {
-                Vector * const v = pool.query();
+                Vector * const Q = pool.query();
                 try
                 {
-                    if( v->ld(a) )
-                        return v;
+                    if( Q->ld(a) )
+                        return Q;
                     else {
-                        pool.store(v);
+                        pool.store(Q);
                         return 0;
                     }
-                } catch(...) { pool.store(v); throw; }
+                } catch(...) { pool.store(Q); throw; }
             }
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
         };

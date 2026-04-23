@@ -11,6 +11,7 @@
 #include "y/type/replicate.hpp"
 
 #include "y/object.hpp"
+#include "y/swap.hpp"
 
 namespace Yttrium
 {
@@ -112,6 +113,18 @@ namespace Yttrium
             return code->cxx[indx];
         }
         
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+
+        inline CxxArray & xch( CxxArray &other ) noexcept
+        {
+            CoerceSwap(code,other.code); return *this;
+        }
+
 
         //______________________________________________________________________
         //
