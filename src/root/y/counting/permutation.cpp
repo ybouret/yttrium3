@@ -1,6 +1,6 @@
 #include "y/counting/permutation.hpp"
 #include "y/exception.hpp"
-#include "y/memory/troop.hpp"
+#include "y/memory/troop/legacy.hpp"
 #include "y/memory/allocator/pooled.hpp"
 #include "y/counting/c/perm.h"
 #include "y/type/destroy.hpp"
@@ -24,16 +24,15 @@ namespace Yttrium
         return np.cast<Cardinality>(Permutation::CallSign,0);
     }
 
-    class Permutation:: Code : public Memory::Troop<size_t,Object>
+    class Permutation:: Code : public Memory::LegacyTroop<size_t,Object>
     {
     public:
-        typedef Memory::Troop<size_t,Object> CodeMemory;
+        typedef Memory::LegacyTroop<size_t,Object> CodeMemory;
 
         inline explicit Code(const size_t n) :
         CodeMemory(n),
         perm()
         {
-            Coerce(size) = n;
             Y_Perm_Init(&perm,n);
             Y_Perm_Boot(&perm,cxx);
         }
@@ -41,7 +40,6 @@ namespace Yttrium
 
         inline virtual ~Code() noexcept
         {
-            Coerce(size) = 0;
         }
 
         inline void boot() noexcept { Y_Perm_Boot(&perm,cxx); }
