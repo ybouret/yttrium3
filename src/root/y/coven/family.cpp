@@ -24,6 +24,7 @@ namespace Yttrium
         Object(),
         Metrics(other),
         Recyclable(),
+        Logging(),
         list(),
         pool(other.pool),
         quality(other.quality),

@@ -27,14 +27,17 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
+
+            //! describe quality
             enum Quality
             {
-                Degenerate,
-                Fragmental,
-                HyperPlane,
-                TotalSpace
+                Degenerate, //!< no vectors
+                Fragmental, //!< vectors bu below hyperplane
+                HyperPlane, //!< hyperplane, codimension=1
+                TotalSpace  //!< matches full space (a.k.a basis)
             };
 
+            //! \return textual quality
             static const char * HumanReadableQuality(const Quality) noexcept;
 
             //__________________________________________________________________
@@ -54,6 +57,8 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
+
+            //! \param size \return qualit according to size w.r.t dimension
             Quality computeQuality(const size_t size) const noexcept;
 
             //__________________________________________________________________

@@ -12,6 +12,14 @@ namespace Yttrium
 
     namespace Coven
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Family of orthogonals vectors
+        //
+        //
+        //______________________________________________________________________
         class Family :
         public Object,
         public Metrics,
@@ -19,13 +27,37 @@ namespace Yttrium
         public Logging
         {
         public:
-            explicit Family(VCache &vc) noexcept;
-            virtual ~Family()           noexcept;
-            Family(const Family &);
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Family(VCache &) noexcept; //!< setup with PERSISTENT cache
+            virtual ~Family()         noexcept; //!< cleanup
+            Family(const Family &);             //!< duplicate
 
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
             virtual void free() noexcept;
             virtual void toXML(XML::Log &) const;
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! check is a vector can contribute to the family
+            /**
+             \param a compatible source vector
+             \return remaining, not zero orthogonal vector, NULL otherwise
+             */
             template <typename READABLE>
             Vector * accepted(READABLE &a)
             {
@@ -50,20 +82,27 @@ namespace Yttrium
                 return 0;
             }
 
+            //! insert an accepted vector \param v valid vector (from accepted)
             void grow(Vector * const v) noexcept;
 
 
-
-            const Vectors  list;
-            VCache       & pool;
-            const Quality  quality;
-            Family *       next;
-            Family *       prev;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const Vectors  list;    //!< current vectors
+            VCache       & pool;    //!< PERSISTENT cache
+            const Quality  quality; //!< current quality
+            Family *       next;    //!< for list/pool
+            Family *       prev;    //!< for list
 
         private:
-            Y_Disable_Assign(Family);
-            void free_() noexcept;
+            Y_Disable_Assign(Family); //!< discarded
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            void free_() noexcept;
             template <typename READABLE> inline
             Vector * acceptedFirst( READABLE &a )
             {
@@ -78,6 +117,7 @@ namespace Yttrium
                     }
                 } catch(...) { pool.store(v); throw; }
             }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
         };
     }
 

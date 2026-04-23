@@ -45,8 +45,8 @@ namespace Yttrium
             virtual ~Vector() noexcept;         //!< cleanup
             Vector(const Vector &);             //!< duplicate
             Vector & operator=(const Vector &); //!< assign (with same metrics) \return *this
-            Y_OSTREAM_PROTO(Vector);
-            
+            Y_OSTREAM_PROTO(Vector);            //!< display
+
             //__________________________________________________________________
             //
             //
@@ -64,7 +64,7 @@ namespace Yttrium
             static SignType Compare(const Vector & , const Vector & ) noexcept;
 
 
-            //! generic dot product
+            //! optimized dot product
             /**
              \param a compatible array with same metrics
              \return a*(*this)
@@ -122,6 +122,11 @@ namespace Yttrium
                 return Q.univocal();
             }
 
+            //! load compatible array and check univocal
+            /**
+             \param A source vector
+             \return true iff A is was empty
+             */
             template <typename READABLE> inline
             bool ld(READABLE &A)
             {
