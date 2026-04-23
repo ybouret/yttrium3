@@ -9,7 +9,7 @@ Y_UTEST(coven_family)
 {
     Core::Rand    ran;
 
-    for(size_t dims=1; dims <= 5; ++dims)
+    for(size_t dims=1; dims <= 6; ++dims)
     {
         std::cerr << "-- dimension = " << dims << std::endl;
         Coven::Metrics metrics(dims);
