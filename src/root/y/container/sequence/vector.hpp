@@ -186,24 +186,24 @@ namespace Yttrium
 
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-        typedef Memory::JointTroop<MutableType> CodeMemory;
-        class Code : public Object, public CodeMemory
+        typedef Memory::JointTroop<MutableType,Object> CodeMemory;
+        class Code : public CodeMemory
         {
         public:
-            inline explicit Code(const size_t n) : Object(), CodeMemory(n) {}
+            inline explicit Code(const size_t n) : CodeMemory(n) {}
             inline virtual ~Code() noexcept {}
 
             template <typename READABLE>
             inline explicit Code(const CopyOf_  &,
                                  READABLE       &arr) :
-            Object(), CodeMemory(arr.size())
+            CodeMemory(arr.size())
             {
                 this->copy(arr);
             }
 
             template <typename ITERATOR>
             inline explicit Code(const Replicate_ &, ITERATOR i, const size_t n) :
-            Object(), CodeMemory(n)
+            CodeMemory(n)
             {
                 this->replicate(i,n);
             }

@@ -8,7 +8,7 @@
 #include "y/memory/troop.hpp"
 #include "y/container/contiguous/readable.hpp"
 #include "y/type/destroy.hpp"
-
+#include "y/object.hpp"
 
 namespace Yttrium
 {
@@ -37,10 +37,10 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
-                typedef V2D<T>              vertex_t; //!< alias
-                typedef Leap2D<T>           Leap;     //!< alias
-                typedef Tile2D<T>           Tile;     //!< alias
-                typedef Memory::Troop<Tile> Code;     //!< alias
+                typedef V2D<T>                     vertex_t; //!< alias
+                typedef Leap2D<T>                  Leap;     //!< alias
+                typedef Tile2D<T>                  Tile;     //!< alias
+                typedef Memory::Troop<Tile,Object> Code;     //!< alias
 
                 //______________________________________________________________
                 //

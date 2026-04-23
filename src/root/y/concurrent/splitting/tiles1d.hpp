@@ -8,6 +8,7 @@
 #include "y/container/contiguous/readable.hpp"
 #include "y/memory/troop.hpp"
 #include "y/type/destroy.hpp"
+#include "y/object.hpp"
 
 namespace Yttrium
 {
@@ -120,9 +121,9 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
-                typedef Leap1D<T>           Leap; //!< alias
-                typedef Tile1D<T>           Tile; //!< alias
-                typedef Memory::Troop<Tile> Code; //!< alias
+                typedef Leap1D<T>                  Leap; //!< alias
+                typedef Tile1D<T>                  Tile; //!< alias
+                typedef Memory::Troop<Tile,Object> Code; //!< alias
                 using Leap::offset;
                 using Leap::length;
 

@@ -140,8 +140,8 @@ namespace Yttrium
 
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-        typedef Memory::Troop<MutableType> CodeMemory;
-        class Code : public Object, public CodeMemory
+        typedef Memory::Troop<MutableType,Object> CodeMemory;
+        class Code : public CodeMemory
         {
         public:
             using CodeMemory::addr;

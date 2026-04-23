@@ -20,8 +20,8 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        template <typename T>
-        class JointTroop : public Troop<T>
+        template <typename T, typename OBJECT>
+        class JointTroop : public Troop<T,OBJECT>
         {
         public:
             //__________________________________________________________________
@@ -31,10 +31,11 @@ namespace Yttrium
             //
             //__________________________________________________________________
             Y_Args_Expose(T,Type); //!< aliases
-            using Troop<T>::addr;
-            using Troop<T>::size;
-            using Troop<T>::capacity;
-            using Troop<T>::cxx;
+            typedef Troop<T,OBJECT> TroopType;
+            using TroopType::addr;
+            using TroopType::size;
+            using TroopType::capacity;
+            using TroopType::cxx;
 
             //__________________________________________________________________
             //
@@ -42,8 +43,8 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            inline explicit JointTroop(const size_t n) : Troop<T>(n) {} //!< setup \param n minimal capacity
-            inline virtual ~JointTroop() noexcept                    {} //!< cleanup
+            inline explicit JointTroop(const size_t n) : TroopType(n) {} //!< setup \param n minimal capacity
+            inline virtual ~JointTroop() noexcept                     {} //!< cleanup
 
             //__________________________________________________________________
             //

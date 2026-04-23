@@ -24,14 +24,13 @@ namespace Yttrium
         return np.cast<Cardinality>(Permutation::CallSign,0);
     }
 
-    class Permutation:: Code :
-    public Object, public Memory::Troop<size_t>
+    class Permutation:: Code : public Memory::Troop<size_t,Object>
     {
     public:
+        typedef Memory::Troop<size_t,Object> CodeMemory;
 
         inline explicit Code(const size_t n) :
-        Object(),
-        Memory::Troop<size_t>(n),
+        CodeMemory(n),
         perm()
         {
             Coerce(size) = n;

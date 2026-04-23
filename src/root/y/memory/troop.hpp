@@ -57,8 +57,8 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        template <typename T>
-        class Troop : public TroopGear
+        template <typename T, typename OBJECT>
+        class Troop : public OBJECT, public TroopGear
         {
         public:
             //__________________________________________________________________
