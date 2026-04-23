@@ -64,6 +64,10 @@ namespace Yttrium
             assert(v->ncof);
             assert(v->mod2>0);
 
+#if !defined(NDEBUG)
+
+#endif
+
             Coerce(list).pushTail(v);
             Coerce(quality) = computeQuality(list.size);
 

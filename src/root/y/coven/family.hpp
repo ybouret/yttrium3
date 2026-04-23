@@ -53,7 +53,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            //! check is a vector can contribute to the family
+            //! check if a vector can contribute to the family
             /**
              \param a compatible source vector
              \return remaining, not zero orthogonal vector, NULL otherwise
@@ -78,6 +78,8 @@ namespace Yttrium
 
                 assert(list.size>0);
                 assert(list.size<dimension);
+
+                
 
                 return 0;
             }
