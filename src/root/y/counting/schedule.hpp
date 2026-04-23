@@ -3,7 +3,7 @@
 #define Y_Counting_Schedule_Included 1
 
 #include "y/counting/counting.hpp"
-#include "y/container/readable.hpp"
+#include "y/container/contiguous/readable.hpp"
 
 namespace Yttrium
 {
@@ -16,7 +16,7 @@ namespace Yttrium
     //
     //
     //__________________________________________________________________________
-    class Schedule : public Counting, public Readable<size_t>
+    class Schedule : public Counting, public ContiguousReadable<size_t>
     {
     protected:
         explicit Schedule(const Cardinality) noexcept; //!< setup with cardinality
@@ -29,4 +29,4 @@ namespace Yttrium
 
 }
 
-#endif
+#endif // !Y_Counting_Schedule_Included

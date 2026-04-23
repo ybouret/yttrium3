@@ -7,7 +7,7 @@ namespace Yttrium
 
     Schedule:: Schedule(const Cardinality n) noexcept :
     Counting(n),
-    Readable<size_t>()
+    ContiguousReadable<size_t>()
     {
     }
     

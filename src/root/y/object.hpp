@@ -77,6 +77,12 @@ namespace Yttrium
         //! placement delete
         static void  operator delete(void * const , void * const)                 noexcept; 
 
+        template <typename T> static inline
+        T * AcquireZombie() { return static_cast<T*>(operator new (sizeof(T))); }
+
+        template <typename T> static inline
+        void ReleaseZombie(T * const zombie) noexcept { operator delete(zombie,sizeof(T));  }
+
     private:
         Y_Disable_Copy_And_Assign(Object); //!< discarded
 

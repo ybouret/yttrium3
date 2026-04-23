@@ -113,6 +113,7 @@ Y_UTEST(container:contiguous:rw)
 Y_UTEST(container:cxx:array)
 Y_UTEST(container:cxx:series)
 Y_UTEST(container:vector)
+Y_UTEST(container:list)
 
 Y_UTEST(apex:k)
 Y_UTEST(apex:k:bits)
