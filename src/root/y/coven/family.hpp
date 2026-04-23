@@ -5,13 +5,18 @@
 #define Y_Coven_Family_Included 1
 
 #include "y/coven/vcache.hpp"
+#include "y/ability/logging.hpp"
 
 namespace Yttrium
 {
 
     namespace Coven
     {
-        class Family : public Object, public Metrics, public Recyclable
+        class Family :
+        public Object,
+        public Metrics,
+        public Recyclable,
+        public Logging
         {
         public:
             explicit Family(VCache &vc) noexcept;
@@ -19,6 +24,7 @@ namespace Yttrium
             Family(const Family &);
 
             virtual void free() noexcept;
+            virtual void toXML(XML::Log &) const;
 
             template <typename READABLE>
             Vector * accepted(READABLE &a)

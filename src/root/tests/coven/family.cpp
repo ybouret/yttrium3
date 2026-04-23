@@ -23,6 +23,9 @@ Y_UTEST(coven_family)
             }
             Coven::Vector * v = family.accepted(a);
             if(v) family.grow(v);
+
+            family.writeXML(std::cerr);
+
         }
 
 

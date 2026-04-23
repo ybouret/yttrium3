@@ -121,6 +121,12 @@ namespace Yttrium
             return __Zero__;
         }
 
+        std::ostream & operator<<(std::ostream &os, const Vector &v)
+        {
+            { const zVector &zv = v; os << zv; }
+            return os << " // |#" << v.ncof << "|^2=" << v.mod2;
+        }
+
     }
 }
 

@@ -68,10 +68,36 @@ namespace Yttrium
 
             while(v->prev && Vector::Compare(*(v->prev),*v) != Positive )
                 Coerce(list).towardsHead(v);
-            
+
         }
 
 
     }
 
 }
+
+#include "y/xml/log.hpp"
+#include "y/xml/element.hpp"
+#include "y/xml/attribute.hpp"
+
+namespace Yttrium
+{
+
+    namespace Coven
+    {
+
+        void Family:: toXML(XML::Log &xml) const
+        {
+            const size_t       size = list.size;
+            const char * const qlty = HumanReadableQuality(quality);
+            Y_XML_Element_Attr(xml,Family,Y_XML_Attr(size) << Y_XML_Attr(dimension) << Y_XML_Attr(qlty));
+            for(const Vector *v=list.head;v;v=v->next)
+            {
+                Y_XMLog(xml,*v);
+            }
+        }
+
+    }
+
+}
+

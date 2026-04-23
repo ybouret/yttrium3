@@ -45,7 +45,8 @@ namespace Yttrium
             virtual ~Vector() noexcept;         //!< cleanup
             Vector(const Vector &);             //!< duplicate
             Vector & operator=(const Vector &); //!< assign (with same metrics) \return *this
-
+            Y_OSTREAM_PROTO(Vector);
+            
             //__________________________________________________________________
             //
             //
