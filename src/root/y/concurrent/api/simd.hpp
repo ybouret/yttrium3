@@ -46,6 +46,7 @@ namespace Yttrium
                 Arguments(const CopyOf_ &, void * const) noexcept; //!< setup with arg1 as copy of address
                 ~Arguments() noexcept;  //!< cleanup
 
+                //! setup with one argument \param usr1 argument no. 1
                 template <typename ARG1> inline
                 Arguments(ARG1 &usr1) noexcept : arg1( (void*)&usr1 )
                 {

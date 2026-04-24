@@ -8,7 +8,7 @@
 #include "y/concurrent/thread.hpp"
 #include "y/memory/buffer/classified.hpp"
 #include "y/memory/allocator/archon.hpp"
-//#include "y/container/cxx/series.hpp"
+#include "y/type/destruct.hpp"
 
 #include <iostream>
 
@@ -21,14 +21,16 @@ namespace Yttrium
         {
         public:
             typedef Memory::Classified<Thread,Memory::Archon> Threads;
-            //typedef CxxSeries<Thread> Threads;
 
             inline explicit Code(const size_t numThreads,
-                                 SIMD        &parent) :
+                                 Procedure   &theProc,
+                                 Arguments * &theArgs) :
             Object(),
             level( Max<size_t>(numThreads,1) ),
             ready(0),
-            instr(parent),
+            inuse(0),
+            proc(theProc),
+            args(theArgs),
             mutex(),
             cycle(),
             comms(),
@@ -38,13 +40,17 @@ namespace Yttrium
             }
 
             inline virtual ~Code() noexcept {
+                quit();
 
             }
 
+            void run() noexcept;
 
             const size_t level;
             size_t       ready;
-            SIMD        &instr;
+            size_t       inuse;
+            Procedure   &proc;
+            Arguments * &args;
             Mutex        mutex;
             Condition    cycle;
             Condition    comms;
@@ -66,7 +72,26 @@ namespace Yttrium
 
         void Crew:: Code:: quit() noexcept
         {
+            assert(!proc);
+            assert(!args);
+            assert(!inuse);
 
+            // wake up all (remaining)
+            cycle.broadcast();
+
+            // wait for all threads to return
+            {
+                Y_Lock(mutex);
+                if(ready>0) comms.wait(mutex);
+                std::cerr << "all done" << std::endl;
+            }
+
+
+
+            // cleanup
+            for(size_t i=0;i<level;++i)
+                Destruct( threads(i) );
+            
         }
 
         void Crew:: Code:: init()
@@ -78,10 +103,8 @@ namespace Yttrium
                 for(size_t i=0;i<level;++i)
                 {
                     new ( threads(i) ) Thread(Launch,code);
-
                     {
-                        Y_Lock(mutex);
-                        if(ready<=i) comms.wait(mutex);
+                        Y_Lock(mutex); if(ready<=i) comms.wait(mutex);
                     }
                 }
                 (std::cerr << "synchronized" << std::endl);
@@ -104,9 +127,10 @@ namespace Yttrium
             //------------------------------------------------------------------
             mutex.lock(); assert(ready<level);
             Context context(level,ready,mutex);
-            (std::cerr << "in " << context << std::endl).flush();
+            (std::cerr << context << " is ready" << std::endl).flush();
             ++ready;
             comms.signal();
+        CYCLE:
             cycle.wait(mutex);
 
             //------------------------------------------------------------------
@@ -114,15 +138,48 @@ namespace Yttrium
             // wake up on a LOCKED mutex
             //
             //------------------------------------------------------------------
+
+            if(!proc)
+            {
+                (std::cerr << context << " is leaving" << std::endl).flush();
+                assert(ready>0);
+                if(--ready<=0) comms.signal();
+                mutex.unlock();
+                return;
+            }
+
+
+            //------------------------------------------------------------------
+            //
+            // work to do
+            //
+            //------------------------------------------------------------------
+            assert(inuse>0); assert(args);
+
+            mutex.unlock();
+            { proc(context,*args); }
+            mutex.lock();
             
+            assert(inuse>0);
+            if(--inuse<=0) comms.signal();
+            goto CYCLE;
+        }
+
+        void Crew:: Code:: run() noexcept
+        {
+            assert(proc);
+            assert(args);
+            assert(!inuse);
+            inuse = level;
+            cycle.broadcast();
+            { Y_Lock(mutex); if(inuse) comms.wait(mutex); }
 
         }
 
 
-        SIMD & Crew:: self() noexcept { return *this; }
 
         Crew:: Crew(const size_t n) :
-        code( new Code(n,self()) )
+        code( new Code(n,procedure,arguments) )
         {
             std::cerr << "sizeof(Crew::Code) = " << sizeof(Code) << std::endl;
         }
@@ -135,7 +192,9 @@ namespace Yttrium
 
         void Crew:: run()
         {
-            
+            assert(procedure);
+            assert(arguments);
+            code->run();
         }
 
     }

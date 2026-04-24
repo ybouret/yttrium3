@@ -29,13 +29,13 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Crew(const size_t n); //!< setup
-            virtual ~Crew() noexcept; //!< cleanup
+            explicit Crew(const size_t n); //!< setup \param n number of threads
+            virtual ~Crew() noexcept;      //!< cleanup
 
         private:
             Y_Disable_Copy_And_Assign(Crew); //!< discarded
-            Code * const code;
-            
+            Code * const code;               //!< inner code
+
             //__________________________________________________________________
             //
             //
@@ -44,13 +44,7 @@ namespace Yttrium
             //__________________________________________________________________
             virtual void run();
 
-            //__________________________________________________________________
-            //
-            //
-            // Methods
-            //
-            //__________________________________________________________________
-            SIMD & self() noexcept;
+            
         };
 
     }

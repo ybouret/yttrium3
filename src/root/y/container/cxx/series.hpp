@@ -18,6 +18,12 @@
 namespace Yttrium
 {
 
+    //! helper to implement append code
+#define Y_CxxSeries_Append( CODE )               \
+assert(code); assert(code->size<code->capacity); \
+new (code->entry+code->size) MutableType CODE ;  \
+++Coerce(code->size)
+
     //__________________________________________________________________________
     //
     //
@@ -129,16 +135,15 @@ namespace Yttrium
         //
         //______________________________________________________________________
 
-#define Y_CxxSeries_Append( CODE )               \
-assert(code); assert(code->size<code->capacity); \
-new (code->entry+code->size) MutableType CODE ;  \
-++Coerce(code->size)
 
+
+        //! append default item
         inline void append()
         {
             Y_CxxSeries_Append(());
         }
 
+        //! append item with 1-argument constructor \param u value for constructor
         template <typename U>
         inline void append( U &u )
         {
