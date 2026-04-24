@@ -138,6 +138,7 @@ Y_UTEST(coven:univocal)
 Y_UTEST(coven:vector)
 Y_UTEST(coven:vcache)
 Y_UTEST(coven:family)
+Y_UTEST(coven:colinear)
 
 Y_UTEST(counting:perm)
 Y_UTEST(counting:comb)
