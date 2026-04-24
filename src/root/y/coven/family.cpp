@@ -14,9 +14,7 @@ namespace Yttrium
         list(),
         pool(vc),
         wksp(0),
-        quality( computeQuality(list.size) ),
-        next(0),
-        prev(0)
+        quality( computeQuality(list.size) )
         {
 
         }
@@ -29,9 +27,7 @@ namespace Yttrium
         list(),
         pool(other.pool),
         wksp(0),
-        quality(other.quality),
-        next(0),
-        prev(0)
+        quality(other.quality)
         {
             try
             {

@@ -125,8 +125,7 @@ namespace Yttrium
             VCache       & pool;    //!< PERSISTENT cache
             Vector * const wksp;    //!< workspace (found when dimension>=3)
             const Quality  quality; //!< current quality
-            Family *       next;    //!< for list/pool
-            Family *       prev;    //!< for list
+            
 
         private:
             Y_Disable_Assign(Family); //!< discarded
