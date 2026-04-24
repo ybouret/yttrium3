@@ -28,6 +28,7 @@ y/concurrent/windows
 y/concurrent/splitting
 y/threading
 y/calculus
+y/calculus/prime
 y/type
 y/memory
 y/memory/type
