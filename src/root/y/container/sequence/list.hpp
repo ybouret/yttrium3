@@ -89,7 +89,7 @@ namespace Yttrium
 
         //! duplicate \param _ helper \param arr readable array
         template <typename READABLE>
-        inline explicit List(const CopyOf_ &_, READABLE &arr) :
+        inline explicit List(const CopyOf_ &, READABLE &arr) :
         list(), pool()
         {
             try
