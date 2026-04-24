@@ -46,5 +46,5 @@ namespace Yttrium
     }
 }
 
-#endif
+#endif // !Y_Apex_Modular_Included
 
