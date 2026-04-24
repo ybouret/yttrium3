@@ -40,6 +40,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(calculus_isqrt);
     Y_UTEST(calculus_ldiv);
     Y_UTEST(calculus_gcd);
+    Y_UTEST(calculus_primes);
 
 
     Y_UTEST(type_ints);
