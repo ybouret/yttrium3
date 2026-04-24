@@ -26,6 +26,8 @@ y/concurrent/sys
 y/concurrent/singleton
 y/concurrent/windows
 y/concurrent/splitting
+y/concurrent/api
+y/concurrent/api/simd
 y/threading
 y/calculus
 y/calculus/prime

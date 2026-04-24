@@ -57,6 +57,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(concurrent_member);
     Y_UTEST(concurrent_split1d);
     Y_UTEST(concurrent_split2d);
+    Y_UTEST(concurrent_simd);
 
 
     Y_UTEST(memory_small_chunk);
