@@ -45,6 +45,7 @@ namespace Yttrium
         //______________________________________________________________________
         virtual const char * callSign()  const noexcept; //!< \return CallSign
         virtual size_t       size()      const noexcept; //!< \return current parts
+        virtual size_t       capacity()  const noexcept; //!< \return capacity = initial n
 
     private:
         class Code;
@@ -53,12 +54,12 @@ namespace Yttrium
 
         virtual void           doBoot() noexcept;
         virtual bool           doNext() noexcept;
-        virtual const size_t & getItemAt(const size_t) const noexcept;
+        virtual const size_t & ask(const size_t) const noexcept;
 
     };
     
 
 }
 
-#endif
+#endif // !Y_Counting_Partition_Included
 

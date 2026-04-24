@@ -138,4 +138,5 @@ Y_UTEST(coven:family)
 
 Y_UTEST(counting:perm)
 Y_UTEST(counting:comb)
+Y_UTEST(counting:part)
 

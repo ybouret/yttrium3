@@ -66,12 +66,12 @@ namespace Yttrium
 
         virtual void doBoot() noexcept;
         virtual bool doNext() noexcept;
-        virtual const size_t & getItemAt(const size_t indx) const noexcept;
+        virtual const size_t & ask(const size_t indx) const noexcept;
 
     };
 
 
 }
 
-#endif
+#endif // !Y_Counting_Nested_Loop_Included
 

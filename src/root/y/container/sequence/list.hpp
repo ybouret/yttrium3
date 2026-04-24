@@ -47,32 +47,35 @@ namespace Yttrium
         Y_Args_Declare(T,Type);                         //!< aliases
         typedef Sequence<T, Writable<T> > SequenceType; //!< alias
 
+        //______________________________________________________________________
+        //
+        //
+        //! inner node
+        //
+        //______________________________________________________________________
         class Node
         {
         public:
-            Y_Args_Expose(T,Type);
-            typedef Core::ListOf<Node> List;
-            typedef Core::PoolOf<Node> Pool;
+            Y_Args_Expose(T,Type); //!< aliases
 
-            inline Node(ConstType &args) : data(args), next(0), prev(0) {}
-            inline ~Node() noexcept {}
+            inline Node(ConstType &args) : data(args), next(0), prev(0) {} //!< setup \param args for data
+            inline ~Node() noexcept {} //!< cleanup
 
-            inline Type      & operator*()       noexcept { return data; }
-            inline ConstType & operator*() const noexcept { return data; }
-
+            inline Type      & operator*()       noexcept { return data; } //!< \return access
+            inline ConstType & operator*() const noexcept { return data; } //!< \return const access
 
         private:
-            MutableType data;
+            MutableType data; //!< data location
         public:
-            Node *      next;
-            Node *      prev;
+            Node *      next; //!< for list/pool
+            Node *      prev; //!< for list
 
         private:
-            Y_Disable_Copy_And_Assign(Node);
+            Y_Disable_Copy_And_Assign(Node); //!< discarded
         };
 
-        typedef Core::ListOf<Node> ListType;
-        typedef Core::PoolOf<Node> PoolType;
+        typedef Core::ListOf<Node> ListType; //!< alias
+        typedef Core::PoolOf<Node> PoolType; //!< alias
 
         //______________________________________________________________________
         //
@@ -80,8 +83,9 @@ namespace Yttrium
         // C++
         //
         //______________________________________________________________________
-        inline explicit List() noexcept : list(), pool() {}
-        inline virtual ~List() noexcept { release_(); }
+
+        inline explicit List() noexcept : list(), pool() {} //!< setup
+        inline virtual ~List() noexcept { release_(); }     //!< cleanup
 
         //! duplicate \param _ helper \param arr readable array
         template <typename READABLE>
@@ -99,7 +103,7 @@ namespace Yttrium
 
         //! replicate \param _ helper \param i first iterator \param n range size
         template <typename ITERATOR>
-        inline explicit List(const Replicate_ &_, ITERATOR i, const size_t n) :
+        inline explicit List(const Replicate_ &, ITERATOR i, const size_t n) :
         list(), pool()
         {
             replicate(i,n);
@@ -107,7 +111,7 @@ namespace Yttrium
 
         //! replicate full sequence \param _ helper \param seq source
         template <typename SEQUENCE>
-        inline explicit List(const Replicate_ &_, SEQUENCE &seq) :
+        inline explicit List(const Replicate_ &, SEQUENCE &seq) :
         list(), pool()
         {
             replicate(seq.begin(),seq.size());
@@ -121,13 +125,7 @@ namespace Yttrium
         //______________________________________________________________________
         inline virtual size_t size()     const noexcept { return list.size; }
         inline virtual size_t capacity() const noexcept { return list.size+pool.size; }
-
-
-
-
-
-
-        inline void reserve(const size_t n) {
+        inline void           reserve(const size_t n) {
             for(size_t i=n;i>0;--i) pool.store( CreateZombie() );
         }
 
@@ -169,6 +167,7 @@ namespace Yttrium
         // Iterators
         //
         //______________________________________________________________________
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         typedef Iter::Linked<Iter::Forward,Node>       Iterator;
         typedef Iter::Linked<Iter::Forward,const Node> ConstIterator;
 
@@ -184,7 +183,8 @@ namespace Yttrium
         inline ReverseIterator      rend()         noexcept { return 0; }
         inline ConstReverseIterator rbegin() const noexcept { return list.tail; }
         inline ConstReverseIterator rend()   const noexcept { return 0; }
-        
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
     private:
         Y_Disable_Copy_And_Assign(List); //!< discarded
         ListType list; //!< alive nodes
@@ -202,6 +202,7 @@ namespace Yttrium
             assert(list.head); return **list.head;
         }
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         template <typename ITERATOR> inline
         void replicate( ITERATOR i, size_t n)
         {
@@ -226,6 +227,7 @@ namespace Yttrium
             while(list.size) Object::ReleaseZombie( Destructed(list.popTail()) );
             while(pool.size) Object::ReleaseZombie( pool.query() );
         }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
     };
 
 }

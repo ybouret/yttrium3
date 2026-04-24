@@ -128,8 +128,7 @@ namespace Yttrium
     Schedule( CardinalityFor(d,n) ),
     code( new Code(d,n) )
     {
-
-        std::cerr << "sizeof(Code)=" << sizeof(Code) << std::endl;
+        //std::cerr << "sizeof(Code)=" << sizeof(Code) << std::endl;
     }
 
     const char * NestedLoop:: callSign() const noexcept
@@ -143,7 +142,7 @@ namespace Yttrium
         return code->dims;
     }
 
-    const size_t & NestedLoop:: getItemAt(const size_t i) const noexcept
+    const size_t & NestedLoop:: ask(const size_t i) const noexcept
     {
         assert(0!=code);
         return (*code)[i];

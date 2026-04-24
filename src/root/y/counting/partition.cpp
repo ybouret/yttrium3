@@ -1,9 +1,9 @@
 
 #include "y/counting/partition.hpp"
 #include "y/system/exception.hpp"
-#include "y/memory/troop.hpp"
+#include "y/memory/troop/legacy.hpp"
 #include "y/counting/c/part.h"
-//#include "y/container/sequence/list.hpp"
+#include "y/container/sequence/list.hpp"
 #include "y/container/sequence/vector.hpp"
 
 #include <cerrno>
@@ -13,7 +13,6 @@ namespace Yttrium
 
     const char * const Partition:: CallSign = "Partition";
 
-#if 0
     namespace
     {
         static inline void euler_sum(apn &sum, const List<apn> &l)
@@ -84,7 +83,7 @@ namespace Yttrium
         {
             if(n<1)   throw Specific::Exception(Partition::CallSign,"n<1");
             const apn np = Partition::Cardinal(n);
-            return np.cast<Cardinality>(Partition::CallSign);
+            return np.cast<Cardinality>(Partition::CallSign,0);
         }
     }
 
@@ -94,12 +93,13 @@ namespace Yttrium
     }
 
 
-    class Partition:: Code : public Memory::SchoolOf<size_t>
+    class Partition:: Code : public Memory::LegacyTroop<size_t,Object>
     {
     public:
+        typedef Memory::LegacyTroop<size_t,Object> CodeMemory;
 
         inline explicit Code(const size_t n) :
-        Memory::SchoolOf<size_t>(n),
+        CodeMemory(n),
         part()
         {
             assert(n>0);
@@ -157,7 +157,13 @@ namespace Yttrium
         return code->part.k;
     }
 
-    const size_t & Partition:: getItemAt(const size_t i) const noexcept
+    size_t Partition:: capacity() const noexcept
+    {
+        assert(0!=code);
+        return code->part.n;
+    }
+    
+    const size_t & Partition:: ask(const size_t i) const noexcept
     {
         assert(0!=code);
         assert(i>=1);
@@ -167,7 +173,6 @@ namespace Yttrium
 
     
     
-#endif
 
 
 }
