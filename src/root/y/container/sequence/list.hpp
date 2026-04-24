@@ -87,7 +87,7 @@ namespace Yttrium
         inline explicit List() noexcept : list(), pool() {} //!< setup
         inline virtual ~List() noexcept { release_(); }     //!< cleanup
 
-        //! duplicate \param _ helper \param arr readable array
+        //! duplicate \param arr readable array
         template <typename READABLE>
         inline explicit List(const CopyOf_ &, READABLE &arr) :
         list(), pool()
@@ -101,7 +101,7 @@ namespace Yttrium
             catch(...) { release_(); throw; }
         }
 
-        //! replicate \param _ helper \param i first iterator \param n range size
+        //! replicate \param i first iterator \param n range size
         template <typename ITERATOR>
         inline explicit List(const Replicate_ &, ITERATOR i, const size_t n) :
         list(), pool()
@@ -109,7 +109,7 @@ namespace Yttrium
             replicate(i,n);
         }
 
-        //! replicate full sequence \param _ helper \param seq source
+        //! replicate full sequence \param seq source
         template <typename SEQUENCE>
         inline explicit List(const Replicate_ &, SEQUENCE &seq) :
         list(), pool()
