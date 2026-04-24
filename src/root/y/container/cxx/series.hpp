@@ -78,7 +78,7 @@ namespace Yttrium
         //______________________________________________________________________
         //
         //
-        // Interfacce
+        // Interface
         //
         //______________________________________________________________________
         inline virtual size_t size()     const noexcept { assert(code); return code->size; }
@@ -121,6 +121,30 @@ namespace Yttrium
         {
             assert(code); code->demote(indx);
         }
+
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+
+#define Y_CxxSeries_Append( CODE )               \
+assert(code); assert(code->size<code->capacity); \
+new (code->entry+code->size) MutableType CODE ;  \
+++Coerce(code->size)
+
+        inline void append()
+        {
+            Y_CxxSeries_Append(());
+        }
+
+        template <typename U>
+        inline void append( U &u )
+        {
+            Y_CxxSeries_Append((u));
+        }
+
 
 
 

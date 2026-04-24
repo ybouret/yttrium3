@@ -4,7 +4,7 @@
 #include "y/utest/run.hpp"
 
 
-
+#include "y/concurrent/thread.hpp"
 
 using namespace Yttrium;
 
@@ -18,6 +18,7 @@ Y_UTEST(concurrent_simd)
     Concurrent::Crew crew(2);
     
 
+    Y_SIZEOF(Concurrent::Thread);
 
 }
 Y_UDONE()
