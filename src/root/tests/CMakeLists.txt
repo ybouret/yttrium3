@@ -101,6 +101,7 @@ Y_UTEST(memory:buffer)
 Y_UTEST(pointer:auto)
 
 Y_UTEST(ascii:base64)
+Y_UTEST(ascii:conv:u64)
 
 Y_UTEST(threading:gmt)
 Y_UTEST(threading:stc)

@@ -1,5 +1,3 @@
-
-
 //! \file
 
 #ifndef Y_ASCII_Plural_Included
