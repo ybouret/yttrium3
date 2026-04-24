@@ -18,14 +18,11 @@ namespace Yttrium
 
             template <typename T> struct NativeQueryAPI<T,true>
             {
-                static inline SignType SignOf(const T &x) noexcept
-                {
+                static inline SignType SignOf(const T &x) noexcept {
                     return x<0 ? Negative : ( 0< x ? Positive : __Zero__);
                 }
 
-
-                static inline apn AbsOf(const T &x)
-                {
+                static inline apn AbsOf(const T &x) {
                     typedef typename UnsignedFor< sizeof(T) >::Alias::Type UType;
                     return 0<=x ? (UType)x : (UType)-x;
                 }
@@ -34,8 +31,7 @@ namespace Yttrium
 
             template <typename T> struct NativeQueryAPI<T,false>
             {
-                static inline SignType SignOf(const T &x) noexcept
-                {
+                static inline SignType SignOf(const T &x) noexcept {
                     return (0<x) ? Positive : __Zero__;
                 }
 
@@ -49,8 +45,7 @@ namespace Yttrium
                     return NativeQueryAPI<T, IsSignedInt<T>::Value >::SignOf(x);
                 }
 
-                static inline apn AbsOf(const T x)
-                {
+                static inline apn AbsOf(const T x) {
                     return NativeQueryAPI<T, IsSignedInt<T>::Value >::AbsOf(x);
                 }
 
@@ -58,8 +53,7 @@ namespace Yttrium
 
             template <> struct QueryAPI<apz>
             {
-                static inline SignType SignOf(const apz &z) noexcept
-                {
+                static inline SignType SignOf(const apz &z) noexcept {
                     return z.s;
                 }
 
@@ -68,15 +62,11 @@ namespace Yttrium
 
             template <> struct QueryAPI<apn>
             {
-                static inline SignType SignOf(const apn &n) noexcept
-                {
+                static inline SignType SignOf(const apn &n) noexcept {
                     return n.is0() ? __Zero__ : Positive;
                 }
 
-                static inline  apn AbsOf(const apn &n)
-                {
-                    return n;
-                }
+                static inline  apn AbsOf(const apn &n) { return n; }
             };
 
 
@@ -210,7 +200,7 @@ namespace Yttrium
                 return true;
             }
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            
+
         };
 
     }
