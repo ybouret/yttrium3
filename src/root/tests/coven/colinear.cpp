@@ -2,6 +2,7 @@
 #include "y/utest/run.hpp"
 
 #include "y/container/cxx/series.hpp"
+#include "y/swap.hpp"
 
 using namespace Yttrium;
 
@@ -45,7 +46,35 @@ Y_UTEST(coven_colinear)
         zarr << 2;
     }
     ALL_TESTS();
-    
+
+
+    {
+        iarr << 0; Y_ASSERT(2==iarr.size());
+        uarr << 0; Y_ASSERT(2==uarr.size());
+        narr << 0; Y_ASSERT(2==narr.size());
+        zarr << 0; Y_ASSERT(2==zarr.size());
+    }
+    ALL_TESTS();
+
+    {
+        Swap(iarr[1],iarr[2]);
+        Swap(uarr[1],uarr[2]);
+        Swap(narr[1],narr[2]);
+        Swap(zarr[1],zarr[2]);
+    }
+    ALL_TESTS();
+
+    {
+        iarr >> 2; std::cerr << iarr << std::endl;
+        uarr >> 4; std::cerr << uarr << std::endl;
+        narr >> 2; std::cerr << narr << std::endl;
+        zarr >> 4; std::cerr << zarr << std::endl;
+    }
+    ALL_TESTS();
+
+
+
+
 
 
 

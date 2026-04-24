@@ -11,6 +11,7 @@ namespace Yttrium
     namespace Coven
     {
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         namespace Pith
         {
             template <typename T,bool> struct NativeQueryAPI;
@@ -85,10 +86,26 @@ namespace Yttrium
             template <typename T> inline
             apn QueryAbsOf(const T &x) noexcept { return QueryAPI<T>::AbsOf(x); }
         }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
+
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! testing colinearity for arrays of integers
+        //
+        //
+        //______________________________________________________________________
         struct Colinear
         {
 
+            //! compare all non trivial ratios of same-sized array
+            /**
+             \param lhs first array
+             \param rhs second array
+             \return true iff colinear arrays
+             */
             template <typename LHS, typename RHS> static inline
             bool Test( LHS &lhs, RHS &rhs )
             {
@@ -97,13 +114,11 @@ namespace Yttrium
                 size_t i = lhs.size();
                 while(i>0)
                 {
-                    typename LHS::ConstType &l  = lhs[i];
-                    typename RHS::ConstType &r  = rhs[i];
-                    const SignType           ls = Pith::QuerySignOf(l);
-                    const SignType           rs = Pith::QuerySignOf(r);
-
-                    std::cerr << l << " / " << r << std::endl;
-                    SignType rhoSign = Positive;
+                    typename LHS::ConstType &l       = lhs[i];
+                    typename RHS::ConstType &r       = rhs[i];
+                    const SignType           ls      = Pith::QuerySignOf(l);
+                    const SignType           rs      = Pith::QuerySignOf(r);
+                    SignType                 rhoSign = Positive;
                     switch( Sign::Pair(ls,rs) )
                     {
                         case Sign::PZ:
@@ -125,24 +140,77 @@ namespace Yttrium
                     }
                     assert(l>0);
                     assert(r>0);
-
+                    assert(i>0);
                     const apn rhoNumer = Pith::QueryAbsOf(l);
                     const apn rhoDenom = Pith::QueryAbsOf(r);
                     apn::Reduce(Coerce(rhoNumer),Coerce(rhoDenom));
-                    std::cerr << "rho: " << rhoSign << " * " << rhoNumer << " / " << rhoDenom << std::endl;
-
-                    while(--i>0)
-                    {
-                        
-                    }
-
-
+                    return EndTest(lhs,rhs,i,rhoSign,rhoNumer,rhoDenom);
                 }
-
 
                 return true;
             }
 
+        private:
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+            template <typename LHS, typename RHS> static inline
+            bool EndTest(LHS &          lhs,
+                         RHS &          rhs,
+                         size_t         i,
+                         const SignType rhoSign,
+                         const apn      rhoNumer,
+                         const apn      rhoDenom)
+            {
+                assert(i>0);
+                while(--i>0)
+                {
+                    typename LHS::ConstType &l  = lhs[i];
+                    typename RHS::ConstType &r  = rhs[i];
+                    const SignType           ls = Pith::QuerySignOf(l);
+                    const SignType           rs = Pith::QuerySignOf(r);
+
+                    SignType theSign = Positive;
+                    switch( Sign::Pair(ls,rs) )
+                    {
+                        case Sign::PZ:
+                        case Sign::ZP:
+                        case Sign::NZ:
+                        case Sign::ZN:
+                            return false; // zero against not zero
+
+                        case Sign::ZZ:  continue; // zero against zero, shortcut
+
+                        case Sign::PP:
+                        case Sign::NN:
+                            break;
+
+                        case Sign::PN:
+                        case Sign::NP:
+                            theSign = Negative;
+                            break;
+                    }
+                    assert(l>0);
+                    assert(r>0);
+
+                    if(rhoSign!=theSign)
+                    {
+                        return false;
+                    }
+
+                    const apn numer = Pith::QueryAbsOf(l);
+                    const apn denom = Pith::QueryAbsOf(r);
+                    apn::Reduce(Coerce(numer),Coerce(denom));
+                    if( numer != rhoNumer || denom != rhoDenom )
+                    {
+                        return false;
+                    }
+
+                }
+
+                return true;
+            }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            
         };
 
     }
