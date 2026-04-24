@@ -108,6 +108,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(apex_z);
     Y_UTEST(apex_q);
     Y_UTEST(apex_in_threads);
+    Y_UTEST(apex_rsa);
 
     Y_UTEST(stream_u64);
     Y_UTEST(stream_output_file);

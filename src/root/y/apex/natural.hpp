@@ -219,7 +219,10 @@ Y_Apex_Natural_Unary(OP,CALL)
             static Natural LCM(const Natural &, const Natural &); //!< \return LCM of arguments
             static void    Reduce(Natural &, Natural &); //!< representation reduction
             Natural        mod2() const; //!< \return |*this|^2
-                                         
+            bool           isOdd()  const noexcept; //! \retrue true iff odd
+            bool           isEven() const noexcept; //! \retrue true iff even
+
+
             //__________________________________________________________________
             //
             //

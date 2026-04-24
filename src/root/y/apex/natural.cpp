@@ -112,6 +112,19 @@ namespace Yttrium
             assert(code);
             return static_cast<const KegType *>(code)->bits == 1;
         }
+
+        bool Natural:: isOdd() const noexcept
+        {
+            assert(code);
+            return static_cast<const KegType *>(code)->isOdd();
+        }
+
+        bool Natural:: isEven() const noexcept
+        {
+            assert(code);
+            return static_cast<const KegType *>(code)->isEven();
+        }
+
     }
 
 }
