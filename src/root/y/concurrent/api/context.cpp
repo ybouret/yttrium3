@@ -19,6 +19,11 @@ namespace Yttrium
         {
 
         }
+
+        Context:: ~Context() noexcept
+        {
+        }
+        
     }
 
 }

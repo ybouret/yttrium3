@@ -1,3 +1,5 @@
+
+#include "y/memory/buffer/classified.hpp"
 #include "y/memory/buffer/allocated.hpp"
 #include "y/memory/buffer/static.hpp"
 #include "y/utest/run.hpp"
@@ -24,6 +26,8 @@ Y_UTEST(memory_buffer)
     Memory::AllocatedBuffer<Memory::Archon> abuf(0);
     std::cerr << "abuf=" << abuf << std::endl;
 
+    Memory::Classified<uint64_t,Memory::Pooled> cls(10);
+    
 
 }
 Y_UDONE()
