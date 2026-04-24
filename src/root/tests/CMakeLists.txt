@@ -49,6 +49,7 @@ Y_UTEST(system:error)
 Y_UTEST(system:exception)
 Y_UTEST(system:pid)
 Y_UTEST(system:wall_time)
+Y_UTEST(system:hw)
 
 Y_UTEST(calculus:integer_log2)
 Y_UTEST(calculus:base2)
