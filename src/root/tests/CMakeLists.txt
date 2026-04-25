@@ -106,6 +106,7 @@ Y_UTEST(ascii:conv:i64)
 Y_UTEST(ascii:conv:apn)
 Y_UTEST(ascii:conv:apz)
 Y_UTEST(ascii:conv:flt)
+Y_UTEST(ascii:convert)
 
 Y_UTEST(threading:gmt)
 Y_UTEST(threading:stc)

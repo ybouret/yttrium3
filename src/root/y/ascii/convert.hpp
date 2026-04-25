@@ -5,6 +5,7 @@
 
 #include "y/type/ints.hpp"
 #include "y/int-to-type.hpp"
+#include "y/type/traits.hpp"
 #include "y/exception.hpp"
 #include "y/apex/integer.hpp"
 
@@ -30,6 +31,24 @@ namespace Yttrium
             //
             //__________________________________________________________________
             static const char * const CallSign; //!< "ASCII::Convert"
+
+            enum Category
+            {
+                UseIP,
+                UseAP,
+                UseFP,
+                UseNA
+            };
+
+            template <typename T>
+            struct CategoryOf
+            {
+                static const bool      MatchIP = TypeTraits<T>::IsIntegral;
+                static const bool      MatchAP = IsSameType<T,apn>::Value || IsSameType<T,apz>::Value;
+                static const bool      MatchFP = TypeTraits<T>::IsIsoFloatingPoint;
+                static const Category  Value = MatchIP ? UseIP : ( MatchAP ? UseAP : ( MatchFP ? UseFP : UseNA)  );
+            };
+
 
 
             //__________________________________________________________________
@@ -151,6 +170,12 @@ namespace Yttrium
                              const char * const varPart);
 
 
+            template <typename T> static
+            T ToAP(const char * const text,
+                   const size_t       size,
+                   const char * const varName,
+                   const char * const varPart);
+
             //__________________________________________________________________
             //
             //
@@ -169,9 +194,58 @@ namespace Yttrium
                    const char * const varPart);
 
 
+
+            //__________________________________________________________________
+            //
+            //
+            //
+            //__________________________________________________________________
+            template <typename T> static inline
+            T To(const char * const text,
+                 const size_t       size,
+                 const char * const varName,
+                 const char * const varPart)
+            {
+                static const IntToType< CategoryOf<T>::Value > Selected = {};
+                return To<T>(Selected,text,size,varName,varPart);
+            }
+
         private:
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+            template <typename T> static inline
+            T To(const IntToType<UseIP> &,
+                 const char * const text,
+                 const size_t       size,
+                 const char * const varName,
+                 const char * const varPart)
+            {
+                return ToIntegral<T>(text,size,varName,varPart);
+            }
+
+
+            template <typename T> static inline
+            T To(const IntToType<UseAP> &,
+                 const char * const text,
+                 const size_t       size,
+                 const char * const varName,
+                 const char * const varPart)
+            {
+                return ToAP<T>(text,size,varName,varPart);
+            }
+
+            template <typename T> static inline
+            T To(const IntToType<UseFP> &,
+                 const char * const text,
+                 const size_t       size,
+                 const char * const varName,
+                 const char * const varPart)
+            {
+                return ToFP<T>(text,size,varName,varPart);
+            }
+
+
             static bool HasHexaPrefix(const char * const text, const size_t size) noexcept;
 
             template <typename T> static inline
@@ -181,7 +255,7 @@ namespace Yttrium
                          const char * const  varName,
                          const char * const  varPart)
             {
-                static const uint64_t MaxValue = IntegerFor<T>::Maximium;
+                static const uint64_t MaxValue = IntegerFor<T>::Maximum;
                 const uint64_t        value    = ToU64(text,size,varName,varPart);
                 if(value>MaxValue) {
                     Specific::Exception excp(CallSign,"overflow for unsigned integral");
@@ -198,7 +272,7 @@ namespace Yttrium
                          const char * const  varPart)
             {
 
-                static const int64_t MaxValue = IntegerFor<T>::Maximium;
+                static const int64_t MaxValue = IntegerFor<T>::Maximum;
                 static const int64_t MinValue = IntegerFor<T>::Minimum;
                 const int64_t        value    = ToI64(text,size,varName,varPart);
                 if(value>MaxValue||value<MinValue) {
