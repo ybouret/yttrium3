@@ -151,6 +151,17 @@ namespace Yttrium
                              const char * const varPart);
 
 
+            //__________________________________________________________________
+            //
+            //
+            //! convert to [float|double|long double]
+            /**
+             \param text ascii string text != NULL
+             \param size text length, size>0
+             \param varName optional var name \param varPart optional var part
+             \return parsed floating point value
+             */
+            //__________________________________________________________________
             template <typename T> static
             T ToFP(const char * const text,
                    const size_t       size,

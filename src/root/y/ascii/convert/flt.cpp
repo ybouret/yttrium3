@@ -1,4 +1,5 @@
 #include "y/ascii/convert.hpp"
+#include "y/calculus/ipower.hpp"
 #include <cassert>
 
 namespace Yttrium
@@ -109,6 +110,7 @@ namespace Yttrium
                         throw excp.signedFor(varName,varPart);
                     }
                     bool negativeExponent = false;
+
                     if('-' == text[0])
                     {
                         ++text;
@@ -119,7 +121,44 @@ namespace Yttrium
                             throw excp.signedFor(varName,varPart);
                         }
                     }
-                    
+
+                    if('+' == text[0])
+                    {
+                        ++text;
+                        --size;
+                        if(size<=0) {
+                            Specific::Exception excp(Convert::CallSign,"%sempty positive exponent",fn);
+                            throw excp.signedFor(varName,varPart);
+                        }
+                    }
+
+
+
+
+                    unsigned xp = 0;
+                    while(size-- > 0)
+                    {
+                        xp *= 10;
+                        const char c = *(text++);
+                        switch(c)
+                        {
+                            case '0': continue;
+                            case '1': ++xp;    continue;
+                            case '2': xp += 2; continue;
+                            case '3': xp += 3; continue;
+                            case '4': xp += 4; continue;
+                            case '5': xp += 5; continue;
+                            case '6': xp += 6; continue;
+                            case '7': xp += 7; continue;
+                            case '8': xp += 8; continue;
+                            case '9': xp += 9; continue;
+                            default: break;
+                        }
+                        Specific::Exception excp(Convert::CallSign,"%sinvalid '%c' in exponent",fn,c);
+                        throw excp.signedFor(varName,varPart);
+                    }
+                    if(xp>0)
+                        res *= ipower<T>( negativeExponent ? tenth : ten, xp);
                 }
 
 
