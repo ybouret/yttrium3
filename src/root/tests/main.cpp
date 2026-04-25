@@ -85,6 +85,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(ascii_conv_i64);
     Y_UTEST(ascii_conv_apn);
     Y_UTEST(ascii_conv_apz);
+    Y_UTEST(ascii_conv_flt);
 
 
     Y_UTEST(threading_gmt);

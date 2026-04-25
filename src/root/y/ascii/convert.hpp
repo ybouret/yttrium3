@@ -36,7 +36,12 @@ namespace Yttrium
             //
             //
             //! conversion to uint64_t
-            //
+            /**
+             \param text ascii string text != NULL, with optional hexa
+             \param size text length, size>0
+             \param varName optional var name \param varPart optional var part
+             \return parsed uint64_t
+             */
             //__________________________________________________________________
             static uint64_t ToU64(const char *       text,
                                   const size_t       size,
@@ -47,7 +52,12 @@ namespace Yttrium
             //
             //
             //! conversion to int64_t
-            //
+            /**
+             \param text ascii string text != NULL
+             \param size text length, size>0
+             \param varName optional var name \param varPart optional var part
+             \return parsed int64_t
+             */
             //__________________________________________________________________
             static int64_t ToI64(const char *       text,
                                  const size_t       size,
@@ -58,6 +68,12 @@ namespace Yttrium
             //
             //
             //! conversion to any integral
+            /**
+             \param text ascii string text != NULL, with optional hexa prefix
+             \param size text length, size>0
+             \param varName optional var name \param varPart optional var part
+             \return parsed integral
+             */
             //
             //__________________________________________________________________
             template <typename T> static inline
@@ -74,7 +90,12 @@ namespace Yttrium
             //
             //
             //! decimal string to apn
-            //
+            /**
+             \param text ascii string text != NULL
+             \param size text length, size>0
+             \param varName optional var name \param varPart optional var part
+             \return parsed apn
+             */
             //__________________________________________________________________
             static apn ToDecAPN(const char *       text,
                                 const size_t       size,
@@ -85,7 +106,12 @@ namespace Yttrium
             //
             //
             //! hexadecimal string to apn
-            //
+            /**
+             \param text ascii string text != NULL
+             \param size text length, size>0
+             \param varName optional var name \param varPart optional var part
+             \return parsed apn
+             */
             //__________________________________________________________________
             static apn ToHexAPN(const char *       text,
                                 const size_t       size,
@@ -96,7 +122,12 @@ namespace Yttrium
             //
             //
             //! convert to apn
-            //
+            /**
+             \param text ascii string text != NULL, with optional hexa prefix
+             \param size text length, size>0
+             \param varName optional var name \param varPart optional var part
+             \return parsed apn
+             */
             //__________________________________________________________________
             static apn ToAPN(const char * const text,
                              const size_t       size,
@@ -107,14 +138,25 @@ namespace Yttrium
             //
             //
             //! convert to apz
-            //
+            /**
+             \param text ascii string text != NULL
+             \param size text length, size>0
+             \param varName optional var name \param varPart optional var part
+             \return parsed apz
+             */
             //__________________________________________________________________
             static apz ToAPZ(const char * const text,
                              const size_t       size,
                              const char * const varName,
                              const char * const varPart);
 
-            
+
+            template <typename T> static
+            T ToFP(const char * const text,
+                   const size_t       size,
+                   const char * const varName,
+                   const char * const varPart);
+
 
         private:
 
