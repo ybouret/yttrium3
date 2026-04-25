@@ -10,7 +10,7 @@ using namespace Yttrium;
 Y_UTEST(container_vector)
 {
     Core::Rand ran;
-    const int arr[7] = { 1,2,3,4,5,6,7 };
+    const short arr[7] = { 1,2,3,4,5,6,7 };
 
     {
         Vector<double> v;
@@ -28,6 +28,7 @@ Y_UTEST(container_vector)
         Vector<double> d(CopyOf,v);
         Iter::Test::All(d);
     }
+
 
     {
         Vector<apq> v;
