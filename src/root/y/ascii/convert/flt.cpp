@@ -20,7 +20,7 @@ namespace Yttrium
                      const char * const varPart)
             {
                 static const T ten(10);
-                static const T tenth(0.1);
+                static const T tenth(0.1f);
 
                 assert(text);
                 if(size<=0) {

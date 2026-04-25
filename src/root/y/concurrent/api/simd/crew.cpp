@@ -99,10 +99,10 @@ namespace Yttrium
             assert(0==ready);
             try
             {
-                Code * const code = this;
+                Code * const self = this;
                 for(size_t i=0;i<level;++i)
                 {
-                    new ( threads(i) ) Thread(Launch,code);
+                    new ( threads(i) ) Thread(Launch,self);
                     {
                         Y_Lock(mutex); if(ready<=i) comms.wait(mutex);
                     }

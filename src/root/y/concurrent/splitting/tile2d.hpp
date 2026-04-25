@@ -109,9 +109,9 @@ namespace Yttrium
                  \param indx in [0:items-1]
                  \return indx-t vertex
                  */
-                inline vertex_t at(const size_t indx) const noexcept
+                inline vertex_t at(const T i) const noexcept
                 {
-                    const T i  = (const T)indx; assert(i<items);
+                    assert(i<items);
                     const T y0 = (const T)(i / width.x);
                     const T x0 = (const T)(i % width.x);
                     return vertex_t(x0+lower.x,y0+lower.y);
@@ -296,13 +296,13 @@ namespace Yttrium
                 //
                 //______________________________________________________________
 
-                //! \param indx indx in [1:nseg] \return indx-th segment
-                inline Segment operator[](const T indx) const noexcept
+                //! \param i i in [1:nseg] \return indx-th segment
+                inline Segment operator[](const T i) const noexcept
                 {
-                    assert(indx>=1);
-                    assert(indx<=span);
+                    assert(i>=1);
+                    assert(i<=span);
                     assert(get);
-                    return (*this.*get)(indx);
+                    return (*this.*get)(i);
                 }
 
                 //______________________________________________________________

@@ -65,10 +65,10 @@ Y_UTEST(apex_rsa)
             (std::cerr << std::setw(10) << m.toHex()).flush();
             const apn c = Apex::Modular::Exp(m,e,n);
             (std::cerr << " => " << std::setw(10) << c.toHex()).flush();
-            const apn p = Apex::Modular::Exp(c,d,n);
-            (std::cerr << " => " << std::setw(10) << p.toHex()).flush();
+            const apn r = Apex::Modular::Exp(c,d,n);
+            (std::cerr << " => " << std::setw(10) << r.toHex()).flush();
             std::cerr << std::endl;
-            Y_ASSERT(p==m);
+            Y_ASSERT(r==m);
         }
     }
 
