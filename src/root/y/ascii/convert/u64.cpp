@@ -1,7 +1,5 @@
 #include "y/ascii/convert.hpp"
-#include "y/exception.hpp"
 #include <cassert>
-#include "y/type/ints.hpp"
 
 namespace Yttrium
 {
