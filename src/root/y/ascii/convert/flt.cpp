@@ -103,7 +103,24 @@ namespace Yttrium
                 goto RETURN;
 
             EXPONENT_PART:
-                ;
+                {
+                    if(size<=0) {
+                        Specific::Exception excp(Convert::CallSign,"%sempty exponent",fn);
+                        throw excp.signedFor(varName,varPart);
+                    }
+                    bool negativeExponent = false;
+                    if('-' == text[0])
+                    {
+                        ++text;
+                        --size;
+                        negativeExponent = true;
+                        if(size<=0) {
+                            Specific::Exception excp(Convert::CallSign,"%sempty negative exponent",fn);
+                            throw excp.signedFor(varName,varPart);
+                        }
+                    }
+                    
+                }
 
 
             RETURN:
