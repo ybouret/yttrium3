@@ -16,6 +16,7 @@ namespace Yttrium
 
         struct Convert
         {
+            // Definitions
             static const char * const CallSign;
 
             static uint64_t ToU64(const char *       text,
@@ -23,10 +24,10 @@ namespace Yttrium
                                   const char * const varName,
                                   const char * const varPart);
 
-            static uint64_t ToI64(const char *       text,
-                                  const size_t       size,
-                                  const char * const varName,
-                                  const char * const varPart);
+            static int64_t ToI64(const char *       text,
+                                 const size_t       size,
+                                 const char * const varName,
+                                 const char * const varPart);
 
 
             template <typename T> static inline
@@ -50,6 +51,11 @@ namespace Yttrium
                                 const char * const varPart);
 
             static apn ToAPN(const char * const text,
+                             const size_t       size,
+                             const char * const varName,
+                             const char * const varPart);
+
+            static apz ToAPZ(const char * const text,
                              const size_t       size,
                              const char * const varName,
                              const char * const varPart);

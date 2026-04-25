@@ -9,7 +9,7 @@ namespace Yttrium
     namespace ASCII
     {
 
-        uint64_t Convert:: ToI64(const char *       text,
+        int64_t Convert:: ToI64(const char *       text,
                                  size_t             size,
                                  const char * const varName,
                                  const char * const varPart)

@@ -104,6 +104,7 @@ Y_UTEST(ascii:base64)
 Y_UTEST(ascii:conv:u64)
 Y_UTEST(ascii:conv:i64)
 Y_UTEST(ascii:conv:apn)
+Y_UTEST(ascii:conv:apz)
 
 Y_UTEST(threading:gmt)
 Y_UTEST(threading:stc)

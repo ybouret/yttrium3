@@ -78,14 +78,13 @@ Y_UTEST_DECL(8)
     Y_UTEST(memory_buffer);
 
 
-
-
     Y_UTEST(pointer_auto);
 
     Y_UTEST(ascii_base64);
     Y_UTEST(ascii_conv_u64);
     Y_UTEST(ascii_conv_i64);
     Y_UTEST(ascii_conv_apn);
+    Y_UTEST(ascii_conv_apz);
 
 
     Y_UTEST(threading_gmt);
