@@ -74,18 +74,22 @@ namespace Yttrium
             }
 
 
-            static inline bool HasHexaPrefix(const char * const text,
-                                             const size_t       size) noexcept
-            {
-                assert(size>0);
-                if(size<2)       return false;
-                if('0'!=text[0]) return false;
-                const char x = text[1];
-                if(x!='x' && x!='X') return false;
-                return true;
-            }
-
         }
+
+
+        bool Convert:: HasHexaPrefix(const char * const text,
+                                     const size_t       size) noexcept
+        {
+            assert(text);
+            assert(size>0);
+            if(size<2)       return false;
+            if('0'!=text[0]) return false;
+            const char x = text[1];
+            if(x!='x' && x!='X') return false;
+            return true;
+        }
+
+
 
         uint64_t Convert:: ToU64(const char *      text,
                                  const size_t       size,

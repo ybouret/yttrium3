@@ -47,3 +47,40 @@ namespace Yttrium
 
 }
 
+
+
+namespace Yttrium
+{
+    namespace Apex
+    {
+
+        Natural & Natural:: operator <<=( const size_t n )
+        {
+            Natural tmp = shl(n);
+            return xch(tmp);
+        }
+
+        Natural & Natural:: operator >>=( const size_t n )
+        {
+            Natural tmp = shr(n);
+            return xch(tmp);
+        }
+
+
+        Natural  operator<<(const Natural &x, const size_t s)
+        {
+            Natural res = x;
+            return res.shl(s);
+        }
+
+        Natural  operator>>(const Natural &x, const size_t s)
+        {
+            Natural res = x;
+            return res.shr(s);
+        }
+        
+    }
+
+    
+
+}

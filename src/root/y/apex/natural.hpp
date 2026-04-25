@@ -207,6 +207,15 @@ Y_Apex_Natural_Unary(OP,CALL)
             Natural & shr(const size_t n) noexcept; //!< \param n bits to shift \return *this >>= n
             Natural & shl(const size_t n);          //!< \param n bits to shift \return *this <<= n
 
+            Natural & operator<<=(const size_t);
+            Natural & operator>>=(const size_t);
+
+            friend Natural  operator<<(const Natural &, const size_t);
+            friend Natural  operator>>(const Natural &, const size_t);
+
+
+
+
             //__________________________________________________________________
             //
             //

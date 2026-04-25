@@ -6,6 +6,7 @@
 #include "y/type/ints.hpp"
 #include "y/int-to-type.hpp"
 #include "y/exception.hpp"
+#include "y/apex/integer.hpp"
 
 namespace Yttrium
 {
@@ -38,7 +39,24 @@ namespace Yttrium
                 return ToIntegral<T>(Choice,text,size,varName,varPart);
             }
 
+            static apn ToDecAPN(const char *       text,
+                                const size_t       size,
+                                const char * const varName,
+                                const char * const varPart);
+
+            static apn ToHexAPN(const char *       text,
+                                const size_t       size,
+                                const char * const varName,
+                                const char * const varPart);
+
+            static apn ToAPN(const char * const text,
+                             const size_t       size,
+                             const char * const varName,
+                             const char * const varPart);
+
         private:
+            static bool HasHexaPrefix(const char * const text, const size_t size) noexcept;
+
             template <typename T> static inline
             T ToIntegral(const IntToType<false> &,
                          const char *        text,
