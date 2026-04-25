@@ -13,23 +13,53 @@ namespace Yttrium
 
     namespace ASCII
     {
-
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! ASCII conversions
+        //
+        //
+        //______________________________________________________________________
         struct Convert
         {
+            //__________________________________________________________________
+            //
+            //
             // Definitions
-            static const char * const CallSign;
+            //
+            //__________________________________________________________________
+            static const char * const CallSign; //!< "ASCII::Convert"
 
+
+            //__________________________________________________________________
+            //
+            //
+            //! conversion to uint64_t
+            //
+            //__________________________________________________________________
             static uint64_t ToU64(const char *       text,
                                   const size_t       size,
                                   const char * const varName,
                                   const char * const varPart);
 
+            //__________________________________________________________________
+            //
+            //
+            //! conversion to int64_t
+            //
+            //__________________________________________________________________
             static int64_t ToI64(const char *       text,
                                  const size_t       size,
                                  const char * const varName,
                                  const char * const varPart);
 
-
+            //__________________________________________________________________
+            //
+            //
+            //! conversion to any integral
+            //
+            //__________________________________________________________________
             template <typename T> static inline
             T ToIntegral(const char *       text,
                          const size_t       size,
@@ -40,27 +70,55 @@ namespace Yttrium
                 return ToIntegral<T>(Choice,text,size,varName,varPart);
             }
 
+            //__________________________________________________________________
+            //
+            //
+            //! decimal string to apn
+            //
+            //__________________________________________________________________
             static apn ToDecAPN(const char *       text,
                                 const size_t       size,
                                 const char * const varName,
                                 const char * const varPart);
 
+            //__________________________________________________________________
+            //
+            //
+            //! hexadecimal string to apn
+            //
+            //__________________________________________________________________
             static apn ToHexAPN(const char *       text,
                                 const size_t       size,
                                 const char * const varName,
                                 const char * const varPart);
 
+            //__________________________________________________________________
+            //
+            //
+            //! convert to apn
+            //
+            //__________________________________________________________________
             static apn ToAPN(const char * const text,
                              const size_t       size,
                              const char * const varName,
                              const char * const varPart);
 
+            //__________________________________________________________________
+            //
+            //
+            //! convert to apz
+            //
+            //__________________________________________________________________
             static apz ToAPZ(const char * const text,
                              const size_t       size,
                              const char * const varName,
                              const char * const varPart);
 
+            
+
         private:
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             static bool HasHexaPrefix(const char * const text, const size_t size) noexcept;
 
             template <typename T> static inline
@@ -95,8 +153,8 @@ namespace Yttrium
                     throw excp.signedFor(varName,varPart);
                 }
                 return (T)value;
-
             }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
         };
 
     }
