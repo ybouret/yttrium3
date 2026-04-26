@@ -18,7 +18,9 @@ Y_UTEST(exception)
     }
 
     try {
-        throw Specific::Exception("Testing","%s @ %s",test,__DATE__);
+        Specific::Exception excp("Testing","%s @ %s",test,__DATE__);
+        excp.signedFor("my","data");
+        throw excp;
     }
     catch(const Exception &excp)
     {
