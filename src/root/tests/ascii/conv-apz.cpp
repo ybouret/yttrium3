@@ -14,7 +14,7 @@ Y_UTEST(ascii_conv_apz)
         const char * const text = argv[i];
         const size_t       size = Yttrium_Strlen(text);
         std::cerr << "'" << text << "' => ";
-        const apz     res = ASCII::Convert::ToAPZ(text,size,"argv",0);
+        const apz     res = ASCII::Convert::ToAPZ(text,size);
         std::cerr << res << std::endl;
     }
 }

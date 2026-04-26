@@ -15,7 +15,7 @@ Y_UTEST(ascii_conv_flt)
         const char * const text = argv[i];
         const size_t       size = Yttrium_Strlen(text);
         std::cerr << "'" << text << "' => ";
-        const long double res = ASCII::Convert::ToFP<long double>(text,size,"argv",0);
+        const long double res = ASCII::Convert::ToFP<long double>(text,size);
         std::cerr << res << std::endl;
     }
 }

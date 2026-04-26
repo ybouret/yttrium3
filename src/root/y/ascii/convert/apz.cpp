@@ -9,19 +9,15 @@ namespace Yttrium
     {
 
         apz Convert:: ToAPZ(const char *       text,
-                            size_t             size,
-                            const char * const varName,
-                            const char * const varPart)
+                            size_t             size)
         {
             static const char    fn[] = "To apz: ";
 
 
             assert(text);
             if(size<=0)
-            {
-                Specific::Exception excp(Convert::CallSign,"%sempty text",fn);
-                throw excp.signedFor(varName,varPart);
-            }
+                throw Specific::Exception(Convert::CallSign,"%sempty text",fn);
+
 
             bool isNegative = false;
             if('-' == text[0])
@@ -31,8 +27,7 @@ namespace Yttrium
                 --size;
                 if(size<=0)
                 {
-                    Specific::Exception excp(CallSign,"%sempty text for negative",fn);
-                    throw excp.signedFor(varName,varPart);
+                    throw Specific::Exception(CallSign,"%sempty text for negative",fn);
                 }
             }
 
@@ -58,8 +53,7 @@ namespace Yttrium
                     default:
                         break;
                 }
-                Specific::Exception excp(CallSign,"%sinvalid decimal '%c'",fn,c);
-                throw excp.signedFor(varName,varPart);
+                throw Specific::Exception(CallSign,"%sinvalid decimal '%c'",fn,c);
             }
 
             if(isNegative) Sign::MakeOpposite( Coerce(res.s) );

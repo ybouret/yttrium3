@@ -10,9 +10,7 @@ namespace Yttrium
     {
 
         int64_t Convert:: ToI64(const char *       text,
-                                 size_t             size,
-                                 const char * const varName,
-                                 const char * const varPart)
+                                size_t             size)
         {
             static const char    fn[] = "To uint64_t: ";
             static const int64_t VMAX = IntegerFor<int64_t>::Maximum;
@@ -22,10 +20,8 @@ namespace Yttrium
 
             assert(text);
             if(size<=0)
-            {
-                Specific::Exception excp(Convert::CallSign,"%sempty text",fn);
-                throw excp.signedFor(varName,varPart);
-            }
+               throw Specific::Exception(Convert::CallSign,"%sempty text",fn);
+
 
             bool isNegative = false;
             if('-' == text[0])
@@ -34,10 +30,8 @@ namespace Yttrium
                 ++text;
                 --size;
                 if(size<=0)
-                {
-                    Specific::Exception excp(CallSign,"%sempty text for negative",fn);
-                    throw excp.signedFor(varName,varPart);
-                }
+                    throw Specific::Exception(CallSign,"%sempty text for negative",fn);
+
             }
 
             assert(size>0);
@@ -50,18 +44,12 @@ namespace Yttrium
                 if(isNegative)
                 {
                     if(res > VLOW)
-                    {
-                        Specific::Exception excp(CallSign,"%snegative overflow",fn);
-                        throw excp.signedFor(varName,varPart);
-                    }
+                        throw Specific::Exception(CallSign,"%snegative overflow",fn);
                 }
                 else
                 {
                     if(res>VTOP)
-                    {
-                        Specific::Exception excp(CallSign,"%spositive overflow",fn);
-                        throw excp.signedFor(varName,varPart);
-                    }
+                        throw Specific::Exception(CallSign,"%spositive overflow",fn);
                 }
 
                 res *= 10;
@@ -80,8 +68,7 @@ namespace Yttrium
                     default:
                         break;
                 }
-                Specific::Exception excp(CallSign,"%sinvalid decimal '%c'",fn,c);
-                throw excp.signedFor(varName,varPart);
+                throw Specific::Exception(CallSign,"%sinvalid decimal '%c'",fn,c);
             }
 
             if(res)

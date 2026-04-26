@@ -15,25 +15,39 @@ namespace Yttrium
     const char * const Exception:: CallSign = "Exception";
     
 
+    void Exception:: init() noexcept
+    {
+        Y_BZero(what_);
+        Y_BZero(info_);
+        Yttrium_Strcpy(what_,sizeof(what_),CallSign);
+    }
+
 
     Exception:: ~Exception() noexcept
     {
-        Y_BZero(info_);
+        init();
     }
 
     Exception::Exception(const Exception &_) noexcept :
     info_()
     {
+        Y_BCopy(what_,_);
         Y_BCopy(info_,_);
     }
 
-    Exception:: Exception() noexcept : info_() { Y_BZero(info_); }
-
-    Exception:: Exception(const char * const fmt,...) noexcept :
+    Exception:: Exception() noexcept :
+    what_(),
     info_()
     {
-        Y_BZero(info_);
+        init();
+    }
 
+    Exception:: Exception(const char * const fmt,...) noexcept :
+    what_(),
+    info_()
+    {
+        init();
+        
         assert(0!=fmt);
         va_list ap;
         va_start(ap,fmt);
@@ -44,7 +58,7 @@ namespace Yttrium
 
     const char * Exception:: what() const noexcept
     {
-        return CallSign;
+        return what_;
     }
 
     const char * Exception:: info() const noexcept
@@ -141,10 +155,9 @@ namespace Yttrium
     {
 
         Exception:: Exception() noexcept :
-        Yttrium::Exception(),
-        what_()
+        Yttrium::Exception()
         {
-            Y_BZero(what_);
+
         }
 
         Exception:: Exception(const char * const nature,
@@ -152,7 +165,6 @@ namespace Yttrium
                               ...) noexcept :
         Yttrium::Exception()
         {
-            Y_BZero(what_);
             Yttrium_Strcpy(what_,sizeof(what_),nature);
             va_list ap;
             va_start(ap,fmt);
@@ -162,18 +174,13 @@ namespace Yttrium
 
         Exception:: ~Exception() noexcept
         {
-            Y_BZero(what_);
         }
 
         Exception:: Exception(const Exception &_) noexcept : Yttrium::Exception(_)
         {
-            Y_BCopy(what_,_);
         }
 
-        const char * Exception:: what() const noexcept
-        {
-            return what_;
-        }
+
     }
 
 }

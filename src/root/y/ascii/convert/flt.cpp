@@ -15,18 +15,14 @@ namespace Yttrium
 
             template <typename T> static inline
             T FPConv(const char *       text,
-                     size_t             size,
-                     const char * const varName,
-                     const char * const varPart)
+                     size_t             size)
             {
                 static const T ten(10);
                 static const T tenth(0.1f);
 
                 assert(text);
-                if(size<=0) {
-                    Specific::Exception excp(Convert::CallSign,"%sempty text",fn);
-                    throw excp.signedFor(varName,varPart);
-                }
+                if(size<=0)
+                    throw Specific::Exception(Convert::CallSign,"%sempty text",fn);
 
                 bool isNegative = false;
                 if('-' == text[0])
@@ -34,10 +30,8 @@ namespace Yttrium
                     isNegative = true;
                     ++text;
                     --size;
-                    if(size<=0) {
-                        Specific::Exception excp(Convert::CallSign,"%sempty negative text",fn);
-                        throw excp.signedFor(varName,varPart);
-                    }
+                    if(size<=0)
+                        throw Specific::Exception(Convert::CallSign,"%sempty negative text",fn);
                 }
 
                 T res = 0;
@@ -66,8 +60,7 @@ namespace Yttrium
                         default:
                             break;
                     }
-                    Specific::Exception excp(Convert::CallSign,"%sinvalid '%c' in integer part",fn,c);
-                    throw excp.signedFor(varName,varPart);
+                    throw Specific::Exception(Convert::CallSign,"%sinvalid '%c' in integer part",fn,c);
                 }
                 goto RETURN;
 
@@ -97,8 +90,7 @@ namespace Yttrium
                             default:
                                 break;
                         }
-                        Specific::Exception excp(Convert::CallSign,"%sinvalid '%c' in fractional part",fn,c);
-                        throw excp.signedFor(varName,varPart);
+                        throw Specific::Exception(Convert::CallSign,"%sinvalid '%c' in fractional part",fn,c);
                     }
                 }
                 goto RETURN;
@@ -106,8 +98,7 @@ namespace Yttrium
             EXPONENT_PART:
                 {
                     if(size<=0) {
-                        Specific::Exception excp(Convert::CallSign,"%sempty exponent",fn);
-                        throw excp.signedFor(varName,varPart);
+                        throw Specific::Exception(Convert::CallSign,"%sempty exponent",fn);
                     }
                     bool negativeExponent = false;
 
@@ -117,8 +108,7 @@ namespace Yttrium
                         --size;
                         negativeExponent = true;
                         if(size<=0) {
-                            Specific::Exception excp(Convert::CallSign,"%sempty negative exponent",fn);
-                            throw excp.signedFor(varName,varPart);
+                            throw Specific::Exception(Convert::CallSign,"%sempty negative exponent",fn);
                         }
                     }
 
@@ -127,8 +117,7 @@ namespace Yttrium
                         ++text;
                         --size;
                         if(size<=0) {
-                            Specific::Exception excp(Convert::CallSign,"%sempty positive exponent",fn);
-                            throw excp.signedFor(varName,varPart);
+                            throw Specific::Exception(Convert::CallSign,"%sempty positive exponent",fn);
                         }
                     }
 
@@ -154,8 +143,7 @@ namespace Yttrium
                             case '9': xp += 9; continue;
                             default: break;
                         }
-                        Specific::Exception excp(Convert::CallSign,"%sinvalid '%c' in exponent",fn,c);
-                        throw excp.signedFor(varName,varPart);
+                        throw Specific::Exception(Convert::CallSign,"%sinvalid '%c' in exponent",fn,c);
                     }
                     if(xp>0)
                         res *= ipower<T>( negativeExponent ? tenth : ten, xp);
@@ -176,31 +164,25 @@ namespace Yttrium
 
         template <>
         float Convert:: ToFP<float>(const char * const text,
-                                    const size_t       size,
-                                    const char * const varName,
-                                    const char * const varPart)
+                                    const size_t       size)
         {
 
-            return FPConv<float>(text,size,varName,varPart);
+            return FPConv<float>(text,size);
         }
 
 
         template <>
         double Convert:: ToFP<double>(const char * const text,
-                                      const size_t       size,
-                                      const char * const varName,
-                                      const char * const varPart)
+                                      const size_t       size)
         {
-            return FPConv<double>(text,size,varName,varPart);
+            return FPConv<double>(text,size);
         }
 
         template <>
         long double Convert:: ToFP<long double>(const char * const text,
-                                                const size_t       size,
-                                                const char * const varName,
-                                                const char * const varPart)
+                                                const size_t       size)
         {
-            return FPConv<double>(text,size,varName,varPart);
+            return FPConv<double>(text,size);
         }
 
     }

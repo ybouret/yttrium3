@@ -12,26 +12,19 @@ namespace Yttrium
             static const char fn[] = "To uint64_t: ";
 
             static inline uint64_t ToHex64(const char *      text,
-                                           const size_t      size,
-                                           const char *const varName,
-                                           const char *const varPart)
+                                           const size_t      size)
             {
                 static const uint64_t VMAX = IntegerFor<uint64_t>::Maximum;
                 static const uint64_t VTOP = VMAX>>4;
                 if(size<=0)
-                {
-                    Specific::Exception excp(Convert::CallSign,"%sempty hexadecimal text",fn);
-                    throw excp.signedFor(varName,varPart);
-                }
+                    throw Specific::Exception(Convert::CallSign,"%sempty hexadecimal text",fn);
+
 
                 uint64_t              res  = 0;
                 for(size_t i=size;i>0;--i)
                 {
                     if(res>VTOP)
-                    {
-                        Specific::Exception excp(Convert::CallSign,"%shexadecimal overflow",fn);
-                        throw excp.signedFor(varName,varPart);
-                    }
+                        throw Specific::Exception(Convert::CallSign,"%shexadecimal overflow",fn);
 
                     res <<= 4;
 
@@ -64,9 +57,7 @@ namespace Yttrium
                         default:
                             break;
                     }
-                    Specific::Exception excp(Convert::CallSign,"%sinvalid hexadecimal '%c'",fn,c);
-                    throw excp.signedFor(varName,varPart);
-
+                    throw Specific::Exception(Convert::CallSign,"%sinvalid hexadecimal '%c'",fn,c);
                 }
 
                 return res;
@@ -92,17 +83,15 @@ namespace Yttrium
 
 
         uint64_t Convert:: ToU64(const char *      text,
-                                 const size_t       size,
-                                 const char *const varName,
-                                 const char *const varPart)
+                                 const size_t       size)
         {
 
-            if(size<=0) { Specific::Exception excp(CallSign,"%sempty text",fn); throw excp.signedFor(varName,varPart); }
+            if(size<=0) throw Specific::Exception(CallSign,"%sempty text",fn);
 
             assert(text);
 
             if( HasHexaPrefix(text,size ))
-                return ToHex64(text+2,size-2,varName,varPart);
+                return ToHex64(text+2,size-2);
             else
             {
                 static const uint64_t VMAX = IntegerFor<uint64_t>::Maximum;
@@ -112,10 +101,8 @@ namespace Yttrium
                 for(size_t i=size;i>0;--i)
                 {
                     if(res>VTOP)
-                    {
-                        Specific::Exception excp(CallSign,"%sdecimal overflow",fn);
-                        throw excp.signedFor(varName,varPart);
-                    }
+                        throw Specific::Exception(CallSign,"%sdecimal overflow",fn);
+
                     res *= 10;
 
                     const char c = *(text++);
@@ -134,8 +121,7 @@ namespace Yttrium
                         default:
                             break;
                     }
-                    Specific::Exception excp(CallSign,"%sinvalid decimal '%c'",fn,c);
-                    throw excp.signedFor(varName,varPart);
+                    throw Specific::Exception(CallSign,"%sinvalid decimal '%c'",fn,c);
                 }
 
                 return res;

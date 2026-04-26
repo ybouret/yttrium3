@@ -63,9 +63,7 @@ namespace Yttrium
              */
             //__________________________________________________________________
             static uint64_t ToU64(const char *       text,
-                                  const size_t       size,
-                                  const char * const varName,
-                                  const char * const varPart);
+                                  const size_t       size);
 
             //__________________________________________________________________
             //
@@ -79,9 +77,7 @@ namespace Yttrium
              */
             //__________________________________________________________________
             static int64_t ToI64(const char *       text,
-                                 const size_t       size,
-                                 const char * const varName,
-                                 const char * const varPart);
+                                 const size_t       size);
 
             //__________________________________________________________________
             //
@@ -97,12 +93,10 @@ namespace Yttrium
             //__________________________________________________________________
             template <typename T> static inline
             T ToIntegral(const char *       text,
-                         const size_t       size,
-                         const char * const varName,
-                         const char * const varPart)
+                         const size_t       size)
             {
                 static const IntToType< IsSignedInt<T>::Value > Choice = {};
-                return ToIntegral<T>(Choice,text,size,varName,varPart);
+                return ToIntegral<T>(Choice,text,size);
             }
 
             //__________________________________________________________________
@@ -117,9 +111,7 @@ namespace Yttrium
              */
             //__________________________________________________________________
             static apn ToDecAPN(const char *       text,
-                                const size_t       size,
-                                const char * const varName,
-                                const char * const varPart);
+                                const size_t       size);
 
             //__________________________________________________________________
             //
@@ -133,9 +125,7 @@ namespace Yttrium
              */
             //__________________________________________________________________
             static apn ToHexAPN(const char *       text,
-                                const size_t       size,
-                                const char * const varName,
-                                const char * const varPart);
+                                const size_t       size);
 
             //__________________________________________________________________
             //
@@ -149,9 +139,7 @@ namespace Yttrium
              */
             //__________________________________________________________________
             static apn ToAPN(const char * const text,
-                             const size_t       size,
-                             const char * const varName,
-                             const char * const varPart);
+                             const size_t       size);
 
             //__________________________________________________________________
             //
@@ -165,16 +153,12 @@ namespace Yttrium
              */
             //__________________________________________________________________
             static apz ToAPZ(const char * const text,
-                             const size_t       size,
-                             const char * const varName,
-                             const char * const varPart);
+                             const size_t       size);
 
 
             template <typename T> static
             T ToAP(const char * const text,
-                   const size_t       size,
-                   const char * const varName,
-                   const char * const varPart);
+                   const size_t       size);
 
             //__________________________________________________________________
             //
@@ -189,9 +173,7 @@ namespace Yttrium
             //__________________________________________________________________
             template <typename T> static
             T ToFP(const char * const text,
-                   const size_t       size,
-                   const char * const varName,
-                   const char * const varPart);
+                   const size_t       size);
 
 
 
@@ -207,7 +189,19 @@ namespace Yttrium
                  const char * const varPart)
             {
                 static const IntToType< CategoryOf<T>::Value > Selected = {};
-                return To<T>(Selected,text,size,varName,varPart);
+                try
+                {
+                    return To<T>(Selected,text,size);
+                }
+                catch(Exception &excp)
+                {
+                    throw excp.signedFor(varName,varPart);
+                }
+                catch(...)
+                {
+                    throw;
+                }
+
             }
 
         private:
@@ -217,32 +211,26 @@ namespace Yttrium
             template <typename T> static inline
             T To(const IntToType<UseIP> &,
                  const char * const text,
-                 const size_t       size,
-                 const char * const varName,
-                 const char * const varPart)
+                 const size_t       size)
             {
-                return ToIntegral<T>(text,size,varName,varPart);
+                return ToIntegral<T>(text,size);
             }
 
 
             template <typename T> static inline
             T To(const IntToType<UseAP> &,
                  const char * const text,
-                 const size_t       size,
-                 const char * const varName,
-                 const char * const varPart)
+                 const size_t       size)
             {
-                return ToAP<T>(text,size,varName,varPart);
+                return ToAP<T>(text,size);
             }
 
             template <typename T> static inline
             T To(const IntToType<UseFP> &,
                  const char * const text,
-                 const size_t       size,
-                 const char * const varName,
-                 const char * const varPart)
+                 const size_t       size)
             {
-                return ToFP<T>(text,size,varName,varPart);
+                return ToFP<T>(text,size);
             }
 
 
@@ -251,34 +239,25 @@ namespace Yttrium
             template <typename T> static inline
             T ToIntegral(const IntToType<false> &,
                          const char *        text,
-                         const size_t        size,
-                         const char * const  varName,
-                         const char * const  varPart)
+                         const size_t        size)
             {
                 static const uint64_t MaxValue = IntegerFor<T>::Maximum;
-                const uint64_t        value    = ToU64(text,size,varName,varPart);
-                if(value>MaxValue) {
-                    Specific::Exception excp(CallSign,"overflow for unsigned integral");
-                    throw excp.signedFor(varName,varPart);
-                }
+                const uint64_t        value    = ToU64(text,size);
+                if(value>MaxValue) throw Specific::Exception(CallSign,"overflow for unsigned integral");
                 return (T)value;
             }
 
             template <typename T> static inline
             T ToIntegral(const IntToType<true> &,
                          const char *        text,
-                         const size_t        size,
-                         const char * const  varName,
-                         const char * const  varPart)
+                         const size_t        size)
             {
 
                 static const int64_t MaxValue = IntegerFor<T>::Maximum;
                 static const int64_t MinValue = IntegerFor<T>::Minimum;
-                const int64_t        value    = ToI64(text,size,varName,varPart);
-                if(value>MaxValue||value<MinValue) {
-                    Specific::Exception excp(CallSign,"overflow for signed integeral");
-                    throw excp.signedFor(varName,varPart);
-                }
+                const int64_t        value    = ToI64(text,size);
+                if(value>MaxValue||value<MinValue)
+                    throw Specific::Exception(CallSign,"overflow for signed integeral");
                 return (T)value;
             }
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)

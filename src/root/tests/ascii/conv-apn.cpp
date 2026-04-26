@@ -13,7 +13,7 @@ Y_UTEST(ascii_conv_apn)
         const char * const text = argv[i];
         const size_t       size = Yttrium_Strlen(text);
         std::cerr << "'" << text << "' => ";
-        const apn     res = ASCII::Convert::ToAPN(text,size,"argv",0);
+        const apn     res = ASCII::Convert::ToAPN(text,size);
         std::cerr << res << std::endl;
     }
 }

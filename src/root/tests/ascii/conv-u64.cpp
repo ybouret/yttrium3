@@ -12,7 +12,7 @@ Y_UTEST(ascii_conv_u64)
         const char * const text = argv[i];
         const size_t       size = Yttrium_Strlen(text);
         std::cerr << "'" << text << "' => ";
-        const uint64_t     u64 = ASCII::Convert::ToU64(text,size,"argv",0);
+        const uint64_t     u64 = ASCII::Convert::ToU64(text,size);
         std::cerr << u64 << std::endl;
     }
 }

@@ -10,20 +10,16 @@ namespace Yttrium
 
         template <>
         apz Convert:: ToAP<apz>(const char * const text,
-                                const size_t       size,
-                                const char * const varName,
-                                const char * const varPart)
+                                const size_t       size)
         {
-            return ToAPZ(text,size,varName,varPart);
+            return ToAPZ(text,size);
         }
 
         template <>
         apn Convert:: ToAP<apn>(const char * const text,
-                                const size_t       size,
-                                const char * const varName,
-                                const char * const varPart)
+                                const size_t       size)
         {
-            return ToAPN(text,size,varName,varPart);
+            return ToAPN(text,size);
         }
     }
 

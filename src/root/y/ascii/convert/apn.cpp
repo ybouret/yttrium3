@@ -13,17 +13,13 @@ namespace Yttrium
             static const char fn[] = "To apn: ";
         }
 
-        apn Convert:: ToHexAPN(const char *text, const size_t size, const char *const varName, const char *const varPart)
+        apn Convert:: ToHexAPN(const char *text, const size_t size)
         {
             assert(text);
-            if(size<=0) {
-                Specific::Exception excp(CallSign,"%sempty hexadecimal text",fn);
-                throw excp.signedFor(varName,varPart);
-            }
+            if(size<=0)
+                throw Specific::Exception(CallSign,"%sempty hexadecimal text",fn);
 
             apn res = 0;
-
-
             for(size_t i=size;i>0;--i)
             {
                 res <<= 4;
@@ -56,8 +52,7 @@ namespace Yttrium
                     default:
                         break;
                 }
-                Specific::Exception excp(Convert::CallSign,"%sinvalid hexadecimal '%c'",fn,c);
-                throw excp.signedFor(varName,varPart);
+                throw Specific::Exception(Convert::CallSign,"%sinvalid hexadecimal '%c'",fn,c);
             }
 
             return res;
@@ -65,15 +60,12 @@ namespace Yttrium
 
 
         apn Convert:: ToDecAPN(const char *       text,
-                               const size_t       size,
-                               const char * const varName,
-                               const char * const varPart)
+                               const size_t       size)
         {
             assert(text);
-            if(size<=0) {
-                Specific::Exception excp(CallSign,"%sempty decimal text",fn);
-                throw excp.signedFor(varName,varPart);
-            }
+            if(size<=0)
+                throw Specific::Exception(CallSign,"%sempty decimal text",fn);
+
 
             apn res = 0;
             for(size_t i=size;i>0;--i)
@@ -96,31 +88,26 @@ namespace Yttrium
                     default:
                         break;
                 }
-                Specific::Exception excp(CallSign,"%sinvalid decimal '%c'",fn,c);
-                throw excp.signedFor(varName,varPart);
+                throw Specific::Exception(CallSign,"%sinvalid decimal '%c'",fn,c);
             }
 
             return res;
         }
 
         apn Convert:: ToAPN(const char * const text,
-                            const size_t       size,
-                            const char * const varName,
-                            const char * const varPart)
+                            const size_t       size)
         {
             if(size<=0)
-            {
-                Specific::Exception excp(CallSign,"%sempty text",fn);
-                throw excp.signedFor(varName,varPart);
-            }
+                throw Specific::Exception(CallSign,"%sempty text",fn);
+
 
             if(HasHexaPrefix(text,size))
             {
-                return ToHexAPN(text+2,size-2,varName,varPart);
+                return ToHexAPN(text+2,size-2);
             }
             else
             {
-                return ToDecAPN(text,size,varName,varPart);
+                return ToDecAPN(text,size);
             }
             
         }

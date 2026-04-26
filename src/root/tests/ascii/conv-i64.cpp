@@ -13,7 +13,7 @@ Y_UTEST(ascii_conv_i64)
         const char * const text = argv[i];
         const size_t       size = Yttrium_Strlen(text);
         std::cerr << "'" << text << "' => ";
-        const int64_t     i64 = ASCII::Convert::ToI64(text,size,"argv",0);
+        const int64_t     i64 = ASCII::Convert::ToI64(text,size);
         std::cerr << i64 << std::endl;
     }
 }

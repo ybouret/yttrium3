@@ -28,6 +28,7 @@ namespace Yttrium
         // Definitions
         //
         //______________________________________________________________________
+        static const size_t       WhatLength = 128; //!< internal bytes
         static const size_t       InfoLength = 256; //!< internal length for what
         static const char * const CallSign;         //!< "Exception"
         
@@ -40,7 +41,7 @@ namespace Yttrium
 
         //! setup for formatted info \param fmt format string
         explicit Exception(const char * const fmt,...) noexcept Y_Printf_Check(2,3);
-        explicit Exception()                           noexcept; //!< setup emptu
+        explicit Exception()                           noexcept; //!< setup empty
         virtual ~Exception()         noexcept; //!< cleanup
         Exception(const Exception &) noexcept; //!< duplicate
 
@@ -83,7 +84,10 @@ namespace Yttrium
 
     private:
         Y_Disable_Assign(Exception); //!< discarded
+        void init() noexcept;
+        
     protected:
+        char what_[WhatLength];      //!< nature
         char info_[InfoLength];      //!< information
     };
 
@@ -101,14 +105,6 @@ namespace Yttrium
         class Exception : public Yttrium::Exception
         {
         public:
-            //__________________________________________________________________
-            //
-            //
-            // Definitions
-            //
-            //__________________________________________________________________
-            static const size_t WhatLength = 128; //!< internal bytes
-
 
             //__________________________________________________________________
             //
@@ -122,20 +118,12 @@ namespace Yttrium
             Exception(const Exception &) noexcept; //!< duplicate
             virtual ~Exception()         noexcept; //!< cleanup
 
-            //__________________________________________________________________
-            //
-            //
-            // Interface
-            //
-            //__________________________________________________________________
-            virtual const char * what() const noexcept; //!< specific reason \return what_
 
         private:
             Y_Disable_Assign(Exception); //!< discarded
                                          //!
         protected:
             Exception()   noexcept; //!< setup empty
-            char what_[WhatLength]; //!< nature
         };
     }
 
