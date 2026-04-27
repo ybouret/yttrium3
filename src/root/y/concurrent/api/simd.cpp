@@ -8,7 +8,8 @@ namespace Yttrium
 
         SIMD:: Arguments:: Arguments(const CopyOf_ &, void * const user) noexcept :
         addr(user),
-        arg1(0)
+        arg1(0),
+        arg2(0)
         {
         }
 
