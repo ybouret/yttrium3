@@ -50,6 +50,7 @@ y/container/contiguous
 y/container/cxx
 y/container/sequence
 y/container/algorithm
+y/container/matrix
 y/pointer
 y/utest
 y/stream

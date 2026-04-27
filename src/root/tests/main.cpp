@@ -106,6 +106,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(container_cxx_series);
     Y_UTEST(container_vector);
     Y_UTEST(container_list);
+    Y_UTEST(container_matrix);
 
     Y_UTEST(apex_k);
     Y_UTEST(apex_k_bits);
