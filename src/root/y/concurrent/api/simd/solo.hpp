@@ -44,7 +44,7 @@ namespace Yttrium
 
         private:
             virtual const Context & ask(const size_t) const noexcept;
-            
+
             Y_Disable_Copy_And_Assign(Solo); //!< discarded
             FakeLock sync;                   //!< sequential lock
             Context  full;                   //!< full range context

@@ -30,7 +30,7 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            typedef void (SIMD::*Meth)(void);
+            typedef void (SIMD::*Meth)(void); //!< method pointer alias
 
             //__________________________________________________________________
             //
@@ -79,6 +79,10 @@ namespace Yttrium
 
 
                 //! setup with object and method
+                /**
+                 \param object host
+                 \param method host.method(context)
+                 */
                 template <typename OBJECT, typename METHOD> inline
                 Arguments(OBJECT &object, METHOD method) noexcept :
                 addr( (void*)&object ),
@@ -89,6 +93,11 @@ namespace Yttrium
                 }
 
                 //! setup with object, method and argument
+                /**
+                 \param object host
+                 \param method host.method(context,usr1)
+                 \param usr1   first user argument
+                 */
                 template <typename OBJECT, typename METHOD, typename ARG1> inline
                 Arguments(OBJECT &object, METHOD method, ARG1 &usr1) noexcept :
                 addr( (void*)&object ),
@@ -100,6 +109,12 @@ namespace Yttrium
                 }
 
                 //! setup with object, method and two arguments
+                /**
+                 \param object host
+                 \param method host.method(context,usr1)
+                 \param usr1   first user argument
+                 \param usr2   second user argument
+                 */
                 template <typename OBJECT, typename METHOD, typename ARG1, typename ARG2> inline
                 Arguments(OBJECT &object, METHOD method, ARG1 &usr1, ARG2 &usr2) noexcept :
                 addr( (void*) &object ),
@@ -110,9 +125,7 @@ namespace Yttrium
 
                 }
 
-
-
-
+                
                 //______________________________________________________________
                 //
                 // Members
@@ -125,6 +138,7 @@ namespace Yttrium
             private:
                 Y_Disable_Copy_And_Assign(Arguments); //!< discarded
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
                 template <typename METHOD> inline
                 Meth MethodToMeth(METHOD method) noexcept
                 {
@@ -134,6 +148,7 @@ namespace Yttrium
                     } alias =  { method };
                     return alias.m;
                 }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             };
 
             typedef void (*Procedure)(Context &, Arguments &); //!< alias
@@ -194,10 +209,11 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
-            // Methods to run objects
+            // Methods to invoke methods
             //
             //__________________________________________________________________
 
+            //! invoke object.method(context) \param object host \param method to invoke
             template <typename OBJECT,typename METHOD> inline
             void operator()(OBJECT &object, METHOD method)
             {
@@ -210,6 +226,12 @@ namespace Yttrium
                 run();
             }
 
+            //! invoke object.method(context,arg1)
+            /**
+             \param object host
+             \param method to invoke
+             \param arg1   first argument
+             */
             template <typename OBJECT,typename METHOD, typename ARG1> inline
             void operator()(OBJECT &object, METHOD method, ARG1 &arg1)
             {
@@ -222,7 +244,13 @@ namespace Yttrium
                 run();
             }
 
-
+            //! invoke object.method(context,arg1,arg2)
+            /**
+             \param object host
+             \param method to invoke
+             \param arg1   first argument
+             \param arg2   second argument
+             */
             template <typename OBJECT,typename METHOD, typename ARG1, typename ARG2> inline
             void operator()(OBJECT &object, METHOD method, ARG1 &arg1, ARG2 &arg2)
             {
@@ -237,7 +265,7 @@ namespace Yttrium
 
 
         protected:
-            virtual void run() = 0; //!< run procederue on each context with arugment
+            virtual void run() = 0; //!< run procedure on each context with optional argument(s)
             Procedure  procedure;   //!< temporary procedure
             Arguments *arguments;   //!< temporary arguments
 
