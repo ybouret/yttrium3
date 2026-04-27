@@ -32,6 +32,37 @@ namespace
         }
     }
 
+    class Dummy
+    {
+    public:
+        Dummy() noexcept {}
+        ~Dummy() noexcept {}
+
+
+        void par(Concurrent::Context &context)
+        {
+            {
+                Y_Lock(context.sync);
+                (std::cerr << "Dummy in " << context << std::endl).flush();
+            }
+        }
+
+        void par1( Concurrent::Context &context, const size_t & total )
+        {
+            size_t offset = 1;
+            const size_t length = context.part(total,offset);
+
+            {
+                Y_Lock(context.sync);
+                (std::cerr << "Dummy in " << context << " with " << total << " : " << offset << "+" << length << std::endl).flush();
+            }
+        }
+
+
+    private:
+        Y_Disable_Copy_And_Assign(Dummy);
+    };
+
 }
 
 
@@ -47,12 +78,21 @@ Y_UTEST(concurrent_simd)
 
     solo(DoSomething);
     crew(DoSomething);
+    std::cerr << std::endl;
 
     const size_t total = 10;
     solo(DoSomething1,total);
     crew(DoSomething1,total);
+    std::cerr << std::endl;
 
+    Dummy dummy;
+    solo(dummy, & Dummy::par);
+    crew(dummy, & Dummy::par);
+    std::cerr << std::endl;
 
+    solo(dummy, & Dummy::par1, total);
+    crew(dummy, & Dummy::par1, total);
+    std::cerr << std::endl;
 
     std::cerr << "-- leaving " << test << std::endl << std::endl;
 }

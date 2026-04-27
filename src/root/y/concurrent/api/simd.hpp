@@ -29,6 +29,7 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
+            typedef void (SIMD::*Meth)(void);
 
             //__________________________________________________________________
             //
@@ -39,6 +40,7 @@ namespace Yttrium
             class Arguments
             {
             public:
+                
                 //______________________________________________________________
                 //
                 // C++
@@ -55,7 +57,8 @@ namespace Yttrium
                 Arguments(void * const user, ARG1 &usr1) noexcept :
                 addr(user),
                 arg1( (void*)&usr1 ),
-                arg2(0)
+                arg2(0),
+                meth(0)
                 {
                 }
 
@@ -73,6 +76,31 @@ namespace Yttrium
                 {
                 }
 
+
+                //! setup with object and method
+                template <typename OBJECT, typename METHOD> inline
+                Arguments(OBJECT &object, METHOD method) noexcept :
+                addr( (void*)&object ),
+                arg1(0), arg2(0),
+                meth( MethodToMeth(method) )
+                {
+
+                }
+
+                //! setup with object, method and argument
+                template <typename OBJECT, typename METHOD, typename ARG1> inline
+                Arguments(OBJECT &object, METHOD method, ARG1 &usr1) noexcept :
+                addr( (void*)&object ),
+                arg1( (void*) &usr1 ),
+                arg2(0),
+                meth( MethodToMeth(method) )
+                {
+
+                }
+
+
+
+
                 //______________________________________________________________
                 //
                 // Members
@@ -80,10 +108,20 @@ namespace Yttrium
                 void * const addr; //!< anonymous address
                 void * const arg1; //!< first  argument address
                 void * const arg2; //!< second argument address
-
+                Meth   const meth; //!< method pointer
 
             private:
                 Y_Disable_Copy_And_Assign(Arguments); //!< discarded
+
+                template <typename METHOD> inline
+                Meth MethodToMeth(METHOD method) noexcept
+                {
+                    union {
+                        METHOD M;
+                        Meth   m;
+                    } alias =  { method };
+                    return alias.m;
+                }
             };
 
             typedef void (*Procedure)(Context &, Arguments &); //!< alias
@@ -100,7 +138,7 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
-            // Methods
+            // Methods to run functions
             //
             //__________________________________________________________________
 
@@ -138,6 +176,37 @@ namespace Yttrium
                 Arguments                    args((void*)func,arg1,arg2);
                 const Temporary<Arguments *> tmpArgs(arguments,&args);
                 const Temporary<Procedure>   tmpProc(procedure,CallFunc2<ARG1,ARG2>);
+                run();
+            }
+
+            //__________________________________________________________________
+            //
+            //
+            // Methods to run objects
+            //
+            //__________________________________________________________________
+
+            template <typename OBJECT,typename METHOD> inline
+            void operator()(OBJECT &object, METHOD method)
+            {
+                assert(!procedure);
+                assert(!arguments);
+                assert(method);
+                Arguments                    args(object,method);
+                const Temporary<Arguments *> tmpArgs(arguments,&args);
+                const Temporary<Procedure>   tmpProc(procedure,CallMeth0<OBJECT,METHOD>);
+                run();
+            }
+
+            template <typename OBJECT,typename METHOD, typename ARG1> inline
+            void operator()(OBJECT &object, METHOD method, ARG1 &arg1)
+            {
+                assert(!procedure);
+                assert(!arguments);
+                assert(method);
+                Arguments                    args(object,method,arg1);
+                const Temporary<Arguments *> tmpArgs(arguments,&args);
+                const Temporary<Procedure>   tmpProc(procedure,CallMeth1<OBJECT,METHOD,ARG1>);
                 run();
             }
 
@@ -179,6 +248,36 @@ namespace Yttrium
                 assert(alias.func);
                 alias.func(ctx, *static_cast<ARG1*>(args.arg1), *static_cast<ARG2*>(args.arg2) );
             }
+
+
+            template <typename OBJECT, typename METHOD> static
+            void CallMeth0(Context &ctx, Arguments &args)
+            {
+                assert(args.addr);
+                assert(args.meth);
+                OBJECT & object = *static_cast<OBJECT *>(args.addr);
+                union {
+                    Meth   m;
+                    METHOD M;
+                } alias = { args.meth };
+                (object.*alias.M)(ctx);
+            }
+
+            template <typename OBJECT, typename METHOD, typename ARG1> static
+            void CallMeth1(Context &ctx, Arguments &args)
+            {
+                assert(args.addr);
+                assert(args.meth);
+                assert(args.arg1);
+                OBJECT & object = *static_cast<OBJECT *>(args.addr);
+                union {
+                    Meth   m;
+                    METHOD M;
+                } alias = { args.meth };
+                (object.*alias.M)(ctx,*static_cast<ARG1 *>(args.arg1));
+            }
+
+
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
