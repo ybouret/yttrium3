@@ -9,6 +9,7 @@
 #include "y/type/copy-of.hpp"
 #include "y/swap.hpp"
 #include "y/ability/releasable.hpp"
+#include "y/hide.hpp"
 
 namespace Yttrium
 {
@@ -144,7 +145,7 @@ namespace Yttrium
         //______________________________________________________________________
         //
         //
-        // Interfce
+        // Interface
         //
         //______________________________________________________________________
         inline virtual void release() noexcept { deallocate(); }
@@ -212,6 +213,17 @@ namespace Yttrium
             CoerceSwap(row,other.row);
             return *this;
         }
+
+        inline void swapRows(const size_t i, const size_t j) noexcept
+        {
+            assert(i>=1); assert(i<=rows);
+            assert(j>=1); assert(j<=rows);
+            char * a = static_cast<char *>(Hide::Address( &row[i][1] ));
+            char * b = static_cast<char *>(Hide::Address( &row[j][1] ));
+            for(size_t i=cols*sizeof(T);i>0;--i)
+                Swap(*(a++),*(b++));
+        }
+
 
     private:
         size_t              length; //!< bytes

@@ -56,6 +56,10 @@ namespace
                     std::cerr << mm << std::endl;
                 }
 
+                if(r>0)
+                {
+                    m.swapRows( ran.in<size_t>(1,r), ran.in<size_t>(1,r) );
+                }
 
             }
         }
