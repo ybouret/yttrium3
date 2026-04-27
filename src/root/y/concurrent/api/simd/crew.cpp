@@ -9,6 +9,7 @@
 #include "y/memory/buffer/classified.hpp"
 #include "y/memory/allocator/archon.hpp"
 #include "y/type/destruct.hpp"
+#include "y/container/cxx/array.hpp"
 
 #include <iostream>
 
@@ -34,7 +35,8 @@ namespace Yttrium
             mutex(),
             cycle(),
             comms(),
-            threads( level )
+            threads( level ),
+            metactx( level )
             {
                 init();
             }
@@ -46,15 +48,16 @@ namespace Yttrium
 
             void run() noexcept;
 
-            const size_t level;
-            size_t       ready;
-            size_t       inuse;
-            Procedure   &proc;
-            Arguments * &args;
-            Mutex        mutex;
-            Condition    cycle;
-            Condition    comms;
-            Threads      threads;
+            const size_t       level;
+            size_t             ready;
+            size_t             inuse;
+            Procedure   &      proc;
+            Arguments * &      args;
+            Mutex              mutex;
+            Condition          cycle;
+            Condition          comms;
+            Threads            threads;
+            CxxArray<Context*> metactx;
 
         private:
             Y_Disable_Copy_And_Assign(Code);
@@ -127,6 +130,7 @@ namespace Yttrium
             //------------------------------------------------------------------
             mutex.lock(); assert(ready<level);
             Context context(level,ready,mutex);
+            metactx[context.indx] = &context;
             (std::cerr << context << " is ready" << std::endl).flush();
             ++ready;
             comms.signal();
@@ -196,6 +200,19 @@ namespace Yttrium
             assert(arguments);
             code->run();
         }
+
+        size_t Crew:: size()     const noexcept { assert(code); return code->level; }
+        size_t Crew:: capacity() const noexcept { assert(code); return code->level; }
+
+        const Context & Crew:: ask(const size_t i) const noexcept
+        {
+            assert(code);
+            assert(i>0);
+            assert(i<=code->level);
+            assert(0!=code->metactx[i]);
+            return *(code->metactx[i]);
+        }
+
 
     }
 

@@ -6,6 +6,7 @@
 #include "y/concurrent/api/context.hpp"
 #include "y/type/copy-of.hpp"
 #include "y/type/temporary.hpp"
+#include "y/container/writable.hpp"
 
 namespace Yttrium
 {
@@ -20,7 +21,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class SIMD
+        class SIMD : public Writable<Context>
         {
         public:
             //__________________________________________________________________
@@ -93,6 +94,17 @@ namespace Yttrium
                 addr( (void*)&object ),
                 arg1( (void*) &usr1 ),
                 arg2(0),
+                meth( MethodToMeth(method) )
+                {
+
+                }
+
+                //! setup with object, method and two arguments
+                template <typename OBJECT, typename METHOD, typename ARG1, typename ARG2> inline
+                Arguments(OBJECT &object, METHOD method, ARG1 &usr1, ARG2 &usr2) noexcept :
+                addr( (void*) &object ),
+                arg1( (void*) &usr1 ),
+                arg2( (void*) &usr2 ),
                 meth( MethodToMeth(method) )
                 {
 
@@ -211,6 +223,19 @@ namespace Yttrium
             }
 
 
+            template <typename OBJECT,typename METHOD, typename ARG1, typename ARG2> inline
+            void operator()(OBJECT &object, METHOD method, ARG1 &arg1, ARG2 &arg2)
+            {
+                assert(!procedure);
+                assert(!arguments);
+                assert(method);
+                Arguments                    args(object,method,arg1,arg2);
+                const Temporary<Arguments *> tmpArgs(arguments,&args);
+                const Temporary<Procedure>   tmpProc(procedure,CallMeth2<OBJECT,METHOD,ARG1,ARG2>);
+                run();
+            }
+
+
         protected:
             virtual void run() = 0; //!< run procederue on each context with arugment
             Procedure  procedure;   //!< temporary procedure
@@ -275,6 +300,23 @@ namespace Yttrium
                     METHOD M;
                 } alias = { args.meth };
                 (object.*alias.M)(ctx,*static_cast<ARG1 *>(args.arg1));
+            }
+
+            template <typename OBJECT, typename METHOD, typename ARG1, typename ARG2> static
+            void CallMeth2(Context &ctx, Arguments &args)
+            {
+                assert(args.addr);
+                assert(args.meth);
+                assert(args.arg1);
+                assert(args.arg2);
+                OBJECT & object = *static_cast<OBJECT *>(args.addr);
+                union {
+                    Meth   m;
+                    METHOD M;
+                } alias = { args.meth };
+                (object.*alias.M)(ctx,
+                                  *static_cast<ARG1 *>(args.arg1),
+                                  *static_cast<ARG2 *>(args.arg2));
             }
 
 

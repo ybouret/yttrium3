@@ -31,7 +31,20 @@ namespace Yttrium
             explicit Solo() noexcept; //!< setup
             virtual ~Solo() noexcept; //!< cleanup
 
+
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
+            virtual size_t size()     const noexcept;
+            virtual size_t capacity() const noexcept;
+
+
         private:
+            virtual const Context & ask(const size_t) const noexcept;
+            
             Y_Disable_Copy_And_Assign(Solo); //!< discarded
             FakeLock sync;                   //!< sequential lock
             Context  full;                   //!< full range context
