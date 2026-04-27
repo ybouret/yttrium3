@@ -10,6 +10,12 @@ namespace Yttrium
 {
     namespace Algorithm
     {
+        //! Trim bad items
+        /**
+         \param seq   sequence-like container
+         \param isBad illness detector
+         \return trimmed sequence
+         */
         template <typename SEQUENCE, typename IS_BAD> inline
         SEQUENCE Trim(SEQUENCE &seq, IS_BAD &isBad) noexcept
         {

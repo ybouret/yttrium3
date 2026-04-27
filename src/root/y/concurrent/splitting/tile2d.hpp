@@ -106,8 +106,8 @@ namespace Yttrium
 
                 //! find vertex by index
                 /**
-                 \param indx in [0:items-1]
-                 \return indx-t vertex
+                 \param i in [0:items-1]
+                 \return i-th vertex
                  */
                 inline vertex_t at(const T i) const noexcept
                 {

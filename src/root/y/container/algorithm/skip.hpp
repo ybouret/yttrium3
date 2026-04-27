@@ -11,6 +11,12 @@ namespace Yttrium
 {
     namespace Algorithm
     {
+        //! Skip bad items
+        /**
+         \param seq   sequence-like container
+         \param isBad illness detector
+         \return skipped sequence
+         */
         template <typename SEQUENCE, typename IS_BAD> inline
         SEQUENCE Skip(SEQUENCE &seq, IS_BAD &isBad) noexcept
         {

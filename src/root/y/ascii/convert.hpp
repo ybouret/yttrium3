@@ -32,21 +32,23 @@ namespace Yttrium
             //__________________________________________________________________
             static const char * const CallSign; //!< "ASCII::Convert"
 
+            //! API category
             enum Category
             {
-                UseIP,
-                UseAP,
-                UseFP,
-                UseNA
+                UseIP, //!< use Integral Procedure
+                UseAP, //!< use Apex Procedure
+                UseFP, //!< use Floating Point
+                UseNA  //!< N/A
             };
 
+            //! API selector
             template <typename T>
             struct CategoryOf
             {
-                static const bool      MatchIP = TypeTraits<T>::IsIntegral;
-                static const bool      MatchAP = IsSameType<T,apn>::Value || IsSameType<T,apz>::Value;
-                static const bool      MatchFP = TypeTraits<T>::IsIsoFloatingPoint;
-                static const Category  Value = MatchIP ? UseIP : ( MatchAP ? UseAP : ( MatchFP ? UseFP : UseNA)  );
+                static const bool      MatchIP = TypeTraits<T>::IsIntegral;                            //!< alias
+                static const bool      MatchAP = IsSameType<T,apn>::Value || IsSameType<T,apz>::Value; //!< alias
+                static const bool      MatchFP = TypeTraits<T>::IsIsoFloatingPoint;                    //!< alias
+                static const Category  Value = MatchIP ? UseIP : ( MatchAP ? UseAP : ( MatchFP ? UseFP : UseNA)  ); //!< selection
             };
 
 
@@ -58,7 +60,6 @@ namespace Yttrium
             /**
              \param text ascii string text != NULL, with optional hexa
              \param size text length, size>0
-             \param varName optional var name \param varPart optional var part
              \return parsed uint64_t
              */
             //__________________________________________________________________
@@ -72,7 +73,6 @@ namespace Yttrium
             /**
              \param text ascii string text != NULL
              \param size text length, size>0
-             \param varName optional var name \param varPart optional var part
              \return parsed int64_t
              */
             //__________________________________________________________________
@@ -86,7 +86,6 @@ namespace Yttrium
             /**
              \param text ascii string text != NULL, with optional hexa prefix
              \param size text length, size>0
-             \param varName optional var name \param varPart optional var part
              \return parsed integral
              */
             //
@@ -106,7 +105,6 @@ namespace Yttrium
             /**
              \param text ascii string text != NULL
              \param size text length, size>0
-             \param varName optional var name \param varPart optional var part
              \return parsed apn
              */
             //__________________________________________________________________
@@ -120,7 +118,6 @@ namespace Yttrium
             /**
              \param text ascii string text != NULL
              \param size text length, size>0
-             \param varName optional var name \param varPart optional var part
              \return parsed apn
              */
             //__________________________________________________________________
@@ -134,7 +131,6 @@ namespace Yttrium
             /**
              \param text ascii string text != NULL, with optional hexa prefix
              \param size text length, size>0
-             \param varName optional var name \param varPart optional var part
              \return parsed apn
              */
             //__________________________________________________________________
@@ -148,7 +144,6 @@ namespace Yttrium
             /**
              \param text ascii string text != NULL
              \param size text length, size>0
-             \param varName optional var name \param varPart optional var part
              \return parsed apz
              */
             //__________________________________________________________________
@@ -156,9 +151,9 @@ namespace Yttrium
                              const size_t       size);
 
 
+            //! \return apz or apn
             template <typename T> static
-            T ToAP(const char * const text,
-                   const size_t       size);
+            T ToAP(const char * const,const size_t);
 
             //__________________________________________________________________
             //
@@ -167,7 +162,6 @@ namespace Yttrium
             /**
              \param text ascii string text != NULL
              \param size text length, size>0
-             \param varName optional var name \param varPart optional var part
              \return parsed floating point value
              */
             //__________________________________________________________________
@@ -179,8 +173,13 @@ namespace Yttrium
 
             //__________________________________________________________________
             //
-            //
-            //
+            //! conversion selector
+            /**
+             \param text ascii string text != NULL
+             \param size text length, size>0
+             \param varName optional var name \param varPart optional var part
+             \return matching target
+             */
             //__________________________________________________________________
             template <typename T> static inline
             T To(const char * const text,

@@ -84,7 +84,7 @@ namespace Yttrium
 
     private:
         Y_Disable_Assign(Exception); //!< discarded
-        void init() noexcept;
+        void init() noexcept;        //!< init to empty "Exception"
         
     protected:
         char what_[WhatLength];      //!< nature
