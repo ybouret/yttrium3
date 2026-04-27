@@ -11,7 +11,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include "y/exception.hpp"
-#include "y/memory/buffer/out-of.hpp"
+#include "y/memory/buffer/allocated.hpp"
 #include "y/memory/allocator/pooled.hpp"
 #endif // defined(Y_WIN)
 
@@ -32,7 +32,7 @@ namespace Yttrium
 #if defined(Y_WIN)
 		DWORD dw = ::GetEnvironmentVariable(name.c_str(), 0, 0);
 		if (dw <= 0) return false;
-        Memory::BufferOutOf<Memory::Pooled> buff(dw);
+        Memory::AllocatedBuffer<Memory::Pooled> buff(dw);
         char* const text = (char*)buff.rw();
 		const DWORD rd = ::GetEnvironmentVariable(name.c_str(), text, dw);
         if (rd <= 0)
