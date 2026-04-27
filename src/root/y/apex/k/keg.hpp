@@ -289,8 +289,8 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                             s += Hexadecimal::UpperChar[up];
                         }
                         assert(s.size()>0);
-                        if(s[s.size()] == '0' ) s.popTail();
                     }
+                    if(s[s.size()] == '0' ) s.popTail();
                     return "0x" + s.reverse();
                 }
             }
@@ -460,6 +460,15 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 return 0 != (word[0] & LowerBit);
             }
 
+
+            inline uint8_t getByte(const size_t i) const noexcept
+            {
+                assert(i<bytes);
+                WordType     w     = word[i / WordBytes];
+                for(size_t k=(i % WordBytes);k>0;--k)
+                    w >>= 8;
+                return (uint8_t)w;
+            }
 
             //__________________________________________________________________
             //

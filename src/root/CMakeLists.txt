@@ -49,6 +49,7 @@ y/container/iter
 y/container/contiguous
 y/container/cxx
 y/container/sequence
+y/container/algorithm
 y/pointer
 y/utest
 y/stream

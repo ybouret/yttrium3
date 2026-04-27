@@ -225,10 +225,11 @@ Y_Apex_Natural_Unary(OP,CALL)
             // Bits
             //
             //__________________________________________________________________
-            Natural & shr()        noexcept;        //!< \return fast division by two
-            Natural & shl();                        //!< \return multiplication by two
-            size_t    bits() const noexcept;        //!< \return number of bits
-            size_t    bytes() const noexcept;       //!< \return number of bytes
+            Natural & shr()        noexcept;                  //!< \return fast division by two
+            Natural & shl();                                  //!< \return multiplication by two
+            size_t    bits() const noexcept;                  //!< \return number of bits
+            size_t    bytes() const noexcept;                 //!< \return number of bytes
+            uint8_t   get(const size_t ibyte) const noexcept; //!< \param ibyte in [0:bytes()-1] \return ibytes-th byte
 
             Natural & shr(const size_t n) noexcept; //!< \param n bits to shift \return *this >>= n
             Natural & shl(const size_t n);          //!< \param n bits to shift \return *this <<= n
