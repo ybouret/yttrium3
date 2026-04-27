@@ -60,7 +60,6 @@ namespace
                 {
                     m.swapRows( ran.in<size_t>(1,r), ran.in<size_t>(1,r) );
                     m.swapCols( ran.in<size_t>(1,c), ran.in<size_t>(1,c) );
-
                 }
 
             }

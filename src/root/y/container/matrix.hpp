@@ -214,6 +214,7 @@ namespace Yttrium
             return *this;
         }
 
+        //! swap rows \param i first row \param j second row
         inline void swapRows(const size_t i, const size_t j) noexcept
         {
             assert(i>=1); assert(i<=rows);
@@ -221,6 +222,7 @@ namespace Yttrium
             Yttrium_BSwap(&row[i][1],&row[j][1],cols*sizeof(T));
         }
 
+        //! swap columns \param i first column \param j second column
         inline void swapCols(const size_t i, const size_t j) noexcept
         {
             assert(i>=1); assert(i<=cols);
