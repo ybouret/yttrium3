@@ -97,6 +97,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(string_stride);
     Y_UTEST(string);
     Y_UTEST(string_in_threads);
+    Y_UTEST(string_format);
 
     Y_UTEST(container_iter);
     Y_UTEST(container_contiguous_ro);

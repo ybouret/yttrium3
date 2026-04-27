@@ -25,6 +25,7 @@ namespace
 Y_UTEST(concurrent_simd)
 {
     std::cerr << "-- entering " << test << std::endl;
+    
 
     Concurrent::Solo solo;
     Concurrent::Crew crew(2);

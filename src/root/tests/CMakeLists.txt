@@ -116,6 +116,7 @@ Y_UTEST(threading:mto)
 Y_UTEST(string:stride)
 Y_UTEST(string)
 Y_UTEST(string:in_threads)
+Y_UTEST(string:format)
 
 Y_UTEST(container:iter)
 Y_UTEST(container:contiguous:ro)

@@ -8,8 +8,8 @@ int Yttrium_Strfmt(char * const       buffer,
                    const char * const fmt,
                    va_list * const    app)
 {
-    assert(NULL!=buffer);
-    assert(buflen>0);
+    //assert(NULL!=buffer);
+    //assert(buflen>0);
     assert(NULL!=fmt);
     assert(NULL!=app);
     
