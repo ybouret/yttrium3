@@ -193,7 +193,20 @@ Y_APQ_DECL(Rational,CALL) Y_APQ_Binary(OP,CALL) Y_APQ_Unary(OP,CALL)
             //__________________________________________________________________
             Rational abs()  const; //!< \return |*this|
             Rational mod2() const; //!< \return |*this|^2
-            
+
+            //! \return floating point value approximation
+            template <typename T> inline
+            T ratio() const
+            {
+                switch(numer.s)
+                {
+                    case Positive: return  Natural::Ratio<T>(numer.n,denom);
+                    case Negative: return -Natural::Ratio<T>(numer.n,denom);
+                    case __Zero__:
+                        break;
+                }
+                return 0;
+            }
 
             //__________________________________________________________________
             //
