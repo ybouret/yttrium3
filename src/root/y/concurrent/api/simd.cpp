@@ -6,8 +6,9 @@ namespace Yttrium
     namespace Concurrent
     {
 
-        SIMD:: Arguments:: Arguments(const CopyOf_ &, void * const addr) noexcept :
-        arg1(addr)
+        SIMD:: Arguments:: Arguments(const CopyOf_ &, void * const user) noexcept :
+        addr(user),
+        arg1(0)
         {
         }
 
@@ -24,11 +25,11 @@ namespace Yttrium
 
         void SIMD:: CallFunc0(Context &ctx, Arguments &args)
         {
-            assert(args.arg1);
+            assert(args.addr);
             union {
                 void * addr;
                 void (*func)(Context &);
-            } alias = { args.arg1 };
+            } alias = { args.addr };
             assert(alias.func);
             alias.func(ctx);
         }

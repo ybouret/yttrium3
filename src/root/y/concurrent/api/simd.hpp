@@ -56,7 +56,8 @@ namespace Yttrium
                 //
                 // Members
                 //______________________________________________________________
-                void * const arg1; //!< first argument
+                void * const addr; //!< anonymous address
+                void * const arg1; //!< first argument address
 
             private:
                 Y_Disable_Copy_And_Assign(Arguments); //!< discarded

@@ -8,6 +8,8 @@
 #include "y/type/traits.hpp"
 #include "y/exception.hpp"
 #include "y/apex/integer.hpp"
+#include "y/string.hpp"
+#include "y/string/length.hpp"
 
 namespace Yttrium
 {
@@ -200,12 +202,29 @@ namespace Yttrium
                 {
                     throw;
                 }
-
             }
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+            template <typename T> static inline
+            T To(const char * const text,
+                 const char * const varName,
+                 const char * const varPart)
+            {
+                return To<T>(text, StringLength(text), varName, varPart);
+            }
+
+            template <typename T> static inline
+            T To(const String &     text,
+                 const char * const varName,
+                 const char * const varPart)
+            {
+                return To<T>(text.c_str(), text.size(), varName, varPart);
+            }
+
 
         private:
 
-#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
             template <typename T> static inline
             T To(const IntToType<UseIP> &,

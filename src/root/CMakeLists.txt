@@ -59,6 +59,7 @@ y/stream/libc
 y/object
 y/object/light
 y/string
+y/string/env
 y/mkl
 y/apex
 y/apex/k

@@ -94,8 +94,7 @@ namespace Yttrium
         void assign( const Matrix<U> &m )
         {
             assert(cols==m.cols); assert(rows==m.rows);
-            for(size_t i=rows;i>0;--i)
-            {
+            for(size_t i=rows;i>0;--i) {
                 MatrixRow<T>        &tgt_i = (*this)[i];
                 const MatrixRow<U>  &src_i = m[i];
                 for(size_t j=cols;j>0;--j) tgt_i[j] = src_i[j];
@@ -107,8 +106,7 @@ namespace Yttrium
         void assignTranspose( const Matrix<U> &m )
         {
             assert(cols==m.rows); assert(rows==m.cols);
-            for(size_t i=rows;i>0;--i)
-            {
+            for(size_t i=rows;i>0;--i) {
                 MatrixRow<T>        &tgt_i = (*this)[i];
                 for(size_t j=cols;j>0;--j) tgt_i[j] = m[j][i];
             }
@@ -119,8 +117,7 @@ namespace Yttrium
         {
             if(m.rows==rows && m.cols==cols)
                 assign(m);
-            else
-            {
+            else {
                 Matrix tmp(CopyOf,m);
                 return xch(tmp);
             }
@@ -132,8 +129,7 @@ namespace Yttrium
         {
             if(m.rows==rows && m.cols==cols)
                 assign(m);
-            else
-            {
+            else {
                 Matrix tmp(CopyOf,m);
                 return xch(tmp);
             }
@@ -162,12 +158,10 @@ namespace Yttrium
         inline std::ostream & print(std::ostream &os) const
         {
             const Matrix &m = *this;
-            if(rows<=0||cols<=0)
-            {
+            if(rows<=0||cols<=0) {
                 return os << "[]";
             }
-            else
-            {
+            else {
                 const bool has1D = rows==1 || cols==1;
                 if(has1D) os << "hcat(";
                 os << '[';
@@ -243,12 +237,10 @@ namespace Yttrium
             size_t offset = 0;
             void * entry  = acquireWorkspace( sizeof(T), length, offset);
             assert(offset>=rows*sizeof(RowType));
-            try
-            {
+            try {
                 Coerce(row) = createRows(entry,createData( static_cast<char *>(entry) + offset ));
             }
             catch(...) { releaseWorkspace(entry,length); throw; }
-
         }
 
         inline RowType * createRows(void * const entry, MutableType * data) noexcept
