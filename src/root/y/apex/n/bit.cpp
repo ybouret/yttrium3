@@ -26,6 +26,12 @@ namespace Yttrium
             return static_cast<const KegType *>(code)->bits;
         }
 
+        size_t Natural:: bytes() const noexcept
+        {
+            assert(code);
+            return static_cast<const KegType *>(code)->bytes;
+        }
+
         Natural &Natural:: shl()
         {
             assert(code);

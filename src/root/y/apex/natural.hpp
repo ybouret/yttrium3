@@ -11,12 +11,36 @@
 #include "y/mkl/two-to-the-power-of.hpp"
 #include "y/random/coin-flip.hpp"
 #include "y/exception.hpp"
+#include "y/mkl/xreal.hpp"
+#include <cfloat>
 
 namespace Yttrium
 {
     namespace Apex
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        // Helpers for ratio
+        //
+        //
+        //______________________________________________________________________
+
+        template <typename T> struct RealDigits;
+
+        //! digits for float
+        template <> struct RealDigits<float>       { static const unsigned Count = FLT_DIG; /*!< FLT_DIG */  };
+
+        //! digits for double
+        template <> struct RealDigits<double>      { static const unsigned Count = DBL_DIG;  /*!< DBL_DIG */};
+
+        //! digits for long double
+        template <> struct RealDigits<long double> { static const unsigned Count = LDBL_DIG; /*!< LDBL_DIG */};
+
+        //! digits for associated XReal
+        template <typename T> struct RealDigits< XReal<T> > { static const unsigned Count = RealDigits<T>::Count; /*!< alias */  };
 
         //! helper to implement comparisons
 #define Y_Apex_Natural_Cmp(OP,EXPR) \
@@ -204,6 +228,8 @@ Y_Apex_Natural_Unary(OP,CALL)
             Natural & shr()        noexcept;        //!< \return fast division by two
             Natural & shl();                        //!< \return multiplication by two
             size_t    bits() const noexcept;        //!< \return number of bits
+            size_t    bytes() const noexcept;       //!< \return number of bytes
+
             Natural & shr(const size_t n) noexcept; //!< \param n bits to shift \return *this >>= n
             Natural & shl(const size_t n);          //!< \param n bits to shift \return *this <<= n
 
@@ -277,6 +303,48 @@ Y_Apex_Natural_Unary(OP,CALL)
                 }
                 return res;
             }
+
+            //! \param num numerator \param den denominator \return ratio with given precision
+            template <typename T> static inline
+            T Ratio(const Natural &num, const Natural &den)
+            {
+                static const unsigned  Digits = RealDigits<T>::Count;
+                static const T         Factor = 256;
+                static const T         Tenth  = T(0.1);
+                static const natural_t ten    = 10;
+                Natural N = num;
+                Natural q,r;
+
+                T res = 0;
+
+#if 0
+                // integer part
+                Division(&q,&r,N,den);
+                {
+                    const uint8_t * const b = q.data8();
+                    size_t                n = q.bytes();
+                    while(n-- > 0 )
+                    {
+                        res *= Factor;
+                        res += b[n];
+                    }
+                }
+
+                // fractional part
+                T pos = Tenth;
+                for(unsigned i=0;i<Digits;++i, pos *= Tenth)
+                {
+                    if(r.bits()<=0) break;
+                    N.xch(r);
+                    N *= ten;
+                    Division(&q,&r,N,den);
+                    res += pos * static_cast<T>(q.data8()[0]);
+                }
+#endif
+
+                return res;
+            }
+
 
         private:
             void * const code; //!< inner code
