@@ -218,10 +218,15 @@ namespace Yttrium
         {
             assert(i>=1); assert(i<=rows);
             assert(j>=1); assert(j<=rows);
-            char * a = static_cast<char *>(Hide::Address( &row[i][1] ));
-            char * b = static_cast<char *>(Hide::Address( &row[j][1] ));
-            for(size_t i=cols*sizeof(T);i>0;--i)
-                Swap(*(a++),*(b++));
+            Yttrium_BSwap(&row[i][1],&row[j][1],cols*sizeof(T));
+        }
+
+        inline void swapCols(const size_t i, const size_t j) noexcept
+        {
+            assert(i>=1); assert(i<=cols);
+            assert(j>=1); assert(j<=cols);
+            for(size_t r=rows;r>0;--r)
+                Yttrium_BSwap(&row[r][i],&row[r][j],sizeof(T));
         }
 
 
