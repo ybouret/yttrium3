@@ -13,18 +13,45 @@
 namespace Yttrium
 {
 
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! C++ matrix
+    //
+    //
+    //__________________________________________________________________________
     template <typename T>
     class Matrix : public MatrixMetrics, public Releasable
     {
     public:
-        Y_Args_Expose(T,Type);
-        typedef MatrixRow<T> RowType;
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        Y_Args_Declare(T,Type);        //!< alias
+        typedef MatrixRow<T> RowType; //!< alias
 
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+
+        //! setup empty matrix
         inline explicit Matrix() noexcept : MatrixMetrics(0,0), length(0), row(0)
         {
         }
 
 
+        //! setup matrix with default constructor
+        /**
+         \param nr rows
+         \param nc columns
+         */
         inline explicit Matrix(const size_t nr, const size_t nc) :
         MatrixMetrics(nr,nc),
         length(0),
@@ -33,6 +60,7 @@ namespace Yttrium
             allocate();
         }
 
+        //! duplicate \param m source matrix
         inline Matrix(const Matrix &m) :
         MatrixMetrics(m),
         Releasable(),
@@ -41,6 +69,7 @@ namespace Yttrium
             duplicate(m);
         }
 
+        //! duplicate \param m compatible source matrix
         template <typename U>
         inline Matrix(const CopyOf_ &, const Matrix<U> &m) :
         MatrixMetrics(m),
@@ -50,6 +79,7 @@ namespace Yttrium
         }
 
 
+        //! duplicate transpose \param _ helper \param m source matrix
         template <typename U>
         inline Matrix(const TransposeOf_ &_, const Matrix<U> &m) :
         MatrixMetrics(_,m),
@@ -58,9 +88,7 @@ namespace Yttrium
             duplicateTranspose(m);
         }
 
-
-
-        //! assign all item or same metrics
+        //! assign all items for same metrics \param m source matrix
         template <typename U> inline
         void assign( const Matrix<U> &m )
         {
@@ -73,7 +101,7 @@ namespace Yttrium
             }
         }
 
-        //! assign all item or same metrics
+        //! assign all items for transpose metrics \param m source matrix
         template <typename U> inline
         void assignTranspose( const Matrix<U> &m )
         {
@@ -85,9 +113,7 @@ namespace Yttrium
             }
         }
 
-
-
-
+        //! assign any metrics matrix \param m source matrix \return *this
         inline Matrix & operator=(const Matrix &m)
         {
             if(m.rows==rows && m.cols==cols)
@@ -99,6 +125,7 @@ namespace Yttrium
             }
         }
 
+        //! assign any metrics matrix \param m source matrix \return *this
         template <typename U>
         inline Matrix & operator=(const Matrix<U> &m)
         {
@@ -111,41 +138,54 @@ namespace Yttrium
             }
         }
 
-
-        inline virtual ~Matrix() noexcept
-        {
-            deallocate();
-        }
+        inline virtual ~Matrix() noexcept { deallocate(); } //!< cleanup
 
 
-        // Interface
+        //______________________________________________________________________
+        //
+        //
+        // Interfce
+        //
+        //______________________________________________________________________
         inline virtual void release() noexcept { deallocate(); }
 
 
+        //______________________________________________________________________
+        //
+        //
         // Methods
+        //
+        //______________________________________________________________________
+
+        //! Julia display \param os output \return os
         inline std::ostream & print(std::ostream &os) const
         {
             const Matrix &m = *this;
-            switch(rows+cols)
+            if(rows<=0||cols<=0)
             {
-                case 0: return os << "[]";
-                case 2: assert(1==rows); assert(1==cols); return os << "hcat(" << m[1][1] << ")";
-                default:
-                    break;
+                return os << "[]";
             }
-            assert(rows+cols>2);
-            assert(rows>=1);
-            m[1].print(os);
-            for(size_t r=2;r<=rows;++r) m[r].print(os << ';');
-            return os;
+            else
+            {
+                const bool has1D = rows==1 || cols==1;
+                if(has1D) os << "hcat(";
+                os << '[';
+                m[1].print(os);
+                for(size_t r=2;r<=rows;++r) m[r].print(os << ';');
+                os << ']';
+                if(has1D) os << ")";
+                return os;
+            }
         }
 
+        //! C++ display
         inline friend std::ostream & operator<<(std::ostream &os, const Matrix &m)
         {
             return m.print(os);
         }
 
 
+        //! access row \param irow row index \return irow-th row
         inline RowType & operator[](const size_t irow) noexcept
         {
             assert(irow<=rows);
@@ -154,7 +194,7 @@ namespace Yttrium
             return row[irow];
         }
 
-
+        //! access const row \param irow row index \return irow-th row
         inline const RowType & operator[](const size_t irow) const noexcept
         {
             assert(irow<=rows);
@@ -164,6 +204,7 @@ namespace Yttrium
         }
 
 
+        //! no throw exchange \param other another matrix \return *this
         inline Matrix & xch( Matrix &other ) noexcept
         {
             trade(other);
@@ -173,9 +214,10 @@ namespace Yttrium
         }
 
     private:
-        size_t              length;
-        RowType * const     row;
+        size_t              length; //!< bytes
+        RowType * const     row;    //!< row in [1:rows]
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         inline void allocate()
         {
             if(items<=0) return;
@@ -209,7 +251,7 @@ namespace Yttrium
             {
                 while(built<items)
                 {
-                    new (data+built) MutableType( (T)(built+1) );
+                    new (data+built) MutableType();
                     ++built;
                 }
             }
@@ -325,7 +367,7 @@ namespace Yttrium
                 assert(0==rows);
             }
         }
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
     };
 
