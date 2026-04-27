@@ -32,7 +32,7 @@ namespace Yttrium
             return static_cast<const KegType *>(code)->bytes;
         }
 
-        uint8_t Natural:: get(const size_t ibyte) const noexcept
+        uint8_t Natural:: operator[](const size_t ibyte) const noexcept
         {
             assert(code);
             return static_cast<const KegType *>(code)->getByte(ibyte);

@@ -134,6 +134,7 @@ Y_Apex_Natural_Unary(OP,CALL)
             String    toDec()        const;          //!< \return decimal constent
             natural_t lsw()          const noexcept; //!< \return least significant word
 
+
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             //__________________________________________________________________
             //
@@ -229,7 +230,6 @@ Y_Apex_Natural_Unary(OP,CALL)
             Natural & shl();                                  //!< \return multiplication by two
             size_t    bits() const noexcept;                  //!< \return number of bits
             size_t    bytes() const noexcept;                 //!< \return number of bytes
-            uint8_t   get(const size_t ibyte) const noexcept; //!< \param ibyte in [0:bytes()-1] \return ibytes-th byte
 
             Natural & shr(const size_t n) noexcept; //!< \param n bits to shift \return *this >>= n
             Natural & shl(const size_t n);          //!< \param n bits to shift \return *this <<= n
@@ -240,7 +240,15 @@ Y_Apex_Natural_Unary(OP,CALL)
             friend Natural  operator<<(const Natural &, const size_t); //!< \return left  shift
             friend Natural  operator>>(const Natural &, const size_t); //!< \return right shift
 
-            
+
+            //! find byte at given position
+            /**
+             \param ibyte in [0:bytes()-1] or 0
+             \return ibytes-th byte, always ok for ibytes==0
+             */
+            uint8_t   operator[](const size_t ibyte) const noexcept;
+
+
             //__________________________________________________________________
             //
             //
@@ -318,16 +326,14 @@ Y_Apex_Natural_Unary(OP,CALL)
 
                 T res = 0;
 
-#if 0
                 // integer part
                 Division(&q,&r,N,den);
                 {
-                    const uint8_t * const b = q.data8();
                     size_t                n = q.bytes();
                     while(n-- > 0 )
                     {
                         res *= Factor;
-                        res += b[n];
+                        res += q[n];
                     }
                 }
 
@@ -339,9 +345,8 @@ Y_Apex_Natural_Unary(OP,CALL)
                     N.xch(r);
                     N *= ten;
                     Division(&q,&r,N,den);
-                    res += pos * static_cast<T>(q.data8()[0]);
+                    res += pos * static_cast<T>(q[0]);
                 }
-#endif
 
                 return res;
             }

@@ -54,7 +54,7 @@ Y_UTEST(apex_n)
 
         String       h;
         for(size_t i=n.bytes();i>0;)
-            h += Hexadecimal::UpperByte[ n.get(--i) ];
+            h += Hexadecimal::UpperByte[ n[--i] ];
         Algorithm::Skip(h,IsZero);
         h >> 'x' >> '0';
         std::cerr << std::setw(32) << H << " => " << h << std::endl;
@@ -71,6 +71,18 @@ Y_UTEST(apex_n)
         const apn m = lhs % rhs;
     }
 
+    std::cerr << "-- testing ratio" << std::endl;
+    for(size_t iter=0;iter<8;++iter)
+    {
+        const apn   N(ran,ran.in<size_t>(0,10));
+        const apn   D(ran,ran.in<size_t>(1,10));
+        const float       r = Natural::Ratio<float>(N,D);
+        const double      d = Natural::Ratio<double>(N,D);
+        const long double l = Natural::Ratio<long double>(N,D);
+        const XReal<float> xf =Natural::Ratio< XReal<float> >(N,D);
+        std::cerr << N << "/" << D << " = " << r << " = " << d << " = " << l << " = " << xf << std::endl;
+
+    }
 
 
 

@@ -461,13 +461,22 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             }
 
 
+            //! \param i in [0:bytes=1] or 0 \return i-th byte
             inline uint8_t getByte(const size_t i) const noexcept
             {
-                assert(i<bytes);
-                WordType     w     = word[i / WordBytes];
-                for(size_t k=(i % WordBytes);k>0;--k)
-                    w >>= 8;
-                return (uint8_t)w;
+                assert(sanity());
+                if(i<=0)
+                {
+                    return (uint8_t) word[0];
+                }
+                else
+                {
+                    assert(i<bytes);
+                    WordType     w     = word[i / WordBytes];
+                    for(size_t k=(i % WordBytes);k>0;--k)
+                        w >>= 8;
+                    return (uint8_t)w;
+                }
             }
 
             //__________________________________________________________________
