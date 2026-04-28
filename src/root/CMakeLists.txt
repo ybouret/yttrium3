@@ -79,6 +79,8 @@ y/handy/plain/light
 y/handy/plain/heavy
 y/handy/joint/light
 y/handy/joint/heavy
+y/dft
+y/dft/fmt
 )
 
 add_subdirectory(tests)

@@ -52,14 +52,18 @@ namespace Yttrium
             //__________________________________________________________________
 
             //! setup empty
-            inline explicit ListProto() : list(), cache() {}
+            inline explicit ListProto() : ProxyType(), list(), cache() {}
 
             //! setup with existing cache \param sc shared cache (should be)
             inline explicit ListProto(const CACHE<NODE,THREADING_POLICY> &sc) :
-            list(), cache(sc) {}
+            ProxyType(),
+            list(),
+            cache(sc) {}
 
             //! duplicate \param other
-            inline explicit ListProto(const ListProto &other) : list(), cache(other.cache)
+            inline explicit ListProto(const ListProto &other) :
+            ProxyType(),
+            list(), cache(other.cache)
             {
                 Y_Lock(*cache);
                 try
@@ -143,7 +147,7 @@ namespace Yttrium
             inline ConstType & head() const noexcept { assert(list.head); return **list.head; } //!< \return head item
             inline ConstType & tail() const noexcept { assert(list.tail); return **list.tail; } //!< \return tail item
 
-            
+
         protected:
             CoreList list; //!< current content
 
