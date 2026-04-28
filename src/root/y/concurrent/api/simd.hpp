@@ -8,6 +8,10 @@
 #include "y/type/temporary.hpp"
 #include "y/container/writable.hpp"
 
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4371 ) // layout of class may have changed
+#endif
+
 namespace Yttrium
 {
     namespace Concurrent
