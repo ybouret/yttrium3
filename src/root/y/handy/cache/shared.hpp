@@ -32,6 +32,7 @@ namespace Yttrium
             //__________________________________________________________________
             Y_HandyCache_Decl();                                  //!< aliases
             typedef ObjectCache<NODE,ThreadingPolicy> InnerCache; //!< alias
+            typedef Dynamic<Releasable>               ListBase;   //!< alias
 
             //__________________________________________________________________
             //

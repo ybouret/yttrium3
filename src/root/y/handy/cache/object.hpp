@@ -9,6 +9,7 @@
 #include "y/core/pool/to-list.hpp"
 #include "y/core/list/to-pool.hpp"
 #include "y/ability/caching.hpp"
+#include "y/ability/dynamic.hpp"
 
 namespace Yttrium
 {
@@ -35,6 +36,7 @@ namespace Yttrium
             Y_HandyCache_Decl();                     //!< aliases
             typedef Core::PoolOf<NodeType> PoolType; //!< alias
             typedef Core::ListOf<NodeType> ListType; //!< alias
+            typedef Dynamic<Releasable>    ListBase; //!< alias
 
             //__________________________________________________________________
             //
