@@ -20,6 +20,11 @@ namespace Yttrium
 
             }
 
+            inline DirectCache(const DirectCache &) : ThreadingPolicy()
+            {
+            }
+            
+
             inline virtual ~DirectCache() noexcept
             {
             }
@@ -49,10 +54,13 @@ namespace Yttrium
                 banish(alive);
             }
 
+            inline DirectCache *       operator->()       noexcept { return this; }
+            inline const DirectCache * operator->() const noexcept { return this; }
+
 
 
         private:
-            Y_Disable_Copy_And_Assign(DirectCache);
+            Y_Disable_Assign(DirectCache);
         };
     }
 

@@ -2,7 +2,7 @@
 //! \file
 
 #ifndef Y_Handy_ObjectCache_Included
-#define Y_Handy_ObjecttCache_Included 1
+#define Y_Handy_ObjectCache_Included 1
 
 #include "y/handy/cache/defs.hpp"
 #include "y/core/pool.hpp"
@@ -29,6 +29,15 @@ namespace Yttrium
             {
 
             }
+
+            inline ObjectCache(const ObjectCache &) :
+            ThreadingPolicy(),
+            Caching(),
+            zpool()
+            {
+
+            }
+
 
             inline virtual ~ObjectCache() noexcept { release_(); }
 
@@ -80,9 +89,13 @@ namespace Yttrium
                 LightObject::ReleaseZombie( Pulverized(alive) );
             }
 
+            inline ObjectCache *       operator->()       noexcept { return this; }
+            inline const ObjectCache * operator->() const noexcept { return this; }
+
+
 
         private:
-            Y_Disable_Copy_And_Assign(ObjectCache);
+            Y_Disable_Assign(ObjectCache);
             PoolType zpool;
             inline void release_() noexcept
             {

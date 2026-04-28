@@ -1,4 +1,4 @@
-#include "y/handy/cache/object.hpp"
+#include "y/handy/cache/shared.hpp"
 #include "y/handy/cache/direct.hpp"
 #include "y/ability/caching.hpp"
 
@@ -43,11 +43,7 @@ namespace Yttrium
 
 
         
-
-
-        //template <typename NODE> class DirectCache;
-        //template <typename NODE> class SharedCache;
-        //template <typename NODE> class ObjectCache;
+        
 
     }
 }
@@ -61,17 +57,25 @@ Y_UTEST(handy_caches)
         typedef Handy::LightNode<int>                 iNode;
         Handy::DirectCache<iNode,SingleThreadedClass> iDCache;
         Handy::ObjectCache<iNode,SingleThreadedClass> iOCache;
+        Handy::SharedCache<iNode,SingleThreadedClass> iSCache;
 
         int ref = 7;
         {
-            iNode * node = iDCache.summon(ref);
-            iDCache.banish(node);
+            iNode * node = iDCache->summon(ref);
+            iDCache->banish(node);
         }
 
         {
-            iNode * node = iOCache.summon(ref);
-            iOCache.banish(node);
+            iNode * node = iOCache->summon(ref);
+            iOCache->banish(node);
         }
+
+        {
+            iNode * node = iSCache->summon(ref);
+            iSCache->banish(node);
+        }
+
+
 
 
 
