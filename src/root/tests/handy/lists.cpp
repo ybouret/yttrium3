@@ -1,5 +1,4 @@
 #include "y/core/list.hpp"
-#include "y/ability/releasable.hpp"
 
 namespace Yttrium
 {
@@ -11,7 +10,7 @@ namespace Yttrium
         template <typename,typename> class CACHE,
         typename                           THREADING_POLICY
         >
-        class ListProto : public Releasable
+        class ListProto
         {
         public:
             typedef NODE                         NodeType;
@@ -24,7 +23,7 @@ namespace Yttrium
 
             inline virtual ~ListProto() noexcept {}
 
-            
+
 
         protected:
             Core::ListOf<NODE>           list;

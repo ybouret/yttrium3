@@ -4,6 +4,7 @@
 #define Y_Handy_DirectCache_Included 1
 
 #include "y/handy/cache/defs.hpp"
+#include "y/ability/releasable.hpp"
 
 namespace Yttrium
 {
@@ -29,6 +30,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             Y_HandyCache_Decl(); //!< aliases
+            typedef Releasable ListBase;
 
             //__________________________________________________________________
             //

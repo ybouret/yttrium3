@@ -10,9 +10,8 @@
 #include "y/type/replicate.hpp"
 #include "y/type/destruct.hpp"
 #include "y/type/with-at-least.hpp"
-#include "y/ability/recyclable.hpp"
 #include "y/ability/releasable.hpp"
-#include "y/ability/expandable.hpp"
+#include "y/ability/dynamic.hpp"
 #include "y/container/writable.hpp"
 #include "y/ability/releasable.hpp"
 #include "y/core/list.hpp"
@@ -34,8 +33,7 @@ namespace Yttrium
     template <typename T>
     class List :
     public Sequence<T,Writable<T>>,
-    public Expandable<Releasable>,
-    public Recyclable
+    public Dynamic<Releasable>
     {
     public:
         //______________________________________________________________________

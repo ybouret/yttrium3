@@ -11,9 +11,8 @@
 #include "y/type/replicate.hpp"
 #include "y/type/destroy.hpp"
 #include "y/type/with-at-least.hpp"
-#include "y/ability/recyclable.hpp"
 #include "y/ability/releasable.hpp"
-#include "y/ability/expandable.hpp"
+#include "y/ability/dynamic.hpp"
 #include "y/swap.hpp"
 
 namespace Yttrium
@@ -30,8 +29,7 @@ namespace Yttrium
     template <typename T>
     class Vector :
     public Sequence<T,ContiguousWritable<T>>,
-    public Expandable<Releasable>,
-    public Recyclable
+    public Dynamic<Releasable>
     {
     public:
         //______________________________________________________________________
