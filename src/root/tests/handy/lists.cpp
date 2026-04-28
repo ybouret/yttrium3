@@ -106,6 +106,11 @@ Y_UTEST(handy_lists)
     Core::Rand ran;
     testProto<int>(ran);
     testProto<apq>(ran);
+
+    //int basic;
+    //int plain;
+    //int joint;
+
 }
 Y_UDONE()
 
