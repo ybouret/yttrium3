@@ -31,6 +31,7 @@ namespace
         {
         }
 
+        const String & operator*() const noexcept { return *this; }
 
         Node * next;
         Node * prev;

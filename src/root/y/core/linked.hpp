@@ -48,9 +48,9 @@ namespace Yttrium
                 os << '[';
                 const NODE * node = self.head;
                 if(node) {
-                    os << *node;
+                    os << **node;
                     for(node=node->next;node;node=node->next)
-                        os << ';' << *node;
+                        os << ';' << **node;
                 }
                 os << ']';
                 return os;

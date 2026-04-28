@@ -116,6 +116,22 @@ namespace Yttrium
                 }
             }
 
+            //! mirror existing node
+            /**
+             \param node for copy constructor
+             \return duplicated node
+             */
+            inline NodeType * mirror(const NodeType * const mine) {
+                assert(mine);
+                Y_Must_Lock();
+                NodeType * const node = zpool.size ? zpool.query() : LightObject::AcquireZombie<NodeType>();
+                try { return new (node) NodeType(*mine); }
+                catch(...) {
+                    zpool.store( NodeAPI::Clear(node) );
+                    throw;
+                }
+            }
+
             //! banish living node, keep zombie \param alive living node
             inline void banish(NodeType * const alive) noexcept
             {

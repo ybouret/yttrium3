@@ -115,6 +115,12 @@ namespace Yttrium
             replicate(seq.begin(),seq.size());
         }
 
+
+        inline friend std::ostream & operator<<(std::ostream &os, const List &self)
+        {
+            return os << self.list;
+        }
+
         //______________________________________________________________________
         //
         //

@@ -20,10 +20,8 @@ namespace
         {
         }
 
-        inline friend std::ostream & operator<<(std::ostream &os, const Node &node)
-        {
-            return os << node.indx;
-        }
+        
+        inline const size_t & operator*() const noexcept { return indx; }
 
         size_t indx;
         Node * next;

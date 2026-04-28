@@ -15,6 +15,8 @@ namespace
         size_t indx;
         Node * next;
 
+        inline size_t operator*() const noexcept { return indx; }
+
         inline friend std::ostream & operator<<(std::ostream &os, const Node &node)
         {
             return os << node.indx;

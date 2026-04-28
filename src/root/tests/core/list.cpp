@@ -23,6 +23,8 @@ namespace
             return os << node.indx;
         }
 
+        inline size_t operator*() const noexcept { return indx; }
+
         static inline int Compare(const Node * const lhs,
                                   const Node * const rhs) noexcept
         {

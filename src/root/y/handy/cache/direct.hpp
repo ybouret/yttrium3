@@ -69,6 +69,26 @@ namespace Yttrium
                 }
             }
 
+            //! mirror existing node
+            /**
+             \param node for copy constructor
+             \return duplicate node
+             */
+            inline NodeType * mirror(const NodeType * const mine)
+            {
+                assert(mine);
+                Y_Must_Lock();
+                NodeType * const node = LightObject::AcquireZombie<NodeType>();
+                try {
+                    return new (node) NodeType(*mine);
+                }
+                catch(...) {
+                    LightObject::ReleaseZombie( NodeAPI::Clear(node) );
+                    throw;
+                }
+            }
+
+
             //! banish living node \param alive live node
             inline void banish(NodeType * const alive) noexcept
             {
@@ -92,8 +112,7 @@ namespace Yttrium
                 LightObject::ReleaseZombie(zombie);
             }
 
-
-
+            
 
             inline DirectCache *       operator->()       noexcept { return this;  } //!< \return API
             inline const DirectCache * operator->() const noexcept { return this;  } //!< \return API
