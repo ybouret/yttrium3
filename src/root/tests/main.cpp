@@ -137,6 +137,7 @@ Y_UTEST_DECL(8)
 
     Y_UTEST(handy_caches);
     Y_UTEST(handy_lists);
+    Y_UTEST(handy_basic_light_list);
 }
 Y_UTEST_EXEC()
 
