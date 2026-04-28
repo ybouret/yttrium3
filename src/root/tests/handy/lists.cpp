@@ -12,11 +12,13 @@
 #include "y/handy/node/heavy.hpp"
 #include "y/core/rand.hpp"
 #include "y/container/sequence/vector.hpp"
+#include "y/type/sign.hpp"
 
 using namespace Yttrium;
 
 namespace
 {
+
 
     template <typename TARGET, typename SOURCE> inline
     void doPush( TARGET &target, Core::Rand  &ran, SOURCE &source )
@@ -29,7 +31,7 @@ namespace
         std::cerr << target << " | " << tarcpy << std::endl;
 
         {
-            const size_t n = tarcpy.size()/2;
+            const size_t n = tarcpy->size/2;
             while( tarcpy.size() > n )
             {
                 if( ran.tails() ) tarcpy.popTail(); else tarcpy.popHead();
@@ -38,6 +40,9 @@ namespace
             target >> tarcpy;
         }
         std::cerr << "\t" << target << std::endl;
+        target->sortBy( Sign::Increasing<typename TARGET::NodeType::MutableType> );
+        std::cerr << "\t" << target << std::endl;
+
 
     }
 

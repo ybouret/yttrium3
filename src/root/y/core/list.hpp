@@ -339,6 +339,26 @@ namespace Yttrium
                 sort(ByDecreasingNodeAddress);
             }
 
+
+            template <typename COMPARISON>
+            struct CompareBy
+            {
+                COMPARISON & comparison;
+                inline int operator()(const NODE * const lhs, const NODE * const rhs)
+                {
+                    return comparison(**lhs,**rhs);
+                }
+            };
+
+
+            template <typename COMPARISON>
+            inline void sortBy(COMPARISON &comparison)
+            {
+                CompareBy<COMPARISON> cmp = { comparison };
+                sort(cmp);
+            }
+
+
             //! insertion after a node
             /**
              \param mine one of my node

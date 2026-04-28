@@ -3,6 +3,7 @@
 #ifndef Y_Handy_ListProto_Included
 #define Y_Handy_ListProto_Included 1
 
+#include "y/type/proxy.hpp"
 #include "y/core/list.hpp"
 #include "y/container/iter/linked.hpp"
 #include "y/ability/lockable.hpp"
@@ -19,12 +20,12 @@ namespace Yttrium
         template <typename,typename> class CACHE,
         typename                           THREADING_POLICY
         >
-        class ListProto
+        class ListProto : public Proxy< Core::ListOf<NODE> >
         {
         public:
             typedef NODE                         NodeType;
             typedef typename NodeType::ParamType ParamType;
-            typedef Core::ListOf<NODE>           CoreType;
+            typedef Core::ListOf<NODE>           CoreList;
             typedef typename NodeType::Type      Type;
             typedef typename NodeType::ConstType ConstType;
 
@@ -51,7 +52,7 @@ namespace Yttrium
                 return os << self.list;
             }
 
-            inline size_t size()     const noexcept { return list.size; }
+            inline size_t size() const noexcept { return list.size; }
 
             inline void popTail() noexcept
             {
@@ -89,8 +90,7 @@ namespace Yttrium
 
             inline virtual void free() noexcept { free_(); }
 
-
-
+            
             inline Type &      head()       noexcept { assert(list.head); return **list.head; }
             inline Type &      tail()       noexcept { assert(list.tail); return **list.tail; }
             inline ConstType & head() const noexcept { assert(list.head); return **list.head; }
@@ -109,15 +109,16 @@ namespace Yttrium
             }
 
 
-
         protected:
-            Core::ListOf<NODE>           list;
+            CoreList list;
 
         public:
             CACHE<NODE,THREADING_POLICY> cache;
 
         private:
             Y_Disable_Assign(ListProto);
+            inline virtual const CoreList & locus() const noexcept { return list; }
+
             inline void free_() noexcept
             {
                 Y_Lock(*cache);
