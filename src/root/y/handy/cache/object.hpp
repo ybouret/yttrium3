@@ -82,16 +82,17 @@ namespace Yttrium
                 zpool.store( Pulverized(alive) );
             }
 
-            inline void remove(NodeType * const alive) noexcept
+            inline virtual void remove(NodeType * const alive) noexcept
             {
                 Y_Must_Lock();
                 assert(alive);
                 LightObject::ReleaseZombie( Pulverized(alive) );
             }
 
-            inline ObjectCache *       operator->()       noexcept { return this; }
-            inline const ObjectCache * operator->() const noexcept { return this; }
 
+            inline ObjectCache *       operator->()       noexcept { return  this; }
+            inline const ObjectCache * operator->() const noexcept { return  this; }
+            inline Lockable &          operator*()        noexcept { return *this; }
 
 
         private:

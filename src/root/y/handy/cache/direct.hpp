@@ -7,6 +7,7 @@
 
 namespace Yttrium
 {
+    
     namespace Handy
     {
         template <typename NODE, typename THREADING_POLICY>
@@ -54,8 +55,12 @@ namespace Yttrium
                 banish(alive);
             }
 
+
+
             inline DirectCache *       operator->()       noexcept { return this; }
             inline const DirectCache * operator->() const noexcept { return this; }
+
+            inline Lockable & operator*() noexcept { return *this; }
 
 
 

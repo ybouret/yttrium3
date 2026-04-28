@@ -10,6 +10,8 @@
 
 namespace Yttrium
 {
+    class Lockable;
+    
     namespace Handy
     {
 

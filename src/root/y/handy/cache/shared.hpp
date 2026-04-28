@@ -23,6 +23,12 @@ namespace Yttrium
             public:
                 inline explicit Code() : CountedObject(), InnerCache() {}
                 inline virtual ~Code() noexcept {}
+
+                inline virtual void remove(NodeType * const alive) noexcept
+                {
+                    this->banish(alive);
+                }
+
             private:
                 Y_Disable_Copy_And_Assign(Code);
             };
@@ -40,9 +46,9 @@ namespace Yttrium
             {
             }
 
-            inline InnerCache       * operator->() noexcept       { return & *code; }
+            inline InnerCache       * operator->()       noexcept { return & *code; }
             inline const InnerCache * operator->() const noexcept { return & *code; }
-
+            inline Lockable &         operator*()        noexcept { return   *code; }
 
         private:
             Y_Disable_Assign(SharedCache);

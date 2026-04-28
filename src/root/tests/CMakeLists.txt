@@ -156,4 +156,6 @@ Y_UTEST(counting:comb)
 Y_UTEST(counting:part)
 
 Y_UTEST(handy:caches)
+Y_UTEST(handy:lists)
+
 

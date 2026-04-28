@@ -136,6 +136,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(counting_part);
 
     Y_UTEST(handy_caches);
+    Y_UTEST(handy_lists);
 }
 Y_UTEST_EXEC()
 
