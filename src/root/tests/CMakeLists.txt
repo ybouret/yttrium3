@@ -19,6 +19,7 @@ stream
 coven
 counting
 handy
+dft
 )
 
 Y_LinkLibraries(test-root)
@@ -159,5 +160,5 @@ Y_UTEST(handy:caches)
 Y_UTEST(handy:lists)
 Y_UTEST(handy:basic:light:list)
 
-
+Y_UTEST(dft:mul)
 

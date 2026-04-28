@@ -20,6 +20,19 @@ namespace Yttrium
     {
         static void *       Address(void * const)       noexcept; //!< for mutable region  \return given address
         static const void * Address(const void * const) noexcept; //!< for constant region \return given address
+
+        template <typename T> static inline
+        T * Cast(void * const addr) noexcept {
+            return static_cast<T*>( Address(addr) );
+        }
+
+        template <typename T> static inline
+        const T * Cast(const void * const addr) noexcept {
+            return static_cast<const T*>( Address(addr) );
+        }
+
+
+
     };
 
 }
