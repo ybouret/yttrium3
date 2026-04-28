@@ -11,20 +11,22 @@
 namespace Yttrium
 {
 
+    //! destroy and zero memory \param alive live object
     template <typename T> inline
-    void Pulverize(T * const obj) noexcept
+    void Pulverize(T * const alive) noexcept
     {
-        assert(0!=obj);
-        obj->~T();
-        Yttrium_BZero(obj,sizeof(T));
+        assert(0!=alive);
+        alive->~T();
+        Yttrium_BZero(alive,sizeof(T));
     }
 
+    //! destroy and zero memory \param alive live object \return zombie object
     template <typename T> inline
-    T * Pulverized(T * const obj) noexcept
+    T * Pulverized(T * const alive) noexcept
     {
-        assert(0!=obj);
-        obj->~T();
-        return static_cast<T*>(Yttrium_BZero(obj,sizeof(T)));
+        assert(0!=alive);
+        alive->~T();
+        return static_cast<T*>(Yttrium_BZero(alive,sizeof(T)));
     }
 
 }

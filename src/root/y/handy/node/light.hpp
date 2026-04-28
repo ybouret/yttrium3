@@ -9,26 +9,52 @@ namespace Yttrium
     namespace Handy
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Light Node
+        //
+        //
+        //______________________________________________________________________
         template <typename T>
         class LightNode
         {
         public:
-            Y_Args_Expose(T,Type);
-            typedef T & ParamType;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            Y_Args_Expose(T,Type); //!< aliases
+            typedef T & ParamType; //!< alias
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
             inline  LightNode(ParamType args) noexcept :
-            data(args), next(0), prev(0) {}
-            inline ~LightNode() noexcept {}
+            data(args), next(0), prev(0) {} //!< setup \param args for inner data
+            inline ~LightNode() noexcept {} //!< cleanup
 
-            inline Type      & operator*()       noexcept { return data; }
-            inline ConstType & operator*() const noexcept { return data; }
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            inline Type      & operator*()       noexcept { return data; } //!< \return inner data
+            inline ConstType & operator*() const noexcept { return data; } //!< \return inner data
 
         private:
-            Y_Disable_Copy_And_Assign(LightNode);
-            Type &      data;
+            Y_Disable_Copy_And_Assign(LightNode); //!< discarded
+            Type &      data; //!< inner data
         public:
-            LightNode * next;
-            LightNode * prev;
+            LightNode * next; //!< for list
+            LightNode * prev; //!< for list/pool
         };
 
 

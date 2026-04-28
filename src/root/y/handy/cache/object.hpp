@@ -14,14 +14,36 @@ namespace Yttrium
 {
     namespace Handy
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Cache with object level pooling
+        //
+        //
+        //______________________________________________________________________
         template <typename NODE, typename THREADING_POLICY>
         class ObjectCache : public THREADING_POLICY, public Caching
         {
         public:
-            Y_HandyCache_Decl();
-            typedef Core::PoolOf<NodeType> PoolType;
-            typedef Core::ListOf<NodeType> ListType;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            Y_HandyCache_Decl();                     //!< aliases
+            typedef Core::PoolOf<NodeType> PoolType; //!< alias
+            typedef Core::ListOf<NodeType> ListType; //!< alias
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup
             inline explicit ObjectCache() :
             ThreadingPolicy(),
             Caching(),
@@ -30,6 +52,7 @@ namespace Yttrium
 
             }
 
+            //! duplicate (do nothing)
             inline ObjectCache(const ObjectCache &) :
             ThreadingPolicy(),
             Caching(),
@@ -38,10 +61,15 @@ namespace Yttrium
 
             }
 
-
+            //! cleanup
             inline virtual ~ObjectCache() noexcept { release_(); }
 
-
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
             inline virtual void   release()      noexcept { release_(); }
             inline virtual size_t count()  const noexcept { return zpool.size; }
             inline virtual void   cache(const size_t n)
@@ -64,7 +92,18 @@ namespace Yttrium
                 Core::ListToPool::Make(zpool,zlist);
             }
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
 
+            //! summon new node
+            /**
+             \param args for constructor
+             \return constructed node
+             */
             inline NodeType * summon(ParamType args) {
                 Y_Must_Lock();
                 NodeType * const node = zpool.size ? zpool.query() : LightObject::AcquireZombie<NodeType>();
@@ -75,6 +114,7 @@ namespace Yttrium
                 }
             }
 
+            //! banish living node, keep zombie \param alive living node
             inline void banish(NodeType * const alive) noexcept
             {
                 Y_Must_Lock();
@@ -82,22 +122,33 @@ namespace Yttrium
                 zpool.store( Pulverized(alive) );
             }
 
-            inline virtual void remove(NodeType * const alive) noexcept
+            //! remove living node \param alive living node
+            inline virtual void removeLiving(NodeType * const alive) noexcept
             {
                 Y_Must_Lock();
                 assert(alive);
                 LightObject::ReleaseZombie( Pulverized(alive) );
             }
 
+            //! remove zombie node \param zombie zombie node
+            inline virtual void removeZombie(NodeType * const zombie) noexcept
+            {
+                Y_Must_Lock();
+                assert(zombie);
+                LightObject::ReleaseZombie( zombie );
+            }
 
-            inline ObjectCache *       operator->()       noexcept { return  this; }
-            inline const ObjectCache * operator->() const noexcept { return  this; }
-            inline Lockable &          operator*()        noexcept { return *this; }
+
+            inline ObjectCache *       operator->()       noexcept { return  this; } //!< \return API
+            inline const ObjectCache * operator->() const noexcept { return  this; } //!< \return API
+            inline Lockable &          operator*()        noexcept { return *this; } //!< \return lockable
 
 
         private:
-            Y_Disable_Assign(ObjectCache);
-            PoolType zpool;
+            Y_Disable_Assign(ObjectCache); //!< discarded
+            PoolType zpool;                //!< pool of zombies
+
+            //! release all pool
             inline void release_() noexcept
             {
                 Y_Must_Lock();

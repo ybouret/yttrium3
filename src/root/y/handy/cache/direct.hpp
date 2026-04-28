@@ -10,27 +10,51 @@ namespace Yttrium
     
     namespace Handy
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Direct communication to light objects
+        //
+        //
+        //______________________________________________________________________
         template <typename NODE, typename THREADING_POLICY>
         class DirectCache : public THREADING_POLICY
         {
         public:
-            Y_HandyCache_Decl();
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            Y_HandyCache_Decl(); //!< aliases
 
-            inline explicit DirectCache() : ThreadingPolicy()
-            {
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            inline explicit DirectCache() : ThreadingPolicy() {} //!< setup
+            inline virtual ~DirectCache() noexcept            {} //!< cleanup
 
-            }
-
-            inline DirectCache(const DirectCache &) : ThreadingPolicy()
-            {
-            }
-            
-
-            inline virtual ~DirectCache() noexcept
-            {
-            }
+            //! duplicate
+            inline DirectCache(const DirectCache &) : ThreadingPolicy() {}
 
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! summon new node
+            /**
+             \param args for constructor
+             \return constructed node
+             */
             inline NodeType * summon(ParamType args) {
                 Y_Must_Lock();
                 NodeType * const node = LightObject::AcquireZombie<NodeType>();
@@ -43,6 +67,7 @@ namespace Yttrium
                 }
             }
 
+            //! banish living node \param alive live node
             inline void banish(NodeType * const alive) noexcept
             {
                 Y_Must_Lock();
@@ -50,22 +75,32 @@ namespace Yttrium
                 LightObject::ReleaseZombie( Pulverized(alive) );
             }
 
-            inline void remove(NodeType * const alive) noexcept
+
+            //! remove living node \param alive live node
+            inline void removeLiving(NodeType * const alive) noexcept
             {
                 banish(alive);
             }
 
+            //! remove zombie node \param zombie zombie node
+            inline void removeZombie(NodeType * const zombie) noexcept
+            {
+                Y_Must_Lock();
+                assert(zombie);
+                LightObject::ReleaseZombie(zombie);
+            }
 
 
-            inline DirectCache *       operator->()       noexcept { return this; }
-            inline const DirectCache * operator->() const noexcept { return this; }
 
-            inline Lockable & operator*() noexcept { return *this; }
+
+            inline DirectCache *       operator->()       noexcept { return this;  } //!< \return API
+            inline const DirectCache * operator->() const noexcept { return this;  } //!< \return API
+            inline Lockable &          operator*()        noexcept { return *this; } //!< \return lockable
 
 
 
         private:
-            Y_Disable_Assign(DirectCache);
+            Y_Disable_Assign(DirectCache); //!< discarded
         };
     }
 
