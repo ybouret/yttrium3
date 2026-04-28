@@ -101,7 +101,7 @@ namespace Yttrium
         inline virtual size_t size()     const noexcept { assert(code); return code->size;      }
         inline virtual size_t capacity() const noexcept { assert(code); return code->capacity;  }
         inline virtual void   free()           noexcept { assert(code); return code->free();    }
-        inline virtual void   release()        noexcept { assert(code); return code->release(); }
+        inline virtual void   release()        noexcept { assert(code); return code->release(); } //!< release all memory
 
         inline virtual void   popTail()  noexcept { assert(code); code->popTail(); }
         inline virtual void   popHead()  noexcept { assert(code); code->popHead(); }

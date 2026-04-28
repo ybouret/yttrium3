@@ -118,7 +118,7 @@ namespace Yttrium
 
             //! mirror existing node
             /**
-             \param node for copy constructor
+             \param mine for copy constructor
              \return duplicated node
              */
             inline NodeType * mirror(const NodeType * const mine) {

@@ -11,15 +11,33 @@
 
 namespace Yttrium
 {
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Dynamic interface
+    //
+    //
+    //__________________________________________________________________________
     template <typename RELEASABLE>
     class Dynamic : public Expandable<RELEASABLE>, public Recyclable
     {
     public:
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+
+        //! setup
         inline explicit Dynamic() noexcept : Expandable<RELEASABLE>(), Recyclable() {}
+
+        //! cleanup
         inline virtual ~Dynamic() noexcept {}
         
     private:
-        Y_Disable_Copy_And_Assign(Dynamic);
+        Y_Disable_Copy_And_Assign(Dynamic); //!< discarded
     };
 
 }

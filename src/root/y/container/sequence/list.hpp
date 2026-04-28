@@ -115,7 +115,7 @@ namespace Yttrium
             replicate(seq.begin(),seq.size());
         }
 
-
+        //! display using list API
         inline friend std::ostream & operator<<(std::ostream &os, const List &self)
         {
             return os << self.list;
@@ -137,7 +137,7 @@ namespace Yttrium
             while(list.size) pool.store( Destructed(list.popTail()) );
         }
 
-        inline virtual void release() noexcept { release_(); }
+        inline virtual void release() noexcept { release_(); } //!< release all memory
 
         inline virtual void popTail() noexcept
         {

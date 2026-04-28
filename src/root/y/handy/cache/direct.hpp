@@ -30,7 +30,6 @@ namespace Yttrium
             //
             //__________________________________________________________________
             Y_HandyCache_Decl(); //!< aliases
-            typedef Releasable ListBase;
 
             //__________________________________________________________________
             //
@@ -71,7 +70,7 @@ namespace Yttrium
 
             //! mirror existing node
             /**
-             \param node for copy constructor
+             \param mine for copy constructor
              \return duplicate node
              */
             inline NodeType * mirror(const NodeType * const mine)
