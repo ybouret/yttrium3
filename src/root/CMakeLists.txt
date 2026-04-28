@@ -70,6 +70,8 @@ y/coven
 y/coven/univocal
 y/counting
 y/counting/c
+y/handy
+y/handy/cache
 )
 
 add_subdirectory(tests)

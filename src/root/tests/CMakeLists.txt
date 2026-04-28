@@ -18,6 +18,7 @@ apex
 stream
 coven
 counting
+handy
 )
 
 Y_LinkLibraries(test-root)
@@ -153,4 +154,6 @@ Y_UTEST(coven:colinear)
 Y_UTEST(counting:perm)
 Y_UTEST(counting:comb)
 Y_UTEST(counting:part)
+
+Y_UTEST(handy:caches)
 
