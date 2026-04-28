@@ -72,6 +72,7 @@ y/counting
 y/counting/c
 y/handy
 y/handy/cache
+y/handy/node
 )
 
 add_subdirectory(tests)
