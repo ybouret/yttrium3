@@ -8,18 +8,45 @@
 namespace Yttrium
 {
 
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Proxy to interface
+    //
+    //
+    //__________________________________________________________________________
     template <typename T>
     class Proxy
     {
     public:
-        Y_Args_Expose(T,Interface);
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        Y_Args_Expose(T,Interface); //!< alias
 
-        inline explicit Proxy() noexcept {}
-        inline virtual ~Proxy() noexcept {}
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+        inline explicit Proxy() noexcept {} //!< setup
+        inline virtual ~Proxy() noexcept {} //!< cleanup
 
-        inline Interface *      operator->()       noexcept { return & (Interface&)locus(); }
-        inline ConstInterface * operator->() const noexcept { return & locus(); }
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+        inline Interface *      operator->()       noexcept { return & (Interface&)locus(); } //!< \return access
+        inline ConstInterface * operator->() const noexcept { return & locus(); }             //!< \return const access
 
+        //! forward call
         inline friend std::ostream & operator<<(std::ostream &os, const Proxy &self)
         {
             return os << self.locus();
@@ -27,8 +54,9 @@ namespace Yttrium
 
 
     private:
-        Y_Disable_Copy_And_Assign(Proxy);
+        Y_Disable_Copy_And_Assign(Proxy); //!< discarding
 
+        //! \return interface location
         virtual ConstInterface & locus() const noexcept = 0;
     };
 

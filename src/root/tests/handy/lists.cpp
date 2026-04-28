@@ -87,7 +87,7 @@ namespace
     template <typename T>
     static inline void testProto( Core::Rand &ran )
     {
-        const size_t n = ran.in<size_t>(5,10);
+        const size_t n = ran.in<size_t>(10,20);
         Vector<T>    v(WithAtLeast,n);
         for(size_t i=0;i<n;++i) v << T( ran.in<int>(-10,10) );
 

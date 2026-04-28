@@ -16,6 +16,7 @@ namespace Yttrium
     namespace Handy
     {
 
+        //! helper for all caches
 #define Y_HandyCache_Decl()                             \
 typedef THREADING_POLICY               ThreadingPolicy; \
 typedef NODE                           NodeType;        \

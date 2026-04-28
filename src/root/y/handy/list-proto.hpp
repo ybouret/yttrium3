@@ -15,6 +15,14 @@ namespace Yttrium
     namespace Handy
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Prototype for all lists
+        //
+        //
+        //______________________________________________________________________
         template <
         typename                           NODE,
         template <typename,typename> class CACHE,
@@ -23,17 +31,34 @@ namespace Yttrium
         class ListProto : public Proxy< Core::ListOf<NODE> >
         {
         public:
-            typedef NODE                         NodeType;
-            typedef typename NodeType::ParamType ParamType;
-            typedef Core::ListOf<NODE>           CoreList;
-            typedef typename NodeType::Type      Type;
-            typedef typename NodeType::ConstType ConstType;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef NODE                         NodeType;  //!< alias
+            typedef typename NodeType::ParamType ParamType; //!< alias
+            typedef Core::ListOf<NODE>           CoreList;  //!< alias
+            typedef typename NodeType::Type      Type;      //!< alias
+            typedef typename NodeType::ConstType ConstType; //!< alias
+            typedef Proxy<CoreList>              ProxyType; //!< alias
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup empty
             inline explicit ListProto() : list(), cache() {}
 
+            //! setup with existing cache \param sc shared cache (should be)
             inline explicit ListProto(const CACHE<NODE,THREADING_POLICY> &sc) :
             list(), cache(sc) {}
 
+            //! duplicate \param other
             inline explicit ListProto(const ListProto &other) : list(), cache(other.cache)
             {
                 Y_Lock(*cache);
@@ -45,41 +70,51 @@ namespace Yttrium
                 catch(...) { free_(); throw; }
             }
 
+            //! cleanup
             inline virtual ~ListProto() noexcept { free_(); }
 
-            inline friend std::ostream & operator<<(std::ostream &os, const ListProto &self)
-            {
-                return os << self.list;
-            }
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            inline size_t size() const noexcept { return list.size; } //!< \return current size
 
-            inline size_t size() const noexcept { return list.size; }
 
+            //! remove tail node
             inline void popTail() noexcept
             {
                 Y_Lock(*cache);
                 cache->banish( list.popTail() );
             }
 
+            //! remove head node
             inline void popHead() noexcept
             {
                 Y_Lock(*cache);
                 cache->banish( list.popTail() );
             }
 
+            //! push new value \param args compatible value
             inline void pushTail(ParamType args)
             {
                 Y_Lock(*cache);
                 list.pushTail( cache->summon(args) );
             }
 
+            //! push new value \param args compatible value
             inline void pushHead(ParamType args)
             {
                 Y_Lock(*cache);
                 list.pushHead( cache->summon(args) );
             }
 
-            inline ListProto & operator<<(ParamType args)
-            {
+            //! free current content, keep memory
+            inline virtual void free() noexcept { free_(); }
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            inline ListProto & operator<<(ParamType args) {
                 pushTail(args); return *this;
             }
 
@@ -87,14 +122,6 @@ namespace Yttrium
             {
                 pushHead(args); return *this;
             }
-
-            inline virtual void free() noexcept { free_(); }
-
-            
-            inline Type &      head()       noexcept { assert(list.head); return **list.head; }
-            inline Type &      tail()       noexcept { assert(list.tail); return **list.tail; }
-            inline ConstType & head() const noexcept { assert(list.head); return **list.head; }
-            inline ConstType & tail() const noexcept { assert(list.tail); return **list.tail; }
 
             inline ListProto & operator<<( const ListProto & other )
             {
@@ -107,20 +134,28 @@ namespace Yttrium
                 { ListProto tmp(other); list.mergeHead(tmp.list); }
                 return *this;
             }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
 
+            
+            inline Type &      head()       noexcept { assert(list.head); return **list.head; } //!< \return head item
+            inline Type &      tail()       noexcept { assert(list.tail); return **list.tail; } //!< \return tail item
+            inline ConstType & head() const noexcept { assert(list.head); return **list.head; } //!< \return head item
+            inline ConstType & tail() const noexcept { assert(list.tail); return **list.tail; } //!< \return tail item
+
+            
         protected:
-            CoreList list;
+            CoreList list; //!< current content
 
         public:
-            CACHE<NODE,THREADING_POLICY> cache;
+            CACHE<NODE,THREADING_POLICY> cache; //!< cache
 
         private:
-            Y_Disable_Assign(ListProto);
-            inline virtual const CoreList & locus() const noexcept { return list; }
+            Y_Disable_Assign(ListProto); //!< discarded
 
-            inline void free_() noexcept
-            {
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            inline virtual const CoreList & locus() const noexcept { return list; }
+            inline void free_() noexcept {
                 Y_Lock(*cache);
                 while( list.size ) cache->banish( list.popTail() );
             }
@@ -132,7 +167,6 @@ namespace Yttrium
             // Iterators
             //
             //__________________________________________________________________
-#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             typedef Iter::Linked<Iter::Forward,NODE>       Iterator;
             typedef Iter::Linked<Iter::Forward,const NODE> ConstIterator;
 

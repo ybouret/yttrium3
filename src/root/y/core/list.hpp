@@ -340,6 +340,7 @@ namespace Yttrium
             }
 
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             template <typename COMPARISON>
             struct CompareBy
             {
@@ -349,8 +350,9 @@ namespace Yttrium
                     return comparison(**lhs,**rhs);
                 }
             };
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
-
+            //! sort by data comparision \param comparison compatible comparison
             template <typename COMPARISON>
             inline void sortBy(COMPARISON &comparison)
             {
