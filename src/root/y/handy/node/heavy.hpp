@@ -53,7 +53,7 @@ namespace Yttrium
 
         private:
             Y_Disable_Assign(HeavyNode); //!< discarded
-            Type &      data; //!< inner data
+            Type        data; //!< inner data
         public:
             HeavyNode * next; //!< for list
             HeavyNode * prev; //!< for list/pool

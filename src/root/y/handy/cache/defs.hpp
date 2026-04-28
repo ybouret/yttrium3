@@ -1,3 +1,4 @@
+//! \file
 
 #ifndef Y_Handy_Cache_Defs_Included
 #define Y_Handy_Cache_Defs_Included 1
