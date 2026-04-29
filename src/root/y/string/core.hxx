@@ -461,3 +461,14 @@ template <> String<CH>::ConstType & String<CH>:: getTail() const noexcept
     assert(code->size>0);
     return code->cxx[code->size];
 }
+
+
+template <> String<CH> String<CH>::Read(InputStream &fp, const char *varName)
+{
+    const size_t nch = fp.vbr<size_t>(varName,"size"); 
+    String<CH>   res(WithAtLeast,nch,InitEmptyString);
+
+    for(size_t i=0;i<nch;++i)
+        res += fp.cbr<CH>(varName,"char");
+    return res;
+}

@@ -31,6 +31,8 @@ namespace Yttrium
         InitBlankString  //!< size = requested
     };
 
+    class InputStream;
+
     namespace Core
     {
 
@@ -105,6 +107,9 @@ namespace Yttrium
             virtual size_t       length() const noexcept;
             
             virtual size_t       serialize(OutputStream &) const;
+
+            static String Read(InputStream &fp,
+                               const char * varName);
 
             //__________________________________________________________________
             //

@@ -3,6 +3,7 @@
 #include "y/string/stride.hpp"
 #include "y/swap.hpp"
 #include "y/stream/output.hpp"
+#include "y/stream/input.hpp"
 
 namespace Yttrium
 {

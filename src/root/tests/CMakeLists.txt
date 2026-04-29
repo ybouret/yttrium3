@@ -146,6 +146,7 @@ Y_UTEST(stream:u64)
 Y_UTEST(stream:output:file)
 Y_UTEST(stream:input:file)
 Y_UTEST(stream:io64)
+Y_UTEST(stream:serialize)
 
 Y_UTEST(coven:univocal)
 Y_UTEST(coven:vector)
