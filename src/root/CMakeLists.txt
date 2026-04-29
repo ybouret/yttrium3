@@ -85,6 +85,8 @@ y/handy/joint/heavy
 y/dft
 y/dft/fmt
 y/jive
+y/jive/pattern
+y/jive/pattern/basic
 )
 
 add_subdirectory(tests)

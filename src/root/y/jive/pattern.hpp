@@ -4,6 +4,7 @@
 #define Y_Jive_Pattern_Included 1
 
 #include "y/jive/source.hpp"
+#include "y/type/fourcc.hpp"
 
 namespace Yttrium
 {
@@ -12,7 +13,7 @@ namespace Yttrium
 
         class Pattern : public Object
         {
-        private:
+        protected:
             explicit Pattern(const uint32_t)  noexcept;
             explicit Pattern(const Pattern &) noexcept;
 
@@ -20,7 +21,8 @@ namespace Yttrium
             virtual ~Pattern() noexcept;
 
 
-            virtual bool accepts(Token &token, Source &source) const = 0;
+            virtual bool      takes(Token &, Source &) const = 0;
+            virtual Pattern * clone() const = 0;
 
             const uint32_t uuid;
             const char     name[8];

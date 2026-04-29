@@ -1,12 +1,31 @@
-#include "y/jive/pattern.hpp"
+#include "y/jive/pattern/basic/all.hpp"
+#include "y/pointer/auto.hpp"
 #include "y/utest/run.hpp"
 
 using namespace Yttrium;
 
+
+namespace  {
+
+    static inline
+    void testPattern(const Jive::Pattern &p)
+    {
+        std::cerr << "-- " << p.name << std::endl;
+
+        AutoPtr<Jive::Pattern> q = p.clone();
+
+    }
+
+
+}
+
 Y_UTEST(jive_pattern)
 {
     Y_SIZEOF(Jive::Pattern);
-    
+    Y_SIZEOF(Jive::Any1);
+
+    { Jive::Any1 p; testPattern(p); }
+
 }
 Y_UDONE()
 
