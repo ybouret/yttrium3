@@ -17,7 +17,7 @@ namespace Yttrium
         typedef ArcPtr<const String> SharedString;
 
         Identifier(const String * const) noexcept;
-        Identifier(const Identifier &)    noexcept;
+        Identifier(const Identifier &)   noexcept;
         Identifier(const String &);
         Identifier(const char * const);
         Identifier(const char);

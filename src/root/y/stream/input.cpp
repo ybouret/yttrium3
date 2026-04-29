@@ -6,7 +6,7 @@
 namespace Yttrium
 {
 
-    InputStream::  InputStream() : Stream() {}
+    //InputStream::  InputStream() : Stream() {}
     InputStream:: ~InputStream() noexcept {}
 
     bool InputStream:: peek(char &C)
@@ -60,7 +60,7 @@ namespace Yttrium
         if(numRead<blockSize)
         {
             const size_t missing = blockSize - numRead;
-            Specific::Exception excp(title.c_str(),"#missing=%s", Decimal(missing).c_str());
+            Specific::Exception excp(title->c_str(),"#missing=%s", Decimal(missing).c_str());
             throw excp.signedFor(varName,varPart);
         }
     }
@@ -122,7 +122,7 @@ namespace Yttrium
                                         const char * const varName,
                                         const char * const varPart)
     {
-        if(qw>0xff) { Specific::Exception excp(title.c_str(),"read more than 0xff"); throw excp.signedFor(varName,varPart); }
+        if(qw>0xff) { Specific::Exception excp(title->c_str(),"read more than 0xff"); throw excp.signedFor(varName,varPart); }
         return (uint8_t) qw;
     }
 
@@ -131,7 +131,7 @@ namespace Yttrium
                                         const char * const varName,
                                         const char * const varPart)
     {
-        if(qw>0xffff) { Specific::Exception excp(title.c_str(),"read more than 0xffff"); throw excp.signedFor(varName,varPart); }
+        if(qw>0xffff) { Specific::Exception excp(title->c_str(),"read more than 0xffff"); throw excp.signedFor(varName,varPart); }
         return (uint16_t) qw;
     }
 
@@ -140,7 +140,7 @@ namespace Yttrium
                                           const char * const varName,
                                           const char * const varPart)
     {
-        if(qw>0xffffffff) { Specific::Exception excp(title.c_str(),"read more than 0xffffffff"); throw excp.signedFor(varName,varPart); }
+        if(qw>0xffffffff) { Specific::Exception excp(title->c_str(),"read more than 0xffffffff"); throw excp.signedFor(varName,varPart); }
         return (uint32_t) qw;
     }
 

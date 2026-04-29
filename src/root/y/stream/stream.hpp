@@ -5,6 +5,7 @@
 #define Y_Stream_Included 1
 
 #include "y/ability/identifiable.hpp"
+#include "y/stream/identifier.hpp"
 #include "y/string.hpp"
 
 namespace Yttrium
@@ -22,7 +23,6 @@ namespace Yttrium
     //__________________________________________________________________________
     class  Stream : public Identifiable
     {
-
     public:
         //______________________________________________________________________
         //
@@ -38,9 +38,7 @@ namespace Yttrium
 
         }
         virtual ~Stream() noexcept; //!< cleanup
-        
-    protected:
-        explicit Stream();
+
         
     public:
         //______________________________________________________________________
@@ -57,7 +55,7 @@ namespace Yttrium
         // method
         //
         //______________________________________________________________________
-        Exception & stamp(Exception &excp); //!< stamp exception \param excp input exception \return stamped exception
+        Exception & stamp(Exception &excp, const int line=0); //!< stamp exception \param excp input exception \return stamped exception
 
         //______________________________________________________________________
         //
@@ -65,7 +63,7 @@ namespace Yttrium
         // Members
         //
         //______________________________________________________________________
-        const String title; //!< title for this stream
+        const Identifier title; //!< title for this stream
 
     private:
         Y_Disable_Copy_And_Assign(Stream); //!< discarded

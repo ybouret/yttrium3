@@ -127,9 +127,7 @@ namespace Yttrium
             } alias = { make<UType>(qw,varName,varPart) };
             return alias.t;
         }
-
-    protected:
-        explicit InputStream(); //!< for virtual constructor
+        
 
     private:
         Y_Disable_Copy_And_Assign(InputStream); //!< discarded

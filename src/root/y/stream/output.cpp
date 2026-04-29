@@ -4,10 +4,7 @@
 namespace Yttrium
 {
 
-    OutputStream:: OutputStream() : Stream()
-    {
-
-    }
+    //OutputStream:: OutputStream() : Stream() {}
 
     OutputStream:: ~OutputStream() noexcept
     {

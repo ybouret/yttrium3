@@ -75,8 +75,10 @@ y/handy/cache
 y/handy/node
 y/handy/basic/light
 y/handy/basic/heavy
+y/handy/plain
 y/handy/plain/light
 y/handy/plain/heavy
+y/handy/joint
 y/handy/joint/light
 y/handy/joint/heavy
 y/dft

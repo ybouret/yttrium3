@@ -159,6 +159,9 @@ Y_UTEST(counting:part)
 Y_UTEST(handy:caches)
 Y_UTEST(handy:lists)
 Y_UTEST(handy:basic:light:list)
+Y_UTEST(handy:basic:heavy:list)
+Y_UTEST(handy:plain:light:list)
+Y_UTEST(handy:plain:heavy:list)
 
 Y_UTEST(dft:mul)
 

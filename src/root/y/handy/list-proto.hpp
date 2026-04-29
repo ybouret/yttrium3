@@ -7,6 +7,7 @@
 #include "y/core/list.hpp"
 #include "y/container/iter/linked.hpp"
 #include "y/ability/lockable.hpp"
+#include "y/ability/recyclable.hpp"
 
 
 namespace Yttrium
@@ -28,7 +29,7 @@ namespace Yttrium
         template <typename,typename> class CACHE,
         typename                           THREADING_POLICY
         >
-        class ListProto : public Proxy< Core::ListOf<NODE> >
+        class ListProto : public Proxy< Core::ListOf<NODE> >, public Recyclable
         {
         public:
             //__________________________________________________________________
@@ -80,6 +81,14 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
+            // Interface
+            //
+            //__________________________________________________________________
+            inline virtual void free() noexcept { free_(); }
+
+            //__________________________________________________________________
+            //
+            //
             // Methods
             //
             //__________________________________________________________________
@@ -114,8 +123,7 @@ namespace Yttrium
                 list.pushHead( cache->summon(args) );
             }
 
-            //! free current content, keep memory
-            inline virtual void free() noexcept { free_(); }
+
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             inline ListProto & operator<<(ParamType args) {

@@ -33,7 +33,7 @@ namespace Yttrium
         template <typename NAME> inline
         explicit InputFile(const NAME &name) :
         InputStream(name),
-        code( OpenRegular(title) ),
+        code( OpenRegular(*title) ),
         buff()
         {
         }

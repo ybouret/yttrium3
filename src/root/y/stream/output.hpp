@@ -19,7 +19,7 @@ namespace Yttrium
     //
     //
     //__________________________________________________________________________
-    class OutputStream : public virtual Stream
+    class OutputStream : public Stream
     {
 
     public:
@@ -94,7 +94,7 @@ namespace Yttrium
         OutputStream & operator()(const char * const fmt,...) Y_Printf_Check(2,3);
 
     protected:
-        explicit OutputStream(); //!< setup for virtual constructor
+        //explicit OutputStream(); //!< setup for virtual constructor
 
     private:
         Y_Disable_Copy_And_Assign(OutputStream); //!< discarded
