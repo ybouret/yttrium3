@@ -13,21 +13,30 @@ namespace Yttrium
 {
     namespace Handy
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Plain List of light nodes
+        //
+        //
+        //______________________________________________________________________
         template <typename T, typename THREADING_POLICY>
         class PlainLightList : public PlainList<LightNode<T>,THREADING_POLICY>
         {
         public:
-            inline explicit PlainLightList() {}
+            inline explicit PlainLightList()          {} //!< setup
+            inline virtual ~PlainLightList() noexcept {} //!< cleanup
 
+            //! duplicate \param L another list
             inline PlainLightList(const PlainLightList &L) :
             PlainList<LightNode<T>,THREADING_POLICY>(L)
             {
             }
 
-            inline virtual ~PlainLightList() noexcept {}
 
         private:
-            Y_Disable_Assign(PlainLightList);
+            Y_Disable_Assign(PlainLightList); //!< discarded
         };
 
     }

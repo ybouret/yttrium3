@@ -12,34 +12,39 @@ namespace Yttrium
     namespace Handy
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Plain List prototype
+        //
+        //
+        //______________________________________________________________________
         template <typename NODE, typename THREADING_POLICY>
         class PlainList :
         public ListProto<NODE,ObjectCache,THREADING_POLICY>,
         public Releasable
         {
         public:
-            inline explicit PlainList() {}
+            inline explicit PlainList()          {} //!< setup
+            inline virtual ~PlainList() noexcept {} //!< cleanup
 
+            //! duplicate \param L another list
             inline PlainList(const PlainList &L) :
             ListProto<NODE,ObjectCache,THREADING_POLICY>(L),
             Releasable()
             {
             }
             
-
-            inline virtual ~PlainList() noexcept
-            {
-            }
-
-            inline virtual void release() noexcept
-            {
+            
+            inline virtual void release() noexcept {
                 while(this->list.size>0)
                     this->cache->removeLiving(this->list.popTail());
                 this->cache->release();
             }
 
         private:
-            Y_Disable_Assign(PlainList);
+            Y_Disable_Assign(PlainList); //!< discarded
         };
 
     }

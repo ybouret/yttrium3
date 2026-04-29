@@ -14,21 +14,30 @@ namespace Yttrium
 {
     namespace Handy
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Plain List of heavy nodes
+        //
+        //
+        //______________________________________________________________________
         template <typename T, typename THREADING_POLICY>
         class PlainHeavyList : public PlainList<HeavyNode<T>,THREADING_POLICY>
         {
         public:
-            inline explicit PlainHeavyList() {}
+            inline explicit PlainHeavyList()          {} //!< setup
+            inline virtual ~PlainHeavyList() noexcept {} //!< cleanup
 
+            //! duplicate \param L another list
             inline PlainHeavyList(const PlainHeavyList &L) :
             PlainList<HeavyNode<T>,THREADING_POLICY>(L)
             {
             }
 
-            inline virtual ~PlainHeavyList() noexcept {}
 
         private:
-            Y_Disable_Assign(PlainHeavyList);
+            Y_Disable_Assign(PlainHeavyList); //!< discarded
         };
 
     }

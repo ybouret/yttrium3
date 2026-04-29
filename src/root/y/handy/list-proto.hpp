@@ -64,6 +64,7 @@ namespace Yttrium
             //! duplicate \param other
             inline explicit ListProto(const ListProto &other) :
             ProxyType(),
+            Recyclable(),
             list(), cache(other.cache)
             {
                 Y_Lock(*cache);

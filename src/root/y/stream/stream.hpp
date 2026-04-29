@@ -52,10 +52,18 @@ namespace Yttrium
         //______________________________________________________________________
         //
         //
-        // method
+        // Methods
         //
         //______________________________________________________________________
-        Exception & stamp(Exception &excp, const int line=0); //!< stamp exception \param excp input exception \return stamped exception
+
+        //!stamp exception
+        /**
+         \param excp input exception
+         \param line optional line number
+         \return stamped exception
+         */
+        Exception & stamp(Exception &excp, const int line=0);
+
 
         //______________________________________________________________________
         //
