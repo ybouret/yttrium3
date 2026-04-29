@@ -2,12 +2,11 @@
 
 //! \file
 
-#ifndef Y_Handy_BasicHeavyList_Included
-#define Y_Handy_BasicHeavyList_Included 1
+#ifndef Y_Handy_PlainLigthList_Included
+#define Y_Handy_PlainLigthList_Included 1
 
-#include "y/handy/list-proto.hpp"
-#include "y/handy/node/heavy.hpp"
-#include "y/handy/cache/direct.hpp"
+#include "y/handy/plain/list.hpp"
+#include "y/handy/node/light.hpp"
 
 
 namespace Yttrium
@@ -15,24 +14,24 @@ namespace Yttrium
     namespace Handy
     {
         template <typename T, typename THREADING_POLICY>
-        class BasicHeavyList : public ListProto< HeavyNode<T>, DirectCache, THREADING_POLICY>
+        class PlainLightList : public PlainList<LightNode<T>,THREADING_POLICY>
         {
         public:
-            inline explicit BasicHeavyList() {}
+            inline explicit PlainLightList() {}
 
-            inline BasicHeavyList(const BasicHeavyList &L) :
-            ListProto< HeavyNode<T>, DirectCache, THREADING_POLICY>(L)
+            inline PlainLightList(const PlainLightList &L) :
+            PlainList<LightNode<T>,THREADING_POLICY>(L)
             {
             }
 
-            inline virtual ~BasicHeavyList() noexcept {}
+            inline virtual ~PlainLightList() noexcept {}
 
         private:
-            Y_Disable_Assign(BasicHeavyList);
+            Y_Disable_Assign(PlainLightList);
         };
 
     }
 }
 
-#endif // !Y_Handy_BasicHeavyList_Included
+#endif // !Y_Handy_PlainLigthList_Included
 
