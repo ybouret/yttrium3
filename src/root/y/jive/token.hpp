@@ -19,6 +19,9 @@ namespace Yttrium
             virtual ~Token() noexcept;
             Token(const Token &);
 
+            Token & operator<<(Char * const) noexcept;
+            Token & operator>>(Char * const) noexcept;
+
         private:
             Y_Disable_Assign(Token);
         };

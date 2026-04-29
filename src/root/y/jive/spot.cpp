@@ -1,4 +1,5 @@
 #include "y/jive/spot.hpp"
+//#include "y/exception.hpp"
 
 namespace Yttrium
 {
@@ -15,7 +16,8 @@ namespace Yttrium
         {
         }
 
-        
+
+
 
     }
 }

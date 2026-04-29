@@ -16,6 +16,20 @@ namespace Yttrium
         {
         }
 
+        Token & Token:: operator<<(Char * const ch) noexcept
+        {
+            pushTail(ch);
+            return *this;
+        }
+
+
+        Token & Token:: operator>>(Char * const ch) noexcept
+        {
+            pushHead(ch);
+            return *this;
+        }
+
+
     }
 
 }

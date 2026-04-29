@@ -22,6 +22,7 @@ namespace Yttrium
             virtual ~Spot()    noexcept;
             Spot(const Spot &) noexcept;
 
+            Spot previous() const;
 
             const Identifier title;
             const unsigned   line;
