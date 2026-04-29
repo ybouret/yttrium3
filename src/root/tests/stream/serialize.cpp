@@ -2,6 +2,7 @@
 #include "y/stream/libc/output.hpp"
 #include "y/stream/libc/input.hpp"
 #include "y/utest/run.hpp"
+#include "y/apex/rational.hpp"
 
 using namespace Yttrium;
 
@@ -14,6 +15,11 @@ Y_UTEST(stream_serialize)
         {
             const String s = "Hello, World!";
             written += s.serialize(fp);
+        }
+        Y_PRINTV(written);
+        {
+            const apn n = 0x1234567;
+            written += n.serialize(fp);
         }
         Y_PRINTV(written);
     }

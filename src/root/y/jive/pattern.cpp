@@ -24,6 +24,7 @@ namespace Yttrium
         }
 
         Pattern:: Pattern(const Pattern &p) noexcept :
+        Object(),
         uuid(p.uuid),
         name()
         {

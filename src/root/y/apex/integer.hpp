@@ -88,6 +88,7 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
             virtual void ldz()                    noexcept;
             virtual bool is0()              const noexcept;
             virtual bool is1()              const noexcept;
+            virtual size_t serialize(OutputStream &) const;
 
             //__________________________________________________________________
             //
