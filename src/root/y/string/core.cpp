@@ -2,6 +2,7 @@
 #include "y/object/light.hpp"
 #include "y/string/stride.hpp"
 #include "y/swap.hpp"
+#include "y/stream/output.hpp"
 
 namespace Yttrium
 {

@@ -173,6 +173,17 @@ template <> size_t String<CH>:: length() const noexcept
     return code->size * sizeof(CH);
 }
 
+template <> size_t String<CH>:: serialize(OutputStream &fp) const 
+{
+    assert(code);
+    size_t res = fp.vbr(code->size);
+    for(size_t i=0;i<code->size;++i)
+    {
+        res += fp.cbr(code->entry[i]);
+    }
+    return res;
+}
+
 
 
 //------------------------------------------------------------------------------
