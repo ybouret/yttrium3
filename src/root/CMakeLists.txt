@@ -56,6 +56,7 @@ y/utest
 y/stream
 y/stream/io
 y/stream/libc
+y/stream/memory
 y/object
 y/object/light
 y/string

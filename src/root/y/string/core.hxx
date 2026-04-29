@@ -23,6 +23,7 @@ Container(),
 DynamicClass(),
 SequenceType(),
 Recyclable(),
+Memory::ReadOnlyBuffer(),
 code( new Code(*s.code) )
 {
 
@@ -160,6 +161,17 @@ template <> void String<CH>:: popHead() noexcept
     code->skip(1);
 }
 
+template <> const void * String<CH>:: ro() const noexcept
+{
+    assert(code);
+    return code->entry;
+}
+
+template <> size_t String<CH>:: length() const noexcept
+{
+    assert(code);
+    return code->size * sizeof(CH);
+}
 
 
 

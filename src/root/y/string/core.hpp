@@ -12,6 +12,7 @@
 #include "y/container/sequence.hpp"
 #include "y/type/sign.hpp"
 #include "y/ability/recyclable.hpp"
+#include "y/memory/buffer/ro.hpp"
 #include <iosfwd>
 
 namespace Yttrium
@@ -44,7 +45,8 @@ namespace Yttrium
         class String :
         public CountedObject,
         public Sequence<T,ContiguousWritable<T> >,
-        public Recyclable
+        public Recyclable,
+        public Memory::ReadOnlyBuffer
         {
         public:
             //__________________________________________________________________
@@ -97,6 +99,8 @@ namespace Yttrium
             virtual void   pushHead(ParamType);
             virtual void   pushTail(ParamType);
 
+            virtual const void * ro()     const noexcept;
+            virtual size_t       length() const noexcept;
 
             //__________________________________________________________________
             //

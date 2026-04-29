@@ -5,6 +5,8 @@
 
 #include "y/jive/spot.hpp"
 #include "y/object/light.hpp"
+
+
 namespace Yttrium
 {
     namespace Jive
