@@ -22,7 +22,9 @@ namespace Yttrium
 
 
             virtual bool      takes(Token &, Source &) const = 0;
-            virtual Pattern * clone() const = 0;
+            virtual Pattern * clone()  const                 = 0;
+            virtual bool      sound() const noexcept        = 0;
+            bool              frail() const noexcept;
 
             const uint32_t uuid;
             const char     name[8];

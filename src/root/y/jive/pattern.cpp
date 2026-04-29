@@ -31,5 +31,10 @@ namespace Yttrium
         }
 
 
+        bool Pattern:: frail() const noexcept
+        {
+            return !sound();
+        }
+
     }
 }

@@ -24,7 +24,9 @@ Y_UTEST(jive_pattern)
     Y_SIZEOF(Jive::Pattern);
     Y_SIZEOF(Jive::Any1);
 
-    { Jive::Any1 p; testPattern(p); }
+    { Jive::Any1   p;          testPattern(p); }
+    { Jive::Single p('A');     testPattern(p); }
+    { Jive::Range  p('Z','A'); testPattern(p); }
 
 }
 Y_UDONE()
