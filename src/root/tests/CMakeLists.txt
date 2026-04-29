@@ -163,6 +163,8 @@ Y_UTEST(handy:basic:light:list)
 Y_UTEST(handy:basic:heavy:list)
 Y_UTEST(handy:plain:light:list)
 Y_UTEST(handy:plain:heavy:list)
+Y_UTEST(handy:joint:light:list)
+Y_UTEST(handy:joint:heavy:list)
 
 Y_UTEST(dft:mul)
 

@@ -142,6 +142,9 @@ Y_UTEST_DECL(8)
     Y_UTEST(handy_plain_light_list);
     Y_UTEST(handy_plain_heavy_list);
 
+    Y_UTEST(handy_joint_light_list);
+    Y_UTEST(handy_joint_heavy_list);
+
     Y_UTEST(dft_mul);
 
     Y_UTEST(jive_source);
