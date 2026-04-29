@@ -169,4 +169,5 @@ Y_UTEST(handy:joint:heavy:list)
 Y_UTEST(dft:mul)
 
 Y_UTEST(jive:source)
+Y_UTEST(jive:pattern)
 

@@ -18,9 +18,12 @@ namespace Yttrium
             explicit Token() noexcept;
             virtual ~Token() noexcept;
             Token(const Token &);
+            Y_OSTREAM_PROTO(Token);
 
             Token & operator<<(Char * const) noexcept;
             Token & operator>>(Char * const) noexcept;
+            
+
 
         private:
             Y_Disable_Assign(Token);

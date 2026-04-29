@@ -15,16 +15,16 @@ namespace Yttrium
         class Char : public LightObject, public Spot
         {
         public:
-            explicit Char(const Spot &, const char) noexcept;
+            explicit Char(const Spot &, const uint8_t) noexcept;
             Char(const Char &) noexcept;
             virtual ~Char() noexcept;
 
-            char       & operator*() noexcept;
-            const char & operator*() const noexcept;
+            uint8_t       & operator*() noexcept;
+            const uint8_t & operator*() const noexcept;
 
         private:
             Y_Disable_Assign(Char);
-            char data;
+            uint8_t data;
         public:
             Char * next;
             Char * prev;
