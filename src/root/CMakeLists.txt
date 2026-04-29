@@ -83,6 +83,7 @@ y/handy/joint/light
 y/handy/joint/heavy
 y/dft
 y/dft/fmt
+y/jive
 )
 
 add_subdirectory(tests)

@@ -20,6 +20,7 @@ coven
 counting
 handy
 dft
+jive
 )
 
 Y_LinkLibraries(test-root)
@@ -164,4 +165,6 @@ Y_UTEST(handy:plain:light:list)
 Y_UTEST(handy:plain:heavy:list)
 
 Y_UTEST(dft:mul)
+
+Y_UTEST(jive:source)
 

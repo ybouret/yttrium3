@@ -62,7 +62,7 @@ namespace Yttrium
          \param line optional line number
          \return stamped exception
          */
-        Exception & stamp(Exception &excp, const int line=0);
+        Exception & stamp(Exception &excp, const unsigned line=0);
 
 
         //______________________________________________________________________
