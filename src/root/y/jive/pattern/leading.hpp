@@ -4,8 +4,7 @@
 #ifndef Y_Jive_Leading_Included
 #define Y_Jive_Leading_Included 1
 
-#include "y/config/setup.hpp"
-#include "y/ostream-proto.hpp"
+#include "y/jive/pattern/within.hpp"
 
 namespace Yttrium
 {
@@ -53,14 +52,16 @@ namespace Yttrium
             Leading & operator << (const uint8_t)   noexcept; //!< merge byte \return *this
             Leading & operator << (const Leading &) noexcept; //!< merge another \return *this
 
-            bool      get(const uint8_t)          const noexcept; //!< get byte status \return true iff byte is use
-            Leading & set(const uint8_t)                noexcept; //!< set byte status \return *this
-            Leading & clr(const uint8_t)                noexcept; //!< clr byte status \return *this
-            Leading & ldz()                             noexcept; //!< reset \return *this
-            Leading & all()                             noexcept; //!< set all used \return *this
-            Leading & set(const uint8_t, const uint8_t) noexcept; //!< set a range \return *this
+            bool      get(const uint8_t) const noexcept; //!< get byte status \return true iff byte is use
+            Leading & set(const uint8_t)       noexcept; //!< set byte status \return *this
+            Leading & clr(const uint8_t)       noexcept; //!< clr byte status \return *this
+            Leading & ldz()                    noexcept; //!< reset \return *this
+            Leading & all()                    noexcept; //!< set all used \return *this
+            Leading & set(const Within)        noexcept; //!< set a range \return *this
 
             size_t size() const noexcept; //!< \return number of used bytes
+
+            void forEach( void (*proc)(const Within &, void * const), void * const args ) const;
 
 
         private:

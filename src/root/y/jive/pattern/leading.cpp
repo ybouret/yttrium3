@@ -3,7 +3,7 @@
 #include "y/ascii/printable.hpp"
 #include <cstring>
 #include <iostream>
-#include "y/swap.hpp"
+#include <cassert>
 
 namespace Yttrium
 {
@@ -85,28 +85,25 @@ namespace Yttrium
         }
 
 
-
+        static inline void display(const Within &w, void * const args)
+        {
+            assert(args);
+            std::ostream & os = * static_cast<std::ostream *>(args);
+            os << w;
+        }
         std::ostream & operator<<(std::ostream &os, const Leading &self)
         {
             os << '#' << '{';
-            for(unsigned i=0;i<256;++i)
-            {
-                const uint8_t b = (uint8_t)i;
-                if(self.get(b) )
-                {
-                    os << ASCII::Printable::Char[b];
-                }
-            }
+            self.forEach(display,&os);
             os << '}' << '=' << self.size();
             return os;
         }
 
 
-        Leading & Leading:: set(const uint8_t lo, const uint8_t up) noexcept
+        Leading & Leading:: set(const Within w) noexcept
         {
-            unsigned lower = lo;
-            unsigned upper = up;
-            if(upper<lower) Swap(lower,upper);
+            unsigned lower = w.lower;
+            unsigned upper = w.upper;
             for(unsigned i=lower;i<=upper;++i) set( (uint8_t)i );
             return *this;
         }
@@ -115,6 +112,33 @@ namespace Yttrium
         {
             memset(data,0xff,sizeof(data));
             return *this;
+        }
+
+
+
+
+        void Leading:: forEach( void (*proc)(const Within &, void * const), void * const args ) const
+        {
+            assert(proc);
+            unsigned curr = 0;
+            while(curr<256)
+            {
+                if( ! get( (uint8_t) curr) )
+                {
+                    ++curr;
+                    continue;
+                }
+                const uint8_t lower = (uint8_t) curr;
+                while(curr<256 && get( (uint8_t) curr) )
+                {
+                    ++curr;
+                }
+                const uint8_t upper = (uint8_t)(curr-1);
+                const Within  w(lower,upper);
+                proc(w,args);
+            }
+
+
         }
 
     }

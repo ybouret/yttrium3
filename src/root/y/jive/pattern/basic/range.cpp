@@ -49,7 +49,7 @@ namespace Yttrium
 
         void Range:: glean(Leading &leading) const noexcept
         {
-            leading.set(lower,upper);
+            leading.set(*this);
         }
 
         bool Range:: univocal() const noexcept

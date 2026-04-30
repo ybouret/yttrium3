@@ -4,6 +4,11 @@
 using namespace Yttrium;
 
 
+namespace
+{
+
+}
+
 Y_UTEST(jive_leading)
 {
     Jive::Leading lead;
@@ -16,7 +21,17 @@ Y_UTEST(jive_leading)
     lead.clr('Z');
     std::cerr << lead << std::endl;
 
-    lead.set('0','9');
+    lead.set( Jive::Within('0','9') );
+    std::cerr << lead << std::endl;
+
+
+    lead.ldz();
+    std::cerr << lead << std::endl;
+
+    lead.all();
+    std::cerr << lead << std::endl;
+
+    lead.clr('X');
     std::cerr << lead << std::endl;
 
 
