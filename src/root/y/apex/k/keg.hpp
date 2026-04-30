@@ -61,6 +61,9 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
         };
 
 
+
+
+
         //______________________________________________________________________
         //
         //
