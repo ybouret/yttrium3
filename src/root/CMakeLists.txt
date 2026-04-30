@@ -87,6 +87,7 @@ y/dft/fmt
 y/jive
 y/jive/pattern
 y/jive/pattern/basic
+y/jive/pattern/logic
 )
 
 add_subdirectory(tests)

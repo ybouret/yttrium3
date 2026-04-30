@@ -21,11 +21,17 @@ namespace Yttrium
     namespace Apex
     {
 
+        //! using Fourier Multiplication
         struct KegDFT
         {
-            static uint64_t Trace;
+            static uint64_t Trace; //!< to trace call ticks
 
-
+            //! compute lhs * rhs by fourier transform
+            /**
+             \param lhs first argument
+             \param rhs second argument
+             \return lhs * rhs
+             */
             template <typename WORD> static inline
             Keg<WORD> * Compute(const Keg<WORD> &lhs,
                                 const Keg<WORD> &rhs)

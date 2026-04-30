@@ -106,10 +106,8 @@ namespace Yttrium
             virtual const void * ro()     const noexcept;
             virtual size_t       length() const noexcept;
             
-            virtual size_t       serialize(OutputStream &) const;
-
-            static String Read(InputStream &fp,
-                               const char * varName);
+            virtual size_t serialize(OutputStream &) const;
+            static  String Read(InputStream &, const char * const); //!< \return from serialized string
 
             //__________________________________________________________________
             //

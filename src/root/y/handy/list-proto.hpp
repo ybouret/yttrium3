@@ -147,15 +147,6 @@ namespace Yttrium
                 { ListProto tmp(other); list.mergeHead(tmp.list); }
                 return *this;
             }
-#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
-
-
-            
-            inline Type &      head()       noexcept { assert(list.head); return **list.head; } //!< \return head item
-            inline Type &      tail()       noexcept { assert(list.tail); return **list.tail; } //!< \return tail item
-            inline ConstType & head() const noexcept { assert(list.head); return **list.head; } //!< \return head item
-            inline ConstType & tail() const noexcept { assert(list.tail); return **list.tail; } //!< \return tail item
-
 
             static inline bool HaveSameContent(const ListProto &lhs, const ListProto &rhs)
             {
@@ -177,6 +168,19 @@ namespace Yttrium
             {
                 return !HaveSameContent(lhs,rhs);
             }
+            
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+
+            
+            inline Type &      head()       noexcept { assert(list.head); return **list.head; } //!< \return head item
+            inline Type &      tail()       noexcept { assert(list.tail); return **list.tail; } //!< \return tail item
+            inline ConstType & head() const noexcept { assert(list.head); return **list.head; } //!< \return head item
+            inline ConstType & tail() const noexcept { assert(list.tail); return **list.tail; } //!< \return tail item
+
+
+
+
 
 
 

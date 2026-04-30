@@ -12,33 +12,59 @@ namespace Yttrium
     namespace Jive
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Leading first byte
+        //
+        //
+        //______________________________________________________________________
         class Leading
         {
         public:
-            static const uint8_t Bit[8];
-            static const uint8_t Msk[8];
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const uint8_t Bit[8]; //!< Bits
+            static const uint8_t Msk[8]; //!< ~Bit
 
-            Leading()                            noexcept;
-            ~Leading()                           noexcept;
-            Leading(const Leading &)             noexcept;
-            Leading & operator=(const Leading &) noexcept;
-            Y_OSTREAM_PROTO(Leading);
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            Leading()                            noexcept; //!< setup empty
+            ~Leading()                           noexcept; //!< cleanup
+            Leading(const Leading &)             noexcept; //!< duplicate
+            Leading & operator=(const Leading &) noexcept; //!< assign \return *this
+            Y_OSTREAM_PROTO(Leading);                      //!< display
 
-            Leading & operator << (const uint8_t)   noexcept;
-            Leading & operator << (const Leading &) noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            Leading & operator << (const uint8_t)   noexcept; //!< merge byte \return *this
+            Leading & operator << (const Leading &) noexcept; //!< merge another \return *this
 
-            bool get(const uint8_t) const noexcept;
-            Leading & set(const uint8_t) noexcept;
-            Leading & clr(const uint8_t) noexcept;
-            Leading & set(const uint8_t lo, const uint8_t up) noexcept;
-            Leading & ldz() noexcept;
-            Leading & all() noexcept;
+            bool      get(const uint8_t)          const noexcept; //!< get byte status \return true iff byte is use
+            Leading & set(const uint8_t)                noexcept; //!< set byte status \return *this
+            Leading & clr(const uint8_t)                noexcept; //!< clr byte status \return *this
+            Leading & ldz()                             noexcept; //!< reset \return *this
+            Leading & all()                             noexcept; //!< set all used \return *this
+            Leading & set(const uint8_t, const uint8_t) noexcept; //!< set a range \return *this
 
-            size_t size() const noexcept;
+            size_t size() const noexcept; //!< \return number of used bytes
 
 
         private:
-            uint8_t data[32];
+            uint8_t data[32]; //!< 256 bits
         };
     }
 

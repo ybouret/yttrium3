@@ -24,36 +24,59 @@ namespace Yttrium
         //______________________________________________________________________
         class Pattern : public Object, public Serializable
         {
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
         protected:
-            explicit Pattern(const uint32_t)  noexcept;
-            explicit Pattern(const Pattern &) noexcept;
+            explicit Pattern(const uint32_t)  noexcept; //!< setup
+            explicit Pattern(const Pattern &) noexcept; //!< duplicate
 
         public:
-            virtual ~Pattern() noexcept;
+            virtual ~Pattern() noexcept; //!< cleanup
 
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
+            virtual bool      takes(Token &, Source &) const  = 0; //!< \return true iff token is extracted from matching source
+            virtual Pattern * clone()  const                  = 0; //!< \return clone
+            virtual void      glean(Leading &) const noexcept = 0; //!< find leading bytes
+            virtual bool      sound()          const noexcept = 0; //!< \return true iff takes doesn't return successful empty token
+            bool              frail()          const noexcept;     //!< \return !sound()
 
-            virtual bool      takes(Token &, Source &) const  = 0;
-            virtual Pattern * clone()  const                  = 0;
-            virtual void      glean(Leading &) const noexcept = 0;
-            virtual bool      sound()          const noexcept = 0;
-            bool              frail()          const noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            size_t           emitUUID(OutputStream&) const; //!< emit UUID \return emitted bytes
+            static Pattern * Load(InputStream &);           //!< \return reloaded pattern
 
-            size_t           emitUUID(OutputStream&) const;
-            static Pattern * Load(InputStream &);
-            static bool      AreEqual(const Pattern &lhs, const Pattern &rhs) noexcept;
-
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            static bool      AreEqual(const Pattern &, const Pattern &) noexcept; //!<
             friend bool operator==(const Pattern &, const Pattern&) noexcept;
             friend bool operator!=(const Pattern &, const Pattern&) noexcept;
-
-
-            const uint32_t uuid;
-            const char     name[8];
-
-            Pattern * next;
-            Pattern * prev;
+#endif
+            
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const uint32_t uuid;    //!< UUID
+            const char     name[8]; //!< from UUID
+            Pattern *      next;    //!< for list
+            Pattern *      prev;    //!< for list
 
         private:
-            Y_Disable_Assign(Pattern);
+            Y_Disable_Assign(Pattern); //!< discarded
         };
     }
 }

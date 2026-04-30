@@ -10,26 +10,46 @@ namespace Yttrium
     namespace Jive
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Specific location
+        //
+        //
+        //______________________________________________________________________
         class Spot
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup \param name compatible initializer for title
             template <typename NAME> inline
             explicit Spot(const NAME &name) :
             title(name), line(1), column(1)
             {
             }
 
-            virtual ~Spot()    noexcept;
-            Spot(const Spot &) noexcept;
+            virtual ~Spot()    noexcept; //!< cleanup
+            Spot(const Spot &) noexcept; //!< duplicate
 
-            Spot previous() const;
-
-            const Identifier title;
-            const unsigned   line;
-            const unsigned   column;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const Identifier title;  //!< title
+            const unsigned   line;   //!< current line
+            const unsigned   column; //!< current column
 
         private:
-            Y_Disable_Assign(Spot);
+            Y_Disable_Assign(Spot); //!< discarded
         };
 
     }

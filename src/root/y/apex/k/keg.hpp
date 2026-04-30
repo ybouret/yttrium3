@@ -38,18 +38,22 @@ maxWords(0),  \
 blockShift(0),\
 word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) )
 
+        //! helper to right shift 8 bits
         template <typename T>
         struct SHR8
         {
+            //! \param x becomes x>>=8
             static inline void Make(T &x) noexcept
             {
                 x >>= 8;
             }
         };
 
+        //! helper to right shift 8 bits
         template <>
         struct SHR8<uint8_t>
         {
+            //! \param x becomes 0
             static inline void Make(uint8_t &x) noexcept
             {
                 x = 0;

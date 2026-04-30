@@ -24,6 +24,7 @@ DynamicClass(),
 SequenceType(),
 Recyclable(),
 Memory::ReadOnlyBuffer(),
+Serializable(),
 code( new Code(*s.code) )
 {
 
@@ -463,7 +464,7 @@ template <> String<CH>::ConstType & String<CH>:: getTail() const noexcept
 }
 
 
-template <> String<CH> String<CH>::Read(InputStream &fp, const char *varName)
+template <> String<CH> String<CH>::Read(InputStream &fp, const char * const varName)
 {
     const size_t nch = fp.vbr<size_t>(varName,"size"); 
     String<CH>   res(WithAtLeast,nch,InitEmptyString);

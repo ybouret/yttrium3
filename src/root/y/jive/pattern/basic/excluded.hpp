@@ -10,23 +10,56 @@ namespace Yttrium
     namespace Jive
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Accepting all but one char
+        //
+        //
+        //______________________________________________________________________
+
         class Excluded : public OneChar
         {
         public:
-            static const uint32_t UUID = Y_FOURCC('E','X','C','L');
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const uint32_t UUID = Y_FOURCC('E','X','C','L'); //!< UUID
 
-            explicit Excluded(const uint8_t) noexcept;
-            virtual ~Excluded()              noexcept;
-            Excluded(const Excluded &)       noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Excluded(const uint8_t) noexcept; //!< setup
+            virtual ~Excluded()              noexcept; //!< cleanup
+            Excluded(const Excluded &)       noexcept; //!< duplicate
 
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
             virtual Pattern * clone()                   const;
             virtual size_t    serialize(OutputStream &) const;
             virtual void      glean(Leading &) const noexcept;
 
-            const uint8_t code;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const uint8_t code; //!< char to exclude
 
         private:
-            Y_Disable_Assign(Excluded);
+            Y_Disable_Assign(Excluded); //!< discarded
             virtual bool found(const uint8_t) const noexcept;
         };
 

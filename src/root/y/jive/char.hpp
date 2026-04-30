@@ -11,23 +11,49 @@ namespace Yttrium
 {
     namespace Jive
     {
-
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Character with location
+        //
+        //
+        //______________________________________________________________________
         class Char : public LightObject, public Spot
         {
         public:
-            explicit Char(const Spot &, const uint8_t) noexcept;
-            Char(const Char &) noexcept;
-            virtual ~Char() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Char(const Spot &, const uint8_t) noexcept; //!< setup
+            Char(const Char &)                         noexcept; //!< duplicate
+            virtual ~Char()                            noexcept; //!< cleanup
 
-            uint8_t       & operator*() noexcept;
-            const uint8_t & operator*() const noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            uint8_t       & operator*()       noexcept; //!< \return inner data
+            const uint8_t & operator*() const noexcept; //!< \return inner data
 
         private:
-            Y_Disable_Assign(Char);
-            uint8_t data;
+            Y_Disable_Assign(Char); //!< discarded
+
+            //__________________________________________________________________
+            //
+            //
+            // Member
+            //
+            //__________________________________________________________________
+            uint8_t data; //!< inner data
         public:
-            Char * next;
-            Char * prev;
+            Char * next; //!< for list/pool
+            Char * prev; //!< for list
         };
     }
 

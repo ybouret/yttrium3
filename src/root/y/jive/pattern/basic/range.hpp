@@ -13,24 +13,56 @@ namespace Yttrium
     namespace Jive
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Accept a range of characters
+        //
+        //
+        //______________________________________________________________________
         class Range : public OneChar
         {
         public:
-            static const uint32_t UUID = Y_FOURCC('R','N','G','E');
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const uint32_t UUID = Y_FOURCC('R','N','G','E'); //!< UUID
 
-            explicit Range(const uint8_t,const uint8_t) noexcept;
-            virtual ~Range()                            noexcept;
-            Range(const Range &)                        noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Range(const uint8_t,const uint8_t) noexcept; //!< setup
+            virtual ~Range()                            noexcept; //!< cleanup
+            Range(const Range &)                        noexcept; //!< duplicate
 
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
             virtual Pattern * clone()                   const;
             virtual size_t    serialize(OutputStream &) const;
             virtual void      glean(Leading &) const noexcept;
 
-            const uint8_t lower;
-            const uint8_t upper;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const uint8_t lower; //!< lower bound
+            const uint8_t upper; //!< upper bound
 
         private:
-            Y_Disable_Assign(Range);
+            Y_Disable_Assign(Range); //!< discared
             virtual bool found(const uint8_t) const noexcept;
         };
 

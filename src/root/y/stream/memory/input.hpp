@@ -12,9 +12,25 @@
 namespace Yttrium
 {
 
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Memory to Input Stream
+    //
+    //
+    //__________________________________________________________________________
     class InputMemoryStream : public InputStream
     {
     public:
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+
+        //! setup \param name for title \param buffer memory address \param buflen memory size
         template <typename NAME> inline
         explicit InputMemoryStream(const NAME &       name,
                                    const void * const buffer,
@@ -27,6 +43,7 @@ namespace Yttrium
             assert( !(0==buffer&&buflen>0) );
         }
 
+        //! setup \param name for title \param buff read-only buffer
         template <typename NAME> inline
         explicit InputMemoryStream(const NAME &                  name,
                                    const Memory::ReadOnlyBuffer &buff) noexcept :
@@ -37,6 +54,7 @@ namespace Yttrium
         {
         }
 
+        //! setup \param name for title \param text any text
         template <typename NAME> inline
         explicit InputMemoryStream(const NAME &       name,
                                    const char * const text) noexcept :
@@ -47,19 +65,23 @@ namespace Yttrium
         {
         }
 
+        virtual ~InputMemoryStream() noexcept; //!< cleanup
 
-        virtual ~InputMemoryStream() noexcept;
-
-        
+        //______________________________________________________________________
+        //
+        //
+        // Interface
+        //
+        //______________________________________________________________________
         virtual bool   query(char &);
         virtual size_t query(void * const, const size_t);
         virtual void   store(const char);
 
     private:
-        Y_Disable_Copy_And_Assign(InputMemoryStream);
-        const char *       curr;
-        const char * const base;
-        const char * const last;
+        Y_Disable_Copy_And_Assign(InputMemoryStream); //!< discarded
+        const char *       curr; //!< current location
+        const char * const base; //!< base location
+        const char * const last; //!< first invalid location
     };
 
 }

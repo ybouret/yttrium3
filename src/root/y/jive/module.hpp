@@ -11,23 +11,43 @@ namespace Yttrium
     namespace Jive
     {
 
-        typedef ArcPtr<InputStream> Input;
+        typedef ArcPtr<InputStream> Input; //!< alias
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Transform InputStream to Char provider
+        //
+        //
+        //______________________________________________________________________
         class Module : public Object, public Spot
         {
         public:
-            explicit Module( const Input & ) noexcept;
-            virtual ~Module() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Module( const Input & ) noexcept; //!< setup
+            virtual ~Module()                noexcept; //!< cleanup
+
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            Char * get();              //!< \return new char from input
+            void   newLine() noexcept; //!< modify location
 
 
-            Char * get();
-            void   newLine() noexcept;
+            static Module * OpenFile(const String &);      //!< \return new module from file name
+            static Module * OpenFile(const char * const);  //!< \return new module from file name
+            static Module * OpenStdIn();                   //!< \return new module from stdin
 
-
-            static Module * OpenFile(const String &fileName);
-            static Module * OpenFile(const char * const fileName);
-            static Module * OpenStdIn();
-
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             template <typename NAME> inline
             static Module * OpenData(const NAME &       name,
                                      const void * const buffer,
@@ -52,12 +72,12 @@ namespace Yttrium
                 const Input in( new InputMemoryStream(name,text) );
                 return new Module(in);
             }
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
 
         private:
-            Y_Disable_Copy_And_Assign(Module);
-            Input input;
+            Y_Disable_Copy_And_Assign(Module); //!< discarded
+            Input input; //!< inner input
         };
 
 

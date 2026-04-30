@@ -10,21 +10,40 @@ namespace Yttrium
 {
     namespace Jive
     {
-
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! One Char accepting pattern interface
+        //
+        //
+        //______________________________________________________________________
         class OneChar : public Pattern
         {
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
         protected:
-            explicit OneChar(const uint32_t) noexcept;
-            OneChar(const OneChar &) noexcept;
+            explicit OneChar(const uint32_t) noexcept; //!< setup
+            OneChar(const OneChar &)         noexcept; //!< duplicate
         public:
-            virtual ~OneChar() noexcept;
+            virtual ~OneChar()               noexcept; //!< cleanup
 
-            virtual bool sound() const noexcept; //!< \return true
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
+            virtual bool sound() const noexcept;
             virtual bool takes(Token&,Source&) const;
-            virtual bool found(const uint8_t) const noexcept = 0;
-            
+            virtual bool found(const uint8_t) const noexcept = 0; //!< \return true iff acceptable unique char
+
         private:
-            Y_Disable_Assign(OneChar);
+            Y_Disable_Assign(OneChar); //!< discarded
         };
     }
 
