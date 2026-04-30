@@ -36,6 +36,11 @@ namespace Yttrium
 
             size_t           emitUUID(OutputStream&) const;
             static Pattern * Load(InputStream &);
+            static bool      AreEqual(const Pattern &lhs, const Pattern &rhs) noexcept;
+
+            friend bool operator==(const Pattern &, const Pattern&) noexcept;
+            friend bool operator!=(const Pattern &, const Pattern&) noexcept;
+
 
             const uint32_t uuid;
             const char     name[8];

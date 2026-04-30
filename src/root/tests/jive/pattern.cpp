@@ -26,6 +26,7 @@ namespace  {
         {
             InputFile fp(fileName);
             AutoPtr<Jive::Pattern> loaded = Jive::Pattern::Load(fp);
+            Y_ASSERT(p == *loaded);
         }
 
     }

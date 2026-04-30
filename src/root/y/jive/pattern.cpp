@@ -42,5 +42,15 @@ namespace Yttrium
         {
             return fp.cbr(uuid);
         }
+
+        bool operator==(const Pattern &lhs, const Pattern &rhs) noexcept
+        {
+            return Pattern::AreEqual(lhs,rhs);
+        }
+
+        bool operator!=(const Pattern &lhs, const Pattern &rhs) noexcept
+        {
+            return !Pattern::AreEqual(lhs,rhs);
+        }
     }
 }
