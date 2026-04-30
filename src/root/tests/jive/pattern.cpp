@@ -4,6 +4,7 @@
 
 #include "y/stream/libc/output.hpp"
 #include "y/stream/libc/input.hpp"
+#include "y/jive/pattern/leading.hpp"
 
 using namespace Yttrium;
 
@@ -27,6 +28,12 @@ namespace  {
             InputFile fp(fileName);
             AutoPtr<Jive::Pattern> loaded = Jive::Pattern::Load(fp);
             Y_ASSERT(p == *loaded);
+        }
+
+        {
+            Jive::Leading fc;
+            p.glean(fc);
+            std::cerr << "fc=" << fc << std::endl;
         }
 
     }
