@@ -100,7 +100,8 @@ Y_APQ_DECL(Rational,CALL) Y_APQ_Binary(OP,CALL) Y_APQ_Unary(OP,CALL)
             virtual bool         is0()      const noexcept;
             virtual bool         is1()      const noexcept;
             virtual const char * callSign() const noexcept;
-            virtual size_t serialize(OutputStream &) const;
+            virtual size_t       serialize(OutputStream &) const;
+            static  Rational     Read(InputStream &, const char * const); //!< \return read from serialized
 
             //__________________________________________________________________
             //

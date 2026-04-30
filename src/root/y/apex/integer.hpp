@@ -89,7 +89,7 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
             virtual bool is0()              const noexcept;
             virtual bool is1()              const noexcept;
             virtual size_t  serialize(OutputStream &) const;
-            static  Integer Read(InputStream &, const char * const varName);
+            static  Integer Read(InputStream &, const char * const); //!< \return read from serialized
             
             //__________________________________________________________________
             //
