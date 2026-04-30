@@ -50,6 +50,9 @@ namespace Yttrium
                 const size_t n = lhs.bytes;
                 const size_t m = rhs.bytes; if(n<=0||m<=0) return new Keg<WORD>();
 
+#if defined(Y_Apex_Trace)
+                uint64_t mark = System::WallTime::Ticks();
+#endif
                 //--------------------------------------------------------------
                 //
                 // Compute minimal common size
@@ -72,6 +75,9 @@ namespace Yttrium
                 //
                 //--------------------------------------------------------------
                 const size_t          mpn = m+n; assert(mpn>=2);
+#if defined(Y_Apex_Trace)
+                Trace += System::WallTime::Ticks() - mark;
+#endif
                 AutoPtr< Keg<WORD> >  dft = new Keg<WORD>(mpn);
 
                 //--------------------------------------------------------------
@@ -82,6 +88,9 @@ namespace Yttrium
                 const unsigned blockShift = ns+1+IntegerLog2For<double>::Value;
                 void   * const blockEntry = archon.acquireBlock(blockShift);
                 {
+#if defined(Y_Apex_Trace)
+                    mark = System::WallTime::Ticks();
+#endif
                     double * const  a = static_cast<double *>(blockEntry)-1; // a[1:nn]
                     double * const  b = a+nn;                                // b[1:nn]
                     uint8_t * const w = static_cast<uint8_t*>(blockEntry)-1; // w[1:nn]
@@ -113,8 +122,8 @@ namespace Yttrium
                         w[j] = (uint8_t)(t-cy*RX);
                     }
                     if (cy >= RX)
-                        throw Exception("cannot happen in DFT Multiplication");
-                    
+                        throw Specific::Exception("DFT::Multiplication","algebraic failure");
+
                     {
                         size_t top = mpn-1;
                         Coerce(dft->words) = Alignment::To<WORD>::Ceil(mpn) / sizeof(WORD);
@@ -125,6 +134,9 @@ namespace Yttrium
                     dft->update();
                 }
 
+#if defined(Y_Apex_Trace)
+                Trace += System::WallTime::Ticks() - mark;
+#endif
                 archon.releaseBlock(blockEntry,blockShift);
 
                 return dft.yield();

@@ -35,6 +35,9 @@ namespace
 
             Y_ASSERT( __Zero__ == KegCmp::ResultFor(*mul,*dft) );
         }
+
+        std::cerr << "Trace = " << KegDFT:: Trace << std::endl;
+
     }
 
 }
