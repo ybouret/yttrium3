@@ -22,7 +22,7 @@ namespace Yttrium
             char c = 0;
             if( input->query(c) )
             {
-                Char * const ch = new Char(*this,c);
+                Char * const ch = new Char(*this,(uint8_t)c);
                 ++Coerce(column);
                 return ch;
             }

@@ -344,10 +344,10 @@ namespace Yttrium
             template <typename COMPARISON>
             struct CompareBy
             {
-                COMPARISON & comparison;
+                COMPARISON * comparison;
                 inline int operator()(const NODE * const lhs, const NODE * const rhs)
                 {
-                    return comparison(**lhs,**rhs);
+                    return (*comparison)(**lhs,**rhs);
                 }
             };
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
@@ -356,7 +356,7 @@ namespace Yttrium
             template <typename COMPARISON>
             inline void sortBy(COMPARISON &comparison)
             {
-                CompareBy<COMPARISON> cmp = { comparison };
+                CompareBy<COMPARISON> cmp = { &comparison };
                 sort(cmp);
             }
 
