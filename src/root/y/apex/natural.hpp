@@ -121,8 +121,9 @@ Y_Apex_Natural_Unary(OP,CALL)
             virtual void ldz()                    noexcept;
             virtual bool is0()              const noexcept;
             virtual bool is1()              const noexcept;
-            virtual size_t serialize(OutputStream &) const;
-            
+            virtual size_t  serialize(OutputStream &) const;
+            static  Natural Read(InputStream &, const char * const varName);
+
             //__________________________________________________________________
             //
             //

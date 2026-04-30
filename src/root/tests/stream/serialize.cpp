@@ -30,6 +30,11 @@ Y_UTEST(stream_serialize)
             const String readString = String::Read(fp,"string");
             Y_PRINTV(readString);
         }
+        {
+            const apn readAPN = apn::Read(fp,"apn");
+            Y_PRINTV(readAPN.toHex());
+
+        }
     }
 }
 Y_UDONE()
