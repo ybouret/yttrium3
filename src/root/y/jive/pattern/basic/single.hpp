@@ -21,7 +21,8 @@ namespace Yttrium
             virtual ~Single()              noexcept;
             Single(const Single &)         noexcept;
 
-            virtual Pattern * clone()                  const;
+            virtual Pattern * clone()                   const;
+            virtual size_t    serialize(OutputStream &) const;
 
             const uint8_t code;
 

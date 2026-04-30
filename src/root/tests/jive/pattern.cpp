@@ -2,6 +2,8 @@
 #include "y/pointer/auto.hpp"
 #include "y/utest/run.hpp"
 
+#include "y/stream/libc/output.hpp"
+
 using namespace Yttrium;
 
 
@@ -12,7 +14,13 @@ namespace  {
     {
         std::cerr << "-- " << p.name << std::endl;
 
-        AutoPtr<Jive::Pattern> q = p.clone();
+        { AutoPtr<Jive::Pattern> q = p.clone(); }
+
+        const String fileName = p.name + String(".bin");
+        {
+            OutputFile fp(fileName);
+            p.serialize(fp);
+        }
 
     }
 

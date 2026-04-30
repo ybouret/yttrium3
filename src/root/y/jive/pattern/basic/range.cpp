@@ -1,5 +1,6 @@
 #include "y/jive/pattern/basic/range.hpp"
 #include "y/swap.hpp"
+#include "y/stream/output.hpp"
 
 namespace Yttrium
 {
@@ -33,6 +34,13 @@ namespace Yttrium
             return b>=lower && b <= upper;
         }
 
+        size_t Range:: serialize(OutputStream &fp) const
+        {
+            size_t res = emitUUID(fp);
+            res += fp.cbr(lower);
+            res += fp.cbr(upper);
+            return res;
+        }
     }
 
 }

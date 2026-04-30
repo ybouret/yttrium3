@@ -2,6 +2,7 @@
 
 
 #include "y/jive/pattern/basic/excluded.hpp"
+#include "y/stream/output.hpp"
 
 namespace Yttrium
 {
@@ -30,6 +31,11 @@ namespace Yttrium
             return b != code;
         }
 
+        size_t Excluded:: serialize(OutputStream &fp) const
+        {
+            const size_t res = emitUUID(fp);
+            return res + fp.cbr(code);
+        }
     }
 
 }

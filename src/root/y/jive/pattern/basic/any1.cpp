@@ -27,6 +27,11 @@ namespace Yttrium
         {
             return true;
         }
+
+        size_t Any1:: serialize(OutputStream &fp) const
+        {
+            return emitUUID(fp);
+        }
     }
 
 }

@@ -20,7 +20,8 @@ namespace Yttrium
             virtual ~Any1()    noexcept;
             Any1(const Any1 &) noexcept;
 
-            virtual Pattern * clone()                  const;
+            virtual Pattern * clone()                   const;
+            virtual size_t    serialize(OutputStream &) const;
 
         private:
             Y_Disable_Assign(Any1);

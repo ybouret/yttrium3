@@ -5,13 +5,21 @@
 
 #include "y/jive/source.hpp"
 #include "y/type/fourcc.hpp"
+#include "y/stream/serializable.hpp"
 
 namespace Yttrium
 {
     namespace Jive
     {
-
-        class Pattern : public Object
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Pattern interface
+        //
+        //
+        //______________________________________________________________________
+        class Pattern : public Object, public Serializable
         {
         protected:
             explicit Pattern(const uint32_t)  noexcept;
@@ -23,8 +31,11 @@ namespace Yttrium
 
             virtual bool      takes(Token &, Source &) const = 0;
             virtual Pattern * clone()  const                 = 0;
-            virtual bool      sound() const noexcept        = 0;
+            virtual bool      sound() const noexcept         = 0;
             bool              frail() const noexcept;
+
+            size_t           emitUUID(OutputStream&) const;
+            static Pattern * Load(InputStream &);
 
             const uint32_t uuid;
             const char     name[8];

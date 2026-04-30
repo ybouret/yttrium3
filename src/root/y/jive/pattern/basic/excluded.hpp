@@ -19,7 +19,8 @@ namespace Yttrium
             virtual ~Excluded()              noexcept;
             Excluded(const Excluded &)       noexcept;
 
-            virtual Pattern * clone()             const;
+            virtual Pattern * clone()                   const;
+            virtual size_t    serialize(OutputStream &) const;
 
             const uint8_t code;
 

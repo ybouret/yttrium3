@@ -1,4 +1,5 @@
 #include "y/jive/pattern.hpp"
+#include "y/stream/output.hpp"
 #include <cstring>
 
 namespace Yttrium
@@ -37,5 +38,9 @@ namespace Yttrium
             return !sound();
         }
 
+        size_t Pattern:: emitUUID(OutputStream &fp) const
+        {
+            return fp.cbr(uuid);
+        }
     }
 }

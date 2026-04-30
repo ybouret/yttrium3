@@ -22,7 +22,8 @@ namespace Yttrium
             virtual ~Range()                            noexcept;
             Range(const Range &)                        noexcept;
 
-            virtual Pattern * clone() const;
+            virtual Pattern * clone()                   const;
+            virtual size_t    serialize(OutputStream &) const;
 
             const uint8_t lower;
             const uint8_t upper;
