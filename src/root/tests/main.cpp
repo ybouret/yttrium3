@@ -113,6 +113,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(apex_k_bits);
     Y_UTEST(apex_k_sd);
     Y_UTEST(apex_k_gcd);
+    Y_UTEST(apex_k_dft);
     Y_UTEST(apex_n64);
     Y_UTEST(apex_n);
     Y_UTEST(apex_n_red);

@@ -38,6 +38,24 @@ maxWords(0),  \
 blockShift(0),\
 word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) )
 
+        template <typename T>
+        struct SHR8
+        {
+            static inline void Make(T &x) noexcept
+            {
+                x >>= 8;
+            }
+        };
+
+        template <>
+        struct SHR8<uint8_t>
+        {
+            static inline void Make(uint8_t &x) noexcept
+            {
+                x = 0;
+            }
+        };
+
 
         //______________________________________________________________________
         //
@@ -474,7 +492,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                     assert(i<bytes);
                     WordType     w     = word[i / WordBytes];
                     for(size_t k=(i % WordBytes);k>0;--k)
-                        w >>= 8;
+                        SHR8<WORD>::Make(w);
                     return (uint8_t)w;
                 }
             }
@@ -495,8 +513,9 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
 
         private:
             Y_Disable_Assign(Keg); //!< discarded
-
         };
+
+
 
     }
 }

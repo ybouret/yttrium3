@@ -22,6 +22,7 @@ namespace Yttrium
         {
             template <typename T> struct Make;
 
+            static void Expand(uint8_t  * const target, const uint8_t  &source) noexcept; //!< expand \param target small area \param source large word
             static void Expand(uint8_t  * const target, const uint16_t &source) noexcept; //!< expand \param target small area \param source large word
             static void Expand(uint8_t  * const target, const uint32_t &source) noexcept; //!< expand \param target small area \param source large word
             static void Expand(uint8_t  * const target, const uint64_t &source) noexcept; //!< expand \param target small area \param source large word

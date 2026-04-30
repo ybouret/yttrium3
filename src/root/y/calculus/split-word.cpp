@@ -7,6 +7,12 @@ namespace Yttrium
 
     namespace Calculus
     {
+
+        void SplitWord:: Expand(uint8_t * const target, const uint8_t &source) noexcept
+        {
+            target[0]   = source;
+        }
+
         void SplitWord:: Expand(uint8_t * const target, const uint16_t &source) noexcept
         {
             const uint8_t u[2] = { (uint8_t)(source), (uint8_t)(source>>8) };
