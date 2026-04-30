@@ -9,6 +9,7 @@
 #include "y/memory/allocator/archon.hpp"
 #include "y/dft/dft.hpp"
 #include "y/exception.hpp"
+#include "y/pointer/auto.hpp"
 
 #if defined(Y_Apex_Trace)
 #include "y/system/wall-time.hpp"
@@ -44,8 +45,12 @@ namespace Yttrium
                                 const Keg<WORD> &rhs)
             {
                 static Memory::Archon  &archon = Memory::Archon::Instance();
+
+                // check length
                 const size_t n = lhs.bytes;
                 const size_t m = rhs.bytes; if(n<=0||m<=0) return new Keg<WORD>();
+
+                // compute minimal common size
                 const size_t mn = Max(m,n);
                 size_t       nn = 1;
                 unsigned     ns = 0;
@@ -57,21 +62,24 @@ namespace Yttrium
                 nn <<= 1; ++ns;       // number of reals
                 assert( size_t(1) << ns == nn);
 
-                const size_t mpn = m+n;
 
-                const unsigned blockShift = ns+1+IntegerLog2For<double>::Value; std::cerr << "nn=" << nn << " => 2^" << blockShift << " = " << (1<<blockShift) << std::endl;
-                void   * const blockEntry =  archon.acquireBlock(blockShift);
+                const size_t          mpn = m+n; assert(mpn>=2);
+
+                // allocate result
+                AutoPtr< Keg<WORD> >  dft = new Keg<WORD>(mpn);
+
+                // allocate enough memory
+                const unsigned blockShift = ns+1+IntegerLog2For<double>::Value; //std::cerr << "nn=" << nn << " => 2^" << blockShift << " = " << (1<<blockShift) << std::endl;
+                void   * const blockEntry = archon.acquireBlock(blockShift);
                 {
                     double * const a = static_cast<double *>(blockEntry)-1; // a[1:nn]
                     double * const b = a+nn;                                // b[1:nn]
 
-                    //CxxArray<double> a(nn);
-                    //CxxArray<double> b(nn);
                     for(size_t i=n;i>0;--i) a[i] = lhs.getByte(n-i);
                     for(size_t i=m;i>0;--i) b[i] = rhs.getByte(m-i);
 
-                    Core::Display(std::cerr << "a=",a+1,nn,D2H) << std::endl;
-                    Core::Display(std::cerr << "b=",b+1,nn,D2H) << std::endl;
+                    //Core::Display(std::cerr << "a=",a+1,nn,D2H) << std::endl;
+                    //Core::Display(std::cerr << "b=",b+1,nn,D2H) << std::endl;
 
 
                     DFT::RealForward(a,b,nn);
@@ -104,18 +112,41 @@ namespace Yttrium
                     }
 
 
-#if 1
+#if 0
                     uint8_t * w = static_cast<uint8_t *>(blockEntry);
                     w[0]=(uint8_t) cy;
                     for(size_t j=1;j<mpn;++j)
                         w[j] = *(const uint8_t *) &b[j];
                     Hexadecimal::Display(std::cerr << "w=", w, mpn) << std::endl;
 #endif
+
+#if 0
+                    uint8_t * w = static_cast<uint8_t *>(blockEntry)-1;
+                    w[mpn]=(uint8_t) cy;
+                    for(size_t j=1;j<mpn;++j)
+                        w[mpn-j] = *(const uint8_t *) &b[j];
+                    Hexadecimal::Display(std::cerr << "w=", w+1, mpn) << std::endl;
+#endif
+
+#if 0
+                    uint8_t *    w   = static_cast<uint8_t *>(blockEntry);
+                    const size_t top = mpn-1;
+                    w[top]=(uint8_t) cy;
+                    for(size_t j=1;j<mpn;++j)
+                        w[top-j] = *(const uint8_t *) &b[j];
+                    Hexadecimal::Display(std::cerr << "w=", w, mpn) << std::endl;
+#endif
+                    size_t top = mpn-1;
+                    Coerce(dft->words) = Alignment::To<WORD>::Ceil(mpn) / sizeof(WORD);
+                    dft->or_(top, (uint8_t) cy);
+                    for(size_t j=1;j<mpn;++j)
+                        dft->or_(top-j,*(const uint8_t *) &b[j]);
+                    dft->update();
                 }
 
                 archon.releaseBlock(blockEntry,blockShift);
 
-                return 0;
+                return dft.yield();
             }
         };
 

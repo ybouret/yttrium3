@@ -501,6 +501,16 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 }
             }
 
+            //! dangerous
+            inline void or_(const size_t i, const uint8_t b) noexcept
+            {
+                WordType &W = word[i/WordBytes];
+                WordType  B = b;
+                for(size_t k=(i % WordBytes);k>0;--k) B <<= 8;
+                W |= B;
+            }
+
+
             //__________________________________________________________________
             //
             //

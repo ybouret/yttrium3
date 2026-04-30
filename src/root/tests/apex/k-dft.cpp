@@ -4,6 +4,7 @@
 #include "y/core/rand.hpp"
 #include "y/pointer/auto.hpp"
 #include "y/apex/k/mul.hpp"
+#include "y/apex/k/cmp.hpp"
 
 using namespace Yttrium;
 using namespace Apex;
@@ -18,8 +19,8 @@ namespace
     void testDFT(Core::Rand &ran)
     {
 
-        AutoPtr< Keg<WORD> > lhs = Keg<WORD>::MakeRandom(ran, ran.in<size_t>(0,40) );
-        AutoPtr< Keg<WORD> > rhs = Keg<WORD>::MakeRandom(ran, ran.in<size_t>(0,40) );
+        AutoPtr< Keg<WORD> > lhs = Keg<WORD>::MakeRandom(ran, ran.in<size_t>(0,100) );
+        AutoPtr< Keg<WORD> > rhs = Keg<WORD>::MakeRandom(ran, ran.in<size_t>(0,100) );
         AutoPtr< Keg<WORD> > mul = KegMul::Compute<WORD,CORE>(lhs->word,lhs->words,rhs->word,rhs->words);
 
 
@@ -28,8 +29,10 @@ namespace
         std::cerr << "mul=" << mul->toHex() << std::endl;
 
         AutoPtr< Keg<WORD> > dft = KegDFT::Compute(*lhs,*rhs);
+        std::cerr << "dft=" << dft->toHex() << std::endl;
 
-        
+        Y_ASSERT( __Zero__ == KegCmp::ResultFor(*mul,*dft) );
+
     }
 
 }
