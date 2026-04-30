@@ -26,6 +26,13 @@ namespace Yttrium
         {
             static uint64_t Trace; //!< to trace call ticks
 
+
+            static inline Hexadecimal D2H(const double x)
+            {
+                const uint8_t u = (uint8_t)x;
+                return Hexadecimal(u);
+            }
+
             //! compute lhs * rhs by fourier transform
             /**
              \param lhs first argument
@@ -48,56 +55,63 @@ namespace Yttrium
                 }
                 const size_t nc = nn; // number of complexes
                 nn <<= 1; ++ns;       // number of reals
-
                 assert( size_t(1) << ns == nn);
 
+                const size_t mpn = m+n;
+
                 const unsigned blockShift = ns+1+IntegerLog2For<double>::Value; std::cerr << "nn=" << nn << " => 2^" << blockShift << " = " << (1<<blockShift) << std::endl;
-                double * const blockEntry = static_cast<double *>( archon.acquireBlock(blockShift) );
-                double * const a          = blockEntry-1;
-                double * const b          = a+nn;
-
-                //CxxArray<double> a(nn);
-                //CxxArray<double> b(nn);
-                for(size_t i=n;i>0;--i) a[i] = lhs.getByte(n-i);
-                for(size_t i=m;i>0;--i) b[i] = rhs.getByte(m-i);
-
-                Core::Display(std::cerr << "a=",a+1,nn) << std::endl;
-                Core::Display(std::cerr << "b=",b+1,nn) << std::endl;
-
-
-                DFT::RealForward(a,b,nn);
-
-                b[1] *= a[1];
-                b[2] *= a[2];
+                void   * const blockEntry =  archon.acquireBlock(blockShift);
                 {
-                    Complex<double> * zb = (Complex<double> *) b+1;
-                    Complex<double> * za = (Complex<double> *) a+1;
-                    for(size_t i=nc-1;i>0;--i)
+                    double * const a = static_cast<double *>(blockEntry)-1; // a[1:nn]
+                    double * const b = a+nn;                                // b[1:nn]
+
+                    //CxxArray<double> a(nn);
+                    //CxxArray<double> b(nn);
+                    for(size_t i=n;i>0;--i) a[i] = lhs.getByte(n-i);
+                    for(size_t i=m;i>0;--i) b[i] = rhs.getByte(m-i);
+
+                    Core::Display(std::cerr << "a=",a+1,nn,D2H) << std::endl;
+                    Core::Display(std::cerr << "b=",b+1,nn,D2H) << std::endl;
+
+
+                    DFT::RealForward(a,b,nn);
+
+                    b[1] *= a[1];
+                    b[2] *= a[2];
                     {
-                        *(++zb) *= *(++za);
+                        Complex<double> * zb = (Complex<double> *) &b[1];
+                        Complex<double> * za = (Complex<double> *) &a[1];
+                        for(size_t i=nc-1;i>0;--i)
+                        {
+                            *(++zb) *= *(++za);
+                        }
                     }
-                }
 
-                DFT::RealReverse(b,nn);
-                double              cy  = 0;
-                static const double RX  = 256.0;
-                Core::Display(std::cerr << "p=",b+1,nn) << std::endl;
 
-                for(size_t j=nn;j>0;--j) {
-                    const double t = floor( b[j]/(double)nc+cy+0.5 );
-                    cy=(unsigned long) (t*0.00390625);
-                    *(uint8_t *)&b[j]= (uint8_t)(t-cy*RX);
-                }
+                    DFT::RealReverse(b,nn);
+                    double              cy  = 0;
+                    static const double RX  = 256.0;
+                    //Core::Display(std::cerr << "p=",b+1,nn) << std::endl;
 
-                if (cy >= RX) {
-                    throw Exception("cannot happen in DFT Multiplication");
-                }
+                    for(size_t j=nn;j>0;--j) {
+                        const double t = floor( b[j]/(double)nc+cy+0.5 );
+                        cy=(unsigned long) (t*0.00390625);
+                        *(uint8_t *)&b[j]= (uint8_t)(t-cy*RX);
+                    }
 
-#if 0
-                w[1]=(uint8_t) cy;
-                for(size_t j=2;j<=n+m;++j)
-                    w[j] = *(const uint8_t *) &b[j-1];
+                    if (cy >= RX) {
+                        throw Exception("cannot happen in DFT Multiplication");
+                    }
+
+
+#if 1
+                    uint8_t * w = static_cast<uint8_t *>(blockEntry);
+                    w[0]=(uint8_t) cy;
+                    for(size_t j=1;j<mpn;++j)
+                        w[j] = *(const uint8_t *) &b[j];
+                    Hexadecimal::Display(std::cerr << "w=", w, mpn) << std::endl;
 #endif
+                }
 
                 archon.releaseBlock(blockEntry,blockShift);
 
