@@ -27,14 +27,13 @@ namespace Yttrium
             const size_t num = fp.vbr<size_t>(varName,"bytes");
             if(num<=0) return Natural();
             AutoPtr<KegType> keg = new KegType(num);
-            Coerce(keg->words) = Alignment::To<_Keg::Word>::Ceil(num);
+            Coerce(keg->words)   = Alignment::To<_Keg::Word>::Ceil(num)/sizeof(_Keg::Word);
 
             for(size_t i=0;i<num;++i)
             {
                 const _Keg::Word b = fp.cbr<uint8_t>(varName,"byte");
                 _Keg::Word &     w = keg->word[i/sizeof(_Keg::Word)];
-                const size_t     j = i%sizeof(_Keg::Word);
-                w |= ( b << (j*8) );
+                w |= ( b << ((i%sizeof(_Keg::Word))<<3) );
             }
             keg->update();
             if(keg->bytes!=num)

@@ -25,6 +25,14 @@ namespace Yttrium
             return fp.cbr(Mark__Zero__);
 
         }
+
+        Integer Integer:: Read(InputStream &fp, const char * const varName)
+        {
+
+        }
+
+
     }
+
 
 }
