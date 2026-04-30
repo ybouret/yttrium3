@@ -28,11 +28,7 @@ namespace Yttrium
             static uint64_t Trace; //!< to trace call ticks
 
 
-            static inline Hexadecimal D2H(const double x)
-            {
-                const uint8_t u = (uint8_t)x;
-                return Hexadecimal(u);
-            }
+
 
             //! compute lhs * rhs by fourier transform
             /**
@@ -46,11 +42,19 @@ namespace Yttrium
             {
                 static Memory::Archon  &archon = Memory::Archon::Instance();
 
-                // check length
+                //--------------------------------------------------------------
+                //
+                // Check lengths
+                //
+                //--------------------------------------------------------------
                 const size_t n = lhs.bytes;
                 const size_t m = rhs.bytes; if(n<=0||m<=0) return new Keg<WORD>();
 
-                // compute minimal common size
+                //--------------------------------------------------------------
+                //
+                // Compute minimal common size
+                //
+                //--------------------------------------------------------------
                 const size_t mn = Max(m,n);
                 size_t       nn = 1;
                 unsigned     ns = 0;
@@ -62,24 +66,28 @@ namespace Yttrium
                 nn <<= 1; ++ns;       // number of reals
                 assert( size_t(1) << ns == nn);
 
-
+                //--------------------------------------------------------------
+                //
+                // Allocate result
+                //
+                //--------------------------------------------------------------
                 const size_t          mpn = m+n; assert(mpn>=2);
-
-                // allocate result
                 AutoPtr< Keg<WORD> >  dft = new Keg<WORD>(mpn);
 
-                // allocate enough memory
-                const unsigned blockShift = ns+1+IntegerLog2For<double>::Value; //std::cerr << "nn=" << nn << " => 2^" << blockShift << " = " << (1<<blockShift) << std::endl;
+                //--------------------------------------------------------------
+                //
+                // Allocate enough memory
+                //
+                //--------------------------------------------------------------
+                const unsigned blockShift = ns+1+IntegerLog2For<double>::Value;
                 void   * const blockEntry = archon.acquireBlock(blockShift);
                 {
-                    double * const a = static_cast<double *>(blockEntry)-1; // a[1:nn]
-                    double * const b = a+nn;                                // b[1:nn]
+                    double * const  a = static_cast<double *>(blockEntry)-1; // a[1:nn]
+                    double * const  b = a+nn;                                // b[1:nn]
+                    uint8_t * const w = static_cast<uint8_t*>(blockEntry)-1; // w[1:nn]
 
-                    for(size_t i=n;i>0;--i) a[i] = lhs.getByte(n-i);
-                    for(size_t i=m;i>0;--i) b[i] = rhs.getByte(m-i);
-
-                    //Core::Display(std::cerr << "a=",a+1,nn,D2H) << std::endl;
-                    //Core::Display(std::cerr << "b=",b+1,nn,D2H) << std::endl;
+                    for(size_t i=n,j=0;i>0;--i) a[i] = lhs.getByte(j++);
+                    for(size_t i=m,j=0;i>0;--i) b[i] = rhs.getByte(j++);
 
 
                     DFT::RealForward(a,b,nn);
@@ -99,48 +107,21 @@ namespace Yttrium
                     DFT::RealReverse(b,nn);
                     double              cy  = 0;
                     static const double RX  = 256.0;
-                    //Core::Display(std::cerr << "p=",b+1,nn) << std::endl;
-
                     for(size_t j=nn;j>0;--j) {
                         const double t = floor( b[j]/(double)nc+cy+0.5 );
                         cy=(unsigned long) (t*0.00390625);
-                        *(uint8_t *)&b[j]= (uint8_t)(t-cy*RX);
+                        w[j] = (uint8_t)(t-cy*RX);
                     }
-
-                    if (cy >= RX) {
+                    if (cy >= RX)
                         throw Exception("cannot happen in DFT Multiplication");
+                    
+                    {
+                        size_t top = mpn-1;
+                        Coerce(dft->words) = Alignment::To<WORD>::Ceil(mpn) / sizeof(WORD);
+                        dft->or_(top, (uint8_t) cy);
+                        for(size_t j=1;j<mpn;++j)
+                            dft->or_(--top,w[j]);
                     }
-
-
-#if 0
-                    uint8_t * w = static_cast<uint8_t *>(blockEntry);
-                    w[0]=(uint8_t) cy;
-                    for(size_t j=1;j<mpn;++j)
-                        w[j] = *(const uint8_t *) &b[j];
-                    Hexadecimal::Display(std::cerr << "w=", w, mpn) << std::endl;
-#endif
-
-#if 0
-                    uint8_t * w = static_cast<uint8_t *>(blockEntry)-1;
-                    w[mpn]=(uint8_t) cy;
-                    for(size_t j=1;j<mpn;++j)
-                        w[mpn-j] = *(const uint8_t *) &b[j];
-                    Hexadecimal::Display(std::cerr << "w=", w+1, mpn) << std::endl;
-#endif
-
-#if 0
-                    uint8_t *    w   = static_cast<uint8_t *>(blockEntry);
-                    const size_t top = mpn-1;
-                    w[top]=(uint8_t) cy;
-                    for(size_t j=1;j<mpn;++j)
-                        w[top-j] = *(const uint8_t *) &b[j];
-                    Hexadecimal::Display(std::cerr << "w=", w, mpn) << std::endl;
-#endif
-                    size_t top = mpn-1;
-                    Coerce(dft->words) = Alignment::To<WORD>::Ceil(mpn) / sizeof(WORD);
-                    dft->or_(top, (uint8_t) cy);
-                    for(size_t j=1;j<mpn;++j)
-                        dft->or_(top-j,*(const uint8_t *) &b[j]);
                     dft->update();
                 }
 
