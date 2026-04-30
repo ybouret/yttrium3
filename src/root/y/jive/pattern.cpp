@@ -43,6 +43,11 @@ namespace Yttrium
             return !sound();
         }
 
+        bool Pattern:: multiple() const noexcept
+        {
+            return !univocal();
+        }
+
         size_t Pattern:: emitUUID(OutputStream &fp) const
         {
             return fp.cbr(uuid);

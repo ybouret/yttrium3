@@ -42,6 +42,11 @@ namespace Yttrium
             leading << code;
         }
 
+        bool Single:: univocal() const noexcept
+        {
+            return true;
+        }
+
     }
 
 }

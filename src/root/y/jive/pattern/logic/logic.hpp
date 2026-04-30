@@ -1,43 +1,38 @@
-
 //! \file
 
-#ifndef Y_Jive_Any1_Included
-#define Y_Jive_Any1_Included 1
 
-#include "y/jive/pattern/basic/one-char.hpp"
+#ifndef Y_Jive_Logic_Included
+#define Y_Jive_Logic_Included 1
+
+#include "y/jive/pattern.hpp"
 
 namespace Yttrium
 {
     namespace Jive
     {
-        //______________________________________________________________________
-        //
-        //
-        //
-        //! Accept any one character
-        //
-        //
-        //______________________________________________________________________
-        class Any1 : public OneChar
-        {
-        public:
-            //__________________________________________________________________
-            //
-            //
-            // Definitions
-            //
-            //__________________________________________________________________
-            static const uint32_t UUID = Y_FOURCC('A','N','Y','1'); //!< UUID
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Logic Pattern interface
+        //
+        //
+        //______________________________________________________________________
+        class Logic : public Pattern, public Patterns
+        {
             //__________________________________________________________________
             //
             //
             // C++
             //
             //__________________________________________________________________
-            explicit Any1()    noexcept; //!< setup
-            virtual ~Any1()    noexcept; //!< cleanup
-            Any1(const Any1 &) noexcept; //!< duplicate
+        protected:
+            explicit Logic(const uint32_t) noexcept; //!< setu
+            Logic(const Logic &); //!< duplicate
+
+        public:
+            virtual ~Logic() noexcept; //!< cleanup
 
             //__________________________________________________________________
             //
@@ -45,19 +40,25 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual Pattern * clone()                   const;
-            virtual size_t    serialize(OutputStream &) const;
-            virtual void      glean(Leading &) const noexcept;
-            virtual bool      univocal()       const noexcept;
-            
+            virtual size_t serialize(OutputStream &) const;
+
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            void           load(InputStream &); //!< load save patterns
+
         private:
-            Y_Disable_Assign(Any1); //!< discarded
-            virtual bool found(const uint8_t) const noexcept;
+            Y_Disable_Assign(Logic); //!< discarded
+
         };
 
     }
+    
 
 }
 
-#endif // !Y_Jive_Any1_Included
+#endif // !Y_Jive_Logic_Included
 

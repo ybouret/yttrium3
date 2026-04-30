@@ -44,6 +44,12 @@ namespace Yttrium
             tmp.all().clr(code);
             leading << tmp;
         }
+
+        bool Excluded:: univocal() const noexcept
+        {
+            return false;
+        }
+
     }
 
 }

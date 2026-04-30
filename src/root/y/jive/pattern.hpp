@@ -6,6 +6,7 @@
 #include "y/jive/source.hpp"
 #include "y/type/fourcc.hpp"
 #include "y/stream/serializable.hpp"
+#include "y/core/list/clone.hpp"
 
 namespace Yttrium
 {
@@ -48,6 +49,8 @@ namespace Yttrium
             virtual void      glean(Leading &) const noexcept = 0; //!< find leading bytes
             virtual bool      sound()          const noexcept = 0; //!< \return true iff takes doesn't return successful empty token
             bool              frail()          const noexcept;     //!< \return !sound()
+            virtual bool      univocal()       const noexcept = 0; //!< \return true iff univocal result
+            bool              multiple()       const noexcept;     //!< \return !univocal()
 
             //__________________________________________________________________
             //
@@ -63,7 +66,7 @@ namespace Yttrium
             friend bool operator==(const Pattern &, const Pattern&) noexcept;
             friend bool operator!=(const Pattern &, const Pattern&) noexcept;
 #endif
-            
+
             //__________________________________________________________________
             //
             //
@@ -78,6 +81,8 @@ namespace Yttrium
         private:
             Y_Disable_Assign(Pattern); //!< discarded
         };
+
+        typedef CloneList<Pattern> Patterns; //!< alias
     }
 }
 

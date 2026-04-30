@@ -47,6 +47,12 @@ namespace Yttrium
         {
             leading.set(lower,upper);
         }
+
+        bool Range:: univocal() const noexcept
+        {
+            return upper<=lower;
+        }
+
     }
 
 }

@@ -38,6 +38,11 @@ namespace Yttrium
         {
             leading.all();
         }
+
+        bool Any1:: univocal() const noexcept
+        {
+            return false;
+        }
     }
 
 }
