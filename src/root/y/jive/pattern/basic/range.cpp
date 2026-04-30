@@ -13,7 +13,7 @@ namespace Yttrium
         lower(lo),
         upper(up)
         {
-            if(up<lo) CoerceSwap(lo,up);
+            if(upper<lower) CoerceSwap(lower,upper);
         }
 
         Range:: Range(const Range &_) noexcept :
