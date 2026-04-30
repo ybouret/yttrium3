@@ -157,6 +157,31 @@ namespace Yttrium
             inline ConstType & tail() const noexcept { assert(list.tail); return **list.tail; } //!< \return tail item
 
 
+            static inline bool HaveSameContent(const ListProto &lhs, const ListProto &rhs)
+            {
+                const size_t n = lhs->size; if(n!=rhs->size) return false;
+                for(const NodeType *L=lhs->head, *R=rhs->head;L;L=L->next,R=R->next)
+                {
+                    assert(L); assert(R);
+                    if( **L != **R) return false;
+                }
+                return true;
+            }
+
+            inline friend bool operator==(const ListProto &lhs, const ListProto &rhs)
+            {
+                return HaveSameContent(lhs,rhs);
+            }
+
+            inline friend bool operator!=(const ListProto &lhs, const ListProto &rhs)
+            {
+                return !HaveSameContent(lhs,rhs);
+            }
+
+
+
+
+
         protected:
             CoreList list; //!< current content
 

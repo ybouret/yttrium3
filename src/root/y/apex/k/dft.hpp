@@ -14,6 +14,8 @@
 #include "y/system/wall-time.hpp"
 #endif
 
+#include <cmath>
+
 namespace Yttrium
 {
     namespace Apex
@@ -90,7 +92,7 @@ namespace Yttrium
                 for(size_t j=2;j<=n+m;++j)
                     w[j] = *(const uint8_t *) &b[j-1];
 #endif
-                
+
                 archon.releaseBlock(blockEntry,blockShift);
 
                 return 0;
