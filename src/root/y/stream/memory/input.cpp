@@ -37,7 +37,7 @@ namespace Yttrium
     size_t InputMemoryStream:: query(void * const buffer, const size_t buflen)
     {
         assert( !(0==buffer&&buflen>0) );
-        const size_t numRead   = Min<size_t>(buflen,last-curr);
+        const size_t numRead   = Min<size_t>(buflen,(size_t)(last-curr));
         memcpy(buffer,curr,numRead);
         curr += numRead;
         return numRead;

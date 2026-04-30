@@ -73,7 +73,7 @@ namespace Yttrium
             Char * const ch = get();
             if(ch)
             {
-                c = **ch;
+                c = (char) **ch;
                 delete ch;
                 return true;
             }
@@ -85,8 +85,8 @@ namespace Yttrium
 
         size_t Source:: query(void * const buffer, const size_t buflen)
         {
-            size_t  n  = 0;
-            char *  p = (char *)buffer;
+            size_t     n  = 0;
+            uint8_t *  p = (uint8_t *)buffer;
             while(n<buflen && buff.size>0)
             {
                 *(p++) = **buff.head;
@@ -108,7 +108,7 @@ namespace Yttrium
 
         void Source:: store(const char c)
         {
-            buff.pushHead( new Char(*impl,c) );
+            buff.pushHead( new Char(*impl,(uint8_t)c) );
         }
 
         void Source:: endl() noexcept
