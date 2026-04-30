@@ -14,7 +14,9 @@ namespace Yttrium
 
         Pattern:: Pattern(const uint32_t t) noexcept :
         uuid(t),
-        name()
+        name(),
+        next(0),
+        prev(0)
         {
             memset( (void*)name, 0, sizeof(name) );
             for(int shift=0,i=0;shift<=24;shift+=8,++i)
@@ -27,7 +29,9 @@ namespace Yttrium
         Pattern:: Pattern(const Pattern &p) noexcept :
         Object(),
         uuid(p.uuid),
-        name()
+        name(),
+        next(0),
+        prev(0)
         {
             memcpy( (void*)name,p.name,sizeof(name));
         }

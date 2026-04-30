@@ -1,5 +1,6 @@
 
 #include "y/jive/pattern/basic/any1.hpp"
+#include "y/jive/pattern/leading.hpp"
 
 namespace Yttrium
 {
@@ -31,6 +32,11 @@ namespace Yttrium
         size_t Any1:: serialize(OutputStream &fp) const
         {
             return emitUUID(fp);
+        }
+
+        void Any1:: glean(Leading &leading) const noexcept
+        {
+            leading.all();
         }
     }
 

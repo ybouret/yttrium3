@@ -2,6 +2,7 @@
 
 #include "y/jive/pattern/basic/single.hpp"
 #include "y/stream/output.hpp"
+#include "y/jive/pattern/leading.hpp"
 
 namespace Yttrium
 {
@@ -35,6 +36,12 @@ namespace Yttrium
             const size_t res = emitUUID(fp);
             return res + fp.cbr(code);
         }
+
+        void Single:: glean(Leading &leading) const noexcept
+        {
+            leading << code;
+        }
+
     }
 
 }

@@ -1,6 +1,7 @@
 #include "y/jive/pattern/basic/range.hpp"
 #include "y/swap.hpp"
 #include "y/stream/output.hpp"
+#include "y/jive/pattern/leading.hpp"
 
 namespace Yttrium
 {
@@ -40,6 +41,11 @@ namespace Yttrium
             res += fp.cbr(lower);
             res += fp.cbr(upper);
             return res;
+        }
+
+        void Range:: glean(Leading &leading) const noexcept
+        {
+            leading.set(lower,upper);
         }
     }
 

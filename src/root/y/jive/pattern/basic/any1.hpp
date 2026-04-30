@@ -22,6 +22,7 @@ namespace Yttrium
 
             virtual Pattern * clone()                   const;
             virtual size_t    serialize(OutputStream &) const;
+            virtual void      glean(Leading &) const noexcept;
 
         private:
             Y_Disable_Assign(Any1);

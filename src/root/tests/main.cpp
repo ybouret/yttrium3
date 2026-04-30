@@ -37,6 +37,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(calculus_align);
     Y_UTEST(calculus_gc);
     Y_UTEST(calculus_required);
+    Y_UTEST(calculus_nzbits);
     Y_UTEST(calculus_split);
     Y_UTEST(calculus_isqrt);
     Y_UTEST(calculus_ldiv);
@@ -149,6 +150,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(dft_mul);
 
     Y_UTEST(jive_source);
+    Y_UTEST(jive_leading);
     Y_UTEST(jive_pattern);
 }
 Y_UTEST_EXEC()

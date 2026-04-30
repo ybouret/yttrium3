@@ -3,6 +3,7 @@
 
 #include "y/jive/pattern/basic/excluded.hpp"
 #include "y/stream/output.hpp"
+#include "y/jive/pattern/leading.hpp"
 
 namespace Yttrium
 {
@@ -35,6 +36,13 @@ namespace Yttrium
         {
             const size_t res = emitUUID(fp);
             return res + fp.cbr(code);
+        }
+
+        void Excluded:: glean(Leading &leading) const noexcept
+        {
+            Leading tmp;
+            tmp.all().clr(code);
+            leading << tmp;
         }
     }
 

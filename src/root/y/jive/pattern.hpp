@@ -11,6 +11,9 @@ namespace Yttrium
 {
     namespace Jive
     {
+
+        class Leading;
+
         //______________________________________________________________________
         //
         //
@@ -29,10 +32,11 @@ namespace Yttrium
             virtual ~Pattern() noexcept;
 
 
-            virtual bool      takes(Token &, Source &) const = 0;
-            virtual Pattern * clone()  const                 = 0;
-            virtual bool      sound() const noexcept         = 0;
-            bool              frail() const noexcept;
+            virtual bool      takes(Token &, Source &) const  = 0;
+            virtual Pattern * clone()  const                  = 0;
+            virtual void      glean(Leading &) const noexcept = 0;
+            virtual bool      sound()          const noexcept = 0;
+            bool              frail()          const noexcept;
 
             size_t           emitUUID(OutputStream&) const;
             static Pattern * Load(InputStream &);
@@ -44,6 +48,9 @@ namespace Yttrium
 
             const uint32_t uuid;
             const char     name[8];
+
+            Pattern * next;
+            Pattern * prev;
 
         private:
             Y_Disable_Assign(Pattern);
