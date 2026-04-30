@@ -1,5 +1,4 @@
 #include "y/jive/pattern/basic/range.hpp"
-#include "y/swap.hpp"
 #include "y/stream/output.hpp"
 #include "y/jive/pattern/leading.hpp"
 
@@ -11,14 +10,19 @@ namespace Yttrium
         Range:: Range(const uint8_t lo,
                       const uint8_t up) noexcept :
         OneChar(UUID),
-        lower(lo),
-        upper(up)
+        Within(lo,up)
         {
-            if(upper<lower) CoerceSwap(lower,upper);
         }
 
+        Range:: Range(const Within w) noexcept :
+        OneChar(UUID),
+        Within(w)
+        {
+        }
+        
+
         Range:: Range(const Range &_) noexcept :
-        OneChar(_), lower(_.lower), upper(_.upper)
+        OneChar(_), Within(_)
         {}
 
         Pattern * Range:: clone() const

@@ -1,4 +1,5 @@
-#include "y/jive/pattern/basic/all.hpp"
+#include "y/jive/pattern/all.hpp"
+
 #include "y/pointer/auto.hpp"
 #include "y/utest/run.hpp"
 
@@ -36,6 +37,8 @@ namespace  {
             std::cerr << "fc=" << fc << std::endl;
         }
 
+
+        
     }
 
 
@@ -50,6 +53,12 @@ Y_UTEST(jive_pattern)
     { Jive::Single    p('A');     testPattern(p); }
     { Jive::Range     p('Z','A'); testPattern(p); }
     { Jive::Excluded  p('X');     testPattern(p); }
+
+    {
+        Jive::And       p;
+        p << 'a' << 'b' << Jive::Within('0','9');
+        testPattern(p);
+    }
 
 }
 Y_UDONE()

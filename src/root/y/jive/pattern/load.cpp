@@ -1,11 +1,21 @@
 #include "y/jive/pattern/all.hpp"
 #include "y/stream/input.hpp"
 #include "y/exception.hpp"
+#include "y/pointer/auto.hpp"
 
 namespace Yttrium
 {
     namespace Jive
     {
+
+        static inline
+        Pattern * LoadLogic(Logic * const p, InputStream &fp)
+        {
+            AutoPtr<Logic> q(p);
+            q->load(fp);
+            return q.yield();
+        }
+
         Pattern * Pattern:: Load(InputStream &fp)
         {
 
@@ -25,6 +35,9 @@ namespace Yttrium
                     if(upper<lower) throw Specific::Exception(varName,"corrupted lower/upper");
                     return new Range(lower,upper);
                 }
+
+                case And:: UUID:  return LoadLogic( new And(), fp );
+
             }
 
             throw Specific::Exception(varName, "unknown UUID was read");

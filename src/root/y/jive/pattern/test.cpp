@@ -21,6 +21,8 @@ namespace Yttrium
                     return L.lower == R.lower && L.upper == R.upper;
                 }
 
+                case And::UUID: return Logic::HaveSamePatterns( dynamic_cast<const Logic&>(lhs), dynamic_cast<const Logic&>(rhs) );
+
                 default:
                     std::cerr << "[unhandled " << FourCC(uid).c_str() << "]" << std::endl;
                     break;

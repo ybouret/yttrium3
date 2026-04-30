@@ -7,6 +7,7 @@
 #define Y_Jive_Range_Included 1
 
 #include "y/jive/pattern/basic/one-char.hpp"
+#include "y/jive/pattern/within.hpp"
 
 namespace Yttrium
 {
@@ -21,7 +22,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Range : public OneChar
+        class Range : public OneChar, public Within
         {
         public:
             //__________________________________________________________________
@@ -38,9 +39,10 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Range(const uint8_t,const uint8_t) noexcept; //!< setup
-            virtual ~Range()                            noexcept; //!< cleanup
-            Range(const Range &)                        noexcept; //!< duplicate
+            Range(const uint8_t,const uint8_t) noexcept; //!< setup
+            Range(const Within)                noexcept;
+            virtual ~Range()                   noexcept; //!< cleanup
+            Range(const Range &)               noexcept; //!< duplicate
 
             //__________________________________________________________________
             //
@@ -53,15 +55,7 @@ namespace Yttrium
             virtual void      glean(Leading &) const noexcept;
             virtual bool      univocal()       const noexcept;
 
-            //__________________________________________________________________
-            //
-            //
-            // Members
-            //
-            //__________________________________________________________________
-            const uint8_t lower; //!< lower bound
-            const uint8_t upper; //!< upper bound
-
+            
         private:
             Y_Disable_Assign(Range); //!< discared
             virtual bool found(const uint8_t) const noexcept;

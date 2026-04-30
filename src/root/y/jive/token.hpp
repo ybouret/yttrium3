@@ -30,7 +30,6 @@ namespace Yttrium
 
             Token & operator<<(Char * const) noexcept; //!< merge tail \return *this
             Token & operator>>(Char * const) noexcept; //!< merge head \return *this
-
             String toString() const; //!< \return human readable string
 
         private:

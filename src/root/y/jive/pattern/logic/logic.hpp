@@ -5,6 +5,7 @@
 #define Y_Jive_Logic_Included 1
 
 #include "y/jive/pattern.hpp"
+#include "y/jive/pattern/within.hpp"
 
 namespace Yttrium
 {
@@ -28,8 +29,8 @@ namespace Yttrium
             //
             //__________________________________________________________________
         protected:
-            explicit Logic(const uint32_t) noexcept; //!< setu
-            Logic(const Logic &); //!< duplicate
+            explicit Logic(const uint32_t) noexcept; //!< setup
+            Logic(const Logic &);                    //!< duplicate
 
         public:
             virtual ~Logic() noexcept; //!< cleanup
@@ -50,13 +51,20 @@ namespace Yttrium
             //__________________________________________________________________
             void           load(InputStream &); //!< load save patterns
 
+            Logic & operator<<(Pattern * const);
+            Logic & operator<<(const uint8_t);
+            Logic & operator<<(const Within);
+
+            static bool HaveSamePatterns(const Logic &lhs, const Logic &rhs) noexcept;
+
+
         private:
             Y_Disable_Assign(Logic); //!< discarded
 
         };
 
     }
-    
+
 
 }
 
