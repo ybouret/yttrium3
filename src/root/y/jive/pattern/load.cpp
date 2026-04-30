@@ -37,6 +37,7 @@ namespace Yttrium
                 }
 
                 case And:: UUID:  return LoadLogic( new And(), fp );
+                case Or::  UUID:  return LoadLogic( new Or(), fp );
 
             }
 

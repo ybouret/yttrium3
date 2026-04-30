@@ -5,6 +5,7 @@
 #define Y_Pattern_Within_Included 1
 
 #include "y/config/setup.hpp"
+#include "y/ostream-proto.hpp"
 
 namespace Yttrium
 {
@@ -17,6 +18,8 @@ namespace Yttrium
             Within(const uint8_t,const uint8_t) noexcept;
             virtual ~Within() noexcept;
             Within(const Within &) noexcept;
+            Y_OSTREAM_PROTO(Within);
+
 
             const uint8_t lower;
             const uint8_t upper;

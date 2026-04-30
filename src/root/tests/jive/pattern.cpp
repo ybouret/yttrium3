@@ -60,6 +60,12 @@ Y_UTEST(jive_pattern)
         testPattern(p);
     }
 
+    {
+        Jive::Or       p;
+        p << Jive::Within('a','z') << Jive::Within('A','Z');
+        testPattern(p);
+    }
+
 }
 Y_UDONE()
 
