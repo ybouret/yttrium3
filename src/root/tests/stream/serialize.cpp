@@ -11,11 +11,13 @@ Y_UTEST(stream_serialize)
 {
     Core::Rand ran;
     const String s = "Hello, World!";
-    const apn    n(ran,ran.in<size_t>(10,100));
+    const apn    n(ran,ran.in<size_t>(0,100));
+    const apz    z(ran,ran.in<size_t>(0,40));
 
     Y_PRINTV(s);
     Y_PRINTV(n.toHex());
-
+    Y_PRINTV(z);
+    std::cerr << std::endl;
 
     size_t written = 0;
     {
@@ -28,7 +30,12 @@ Y_UTEST(stream_serialize)
             written += n.serialize(fp);
         }
         Y_PRINTV(written);
+        {
+            written += z.serialize(fp);
+        }
+        Y_PRINTV(written);
     }
+    std::cerr << std::endl;
 
     {
         InputFile fp("serialize.bin");
@@ -41,6 +48,11 @@ Y_UTEST(stream_serialize)
             const apn readAPN = apn::Read(fp,"apn");
             Y_PRINTV(readAPN.toHex());
             Y_ASSERT(n==readAPN);
+        }
+        {
+            const apz readAPZ = apz::Read(fp,"apz");
+            Y_PRINTV(readAPZ);
+            Y_ASSERT(z==readAPZ);
         }
     }
 }

@@ -2,6 +2,7 @@
 
 #include "y/apex/integer.hpp"
 #include "y/stream/output.hpp"
+#include "y/stream/input.hpp"
 
 namespace Yttrium
 {
@@ -28,7 +29,26 @@ namespace Yttrium
 
         Integer Integer:: Read(InputStream &fp, const char * const varName)
         {
-
+            const uint8_t mark = fp.cbr<uint8_t>(varName,"sign");
+            SignType      mine = __Zero__;
+            switch(mark)
+            {
+                case Mark__Zero__: return Integer();
+                case MarkPositive: mine = Positive; break;
+                case MarkNegative: mine = Negative; break;
+                default:
+                {
+                    Specific::Exception excp(CallSign,"invalid mark 0x%02x",mark);
+                    throw excp.signedFor(varName,"sign");
+                }
+            }
+            const Natural zabs = Natural::Read(fp,varName);
+            if(zabs.is0())
+            {
+                Specific::Exception excp(CallSign,"corrupted absolute value");
+                throw excp.signedFor(varName,"natural part");
+            }
+            return Integer(mine,zabs);
         }
 
 

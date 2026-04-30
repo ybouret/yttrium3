@@ -36,6 +36,7 @@ namespace Yttrium
                 w |= ( b << ((i%sizeof(_Keg::Word))<<3) );
             }
             keg->update();
+            
             if(keg->bytes!=num)
             {
                 Specific::Exception excp(CallSign,"Read corrupted");
