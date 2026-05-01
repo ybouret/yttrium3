@@ -15,6 +15,7 @@ namespace
 
     const size_t minBits = 128;
     const size_t maxBits = 4096;
+    long double  tmx     = 0.02L;
 
     template <typename WORD, typename CORE>
     static inline
@@ -53,7 +54,7 @@ namespace
 
                     Y_ASSERT( __Zero__ == KegCmp::ResultFor(*mul,*dft) );
                 }
-                while( chrono(mul64) < 0.1L );
+                while( chrono(mul64) < tmx );
 
                 const long double cycles = (long double)nops;
                 if(KegDFT::Trace&&KegMul::Trace)
@@ -76,36 +77,23 @@ namespace
             }
         }
 
-#if 0
-        KegDFT::Trace = 0;
-        KegMul::Trace = 0;
 
-        for(size_t iter=0;iter<1024;++iter)
-        {
-            AutoPtr< Keg<WORD> > lhs = Keg<WORD>::MakeRandom(ran, ran.in<size_t>(0,200) );
-            AutoPtr< Keg<WORD> > rhs = Keg<WORD>::MakeRandom(ran, ran.in<size_t>(0,200) );
-            AutoPtr< Keg<WORD> > mul = KegMul::Compute<WORD,CORE>(lhs->word,lhs->words,rhs->word,rhs->words);
-
-
-           // std::cerr << "lhs=" << lhs->toHex() << std::endl;
-           // std::cerr << "rhs=" << rhs->toHex() << std::endl;
-            //std::cerr << "mul=" << mul->toHex() << std::endl;
-
-            AutoPtr< Keg<WORD> > dft = KegDFT::Compute(*lhs,*rhs);
-            //std::cerr << "dft=" << dft->toHex() << std::endl;
-            Y_ASSERT( __Zero__ == KegCmp::ResultFor(*mul,*dft) );
-        }
-
-        std::cerr << "Trace = " << KegDFT:: Trace << "/" << KegMul::Trace << std::endl;
-#endif
         std::cerr << std::endl;
     }
 
 }
 
+#include "y/ascii/convert.hpp"
+
 Y_UTEST(apex_k_dft)
 {
     Core::Rand ran;
+
+    if(argc>1)
+    {
+        tmx = ASCII::Convert::To<long double>(argv[1],"tmx",0);
+    }
+
     testDFT<uint8_t,uint16_t>(ran);
     testDFT<uint8_t,uint32_t>(ran);
     testDFT<uint8_t,uint64_t>(ran);
