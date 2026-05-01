@@ -36,8 +36,9 @@ namespace Yttrium
                     return new Range(lower,upper);
                 }
 
-                case And:: UUID:  return LoadLogic( new And(), fp );
-                case Or::  UUID:  return LoadLogic( new Or(), fp );
+                case And::  UUID:  return LoadLogic( new And(),  fp );
+                case Or::   UUID:  return LoadLogic( new Or(),   fp );
+                case None:: UUID:  return LoadLogic( new None(), fp );
 
             }
 

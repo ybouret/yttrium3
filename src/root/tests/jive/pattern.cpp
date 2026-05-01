@@ -66,6 +66,12 @@ Y_UTEST(jive_pattern)
         testPattern(p);
     }
 
+    {
+        Jive::None       p;
+        p << Jive::Within('0','9') << Jive::Within('A','Z');
+        testPattern(p);
+    }
+
 }
 Y_UDONE()
 

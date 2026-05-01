@@ -51,6 +51,8 @@ namespace Yttrium
             //__________________________________________________________________
             Leading & operator << (const uint8_t)   noexcept; //!< merge byte \return *this
             Leading & operator << (const Leading &) noexcept; //!< merge another \return *this
+            Leading & operator-=(const uint8_t)     noexcept; //!< remove byte \return *this
+            Leading & operator-=(const Leading &)   noexcept; //!< remove other conten \return *this
 
             bool      get(const uint8_t) const noexcept; //!< get byte status \return true iff byte is use
             Leading & set(const uint8_t)       noexcept; //!< set byte status \return *this

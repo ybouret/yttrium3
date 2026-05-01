@@ -53,9 +53,24 @@ namespace Yttrium
 
         Leading & Leading:: operator << (const uint8_t b) noexcept
         {
-            data[b>>3] |= Bit[b&7];
+            return set(b);
+        }
+
+        Leading & Leading:: operator-=(const uint8_t b) noexcept
+        {
+            return clr(b);
+        }
+
+        Leading & Leading:: operator-=(const Leading &other)   noexcept
+        {
+            for(unsigned i=0;i<256;++i)
+            {
+                const uint8_t b = (uint8_t)i;
+                if(other.get(b)) clr(b);
+            }
             return *this;
         }
+
 
         Leading & Leading:: operator << (const Leading &other) noexcept
         {
