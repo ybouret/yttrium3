@@ -51,11 +51,12 @@ namespace Yttrium
             //__________________________________________________________________
             void           load(InputStream &); //!< load save patterns
 
-            Logic & operator<<(Pattern * const);
-            Logic & operator<<(const uint8_t);
-            Logic & operator<<(const Within);
+            Logic & operator<<(Pattern * const); //!< append new patern \return *this
+            Logic & operator<<(const uint8_t);   //!< append new single \return *this
+            Logic & operator<<(const Within);    //!< append new range  \return *this
 
-            static bool HaveSamePatterns(const Logic &lhs, const Logic &rhs) noexcept;
+            //! \return true iff arguments have same patterns
+            static bool HaveSamePatterns(const Logic &, const Logic &) noexcept;
 
 
         private:

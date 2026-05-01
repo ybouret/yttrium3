@@ -39,6 +39,7 @@ blockShift(0),\
 word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) )
 
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         template <typename WORD>
         struct GetByte
         {
@@ -80,7 +81,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 word[i] = b;
             }
         };
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         //______________________________________________________________________
         //
@@ -519,7 +520,11 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 }
             }
 
-            //! dangerous
+            //! dangerous!
+            /**
+             \param i index in [0:bytes-1]
+             \param b byte to put at i-th position
+             */
             inline void or_(const size_t i, const uint8_t b) noexcept
             {
                 PutByte<WORD>::At(word,i,b);

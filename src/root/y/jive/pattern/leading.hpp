@@ -61,6 +61,11 @@ namespace Yttrium
 
             size_t size() const noexcept; //!< \return number of used bytes
 
+            //! callback for each detected Within
+            /**
+             \param proc to call on a Within
+             \param args parameters for proc
+             */
             void forEach( void (*proc)(const Within &, void * const), void * const args ) const;
 
 

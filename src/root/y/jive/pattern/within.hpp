@@ -12,20 +12,39 @@ namespace Yttrium
 
     namespace Jive
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Within holds lower and upper bounds
+        //
+        //
+        //______________________________________________________________________
         class Within
         {
         public:
-            Within(const uint8_t,const uint8_t) noexcept;
-            virtual ~Within() noexcept;
-            Within(const Within &) noexcept;
-            Y_OSTREAM_PROTO(Within);
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            Within(const uint8_t,const uint8_t) noexcept; //!< setup
+            virtual ~Within()                   noexcept; //!< cleanup
+            Within(const Within &)              noexcept; //!< duplicate
+            Y_OSTREAM_PROTO(Within);                      //!< display
 
-
-            const uint8_t lower;
-            const uint8_t upper;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const uint8_t lower; //!< lower bound
+            const uint8_t upper; //!< upper bound
 
         private:
-            Y_Disable_Assign(Within);
+            Y_Disable_Assign(Within); //!< discarded
         };
     }
 

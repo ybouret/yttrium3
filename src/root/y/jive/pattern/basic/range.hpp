@@ -40,7 +40,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             Range(const uint8_t,const uint8_t) noexcept; //!< setup
-            Range(const Within)                noexcept;
+            Range(const Within)                noexcept; //!< setup from Within
             virtual ~Range()                   noexcept; //!< cleanup
             Range(const Range &)               noexcept; //!< duplicate
 
