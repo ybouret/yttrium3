@@ -88,6 +88,7 @@ y/jive
 y/jive/pattern
 y/jive/pattern/basic
 y/jive/pattern/logic
+y/jive/pattern/joker
 )
 
 add_subdirectory(tests)

@@ -7,6 +7,8 @@
 #include "y/type/fourcc.hpp"
 #include "y/stream/serializable.hpp"
 #include "y/core/list/clone.hpp"
+#include "y/pointer/arc.hpp"
+#include "y/object/counted.hpp"
 
 namespace Yttrium
 {
@@ -23,7 +25,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Pattern : public Object, public Serializable
+        class Pattern : public CountedObject, public Serializable
         {
             //__________________________________________________________________
             //
@@ -82,7 +84,9 @@ namespace Yttrium
             Y_Disable_Assign(Pattern); //!< discarded
         };
 
-        typedef CloneList<Pattern> Patterns; //!< alias
+        typedef CloneList<Pattern>    Patterns; //!< alias
+        typedef ArcPtr<const Pattern> Motif;    //!< alias
+
     }
 }
 
