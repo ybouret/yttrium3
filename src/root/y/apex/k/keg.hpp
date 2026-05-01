@@ -38,30 +38,48 @@ maxWords(0),  \
 blockShift(0),\
 word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) )
 
-        //! helper to right shift 8 bits
-        template <typename T>
-        struct SHR8
+
+        template <typename WORD>
+        struct GetByte
         {
-            //! \param x becomes x>>=8
-            static inline void Make(T &x) noexcept
+            static inline uint8_t At(const WORD * const word, const size_t i) noexcept
             {
-                x >>= 8;
+                WORD     w = word[i / sizeof(WORD)];
+                for(size_t k=(i % sizeof(WORD));k>0;--k)
+                    w >>= 8;
+                return (uint8_t)w;
             }
         };
 
-        //! helper to right shift 8 bits
+        template <> struct GetByte<uint8_t>
+        {
+            static inline uint8_t At(const uint8_t * const word, const size_t i) noexcept
+            {
+                return word[i];
+            }
+        };
+
+        template <typename WORD>
+        struct PutByte
+        {
+            static inline void At(WORD * const word, const size_t i, const uint8_t b) noexcept
+            {
+                WORD &W = word[i/sizeof(WORD)];
+                WORD  B = b;
+                for(size_t k=(i % sizeof(WORD));k>0;--k) B <<= 8;
+                W |= B;
+            }
+        };
+
+
         template <>
-        struct SHR8<uint8_t>
+        struct PutByte<uint8_t>
         {
-            //! \param x becomes 0
-            static inline void Make(uint8_t &x) noexcept
+            static inline void At(uint8_t * const word, const size_t i, const uint8_t b) noexcept
             {
-                x = 0;
+                word[i] = b;
             }
         };
-
-
-
 
 
         //______________________________________________________________________
@@ -497,20 +515,14 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 else
                 {
                     assert(i<bytes);
-                    WordType     w     = word[i / WordBytes];
-                    for(size_t k=(i % WordBytes);k>0;--k)
-                        SHR8<WORD>::Make(w);
-                    return (uint8_t)w;
+                    return GetByte<WORD>::At(word,i);
                 }
             }
 
             //! dangerous
             inline void or_(const size_t i, const uint8_t b) noexcept
             {
-                WordType &W = word[i/WordBytes];
-                WordType  B = b;
-                for(size_t k=(i % WordBytes);k>0;--k) B <<= 8;
-                W |= B;
+                PutByte<WORD>::At(word,i,b);
             }
 
 
