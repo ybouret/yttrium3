@@ -38,7 +38,7 @@ namespace Yttrium
 
         bool Counting:: univocal() const noexcept
         {
-            return upper==lower && motif->univocal();
+            return lower>0 && upper==lower && motif->univocal();
         }
 
         size_t Counting:: serialize(OutputStream &fp) const

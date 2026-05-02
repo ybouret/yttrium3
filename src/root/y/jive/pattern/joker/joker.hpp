@@ -50,6 +50,8 @@ namespace Yttrium
             // Method
             //
             //__________________________________________________________________
+
+            //! \return true if identical patterns
             static bool HaveSameMotif(const Joker &, const Joker &) noexcept;
 
             //__________________________________________________________________
@@ -58,7 +60,8 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            const Motif motif;
+            const Motif motif; //!< current motif
+            
         private:
             Y_Disable_Assign(Joker); //!< discarded
 

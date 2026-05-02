@@ -37,9 +37,9 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Optional(const Motif &) noexcept;
-            Optional(const Optional &);
-            virtual ~Optional() noexcept;
+            explicit Optional(const Motif &) noexcept; //!< setup
+            Optional(const Optional &);                //!< duplicate
+            virtual ~Optional() noexcept;              //!< cleanup
 
             //__________________________________________________________________
             //
@@ -50,7 +50,7 @@ namespace Yttrium
             virtual Pattern * clone() const;
             virtual bool      univocal() const noexcept;        // false
             virtual size_t    serialize(OutputStream &) const;
-            virtual bool      sound() const noexcept; // false
+            virtual bool      sound() const noexcept;           // false
             virtual bool      takes(Token&,Source&) const;
 
             //__________________________________________________________________
@@ -59,12 +59,14 @@ namespace Yttrium
             // Method
             //
             //__________________________________________________________________
+
+            //! \return new optional from new pattern
             static Optional * Make(Pattern * const);
 
 
 
         private:
-            Y_Disable_Assign(Optional);
+            Y_Disable_Assign(Optional); //!< dicarded
         };
     }
 

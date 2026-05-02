@@ -40,8 +40,8 @@ namespace Yttrium
 
             //! setup with SOUND motif and counts
             explicit Counting(const Motif &, const size_t, const size_t);
-            Counting(const Counting &);
-            virtual ~Counting() noexcept;
+            Counting(const Counting &);    //!< duplicate
+            virtual ~Counting() noexcept;  //!< cleanup
 
             //__________________________________________________________________
             //
@@ -50,9 +50,9 @@ namespace Yttrium
             //
             //__________________________________________________________________
             virtual Pattern * clone() const;
-            virtual bool      univocal() const noexcept;        // false
+            virtual bool      univocal() const noexcept;        // almost false
             virtual size_t    serialize(OutputStream &) const;
-            virtual bool      sound() const noexcept; // false
+            virtual bool      sound() const noexcept;          // almost false
             virtual bool      takes(Token&,Source&) const;
 
             //__________________________________________________________________
@@ -61,6 +61,8 @@ namespace Yttrium
             // Method
             //
             //__________________________________________________________________
+
+            //! \return new counting form new pattern and parameters
             static Counting * Make(Pattern * const,const size_t,const size_t);
 
             //__________________________________________________________________
@@ -69,8 +71,8 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            const size_t lower;
-            const size_t upper;
+            const size_t lower; //!< minimal count
+            const size_t upper; //!< maximal count
 
         private:
             Y_Disable_Assign(Counting); //!< discarded

@@ -39,8 +39,8 @@ namespace Yttrium
 
             //! setup with SOUND motif and minimal count
             explicit Repeating(const Motif &, const size_t);
-            Repeating(const Repeating &);
-            virtual ~Repeating() noexcept;
+            Repeating(const Repeating &);  //!< duplicate
+            virtual ~Repeating() noexcept; //!< cleanup
 
             //__________________________________________________________________
             //
@@ -51,7 +51,7 @@ namespace Yttrium
             virtual Pattern * clone() const;
             virtual bool      univocal() const noexcept;        // false
             virtual size_t    serialize(OutputStream &) const;
-            virtual bool      sound() const noexcept; // false
+            virtual bool      sound() const noexcept;           // false
             virtual bool      takes(Token&,Source&) const;
 
             //__________________________________________________________________
@@ -60,6 +60,8 @@ namespace Yttrium
             // Method
             //
             //__________________________________________________________________
+
+            //! \return new repeating from new pattern and parameter
             static Repeating * Make(Pattern * const,const size_t);
 
             //__________________________________________________________________
@@ -68,7 +70,7 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            const size_t atLeast;
+            const size_t atLeast; //!< minimal count
 
         private:
             Y_Disable_Assign(Repeating); //!< discarded
