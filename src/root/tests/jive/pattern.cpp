@@ -72,6 +72,12 @@ Y_UTEST(jive_pattern)
         testPattern(p);
     }
 
+    {
+        const Jive::Motif m = new Jive::Range('0','9');
+        Jive::Optional    p(m);
+        testPattern(p);
+    }
+
 }
 Y_UDONE()
 

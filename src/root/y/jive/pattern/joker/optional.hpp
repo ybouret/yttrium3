@@ -2,39 +2,44 @@
 //! \file
 
 
-#ifndef Y_Jive_Joker_Included
-#define Y_Jive_Joker_Included 1
+#ifndef Y_Jive_Optional_Included
+#define Y_Jive_Optional_Included 1
 
-#include "y/jive/pattern.hpp"
+#include "y/jive/pattern/joker/joker.hpp"
 
 namespace Yttrium
 {
     namespace Jive
     {
-        
 
         //______________________________________________________________________
         //
         //
         //
-        //! Joker Pattern interface
+        //! Optional pattern
         //
         //
         //______________________________________________________________________
-        class Joker : public Pattern
+        class Optional : public Joker
         {
+        public:
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const uint32_t UUID = Y_FOURCC('O', 'P', 'T', '_'); //!< UUID
+
             //__________________________________________________________________
             //
             //
             // C++
             //
             //__________________________________________________________________
-        protected:
-            explicit Joker(const uint32_t, const Motif &) noexcept; //!< setup
-            Joker(const Joker &);                                   //!< duplicate by cloning
-
-        public:
-            virtual ~Joker() noexcept; //!< cleanup
+            explicit Optional(const Motif &) noexcept;
+            Optional(const Optional &);
+            virtual ~Optional() noexcept;
 
             //__________________________________________________________________
             //
@@ -42,7 +47,11 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual void glean(Leading &) const noexcept;
+            virtual Pattern * clone() const;
+            virtual bool      univocal() const noexcept;        // false
+            virtual size_t    serialize(OutputStream &) const;
+            virtual bool      sound() const noexcept; // false
+            virtual bool      takes(Token&,Source&) const;
 
             //__________________________________________________________________
             //
@@ -50,23 +59,14 @@ namespace Yttrium
             // Method
             //
             //__________________________________________________________________
+            static Optional * Make(Pattern * const);
 
-            //__________________________________________________________________
-            //
-            //
-            // Members
-            //
-            //__________________________________________________________________
-            const Motif motif;
         private:
-            Y_Disable_Assign(Joker); //!< discarded
-
+            Y_Disable_Assign(Optional);
         };
-
     }
-
 
 }
 
-#endif // !Y_Jive_Joker_Included
+#endif // !Y_Jive_Optional_Included
 

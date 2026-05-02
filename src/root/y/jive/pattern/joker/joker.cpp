@@ -10,9 +10,9 @@ namespace Yttrium
         {
         }
 
-        Joker:: Joker(const Joker &jk) noexcept :
+        Joker:: Joker(const Joker &jk)   :
         Pattern(jk),
-        motif(jk.motif)
+        motif(jk.motif->clone())
         {
         }
 

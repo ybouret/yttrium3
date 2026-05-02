@@ -7,7 +7,6 @@
 #include "y/type/fourcc.hpp"
 #include "y/stream/serializable.hpp"
 #include "y/core/list/clone.hpp"
-#include "y/pointer/arc.hpp"
 #include "y/object/counted.hpp"
 
 namespace Yttrium

@@ -26,6 +26,10 @@ namespace Yttrium
                 case None:: UUID:
                     return Logic::HaveSamePatterns( dynamic_cast<const Logic&>(lhs), dynamic_cast<const Logic&>(rhs) );
 
+
+                case Optional::UUID:
+                    return AreEqual(*dynamic_cast<const Optional &>(lhs).motif,*dynamic_cast<const Optional &>(rhs).motif);
+
                 default:
                     std::cerr << "[unhandled " << FourCC(uid).c_str() << "]" << std::endl;
                     break;

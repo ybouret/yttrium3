@@ -40,9 +40,11 @@ namespace Yttrium
                 case Or::   UUID:  return LoadLogic( new Or(),   fp );
                 case None:: UUID:  return LoadLogic( new None(), fp );
 
+                case Optional:: UUID: return Optional::Make( Load(fp) );
+
             }
 
-            throw Specific::Exception(varName, "unknown UUID was read");
+            throw Specific::Exception(varName, "unknown UUID was read in Pattern::Load");
         }
     }
 

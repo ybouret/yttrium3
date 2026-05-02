@@ -6,6 +6,7 @@
 
 #include "y/jive/pattern/basic/all.hpp"
 #include "y/jive/pattern/logic/all.hpp"
+#include "y/jive/pattern/joker/all.hpp"
 
 
 #endif // !Y_Pattern_All_Included
