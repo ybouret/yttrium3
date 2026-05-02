@@ -27,6 +27,10 @@ namespace Yttrium
             motif->glean(fc);
         }
 
+        bool Joker:: HaveSameMotif(const Joker &lhs, const Joker &rhs) noexcept
+        {
+            return AreEqual(*lhs.motif, *rhs.motif);
+        }
     }
 }
 

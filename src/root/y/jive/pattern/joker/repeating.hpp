@@ -1,40 +1,46 @@
-
 //! \file
 
 
-#ifndef Y_Jive_Joker_Included
-#define Y_Jive_Joker_Included 1
+#ifndef Y_Jive_Repeating_Included
+#define Y_Jive_Repeating_Included 1
 
-#include "y/jive/pattern.hpp"
+#include "y/jive/pattern/joker/joker.hpp"
 
 namespace Yttrium
 {
     namespace Jive
     {
-        
 
         //______________________________________________________________________
         //
         //
         //
-        //! Joker Pattern interface
+        //! Repeating pattern
         //
         //
         //______________________________________________________________________
-        class Joker : public Pattern
+        class Repeating : public Joker
         {
+        public:
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const uint32_t UUID = Y_FOURCC('R', 'E', 'P', '_'); //!< UUID
+
             //__________________________________________________________________
             //
             //
             // C++
             //
             //__________________________________________________________________
-        protected:
-            explicit Joker(const uint32_t, const Motif &) noexcept; //!< setup
-            Joker(const Joker &);                                   //!< duplicate by cloning
 
-        public:
-            virtual ~Joker() noexcept; //!< cleanup
+            //! setup with SOUND motif and minimal count
+            explicit Repeating(const Motif &, const size_t);
+            Repeating(const Repeating &);
+            virtual ~Repeating() noexcept;
 
             //__________________________________________________________________
             //
@@ -42,7 +48,11 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual void glean(Leading &) const noexcept;
+            virtual Pattern * clone() const;
+            virtual bool      univocal() const noexcept;        // false
+            virtual size_t    serialize(OutputStream &) const;
+            virtual bool      sound() const noexcept; // false
+            virtual bool      takes(Token&,Source&) const;
 
             //__________________________________________________________________
             //
@@ -50,7 +60,7 @@ namespace Yttrium
             // Method
             //
             //__________________________________________________________________
-            static bool HaveSameMotif(const Joker &, const Joker &) noexcept;
+            static Repeating * Make(Pattern * const,const size_t);
 
             //__________________________________________________________________
             //
@@ -58,16 +68,14 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            const Motif motif;
+            const size_t atLeast;
+
         private:
-            Y_Disable_Assign(Joker); //!< discarded
-
+            Y_Disable_Assign(Repeating); //!< discarded
         };
-
     }
-
 
 }
 
-#endif // !Y_Jive_Joker_Included
+#endif // !Y_Jive_Repeating_Included
 

@@ -61,6 +61,8 @@ namespace Yttrium
             //__________________________________________________________________
             static Optional * Make(Pattern * const);
 
+
+
         private:
             Y_Disable_Assign(Optional);
         };

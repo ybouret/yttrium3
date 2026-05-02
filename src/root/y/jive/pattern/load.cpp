@@ -40,7 +40,11 @@ namespace Yttrium
                 case Or::   UUID:  return LoadLogic( new Or(),   fp );
                 case None:: UUID:  return LoadLogic( new None(), fp );
 
-                case Optional:: UUID: return Optional::Make( Load(fp) );
+                case Optional::  UUID: return Optional::Make( Load(fp) );
+                case Repeating:: UUID: {
+                    const size_t atLeast = fp.vbr<size_t>("Repeating","atLeast");
+                    return Repeating::Make( Load(fp), atLeast );
+                }
 
             }
 

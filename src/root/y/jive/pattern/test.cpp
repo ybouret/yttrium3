@@ -28,10 +28,19 @@ namespace Yttrium
 
 
                 case Optional::UUID:
-                    return AreEqual(*dynamic_cast<const Optional &>(lhs).motif,*dynamic_cast<const Optional &>(rhs).motif);
+                    return Joker::HaveSameMotif(dynamic_cast<const Joker &>(lhs),dynamic_cast<const Joker &>(rhs));
+
+                case Repeating:: UUID: {
+                    const Repeating &L = dynamic_cast<const Repeating &>(lhs);
+                    const Repeating &R = dynamic_cast<const Repeating &>(rhs);
+                    return L.atLeast == R.atLeast && Joker::HaveSameMotif(L,R);
+                }
+
+                    
+
 
                 default:
-                    std::cerr << "[unhandled " << FourCC(uid).c_str() << "]" << std::endl;
+                    std::cerr << "[unhandled " << FourCC(uid).c_str() << " comparison]" << std::endl;
                     break;
             }
 
