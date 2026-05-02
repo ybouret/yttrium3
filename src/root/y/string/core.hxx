@@ -290,6 +290,28 @@ template <> String<CH> & String<CH>:: operator+=( const CH C )
     }
 }
 
+template<> String<CH> & String<CH>:: cat(const CH * const buffer, const size_t buflen)
+{
+    if(buflen>0)
+    {
+        if(code->capacity-code->size>=buflen)
+        {
+            code->cat(buffer,buflen);
+            return *this;
+        }
+        else
+        {
+            String tmp(code->entry,code->size,buffer,buflen);
+            return xch(tmp);
+        }
+    }
+    else
+    {
+        return *this;
+    }
+}
+
+
 template <> String<CH> & String<CH>:: operator+=( const String &s )
 {
     if(code->capacity-code->size>=s.code->size)

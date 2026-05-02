@@ -115,10 +115,13 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            String &       xch(String &)      noexcept; //!< no-throw exchange \return *this
-            std::ostream & print(std::ostream &) const; //!< print \return output stream
-            String &       reverse()          noexcept; //!< reverse content \return *this, reversed
-            const T *      c_str()      const noexcept; //!< pseudo universal c_str \return data
+            String &       xch(String &)      noexcept;        //!< no-throw exchange \return *this
+            std::ostream & print(std::ostream &) const;        //!< print \return output stream
+            String &       reverse()          noexcept;        //!< reverse content \return *this, reversed
+            const T *      c_str()      const noexcept;        //!< pseudo universal c_str \return data
+            String &       cat(const T * const, const size_t); //!< \return cat valid buffer
+
+
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             inline friend String operator + (const String &  lhs, const String &  rhs) { return Add(lhs,rhs); }
@@ -173,6 +176,7 @@ inline friend bool operator OP (const T         lhs, const String  & rhs) noexce
             static String Add(const String  &, const T);
             static String Add(const T, const String  &);
 
+        public:
             // for comparisons
             static SignType Cmp(const T * lhs, const size_t lhsSize,
                                 const T * rhs, const size_t rhsSize) noexcept;

@@ -93,6 +93,10 @@ namespace Yttrium
          */
         OutputStream & operator()(const char * const fmt,...) Y_Printf_Check(2,3);
 
+        OutputStream & operator<<(const char * const);
+        OutputStream & operator<<(const char);
+
+
     protected:
         //explicit OutputStream(); //!< setup for virtual constructor
 

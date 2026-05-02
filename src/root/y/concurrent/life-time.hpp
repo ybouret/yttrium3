@@ -32,7 +32,7 @@ static const System::AtExit::Longevity CLASS = ConcurrentNucleus - (__LINE__-Hel
         Y_LifeTimeFor(MemoryArchon);       //!< for Memory::Pooled
         Y_LifeTimeFor(ObjectFactory);      //!< for Object::Factory
         Y_LifeTimeFor(LightObjectFactory); //!< for LightObject::Factory
-
+        Y_LifeTimeFor(LocalFS);            //!< for VFS::LocalFS
     };
 
 }

@@ -1,10 +1,10 @@
 
 #include "y/stream/output.hpp"
+#include "y/string/length.hpp"
 
 namespace Yttrium
 {
 
-    //OutputStream:: OutputStream() : Stream() {}
 
     OutputStream:: ~OutputStream() noexcept
     {
@@ -55,10 +55,20 @@ namespace Yttrium
         return Y_Static_Size(u);
     }
 
+    OutputStream & OutputStream:: operator<<(const char c)
+    {
+        write(c);
+        return *this;
+    }
 
 
+    OutputStream & OutputStream:: operator<<(const char * const text)
+    {
+        write( text, StringLength(text) );
+        return *this;
+    }
 
-
+    
 }
 
 #include "y/stream/io/encode64.hpp"
