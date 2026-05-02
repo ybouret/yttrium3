@@ -36,8 +36,12 @@ namespace Yttrium
                     return L.atLeast == R.atLeast && Joker::HaveSameMotif(L,R);
                 }
 
+                case Counting:: UUID: {
+                    const Counting &L = dynamic_cast<const Counting &>(lhs);
+                    const Counting &R = dynamic_cast<const Counting &>(rhs);
+                    return L.lower == R.lower && L.upper == R.upper && Joker::HaveSameMotif(L,R);
+                }
                     
-
 
                 default:
                     std::cerr << "[unhandled " << FourCC(uid).c_str() << " comparison]" << std::endl;

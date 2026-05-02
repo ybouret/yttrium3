@@ -46,6 +46,13 @@ namespace Yttrium
                     return Repeating::Make( Load(fp), atLeast );
                 }
 
+                case Counting:: UUID: {
+                    const size_t lower = fp.vbr<size_t>("Counting","lower");
+                    const size_t upper = fp.vbr<size_t>("Counting","upper");
+                    return Counting:: Make( Load(fp), lower, upper);
+                }
+
+
             }
 
             throw Specific::Exception(varName, "unknown UUID was read in Pattern::Load");
