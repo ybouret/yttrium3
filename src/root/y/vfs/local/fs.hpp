@@ -38,7 +38,7 @@ namespace Yttrium
         // Interface
         //
         //______________________________________________________________________
-        virtual void display(std::ostream &, size_t) const;
+        //virtual void display(std::ostream &, size_t) const;
         
         //______________________________________________________________________
         //

@@ -92,6 +92,7 @@ y/jive/pattern/joker
 y/graphviz
 y/functor
 y/vfs
+y/vfs/local
 )
 
 add_subdirectory(tests)

@@ -21,6 +21,7 @@ counting
 handy
 dft
 jive
+vfs
 )
 
 Y_LinkLibraries(test-root)
@@ -174,4 +175,6 @@ Y_UTEST(dft:mul)
 Y_UTEST(jive:source)
 Y_UTEST(jive:leading)
 Y_UTEST(jive:pattern)
+
+Y_UTEST(vfs:scan)
 

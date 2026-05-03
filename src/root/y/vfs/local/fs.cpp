@@ -24,11 +24,13 @@ namespace Yttrium
     {
     }
 
+#if 0
     void LocalFS:: display(std::ostream &os, size_t indent) const
     {
         initProlog(os,indent)  << callSign();
         initEpilog(os,true);
     }
+#endif
 
 
     bool LocalFS::tryRemoveFile(const String &path)
@@ -60,8 +62,8 @@ namespace Yttrium
         static const char xtnd[] = { '\\', '*', 0, 0 };
 
         String res = dirName;
-        Algo::Trim(res,IsSeparator);
-        res.pushAtTail(xtnd,3);
+        Algorithm::Trim(res,IsSeparator);
+        res.cat(xtnd,3);
         return res;
     }
 }
@@ -71,6 +73,7 @@ namespace Yttrium
 #include <dirent.h>
 #include <cerrno>
 #include <sys/stat.h>
+#include "y/libc/block/zero.h"
 
 namespace Yttrium
 {
@@ -129,7 +132,7 @@ namespace Yttrium
         struct stat buf;
         mode_t &    m = buf.st_mode;
 
-        Y_Memory_VZero(buf);
+        Y_VZero(buf);
         if(0!=lstat(path.c_str(),&buf))
         {
             return IsUnk;
@@ -139,7 +142,7 @@ namespace Yttrium
         {
             //std::cerr << "->link" << std::endl;
             link = true;
-            Y_Memory_VZero(buf);
+            Y_VZero(buf);
             if(0!=stat(path.c_str(),&buf))
             {
                 return IsUnk;
@@ -161,7 +164,7 @@ namespace Yttrium
 
 }
 
-#endif
+#endif // defined(Y_BSD)
 
 
 #if defined(Y_WIN)
@@ -244,7 +247,7 @@ namespace Yttrium
     }
 
 }
-#endif
+#endif // defined(Y_WIN)
 
 namespace Yttrium
 {
@@ -282,7 +285,7 @@ namespace Yttrium
             throw Libc::Exception(err, "mkdir('%s')", dirName.c_str() );
         }
         return;
-#endif
+#endif // defined(Y_BSD)
 
 #if defined(Y_WIN)
         if( ! ::CreateDirectory( dirName.c_str(), 0 ) )
@@ -298,7 +301,7 @@ namespace Yttrium
             throw Windows::Exception(err,"CreateDirectory('%s')", dirName.c_str() );
         }
         return;
-#endif
+#endif // defined(Y_WIN)
 
         //throw Specific::Exception("makeDirectory", "Not Implemented");
     }
