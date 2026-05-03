@@ -51,7 +51,7 @@ Y_UTEST(light_object)
     LightObject::Factory &F = LightObject::Factory::Instance();
     F.writeXML(std::cerr);
 
-    CxxList<Node> list;
+    CxxListOf<Node> list;
     for(size_t i = 100 + ran.in<size_t>(1,1000);i>0;--i)
     {
         if( ran.heads() )

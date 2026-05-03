@@ -18,7 +18,7 @@ namespace Yttrium
     //
     //__________________________________________________________________________
     template <typename NODE>
-    class CxxPool : public Core::PoolOf<NODE>, public Releasable
+    class CxxPoolOf : public Core::PoolOf<NODE>, public Releasable
     {
     public:
         //______________________________________________________________________
@@ -37,12 +37,12 @@ namespace Yttrium
         //______________________________________________________________________
 
         //! setup empty
-        inline explicit CxxPool() noexcept : Core::PoolOf<NODE>()
+        inline explicit CxxPoolOf() noexcept : Core::PoolOf<NODE>()
         {
         }
 
         //! duplicate \param other another pool
-        inline CxxPool(const CxxPool &other) : Core::PoolOf<NODE>()
+        inline CxxPoolOf(const CxxPoolOf &other) : Core::PoolOf<NODE>()
         {
             try {
                 for(const NODE *node=other.head;node;node=node->next)
@@ -52,7 +52,7 @@ namespace Yttrium
         }
 
         //! cleanup
-        inline virtual ~CxxPool() noexcept { release_(); }
+        inline virtual ~CxxPoolOf() noexcept { release_(); }
 
         //______________________________________________________________________
         //
@@ -63,7 +63,7 @@ namespace Yttrium
         inline virtual void release() noexcept { release_(); }
 
     private:
-        Y_Disable_Assign(CxxPool); //!< discarded
+        Y_Disable_Assign(CxxPoolOf); //!< discarded
 
         //! remove all nodes from head
         inline void release_() noexcept { while(size>0) delete this->query(); }

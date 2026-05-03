@@ -27,7 +27,7 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            typedef CxxList<Char> List; //!< alias
+            typedef CxxListOf<Char> List; //!< alias
 
             //__________________________________________________________________
             //

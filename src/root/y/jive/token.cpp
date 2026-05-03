@@ -11,7 +11,7 @@ namespace Yttrium
         {
         }
 
-        Token:: Token(const Token &t) : CxxList(t) {}
+        Token:: Token(const Token &t) : CxxListOf<Char>(t) {}
 
         Token:: Token() noexcept
         {

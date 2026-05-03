@@ -24,7 +24,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        typedef CxxList<Vector> Vectors;
+        typedef CxxListOf<Vector> Vectors;
 
         //______________________________________________________________________
         //
@@ -71,7 +71,7 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(VCache); //!< discarded
-            CxxPool<Vector> vpool;             //!< inner cache
+            CxxPoolOf<Vector> vpool;             //!< inner cache
         };
 
     }

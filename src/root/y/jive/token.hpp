@@ -20,7 +20,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Token : public CxxList<Char>
+        class Token : public CxxListOf<Char>
         {
         public:
             explicit Token() noexcept; //!< setup

@@ -17,7 +17,7 @@ namespace Yttrium
     //
     //__________________________________________________________________________
     template <typename NODE>
-    class CloneList : public Core::ListOf<NODE>, public Releasable
+    class ListOfCloneable : public Core::ListOf<NODE>, public Releasable
     {
     public:
         //______________________________________________________________________
@@ -36,12 +36,12 @@ namespace Yttrium
         //______________________________________________________________________
 
         //! setup empty
-        inline explicit CloneList() noexcept : Core::ListOf<NODE>(), Releasable()
+        inline explicit ListOfCloneable() noexcept : Core::ListOf<NODE>(), Releasable()
         {
         }
 
         //! duplicate \param other another list
-        inline CloneList(const CloneList &other) : Core::ListOf<NODE>(), Releasable()
+        inline ListOfCloneable(const ListOfCloneable &other) : Core::ListOf<NODE>(), Releasable()
         {
             try
             {
@@ -52,7 +52,7 @@ namespace Yttrium
         }
 
         //! cleanup
-        inline virtual ~CloneList() noexcept { release_(); }
+        inline virtual ~ListOfCloneable() noexcept { release_(); }
 
         //______________________________________________________________________
         //
@@ -63,7 +63,7 @@ namespace Yttrium
         inline virtual void release() noexcept { release_(); }
 
     private:
-        Y_Disable_Assign(CloneList); //!< discared
+        Y_Disable_Assign(ListOfCloneable); //!< discared
 
         //! remove all nodes from the tail
         inline void release_() noexcept { while(size>0) delete this->popTail(); }

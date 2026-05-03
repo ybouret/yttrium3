@@ -20,7 +20,7 @@ namespace
     class Node : public String
     {
     public:
-        typedef CxxList<Node> List;
+        typedef CxxListOf<Node> List;
 
         explicit Node(const String &s) : String(s), next(0), prev(0)
         {

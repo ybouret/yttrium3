@@ -19,7 +19,7 @@ namespace Yttrium
     //
     //__________________________________________________________________________
     template <typename NODE>
-    class CxxList : public Core::ListOf<NODE>, public Releasable
+    class CxxListOf : public Core::ListOf<NODE>, public Releasable
     {
     public:
         //______________________________________________________________________
@@ -38,12 +38,12 @@ namespace Yttrium
         //______________________________________________________________________
 
         //! setup empty
-        inline explicit CxxList() noexcept : Core::ListOf<NODE>(), Releasable()
+        inline explicit CxxListOf() noexcept : Core::ListOf<NODE>(), Releasable()
         {
         }
 
         //! duplicate \param other another list
-        inline CxxList(const CxxList &other) : Core::ListOf<NODE>(), Releasable()
+        inline CxxListOf(const CxxListOf &other) : Core::ListOf<NODE>(), Releasable()
         {
             try
             {
@@ -54,7 +54,7 @@ namespace Yttrium
         }
 
         //! cleanup
-        inline virtual ~CxxList() noexcept { release_(); }
+        inline virtual ~CxxListOf() noexcept { release_(); }
 
         //______________________________________________________________________
         //
@@ -65,7 +65,7 @@ namespace Yttrium
         inline virtual void release() noexcept { release_(); }
 
     private:
-        Y_Disable_Assign(CxxList); //!< discared
+        Y_Disable_Assign(CxxListOf); //!< discared
 
         //! remove all nodes from the tail
         inline void release_() noexcept { while(size>0) delete this->popTail(); }

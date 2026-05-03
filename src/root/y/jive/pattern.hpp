@@ -83,8 +83,8 @@ namespace Yttrium
             Y_Disable_Assign(Pattern); //!< discarded
         };
 
-        typedef CloneList<Pattern>    Patterns; //!< alias
-        typedef ArcPtr<const Pattern> Motif;    //!< alias
+        typedef ListOfCloneable<Pattern> Patterns; //!< alias
+        typedef ArcPtr<const Pattern>    Motif;    //!< alias
 
     }
 }

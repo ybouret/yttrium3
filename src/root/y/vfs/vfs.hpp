@@ -186,7 +186,7 @@ namespace Yttrium
         //! List of Entries
         //
         //______________________________________________________________________
-        typedef CxxList<Entry> Entries; //!< alias
+        typedef CxxListOf<Entry> Entries; //!< alias
 
 
         //______________________________________________________________________

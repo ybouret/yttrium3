@@ -34,8 +34,8 @@ namespace
 
 Y_UTEST(core_pool_and_list)
 {
-    CxxPool<Node> pool;
-    CxxList<Node> list;
+    CxxPoolOf<Node> pool;
+    CxxListOf<Node> list;
     
     for(size_t n=0;n<=10;++n)
     {
