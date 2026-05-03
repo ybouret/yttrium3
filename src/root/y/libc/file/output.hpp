@@ -50,8 +50,8 @@ namespace Yttrium
 
             //! write a block of chars
             /**
-             \param blockAddr memory, not NULL
-             \param blockSize blockSize>0
+             \param blockAddr memory
+             \param blockSize blockSize 
              */
             void write(const void * const blockAddr,
                        const size_t       blockSize);

@@ -22,19 +22,20 @@ namespace Yttrium
         {
             const char * name; //!< uuid
             size_t       size; //!< number of sub-colors
+            Y_OSTREAM_PROTO(ColorScheme);
 
             String  operator[](const size_t) const; //!< \return formatted color
+
 
             static const ColorScheme   Table[]; //!< global table
             static const unsigned      Count;   //!< table size
             static const ColorScheme & Query(const char * const); //!< \return named scheme
             static const ColorScheme & Query(const String &);     //!< \return named scheme
-
         };
     }
 
 }
 
 
-#endif
+#endif // !Y_GraphViz_ColorScheme_Included
 

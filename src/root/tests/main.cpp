@@ -154,6 +154,8 @@ Y_UTEST_DECL(8)
     Y_UTEST(jive_leading);
     Y_UTEST(jive_pattern);
 
+    Y_UTEST(graphviz);
+
     Y_UTEST(vfs_scan);
 }
 Y_UTEST_EXEC()

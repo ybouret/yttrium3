@@ -319,4 +319,4 @@ namespace Yttrium
     };
 }
 
-#endif
+#endif // !Y_VFS_Included

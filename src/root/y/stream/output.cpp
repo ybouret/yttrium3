@@ -68,6 +68,13 @@ namespace Yttrium
         return *this;
     }
 
+    OutputStream & OutputStream:: operator<<(const Memory::ReadOnlyBuffer &buff)
+    {
+        write(buff.ro(), buff.length());
+        return *this;
+    }
+
+
     
 }
 
@@ -127,6 +134,5 @@ namespace Yttrium
             write(buffer,n);
             return *this;
         }
-
     }
 }

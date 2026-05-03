@@ -92,10 +92,9 @@ namespace Yttrium
          \return *this
          */
         OutputStream & operator()(const char * const fmt,...) Y_Printf_Check(2,3);
-
         OutputStream & operator<<(const char * const);
         OutputStream & operator<<(const char);
-
+        OutputStream & operator<<(const Memory::ReadOnlyBuffer &);
 
     protected:
         //explicit OutputStream(); //!< setup for virtual constructor

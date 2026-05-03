@@ -76,6 +76,12 @@ Y_CS(NAME,12)
 
         const unsigned ColorScheme:: Count = sizeof(Table)/sizeof(Table[0]);
 
+        std::ostream & operator<<(std::ostream &os, const ColorScheme &cs)
+        {
+            os << cs.name << "[" << cs.size << "]";
+            return os;
+        }
+
 
         String  ColorScheme:: operator[](const size_t i) const
         {

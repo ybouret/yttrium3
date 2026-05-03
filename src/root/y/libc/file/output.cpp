@@ -106,8 +106,9 @@ namespace Yttrium
         void OutputFile:: write(const void * const blockAddr,
                                 const size_t       blockSize)
         {
-            assert(0!=blockAddr);
-            assert(blockSize>0);
+            assert( !(0==blockAddr&&blockSize>0) );
+            if(!blockSize) return;
+
             Y_Giant_Lock();
             if( fwrite(blockAddr,blockSize,1,handle) <= 0 )
             {

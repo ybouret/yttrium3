@@ -66,5 +66,5 @@ namespace Yttrium
     };
 }
 
-#endif
+#endif // !Y_VFS_LocalFS_Included
 

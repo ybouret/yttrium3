@@ -14,15 +14,15 @@ namespace
 {
 
     const size_t minBits = 128;
-    const size_t maxBits = 4096;
-    long double  tmx     = 0.02L;
+    const size_t maxBits = 8192;
+    long double  tmx     = 0.01L;
 
     template <typename WORD, typename CORE>
     static inline
     void testDFT(Core::Rand &ran)
     {
 
-        std::cerr << "-- WORD = " << ( sizeof(WORD) * 8) << " bits | CORE =" << ( sizeof(CORE) * 8) << " bits" << std::endl;
+        std::cerr << "-- WORD = " << ( sizeof(WORD) * 8) << " bits | CORE = " << ( sizeof(CORE) * 8) << " bits" << std::endl;
         System::WallTime chrono;
         uint64_t mul64 = 0;
         uint64_t dft64 = 0;
@@ -54,20 +54,20 @@ namespace
 
                     Y_ASSERT( __Zero__ == KegCmp::ResultFor(*mul,*dft) );
                 }
-                while( chrono(mul64) < tmx );
+                while( Max(chrono(mul64),chrono(dft64)) < tmx );
 
                 const long double cycles = (long double)nops;
                 if(KegDFT::Trace&&KegMul::Trace)
                 {
                     const long double mulRate = cycles / chrono(KegMul::Trace);
                     const long double dftRate = cycles / chrono(KegDFT::Trace);
-                    std::cerr << " |[in]  mul: " <<  HumanReadable(mulRate)  << " dft: " <<  HumanReadable(dftRate);
+                    std::cerr << " | [in]  mul: " <<  HumanReadable(mulRate)  << " dft: " <<  HumanReadable(dftRate);
                     if(dftRate>=mulRate) std::cerr << " (+)"; else std::cerr << " (-)";
                 }
                 {
                     const long double mulRate = cycles / chrono(mul64);
                     const long double dftRate = cycles / chrono(dft64);
-                    std::cerr << " |[out]  mul: " <<  HumanReadable(mulRate)  << " dft: " <<  HumanReadable(dftRate);
+                    std::cerr << " | [out]  mul: " <<  HumanReadable(mulRate)  << " dft: " <<  HumanReadable(dftRate);
                     if(dftRate>=mulRate) std::cerr << " (+)"; else std::cerr << " (-)";
                 }
                 //std::cerr << "  | mul: " <<  HumanReadable(KegMul::Trace)  << " dft: " <<  HumanReadable(KegDFT::Trace);

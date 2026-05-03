@@ -176,5 +176,7 @@ Y_UTEST(jive:source)
 Y_UTEST(jive:leading)
 Y_UTEST(jive:pattern)
 
+Y_UTEST(graphviz)
+
 Y_UTEST(vfs:scan)
 
