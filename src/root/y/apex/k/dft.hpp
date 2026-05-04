@@ -24,6 +24,7 @@ namespace Yttrium
 
         template <typename T> struct Transfer;
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         template <> struct Transfer<uint32_t>
         {
             static inline void Send(double * a, const uint32_t * word, const size_t words) noexcept
@@ -108,18 +109,18 @@ namespace Yttrium
 
         };
 
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
         //! using Fourier Multiplication
         struct KegDFT
         {
             static uint64_t Trace; //!< to trace call ticks
 
 
-
-
             //! compute lhs * rhs by fourier transform
             /**
-             \param lhs first argument
-             \param rhs second argument
+             \param  lhs first argument
+             \param  rhs second argument
              \return lhs * rhs
              */
             template <typename WORD> static inline
