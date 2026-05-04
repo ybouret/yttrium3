@@ -106,7 +106,26 @@ namespace Yttrium
         {
             return Among(s.c_str(),s.size());
         }
+
+        Pattern * Or:: optimized()
+        {
+            noMultiple();
+            optimizePatterns();
+            alterBasic();
+            if(1==size)
+            {
+                Pattern * const p = popHead();
+                delete this;
+                return p;
+            }
+            else
+            {
+                return this;
+            }
+        }
     }
 
 
 }
+
+

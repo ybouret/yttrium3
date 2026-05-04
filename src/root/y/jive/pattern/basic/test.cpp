@@ -19,5 +19,13 @@ namespace Yttrium
             return false;
         }
 
+        Pattern * Within:: create() const
+        {
+            if( isByte() )
+                return new Byte(lower);
+            else
+                return new Lump(*this);
+        }
+
     }
 }

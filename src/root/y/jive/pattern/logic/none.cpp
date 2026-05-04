@@ -80,6 +80,14 @@ namespace Yttrium
             return emitLink(fp);
         }
 
+        Pattern * None:: optimized()
+        {
+            noMultiple();
+            optimizePatterns();
+            alterBasic();
+            return this;
+        }
+
     }
 
 

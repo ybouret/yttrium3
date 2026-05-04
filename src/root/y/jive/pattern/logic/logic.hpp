@@ -53,20 +53,21 @@ namespace Yttrium
 
             Logic & operator<<(Pattern * const); //!< append new patern \return *this
             Logic & operator<<(const uint8_t);   //!< append new single \return *this
-            Logic & operator<<(const Within);    //!< append new range  \return *this
+            Logic & operator<<(const Within);    //!< append new range/single  \return *this
 
             //! \return true iff arguments have same patterns
             static bool    HaveSamePatterns(const Logic &, const Logic &) noexcept;
             OutputStream & emitLink(OutputStream &) const;
 
         protected:
-            void optimizePatterns();
-            void noMultiple() noexcept;
-            void stripBasic(Patterns &basic) noexcept;
+            void             optimizePatterns();     //!< process all list
+            void             noMultiple() noexcept;  //!< remove duplicates from list
+            void             alterBasic();           //!< gather and optimize basic
 
         private:
             Y_Disable_Assign(Logic); //!< discarded
-
+            void             stripBasic(Patterns &basic) noexcept;
+            static void      groupBasic(Patterns &list, const Patterns &basic);
         };
 
     }

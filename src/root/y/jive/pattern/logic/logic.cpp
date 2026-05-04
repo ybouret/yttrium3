@@ -120,6 +120,18 @@ namespace Yttrium
         }
 
 
+        void Logic:: alterBasic()
+        {
+            Patterns blist;
+            {
+                Patterns basic;
+                stripBasic(basic);
+                groupBasic(blist,basic);
+            }
+            mergeHead(blist);
+        }
+
+
 
     }
 
@@ -127,6 +139,7 @@ namespace Yttrium
 
 #include "y/jive/pattern/basic/byte.hpp"
 #include "y/jive/pattern/basic/lump.hpp"
+#include "y/jive/pattern/leading.hpp"
 
 namespace Yttrium
 {
@@ -141,10 +154,41 @@ namespace Yttrium
 
         Logic & Logic:: operator<<(const Within w)
         {
-            pushTail( new Lump(w) );
+            pushTail( w.create() );
             return *this;
         }
 
+       
+
     }
 
+}
+
+#include "y/jive/pattern/leading.hpp"
+
+namespace Yttrium
+{
+    namespace Jive
+    {
+        static inline void AddBasic(const Within &w, void * const args)
+        {
+            assert(args);
+            Patterns &list = *static_cast<Patterns *>(args);
+            list.pushTail(w.create());
+        }
+
+        void Logic:: groupBasic(Patterns &list, const Patterns &basic)
+        {
+            // collect leading chars
+            Leading leading;
+            for(const Pattern *p=basic.head;p;p=p->next)
+            {
+                assert(p->isBasic());
+                p->glean(leading);
+            }
+
+            // create optimized basic list
+            leading.forEach(AddBasic,&list);
+        }
+    }
 }

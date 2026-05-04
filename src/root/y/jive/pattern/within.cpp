@@ -4,6 +4,8 @@
 #include <iostream>
 #include "y/ascii/printable.hpp"
 
+#include <cassert>
+
 namespace Yttrium
 {
 
@@ -39,6 +41,9 @@ namespace Yttrium
            }
         }
 
+
+        bool Within:: isByte() const noexcept { assert(lower<=upper); return lower==upper; }
+        bool Within:: isLump() const noexcept { assert(lower<=upper); return lower<upper;  }
     }
 
 }

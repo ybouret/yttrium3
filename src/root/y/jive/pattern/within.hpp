@@ -12,6 +12,8 @@ namespace Yttrium
 
     namespace Jive
     {
+        class Pattern;
+        
         //______________________________________________________________________
         //
         //
@@ -33,6 +35,16 @@ namespace Yttrium
             virtual ~Within()                   noexcept; //!< cleanup
             Within(const Within &)              noexcept; //!< duplicate
             Y_OSTREAM_PROTO(Within);                      //!< display
+
+            //__________________________________________________________________
+            //
+            //
+            // methods
+            //
+            //__________________________________________________________________
+            bool      isByte() const noexcept;
+            bool      isLump() const noexcept;
+            Pattern * create() const;
 
             //__________________________________________________________________
             //
