@@ -42,6 +42,11 @@ namespace  {
             Vizible::Render(dotName,p);
         }
 
+        
+        Jive::Motif       raw( p.clone() );
+        const Jive::Motif opt( raw->optimized() );
+
+
     }
 
 

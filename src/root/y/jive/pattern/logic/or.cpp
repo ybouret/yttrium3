@@ -90,10 +90,8 @@ namespace Yttrium
             assert( !(0==text&&tlen>0) );
             AutoPtr<Logic> p = new Or();
             for(size_t i=0;i<tlen;++i)
-            {
-                *p << text[i];
-            }
-            return p.yield();
+                 *p << text[i];
+            return p.yield()->optimized();
         }
 
         Pattern * Pattern:: Among(const char * const text)

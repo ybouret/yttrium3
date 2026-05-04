@@ -60,11 +60,9 @@ namespace Yttrium
             *p << digit();
             *p << Within('A','F');
             *p << Within('a','f');
-            return p.yield();
-            //return Pattern::Optimize(p.yield());
+            return p.yield()->optimized();
         }
 
-#if 0
          Pattern * posix:: blank()
         {
             static const char data[] = " \t";
@@ -73,14 +71,14 @@ namespace Yttrium
 
         Pattern * posix:: space()
         {
-            return Pattern::Optimize( Pattern::Among(" \t\n\r\v\f"));
+            return Pattern::Among(" \t\n\r\v\f");
         }
 
         Pattern * posix::punct()
         {
-            return Pattern::Optimize( Pattern::Among("][!\"#$%&'()*+,./:;<=>?@\\^_`{|}~-"));
+            return Pattern::Among("][!\"#$%&'()*+,./:;<=>?@\\^_`{|}~-");
         }
-
+#if 0
         Pattern * posix:: core()
         {
             AutoPtr<Logic> p = new Or();
@@ -164,8 +162,8 @@ namespace Yttrium
             const String _(id);
             return named(_);
         }
-
 #endif
-        
+
+
     }
 }

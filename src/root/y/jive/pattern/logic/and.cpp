@@ -92,7 +92,6 @@ namespace Yttrium
             }
             else
             {
-
                 return this;
             }
         }

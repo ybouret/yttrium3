@@ -9,3 +9,22 @@ namespace Yttrium
 
 
 }
+
+#include "y/stream/libc/output.hpp"
+
+namespace Yttrium
+{
+    size_t Serializable:: saveBinary(const char *const fileName) const
+    {
+        OutputFile fp(fileName);
+        return serialize(fp);
+    }
+
+    size_t Serializable:: saveBinary(const String & fileName) const
+    {
+        OutputFile fp(fileName);
+        return serialize(fp);
+    }
+
+
+}

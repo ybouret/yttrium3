@@ -96,7 +96,7 @@ namespace Yttrium
         };
 
         typedef ListOfCloneable<Pattern> Patterns; //!< alias
-        typedef ArcPtr<const Pattern>    Motif;    //!< alias
+        typedef ArcPtr<Pattern>          Motif;    //!< alias
 
     }
 }
