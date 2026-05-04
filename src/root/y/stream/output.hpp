@@ -92,12 +92,9 @@ namespace Yttrium
          \return *this
          */
         OutputStream & operator()(const char * const fmt,...) Y_Printf_Check(2,3);
-        OutputStream & operator<<(const char * const);
-        OutputStream & operator<<(const char);
-        OutputStream & operator<<(const Memory::ReadOnlyBuffer &);
-
-    protected:
-        //explicit OutputStream(); //!< setup for virtual constructor
+        OutputStream & operator<<(const char * const);             //!< write text   \return *this
+        OutputStream & operator<<(const char);                     //!< write char   \return *this
+        OutputStream & operator<<(const Memory::ReadOnlyBuffer &); //!< write buffer \return *this
 
     private:
         Y_Disable_Copy_And_Assign(OutputStream); //!< discarded

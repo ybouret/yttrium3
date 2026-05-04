@@ -20,9 +20,9 @@ namespace Yttrium
         //______________________________________________________________________
         struct ColorScheme
         {
-            const char * name; //!< uuid
-            size_t       size; //!< number of sub-colors
-            Y_OSTREAM_PROTO(ColorScheme);
+            const char * name;            //!< uuid
+            size_t       size;            //!< number of sub-colors
+            Y_OSTREAM_PROTO(ColorScheme); //!< display
 
             String  operator[](const size_t) const; //!< \return formatted color
 

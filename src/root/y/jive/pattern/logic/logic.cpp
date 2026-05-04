@@ -89,7 +89,10 @@ namespace Yttrium
                 AutoPtr<Pattern> rhs = popHead();
                 for(const Pattern *lhs = ops.head;lhs;lhs=lhs->next)
                 {
-                    if( AreEqual(*lhs,*rhs) ) goto DONE;
+                    if( AreEqual(*lhs,*rhs) )
+                    {
+                        goto DONE;
+                    }
                 }
 
                 ops.pushTail(rhs.yield());
@@ -97,7 +100,7 @@ namespace Yttrium
             DONE:
                 continue;
             }
-
+            swapForList(ops);
         }
 
         void Logic:: stripBasic(Patterns &basic) noexcept

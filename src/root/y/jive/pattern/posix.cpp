@@ -78,16 +78,16 @@ namespace Yttrium
         {
             return Pattern::Among("][!\"#$%&'()*+,./:;<=>?@\\^_`{|}~-");
         }
-#if 0
+        
         Pattern * posix:: core()
         {
             AutoPtr<Logic> p = new Or();
-            p->add( 0x20 );
-            p->add( 0x21 );
-            p->add( 0x23,0x26 );
-            p->add( 0x28,0x5B );
-            p->add( 0x5D,0x7F );
-            return Pattern::Optimize( p.yield());
+            *p << 0x20;
+            *p << 0x21;
+            *p << Within(0x23,0x26);
+            *p << Within(0x28,0x5B);
+            *p << Within(0x5D,0x7F);
+            return  p.yield()->optimized();
         }
 
         static const char __vowels__[] = "aeiouyAEIOUY";
@@ -103,15 +103,15 @@ namespace Yttrium
             for(int i='a';i<='z';++i)
             {
                 if(strchr(__vowels__,i)) continue;
-                p->add( uint8_t(i) );
+                *p << uint8_t(i);
             }
 
             for(int i='A';i<='Z';++i)
             {
                 if(strchr(__vowels__,i)) continue;
-                p->add( (uint8_t)i );
+                *p << uint8_t(i);
             }
-            return Pattern::Optimize( p.yield());
+            return p.yield()->optimized();
         }
 
         static inline void __fill_endl( Patterns &ops )
@@ -125,14 +125,14 @@ namespace Yttrium
         {
             AutoPtr<Logic> p = new Or();
             __fill_endl(*p);
-            return  Pattern::Optimize(p.yield());
+            return  p.yield()->optimized();
         }
 
         Pattern * posix:: dot()
         {
             AutoPtr<Logic> p = new None();
             __fill_endl(*p);
-            return  Pattern::Optimize(p.yield() );
+            return  p.yield()->optimized();
         }
 
 #define Y_Jive_Posix(NAME) if(id == #NAME) return NAME()
@@ -162,7 +162,6 @@ namespace Yttrium
             const String _(id);
             return named(_);
         }
-#endif
 
 
     }

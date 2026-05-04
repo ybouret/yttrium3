@@ -1,6 +1,7 @@
 
 #include "y/jive/pattern/logic/and.hpp"
 #include "y/stream/output.hpp"
+#include "y/pointer/auto.hpp"
 
 namespace Yttrium
 {
@@ -96,6 +97,25 @@ namespace Yttrium
             }
         }
 
+
+        Pattern * Pattern:: Exact(const char * const text, const size_t tlen)
+        {
+            assert( !(0==text&&tlen>0) );
+            AutoPtr<Logic> p = new And();
+            for(size_t i=0;i<tlen;++i)
+                *p << text[i];
+            return p.yield()->optimized();
+        }
+
+        Pattern * Pattern:: Exact(const char * const text)
+        {
+            return Among(text,StringLength(text));
+        }
+
+        Pattern * Pattern:: Exact(const String &s)
+        {
+            return Among(s.c_str(),s.size());
+        }
     }
 
 

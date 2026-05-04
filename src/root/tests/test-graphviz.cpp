@@ -28,11 +28,14 @@ namespace
         OutputStream & viz(OutputStream &fp) const
         {
             nodeName(fp) << '[';
-            Label(fp, (char)code );
+            String label = "'";
+            label += (char)code;
+            label += "'";
+            Label(fp, label );
             const GraphViz::ColorScheme &cs = GraphViz::ColorScheme::Query("dark28");
             const String                 color = cs[code];
             fp << ",color="     << color;
-            fp << ",textcolor=" << color;
+            fp << ",fontcolor=" << color;
             fp << ']';
             Endl(fp);
             return fp;

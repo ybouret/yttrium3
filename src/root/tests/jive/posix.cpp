@@ -33,6 +33,9 @@ Y_UTEST(jive_posix)
     Y_TEST_POSIX(blank);
     Y_TEST_POSIX(space);
     Y_TEST_POSIX(punct);
+    Y_TEST_POSIX(core);
+    Y_TEST_POSIX(vowel);
+    Y_TEST_POSIX(consonant);
 
 }
 Y_UDONE()

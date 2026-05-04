@@ -48,8 +48,8 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
-        size_t saveBinary(const char * const         fileName) const;
-        size_t saveBinary(const Core::String<char> & filename) const;
+        size_t saveBinary(const char * const)         const; //!< save to file \return serialized bytes
+        size_t saveBinary(const Core::String<char> &) const; //!< save to file \return serialzied bytes
 
     private:
         Y_Disable_Copy_And_Assign(Serializable); //!< discarded

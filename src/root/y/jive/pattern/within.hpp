@@ -42,9 +42,9 @@ namespace Yttrium
             // methods
             //
             //__________________________________________________________________
-            bool      isByte() const noexcept;
-            bool      isLump() const noexcept;
-            Pattern * create() const;
+            bool      isByte() const noexcept; //!< \return true iff lower==upper
+            bool      isLump() const noexcept; //!< \return true iff lower<upper
+            Pattern * create() const; //!< \return matching Byte or Lump
 
             //__________________________________________________________________
             //

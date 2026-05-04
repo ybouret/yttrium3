@@ -53,7 +53,7 @@ namespace Yttrium
 
             //! \return true if identical patterns
             static bool HaveSameMotif(const Joker &, const Joker &) noexcept;
-            OutputStream & emitLink(OutputStream &) const;
+            OutputStream & emitLink(OutputStream &) const; //!< emit and link motif \return output stream
 
             //__________________________________________________________________
             //
@@ -64,7 +64,7 @@ namespace Yttrium
             const Motif motif; //!< current motif
 
         protected:
-            void optimizeMotif();
+            void optimizeMotif(); //!< change motif for its optimized form
             
         private:
             Y_Disable_Assign(Joker); //!< discarded

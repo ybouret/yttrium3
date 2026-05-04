@@ -56,8 +56,8 @@ namespace Yttrium
             bool                  frail()          const noexcept;     //!< \return !sound()
             virtual bool          univocal()       const noexcept = 0; //!< \return true iff univocal result
             bool                  multiple()       const noexcept;     //!< \return !univocal()
-            virtual OutputStream &viz(OutputStream &)       const = 0;
-            virtual Pattern *     optimized()                     = 0;
+            virtual OutputStream &viz(OutputStream &)       const = 0; //!< generate graphviz code \return output stream
+            virtual Pattern *     optimized()                     = 0; //!< \return optimized version
 
             //__________________________________________________________________
             //
@@ -67,17 +67,24 @@ namespace Yttrium
             //__________________________________________________________________
             size_t           emitUUID(OutputStream&) const; //!< emit UUID \return emitted bytes
             static Pattern * Load(InputStream &);           //!< \return reloaded pattern
-            bool             isBasic() const noexcept;
+            bool             isBasic() const noexcept;      //!< \return true iff basic pattern
+
+            static Pattern * Among(const char * const, const size_t); //!< \return Or'd characters
+            static Pattern * Exact(const char * const, const size_t); //!< \return And'd characters
+
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            static bool      AreEqual(const Pattern &, const Pattern &) noexcept; //!<
+            static bool      AreEqual(const Pattern &, const Pattern &) noexcept;
             friend bool operator==(const Pattern &, const Pattern&) noexcept;
             friend bool operator!=(const Pattern &, const Pattern&) noexcept;
-#endif
 
-            static Pattern * Among(const char * const, const size_t);
             static Pattern * Among(const char * const);
             static Pattern * Among(const String &);
+
+            static Pattern * Exact(const char * const);
+            static Pattern * Exact(const String &);
+
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
 
             //__________________________________________________________________

@@ -57,7 +57,7 @@ namespace Yttrium
 
             //! \return true iff arguments have same patterns
             static bool    HaveSamePatterns(const Logic &, const Logic &) noexcept;
-            OutputStream & emitLink(OutputStream &) const;
+            OutputStream & emitLink(OutputStream &) const; //!< emit patterns and link \return output stream
 
         protected:
             void             optimizePatterns();     //!< process all list
@@ -66,8 +66,11 @@ namespace Yttrium
 
         private:
             Y_Disable_Assign(Logic); //!< discarded
+                                     //!
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             void             stripBasic(Patterns &basic) noexcept;
             static void      groupBasic(Patterns &list, const Patterns &basic);
+#endif
         };
 
     }
