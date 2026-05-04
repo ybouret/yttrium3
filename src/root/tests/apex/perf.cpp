@@ -8,13 +8,14 @@
 using namespace Yttrium;
 using namespace Apex;
 
-static size_t      minBits = 64;
+static size_t      minBits = 8;
 static size_t      maxBits = 512;
 static long double tmx     = 0.01L;
 
 template <typename WORD> static inline
 void testDFT(Core::Rand &ran)
 {
+    std::cerr << "DFT " << sizeof(WORD)*8 << "-bits" << std::endl;
     System::WallTime chrono;
     for(size_t lbits=minBits;lbits<=maxBits;lbits <<=1)
     {
@@ -43,6 +44,7 @@ void testDFT(Core::Rand &ran)
             std::cerr << std::endl;
         }
     }
+    std::cerr << std::endl;
 }
 
 
@@ -53,5 +55,8 @@ Y_UTEST(apex_perf)
     Core::Rand ran;
     if(argc>1) tmx = ASCII::Convert::To<long double>(argv[1],"tmx",0);
     testDFT<uint8_t>(ran);
+    testDFT<uint16_t>(ran);
+    testDFT<uint32_t>(ran);
+
 }
 Y_UDONE()

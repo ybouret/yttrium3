@@ -22,13 +22,57 @@ namespace Yttrium
     namespace Apex
     {
 
+        template <typename T> struct Transfer;
+
+        template <> struct Transfer<uint32_t>
+        {
+            static inline void Send(double * a, const uint32_t * word, const size_t words) noexcept
+            {
+                word += words;
+                for(size_t i=words;i>0;--i)
+                {
+                    uint32_t w = *(--word);
+                    *(++a) = (uint8_t)(w>>24);
+                    *(++a) = (uint8_t)(w>>16);
+                    *(++a) = (uint8_t)(w>>8);
+                    *(++a) = (uint8_t)(w);
+                }
+
+            }
+        };
+
+
+        template <> struct Transfer<uint16_t>
+        {
+            static inline void Send(double * a, const uint16_t * word, const size_t words) noexcept
+            {
+                word += words;
+                for(size_t i=words;i>0;--i)
+                {
+                    uint16_t w = *(--word);
+                    *(++a) = (uint8_t)(w>>8);
+                    *(++a) = (uint8_t)(w);
+                }
+            }
+        };
+
+
+        template <> struct Transfer<uint8_t>
+        {
+            static inline void Send(double * a, const uint8_t * word, const size_t words) noexcept
+            {
+                for(size_t i=words;i>0;--i) a[i] = *(word++);
+            }
+
+        };
+
         //! using Fourier Multiplication
         struct KegDFT
         {
             static uint64_t Trace; //!< to trace call ticks
 
 
-            
+
 
             //! compute lhs * rhs by fourier transform
             /**
@@ -95,9 +139,15 @@ namespace Yttrium
                     double * const  b = a+nn;                                // b[1:nn]
                     uint8_t * const w = static_cast<uint8_t*>(blockEntry)-1; // w[1:nn]
 
+//#define Y_APEX_DFT_RAW 1
+
+#if defined(Y_APEX_DFT_RAW)
                     for(size_t i=n,j=0;i>0;--i) a[i] = lhs.getByte(j++);
                     for(size_t i=m,j=0;i>0;--i) b[i] = rhs.getByte(j++);
-
+#else
+                    Transfer<WORD>::Send(a,lhs.word,lhs.words);
+                    Transfer<WORD>::Send(b,rhs.word,rhs.words);
+#endif
 
                     DFT::RealForward(a,b,nn);
 
