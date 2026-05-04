@@ -52,10 +52,10 @@ Y_UTEST(jive_pattern)
     Y_SIZEOF(Jive::Pattern);
     Y_SIZEOF(Jive::Any1);
 
-    { Jive::Any1      p;          testPattern(p); }
-    { Jive::Byte      p('A');     testPattern(p); }
-    { Jive::Lump      p('Z','A'); testPattern(p); }
-    { Jive::Excluded  p('X');     testPattern(p); }
+    { Jive::Any1  p;          testPattern(p); }
+    { Jive::Byte  p('A');     testPattern(p); }
+    { Jive::Lump  p('Z','A'); testPattern(p); }
+    { Jive::Excl  p('X');     testPattern(p); }
 
     {
         Jive::And       p;

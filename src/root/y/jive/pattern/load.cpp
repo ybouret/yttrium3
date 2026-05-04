@@ -27,7 +27,7 @@ namespace Yttrium
             {
                 case Any1:: UUID: return new Any1();
                 case Byte:: UUID: return new Byte( fp.cbr<uint8_t>(varName,"code") );
-                case Excluded:: UUID: return new Excluded( fp.cbr<uint8_t>(varName,"code") );
+                case Excl:: UUID: return new Excl( fp.cbr<uint8_t>(varName,"code") );
                 case Lump:: UUID:
                 {
                     const uint8_t lower = fp.cbr<uint8_t>(varName,"lower");

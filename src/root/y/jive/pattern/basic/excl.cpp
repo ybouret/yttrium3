@@ -1,7 +1,7 @@
 
 
 
-#include "y/jive/pattern/basic/excluded.hpp"
+#include "y/jive/pattern/basic/excl.hpp"
 #include "y/stream/output.hpp"
 #include "y/jive/pattern/leading.hpp"
 
@@ -10,54 +10,54 @@ namespace Yttrium
     namespace Jive
     {
 
-        Excluded:: Excluded(const uint8_t b) noexcept : OneChar(UUID), code(b)
+        Excl:: Excl(const uint8_t b) noexcept : OneChar(UUID), code(b)
         {
         }
 
-        Excluded:: Excluded(const Excluded &_) noexcept : OneChar(_), code(_.code) {}
+        Excl:: Excl(const Excl &_) noexcept : OneChar(_), code(_.code) {}
 
-        Pattern * Excluded:: clone() const
+        Pattern * Excl:: clone() const
         {
-            return new Excluded(*this);
+            return new Excl(*this);
         }
 
 
 
-        Excluded:: ~Excluded() noexcept
+        Excl:: ~Excl() noexcept
         {
         }
 
-        bool Excluded:: found(const uint8_t b) const noexcept
+        bool Excl:: found(const uint8_t b) const noexcept
         {
             return b != code;
         }
 
-        size_t Excluded:: serialize(OutputStream &fp) const
+        size_t Excl:: serialize(OutputStream &fp) const
         {
             const size_t res = emitUUID(fp);
             return res + fp.cbr(code);
         }
 
-        void Excluded:: glean(Leading &leading) const noexcept
+        void Excl:: glean(Leading &leading) const noexcept
         {
             Leading tmp;
             tmp.all().clr(code);
             leading << tmp;
         }
 
-        bool Excluded:: univocal() const noexcept
+        bool Excl:: univocal() const noexcept
         {
             return false;
         }
 
-        OutputStream & Excluded:: viz(OutputStream &fp) const
+        OutputStream & Excl:: viz(OutputStream &fp) const
         {
             nodeName(fp) << '[';
             Label(fp,(char)code) << ",shape=doublecircle";
             return Endl(fp<<']');
         }
 
-        Pattern * Excluded:: optimized()
+        Pattern * Excl:: optimized()
         {
             return this;
         }

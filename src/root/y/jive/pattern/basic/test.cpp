@@ -11,7 +11,7 @@ namespace Yttrium
                 case Any1:: UUID:
                 case Byte:: UUID:
                 case Lump:: UUID:
-                case Excluded:: UUID:
+                case Excl:: UUID:
                     return true;
                 default:
                     break;

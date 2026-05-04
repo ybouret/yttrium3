@@ -1,7 +1,7 @@
 //! \file
 
-#ifndef Y_Jive_Excluded_Included
-#define Y_Jive_Excluded_Included 1
+#ifndef Y_Jive_Excl_Included
+#define Y_Jive_Excl_Included 1
 
 #include "y/jive/pattern/basic/one-char.hpp"
 
@@ -18,8 +18,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-
-        class Excluded : public OneChar
+        class Excl : public OneChar
         {
         public:
             //__________________________________________________________________
@@ -36,9 +35,9 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Excluded(const uint8_t) noexcept; //!< setup
-            virtual ~Excluded()              noexcept; //!< cleanup
-            Excluded(const Excluded &)       noexcept; //!< duplicate
+            explicit Excl(const uint8_t) noexcept; //!< setup
+            virtual ~Excl()              noexcept; //!< cleanup
+            Excl(const Excl &)           noexcept; //!< duplicate
 
             //__________________________________________________________________
             //
@@ -62,7 +61,7 @@ namespace Yttrium
             const uint8_t code; //!< char to exclude
 
         private:
-            Y_Disable_Assign(Excluded); //!< discarded
+            Y_Disable_Assign(Excl); //!< discarded
             virtual bool found(const uint8_t) const noexcept;
         };
 
@@ -70,5 +69,5 @@ namespace Yttrium
 
 }
 
-#endif // !Y_Jive_Excluded_Included
+#endif // !Y_Jive_Excl_Included
 

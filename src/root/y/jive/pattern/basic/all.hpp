@@ -6,7 +6,7 @@
 #include "y/jive/pattern/basic/any1.hpp"
 #include "y/jive/pattern/basic/byte.hpp"
 #include "y/jive/pattern/basic/lump.hpp"
-#include "y/jive/pattern/basic/excluded.hpp"
+#include "y/jive/pattern/basic/excl.hpp"
 
 
 #endif // !Y_Pattern_AllBasic_Included

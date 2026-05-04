@@ -12,9 +12,9 @@ namespace Yttrium
 
             switch(uid)
             {
-                case Any1::     UUID: return true;
-                case Byte::     UUID: return dynamic_cast<const Byte &>(lhs).code == dynamic_cast<const Byte &>(rhs).code;
-                case Excluded:: UUID: return dynamic_cast<const Excluded &>(lhs).code == dynamic_cast<const Excluded &>(rhs).code;
+                case Any1:: UUID: return true;
+                case Byte:: UUID: return dynamic_cast<const Byte &>(lhs).code == dynamic_cast<const Byte &>(rhs).code;
+                case Excl:: UUID: return dynamic_cast<const Excl &>(lhs).code == dynamic_cast<const Excl &>(rhs).code;
                 case Lump:: UUID: {
                     const Lump &L = dynamic_cast<const Lump&>(lhs);
                     const Lump &R = dynamic_cast<const Lump&>(rhs);
