@@ -31,6 +31,13 @@ namespace Yttrium
         {
             return AreEqual(*lhs.motif, *rhs.motif);
         }
+
+        OutputStream & Joker:: emitLink(OutputStream &fp) const
+        {
+            motif->viz(fp);
+            return Endl( to( & *motif, fp) );
+        }
+
     }
 }
 

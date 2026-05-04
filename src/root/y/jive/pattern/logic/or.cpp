@@ -1,6 +1,7 @@
 
 
 #include "y/jive/pattern/logic/or.hpp"
+#include "y/stream/output.hpp"
 
 namespace Yttrium
 {
@@ -74,6 +75,14 @@ namespace Yttrium
             return res;
         }
 
+        OutputStream & Or:: viz(OutputStream &fp) const
+        {
+            nodeName(fp) << '[';
+            Label(fp, "||");
+            fp << ",shape=egg";
+            Endl(fp<<']');
+            return emitLink(fp);
+        }
     }
 
 

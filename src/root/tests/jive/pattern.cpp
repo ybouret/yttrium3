@@ -37,8 +37,11 @@ namespace  {
             std::cerr << "fc=" << fc << std::endl;
         }
 
+        {
+            const String dotName = String("gv-") + p.name + ".dot";
+            Vizible::Render(dotName,p);
+        }
 
-        
     }
 
 

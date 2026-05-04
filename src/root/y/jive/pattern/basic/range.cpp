@@ -1,6 +1,8 @@
 #include "y/jive/pattern/basic/range.hpp"
 #include "y/stream/output.hpp"
 #include "y/jive/pattern/leading.hpp"
+#include "y/string/format.hpp"
+#include "y/ascii/printable.hpp"
 
 namespace Yttrium
 {
@@ -57,6 +59,13 @@ namespace Yttrium
             return upper<=lower;
         }
 
+        OutputStream & Range:: viz(OutputStream &fp) const
+        {
+            nodeName(fp) << '[';
+            const String label = Formatted::Get("[%s-%s]", ASCII::Printable::Char[lower], ASCII::Printable::Char[upper]);
+            fp << "label=\"" << label << "\",shape=rectangle";
+            return Endl(fp<<']');
+        }
     }
 
 }

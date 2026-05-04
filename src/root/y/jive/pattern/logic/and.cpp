@@ -1,5 +1,6 @@
 
 #include "y/jive/pattern/logic/and.hpp"
+#include "y/stream/output.hpp"
 
 namespace Yttrium
 {
@@ -69,6 +70,15 @@ namespace Yttrium
                 }
             }
             return true;
+        }
+
+        OutputStream & And:: viz(OutputStream &fp) const
+        {
+            nodeName(fp) << '[';
+            Label(fp, "||");
+            fp << ",shape=house";
+            Endl(fp<<']');
+            return emitLink(fp);
         }
 
     }

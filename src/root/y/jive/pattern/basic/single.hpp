@@ -47,10 +47,11 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            virtual Pattern * clone()                   const;
-            virtual size_t    serialize(OutputStream &) const;
-            virtual void      glean(Leading &) const noexcept;
-            virtual bool      univocal()       const noexcept;
+            virtual Pattern *     clone()                   const;
+            virtual size_t        serialize(OutputStream &) const;
+            virtual void          glean(Leading &) const noexcept;
+            virtual bool          univocal()       const noexcept;
+            virtual OutputStream &viz(OutputStream &)       const;
 
             //__________________________________________________________________
             //

@@ -3,6 +3,8 @@
 #include "y/jive/pattern/joker/repeating.hpp"
 #include "y/exception.hpp"
 #include "y/stream/output.hpp"
+#include "y/string/format.hpp"
+#include "y/format/decimal.hpp"
 
 namespace Yttrium
 {
@@ -80,6 +82,24 @@ namespace Yttrium
             return new Repeating(p,nmin);
         }
 
+
+        OutputStream & Repeating:: viz(OutputStream &fp) const
+        {
+            nodeName(fp) << '[';
+            switch(atLeast)
+            {
+                case 0: Label(fp,"*"); break;
+                case 1: Label(fp,"+"); break;
+                default:
+                {
+                    const String label = Formatted:: Get(">=%s", Decimal(atLeast).c_str());
+                    Label(fp,label);
+                }
+            }
+            fp << ",shape=trapezium";
+            Endl(fp<<']');
+            return emitLink(fp);
+        }
 
     }
 

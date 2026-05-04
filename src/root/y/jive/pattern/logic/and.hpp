@@ -46,11 +46,12 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual Pattern * clone()                   const;
-            virtual bool      univocal()       const noexcept; // all patterns are univocal
-            virtual bool      sound()          const noexcept; // at least one sound pattern
-            virtual void      glean(Leading &) const noexcept; // all to first sound pattern
-            virtual bool      takes(Token&,Source&)     const; // must accept all pattern
+            virtual Pattern *     clone()                   const;
+            virtual bool          univocal()       const noexcept; // all patterns are univocal
+            virtual bool          sound()          const noexcept; // at least one sound pattern
+            virtual void          glean(Leading &) const noexcept; // all to first sound pattern
+            virtual bool          takes(Token&,Source&)     const; // must accept all pattern
+            virtual OutputStream &viz(OutputStream &)       const;
 
         private:
             Y_Disable_Assign(And); //!< discarde

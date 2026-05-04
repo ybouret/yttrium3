@@ -8,6 +8,7 @@
 #include "y/stream/serializable.hpp"
 #include "y/core/list/clone.hpp"
 #include "y/object/counted.hpp"
+#include "y/graphviz/vizible.hpp"
 
 namespace Yttrium
 {
@@ -24,7 +25,10 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Pattern : public CountedObject, public Serializable
+        class Pattern :
+        public CountedObject,
+        public Serializable,
+        public Vizible
         {
             //__________________________________________________________________
             //
@@ -45,13 +49,14 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual bool      takes(Token &, Source &) const  = 0; //!< \return true iff token is extracted from matching source
-            virtual Pattern * clone()  const                  = 0; //!< \return clone
-            virtual void      glean(Leading &) const noexcept = 0; //!< find leading bytes
-            virtual bool      sound()          const noexcept = 0; //!< \return true iff takes doesn't return successful empty token
-            bool              frail()          const noexcept;     //!< \return !sound()
-            virtual bool      univocal()       const noexcept = 0; //!< \return true iff univocal result
-            bool              multiple()       const noexcept;     //!< \return !univocal()
+            virtual bool          takes(Token &, Source &) const  = 0; //!< \return true iff token is extracted from matching source
+            virtual Pattern *     clone()  const                  = 0; //!< \return clone
+            virtual void          glean(Leading &) const noexcept = 0; //!< find leading bytes
+            virtual bool          sound()          const noexcept = 0; //!< \return true iff takes doesn't return successful empty token
+            bool                  frail()          const noexcept;     //!< \return !sound()
+            virtual bool          univocal()       const noexcept = 0; //!< \return true iff univocal result
+            bool                  multiple()       const noexcept;     //!< \return !univocal()
+            virtual OutputStream &viz(OutputStream &)       const = 0;
 
             //__________________________________________________________________
             //

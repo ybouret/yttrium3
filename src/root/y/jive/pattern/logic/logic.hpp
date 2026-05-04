@@ -56,8 +56,8 @@ namespace Yttrium
             Logic & operator<<(const Within);    //!< append new range  \return *this
 
             //! \return true iff arguments have same patterns
-            static bool HaveSamePatterns(const Logic &, const Logic &) noexcept;
-
+            static bool    HaveSamePatterns(const Logic &, const Logic &) noexcept;
+            OutputStream & emitLink(OutputStream &) const;
 
         private:
             Y_Disable_Assign(Logic); //!< discarded

@@ -45,11 +45,12 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual Pattern * clone()                   const;
-            virtual size_t    serialize(OutputStream &) const;
-            virtual void      glean(Leading &) const noexcept;
-            virtual bool      univocal()       const noexcept;
-            
+            virtual Pattern *     clone()                   const;
+            virtual size_t        serialize(OutputStream &) const;
+            virtual void          glean(Leading &) const noexcept;
+            virtual bool          univocal()       const noexcept;
+            virtual OutputStream &viz(OutputStream &)       const;
+
         private:
             Y_Disable_Assign(Any1); //!< discarded
             virtual bool found(const uint8_t) const noexcept;

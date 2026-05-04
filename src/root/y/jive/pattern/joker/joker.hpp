@@ -53,6 +53,7 @@ namespace Yttrium
 
             //! \return true if identical patterns
             static bool HaveSameMotif(const Joker &, const Joker &) noexcept;
+            OutputStream & emitLink(OutputStream &) const;
 
             //__________________________________________________________________
             //

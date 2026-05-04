@@ -47,11 +47,12 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual Pattern * clone() const;
-            virtual bool      univocal() const noexcept;        // false
-            virtual size_t    serialize(OutputStream &) const;
-            virtual bool      sound() const noexcept;           // false
-            virtual bool      takes(Token&,Source&) const;
+            virtual Pattern *     clone()                   const;
+            virtual bool          univocal()       const noexcept; // false
+            virtual size_t        serialize(OutputStream &) const;
+            virtual bool          sound()          const noexcept; // false
+            virtual bool          takes(Token&,Source&)     const;
+            virtual OutputStream &viz(OutputStream &)       const;
 
             //__________________________________________________________________
             //

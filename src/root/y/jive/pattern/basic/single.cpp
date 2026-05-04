@@ -47,6 +47,12 @@ namespace Yttrium
             return true;
         }
 
+        OutputStream & Single:: viz(OutputStream &fp) const
+        {
+            nodeName(fp) << '[';
+            Label(fp,(char)code) << ",shape=circle";
+            return Endl(fp<<']');
+        }
     }
 
 }

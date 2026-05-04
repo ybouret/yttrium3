@@ -50,6 +50,14 @@ namespace Yttrium
             return false;
         }
 
+        OutputStream & Excluded:: viz(OutputStream &fp) const
+        {
+            nodeName(fp) << '[';
+            Label(fp,(char)code) << ",shape=doublecircle";
+            return Endl(fp<<']');
+        }
+
+
     }
 
 }

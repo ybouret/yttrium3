@@ -1,6 +1,7 @@
 
 #include "y/jive/pattern/logic/none.hpp"
 #include "y/jive/pattern/leading.hpp"
+#include "y/stream/output.hpp"
 
 namespace Yttrium
 {
@@ -68,6 +69,15 @@ namespace Yttrium
             if(!ch) return false;
             token << ch;
             return true;
+        }
+
+        OutputStream & None:: viz(OutputStream &fp) const
+        {
+            nodeName(fp) << '[';
+            Label(fp, "!!");
+            fp << ",shape=doubleoctagon";
+            Endl(fp<<']');
+            return emitLink(fp);
         }
 
     }

@@ -1,6 +1,7 @@
 
 #include "y/jive/pattern/basic/any1.hpp"
 #include "y/jive/pattern/leading.hpp"
+#include "y/stream/output.hpp"
 
 namespace Yttrium
 {
@@ -43,6 +44,14 @@ namespace Yttrium
         {
             return false;
         }
+
+        OutputStream & Any1:: viz(OutputStream &fp) const
+        {
+            nodeName(fp) << '[';
+            Label(fp,"ANY1") << ",shape=box";
+            return Endl(fp<<']');
+        }
+
     }
 
 }

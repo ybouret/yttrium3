@@ -2,6 +2,8 @@
 #include "y/jive/pattern/logic/logic.hpp"
 #include "y/stream/output.hpp"
 #include "y/stream/input.hpp"
+//#include "y/string/format.hpp"
+#include "y/format/decimal.hpp"
 
 namespace Yttrium
 {
@@ -56,6 +58,19 @@ namespace Yttrium
             }
 
             return true;
+        }
+
+        OutputStream & Logic:: emitLink(OutputStream &fp) const
+        {
+            unsigned i=1;
+            for(const Pattern *p=head;p;p=p->next,++i)
+            {
+                p->viz(fp);
+                to(p,fp) << '[';
+                Label(fp,Decimal(i).c_str());
+                Endl(fp << ']');
+            }
+            return fp;
         }
 
 

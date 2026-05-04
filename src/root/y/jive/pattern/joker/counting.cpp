@@ -4,6 +4,8 @@
 #include "y/jive/pattern/joker/counting.hpp"
 #include "y/exception.hpp"
 #include "y/stream/output.hpp"
+#include "y/string/format.hpp"
+#include "y/format/decimal.hpp"
 
 namespace Yttrium
 {
@@ -85,6 +87,15 @@ namespace Yttrium
             return new Counting(p,nmin,nmax);
         }
 
+        OutputStream & Counting:: viz(OutputStream &fp) const
+        {
+            nodeName(fp) << '[';
+            const String label = Formatted::Get("{%s,%s}",Decimal(lower).c_str(),Decimal(upper).c_str());
+            Label(fp,label);
+            fp << ",shape=ellipse";
+            Endl(fp<<']');
+            return emitLink(fp);
+        }
 
     }
 

@@ -1,5 +1,6 @@
 
 #include "y/jive/pattern/joker/optional.hpp"
+#include "y/stream/output.hpp"
 
 namespace Yttrium
 {
@@ -63,6 +64,13 @@ namespace Yttrium
         }
 
 
+        OutputStream & Optional:: viz(OutputStream &fp) const
+        {
+            nodeName(fp) << '[';
+            Label(fp,"?") << ",shape=diamond";
+            Endl(fp<<']');
+            return emitLink(fp);
+        }
     }
 
 }

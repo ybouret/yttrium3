@@ -29,6 +29,7 @@ namespace Yttrium
         Pattern:: Pattern(const Pattern &p) noexcept :
         CountedObject(),
         Serializable(),
+        Vizible(),
         uuid(p.uuid),
         name(),
         next(0),
