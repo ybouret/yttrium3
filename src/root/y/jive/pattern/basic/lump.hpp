@@ -3,8 +3,8 @@
 
 //! \file
 
-#ifndef Y_Jive_Range_Included
-#define Y_Jive_Range_Included 1
+#ifndef Y_Jive_Lump_Included
+#define Y_Jive_Lump_Included 1
 
 #include "y/jive/pattern/basic/one-char.hpp"
 #include "y/jive/pattern/within.hpp"
@@ -22,7 +22,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Range : public OneChar, public Within
+        class Lump : public OneChar, public Within
         {
         public:
             //__________________________________________________________________
@@ -31,7 +31,7 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            static const uint32_t UUID = Y_FOURCC('R','N','G','E'); //!< UUID
+            static const uint32_t UUID = Y_FOURCC('L','U','M','P'); //!< UUID
 
             //__________________________________________________________________
             //
@@ -39,10 +39,10 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            Range(const uint8_t,const uint8_t) noexcept; //!< setup
-            Range(const Within)                noexcept; //!< setup from Within
-            virtual ~Range()                   noexcept; //!< cleanup
-            Range(const Range &)               noexcept; //!< duplicate
+            Lump(const uint8_t,const uint8_t) noexcept; //!< setup
+            Lump(const Within)                noexcept; //!< setup from Within
+            virtual ~Lump()                   noexcept; //!< cleanup
+            Lump(const Lump &)                noexcept; //!< duplicate
 
             //__________________________________________________________________
             //
@@ -59,7 +59,7 @@ namespace Yttrium
 
 
         private:
-            Y_Disable_Assign(Range); //!< discared
+            Y_Disable_Assign(Lump); //!< discared
             virtual bool found(const uint8_t) const noexcept;
         };
 
@@ -67,5 +67,5 @@ namespace Yttrium
 
 }
 
-#endif // !Y_Jive_Range_Included
+#endif // !Y_Jive_Lump_Included
 

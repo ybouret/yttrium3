@@ -126,7 +126,7 @@ namespace Yttrium
 }
 
 #include "y/jive/pattern/basic/byte.hpp"
-#include "y/jive/pattern/basic/range.hpp"
+#include "y/jive/pattern/basic/lump.hpp"
 
 namespace Yttrium
 {
@@ -141,7 +141,7 @@ namespace Yttrium
 
         Logic & Logic:: operator<<(const Within w)
         {
-            pushTail( new Range(w) );
+            pushTail( new Lump(w) );
             return *this;
         }
 

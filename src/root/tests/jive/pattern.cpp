@@ -54,7 +54,7 @@ Y_UTEST(jive_pattern)
 
     { Jive::Any1      p;          testPattern(p); }
     { Jive::Byte      p('A');     testPattern(p); }
-    { Jive::Range     p('Z','A'); testPattern(p); }
+    { Jive::Lump      p('Z','A'); testPattern(p); }
     { Jive::Excluded  p('X');     testPattern(p); }
 
     {
@@ -76,26 +76,26 @@ Y_UTEST(jive_pattern)
     }
 
     {
-        const Jive::Motif m = new Jive::Range('0','9');
+        const Jive::Motif m = new Jive::Lump('0','9');
         Jive::Optional    p(m);
         testPattern(p);
     }
 
     {
-        const Jive::Motif m = new Jive::Range('A','Z');
+        const Jive::Motif m = new Jive::Lump('A','Z');
         Jive::Repeating  p(m,1);
         testPattern(p);
     }
 
     {
-        const Jive::Motif m = new Jive::Range('a','z');
+        const Jive::Motif m = new Jive::Lump('a','z');
         Jive::Counting  p(m,1,3);
         testPattern(p);
     }
 
 
     {
-        AutoPtr<Jive::Pattern> p = new Jive::Range('A','A');
+        AutoPtr<Jive::Pattern> p = new Jive::Lump('A','A');
     }
 
 

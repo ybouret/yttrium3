@@ -25,15 +25,15 @@ namespace Yttrium
 
             switch(uid)
             {
-                case Any1::     UUID: return new Any1();
-                case Byte::     UUID: return new Byte( fp.cbr<uint8_t>(varName,"code") );
+                case Any1:: UUID: return new Any1();
+                case Byte:: UUID: return new Byte( fp.cbr<uint8_t>(varName,"code") );
                 case Excluded:: UUID: return new Excluded( fp.cbr<uint8_t>(varName,"code") );
-                case Range::    UUID:
+                case Lump:: UUID:
                 {
                     const uint8_t lower = fp.cbr<uint8_t>(varName,"lower");
                     const uint8_t upper = fp.cbr<uint8_t>(varName,"upper");
                     if(upper<lower) throw Specific::Exception(varName,"corrupted lower/upper");
-                    return new Range(lower,upper);
+                    return new Lump(lower,upper);
                 }
 
                 case And::  UUID:  return LoadLogic( new And(),  fp );

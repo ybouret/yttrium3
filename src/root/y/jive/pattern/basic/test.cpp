@@ -8,9 +8,9 @@ namespace Yttrium
         {
             switch(uuid)
             {
-                case Any1::     UUID:
-                case Byte::     UUID:
-                case Range::    UUID:
+                case Any1:: UUID:
+                case Byte:: UUID:
+                case Lump:: UUID:
                 case Excluded:: UUID:
                     return true;
                 default:

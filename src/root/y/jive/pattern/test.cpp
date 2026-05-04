@@ -15,9 +15,9 @@ namespace Yttrium
                 case Any1::     UUID: return true;
                 case Byte::     UUID: return dynamic_cast<const Byte &>(lhs).code == dynamic_cast<const Byte &>(rhs).code;
                 case Excluded:: UUID: return dynamic_cast<const Excluded &>(lhs).code == dynamic_cast<const Excluded &>(rhs).code;
-                case Range:: UUID: {
-                    const Range &L = dynamic_cast<const Range&>(lhs);
-                    const Range &R = dynamic_cast<const Range&>(rhs);
+                case Lump:: UUID: {
+                    const Lump &L = dynamic_cast<const Lump&>(lhs);
+                    const Lump &R = dynamic_cast<const Lump&>(rhs);
                     return L.lower == R.lower && L.upper == R.upper;
                 }
 
