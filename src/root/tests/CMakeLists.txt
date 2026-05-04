@@ -144,6 +144,8 @@ Y_UTEST(apex:z)
 Y_UTEST(apex:q)
 Y_UTEST(apex:in_threads)
 Y_UTEST(apex:rsa)
+Y_UTEST(aped:perf)
+
 
 Y_UTEST(stream:u64)
 Y_UTEST(stream:output:file)

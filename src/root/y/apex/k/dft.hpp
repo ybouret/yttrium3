@@ -28,7 +28,7 @@ namespace Yttrium
             static uint64_t Trace; //!< to trace call ticks
 
 
-
+            
 
             //! compute lhs * rhs by fourier transform
             /**

@@ -29,7 +29,6 @@ namespace
 
         for(size_t lbits=minBits;lbits<=maxBits;lbits <<=1)
         {
-            //std::cerr << lbits << std::endl;
             for(size_t rbits=lbits;rbits<=maxBits;rbits <<=1)
             {
                 (std::cerr << " " <<  std::setw(4) << lbits<< " x " << std::setw(4) << rbits).flush();
