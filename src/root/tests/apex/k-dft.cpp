@@ -40,15 +40,15 @@ namespace
                 do
                 {
                     ++nops;
-                    AutoPtr< Keg<WORD> > lhs = Keg<WORD>::MakeRandom(ran, lbits );
-                    AutoPtr< Keg<WORD> > rhs = Keg<WORD>::MakeRandom(ran, rbits );
+                    AutoPtr< Keg<WORD> > lhs = Keg<WORD>::MakeRandom(ran, lbits ); Y_ASSERT(lbits==lhs->bits);
+                    AutoPtr< Keg<WORD> > rhs = Keg<WORD>::MakeRandom(ran, rbits ); Y_ASSERT(rbits==rhs->bits);
 
                     uint64_t mark = System::WallTime::Ticks();
                     AutoPtr< Keg<WORD> > mul = KegMul::Compute<WORD,CORE>(lhs->word,lhs->words,rhs->word,rhs->words);
                     mul64 += System::WallTime::Ticks() - mark;
 
                     mark = System::WallTime::Ticks();
-                    AutoPtr< Keg<WORD> > dft = KegDFT::Compute(*lhs,*rhs);
+                    AutoPtr< Keg<WORD> > dft = KegDFT::Compute<WORD>(*lhs,*rhs);
                     dft64 += System::WallTime::Ticks() - mark;
 
                     Y_ASSERT( __Zero__ == KegCmp::ResultFor(*mul,*dft) );
@@ -69,8 +69,6 @@ namespace
                     std::cerr << " | [out]  mul: " <<  HumanReadable(mulRate)  << " dft: " <<  HumanReadable(dftRate);
                     if(dftRate>=mulRate) std::cerr << " (+)"; else std::cerr << " (-)";
                 }
-                //std::cerr << "  | mul: " <<  HumanReadable(KegMul::Trace)  << " dft: " <<  HumanReadable(KegDFT::Trace);
-                //std::cerr << "| | mul: " <<  HumanReadable(mul64)          << " dft: " <<  HumanReadable(dft64);
                 std::cerr << " |";
                 (std::cerr << std::endl).flush();
             }
@@ -93,7 +91,7 @@ Y_UTEST(apex_k_dft)
         tmx = ASCII::Convert::To<long double>(argv[1],"tmx",0);
     }
 
-    testDFT<uint8_t,uint16_t>(ran);
+    testDFT<uint8_t,uint16_t>(ran); 
     testDFT<uint8_t,uint32_t>(ran);
     testDFT<uint8_t,uint64_t>(ran);
 

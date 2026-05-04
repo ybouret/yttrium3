@@ -9,7 +9,7 @@ using namespace Yttrium;
 using namespace Apex;
 
 static size_t      minBits = 8;
-static size_t      maxBits = 512;
+static size_t      maxBits = 4096;
 static long double tmx     = 0.01L;
 
 template <typename WORD> static inline
@@ -27,9 +27,8 @@ void testDFT(Core::Rand &ran)
             size_t   nops   = 0;
             do {
                 ++nops;
-                AutoPtr< Keg<WORD> > lhs = Keg<WORD>::MakeRandom(ran, lbits );
-                AutoPtr< Keg<WORD> > rhs = Keg<WORD>::MakeRandom(ran, rbits );
-
+                AutoPtr< Keg<WORD> > lhs = Keg<WORD>::MakeRandom(ran, lbits); Y_ASSERT(lbits==lhs->bits);
+                AutoPtr< Keg<WORD> > rhs = Keg<WORD>::MakeRandom(ran, rbits); Y_ASSERT(rbits==rhs->bits);
                 const uint64_t mark = System::WallTime::Ticks();
                 AutoPtr< Keg<WORD> > dft = KegDFT::Compute(*lhs,*rhs);
                 dft64 += System::WallTime::Ticks() - mark;

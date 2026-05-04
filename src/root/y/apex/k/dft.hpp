@@ -37,7 +37,23 @@ namespace Yttrium
                     *(++a) = (uint8_t)(w>>8);
                     *(++a) = (uint8_t)(w);
                 }
+            }
 
+            static inline void Recv(uint32_t * word,  const uint8_t *w, const size_t mpn) noexcept
+            {
+                unsigned choice = 0;
+                w += mpn;
+                for(size_t k=mpn;k>0;--k)
+                {
+                    const uint32_t b = *(--w);
+                    switch(choice)
+                    {
+                        case 0: *word      = b;         choice = 1; continue;
+                        case 1: *word     |= (b << 8);  choice = 2; continue;
+                        case 2: *word     |= (b << 16); choice = 3; continue;
+                        case 3: *(word++) |= (b << 24); choice = 0; continue;
+                    }
+                }
             }
         };
 
@@ -54,6 +70,23 @@ namespace Yttrium
                     *(++a) = (uint8_t)(w);
                 }
             }
+
+            static inline void Recv(uint16_t * word, const uint8_t *w, const size_t mpn) noexcept
+            {
+                unsigned choice = 0;
+                w += mpn;
+                for(size_t k=mpn;k>0;--k)
+                {
+                    const uint16_t b = *(--w);
+                    switch(choice)
+                    {
+                        case 0: *word      = b;        choice = 1; continue;
+                        case 1: *(word++) |= (b << 8); choice = 0; continue;
+                    }
+                }
+            }
+
+            
         };
 
 
@@ -62,6 +95,15 @@ namespace Yttrium
             static inline void Send(double * a, const uint8_t * word, const size_t words) noexcept
             {
                 for(size_t i=words;i>0;--i) a[i] = *(word++);
+            }
+
+            static inline void Recv(uint8_t * word, const uint8_t *w, const size_t mpn) noexcept
+            {
+                word += mpn;
+                for(size_t i=mpn;i>0;--i)
+                {
+                    *(--word) = *(w++);
+                }
             }
 
         };
@@ -137,11 +179,10 @@ namespace Yttrium
 #endif
                     double * const  a = static_cast<double *>(blockEntry)-1; // a[1:nn]
                     double * const  b = a+nn;                                // b[1:nn]
-                    uint8_t * const w = static_cast<uint8_t*>(blockEntry)-1; // w[1:nn]
+                    uint8_t * const w = static_cast<uint8_t*>(blockEntry);   // w[0:..] to use result memory
 
-//#define Y_APEX_DFT_RAW 1
-
-#if defined(Y_APEX_DFT_RAW)
+//#define Y_APEX_DFT_RAW_SEND 1
+#if defined(Y_APEX_DFT_RAW_SEND)
                     for(size_t i=n,j=0;i>0;--i) a[i] = lhs.getByte(j++);
                     for(size_t i=m,j=0;i>0;--i) b[i] = rhs.getByte(j++);
 #else
@@ -174,14 +215,25 @@ namespace Yttrium
                     if (cy >= RX)
                         throw Specific::Exception("DFT::Multiplication","algebraic failure");
 
+                    Coerce(dft->words) = Alignment::To<WORD>::Ceil(mpn) / sizeof(WORD);
+                    assert(dft->words*sizeof(WORD)>=mpn);
+
+#define Y_APEX_DFT_RAW_RECV 1
+#if defined(Y_APEX_DFT_RAW_RECV)
                     {
                         size_t top = mpn-1;
-                        Coerce(dft->words) = Alignment::To<WORD>::Ceil(mpn) / sizeof(WORD);
                         dft->or_(top, (uint8_t) cy);
                         for(size_t j=1;j<mpn;++j)
                             dft->or_(--top,w[j]);
                     }
+#else
+                    {
+                        w[0] = (uint8_t)cy;
+                        Transfer<WORD>::Recv(dft->word,w,mpn);
+                    }
+#endif
                     dft->update();
+
                 }
 
 #if defined(Y_Apex_Trace)
