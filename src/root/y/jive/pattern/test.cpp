@@ -13,7 +13,7 @@ namespace Yttrium
             switch(uid)
             {
                 case Any1::     UUID: return true;
-                case Single::   UUID: return dynamic_cast<const Single   &>(lhs).code == dynamic_cast<const Single   &>(rhs).code;
+                case Byte::     UUID: return dynamic_cast<const Byte &>(lhs).code == dynamic_cast<const Byte &>(rhs).code;
                 case Excluded:: UUID: return dynamic_cast<const Excluded &>(lhs).code == dynamic_cast<const Excluded &>(rhs).code;
                 case Range:: UUID: {
                     const Range &L = dynamic_cast<const Range&>(lhs);

@@ -73,7 +73,7 @@ namespace Yttrium
 
 
 #include "y/pointer/auto.hpp"
-#include "y/jive/pattern/basic/single.hpp"
+#include "y/jive/pattern/basic/byte.hpp"
 
 namespace Yttrium
 {
@@ -84,7 +84,7 @@ namespace Yttrium
             if(upper<=lower)
             {
                 assert(lower==upper);
-                AutoPtr<Pattern> p = new Single(lower);
+                AutoPtr<Pattern> p = new Byte(lower);
                 delete this;
                 return p.yield();
             }

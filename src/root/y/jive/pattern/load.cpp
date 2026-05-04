@@ -26,7 +26,7 @@ namespace Yttrium
             switch(uid)
             {
                 case Any1::     UUID: return new Any1();
-                case Single::   UUID: return new Single( fp.cbr<uint8_t>(varName,"code") );
+                case Byte::     UUID: return new Byte( fp.cbr<uint8_t>(varName,"code") );
                 case Excluded:: UUID: return new Excluded( fp.cbr<uint8_t>(varName,"code") );
                 case Range::    UUID:
                 {

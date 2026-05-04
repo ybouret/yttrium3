@@ -125,7 +125,7 @@ namespace Yttrium
 
 }
 
-#include "y/jive/pattern/basic/single.hpp"
+#include "y/jive/pattern/basic/byte.hpp"
 #include "y/jive/pattern/basic/range.hpp"
 
 namespace Yttrium
@@ -135,7 +135,7 @@ namespace Yttrium
 
         Logic & Logic:: operator<<(const uint8_t b)
         {
-            pushTail( new Single(b) );
+            pushTail( new Byte(b) );
             return *this;
         }
 

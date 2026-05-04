@@ -2,8 +2,8 @@
 
 //! \file
 
-#ifndef Y_Jive_Single_Included
-#define Y_Jive_Single_Included 1
+#ifndef Y_Jive_Byte_Included
+#define Y_Jive_Byte_Included 1
 
 #include "y/jive/pattern/basic/one-char.hpp"
 
@@ -20,7 +20,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Single : public OneChar
+        class Byte : public OneChar
         {
         public:
             //__________________________________________________________________
@@ -29,7 +29,7 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            static const uint32_t UUID = Y_FOURCC('S','N','G','L'); //!< UUID
+            static const uint32_t UUID = Y_FOURCC('B','Y','T','E'); //!< UUID
 
             //__________________________________________________________________
             //
@@ -37,9 +37,9 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Single(const uint8_t) noexcept; //!< setup
-            virtual ~Single()              noexcept; //!< cleanup
-            Single(const Single &)         noexcept; //!< duplicatee
+            explicit Byte(const uint8_t) noexcept; //!< setup
+            virtual ~Byte()              noexcept; //!< cleanup
+            Byte(const Byte &)           noexcept; //!< duplicatee
 
             //__________________________________________________________________
             //
@@ -63,7 +63,7 @@ namespace Yttrium
             const uint8_t code; //!< accepted code
 
         private:
-            Y_Disable_Assign(Single); //!< discarded
+            Y_Disable_Assign(Byte); //!< discarded
             virtual bool found(const uint8_t) const noexcept;
         };
 
@@ -71,5 +71,5 @@ namespace Yttrium
 
 }
 
-#endif // !Y_Jive_Single_Included
+#endif // !Y_Jive_Byte_Included
 
