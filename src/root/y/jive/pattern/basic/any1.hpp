@@ -50,6 +50,7 @@ namespace Yttrium
             virtual void          glean(Leading &) const noexcept;
             virtual bool          univocal()       const noexcept;
             virtual OutputStream &viz(OutputStream &)       const;
+            virtual Pattern *     optimized();
 
         private:
             Y_Disable_Assign(Any1); //!< discarded

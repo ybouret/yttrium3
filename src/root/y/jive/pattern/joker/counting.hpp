@@ -55,6 +55,7 @@ namespace Yttrium
             virtual bool          sound()          const noexcept; // almost false
             virtual bool          takes(Token&,Source&)     const;
             virtual OutputStream &viz(OutputStream &)       const;
+            virtual Pattern *     optimized(); // TODO: improve
 
             //__________________________________________________________________
             //

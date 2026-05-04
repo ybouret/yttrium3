@@ -59,6 +59,11 @@ namespace Yttrium
             static bool    HaveSamePatterns(const Logic &, const Logic &) noexcept;
             OutputStream & emitLink(OutputStream &) const;
 
+        protected:
+            void optimizePatterns();
+            void noMultiple() noexcept;
+            void stripBasic(Patterns &basic) noexcept;
+
         private:
             Y_Disable_Assign(Logic); //!< discarded
 

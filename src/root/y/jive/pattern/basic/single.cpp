@@ -53,6 +53,11 @@ namespace Yttrium
             Label(fp,(char)code) << ",shape=circle";
             return Endl(fp<<']');
         }
+
+        Pattern * Single:: optimized()
+        {
+            return this;
+        }
     }
 
 }

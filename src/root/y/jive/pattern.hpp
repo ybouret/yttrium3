@@ -57,6 +57,7 @@ namespace Yttrium
             virtual bool          univocal()       const noexcept = 0; //!< \return true iff univocal result
             bool                  multiple()       const noexcept;     //!< \return !univocal()
             virtual OutputStream &viz(OutputStream &)       const = 0;
+            virtual Pattern *     optimized()                     = 0;
 
             //__________________________________________________________________
             //
@@ -66,12 +67,18 @@ namespace Yttrium
             //__________________________________________________________________
             size_t           emitUUID(OutputStream&) const; //!< emit UUID \return emitted bytes
             static Pattern * Load(InputStream &);           //!< \return reloaded pattern
+            bool             isBasic() const noexcept;
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             static bool      AreEqual(const Pattern &, const Pattern &) noexcept; //!<
             friend bool operator==(const Pattern &, const Pattern&) noexcept;
             friend bool operator!=(const Pattern &, const Pattern&) noexcept;
 #endif
+
+            static Pattern * Among(const char * const, const size_t);
+            static Pattern * Among(const char * const);
+            static Pattern * Among(const String &);
+
 
             //__________________________________________________________________
             //

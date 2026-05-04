@@ -52,6 +52,11 @@ namespace Yttrium
             return Endl(fp<<']');
         }
 
+        Pattern * Any1:: optimized()
+        {
+            return this;
+        }
+
     }
 
 }

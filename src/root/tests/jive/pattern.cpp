@@ -94,6 +94,10 @@ Y_UTEST(jive_pattern)
     }
 
 
+    {
+        AutoPtr<Jive::Pattern> p = new Jive::Range('A','A');
+    }
+
 
 }
 Y_UDONE()

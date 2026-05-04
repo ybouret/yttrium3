@@ -21,7 +21,7 @@ namespace Yttrium
         Within(w)
         {
         }
-        
+
 
         Range:: Range(const Range &_) noexcept :
         OneChar(_), Within(_)
@@ -31,7 +31,7 @@ namespace Yttrium
         {
             return new Range(*this);
         }
-        
+
         Range:: ~Range() noexcept
         {
         }
@@ -66,6 +66,35 @@ namespace Yttrium
             fp << "label=\"" << label << "\",shape=rectangle";
             return Endl(fp<<']');
         }
+
+    }
+
+}
+
+
+#include "y/pointer/auto.hpp"
+#include "y/jive/pattern/basic/single.hpp"
+
+namespace Yttrium
+{
+    namespace Jive
+    {
+        Pattern * Range:: optimized()
+        {
+            if(upper<=lower)
+            {
+                assert(lower==upper);
+                AutoPtr<Pattern> p = new Single(lower);
+                delete this;
+                return p.yield();
+            }
+            else
+            {
+                return this;
+            }
+        }
+
+
     }
 
 }

@@ -57,6 +57,11 @@ namespace Yttrium
             return Endl(fp<<']');
         }
 
+        Pattern * Excluded:: optimized()
+        {
+            return this;
+        }
+
 
     }
 

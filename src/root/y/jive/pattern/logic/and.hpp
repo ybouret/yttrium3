@@ -52,6 +52,7 @@ namespace Yttrium
             virtual void          glean(Leading &) const noexcept; // all to first sound pattern
             virtual bool          takes(Token&,Source&)     const; // must accept all pattern
             virtual OutputStream &viz(OutputStream &)       const;
+            virtual Pattern *     optimized();
 
         private:
             Y_Disable_Assign(And); //!< discarde

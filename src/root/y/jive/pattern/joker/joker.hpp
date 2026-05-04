@@ -62,6 +62,9 @@ namespace Yttrium
             //
             //__________________________________________________________________
             const Motif motif; //!< current motif
+
+        protected:
+            void optimizeMotif();
             
         private:
             Y_Disable_Assign(Joker); //!< discarded

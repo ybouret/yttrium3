@@ -71,6 +71,12 @@ namespace Yttrium
             Endl(fp<<']');
             return emitLink(fp);
         }
+
+        Pattern * Optional:: optimized()
+        {
+            optimizeMotif();
+            return this;
+        }
     }
 
 }

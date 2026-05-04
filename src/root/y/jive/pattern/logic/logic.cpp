@@ -2,8 +2,8 @@
 #include "y/jive/pattern/logic/logic.hpp"
 #include "y/stream/output.hpp"
 #include "y/stream/input.hpp"
-//#include "y/string/format.hpp"
 #include "y/format/decimal.hpp"
+#include "y/pointer/auto.hpp"
 
 namespace Yttrium
 {
@@ -72,6 +72,53 @@ namespace Yttrium
             }
             return fp;
         }
+
+        void Logic:: optimizePatterns()
+        {
+            Patterns ops;
+            while(size)
+                ops.pushTail( ops.popHead()->optimized() );
+            swapForList(ops);
+        }
+
+        void Logic:: noMultiple() noexcept
+        {
+            Patterns ops;
+            while(size)
+            {
+                AutoPtr<Pattern> rhs = popHead();
+                for(const Pattern *lhs = ops.head;lhs;lhs=lhs->next)
+                {
+                    if( AreEqual(*lhs,*rhs) ) goto DONE;
+                }
+
+                ops.pushTail(rhs.yield());
+
+            DONE:
+                continue;
+            }
+
+        }
+
+        void Logic:: stripBasic(Patterns &basic) noexcept
+        {
+            assert(0==basic.size);
+            Patterns other;
+            while(size)
+            {
+                Pattern * const p = popHead();
+                if(p->isBasic())
+                {
+                    basic.pushTail(p);
+                }
+                else
+                {
+                    other.pushTail(p);
+                }
+            }
+            swapForList(other);
+        }
+
 
 
     }

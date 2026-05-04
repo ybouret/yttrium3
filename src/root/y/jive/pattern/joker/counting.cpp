@@ -97,6 +97,12 @@ namespace Yttrium
             return emitLink(fp);
         }
 
+        Pattern * Counting:: optimized()
+        {
+            optimizeMotif();
+            return this;
+        }
+
     }
 
 }

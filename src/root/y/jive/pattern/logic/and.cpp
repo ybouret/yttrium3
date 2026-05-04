@@ -81,6 +81,22 @@ namespace Yttrium
             return emitLink(fp);
         }
 
+        Pattern * And:: optimized()
+        {
+            optimizePatterns();
+            if(1==size)
+            {
+                Pattern *p = popHead(); assert(0==size);
+                delete this;
+                return p;
+            }
+            else
+            {
+
+                return this;
+            }
+        }
+
     }
 
 

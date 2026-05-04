@@ -54,6 +54,7 @@ namespace Yttrium
             virtual void          glean(Leading &) const noexcept; // from all patterns
             virtual bool          takes(Token&,Source&)     const;
             virtual OutputStream &viz(OutputStream &)       const;
+            virtual Pattern *     optimized();
 
         private:
             Y_Disable_Assign(None); //!< discarde

@@ -2,6 +2,7 @@
 
 #include "y/jive/pattern/logic/or.hpp"
 #include "y/stream/output.hpp"
+#include "y/pointer/auto.hpp"
 
 namespace Yttrium
 {
@@ -82,6 +83,28 @@ namespace Yttrium
             fp << ",shape=egg";
             Endl(fp<<']');
             return emitLink(fp);
+        }
+
+        Pattern * Pattern:: Among(const char * const text, const size_t tlen)
+        {
+            assert( !(0==text&&tlen>0) );
+            AutoPtr<Logic> p = new Or();
+            for(size_t i=0;i<tlen;++i)
+            {
+                *p << text[i];
+            }
+            return p.yield();
+        }
+
+        Pattern * Pattern:: Among(const char * const text)
+        {
+            return Among(text,StringLength(text));
+        }
+
+
+        Pattern * Pattern:: Among(const String &s)
+        {
+            return Among(s.c_str(),s.size());
         }
     }
 

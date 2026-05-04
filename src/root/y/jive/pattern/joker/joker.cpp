@@ -1,5 +1,5 @@
 #include "y/jive/pattern/joker/joker.hpp"
-
+#include "y/pointer/auto.hpp"
 
 namespace Yttrium
 {
@@ -38,6 +38,11 @@ namespace Yttrium
             return Endl( to( & *motif, fp) );
         }
 
+        void Joker:: optimizeMotif()
+        {
+            Motif   m(motif->clone()->optimized());
+            Coerce(motif).xch(m);
+        }
     }
 }
 
