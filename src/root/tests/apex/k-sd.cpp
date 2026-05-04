@@ -4,6 +4,8 @@
 #include "y/utest/run.hpp"
 #include "y/core/rand.hpp"
 
+#include "y/system/wall-time.hpp"
+
 using namespace Yttrium;
 using namespace Apex;
 

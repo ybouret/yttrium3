@@ -6,6 +6,7 @@
 #include "y/apex/k/mul.hpp"
 #include "y/apex/k/cmp.hpp"
 #include "y/format/human-readable.hpp"
+#include "y/system/wall-time.hpp"
 
 using namespace Yttrium;
 using namespace Apex;
