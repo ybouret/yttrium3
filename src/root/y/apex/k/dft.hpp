@@ -218,7 +218,7 @@ namespace Yttrium
                     Coerce(dft->words) = Alignment::To<WORD>::Ceil(mpn) / sizeof(WORD);
                     assert(dft->words*sizeof(WORD)>=mpn);
 
-#define Y_APEX_DFT_RAW_RECV 1
+//#define Y_APEX_DFT_RAW_RECV 1
 #if defined(Y_APEX_DFT_RAW_RECV)
                     {
                         size_t top = mpn-1;
