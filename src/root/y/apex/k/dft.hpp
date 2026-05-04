@@ -115,7 +115,7 @@ namespace Yttrium
         struct KegDFT
         {
             static uint64_t Trace; //!< to trace call ticks
-
+            static unsigned BigBlockShift;
 
             //! compute lhs * rhs by fourier transform
             /**
@@ -174,6 +174,7 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 const unsigned blockShift = ns+1+IntegerLog2For<double>::Value;
                 void   * const blockEntry = archon.acquireBlock(blockShift);
+                InSituMax(BigBlockShift,blockShift);
                 {
 #if defined(Y_Apex_Trace)
                     mark = System::WallTime::Ticks();

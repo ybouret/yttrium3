@@ -10,7 +10,9 @@ namespace Yttrium
     namespace Apex
     {
 
-        uint64_t KegDFT::Trace = 0;
+        uint64_t   KegDFT::Trace = 0;
+        unsigned   KegDFT::BigBlockShift = 0;
+
     }
 
 }

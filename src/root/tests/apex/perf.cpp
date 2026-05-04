@@ -23,7 +23,7 @@ void testDFT(Core::Rand &ran)
     System::WallTime chrono;
     for(size_t lbits=minBits;lbits<=maxBits;lbits <<=1)
     {
-        for(size_t rbits=lbits;rbits<=lbits;rbits <<=1)
+        for(size_t rbits=lbits;rbits<=maxBits;rbits <<=1)
         {
             (std::cerr << " " <<  std::setw(4) << lbits<< " x " << std::setw(4) << rbits).flush();
             KegDFT::Trace   = 0;
@@ -56,8 +56,11 @@ void testDFT(Core::Rand &ran)
             else
                 std::cerr << " [*]";
             std::cerr << std::endl;
+
+            if(mul64>=dft64) goto DONE;
         }
     }
+DONE:
     std::cerr << std::endl;
 }
 
@@ -77,5 +80,7 @@ Y_UTEST(apex_perf)
 
     testDFT<uint32_t,uint64_t>(ran);
 
+
+    std::cerr << "BigBlockShift=" << KegDFT::BigBlockShift << std::endl;
 }
 Y_UDONE()
