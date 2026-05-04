@@ -10,7 +10,7 @@ namespace Yttrium
 {
 
     //! convert ratios to percent string
-    struct Percent
+    struct  Percent
     {
 
         //! \param num numerator \param den denominator \return percent of num<=den

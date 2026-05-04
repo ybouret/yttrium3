@@ -1,4 +1,5 @@
 #include "y/apex/k/dft.hpp"
+#include "y/apex/k/mul.hpp"
 #include "y/utest/run.hpp"
 
 #include "y/core/rand.hpp"
@@ -6,18 +7,19 @@
 #include "y/ascii/convert.hpp"
 #include "y/system/wall-time.hpp"
 
+#include "y/format/percent.hpp"
 
 using namespace Yttrium;
 using namespace Apex;
 
-static size_t      minBits = 8;
-static size_t      maxBits = 4096;
+static size_t      minBits = 128;
+static size_t      maxBits = 8192;
 static long double tmx     = 0.01L;
 
-template <typename WORD> static inline
+template <typename WORD, typename CORE> static inline
 void testDFT(Core::Rand &ran)
 {
-    std::cerr << "DFT " << sizeof(WORD)*8 << "-bits" << std::endl;
+    std::cerr << "DFT " << sizeof(WORD)*8 << "-bits | " << sizeof(CORE)*8 << "-bits:" << std::endl;
     System::WallTime chrono;
     for(size_t lbits=minBits;lbits<=maxBits;lbits <<=1)
     {
@@ -25,23 +27,34 @@ void testDFT(Core::Rand &ran)
         {
             (std::cerr << " " <<  std::setw(4) << lbits<< " x " << std::setw(4) << rbits).flush();
             KegDFT::Trace   = 0;
+            KegMul::Trace   = 0;
             uint64_t dft64  = 0;
+            uint64_t mul64  = 0;
             size_t   nops   = 0;
             do {
                 ++nops;
-                AutoPtr< Keg<WORD> > lhs = Keg<WORD>::MakeRandom(ran, lbits); Y_ASSERT(lbits==lhs->bits);
-                AutoPtr< Keg<WORD> > rhs = Keg<WORD>::MakeRandom(ran, rbits); Y_ASSERT(rbits==rhs->bits);
-                const uint64_t mark = System::WallTime::Ticks();
-                AutoPtr< Keg<WORD> > dft = KegDFT::Compute(*lhs,*rhs);
+                AutoPtr< Keg<WORD> > lhs  = Keg<WORD>::MakeRandom(ran, lbits); Y_ASSERT(lbits==lhs->bits);
+                AutoPtr< Keg<WORD> > rhs  = Keg<WORD>::MakeRandom(ran, rbits); Y_ASSERT(rbits==rhs->bits);
+
+                uint64_t       mark = System::WallTime::Ticks();
+                AutoPtr< Keg<WORD> > dft  = KegDFT::Compute(*lhs,*rhs);
                 dft64 += System::WallTime::Ticks() - mark;
+
+                mark = System::WallTime::Ticks();
+                AutoPtr< Keg<WORD> > mul  = KegMul::Compute<WORD,CORE>(lhs->word, lhs->words, rhs->word, rhs->words);
+                mul64 += System::WallTime::Ticks() - mark;
+
             }
             while( chrono(dft64) < tmx );
             const long double cycles = (const long double)nops;
-            {
-                const long double rate = cycles / chrono(dft64);
-                std::cerr << " | " << HumanReadable(rate);
-            }
-
+            const long double dftRate = cycles / chrono(dft64);
+            const long double mulRate = cycles / chrono(mul64);
+            std::cerr << " | [dft] " << HumanReadable(dftRate);
+            std::cerr << " | [mul] " << HumanReadable(mulRate);
+            if(mul64<dft64)
+                std::cerr << " " << Percent::Get(mul64,dft64);
+            else
+                std::cerr << " [*]";
             std::cerr << std::endl;
         }
     }
@@ -55,9 +68,14 @@ Y_UTEST(apex_perf)
 {
     Core::Rand ran;
     if(argc>1) tmx = ASCII::Convert::To<long double>(argv[1],"tmx",0);
-    testDFT<uint8_t>(ran);
-    testDFT<uint16_t>(ran);
-    testDFT<uint32_t>(ran);
+    testDFT<uint8_t,uint16_t>(ran);
+    testDFT<uint8_t,uint32_t>(ran);
+    testDFT<uint8_t,uint64_t>(ran);
+
+    testDFT<uint16_t,uint32_t>(ran);
+    testDFT<uint16_t,uint64_t>(ran);
+
+    testDFT<uint32_t,uint64_t>(ran);
 
 }
 Y_UDONE()

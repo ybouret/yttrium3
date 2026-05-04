@@ -6,9 +6,9 @@
 namespace Yttrium
 {
 
-    String Percent:: APGet(const apn &count, const apn &total)
+    String  Percent:: APGet(const apn &count, const apn &total)
     {
-        static const char func[] = "Percent";
+        static const char func[] = "StringPercent";
         static const char done[] = "100.00%";
 
         if(total<=0)
