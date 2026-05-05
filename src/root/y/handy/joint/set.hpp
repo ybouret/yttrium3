@@ -56,6 +56,7 @@ namespace Yttrium
             {
                 assert(node);
                 assert(!list.found(**node));
+                Y_Lock(list);
                 list->pushTail(node);
                 update();
                 return *this;
@@ -80,6 +81,7 @@ namespace Yttrium
             ListType   list;
             COMPARATOR compare;
             virtual typename ProxyType::ConstInterface & locus() const noexcept { return list; }
+
             inline void update()
             {
                 CoreList &core = *list;
@@ -88,7 +90,6 @@ namespace Yttrium
                 NodeType * node = core.tail;
                 while(node->prev && Negative != compare(**(node->prev),**node) )
                     core.towardsHead(node);
-
             }
         };
 

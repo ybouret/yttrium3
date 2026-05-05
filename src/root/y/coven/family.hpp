@@ -131,8 +131,6 @@ namespace Yttrium
             Y_Disable_Assign(Family); //!< discarded
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            
-
             void free_() noexcept;
 
             template <typename READABLE> inline

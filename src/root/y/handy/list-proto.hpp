@@ -29,7 +29,10 @@ namespace Yttrium
         template <typename,typename> class CACHE,
         typename                           THREADING_POLICY
         >
-        class ListProto : public Proxy< Core::ListOf<NODE> >, public Recyclable
+        class ListProto :
+        public Proxy< Core::ListOf<NODE> >,
+        public Recyclable,
+        public THREADING_POLICY
         {
         public:
             //__________________________________________________________________
@@ -44,6 +47,7 @@ namespace Yttrium
             typedef typename NodeType::Type      Type;      //!< alias
             typedef typename NodeType::ConstType ConstType; //!< alias
             typedef Proxy<CoreList>              ProxyType; //!< alias
+            typedef THREADING_POLICY             ThreadingPolicy;
 
             //__________________________________________________________________
             //
@@ -53,11 +57,19 @@ namespace Yttrium
             //__________________________________________________________________
 
             //! setup empty
-            inline explicit ListProto() : ProxyType(), list(), cache() {}
+            inline explicit ListProto() :
+            ProxyType(),
+            Recyclable(),
+            ThreadingPolicy(),
+            list(),
+            cache()
+            {}
 
             //! setup with existing cache \param sc shared cache (should be)
             inline explicit ListProto(const CACHE<NODE,THREADING_POLICY> &sc) :
             ProxyType(),
+            Recyclable(),
+            ThreadingPolicy(),
             list(),
             cache(sc) {}
 
@@ -65,9 +77,12 @@ namespace Yttrium
             inline explicit ListProto(const ListProto &other) :
             ProxyType(),
             Recyclable(),
-            list(), cache(other.cache)
+            ThreadingPolicy(),
+            list(),
+            cache(other.cache)
             {
                 Y_Lock(*cache);
+                Y_Lock( Coerce(other) );
                 try
                 {
                     for(const NodeType *node=other.list.head;node;node=node->next)
