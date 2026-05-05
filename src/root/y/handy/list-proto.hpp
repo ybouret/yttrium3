@@ -82,7 +82,6 @@ namespace Yttrium
             cache(other.cache)
             {
                 Y_Lock(*cache);
-                Y_Lock( Coerce(other) );
                 try
                 {
                     for(const NodeType *node=other.list.head;node;node=node->next)
