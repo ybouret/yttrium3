@@ -148,7 +148,7 @@ namespace Yttrium
                 return *this;
             }
 
-            static inline bool HaveSameContent(const ListProto &lhs, const ListProto &rhs)
+            static inline bool AreIdentical(const ListProto &lhs, const ListProto &rhs)
             {
                 const size_t n = lhs->size; if(n!=rhs->size) return false;
                 for(const NodeType *L=lhs->head, *R=rhs->head;L;L=L->next,R=R->next)
@@ -161,12 +161,12 @@ namespace Yttrium
 
             inline friend bool operator==(const ListProto &lhs, const ListProto &rhs)
             {
-                return HaveSameContent(lhs,rhs);
+                return AreIdentical(lhs,rhs);
             }
 
             inline friend bool operator!=(const ListProto &lhs, const ListProto &rhs)
             {
-                return !HaveSameContent(lhs,rhs);
+                return !AreIdentical(lhs,rhs);
             }
             
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
@@ -180,7 +180,14 @@ namespace Yttrium
 
 
 
-
+            inline bool found(ParamType value) const
+            {
+                for(const NodeType *node=list.head;node;node=node->next)
+                {
+                    if( value == **node ) return true;
+                }
+                return false;
+            }
 
 
 

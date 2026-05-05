@@ -51,5 +51,5 @@ namespace Yttrium
     }
 }
 
-#endif // !Y_Handy_JointLightList_Included
+#endif // !Y_Handy_JointHeavyList_Included
 

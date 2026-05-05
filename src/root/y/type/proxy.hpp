@@ -46,6 +46,10 @@ namespace Yttrium
         inline Interface *      operator->()       noexcept { return & (Interface&)locus(); } //!< \return access
         inline ConstInterface * operator->() const noexcept { return & locus(); }             //!< \return const access
 
+        inline Interface      & operator*()       noexcept { return (Interface&)locus(); } //!< \return access
+        inline ConstInterface & operator*() const noexcept { return locus(); }             //!< \return const access
+
+
         //! forward call
         inline friend std::ostream & operator<<(std::ostream &os, const Proxy &self)
         {
