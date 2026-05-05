@@ -57,6 +57,8 @@ SignType CompareDFT(const size_t nbits)
     return last;
 }
 
+static const size_t MaxOps = 30;
+
 template <typename WORD, typename CORE> static inline
 void TestDFT()
 {
@@ -64,16 +66,17 @@ void TestDFT()
     size_t   lowerBits = 8;
     SignType lowerSign = CompareDFT<WORD,CORE>(lowerBits); Y_ASSERT(lowerSign == Positive);
     size_t   upperBits = lowerBits;
+    size_t   count     = 0;
     std::cerr << "[";
     do
     {
         upperBits <<= 1;
-        (std::cerr << '.').flush();
+        ++count; (std::cerr << '.').flush();
     } while( Negative !=  CompareDFT<WORD,CORE>(upperBits) );
 
     while(upperBits-lowerBits>1)
     {
-        (std::cerr << '.').flush();
+        ++count; (std::cerr << '.').flush();
         const size_t   middleBits = (upperBits+lowerBits) >> 1;
         const SignType middleSign = CompareDFT<WORD,CORE>(middleBits);
         switch(middleSign)
@@ -85,7 +88,10 @@ void TestDFT()
         }
         break;
     }
-    std::cerr << "] ==> " << upperBits << std::endl;
+    const size_t upperBytes = Alignment::On<8>::Ceil(upperBits) / 8;
+    std::cerr << "]";
+    while(++count<MaxOps) std::cerr << ' ';
+    std::cerr << "==> " << std::setw(5) << upperBits << " bits | " << std::setw(5) << upperBytes << " bytes" << std::endl;
 
 }
 
