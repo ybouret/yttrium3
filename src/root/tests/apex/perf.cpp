@@ -12,10 +12,86 @@
 using namespace Yttrium;
 using namespace Apex;
 
-static size_t      minBits = 128;
-static size_t      maxBits = 8192;
+
 static long double tmx     = 0.01L;
 
+template <typename WORD, typename CORE> static inline
+SignType CompareDFT(const size_t nbits)
+{
+    //(std::cerr << "\tDFT(" << std::setw(4) << nbits << ") -- " << sizeof(WORD)*8 << "-bits | " << sizeof(CORE)*8 << "-bits: ").flush();
+
+    Core::Rand       ran;
+    System::WallTime chrono;
+
+    uint64_t dft64  = 0;
+    uint64_t mul64  = 0;
+    SignType last   = __Zero__;
+    size_t   same   = 0;
+    do {
+        //++nops;
+        AutoPtr< Keg<WORD> > lhs  = Keg<WORD>::MakeRandom(ran, nbits);
+        AutoPtr< Keg<WORD> > rhs  = Keg<WORD>::MakeRandom(ran, nbits);
+
+        uint64_t             mark = System::WallTime::Ticks();
+        AutoPtr< Keg<WORD> > dft  = KegDFT::Compute(*lhs,*rhs);
+        dft64 += System::WallTime::Ticks() - mark;
+
+        mark = System::WallTime::Ticks();
+        AutoPtr< Keg<WORD> > mul  = KegMul::Compute<WORD,CORE>(lhs->word, lhs->words, rhs->word, rhs->words);
+        mul64 += System::WallTime::Ticks() - mark;
+
+        const SignType curr = Sign::Of(dft64,mul64);
+        if(curr==last)
+        {
+            ++same;
+        }
+        else
+        {
+            last = curr;
+            same = 1;
+        }
+        //std::cerr << "same=" << same << std::endl;
+    }
+    while( chrono(dft64) < tmx || same < 10);
+    //std::cerr << nbits << "\t=> " << std::setw(3) << last << " #same=" << std::setw(8) << same << std::endl;
+    return last;
+}
+
+template <typename WORD, typename CORE> static inline
+void TestDFT()
+{
+    (std::cerr << "-- DFT " << std::setw(3) << sizeof(WORD)*8 << "-bits | " << std::setw(3) << sizeof(CORE)*8 << "-bits: ").flush();
+    size_t   lowerBits = 8;
+    SignType lowerSign = CompareDFT<WORD,CORE>(lowerBits); Y_ASSERT(lowerSign == Positive);
+    size_t   upperBits = lowerBits;
+    std::cerr << "[";
+    do
+    {
+        upperBits <<= 1;
+        (std::cerr << '.').flush();
+    } while( Negative !=  CompareDFT<WORD,CORE>(upperBits) );
+
+    while(upperBits-lowerBits>1)
+    {
+        (std::cerr << '.').flush();
+        const size_t   middleBits = (upperBits+lowerBits) >> 1;
+        const SignType middleSign = CompareDFT<WORD,CORE>(middleBits);
+        switch(middleSign)
+        {
+            case Positive: lowerBits = middleBits; continue;
+            case Negative: upperBits = middleBits; continue;
+            case __Zero__: upperBits = lowerBits = middleBits;
+                break;
+        }
+        break;
+    }
+    std::cerr << "] ==> " << upperBits << std::endl;
+
+}
+
+#if 0
+static size_t      minBits = 128;
+static size_t      maxBits = 8192;
 template <typename WORD, typename CORE> static inline
 void testDFT(Core::Rand &ran)
 {
@@ -63,7 +139,7 @@ void testDFT(Core::Rand &ran)
 DONE:
     std::cerr << std::endl;
 }
-
+#endif
 
 
 
@@ -71,16 +147,32 @@ Y_UTEST(apex_perf)
 {
     Core::Rand ran;
     if(argc>1) tmx = ASCII::Convert::To<long double>(argv[1],"tmx",0);
-    testDFT<uint8_t,uint16_t>(ran);
-    testDFT<uint8_t,uint32_t>(ran);
-    testDFT<uint8_t,uint64_t>(ran);
 
-    testDFT<uint16_t,uint32_t>(ran);
-    testDFT<uint16_t,uint64_t>(ran);
+#if 0
+    {
+        testDFT<uint8_t,uint16_t>(ran);
+        testDFT<uint8_t,uint32_t>(ran);
+        testDFT<uint8_t,uint64_t>(ran);
 
-    testDFT<uint32_t,uint64_t>(ran);
+        testDFT<uint16_t,uint32_t>(ran);
+        testDFT<uint16_t,uint64_t>(ran);
+
+        testDFT<uint32_t,uint64_t>(ran);
+
+        std::cerr << "BigBlockShift=" << KegDFT::BigBlockShift << std::endl;
+    }
+#endif
 
 
-    std::cerr << "BigBlockShift=" << KegDFT::BigBlockShift << std::endl;
+    TestDFT<uint8_t,uint16_t>();
+    TestDFT<uint8_t,uint32_t>();
+    TestDFT<uint8_t,uint64_t>();
+
+    TestDFT<uint16_t,uint32_t>();
+    TestDFT<uint16_t,uint64_t>();
+
+    TestDFT<uint32_t,uint64_t>();
+
+
 }
 Y_UDONE()
