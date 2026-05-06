@@ -8,6 +8,7 @@
 #include "y/calculus/integer-log2.hpp"
 #include "y/config/setup.hpp"
 #include "y/container.hpp"
+#include "y/ability/expandable.hpp"
 
 namespace Yttrium
 {
@@ -15,7 +16,7 @@ namespace Yttrium
     namespace Core
     {
 
-        class HTable : public Container
+        class HTable : public Expandable<Container>
         {
         public:
             static const char * const CallSign; //!< "Core::HTable"
@@ -43,10 +44,12 @@ namespace Yttrium
             virtual size_t capacity() const noexcept;
 
             const void * search(const size_t key) const noexcept;
-            void *       search(const size_t key)   noexcept;
+            void *       search(const size_t key) noexcept;
+            bool         remove(const size_t key) noexcept;
+            
 
             bool insert(const size_t key, void * const args);
-
+            void reserve(const size_t n);
 
         private:
             Y_Disable_Copy_And_Assign(HTable);

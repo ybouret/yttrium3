@@ -62,6 +62,9 @@ Y_UTEST(core_htable)
     Y_PRINTV(table.size());
     Y_PRINTV(table.capacity());
 
+    table.reserve(4);
+    Y_PRINTV(table.size());
+    Y_PRINTV(table.capacity());
 
 }
 Y_UDONE()
