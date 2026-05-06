@@ -6,13 +6,16 @@ namespace Yttrium
     namespace Core
     {
 
-        TreeNode:: TreeNode(const uint8_t c, void * const d) noexcept :
+        TreeNode:: TreeNode(const uint8_t    c,
+                            void * const     d,
+                            TreeNode * const n) noexcept :
         Object(),
         code(c),
         data(d),
         list(),
         next(0),
-        prev(0)
+        prev(0),
+        root(n)
         {
         }
 
@@ -26,6 +29,7 @@ namespace Yttrium
         {
             Coerce(code) = 0;
             Coerce(data) = 0;
+            Coerce(root) = 0;
             return this;
         }
 
@@ -45,6 +49,7 @@ namespace Yttrium
             unsigned i=1;
             for(const TreeNode * node=list.head;node;node=node->next,++i)
             {
+                assert(node->root==this);
                 to(node,fp);
                 if(list.size>1)
                     fp("[label=\"%u\"]",i);

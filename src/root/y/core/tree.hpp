@@ -89,7 +89,7 @@ namespace Yttrium
             //__________________________________________________________________
             void * remove(const void * const path, const size_t plen) noexcept;
             void * remove(const char * const) noexcept;
-            
+
             //__________________________________________________________________
             //
             //
@@ -106,7 +106,10 @@ namespace Yttrium
             TreePool         pool;           //!< cache of nodes
 
             //! \return pooled/created node with code and data
-            TreeNode * queryNode(const uint8_t, void * const);
+            TreeNode * queryNode(const uint8_t, void * const, TreeNode * const);
+
+            void prune(TreeNode * const) noexcept;
+
 
         };
 

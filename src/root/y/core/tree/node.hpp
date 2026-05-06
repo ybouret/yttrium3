@@ -31,8 +31,8 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit TreeNode(const uint8_t, void * const) noexcept; //!< setup
-            virtual ~TreeNode()                            noexcept; //!< cleanup
+            explicit TreeNode(const uint8_t, void * const, TreeNode * const) noexcept; //!< setup
+            virtual ~TreeNode()                                              noexcept; //!< cleanup
 
             //__________________________________________________________________
             //
@@ -54,7 +54,8 @@ namespace Yttrium
             TreeList      list; //!< child[ren]
             TreeNode *    next; //!< for list/pool
             TreeNode *    prev; //!< for list
-
+            TreeNode *    root; //!< for tree
+            
         private:
             Y_Disable_Copy_And_Assign(TreeNode); //!< discarded
         };

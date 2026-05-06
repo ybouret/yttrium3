@@ -12,24 +12,25 @@ namespace Yttrium
         }
 
         Tree:: Tree() :
-        root( new TreeNode(0,0) ),
+        root( new TreeNode(0,0,0) ),
         size(0),
         pool()
         {
         }
 
-        TreeNode * Tree:: queryNode(const uint8_t code, void * const data)
+        TreeNode * Tree:: queryNode(const uint8_t code, void * const data, TreeNode * const from)
         {
             if(pool.size)
             {
                 TreeNode * const node = pool.query();
                 Coerce(node->code) = code;
                 Coerce(node->data) = data;
+                Coerce(node->root) = from;
                 return node;
             }
             else
             {
-                return new TreeNode(code,data);
+                return new TreeNode(code,data,from);
             }
         }
 
@@ -102,13 +103,13 @@ namespace Yttrium
                 for(TreeNode * scan=list.head;scan;scan=scan->next)
                 {
                     if(code==scan->code) {
-                        node = list.moveToHead(scan);;
+                        node = list.moveToHead(scan);
                         walk = true;
                         break;
                     }
                 }
                 if(!walk)
-                    node = list.pushHead( queryNode(code,0) );
+                    node = list.pushHead( queryNode(code,0,node) );
             }
 
             if(node->data)
@@ -139,8 +140,8 @@ namespace Yttrium
             TreeNode * const node = search(path,plen); assert(node);
             void *     const args = node->data;        assert(args);
             Coerce(node->data) = 0;
-
             --Coerce(size);
+            prune(node);
             return args;
         }
 
@@ -149,6 +150,14 @@ namespace Yttrium
             return remove(path,StringLength(path));
         }
 
+        void Tree:: prune(TreeNode * const node) noexcept
+        {
+            if(root != node && !node->data && node->list.size <= 0)
+            {
+                assert(node->root);
+            }
+
+        }
 
     }
 }
