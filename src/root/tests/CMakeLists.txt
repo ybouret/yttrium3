@@ -45,6 +45,7 @@ Y_UTEST(core:pool)
 Y_UTEST(core:list)
 Y_UTEST(core:pool_and_list)
 Y_UTEST(core:tree)
+Y_UTEST(core:htable)
 
 Y_UTEST(libc:sort)
 Y_UTEST(libc:strfmt)

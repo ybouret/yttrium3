@@ -20,6 +20,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(core_list);
     Y_UTEST(core_pool_and_list);
     Y_UTEST(core_tree);
+    Y_UTEST(core_htable);
 
     Y_UTEST(libc_sort);
     Y_UTEST(libc_strfmt);
