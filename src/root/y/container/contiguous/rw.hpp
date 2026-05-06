@@ -86,8 +86,6 @@ namespace Yttrium
         inline ConstReverseIterator rbegin() const noexcept { const size_t n = size(); return (n>0) ? (&ask(n)) : 0; }
         inline ConstReverseIterator rend()   const noexcept { return (size() > 0) ? ((&ask(1))-1) : 0; }
 
-#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
-
         inline friend bool operator==(const ReadWriteContiguous &lhs, const ReadWriteContiguous &rhs)
         {
             return Algorithm::AreEqualSequences(lhs,rhs);
@@ -97,6 +95,10 @@ namespace Yttrium
         {
             return !Algorithm::AreEqualSequences(lhs,rhs);
         }
+        
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+
 
 
 
