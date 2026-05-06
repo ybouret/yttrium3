@@ -71,6 +71,9 @@ namespace Yttrium
             virtual ~Chars() noexcept; //!< cleanup
             Chars(const Chars &);      //!< duplicate content
 
+            Chars & operator<<(const char);
+            Chars & operator>>(const char);
+
         private:
             Y_Disable_Assign(Chars); //!< discarde
         };

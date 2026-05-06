@@ -25,7 +25,7 @@ vfs
 hashing
 )
 
-Y_LinkLibraries(test-root)
+Y_LinkLibraries(test-root zlibstatic)
 
 enable_testing()
 
@@ -155,6 +155,7 @@ Y_UTEST(stream:output:file)
 Y_UTEST(stream:input:file)
 Y_UTEST(stream:io64)
 Y_UTEST(stream:serialize)
+Y_UTEST(stream:gz:in)
 
 Y_UTEST(coven:univocal)
 Y_UTEST(coven:vector)

@@ -56,7 +56,20 @@ namespace Yttrium
         Chars::Chars(const Chars &other) : LightObject(), Char::List(other)
         {
         }
-        
+
+
+        Chars & Chars:: operator<<(const char c)
+        {
+            pushTail( new Char(c) );
+            return *this;
+        }
+
+        Chars & Chars:: operator>>(const char c)
+        {
+            pushHead( new Char(c) );
+            return *this;
+        }
+
     }
 
 }
