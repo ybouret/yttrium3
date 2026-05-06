@@ -80,11 +80,29 @@ namespace Yttrium
             //! insert wrapper for text \return true iff inserted at given path
             bool insert(const char * const, void * const);
 
+
+            //__________________________________________________________________
+            //
+            //
+            // Remove Methods
+            //
+            //__________________________________________________________________
+            void * remove(const void * const path, const size_t plen) noexcept;
+            void * remove(const char * const) noexcept;
+            
+            //__________________________________________________________________
+            //
+            //
+            // Other Methods
+            //
+            //__________________________________________________________________
             OutputStream & viz(OutputStream &) const; //!< emit GraphViz \return output stream
 
         private:
             Y_Disable_Copy_And_Assign(Tree); //!< discarded
             TreeNode * const root;           //!< root for 0-length path
+        public:
+            const size_t     size;           //!< current inserted data count
             TreePool         pool;           //!< cache of nodes
 
             //! \return pooled/created node with code and data

@@ -13,6 +13,7 @@ namespace Yttrium
 
         Tree:: Tree() :
         root( new TreeNode(0,0) ),
+        size(0),
         pool()
         {
         }
@@ -112,11 +113,12 @@ namespace Yttrium
 
             if(node->data)
             {
-                return false;
+                return false; // already occupied
             }
             else
             {
                 Coerce(node->data) = args;
+                ++Coerce(size);
                 return true;
             }
         }
@@ -131,6 +133,22 @@ namespace Yttrium
             assert(root);
             return root->viz(fp);
         }
+
+        void * Tree:: remove(const void * const path, size_t plen) noexcept
+        {
+            TreeNode * const node = search(path,plen); assert(node);
+            void *     const args = node->data;        assert(args);
+            Coerce(node->data) = 0;
+
+            --Coerce(size);
+            return args;
+        }
+
+        void * Tree:: remove(const char * const path) noexcept
+        {
+            return remove(path,StringLength(path));
+        }
+
 
     }
 }

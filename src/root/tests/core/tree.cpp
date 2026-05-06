@@ -30,7 +30,7 @@ Y_UTEST(core_tree)
 
     Core::Tree tree;
 
-    int a[3] = {1,2,3};
+    int a[4] = {1,2,3,4};
 
     tree.insert("Hello", a+0); Y_CHECK( FoundIn(tree,"Hello") );
     Vizible::Render("tree1.dot",tree);
@@ -38,6 +38,17 @@ Y_UTEST(core_tree)
     Vizible::Render("tree2.dot",tree);
     tree.insert("Hell", a+2); Y_CHECK( FoundIn(tree,"Hell") );
     Vizible::Render("tree3.dot",tree);
+    tree.insert("Helico", a+3); Y_CHECK( FoundIn(tree,"Helico") );
+    Vizible::Render("tree4.dot",tree);
+
+    {
+        Y_CHECK( tree.search("Wor",3) );
+        Y_CHECK( 0 == tree.search("Wor",3)->data );
+    }
+
+    Y_CHECK(a+2==tree.remove("Hell"));
+    Vizible::Render("tree5.dot",tree);
+
 
 
 }
