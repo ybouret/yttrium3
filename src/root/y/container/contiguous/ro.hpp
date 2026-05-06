@@ -4,6 +4,7 @@
 #define Y_ReadOnlyContiguous_Included 1
 
 #include "y/container/iter/linear.hpp"
+#include "y/container/algorithm/equality.hpp"
 
 
 namespace Yttrium
@@ -73,6 +74,18 @@ namespace Yttrium
         inline ConstReverseIterator rend()   const noexcept { return (size() > 0) ? ((&ask(1))-1) : 0; }
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+        inline friend bool operator==(const ReadOnlyContiguous &lhs, const ReadOnlyContiguous &rhs)
+        {
+            return Algorithm::AreEqualSequences(lhs,rhs);
+        }
+
+        inline friend bool operator!=(const ReadOnlyContiguous &lhs, const ReadOnlyContiguous &rhs)
+        {
+            return !Algorithm::AreEqualSequences(lhs,rhs);
+        }
+
+
 
     private:
         Y_Disable_Copy_And_Assign(ReadOnlyContiguous); //!< discarded

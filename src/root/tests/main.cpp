@@ -160,6 +160,9 @@ Y_UTEST_DECL(8)
     Y_UTEST(graphviz);
 
     Y_UTEST(vfs_scan);
+
+    Y_UTEST(hashing_tests);
+
 }
 Y_UTEST_EXEC()
 

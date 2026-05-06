@@ -72,6 +72,10 @@ namespace Yttrium
             return os << ']';
         }
 
+       
+
+
+
 
     private:
         Y_Disable_Copy_And_Assign(Readable); //!< discarded

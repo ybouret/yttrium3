@@ -22,6 +22,7 @@ handy
 dft
 jive
 vfs
+hashing
 )
 
 Y_LinkLibraries(test-root)
@@ -184,4 +185,6 @@ Y_UTEST(jive:posix)
 Y_UTEST(graphviz)
 
 Y_UTEST(vfs:scan)
+
+Y_UTEST(hashing:tests)
 

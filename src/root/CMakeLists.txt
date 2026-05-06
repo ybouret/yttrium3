@@ -94,6 +94,8 @@ y/graphviz
 y/functor
 y/vfs
 y/vfs/local
+y/hashing
+y/hashing/key
 )
 
 add_subdirectory(tests)
