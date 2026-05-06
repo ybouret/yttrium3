@@ -1,6 +1,6 @@
 project(y)
 
-include_directories(.)
+include_directories(. ..)
 
 Y_CreateLibrary(y
 y
@@ -58,6 +58,7 @@ y/stream
 y/stream/io
 y/stream/libc
 y/stream/memory
+y/stream/gz
 y/object
 y/object/light
 y/string
