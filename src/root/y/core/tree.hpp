@@ -11,48 +11,83 @@ namespace Yttrium
 {
     namespace Core
     {
-        typedef CxxPoolOf<TreeNode> TreePool;
+        typedef CxxPoolOf<TreeNode> TreePool; //!< alias
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Anonymous suffix tree
+        //
+        //
+        //______________________________________________________________________
         class Tree
         {
         public:
-            explicit Tree();
-            virtual ~Tree() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Tree();          //!< setup with empty root
+            virtual ~Tree() noexcept; //!< cleanup
+
+            //__________________________________________________________________
+            //
+            //
+            // Search Methods
+            //
+            //__________________________________________________________________
 
             //! search path with move to head optimization
             /**
-             \return node existence along path (with any args)
+             \param path anonymous path
+             \param plen path length
+             \return node existence along path (empty or not!)
              */
             TreeNode * search(const void * const path,
                               size_t             plen) noexcept;
 
-
-
-            //!
+            //! search path without optimization
             /**
-             \return node existence along path (with any args)
+             \param path anonymous path
+             \param plen path length
+             \return node existence along path (empty or not!)
              */
             const TreeNode * search(const void * const path,
                                     size_t             plen) const noexcept;
 
-            //!
+
+            //__________________________________________________________________
+            //
+            //
+            // Insert Methods
+            //
+            //__________________________________________________________________
+
+            //! insert data at given path
             /**
+             \param path anonymous path
+             \param plen path length
              \param args args != NULL
-             \return true if coudl find/create node and set its data
+             \return true if could find/create node and set its data
              */
             bool insert(const void * const path,
                         size_t             plen,
                         void * const       args);
 
+            //! insert wrapper for text \return true iff inserted at given path
+            bool insert(const char * const, void * const);
 
-            bool insert(const char * const path, void * const args);
-
-            OutputStream & viz(OutputStream &fp) const;
+            OutputStream & viz(OutputStream &) const; //!< emit GraphViz \return output stream
 
         private:
-            TreeNode * const root; //!< root for 0-length path
-            TreePool         pool; //!< cache of nodes
+            Y_Disable_Copy_And_Assign(Tree); //!< discarded
+            TreeNode * const root;           //!< root for 0-length path
+            TreePool         pool;           //!< cache of nodes
 
+            //! \return pooled/created node with code and data
             TreeNode * queryNode(const uint8_t, void * const);
 
         };

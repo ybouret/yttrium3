@@ -115,7 +115,7 @@ namespace Yttrium
         struct KegDFT
         {
             static uint64_t Trace; //!< to trace call ticks
-            static unsigned BigBlockShift;
+            static unsigned BigBlockShift; //!< to trace blocks
 
             //! compute lhs * rhs by fourier transform
             /**

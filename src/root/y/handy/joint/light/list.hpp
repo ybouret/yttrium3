@@ -27,9 +27,9 @@ namespace Yttrium
         class JointLightList : public ListProto< LightNode<T>, SharedCache, THREADING_POLICY>
         {
         public:
-            typedef SharedCache<LightNode<T>,THREADING_POLICY> CacheType;
+            typedef SharedCache<LightNode<T>,THREADING_POLICY> CacheType; //!< alias
 
-            //! setup
+            //! setup \param sc shared cache
             inline explicit JointLightList( const CacheType &sc ) :
             ListProto< LightNode<T>, SharedCache, THREADING_POLICY>(sc)
             {}

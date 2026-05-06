@@ -41,13 +41,13 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            typedef NODE                         NodeType;  //!< alias
-            typedef typename NodeType::ParamType ParamType; //!< alias
-            typedef Core::ListOf<NODE>           CoreList;  //!< alias
-            typedef typename NodeType::Type      Type;      //!< alias
-            typedef typename NodeType::ConstType ConstType; //!< alias
-            typedef Proxy<CoreList>              ProxyType; //!< alias
-            typedef THREADING_POLICY             ThreadingPolicy;
+            typedef NODE                         NodeType;        //!< alias
+            typedef typename NodeType::ParamType ParamType;       //!< alias
+            typedef Core::ListOf<NODE>           CoreList;        //!< alias
+            typedef typename NodeType::Type      Type;            //!< alias
+            typedef typename NodeType::ConstType ConstType;       //!< alias
+            typedef Proxy<CoreList>              ProxyType;       //!< alias
+            typedef THREADING_POLICY             ThreadingPolicy; //!< alias
 
             //__________________________________________________________________
             //
@@ -193,11 +193,14 @@ namespace Yttrium
             inline ConstType & tail() const noexcept { assert(list.tail); return **list.tail; } //!< \return tail item
 
 
-
+            //! check for present value
+            /**
+             \param value target value
+             \return true iff on node content is value
+             */
             inline bool found(ParamType value) const
             {
-                for(const NodeType *node=list.head;node;node=node->next)
-                {
+                for(const NodeType *node=list.head;node;node=node->next) {
                     if( value == **node ) return true;
                 }
                 return false;

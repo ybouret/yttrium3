@@ -12,6 +12,14 @@ namespace Yttrium
 {
     namespace Handy
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! set of unique data with shared cache
+        //
+        //
+        //______________________________________________________________________
         template <
         typename T,
         typename THREAD_POLICY,
@@ -19,13 +27,27 @@ namespace Yttrium
         class  JointSet : public Proxy<const JointHeavyList<T,THREAD_POLICY> >
         {
         public:
-            typedef JointHeavyList<T,THREAD_POLICY> ListType;
-            typedef typename ListType::CacheType    CacheType;
-            typedef Proxy<const ListType>           ProxyType;
-            typedef typename ListType::NodeType     NodeType;
-            typedef typename ListType::CoreList     CoreList;
-            Y_Args_Declare(T,Type);
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef JointHeavyList<T,THREAD_POLICY> ListType;  //!< alias
+            typedef typename ListType::CacheType    CacheType; //!< alias
+            typedef Proxy<const ListType>           ProxyType; //!< alias
+            typedef typename ListType::NodeType     NodeType;  //!< alias
+            typedef typename ListType::CoreList     CoreList;  //!< alias
+            Y_Args_Declare(T,Type);                            //!< alias
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup \param sc shared cache
             inline explicit JointSet(const CacheType &sc) :
             ProxyType(),
             list(sc),
@@ -33,6 +55,7 @@ namespace Yttrium
             {
             }
 
+            //! duplicate \param other another set
             inline JointSet(const JointSet &other) :
             ProxyType(),
             list(other.list),
@@ -40,10 +63,23 @@ namespace Yttrium
             {
             }
 
+            //! cleanup
             inline virtual ~JointSet() noexcept
             {
             }
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! insert NON-EXISTING data
+            /**
+             \param args data
+             \return *this*
+             */
             JointSet & operator<<(ParamType args)
             {
                 assert( !list.found(args) );
@@ -52,6 +88,11 @@ namespace Yttrium
                 return *this;
             }
 
+            //! insert node with NON-EXISTING data
+            /**
+             \param node valid node
+             \return *this
+             */
             JointSet & insert(NodeType * const node)
             {
                 assert(node);
@@ -62,6 +103,7 @@ namespace Yttrium
                 return *this;
             }
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             inline friend bool operator==(const JointSet &lhs, const JointSet &rhs)
             {
                 return ListType::AreIdentical(lhs.list,rhs.list);
@@ -71,17 +113,18 @@ namespace Yttrium
             {
                 return !ListType::AreIdentical(lhs.list,rhs.list);
             }
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
 
 
 
         private:
-            Y_Disable_Assign(JointSet);
-            ListType   list;
-            COMPARATOR compare;
+            Y_Disable_Assign(JointSet); //!< discarded
+            ListType   list;            //!< content
+            COMPARATOR compare;         //!< comparator
             virtual typename ProxyType::ConstInterface & locus() const noexcept { return list; }
 
+            //! put tail node in its position
             inline void update()
             {
                 CoreList &core = *list;

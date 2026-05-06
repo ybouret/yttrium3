@@ -28,9 +28,9 @@ namespace Yttrium
         class JointHeavyList : public ListProto< HeavyNode<T>, SharedCache, THREADING_POLICY>
         {
         public:
-            typedef SharedCache<HeavyNode<T>,THREADING_POLICY> CacheType;
+            typedef SharedCache<HeavyNode<T>,THREADING_POLICY> CacheType; //!< alias
 
-            //! setup
+            //! setup \param sc shared cache
             inline explicit JointHeavyList( const CacheType &sc ) :
             ListProto< HeavyNode<T>, SharedCache, THREADING_POLICY>(sc)
             {}

@@ -12,27 +12,51 @@ namespace Yttrium
     namespace Core
     {
         class   TreeNode;
-        typedef CxxListOf<TreeNode> TreeList;
-        //typedef CxxPoolOf<TreeNode> TreePool;
+        typedef CxxListOf<TreeNode> TreeList; //!< alias
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Store Tree inner data
+        //
+        //
+        //______________________________________________________________________
         class TreeNode : public Object, public Vizible
         {
         public:
-            explicit TreeNode(const uint8_t, void * const) noexcept;
-            virtual ~TreeNode() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit TreeNode(const uint8_t, void * const) noexcept; //!< setup
+            virtual ~TreeNode()                            noexcept; //!< cleanup
 
-            TreeNode * erased() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            TreeNode *     erased()         noexcept; //!< erase content \return this
+            OutputStream & viz(OutputStream &) const; //!< emit graphviz code \return output stream
 
-            OutputStream & viz(OutputStream &) const;
-
-            const uint8_t code;
-            void * const  data;
-            TreeList      list;
-            TreeNode *    next;
-            TreeNode *    prev;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const uint8_t code; //!< code in path
+            void * const  data; //!< data (NULL means vacant)
+            TreeList      list; //!< child[ren]
+            TreeNode *    next; //!< for list/pool
+            TreeNode *    prev; //!< for list
 
         private:
-            Y_Disable_Copy_And_Assign(TreeNode);
+            Y_Disable_Copy_And_Assign(TreeNode); //!< discarded
         };
 
     }

@@ -11,27 +11,54 @@ namespace Yttrium
     namespace Jive
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Matching engine for Module
+        //
+        //
+        //______________________________________________________________________
         class Matching : public Token, public Motif
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+
+            //! matching manner
             enum How
             {
-                Exactly,
-                Somehow
+                Exactly, //!< full module must match pattern
+                Somehow  //!< partial module must match pattern
             };
 
-            explicit Matching(Pattern * const) noexcept;
-            virtual ~Matching() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Matching(Pattern * const) noexcept; //!< setup
+            virtual ~Matching()                noexcept; //!< setup
 
-            bool operator()(const How &, Module * const);
-
-            bool exactly(Module * const);
-            bool somehow(Module * const);
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            bool operator()(const How &, Module * const); //!< \return dispatched call
+            bool exactly(Module * const); //!< \return true iff full module matches pattern
+            bool somehow(Module * const); //!< \return true iff pattern is found in module
 
 
 
         private:
-            Y_Disable_Copy_And_Assign(Matching);
+            Y_Disable_Copy_And_Assign(Matching); //!< discarded
         };
 
     }
