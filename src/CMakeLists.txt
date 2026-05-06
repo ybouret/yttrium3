@@ -32,3 +32,5 @@ if( NOT "" STREQUAL "${Y_UnitTests}")
     DEPENDS ${Y_UnitTests})
 endif()
 
+add_subdirectory(y)
+
