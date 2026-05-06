@@ -1,6 +1,7 @@
 #include "y/core/tree.hpp"
 #include "y/type/destroy.hpp"
 #include "y/string/length.hpp"
+#include "y/memory/buffer/ro.hpp"
 
 namespace Yttrium
 {
@@ -59,6 +60,17 @@ namespace Yttrium
             return node;
         }
 
+        TreeNode * Tree:: search(const char * const path) noexcept
+        {
+            return search(path,StringLength(path));
+        }
+
+
+        TreeNode * Tree:: search(const Memory::ReadOnlyBuffer &buff ) noexcept
+        {
+            return search(buff.ro(),buff.length());
+        }
+
         const TreeNode * Tree:: search(const void * const path,
                                        size_t             plen) const noexcept
         {
@@ -84,7 +96,16 @@ namespace Yttrium
             return node;
         }
 
+        const TreeNode * Tree:: search(const char * const path) const noexcept
+        {
+            return search(path,StringLength(path));
+        }
 
+
+        const TreeNode * Tree:: search(const Memory::ReadOnlyBuffer &buff ) const noexcept
+        {
+            return search(buff.ro(),buff.length());
+        }
 
         bool Tree:: insert(const void * const path,
                            size_t             plen,
@@ -129,6 +150,12 @@ namespace Yttrium
             return insert(path,StringLength(path),args);
         }
 
+        bool Tree:: insert(const Memory::ReadOnlyBuffer &buff, void * const args)
+        {
+            return insert(buff.ro(),buff.length(),args);
+        }
+
+
         OutputStream & Tree:: viz(OutputStream &fp) const
         {
             assert(root);
@@ -150,12 +177,22 @@ namespace Yttrium
             return remove(path,StringLength(path));
         }
 
-        void Tree:: prune(TreeNode * const node) noexcept
+        void * Tree:: remove(const Memory::ReadOnlyBuffer &buff) noexcept
         {
-            if(root != node && !node->data && node->list.size <= 0)
+            return remove( buff.ro(), buff.length() );
+        }
+
+        void Tree:: prune(TreeNode * node) noexcept
+        {
+            if(root!=node)
             {
-                assert(node->root);
+                TreeNode * const parent = node->root;
+                if(0 == node->data && node->list.size <= 0)
+                    pool.store( parent->list.pop(node) )->ldz();
+                prune(parent);
             }
+
+
 
         }
 

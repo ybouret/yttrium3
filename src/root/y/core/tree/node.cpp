@@ -21,16 +21,15 @@ namespace Yttrium
 
         TreeNode:: ~TreeNode() noexcept
         {
-            (void) erased();
+            ldz();
         }
 
 
-        TreeNode * TreeNode:: erased() noexcept
+       void TreeNode:: ldz() noexcept
         {
             Coerce(code) = 0;
             Coerce(data) = 0;
             Coerce(root) = 0;
-            return this;
         }
 
         OutputStream & TreeNode:: viz(OutputStream &fp) const

@@ -40,7 +40,7 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            TreeNode *     erased()         noexcept; //!< erase content \return this
+            void           ldz()            noexcept; //!< erase content 
             OutputStream & viz(OutputStream &) const; //!< emit graphviz code \return output stream
 
             //__________________________________________________________________

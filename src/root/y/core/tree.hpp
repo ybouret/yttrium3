@@ -4,14 +4,14 @@
 #ifndef Y_Core_Tree_Included
 #define Y_Core_Tree_Included 1
 
-#include "y/core/tree/node.hpp"
-#include "y/core/pool/cxx.hpp"
+#include "y/core/tree/pool.hpp"
 
 namespace Yttrium
 {
+    namespace Memory { class ReadOnlyBuffer; }
+
     namespace Core
     {
-        typedef CxxPoolOf<TreeNode> TreePool; //!< alias
 
         //______________________________________________________________________
         //
@@ -59,6 +59,8 @@ namespace Yttrium
                                     size_t             plen) const noexcept;
 
 
+
+
             //__________________________________________________________________
             //
             //
@@ -77,8 +79,6 @@ namespace Yttrium
                         size_t             plen,
                         void * const       args);
 
-            //! insert wrapper for text \return true iff inserted at given path
-            bool insert(const char * const, void * const);
 
 
             //__________________________________________________________________
@@ -87,8 +87,14 @@ namespace Yttrium
             // Remove Methods
             //
             //__________________________________________________________________
+
+            //! remove content and prune a valid node
+            /**
+             \param path anonymous path
+             \param plen path length
+             \return   data from existing, occupied node
+             */
             void * remove(const void * const path, const size_t plen) noexcept;
-            void * remove(const char * const) noexcept;
 
             //__________________________________________________________________
             //
@@ -96,6 +102,19 @@ namespace Yttrium
             // Other Methods
             //
             //__________________________________________________________________
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            TreeNode *       search(const char * const)                   noexcept;
+            TreeNode *       search(const Memory::ReadOnlyBuffer &)       noexcept;
+            const TreeNode * search(const char * const)             const noexcept;
+            const TreeNode * search(const Memory::ReadOnlyBuffer &) const noexcept;
+            void *           remove(const char * const)                   noexcept;
+            void *           remove(const Memory::ReadOnlyBuffer &)       noexcept;
+            bool             insert(const char * const, void * const);
+            bool             insert(const Memory::ReadOnlyBuffer &, void * const);
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+
+
             OutputStream & viz(OutputStream &) const; //!< emit GraphViz \return output stream
 
         private:
@@ -108,20 +127,11 @@ namespace Yttrium
             //! \return pooled/created node with code and data
             TreeNode * queryNode(const uint8_t, void * const, TreeNode * const);
 
-            void prune(TreeNode * const) noexcept;
-
-
+            //! prune node, returning to pool
+            void prune(TreeNode *) noexcept;
         };
 
-
-
-
-
-
-
-
-
-
+        
     }
 
 }
