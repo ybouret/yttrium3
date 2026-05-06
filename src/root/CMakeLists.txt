@@ -14,6 +14,7 @@ y/xml
 y/core
 y/core/pool
 y/core/list
+y/core/tree
 y/random
 y/system
 y/system/wall-time
