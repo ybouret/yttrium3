@@ -7,6 +7,7 @@
 #include "y/container/associative.hpp"
 #include "y/core/tree.hpp"
 #include "y/type/pulverize.hpp"
+#include "y/container/iter/linked.hpp"
 
 namespace Yttrium
 {
@@ -124,6 +125,23 @@ namespace Yttrium
             return true;
         }
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+        typedef Iter::Linked<Iter::Forward,Node>       Iterator;
+        typedef Iter::Linked<Iter::Forward,const Node> ConstIterator;
+
+        inline Iterator      begin()       noexcept { return list.head; }
+        inline Iterator      end()         noexcept { return 0; }
+        inline ConstIterator begin() const noexcept { return list.head; }
+        inline ConstIterator end()   const noexcept { return 0; }
+
+        typedef Iter::Linked<Iter::Reverse,Node>       ReverseIterator;
+        typedef Iter::Linked<Iter::Reverse,const Node> ConstReverseIterator;
+
+        inline ReverseIterator      rbegin()       noexcept { return list.tail; }
+        inline ReverseIterator      rend()         noexcept { return 0; }
+        inline ConstReverseIterator rbegin() const noexcept { return list.tail; }
+        inline ConstReverseIterator rend()   const noexcept { return 0; }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         //______________________________________________________________________
         //
