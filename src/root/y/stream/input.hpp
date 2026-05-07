@@ -64,7 +64,8 @@ namespace Yttrium
         //
         //______________________________________________________________________
         bool peek(char &);    //!< \return true iff available char
-        bool gets(String &);  //!< \return ture iff a new (maybe empty) string was read
+        bool gets(String &);  //!< \return true iff a new (maybe empty) string was read
+       
 
         //! try to load exact block size
         /**

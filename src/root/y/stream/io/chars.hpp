@@ -67,18 +67,30 @@ namespace Yttrium
         class Chars : public LightObject, public Char::List
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
             explicit Chars() noexcept; //!< setup
             virtual ~Chars() noexcept; //!< cleanup
             Chars(const Chars &);      //!< duplicate content
 
-            Chars & operator<<(const char);
-            Chars & operator>>(const char);
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            Chars & operator<<(const char); //!< pushTail new char \return *this
+            Chars & operator>>(const char); //!< pushHead new char \return *this
 
-            char pullHead() noexcept;
-            char pullTail() noexcept;
+            char pullHead() noexcept; //!< popHead \return saved content
+            char pullTail() noexcept; //!< popTail \return saved content
 
         private:
-            Y_Disable_Assign(Chars); //!< discarde
+            Y_Disable_Assign(Chars); //!< discarded
         };
 
 

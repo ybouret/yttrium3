@@ -9,19 +9,45 @@ namespace Yttrium
 {
     namespace GZ
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Wrapper for gzFile
+        //
+        //
+        //______________________________________________________________________
         class File
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! open gzFile
+            /**
+             \param fileName file name
+             \param mode     "r" or "w[0-9]"
+             */
             explicit File(const char * const fileName,
                           const char * const mode);
             
-            virtual ~File() noexcept;
-            
+            virtual ~File() noexcept; //!< cleanup
+
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
         protected:
-            void * const handle;
+            void * const handle; //!< gzFile
 
         private:
-            Y_Disable_Copy_And_Assign(File);
+            Y_Disable_Copy_And_Assign(File); //!< discarded
         };
     }
 }

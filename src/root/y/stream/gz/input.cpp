@@ -32,7 +32,7 @@ namespace Yttrium
             }
             else
             {
-                gzFile fp = static_cast<gzFile>(handle);
+                gzFile const fp = static_cast<gzFile>(handle);
                 Y_Giant_Lock();
                 if( gzread(fp,&c,1) <= 0 )
                 {
@@ -43,7 +43,7 @@ namespace Yttrium
 
                     int                err = 0;
                     const char * const txt = gzerror(fp,&err);
-                    throw Specific::Exception("gzRead(1)","%s",txt);
+                    throw Specific::Exception(title->c_str(),"%s",txt);
                 }
                 else
                     return true;
@@ -80,14 +80,14 @@ namespace Yttrium
                 const size_t    loaded = transfer(addr,buff,buff.size);
                 const size_t    count  = Min(size-loaded,MaxSize); assert(count>0);
                 uint8_t * const entry  = static_cast<uint8_t*>(addr) + loaded;
-                gzFile          fp     = static_cast<gzFile>(handle);
+                gzFile const    fp     = static_cast<gzFile>(handle);
                 Y_Giant_Lock();
                 const int       numRead = gzread(fp,entry,(unsigned)count);
                 if(numRead<(int)count && !gzeof(fp) )
                 {
                     int                err = 0;
                     const char * const txt = gzerror(fp,&err);
-                    throw Specific::Exception("gzRead(block)","%s",txt);
+                    throw Specific::Exception(title->c_str(),"%s",txt);
                 }
                 return loaded + numRead;
             }
