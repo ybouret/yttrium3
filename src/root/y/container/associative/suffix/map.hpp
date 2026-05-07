@@ -120,7 +120,9 @@ namespace Yttrium
         //______________________________________________________________________
         inline explicit SuffixMap()          {} //!< setup empty
         inline virtual ~SuffixMap() noexcept {} //!< cleanup
-
+        inline SuffixMap(const SuffixMap &other) :
+        SuffixProto<KEY,T,SuffixMapNode>(other)
+        {}
         //______________________________________________________________________
         //
         //
@@ -146,7 +148,7 @@ namespace Yttrium
         }
 
     private:
-        Y_Disable_Copy_And_Assign(SuffixMap); //!< discarded
+        Y_Disable_Assign(SuffixMap); //!< discarded
     };
 
 }

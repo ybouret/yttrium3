@@ -109,6 +109,9 @@ namespace Yttrium
         //______________________________________________________________________
         inline explicit SuffixSet()          {} //!< setup
         inline virtual ~SuffixSet() noexcept {} //!< cleanup
+        inline SuffixSet(const SuffixSet &other) :
+        SuffixProto<KEY,T,SuffixSetNode>(other)
+        {}
 
         //______________________________________________________________________
         //
@@ -131,7 +134,7 @@ namespace Yttrium
 
 
     private:
-        Y_Disable_Copy_And_Assign(SuffixSet); //!< discarded
+        Y_Disable_Assign(SuffixSet); //!< discarded
     };
 
 }

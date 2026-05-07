@@ -88,6 +88,10 @@ Y_UTEST(container_suffix_set)
 
         Y_CHECK(keys.size() == dset.size() );
         Y_CHECK(keys.size() == pset.size() );
+
+        { const SuffixSet<String,Dummy>    cpy(dset); Y_ASSERT(cpy.size() == dset.size()); }
+        { const SuffixSet<String,DummyPtr> cpy(pset); Y_ASSERT(cpy.size() == pset.size()); }
+
         Random::Shuffle(ran,keys(),keys.size());
         for(size_t i=1;i<=keys.size();++i)
         {

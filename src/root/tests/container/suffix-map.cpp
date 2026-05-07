@@ -83,6 +83,10 @@ Y_UTEST(container_suffix_map)
 
         Y_CHECK(keys.size() == dmap.size() );
         Y_CHECK(keys.size() == pmap.size() );
+
+        { const SuffixMap<String,Dummy>    cpy(dmap); Y_ASSERT(cpy.size() == dmap.size()); }
+        { const SuffixMap<String,DummyPtr> cpy(pmap); Y_ASSERT(cpy.size() == pmap.size()); }
+
         Random::Shuffle(ran,keys(),keys.size());
         for(size_t i=1;i<=keys.size();++i)
         {

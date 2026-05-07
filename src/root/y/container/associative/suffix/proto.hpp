@@ -11,6 +11,14 @@
 namespace Yttrium
 {
 
+    namespace Core
+    {
+        struct SuffixCommon
+        {
+            static void InsertFailureException();
+        };
+    }
+
     //__________________________________________________________________________
     //
     //
@@ -52,10 +60,19 @@ namespace Yttrium
         {
         }
         
+        inline SuffixProto(const SuffixProto &proto) :
+        Associative<KEY,T>(), Releasable(),
+        list(), tree(), pool()
+        {
+            duplicate(proto);
+        }
+
 
     public:
         //! cleanup
         inline virtual ~SuffixProto() noexcept { release_(); }
+
+
 
         //! display
         inline friend std::ostream & operator<<(std::ostream &os, const SuffixProto &proto)
@@ -179,13 +196,33 @@ namespace Yttrium
             assert(node);
             RemoveZombie( Pulverized(node) );
         }
+
+        inline void duplicate(const SuffixProto &other)
+        {
+            try
+            {
+                for(const Node * node = other.list.head; node; node=node->next)
+                {
+                    // create living node
+                    Node * const mine = queryZombie();
+                    try { new (mine) Node(*node); }
+                    catch(...) { storeZombie(mine); throw; }
+
+                    // MUST insert
+                    if(!insertLiving(mine))
+                        Core::SuffixCommon::InsertFailureException();
+                }
+            }
+            catch(...) { release_(); throw; }
+        }
+
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
 
 
     private:
         Y_Disable_Assign(SuffixProto); //!< discarded
-        Y_Disable_Copy(SuffixProto);
+        //Y_Disable_Copy(SuffixProto);
 
     };
 
