@@ -89,11 +89,11 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            //! remove content and prune a valid node
+            //! remove content and prune when existed
             /**
              \param path anonymous path
              \param plen path length
-             \return   data from existing, occupied node
+             \return data or NULL
              */
             void * remove(const void * const path, const size_t plen) noexcept;
 

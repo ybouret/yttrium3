@@ -164,8 +164,8 @@ namespace Yttrium
 
         void * Tree:: remove(const void * const path, size_t plen) noexcept
         {
-            TreeNode * const node = search(path,plen); assert(node);
-            void *     const args = node->data;        assert(args);
+            TreeNode * const node = search(path,plen); if(!node) return 0;
+            void *     const args = node->data;        if(!args) return 0;
             Coerce(node->data) = 0;
             --Coerce(size);
             prune(node);

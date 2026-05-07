@@ -25,7 +25,6 @@ namespace Yttrium
     template <typename, typename> class NODE >
     class SuffixProto :
     public Associative<KEY,T>,
-    public Recyclable,
     public Releasable
     {
     public:
@@ -96,6 +95,16 @@ namespace Yttrium
             return & **static_cast<const Node *>(addr);
         }
 
+        inline virtual bool remove(ParamKey key) noexcept
+        {
+            assert(tree.size==list.size);
+            void * const addr = tree.remove(key); if(!addr) return false;
+            Node * const node = static_cast<Node *>(addr);
+            storeLiving(list.pop(node));
+            assert(tree.size==list.size);
+            return true;
+        }
+
 
         //______________________________________________________________________
         //
@@ -112,16 +121,19 @@ namespace Yttrium
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         inline bool insertLiving(Node * const node)
         {
+            assert(tree.size==list.size);
             try
             {
                 if(!tree.insert(node->key(),node) )
                 {
                     storeLiving(node);
+                    assert(tree.size==list.size);
                     return false;
                 }
                 else
                 {
                     list.pushTail(node);
+                    assert(tree.size==list.size);
                     return true;
                 }
             }

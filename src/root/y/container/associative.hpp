@@ -5,6 +5,7 @@
 
 #include "y/container.hpp"
 #include "y/type/args.hpp"
+#include "y/ability/recyclable.hpp"
 
 namespace Yttrium
 {
@@ -17,7 +18,8 @@ namespace Yttrium
     //
     //__________________________________________________________________________
     template <typename KEY, typename T>
-    class Associative : public Container
+    class Associative : public Container, public Recyclable
+
     {
     public:
         //______________________________________________________________________
@@ -44,9 +46,9 @@ namespace Yttrium
         // Interface
         //
         //______________________________________________________________________
-        virtual Type *      search(ParamKey)       = 0; //!< \return address of matching key, 0 if not found
-        virtual ConstType * search(ParamKey) const = 0; //!< \return address of matching key, 0 if not found
-
+        virtual Type *      search(ParamKey)          = 0; //!< \return address of matching key, 0 if not found
+        virtual ConstType * search(ParamKey) const    = 0; //!< \return address of matching key, 0 if not found
+        virtual bool        remove(ParamKey) noexcept = 0;
 
     private:
         Y_Disable_Copy_And_Assign(Associative); //!< discarded
