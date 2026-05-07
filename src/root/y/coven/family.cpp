@@ -70,9 +70,10 @@ namespace Yttrium
             }
 #endif // !defined(NDEBUG)
 
-            Coerce(list).pushTail(v);
-            Coerce(quality) = computeQuality(list.size);
+            Coerce(list).pushTail(v);                    // update list
+            Coerce(quality) = computeQuality(list.size); // update qualitt
 
+            // put new vector into place for unique family
             while(v->prev && Vector::Compare(*(v->prev),*v) == Positive )
                 Coerce(list).towardsHead(v);
 
