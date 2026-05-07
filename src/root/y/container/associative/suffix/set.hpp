@@ -60,19 +60,16 @@ namespace Yttrium
             {
                 if(!this->tree.insert(node->key(),node) )
                 {
-                    this->storeLiving(node); throw;
+                    this->storeLiving(node);
                     return false;
                 }
                 else
                 {
+                    this->list.pushTail(node);
                     return true;
                 }
             }
-            catch(...)
-            {
-                this->storeLiving(node); throw;
-            }
-
+            catch(...) { this->storeLiving(node); throw; }
         }
 
 

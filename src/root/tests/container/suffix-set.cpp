@@ -40,7 +40,9 @@ Y_UTEST(container_suffix_set)
 
     {
         const Dummy dum("hello");
-        dset.insert(dum);
+        Y_CHECK(  dset.insert(dum) );
+        Y_CHECK( !dset.insert(dum) );
+
     }
 
 }
