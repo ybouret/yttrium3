@@ -120,6 +120,8 @@ namespace Yttrium
         //______________________________________________________________________
         inline explicit SuffixMap()          {} //!< setup empty
         inline virtual ~SuffixMap() noexcept {} //!< cleanup
+
+        //! duplicate \param other another suffix map
         inline SuffixMap(const SuffixMap &other) :
         SuffixProto<KEY,T,SuffixMapNode>(other)
         {}

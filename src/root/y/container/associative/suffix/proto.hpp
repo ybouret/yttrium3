@@ -13,9 +13,10 @@ namespace Yttrium
 
     namespace Core
     {
+        //! common API for Suffix Proto
         struct SuffixCommon
         {
-            static void InsertFailureException();
+            static void InsertFailureException(); //!< throw exception
         };
     }
 
@@ -59,7 +60,8 @@ namespace Yttrium
         inline explicit SuffixProto() : list(), tree(), pool()
         {
         }
-        
+
+        //! duplicate \param proto another SuffixProtor
         inline SuffixProto(const SuffixProto &proto) :
         Associative<KEY,T>(), Releasable(),
         list(), tree(), pool()

@@ -109,6 +109,8 @@ namespace Yttrium
         //______________________________________________________________________
         inline explicit SuffixSet()          {} //!< setup
         inline virtual ~SuffixSet() noexcept {} //!< cleanup
+
+        //! duplicate \param other another suffix set
         inline SuffixSet(const SuffixSet &other) :
         SuffixProto<KEY,T,SuffixSetNode>(other)
         {}
