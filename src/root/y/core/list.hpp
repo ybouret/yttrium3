@@ -451,7 +451,35 @@ namespace Yttrium
                 assert(this->hasIncreasingAddresses());
                 return node;
             }
-            
+
+            //! send tail to head
+            inline void rollTailToHead() noexcept
+            {
+                switch(size)
+                {
+                    case 0:
+                    case 1:
+                        return;
+                    case 2:
+                        CoerceSwap(head,tail);
+                        head->prev = 0;
+                        tail->next = 0;
+                        head->next = tail;
+                        tail->prev = head;
+                        return;
+                    default:
+                        break;
+                }
+                assert(size>=3);
+                NODE * const node = tail;
+                Coerce(tail) = tail->prev;
+                tail->next   = 0;
+                node->prev    = 0;
+                node->next   = head;
+                head->prev   = node;
+                Coerce(head) = node;
+            }
+
             //__________________________________________________________________
             //
             //

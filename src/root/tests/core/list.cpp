@@ -186,6 +186,24 @@ Y_UTEST(core_list)
 
         while(list.size) list.popTail();
 
+        std::cerr << "roll" << std::endl;
+        for(size_t i=1;i<=N;++i)
+        {
+            Node * const node = &wksp[i];
+            list.pushTail( node );
+            Y_ASSERT(i==list.size);
+            std::cerr << list << std::endl;
+            for(size_t j=1;j<=i;++j)
+            {
+                list.rollTailToHead();
+                std::cerr << list << std::endl;
+            }
+            std::cerr << std::endl;
+            if(i>=5) break;
+        }
+
+        while(list.size) list.popTail();
+
     }
 
 

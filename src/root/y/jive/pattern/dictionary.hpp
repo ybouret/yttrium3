@@ -45,7 +45,7 @@ namespace Yttrium
             void operator()(const String &,      Pattern * const); //!< insert a new key/pattern
             void operator()(const char * const , Pattern * const); //!< insert a new key/pattern
 
-            Pattern * clone(const String &);
+            Pattern * clone(const String &); //!< \return cloned pattern, 0 if not found
 
 
 
