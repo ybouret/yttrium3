@@ -25,7 +25,8 @@ vfs
 hashing
 )
 
-Y_LinkLibraries(test-root zlibstatic)
+Y_LinkLibraries(test-root)
+target_link_libraries(test-root zlibstatic)
 
 enable_testing()
 

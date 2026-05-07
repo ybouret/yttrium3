@@ -42,7 +42,7 @@ Y_UTEST(core_tree)
     Vizible::Render("tree4.dot",tree);
 
     {
-        Y_CHECK( tree.search("Wor") );
+        Y_CHECK( 0 != tree.search("Wor") );
         Y_CHECK( 0 == tree.search("Wor")->data );
     }
 

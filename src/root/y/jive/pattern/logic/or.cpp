@@ -90,7 +90,7 @@ namespace Yttrium
             assert( !(0==text&&tlen>0) );
             AutoPtr<Logic> p = new Or();
             for(size_t i=0;i<tlen;++i)
-                 *p << text[i];
+                 *p << (uint8_t)text[i];
             return p.yield()->optimized();
         }
 

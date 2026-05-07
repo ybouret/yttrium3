@@ -61,13 +61,13 @@ namespace
                 {
                     const long double mulRate = cycles / chrono(KegMul::Trace);
                     const long double dftRate = cycles / chrono(KegDFT::Trace);
-                    std::cerr << " | [in]  mul: " <<  HumanReadable(mulRate)  << " dft: " <<  HumanReadable(dftRate);
+                    std::cerr << " | [in]  mul: " <<  HumanReadable( (uint64_t)mulRate)  << " dft: " <<  HumanReadable( (uint64_t) dftRate);
                     if(dftRate>=mulRate) std::cerr << " (+)"; else std::cerr << " (-)";
                 }
                 {
                     const long double mulRate = cycles / chrono(mul64);
                     const long double dftRate = cycles / chrono(dft64);
-                    std::cerr << " | [out]  mul: " <<  HumanReadable(mulRate)  << " dft: " <<  HumanReadable(dftRate);
+                    std::cerr << " | [out]  mul: " <<  HumanReadable( (uint64_t)mulRate)  << " dft: " <<  HumanReadable( (uint64_t) dftRate);
                     if(dftRate>=mulRate) std::cerr << " (+)"; else std::cerr << " (-)";
                 }
                 std::cerr << " |";

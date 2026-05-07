@@ -1,6 +1,6 @@
 #include "y/stream/gz/input.hpp"
 #include "y/ability/lockable.hpp"
-#include <zlib.h>
+#include "y/zlib/zlib.h"
 #include "y/exception.hpp"
 #include "y/core/min.hpp"
 
