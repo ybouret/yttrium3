@@ -37,6 +37,23 @@ namespace Yttrium
         Y_Disable_Assign(SuffixSetNode);
     };
 
+    template <typename KEY, typename T> 
+    class SuffixSet :  public SuffixProto<KEY, T, SuffixSetNode>
+    {
+    public:
+        typedef SuffixSetNode<KEY, T> Node;
+        Y_Args_Declare(T, Type);
+        Y_Args_Declare(KEY, Key);
+
+        inline explicit SuffixSet() {}
+        inline virtual ~SuffixSet() noexcept {}
+
+     
+
+    private:
+        Y_Disable_Copy_And_Assign(SuffixSet);
+    };
+
 }
 
 #endif // !Y_Associative_SuffixSet_Inluded
