@@ -191,9 +191,19 @@ namespace Yttrium
                     pool.store( parent->list.pop(node) )->ldz();
                 prune(parent);
             }
+        }
 
+        void Tree:: free(TreeNode * const node) noexcept
+        {
+            while(node->list.size)
+                free(node->list.popTail());
+            if(node!=root) pool.store(node)->ldz();
+        }
 
-
+        void Tree:: free() noexcept
+        {
+            free(root);
+            Coerce(size) = 0;
         }
 
     }

@@ -113,7 +113,7 @@ namespace Yttrium
             bool             insert(const Memory::ReadOnlyBuffer &, void * const);
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
-
+            void free() noexcept;
 
             OutputStream & viz(OutputStream &) const; //!< emit GraphViz \return output stream
 
@@ -129,6 +129,8 @@ namespace Yttrium
 
             //! prune node, returning to pool
             void prune(TreeNode *) noexcept;
+
+            void free(TreeNode * const) noexcept;
         };
 
         

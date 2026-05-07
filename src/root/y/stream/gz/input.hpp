@@ -41,7 +41,8 @@ namespace Yttrium
             template <typename NAME> inline
             explicit Input(const NAME & name) :
             InputStream(name),
-            File(title->c_str(), Mode)
+            File(title->c_str(), Mode),
+            buff()
             {
             }
 

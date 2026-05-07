@@ -18,9 +18,9 @@ set(CPACK_RESOURCE_FILE_README ${zlib_SOURCE_DIR}/README)
 # ============================================================================
 # configuration
 # ============================================================================
-cmake_print_variables(CMAKE_C_FLAGS)
-string( REPLACE "-std=c99" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-cmake_print_variables(CMAKE_C_FLAGS)
+#cmake_print_variables(CMAKE_C_FLAGS)
+#string( REPLACE "-std=c99" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+#cmake_print_variables(CMAKE_C_FLAGS)
 
 if(Y_MSC)
     string( APPEND CMAKE_C_FLAGS " -wd4711 -wd4061 -wd5045 -wd4820 -wd4710 -wd4668")

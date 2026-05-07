@@ -56,7 +56,17 @@ Y_UTEST(core_tree)
     Y_PRINTV(tree.size);
     Y_PRINTV(tree.pool.size);
 
+    tree.free();
+    Y_PRINTV(tree.size);
+    Y_PRINTV(tree.pool.size);
 
+    tree.insert("Hello", a+0);  Y_CHECK( FoundIn(tree,"Hello")  );
+    tree.insert("World",a+1);   Y_CHECK( FoundIn(tree,"World")  );
+    tree.insert("Hell", a+2);   Y_CHECK( FoundIn(tree,"Hell")   );
+    tree.insert("Helico", a+3); Y_CHECK( FoundIn(tree,"Helico") );
+    tree.free();
+    Y_PRINTV(tree.size);
+    Y_PRINTV(tree.pool.size);
 }
 Y_UDONE()
 
