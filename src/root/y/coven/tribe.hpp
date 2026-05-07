@@ -30,6 +30,8 @@ namespace Yttrium
         class Tribe
         {
         public:
+            typedef CxxListOf<Tribe> List;
+
             //! setup
             /**
              \param mu matrix of rows
@@ -45,6 +47,7 @@ namespace Yttrium
             family(vc),
             hired(rc),
             ready(rc),
+            last(0),
             next(0),
             prev(0)
             {
@@ -55,7 +58,11 @@ namespace Yttrium
                 assert(hired->size()+ready->size==mu.rows);
 
                 Vector * first = Coerce(family).accepted(mu[ir]);
-                if(first) Coerce(family).grow(first);
+                if(first)
+                {
+                    Coerce(last) = first;
+                    Coerce(family).grow(first);
+                }
             }
 
             template <typename T> inline
@@ -65,6 +72,7 @@ namespace Yttrium
             family(tribe.family),
             hired(tribe.hired),
             ready(tribe.ready),
+            last(0),
             next(0),
             prev(0)
             {
@@ -75,7 +83,11 @@ namespace Yttrium
                 Coerce(hired).insert(Coerce(ready)->popHead());
 
                 Vector * const v = Coerce(family).accepted(mu[ir]);
-                if(v) Coerce(family).grow(v);
+                if(v)
+                {
+                    Coerce(family).grow(v);
+                    Coerce(last) = v;
+                }
             }
 
 
@@ -86,6 +98,7 @@ namespace Yttrium
             const Family  family; //!< current family
             const RowSet  hired;  //!< set of hired rows
             const RowList ready;  //!< list of ready rows
+            const Vector * const last; //!< last added vector
             Tribe *       next;   //!< for list
             Tribe *       prev;   //!< for list
             
