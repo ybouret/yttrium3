@@ -38,8 +38,7 @@ namespace Yttrium
         assert(code);
 
         if(buff.size) {
-            C = **buff.head;
-            delete buff.popHead();
+            C = buff.pullHead();
             return true;
         }
         else
@@ -58,13 +57,13 @@ namespace Yttrium
 
         static inline size_t transfer(void * const  data,
                                       IO::Chars   & buff,
-                                      const size_t        size) noexcept
+                                      const size_t  size) noexcept
         {
             assert(size<=buff.size);
             char * p = (char *)data;
             for(size_t n=size;n>0;--n)
             {
-                *(p++) =  **buff.head; delete buff.popHead();
+                *(p++) =  buff.pullHead();
             }
             return size;
         }
@@ -79,7 +78,7 @@ namespace Yttrium
         else
         {
             const size_t done = transfer(blockAddr,buff,buff.size);
-            return static_cast<Code *>(code)->query( static_cast<uint8_t *>(blockAddr) + done, blockSize - done);
+            return done+static_cast<Code *>(code)->query( static_cast<uint8_t *>(blockAddr) + done, blockSize - done);
         }
     }
 

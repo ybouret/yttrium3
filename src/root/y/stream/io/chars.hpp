@@ -74,6 +74,9 @@ namespace Yttrium
             Chars & operator<<(const char);
             Chars & operator>>(const char);
 
+            char pullHead() noexcept;
+            char pullTail() noexcept;
+
         private:
             Y_Disable_Assign(Chars); //!< discarde
         };

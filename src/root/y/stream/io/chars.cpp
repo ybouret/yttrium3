@@ -70,6 +70,23 @@ namespace Yttrium
             return *this;
         }
 
+        char Chars:: pullHead() noexcept
+        {
+            assert(size);
+            const char c = **head;
+            delete popHead();
+            return c;
+        }
+
+        char Chars:: pullTail() noexcept
+        {
+            assert(size);
+            const char c = **tail;
+            delete popTail();
+            return c;
+        }
+
+
     }
 
 }
