@@ -48,6 +48,9 @@ Y_UTEST(container_suffix_set)
         Y_CHECK(  dset.insert(dum) );
         Y_CHECK( !dset.insert(dum) );
         std::cerr << dset << std::endl;
+        Y_CHECK( 0!=dset.search("hello") );
+        Y_CHECK( "hello" == dset.search("hello")->name );
+
     }
 
 }

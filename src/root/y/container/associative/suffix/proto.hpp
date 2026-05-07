@@ -11,24 +11,54 @@
 namespace Yttrium
 {
 
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Prototype for Suffix[Set|Map]
+    //
+    //
+    //__________________________________________________________________________
     template <
     typename KEY,
     typename T,
     template <typename, typename> class NODE >
-    class SuffixProto : public Associative<KEY, T>
+    class SuffixProto :
+    public Associative<KEY,T>,
+    public Recyclable,
+    public Releasable
     {
     public:
-        typedef NODE<KEY, T>       Node;
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        typedef NODE<KEY, T>       Node; //!< alias
         typedef Core::ListOf<Node> List; //!< living nodes
         typedef Core::PoolOf<Node> Pool; //!< zombie nodes
+        Y_Args_Declare(T,Type);          //!< aliases
+        Y_Args_Declare(KEY,Key);         //!< aliases
 
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+    protected:
+        //! setup empty
         inline explicit SuffixProto() : list(), tree(), pool()
         {
         }
         
 
+    public:
+        //! cleanup
         inline virtual ~SuffixProto() noexcept { release_(); }
 
+        //! display
         inline friend std::ostream & operator<<(std::ostream &os, const SuffixProto &proto)
         {
             os << '{';
@@ -40,21 +70,46 @@ namespace Yttrium
             return os << '}';
         }
 
-
+        //______________________________________________________________________
+        //
+        //
+        // Interface
+        //
+        //______________________________________________________________________
         inline virtual size_t size()     const noexcept { return list.size; }
         inline virtual size_t capacity() const noexcept { return list.size+pool.size; }
         inline virtual void   free()           noexcept { free_();    }
         inline virtual void   release()        noexcept { release_(); }
 
+        inline virtual Type * search(ParamKey key) noexcept
+        {
+            Core::TreeNode * const node = tree.search(key); if(!node) return 0;
+            void * const           addr = node->data;       if(!addr) return 0;
+            return & **static_cast<Node *>(addr);
+        }
 
 
+        inline virtual ConstType * search(ParamKey key) const noexcept
+        {
+            const Core::TreeNode * const node = tree.search(key); if(!node) return 0;
+            const void * const           addr = node->data;       if(!addr) return 0;
+            return & **static_cast<const Node *>(addr);
+        }
 
+
+        //______________________________________________________________________
+        //
+        //
+        // Members
+        //
+        //______________________________________________________________________
     protected:
-        List       list;
-        Core::Tree tree;
-        Pool       pool;
+        List       list; //!< living nodes
+        Core::Tree tree; //!< tree of node addresses
+        Pool       pool; //!< zombie nodes
 
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         inline bool insertLiving(Node * const node)
         {
             try
@@ -72,6 +127,7 @@ namespace Yttrium
             }
             catch(...) { this->storeLiving(node); throw; }
         }
+
 
         inline void free_() noexcept
         {
@@ -111,15 +167,13 @@ namespace Yttrium
             assert(node);
             RemoveZombie( Pulverized(node) );
         }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
 
 
     private:
-        Y_Disable_Assign(SuffixProto);
+        Y_Disable_Assign(SuffixProto); //!< discarded
         Y_Disable_Copy(SuffixProto);
-
-
-
 
     };
 

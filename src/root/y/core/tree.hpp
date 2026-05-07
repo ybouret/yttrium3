@@ -132,6 +132,7 @@ namespace Yttrium
             //! prune node, returning to pool
             void prune(TreeNode *) noexcept;
 
+            //! free node content
             void free(TreeNode * const) noexcept;
         };
 

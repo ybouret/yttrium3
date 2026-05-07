@@ -8,20 +8,48 @@
 
 namespace Yttrium
 {
-
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Associative container minimal interface
+    //
+    //
+    //__________________________________________________________________________
     template <typename KEY, typename T>
     class Associative : public Container
     {
     public:
-        Y_Args_Declare(T,Type);
-        Y_Args_Declare(KEY,Key);
-        
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        Y_Args_Declare(T,Type);  //!< aliases
+        Y_Args_Declare(KEY,Key); //!< aliases
 
-        inline explicit Associative() noexcept : Container() {}
-        inline virtual ~Associative() noexcept {}
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+        inline explicit Associative() noexcept : Container() {} //!< setup
+        inline virtual ~Associative() noexcept {}               //!< cleanup
+
+        //______________________________________________________________________
+        //
+        //
+        // Interface
+        //
+        //______________________________________________________________________
+        virtual Type *      search(ParamKey)       = 0; //!< \return address of matching key, 0 if not found
+        virtual ConstType * search(ParamKey) const = 0; //!< \return address of matching key, 0 if not found
+
 
     private:
-        Y_Disable_Copy_And_Assign(Associative);
+        Y_Disable_Copy_And_Assign(Associative); //!< discarded
     };
 
 }

@@ -31,7 +31,6 @@ namespace
             return os << dum.value;
         }
 
-
         const int value;
     private:
         Y_Disable_Assign(Dummy);
@@ -46,6 +45,9 @@ Y_UTEST(container_suffix_map)
         const Dummy dum(1);
         Y_ASSERT( dmap.insert("hello",dum) );
         std::cerr << dmap << std::endl;
+        Y_CHECK( 0 != dmap.search("hello") );
+        Y_CHECK( 1 == dmap.search("hello")->value );
+
     }
 
 }
