@@ -5,6 +5,7 @@
 #define Y_Core_Tree_Included 1
 
 #include "y/core/tree/pool.hpp"
+#include "y/ability/recyclable.hpp"
 
 namespace Yttrium
 {
@@ -21,7 +22,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Tree
+        class Tree : public Recyclable, public Releasable
         {
         public:
             //__________________________________________________________________
@@ -113,7 +114,8 @@ namespace Yttrium
             bool             insert(const Memory::ReadOnlyBuffer &, void * const);
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
-            void free() noexcept;
+            virtual void free()    noexcept;
+            virtual void release() noexcept;
 
             OutputStream & viz(OutputStream &) const; //!< emit GraphViz \return output stream
 

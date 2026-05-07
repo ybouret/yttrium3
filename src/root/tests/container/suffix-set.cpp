@@ -11,14 +11,18 @@ namespace
 	public:
 		inline explicit Dummy(const char* const id) : name(id)
 		{
-
+            std::cerr << "[+] Dummy(" << name << ")" << std::endl;
 		}
 
 		inline virtual ~Dummy() noexcept
 		{
+            std::cerr << "[~] Dummy(" << name << ")" << std::endl;
+        }
 
-		}
-		inline Dummy(const Dummy& other) : name(other.name) {}
+        inline Dummy(const Dummy& other) : name(other.name)
+        {
+            std::cerr << "[*] Dummy(" << name << ")" << std::endl;
+        }
 
 		const String & key() const noexcept { return name; }
 
@@ -32,8 +36,12 @@ namespace
 
 Y_UTEST(container_suffix_set)
 {
-	//SuffixProto<int, int, SuffixSetNode> proto;
-	SuffixSet<String, Dummy>  dset;
+	SuffixSet<String,Dummy>  dset;
+
+    {
+        const Dummy dum("hello");
+        dset.insert(dum);
+    }
 
 }
 Y_UDONE()

@@ -197,12 +197,26 @@ namespace Yttrium
         {
             while(node->list.size)
                 free(node->list.popTail());
-            if(node!=root) pool.store(node)->ldz();
+            node->ldz();
+            if(node!=root)
+                pool.store(node);
         }
 
         void Tree:: free() noexcept
         {
+            assert(root);
             free(root);
+            Coerce(size) = 0;
+            assert(root);
+            assert(0==root->code);
+            assert(0==root->data);
+        }
+
+        void Tree:: release() noexcept
+        {
+            assert(root);
+            root->list.release();
+            root->ldz();
             Coerce(size) = 0;
         }
 

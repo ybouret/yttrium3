@@ -38,6 +38,24 @@ namespace Yttrium
     private:
         Y_Disable_Assign(SuffixMapNode);
     };
+
+    template <typename KEY, typename T>
+    class SuffixMap :  public SuffixProto<KEY, T, SuffixMapNode>
+    {
+    public:
+        typedef SuffixMapNode<KEY, T> Node;
+        Y_Args_Declare(T, Type);
+        Y_Args_Declare(KEY, Key);
+
+        inline explicit SuffixMap() {}
+        inline virtual ~SuffixMap() noexcept {}
+
+
+
+    private:
+        Y_Disable_Copy_And_Assign(SuffixMap);
+    };
+
 }
 
 #endif // !Y_Associative_SuffixMap_Inluded
