@@ -17,12 +17,16 @@ namespace Yttrium
         Y_Args_Declare(KEY,Key);
 
         inline SuffixSetNode(ParamType args) :
-        data(args),
-        next(0),
-        prev(0)
-        {
-        }
+        data(args), next(0), prev(0)     {}
         inline ~SuffixSetNode() noexcept {}
+
+        SuffixSetNode(const SuffixSetNode &node) :
+        data(node.data), next(0), prev(0) {}
+
+        inline friend std::ostream & operator<<(std::ostream &os, const SuffixSetNode &node)
+        {
+            return os << node.data;
+        }
 
         inline Type      & operator*()       noexcept { return data; }
         inline ConstType & operator*() const noexcept { return data; }
@@ -55,21 +59,8 @@ namespace Yttrium
             try { new (node) Node(args); }
             catch(...) { this->storeZombie(node); throw; }
 
-            // put living node in the tree
-            try
-            {
-                if(!this->tree.insert(node->key(),node) )
-                {
-                    this->storeLiving(node);
-                    return false;
-                }
-                else
-                {
-                    this->list.pushTail(node);
-                    return true;
-                }
-            }
-            catch(...) { this->storeLiving(node); throw; }
+            // try to insert it
+            return this->insertLiving(node);
         }
 
 

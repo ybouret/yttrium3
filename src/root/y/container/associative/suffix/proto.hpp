@@ -29,6 +29,18 @@ namespace Yttrium
 
         inline virtual ~SuffixProto() noexcept { release_(); }
 
+        inline friend std::ostream & operator<<(std::ostream &os, const SuffixProto &proto)
+        {
+            os << '{';
+            const Node * node = proto.list.head;
+            if(node) {
+                os << *node;
+                for(node=node->next;node;node=node->next) os << ',' << *node;
+            }
+            return os << '}';
+        }
+
+
         inline virtual size_t size()     const noexcept { return list.size; }
         inline virtual size_t capacity() const noexcept { return list.size+pool.size; }
         inline virtual void   free()           noexcept { free_();    }
@@ -41,6 +53,25 @@ namespace Yttrium
         List       list;
         Core::Tree tree;
         Pool       pool;
+
+
+        inline bool insertLiving(Node * const node)
+        {
+            try
+            {
+                if(!tree.insert(node->key(),node) )
+                {
+                    storeLiving(node);
+                    return false;
+                }
+                else
+                {
+                    list.pushTail(node);
+                    return true;
+                }
+            }
+            catch(...) { this->storeLiving(node); throw; }
+        }
 
         inline void free_() noexcept
         {

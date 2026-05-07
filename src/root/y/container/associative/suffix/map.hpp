@@ -23,7 +23,21 @@ namespace Yttrium
         prev(0)
         {
         }
+
         inline ~SuffixMapNode() noexcept {}
+
+        SuffixMapNode(const SuffixMapNode &node) :
+        key_(node.key_),
+        data(node.data),
+        next(0),
+        prev(0)
+        {
+        }
+
+        inline friend std::ostream & operator<<(std::ostream &os, const SuffixMapNode &node)
+        {
+            return os << node.key_ << ":" << node.data;
+        }
 
         inline Type      & operator*()       noexcept { return data; }
         inline ConstType & operator*() const noexcept { return data; }
@@ -50,7 +64,16 @@ namespace Yttrium
         inline explicit SuffixMap() {}
         inline virtual ~SuffixMap() noexcept {}
 
+        inline bool insert(ParamKey key, ParamType args)
+        {
+            // make a living node from args
+            Node * const node = this->queryZombie();
+            try { new (node) Node(key,args); }
+            catch(...) { this->storeZombie(node); throw; }
 
+            // try to insert it
+            return this->insertLiving(node);
+        }
 
     private:
         Y_Disable_Copy_And_Assign(SuffixMap);

@@ -26,7 +26,12 @@ namespace
 
 		const String & key() const noexcept { return name; }
 
-		
+        inline friend std::ostream & operator<<(std::ostream &os, const Dummy &dum)
+        {
+            return os << dum.name;
+        }
+
+
 
 		const String name;
 	private:
@@ -42,7 +47,7 @@ Y_UTEST(container_suffix_set)
         const Dummy dum("hello");
         Y_CHECK(  dset.insert(dum) );
         Y_CHECK( !dset.insert(dum) );
-
+        std::cerr << dset << std::endl;
     }
 
 }
