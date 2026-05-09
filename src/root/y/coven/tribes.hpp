@@ -149,7 +149,7 @@ namespace Yttrium
              \param strategy optimization strategy
              \param proc     optional proc for new vector
              \param args     optional args for proc
-             \return at most mu.rows!/(mu.rows-hired)! possibilites
+             \return new generation size
              */
             template <typename T> inline
             size_t generate(const Matrix<T> & mu,
@@ -164,10 +164,15 @@ namespace Yttrium
                 {
                     for(size_t i=tr->ready->size();i>0;--i)
                     {
+
                         Tribe * const clan = lineage.pushTail( new Tribe(*tr,mu,i,proc,args) );
                         if(!clan->last)
                         {
-                            
+                            // mu[clan->irow] is null or included in sub-space
+                            if( IsNullVector(mu[clan->irow]) )
+                            {
+                                std::cerr << "mu[" << clan->irow << "] is null" << std::endl;
+                            }
                         }
                     }
 
@@ -175,9 +180,14 @@ namespace Yttrium
                 list.swapForList(lineage);
 
                 if(strategy&NoMultiple) noMultiple();
-
                 return list.size;
+            }
 
+            template <typename ARRAY>
+            static inline bool IsNullVector( ARRAY &arr )
+            {
+                for(size_t i=arr.size();i>0;--i) if( 0 != arr[i] ) return false;
+                return true;
             }
 
             //__________________________________________________________________
