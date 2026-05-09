@@ -30,7 +30,7 @@ Y_UTEST(coven_family)
                 if(v)
                     family.grow(v);
 
-            } while( family.list.size != dims );
+            } while( family->size != dims );
 
             family.writeXML(std::cerr);
             family.free();

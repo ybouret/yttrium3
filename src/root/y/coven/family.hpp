@@ -6,6 +6,7 @@
 
 #include "y/coven/vcache.hpp"
 #include "y/ability/logging.hpp"
+#include "y/type/proxy.hpp"
 
 namespace Yttrium
 {
@@ -23,6 +24,7 @@ namespace Yttrium
         class Family :
         public Object,
         public Metrics,
+        public Proxy<const Vectors>,
         public Recyclable,
         public Logging
         {
@@ -124,7 +126,9 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
+        private:
             const Vectors  list;    //!< current unique, ordered vectors
+        public:
             VCache       & pool;    //!< PERSISTENT cache
             Vector * const wksp;    //!< workspace (found when dimension>=3)
             const Quality  quality; //!< current quality
@@ -132,6 +136,8 @@ namespace Yttrium
 
         private:
             Y_Disable_Assign(Family); //!< discarded
+
+            virtual const Vectors & locus() const noexcept;
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             void free_() noexcept;

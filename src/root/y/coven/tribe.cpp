@@ -27,6 +27,17 @@ namespace Yttrium
             family.toXML(xml);
         }
 
+        void Tribe:: demoteNull(const RList &indx) noexcept
+        {
+            for(const RNode *node=indx->head;node;node=node->next)
+            {
+                const size_t  i = **node; if(hired->found(i)) continue;
+                RNode * const z  = Coerce(ready).remove(i); assert(z);
+                Coerce(hired).insert(z);
+            }
+        }
+
+
     }
 
 }

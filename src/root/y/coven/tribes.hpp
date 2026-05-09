@@ -55,7 +55,8 @@ namespace Yttrium
                             void * const      args=0) :
             hired(0),
             ready(0),
-            list()
+            list(),
+            indx(rc)
             {
                 const size_t nr = mu.rows;
                 if(nr>0)
@@ -64,9 +65,18 @@ namespace Yttrium
                     Coerce(ready) = nr - hired;
                     for(size_t i=mu.rows;i>0;--i)
                     {
-                        list.pushHead( new Tribe(mu,i,vc,rc,proc,args) );
+                        Tribe * const tr = list.pushHead( new Tribe(mu,i,vc,rc,proc,args) );
                         assert(list.head->hired->size() == hired);
-                        assert(list.head->ready->size()   == ready);
+                        assert(list.head->ready->size() == ready);
+                        if(0==tr->family->size)
+                        {
+                            std::cerr << "Null '" << mu[i] << "'" << std::endl;
+                            indx << i;
+                        }
+                    }
+                    if( indx->size )
+                    {
+                        std::cerr << "zero: " << indx << std::endl;
                     }
                 }
             }
@@ -147,6 +157,7 @@ namespace Yttrium
 
         private:
             Tribe::List list;                  //!< current list of tribe
+            RList       indx;                  //!< auxiliary indices
             Y_Disable_Copy_And_Assign(Tribes); //!< discarded
             virtual const Tribe::List & locus() const noexcept;
 

@@ -80,7 +80,7 @@ Y_UTEST(coven_tribes)
 
         for(size_t i=1;i<=nr;++i)
             for(size_t j=1;j<=nc;++j)
-                mu[i][j] = ran.in<int>(-2,2);
+                mu[i][j] = ran.in<int>(-1,1);
         std::cerr << "mu=" << mu << std::endl;
 
         Coven::StandardSurvey vec0;

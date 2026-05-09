@@ -103,6 +103,8 @@ namespace Yttrium
             return *(wksp ? wksp : ( Coerce(wksp) = pool.query()));
         }
 
+        const Vectors & Family:: locus() const noexcept { return list; }
+        
 
         bool operator==(const Family &lhs, const Family &rhs) noexcept
         {

@@ -112,6 +112,15 @@ namespace Yttrium
                 return list->pop( list->fetch(i) );
             }
 
+            inline NodeType * remove(ParamType value) noexcept
+            {
+                for(NodeType *node=list->head;node;node=node->next)
+                {
+                    if(value == **node) return list->pop(node);
+                }
+                return 0;
+            }
+
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             inline friend bool operator==(const JointSet &lhs, const JointSet &rhs)
             {
