@@ -62,7 +62,9 @@ namespace Yttrium
              \return comparison value
              **/
             static SignType Compare(const Vector & , const Vector & ) noexcept;
-            
+
+            static SignType Cmp(const Vector * const, const Vector * const) noexcept;
+
             //! optimized dot product
             /**
              \param a compatible array with same metrics

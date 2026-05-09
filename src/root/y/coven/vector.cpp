@@ -122,6 +122,11 @@ namespace Yttrium
             return __Zero__;
         }
 
+        SignType Vector:: Cmp(const Vector * const lhs, const Vector * const rhs) noexcept
+        {
+            assert(lhs); assert(rhs); return Compare(*lhs,*rhs);
+        }
+
         std::ostream & operator<<(std::ostream &os, const Vector &v)
         {
             { const zVector &zv = v; os << zv; }

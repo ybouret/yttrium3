@@ -11,13 +11,26 @@ namespace Yttrium
     namespace Coven
     {
 
+
         class Tribes : public Proxy< const Tribe::List >, public Logging
         {
         public:
+            static const unsigned NoMultiple = 0x01;
+            static const unsigned HyperPlane = 0x01;
+
+
+            //! initialize to rows!/(rows-1)! = rows possibilites
+            /**
+             \param mu matrix with rows to test
+             \param vc vector cache
+             \param rc row indices cache
+             */
             template <typename T> inline
             explicit Tribes(const Matrix<T> & mu,
                             VCache          & vc,
-                            const RowCache  & rc) :
+                            const RCache    & rc,
+                            Tribe::Callback   proc=0,
+                            void * const      args=0) :
             hired(0),
             ready(0),
             list()
@@ -29,19 +42,28 @@ namespace Yttrium
                     Coerce(ready) = nr - hired;
                     for(size_t i=mu.rows;i>0;--i)
                     {
-                        list.pushHead( new Tribe(mu,i,vc,rc) );
+                        list.pushHead( new Tribe(mu,i,vc,rc,proc,args) );
                         assert(list.head->hired->size() == hired);
                         assert(list.head->ready->size()   == ready);
                     }
                 }
             }
 
-            virtual ~Tribes() noexcept;
+            virtual ~Tribes() noexcept; //!< cleanup
 
+
+            //! new generation
+            /**
+             \param mu original matrix (hired+ready==mu.rows)
+             \return at most mu.rows!/(mu.rows-hired)! possibilites
+             */
             template <typename T> inline
-            size_t generate(const Matrix<T> &mu)
+            size_t generate(const Matrix<T> & mu,
+                            const unsigned    strategy,
+                            Tribe::Callback   proc=0,
+                            void * const      args=0)
             {
-                std::cerr << "-- generating" << std::endl;
+                assert(hired+ready==mu.rows);
                 if(ready<=0)
                 {
                     list.release();
@@ -49,6 +71,8 @@ namespace Yttrium
                 }
                 else
                 {
+                    const apn maxCount = apn::Arrange(hired+ready,hired+1);
+                    std::cerr << "-- generating at most " << maxCount << std::endl;
                     Tribe::List lineage;
 
                     for(const Tribe *tr=list.head;tr;tr=tr->next)
@@ -57,7 +81,7 @@ namespace Yttrium
                         assert(tr->ready->size() == ready);
                         for(size_t id=1;id<=ready;++id)
                         {
-                            lineage.pushTail( new Tribe(*tr,mu,id) );
+                            lineage.pushTail( new Tribe(*tr,mu,id,proc,args) );
                         }
                     }
                     list.swapForList(lineage);
@@ -65,6 +89,9 @@ namespace Yttrium
                     ++Coerce(hired);
                     --Coerce(ready);
 
+                    if(strategy&NoMultiple) noMultiple();
+
+                    std::cerr << "           generated: " << list.size << std::endl;
                     return list.size;
                 }
             }
@@ -79,6 +106,8 @@ namespace Yttrium
             virtual const Tribe::List & locus() const noexcept;
 
             Tribe::List list;
+            void noMultiple() noexcept;
+            
         };
 
     }

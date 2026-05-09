@@ -27,5 +27,37 @@ namespace Yttrium
             }
         }
 
+        static inline bool FoundIn(const Tribe::List &target, const Tribe * const lhs) noexcept
+        {
+            for(const Tribe *rhs=target.head;rhs;rhs=rhs->next)
+            {
+                if( lhs->hired == rhs->hired )
+                {
+                    assert(lhs->ready == rhs->ready);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        void Tribes:: noMultiple() noexcept
+        {
+            Tribe::List target;
+            while(list.size)
+            {
+                Tribe * const lhs = list.popHead();
+                if( FoundIn(target,lhs) )
+                {
+                    delete lhs;
+                }
+                else
+                {
+                    target.pushTail(lhs);
+                }
+            }
+            list.swapForList(target);
+        }
+
     }
 }

@@ -16,10 +16,10 @@ namespace Yttrium
     namespace Coven
     {
 
-        typedef Handy::JointSet<const size_t,MultiThreadedObject> RowSet;   //!< alias
-        typedef RowSet::ListType                                  RowList;  //!< alias
-        typedef RowSet::CacheType                                 RowCache; //!< alias
-        typedef RowList::NodeType                                 RowNode;  //!< alias
+        typedef Handy::JointSet<const size_t,MultiThreadedObject> RSet;   //!< alias
+        typedef RSet::ListType                                    RList;  //!< alias
+        typedef RSet::CacheType                                   RCache; //!< alias
+        typedef RList::NodeType                                   RNode;  //!< alias
 
         //______________________________________________________________________
         //
@@ -33,7 +33,8 @@ namespace Yttrium
         {
         public:
             typedef CxxListOf<Tribe> List;
-            
+            typedef void (*Callback)(const Vector &, void * const);
+
             //! setup
             /**
              \param mu matrix of rows
@@ -45,41 +46,42 @@ namespace Yttrium
             explicit Tribe(const Matrix<T> & mu,
                            const size_t      ir,
                            VCache          & vc,
-                           const RowCache  & rc) :
+                           const RCache    & rc,
+                           Callback          proc=0,
+                           void * const      args=0) :
             family(vc),
             hired(rc),
             ready(rc),
             last(0),
             next(0),
-            prev(0),
-            sigil(rc)
+            prev(0)
             {
                 assert(ir>=1);
                 assert(ir<=mu.rows);
                 assert(mu.cols==family.dimension);
                 setup(ir,mu.rows);
                 assert(hired->size()+ready->size()==mu.rows);
-                process(mu[ir]);
+                process(mu[ir],proc,args);
             }
 
             template <typename T> inline
             Tribe(const Tribe     &tr,
                   const Matrix<T> &mu,
-                  const size_t     id) :
+                  const size_t     id,
+                  Callback          proc=0,
+                  void * const      args=0) :
             family(tr.family),
             hired(tr.hired),
             ready(tr.ready),
             last(0),
             next(0),
-            prev(0),
-            sigil(tr.sigil)
+            prev(0)
             {
                 assert(id>=1); assert(id<=ready->size());
-                RowNode * const node = Coerce(ready).extract(id);
+                RNode * const node = Coerce(ready).extract(id);
                 Coerce(hired).insert(node);
                 const size_t    ir   = **node;
-                Coerce(sigil) << ir;
-                process(mu[ir]);
+                process(mu[ir],proc,args);
             }
 
             virtual ~Tribe() noexcept;
@@ -89,12 +91,11 @@ namespace Yttrium
 
 
             const Family  family; //!< current family
-            const RowSet  hired;  //!< set of hired rows
-            const RowSet  ready;  //!< list of ready rows
+            const RSet    hired;  //!< set of hired rows
+            const RSet    ready;  //!< list of ready rows
             const Vector * const last; //!< last added vector
             Tribe *       next;   //!< for list
             Tribe *       prev;   //!< for list
-            const RowList sigil;  //!< in-order used
 
         private:
             Y_Disable_Copy_And_Assign(Tribe); //!< discarded
@@ -107,13 +108,14 @@ namespace Yttrium
             void setup(const size_t ir, const size_t nr);
 
             template <typename ARRAY> inline
-            void process( ARRAY &arr )
+            void process( ARRAY &arr, Callback proc, void * const args)
             {
                 Vector * const v = Coerce(family).accepted(arr);
                 if(v)
                 {
                     Coerce(family).grow(v);
                     Coerce(last) = v;
+                    if(proc) proc(*v,args);
                 }
             }
 
