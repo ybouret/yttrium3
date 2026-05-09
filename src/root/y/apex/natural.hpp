@@ -273,9 +273,9 @@ Y_Apex_Natural_Unary(OP,CALL)
             // Counting
             //
             //__________________________________________________________________
-            static Natural Factorial(const natural_t n);               //!< \param n integral value \return n!
-            static Natural Comb(const natural_t n, const natural_t k); //!< \param n n>=0 \param k 0<=k<=n \return (n,k)
-
+            static Natural Factorial(const natural_t n);                  //!< \param n integral value \return n!
+            static Natural Comb(const natural_t n, const natural_t k);    //!< \param n n>=0 \param k 0<=k<=n \return (n,k)
+            static Natural Arrange(const natural_t n, const natural_t k); //!< \param n n>=0 \param k 0<=k<=n \return n!/(n-k)!
             //__________________________________________________________________
             //
             //

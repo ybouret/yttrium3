@@ -7,6 +7,7 @@ namespace Yttrium
     namespace Coven
     {
 
+
         Tribe:: ~Tribe() noexcept
         {
         }
@@ -19,7 +20,15 @@ namespace Yttrium
             for(size_t i=1;i<ir;++i)     Coerce(ready) << i;
             for(size_t i=ir+1;i<=nr;++i) Coerce(ready) << i;
             Coerce(hired) << ir;
+            Coerce(sigil) << ir;
         }
+
+        void Tribe:: toXML(XML::Log &xml) const
+        {
+            Y_XML_Element_Attr(xml,Tribe,Y_XML_Attr(hired) << Y_XML_Attr(ready) << Y_XML_Attr(sigil));
+            family.toXML(xml);
+        }
+
     }
 
 }

@@ -36,6 +36,12 @@ namespace Yttrium
             return Factorial(n)/Factorial(k)/Factorial(n-k);
         }
 
+        Natural Natural:: Arrange(const natural_t n, const natural_t k)
+        {
+            assert(k<=n);
+            return Factorial(n)/Factorial(n-k);
+        }
+
 
     }
 }

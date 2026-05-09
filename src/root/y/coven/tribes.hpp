@@ -11,33 +11,68 @@ namespace Yttrium
     namespace Coven
     {
 
-        class Tribes : public Proxy< const Tribe::List >
+        class Tribes : public Proxy< const Tribe::List >, public Logging
         {
         public:
             template <typename T> inline
             explicit Tribes(const Matrix<T> & mu,
                             VCache          & vc,
-                            const RowCache  & rc)
+                            const RowCache  & rc) :
+            hired(0),
+            ready(0),
+            list()
             {
-                for(size_t i=mu.rows;i>0;--i)
-                    list.pushHead( new Tribe(mu,i,vc,rc) );
+                const size_t nr = mu.rows;
+                if(nr>0)
+                {
+                    Coerce(hired) = 1;
+                    Coerce(ready) = nr - hired;
+                    for(size_t i=mu.rows;i>0;--i)
+                    {
+                        list.pushHead( new Tribe(mu,i,vc,rc) );
+                        assert(list.head->hired->size() == hired);
+                        assert(list.head->ready->size()   == ready);
+                    }
+                }
             }
+
+            virtual ~Tribes() noexcept;
 
             template <typename T> inline
             size_t generate(const Matrix<T> &mu)
             {
-                Tribe::List lineage;
-                for(const Tribe *tr=list.head;tr;tr=tr->next)
+                std::cerr << "-- generating" << std::endl;
+                if(ready<=0)
                 {
+                    list.release();
+                    return 0;
+                }
+                else
+                {
+                    Tribe::List lineage;
 
+                    for(const Tribe *tr=list.head;tr;tr=tr->next)
+                    {
+                        assert(tr->hired->size() == hired);
+                        assert(tr->ready->size() == ready);
+                        for(size_t id=1;id<=ready;++id)
+                        {
+                            lineage.pushTail( new Tribe(*tr,mu,id) );
+                        }
+                    }
+                    list.swapForList(lineage);
+
+                    ++Coerce(hired);
+                    --Coerce(ready);
+
+                    return list.size;
                 }
             }
 
+            virtual void toXML(XML::Log &) const;
 
-            explicit Tribes() noexcept;
-            virtual ~Tribes() noexcept;
-
-            //const size_t level;
+            const size_t hired;
+            const size_t ready;
 
         private:
             Y_Disable_Copy_And_Assign(Tribes);

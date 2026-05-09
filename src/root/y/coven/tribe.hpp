@@ -8,6 +8,7 @@
 #include "y/container/matrix.hpp"
 #include "y/handy/joint/set.hpp"
 #include "y/threading/multi-threaded-object.hpp"
+#include "y/stream/xmlog.hpp"
 
 namespace Yttrium
 {
@@ -15,9 +16,10 @@ namespace Yttrium
     namespace Coven
     {
 
-        typedef Handy::JointSet<size_t,MultiThreadedObject> RowSet;   //!< alias
-        typedef RowSet::ListType                            RowList;  //!< alias
-        typedef RowSet::CacheType                           RowCache; //!< alias
+        typedef Handy::JointSet<const size_t,MultiThreadedObject> RowSet;   //!< alias
+        typedef RowSet::ListType                                  RowList;  //!< alias
+        typedef RowSet::CacheType                                 RowCache; //!< alias
+        typedef RowList::NodeType                                 RowNode;  //!< alias
 
         //______________________________________________________________________
         //
@@ -27,11 +29,11 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Tribe
+        class Tribe : public Object, public Logging
         {
         public:
             typedef CxxListOf<Tribe> List;
-
+            
             //! setup
             /**
              \param mu matrix of rows
@@ -49,59 +51,51 @@ namespace Yttrium
             ready(rc),
             last(0),
             next(0),
-            prev(0)
+            prev(0),
+            sigil(rc)
             {
                 assert(ir>=1);
                 assert(ir<=mu.rows);
                 assert(mu.cols==family.dimension);
                 setup(ir,mu.rows);
-                assert(hired->size()+ready->size==mu.rows);
-
-                Vector * first = Coerce(family).accepted(mu[ir]);
-                if(first)
-                {
-                    Coerce(last) = first;
-                    Coerce(family).grow(first);
-                }
+                assert(hired->size()+ready->size()==mu.rows);
+                process(mu[ir]);
             }
 
             template <typename T> inline
-            Tribe(const Tribe     &tribe,
+            Tribe(const Tribe     &tr,
                   const Matrix<T> &mu,
-                  const size_t     roll) :
-            family(tribe.family),
-            hired(tribe.hired),
-            ready(tribe.ready),
+                  const size_t     id) :
+            family(tr.family),
+            hired(tr.hired),
+            ready(tr.ready),
             last(0),
             next(0),
-            prev(0)
+            prev(0),
+            sigil(tr.sigil)
             {
-                assert(roll<ready->size);
-                assert(hired->size()+ready->size==mu.rows);
-                Coerce(ready)->rollTailToHead();
-                const size_t ir = ready.head(); assert(ir>=1); assert(ir<=mu.rows); assert( !hired->found(ir) );
-                Coerce(hired).insert(Coerce(ready)->popHead());
-
-                Vector * const v = Coerce(family).accepted(mu[ir]);
-                if(v)
-                {
-                    Coerce(family).grow(v);
-                    Coerce(last) = v;
-                }
+                assert(id>=1); assert(id<=ready->size());
+                RowNode * const node = Coerce(ready).extract(id);
+                Coerce(hired).insert(node);
+                const size_t    ir   = **node;
+                Coerce(sigil) << ir;
+                process(mu[ir]);
             }
 
-
             virtual ~Tribe() noexcept;
+
+            virtual void toXML(XML::Log &) const;
 
 
 
             const Family  family; //!< current family
             const RowSet  hired;  //!< set of hired rows
-            const RowList ready;  //!< list of ready rows
+            const RowSet  ready;  //!< list of ready rows
             const Vector * const last; //!< last added vector
             Tribe *       next;   //!< for list
             Tribe *       prev;   //!< for list
-            
+            const RowList sigil;  //!< in-order used
+
         private:
             Y_Disable_Copy_And_Assign(Tribe); //!< discarded
 
@@ -111,6 +105,18 @@ namespace Yttrium
              \param nr mu.rows
              */
             void setup(const size_t ir, const size_t nr);
+
+            template <typename ARRAY> inline
+            void process( ARRAY &arr )
+            {
+                Vector * const v = Coerce(family).accepted(arr);
+                if(v)
+                {
+                    Coerce(family).grow(v);
+                    Coerce(last) = v;
+                }
+            }
+
 
         };
 

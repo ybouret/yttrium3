@@ -27,7 +27,8 @@ Y_UTEST(handy_joint_set)
 
     setA.insert( sc->summon(-7) ); std::cerr << setA << std::endl;
 
-
+    setA.extract(1);
+    
 
 }
 Y_UDONE()

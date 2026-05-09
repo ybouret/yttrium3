@@ -24,7 +24,8 @@ namespace Yttrium
         typename T,
         typename THREAD_POLICY,
         typename COMPARATOR = Sign::Comparator<T> >
-        class  JointSet : public Proxy<const JointHeavyList<T,THREAD_POLICY> >
+        class  JointSet :
+        public Proxy<const JointHeavyList<T,THREAD_POLICY> >
         {
         public:
             //__________________________________________________________________
@@ -68,6 +69,8 @@ namespace Yttrium
             {
             }
 
+
+
             //__________________________________________________________________
             //
             //
@@ -103,6 +106,11 @@ namespace Yttrium
                 return *this;
             }
 
+            inline NodeType * extract(const size_t i) noexcept
+            {
+                return list->pop( list->fetch(i) );
+            }
+
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             inline friend bool operator==(const JointSet &lhs, const JointSet &rhs)
             {
@@ -114,6 +122,7 @@ namespace Yttrium
                 return !ListType::AreIdentical(lhs.list,rhs.list);
             }
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
 
 
 
@@ -134,6 +143,8 @@ namespace Yttrium
                 while(node->prev && Negative != compare(**(node->prev),**node) )
                     core.towardsHead(node);
             }
+
+
         };
 
     }

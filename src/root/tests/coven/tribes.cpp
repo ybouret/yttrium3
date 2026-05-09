@@ -9,7 +9,7 @@ Y_UTEST(coven_tribes)
 {
     Core::Rand    ran;
 
-    const size_t nr = 3;
+    const size_t nr = 5;
     const size_t nc = 4;
 
     Coven::RowCache rc;
@@ -19,12 +19,21 @@ Y_UTEST(coven_tribes)
         Coven::VCache   vc(metrics);
 
         Coven::Tribes tribes(mu,vc,rc);
+        //tribes.writeXML(std::cerr);
 
-        for(const Coven::Tribe *tribe=tribes->head;tribe;tribe=tribe->next)
+        apn num = tribes->size;
+        std::cerr << "num=" << num << " / " << apn::Arrange(nr,1) << std::endl;
+        while(true)
         {
-            std::cerr << "hired=" << tribe->hired << " | ready=" << tribe->ready << std::endl;
-
+            const size_t gen = tribes.generate(mu);
+            //tribes.writeXML(std::cerr);
+            if(gen<=0) break;
+            std::cerr << "gen=" << gen << " / " << apn::Arrange(nr,tribes.hired) << std::endl;
+            num += gen;
         }
+
+        std::cerr << "#generated=" << num << std::endl;
+
 
 
     }
