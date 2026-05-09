@@ -28,8 +28,8 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            static const unsigned NoMultiple = 0x01; //!< toto
-            static const unsigned HyperPlane = 0x01; //!< toto
+            static const unsigned NoMultiple = 0x01; //!< remove multiple same families
+            static const unsigned HyperPlane = 0x02; //!< only one next vector
 
 
             //__________________________________________________________________
