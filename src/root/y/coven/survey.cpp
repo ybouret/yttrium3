@@ -33,6 +33,7 @@ namespace Yttrium
         Survey & Survey:: operator<< (const Vector &v)
         {
             ++Coerce(sampling);
+
             if(v.ncof<=0) return *this;
             if(got(v))    return *this;
             if(!takes(v)) return *this;
@@ -40,6 +41,7 @@ namespace Yttrium
             Vector * const node = list.pushTail( new Vector(v) );
             while(node->prev && Vector::Compare(*(node->prev),*node) == Positive )
                 list.towardsHead(node);
+            
             return *this;
         }
 
@@ -61,7 +63,11 @@ namespace Yttrium
             return true;
         }
 
-
+        void Survey::Callback(const Vector &v, void * const args)
+        {
+            assert(args);
+            *static_cast<Survey *>(args) << v;
+        }
     }
 
 }

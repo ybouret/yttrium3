@@ -32,8 +32,21 @@ namespace Yttrium
         class Tribe : public Object, public Logging
         {
         public:
-            typedef CxxListOf<Tribe> List;
-            typedef void (*Callback)(const Vector &, void * const);
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef CxxListOf<Tribe> List; //!< alias
+            typedef void (*Callback)(const Vector &, void * const); //!< alias
+
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
 
             //! setup
             /**
@@ -41,6 +54,8 @@ namespace Yttrium
              \param ir master index
              \param vc vector cache
              \param rc row index cache
+             \param proc optional proc for new vector
+             \param args optional args for proc
              */
             template <typename T>
             explicit Tribe(const Matrix<T> & mu,
@@ -64,6 +79,14 @@ namespace Yttrium
                 process(mu[ir],proc,args);
             }
 
+            //! expand
+            /**
+             \param tr parent tribe
+             \param mu matrix of rows
+             \param id index to extract in ready
+             \param proc optional proc for new vector
+             \param args optional args for proc
+             */
             template <typename T> inline
             Tribe(const Tribe     &tr,
                   const Matrix<T> &mu,
@@ -86,16 +109,27 @@ namespace Yttrium
 
             virtual ~Tribe() noexcept;
 
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
             virtual void toXML(XML::Log &) const;
 
 
-
-            const Family  family; //!< current family
-            const RSet    hired;  //!< set of hired rows
-            const RSet    ready;  //!< list of ready rows
-            const Vector * const last; //!< last added vector
-            Tribe *       next;   //!< for list
-            Tribe *       prev;   //!< for list
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const Family         family; //!< current family
+            const RSet           hired;  //!< set of hired rows
+            const RSet           ready;  //!< list of ready rows
+            const Vector * const last;   //!< last added vector
+            Tribe *              next;   //!< for list
+            Tribe *              prev;   //!< for list
 
         private:
             Y_Disable_Copy_And_Assign(Tribe); //!< discarded
@@ -107,6 +141,12 @@ namespace Yttrium
              */
             void setup(const size_t ir, const size_t nr);
 
+            //! try to accept a new vector, then processed
+            /**
+             \param arr  compatible array
+             \param proc optional proc for new vector
+             \param args optional args for proc
+             */
             template <typename ARRAY> inline
             void process( ARRAY &arr, Callback proc, void * const args)
             {

@@ -11,19 +11,41 @@ namespace Yttrium
     namespace Coven
     {
 
-
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Tribes and lineage generation
+        //
+        //
+        //______________________________________________________________________
         class Tribes : public Proxy< const Tribe::List >, public Logging
         {
         public:
-            static const unsigned NoMultiple = 0x01;
-            static const unsigned HyperPlane = 0x01;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const unsigned NoMultiple = 0x01; //!< toto
+            static const unsigned HyperPlane = 0x01; //!< toto
 
+
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
 
             //! initialize to rows!/(rows-1)! = rows possibilites
             /**
-             \param mu matrix with rows to test
-             \param vc vector cache
-             \param rc row indices cache
+             \param mu   matrix with rows to test
+             \param vc   vector cache
+             \param rc   row indices cache
+             \param proc optional proc for new vector
+             \param args optional args for proc
              */
             template <typename T> inline
             explicit Tribes(const Matrix<T> & mu,
@@ -51,10 +73,28 @@ namespace Yttrium
 
             virtual ~Tribes() noexcept; //!< cleanup
 
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
+            virtual void toXML(XML::Log &) const;
+
+
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
 
             //! new generation
             /**
-             \param mu original matrix (hired+ready==mu.rows)
+             \param mu       original matrix (hired+ready==mu.rows)
+             \param strategy optimization strategy
+             \param proc     optional proc for new vector
+             \param args     optional args for proc
              \return at most mu.rows!/(mu.rows-hired)! possibilites
              */
             template <typename T> inline
@@ -96,17 +136,21 @@ namespace Yttrium
                 }
             }
 
-            virtual void toXML(XML::Log &) const;
-
-            const size_t hired;
-            const size_t ready;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const size_t hired; //!< hired size for each tribe
+            const size_t ready; //!< ready size for each tribe
 
         private:
-            Y_Disable_Copy_And_Assign(Tribes);
+            Tribe::List list;                  //!< current list of tribe
+            Y_Disable_Copy_And_Assign(Tribes); //!< discarded
             virtual const Tribe::List & locus() const noexcept;
 
-            Tribe::List list;
-            void noMultiple() noexcept;
+            void noMultiple() noexcept; //!< remove exact same families
             
         };
 

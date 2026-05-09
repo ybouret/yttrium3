@@ -106,6 +106,7 @@ namespace Yttrium
                 return *this;
             }
 
+            //! \param i node index in [1:size] \return extracted i-th node
             inline NodeType * extract(const size_t i) noexcept
             {
                 return list->pop( list->fetch(i) );

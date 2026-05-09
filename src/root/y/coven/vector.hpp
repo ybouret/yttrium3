@@ -63,11 +63,12 @@ namespace Yttrium
              \return comparison value
              **/
             static SignType Compare(const Vector & , const Vector & ) noexcept;
-            static SignType Cmp(const Vector * const, const Vector * const) noexcept;
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            static SignType Cmp(const Vector * const, const Vector * const) noexcept;
             friend bool operator==(const Vector &, const Vector &) noexcept;
             friend bool operator!=(const Vector &, const Vector &) noexcept;
-
+#endif
 
             //! optimized dot product
             /**

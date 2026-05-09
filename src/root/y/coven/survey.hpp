@@ -41,14 +41,9 @@ namespace Yttrium
             bool got(const Vector &) const noexcept; //!< \return true iff vector is not recorded
             Survey & operator<< (const Vector &);    //!< insert not null, taken vector \return *this
 
-            static
-            void Callback(const Vector &v, void * const args)
-            {
-                assert(args);
-                *static_cast<Survey *>(args) << v;
-            }
+            static void Callback(const Vector &, void * const);     //!< helper for Tribes
+            friend bool operator==(const Survey &, const Survey &); //!< \return vector-wise comparison
 
-            friend bool operator==(const Survey &, const Survey &);
 
             //__________________________________________________________________
             //

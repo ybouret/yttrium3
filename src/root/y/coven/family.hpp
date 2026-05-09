@@ -114,6 +114,7 @@ namespace Yttrium
             //! insert an accepted vector \param v valid vector (from accepted)
             void grow(Vector * const v) noexcept;
 
+            //! \return vector-wise comparison
             friend bool operator==(const Family &, const Family &) noexcept;
 
 
