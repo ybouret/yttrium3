@@ -1,0 +1,27 @@
+
+#include "y/coven/survey/positive.hpp"
+
+namespace Yttrium
+{
+
+    namespace Coven
+    {
+        PositiveSurvey::  PositiveSurvey() noexcept
+        {
+        }
+
+        PositiveSurvey:: ~PositiveSurvey() noexcept
+        {
+        }
+
+        bool PositiveSurvey:: takes(const Vector &v) const noexcept
+        {
+            assert(v.ncof>0);
+            return true;
+        }
+
+
+    }
+
+}
+

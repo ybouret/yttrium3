@@ -73,6 +73,7 @@ y/apex/z
 y/apex/q
 y/coven
 y/coven/univocal
+y/coven/survey
 y/counting
 y/counting/c
 y/handy
