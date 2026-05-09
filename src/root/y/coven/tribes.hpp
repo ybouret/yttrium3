@@ -28,9 +28,9 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            static const unsigned NoMultiple = 0x01; //!< remove multiple same families
-            static const unsigned HyperPlane = 0x02; //!< only one next vector
-
+            static const unsigned Precompile = 0x01; //!< remove zero vectors
+            static const unsigned NoMultiple = 0x02; //!< remove multiple same families
+            static const unsigned HyperPlane = 0x04; //!< only one next vector
 
             //__________________________________________________________________
             //
@@ -49,35 +49,30 @@ namespace Yttrium
              */
             template <typename T> inline
             explicit Tribes(const Matrix<T> & mu,
+                            const unsigned    strategy,
                             VCache          & vc,
                             const RCache    & rc,
                             Tribe::Callback   proc=0,
                             void * const      args=0) :
-            hired(0),
-            ready(0),
             list(),
             indx(rc)
             {
-                const size_t nr = mu.rows;
+                const size_t nr  = mu.rows;
+                const bool   pre = 0 != (strategy&Precompile);
                 if(nr>0)
                 {
-                    Coerce(hired) = 1;
-                    Coerce(ready) = nr - hired;
+
                     for(size_t i=mu.rows;i>0;--i)
                     {
                         Tribe * const tr = list.pushHead( new Tribe(mu,i,vc,rc,proc,args) );
-                        assert(list.head->hired->size() == hired);
-                        assert(list.head->ready->size() == ready);
                         if(0==tr->family->size)
                         {
                             std::cerr << "Null '" << mu[i] << "'" << std::endl;
-                            indx << i;
+                            if(pre)
+                                indx << i;
                         }
                     }
-                    if( indx->size )
-                    {
-                        std::cerr << "zero: " << indx << std::endl;
-                    }
+                    if(pre) precompile();
                 }
             }
 
@@ -99,6 +94,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
+#if 0
             //! new generation
             /**
              \param mu       original matrix (hired+ready==mu.rows)
@@ -145,6 +141,44 @@ namespace Yttrium
                     return list.size;
                 }
             }
+#endif
+
+            //! new generation
+            /**
+             \param mu       original matrix (hired+ready==mu.rows)
+             \param strategy optimization strategy
+             \param proc     optional proc for new vector
+             \param args     optional args for proc
+             \return at most mu.rows!/(mu.rows-hired)! possibilites
+             */
+            template <typename T> inline
+            size_t generate(const Matrix<T> & mu,
+                            const unsigned    strategy,
+                            Tribe::Callback   proc=0,
+                            void * const      args=0)
+            {
+                Tribe::List lineage;
+
+
+                for(const Tribe *tr=list.head;tr;tr=tr->next)
+                {
+                    for(size_t i=tr->ready->size();i>0;--i)
+                    {
+                        Tribe * const clan = lineage.pushTail( new Tribe(*tr,mu,i,proc,args) );
+                        if(!clan->last)
+                        {
+                            
+                        }
+                    }
+
+                }
+                list.swapForList(lineage);
+
+                if(strategy&NoMultiple) noMultiple();
+
+                return list.size;
+
+            }
 
             //__________________________________________________________________
             //
@@ -152,8 +186,6 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            const size_t hired; //!< hired size for each tribe
-            const size_t ready; //!< ready size for each tribe
 
         private:
             Tribe::List list;                  //!< current list of tribe
@@ -161,8 +193,9 @@ namespace Yttrium
             Y_Disable_Copy_And_Assign(Tribes); //!< discarded
             virtual const Tribe::List & locus() const noexcept;
 
+            void precompile() noexcept;
             void noMultiple() noexcept; //!< remove exact same families
-            
+
         };
 
     }

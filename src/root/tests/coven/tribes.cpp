@@ -37,9 +37,12 @@ namespace
                    XML::Log        & xml,
                    Coven::Survey   & survey)
     {
-        Coven::Tribes tribes(mu,vc,rc,Coven::Survey::Callback,&survey);
+        Coven::Tribes tribes(mu,strategy,vc,rc,Coven::Survey::Callback,&survey);
         tribes.toXML(xml);
+
+
         apn num = tribes->size;
+#if 1
         while(true)
         {
             const size_t gen = tribes.generate(mu,strategy,Coven::Survey::Callback,&survey);
@@ -57,6 +60,7 @@ namespace
                 Y_XMLog(xml,*node);
             }
         }
+#endif
         return num;
     }
 
@@ -84,7 +88,9 @@ Y_UTEST(coven_tribes)
         std::cerr << "mu=" << mu << std::endl;
 
         Coven::StandardSurvey vec0;
-        const apn             num0 = TestTribes(mu,0x00,vc,rc,xml,vec0);
+        const apn             num0 = TestTribes(mu,
+                                                0x00,
+                                                vc,rc,xml,vec0);
         std::cerr << "#generated=" << num0 << "/ #vectors=" << vec0->size << " / #sampling=" << vec0.sampling << std::endl;
 
 
@@ -92,7 +98,9 @@ Y_UTEST(coven_tribes)
         //const apn num1 = TestTribes(mu,Coven::Tribes::NoMultiple,vc,rc,xml,vec1);
         //std::cerr << "#generated=" << num1 << "/ #vectors=" << vec1.size << std::endl;
         Coven::StandardSurvey vec1;
-        const apn             num1 = TestTribes(mu,Coven::Tribes::NoMultiple,vc,rc,xml,vec1);
+        const apn             num1 = TestTribes(mu,
+                                                Coven::Tribes::NoMultiple | Coven::Tribes::Precompile,
+                                                vc,rc,xml,vec1);
         std::cerr << "#generated=" << num1 << "/ #vectors=" << vec1->size << " / #sampling=" << vec1.sampling << std::endl;
 
     }

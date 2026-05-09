@@ -20,11 +20,9 @@ namespace Yttrium
         void Tribes:: toXML(XML::Log &xml) const
         {
             const size_t count = list.size;
-            Y_XML_Element_Attr(xml,Tribes, Y_XML_Attr(count) << Y_XML_Attr(hired) << Y_XML_Attr(ready) );
+            Y_XML_Element_Attr(xml,Tribes, Y_XML_Attr(count) );
             for(const Tribe *tr=list.head;tr;tr=tr->next)
-            {
                 tr->toXML(xml);
-            }
         }
 
         static inline bool FoundSameFamilyIn(const Tribe::List &target, const Tribe * const lhs) noexcept
@@ -56,6 +54,20 @@ namespace Yttrium
                 }
             }
             list.swapForList(target);
+        }
+
+
+        void Tribes:: precompile() noexcept
+        {
+            if(indx->size)
+            {
+                std::cerr << "demoting indices " << indx << std::endl;
+                for(Tribe *tr=list.head;tr;tr=tr->next)
+                {
+                    tr->demoteNull(indx);
+                }
+            }
+            indx.free();
         }
 
     }

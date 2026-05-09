@@ -68,6 +68,7 @@ namespace Yttrium
             hired(rc),
             ready(rc),
             last(0),
+            irow(ir),
             next(0),
             prev(0)
             {
@@ -97,14 +98,14 @@ namespace Yttrium
             hired(tr.hired),
             ready(tr.ready),
             last(0),
+            irow(0),
             next(0),
             prev(0)
             {
                 assert(id>=1); assert(id<=ready->size());
                 RNode * const node = Coerce(ready).extract(id);
                 Coerce(hired).insert(node);
-                const size_t    ir   = **node;
-                process(mu[ir],proc,args);
+                process(mu[ Coerce(irow) = **node ],proc,args);
             }
 
             virtual ~Tribe() noexcept;
@@ -139,6 +140,7 @@ namespace Yttrium
             const RSet           hired;  //!< set of hired rows
             const RSet           ready;  //!< list of ready rows
             const Vector * const last;   //!< last added vector
+            const size_t         irow;   //!< last used row index
             Tribe *              next;   //!< for list
             Tribe *              prev;   //!< for list
 
