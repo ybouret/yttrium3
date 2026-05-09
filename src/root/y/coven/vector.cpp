@@ -127,6 +127,17 @@ namespace Yttrium
             assert(lhs); assert(rhs); return Compare(*lhs,*rhs);
         }
 
+        bool operator==(const Vector &lhs, const Vector &rhs) noexcept
+        {
+            return __Zero__ == Vector::Compare(lhs,rhs);
+        }
+
+        bool operator!=(const Vector &lhs, const Vector &rhs) noexcept
+        {
+            return __Zero__ != Vector::Compare(lhs,rhs);
+        }
+
+
         std::ostream & operator<<(std::ostream &os, const Vector &v)
         {
             { const zVector &zv = v; os << zv; }

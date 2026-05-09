@@ -7,6 +7,7 @@
 #include "y/coven/metrics.hpp"
 #include "y/container/cxx/array.hpp"
 #include "y/apex/rational.hpp"
+#include "y/core/list/cxx.hpp"
 
 namespace Yttrium
 {
@@ -62,8 +63,11 @@ namespace Yttrium
              \return comparison value
              **/
             static SignType Compare(const Vector & , const Vector & ) noexcept;
-
             static SignType Cmp(const Vector * const, const Vector * const) noexcept;
+
+            friend bool operator==(const Vector &lhs, const Vector &rhs) noexcept;
+            friend bool operator!=(const Vector &lhs, const Vector &rhs) noexcept;
+
 
             //! optimized dot product
             /**
@@ -160,6 +164,16 @@ namespace Yttrium
         };
 
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! List of vectors
+        //
+        //
+        //______________________________________________________________________
+        typedef CxxListOf<Vector> Vectors;
+        
     }
 
 }

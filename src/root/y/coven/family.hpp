@@ -121,7 +121,7 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            const Vectors  list;    //!< current vectors
+            const Vectors  list;    //!< current unique, ordered vectors
             VCache       & pool;    //!< PERSISTENT cache
             Vector * const wksp;    //!< workspace (found when dimension>=3)
             const Quality  quality; //!< current quality
