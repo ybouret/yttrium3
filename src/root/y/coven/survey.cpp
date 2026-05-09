@@ -20,14 +20,26 @@ namespace Yttrium
 
         const Vectors & Survey:: locus() const noexcept { return list; }
 
+
+        bool Survey:: got(const Vector &v) const noexcept
+        {
+            for(const Vector *node=list.head;node;node=node->next)
+            {
+                if(v == *node) return true;
+            }
+            return false;
+        }
+
         Survey & Survey:: operator<< (const Vector &v)
         {
+            ++Coerce(sampling);
             if(v.ncof<=0) return *this;
+            if(got(v))    return *this;
             if(!takes(v)) return *this;
+            
             Vector * const node = list.pushTail( new Vector(v) );
             while(node->prev && Vector::Compare(*(node->prev),*node) == Positive )
                 list.towardsHead(node);
-            ++Coerce(sampling);
             return *this;
         }
 
@@ -36,6 +48,19 @@ namespace Yttrium
             list.release();
             Coerce(sampling) = 0;
         }
+
+        bool operator==(const Survey &lhs, const Survey &rhs)
+        {
+            if(lhs->size!=rhs->size) return false;
+
+            for(const Vector *l=lhs->head, *r=rhs->head;l;l=l->next,r=r->next)
+            {
+                if(*l != *r) return false;
+            }
+
+            return true;
+        }
+
 
     }
 

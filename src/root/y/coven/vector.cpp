@@ -12,6 +12,9 @@ namespace Yttrium
         Vector:: Vector(const Metrics &metrics) :
         Object(), Metrics(metrics), zVector(dimension),
         ncof(0),
+        nnul(0),
+        npos(0),
+        nneg(0),
         mod2(0),
         next(0),
         prev(0)
@@ -25,6 +28,9 @@ namespace Yttrium
         Metrics(v),
         zVector(CopyOf,v),
         ncof(v.ncof),
+        nnul(v.nnul),
+        npos(v.npos),
+        nneg(v.nneg),
         mod2(v.mod2),
         next(0),
         prev(0)
@@ -36,6 +42,9 @@ namespace Yttrium
             try
             {
                 Coerce(ncof) = source.ncof;
+                Coerce(nnul) = source.nnul;
+                Coerce(npos) = source.npos;
+                Coerce(nneg) = source.nneg;
                 Coerce(mod2) = source.mod2;
                 for(size_t i=dimension;i>0;--i)
                     (*this)[i] = source[i];
@@ -51,6 +60,9 @@ namespace Yttrium
         void Vector:: ldz() noexcept
         {
             Coerce(ncof) = 0;
+            Coerce(nnul) = 0;
+            Coerce(npos) = 0;
+            Coerce(nneg) = 0;
             Coerce(mod2).ldz();
             zVector &self = *this;
             for(size_t i=self.size();i>0;--i) self[i].ldz();
@@ -69,14 +81,12 @@ namespace Yttrium
                     const apz &z = self[i];
                     switch(z.s)
                     {
-                        case __Zero__: continue;
-                        case Positive:
-                        case Negative:
-                            ++Coerce(ncof);
-                            nrm2 += z.n.mod2();
-                            continue;
+                        case __Zero__: ++Coerce(nnul); continue;
+                        case Positive: ++Coerce(npos); nrm2 += z.n.mod2(); continue;
+                        case Negative: ++Coerce(nneg); nrm2 += z.n.mod2(); continue;
                     }
                 }
+                Coerce(ncof) = Coerce(npos) + Coerce(nneg);
             }
             catch(...)
             {

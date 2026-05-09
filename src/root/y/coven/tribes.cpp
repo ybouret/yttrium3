@@ -27,13 +27,12 @@ namespace Yttrium
             }
         }
 
-        static inline bool FoundIn(const Tribe::List &target, const Tribe * const lhs) noexcept
+        static inline bool FoundSameFamilyIn(const Tribe::List &target, const Tribe * const lhs) noexcept
         {
             for(const Tribe *rhs=target.head;rhs;rhs=rhs->next)
             {
-                if( lhs->hired == rhs->hired )
+                if( lhs->family == rhs->family)
                 {
-                    assert(lhs->ready == rhs->ready);
                     return true;
                 }
             }
@@ -47,7 +46,7 @@ namespace Yttrium
             while(list.size)
             {
                 Tribe * const lhs = list.popHead();
-                if( FoundIn(target,lhs) )
+                if( FoundSameFamilyIn(target,lhs) )
                 {
                     delete lhs;
                 }

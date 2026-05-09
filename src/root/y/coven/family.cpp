@@ -103,6 +103,20 @@ namespace Yttrium
             return *(wksp ? wksp : ( Coerce(wksp) = pool.query()));
         }
 
+
+        bool operator==(const Family &lhs, const Family &rhs) noexcept
+        {
+            assert(lhs.dimension==rhs.dimension);
+            if(lhs.list.size!=rhs.list.size) return false;
+
+            for(const Vector *l=lhs.list.head, *r=rhs.list.head;l;l=l->next,r=r->next)
+            {
+                if(*l != *r) return false;
+            }
+
+            return true;
+
+        }
     }
 
 }

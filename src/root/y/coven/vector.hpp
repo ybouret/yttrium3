@@ -65,8 +65,8 @@ namespace Yttrium
             static SignType Compare(const Vector & , const Vector & ) noexcept;
             static SignType Cmp(const Vector * const, const Vector * const) noexcept;
 
-            friend bool operator==(const Vector &lhs, const Vector &rhs) noexcept;
-            friend bool operator!=(const Vector &lhs, const Vector &rhs) noexcept;
+            friend bool operator==(const Vector &, const Vector &) noexcept;
+            friend bool operator!=(const Vector &, const Vector &) noexcept;
 
 
             //! optimized dot product
@@ -156,7 +156,10 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            const size_t ncof; //!< number of non-zero coefs
+            const size_t ncof; //!< number of non-zero coefficient(s) = npos+nneg
+            const size_t nnul; //!< number of zero     coefficient(s)
+            const size_t npos; //!< number of positive coefficient(s)
+            const size_t nneg; //!< number of negative coefficient(s)
             const apn    mod2; //!< norm2
             Vector *     next; //!< for list/pool
             Vector *     prev; //!< for list

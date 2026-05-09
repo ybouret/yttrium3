@@ -17,7 +17,7 @@ namespace Yttrium
         bool PositiveSurvey:: takes(const Vector &v) const noexcept
         {
             assert(v.ncof>0);
-            return true;
+            return v.nneg <= 0;
         }
 
 

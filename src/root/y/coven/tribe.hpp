@@ -113,6 +113,7 @@ namespace Yttrium
                 Vector * const v = Coerce(family).accepted(arr);
                 if(v)
                 {
+                    assert(v->ncof>0);
                     Coerce(family).grow(v);
                     Coerce(last) = v;
                     if(proc) proc(*v,args);
