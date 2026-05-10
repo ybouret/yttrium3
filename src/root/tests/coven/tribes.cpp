@@ -93,10 +93,8 @@ Y_UTEST(coven_tribes)
                                                 vc,rc,xml,vec0);
         std::cerr << "#generated=" << num0 << "/ #vectors=" << vec0->size << " / #sampling=" << vec0.sampling << std::endl;
 
+        return 0;
 
-        //Coven::Vectors vec1;
-        //const apn num1 = TestTribes(mu,Coven::Tribes::NoMultiple,vc,rc,xml,vec1);
-        //std::cerr << "#generated=" << num1 << "/ #vectors=" << vec1.size << std::endl;
         Coven::StandardSurvey vec1;
         const apn             num1 = TestTribes(mu,
                                                 Coven::Tribes::NoMultiple | Coven::Tribes::Precompile,

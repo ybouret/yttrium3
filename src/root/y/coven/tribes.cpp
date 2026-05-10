@@ -59,15 +59,15 @@ namespace Yttrium
 
         void Tribes:: precompile() noexcept
         {
-            if(indx->size)
+            if(zset->size())
             {
-                std::cerr << "demoting indices " << indx << std::endl;
+                std::cerr << "demoting indices " << zset << std::endl;
                 for(Tribe *tr=list.head;tr;tr=tr->next)
                 {
-                    tr->demoteNull(indx);
+                    tr->demote(*zset);
                 }
             }
-            indx.free();
+            zset.free();
         }
 
     }

@@ -92,8 +92,8 @@ namespace Yttrium
             Tribe(const Tribe     &tr,
                   const Matrix<T> &mu,
                   const size_t     id,
-                  Callback          proc=0,
-                  void * const      args=0) :
+                  Callback         proc=0,
+                  void * const     args=0) :
             family(tr.family),
             hired(tr.hired),
             ready(tr.ready),
@@ -126,8 +126,8 @@ namespace Yttrium
             //__________________________________________________________________
 
             //! ensure all indices are in hired
-            void demoteNull(const RList &indx) noexcept;
-
+            void demote(const RList &indx) noexcept;
+            void demote(const size_t indx) noexcept;
 
 
             //__________________________________________________________________

@@ -25,7 +25,8 @@ namespace Yttrium
         typename THREAD_POLICY,
         typename COMPARATOR = Sign::Comparator<T> >
         class  JointSet :
-        public Proxy<const JointHeavyList<T,THREAD_POLICY> >
+        public Proxy<const JointHeavyList<T,THREAD_POLICY> >,
+        public Recyclable
         {
         public:
             //__________________________________________________________________
@@ -112,6 +113,13 @@ namespace Yttrium
                 return list->pop( list->fetch(i) );
             }
 
+            //! \param i node index in [1:size] \return data at i-th node
+            inline ConstType & operator[](const size_t i) const noexcept
+            {
+                return ** list->fetch(i);
+            }
+
+
             inline NodeType * remove(ParamType value) noexcept
             {
                 for(NodeType *node=list->head;node;node=node->next)
@@ -133,6 +141,8 @@ namespace Yttrium
             }
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
+
+            inline virtual void free() noexcept { list.free(); }
 
 
 

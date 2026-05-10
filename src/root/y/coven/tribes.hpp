@@ -30,7 +30,8 @@ namespace Yttrium
             //__________________________________________________________________
             static const unsigned Precompile = 0x01; //!< remove zero vectors
             static const unsigned NoMultiple = 0x02; //!< remove multiple same families
-            static const unsigned HyperPlane = 0x04; //!< only one next vector
+            static const unsigned PostFusion = 0x04;
+            //static const unsigned HyperPlane = 0x04; //!< only one next vector
 
             //__________________________________________________________________
             //
@@ -55,7 +56,7 @@ namespace Yttrium
                             Tribe::Callback   proc=0,
                             void * const      args=0) :
             list(),
-            indx(rc)
+            zset(rc)
             {
                 const size_t nr  = mu.rows;
                 const bool   pre = 0 != (strategy&Precompile);
@@ -69,7 +70,7 @@ namespace Yttrium
                         {
                             std::cerr << "Null '" << mu[i] << "'" << std::endl;
                             if(pre)
-                                indx << i;
+                                zset << i;
                         }
                     }
                     if(pre) precompile();
@@ -94,55 +95,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-#if 0
-            //! new generation
-            /**
-             \param mu       original matrix (hired+ready==mu.rows)
-             \param strategy optimization strategy
-             \param proc     optional proc for new vector
-             \param args     optional args for proc
-             \return at most mu.rows!/(mu.rows-hired)! possibilites
-             */
-            template <typename T> inline
-            size_t generate(const Matrix<T> & mu,
-                            const unsigned    strategy,
-                            Tribe::Callback   proc=0,
-                            void * const      args=0)
-            {
-                assert(hired+ready==mu.rows);
-                if(ready<=0)
-                {
-                    list.release();
-                    return 0;
-                }
-                else
-                {
-                    const apn maxCount = apn::Arrange(hired+ready,hired+1);
-                    std::cerr << "-- generating at most " << maxCount << std::endl;
-                    Tribe::List lineage;
-
-                    for(const Tribe *tr=list.head;tr;tr=tr->next)
-                    {
-                        assert(tr->hired->size() == hired);
-                        assert(tr->ready->size() == ready);
-                        for(size_t id=1;id<=ready;++id)
-                        {
-                            lineage.pushTail( new Tribe(*tr,mu,id,proc,args) );
-                        }
-                    }
-                    list.swapForList(lineage);
-
-                    ++Coerce(hired);
-                    --Coerce(ready);
-
-                    if(strategy&NoMultiple) noMultiple();
-
-                    std::cerr << "           generated: " << list.size << std::endl;
-                    return list.size;
-                }
-            }
-#endif
-
+            
             //! new generation
             /**
              \param mu       original matrix (hired+ready==mu.rows)
@@ -158,26 +111,70 @@ namespace Yttrium
                             void * const      args=0)
             {
                 Tribe::List lineage;
+                zset.free();
 
-
-                for(const Tribe *tr=list.head;tr;tr=tr->next)
+                //--------------------------------------------------------------
+                //
+                //
+                // ENTER: loop over old tribes
+                //
+                //
+                //--------------------------------------------------------------
+                for(Tribe *oldTribe=list.head;oldTribe;oldTribe=oldTribe->next)
                 {
-                    for(size_t i=tr->ready->size();i>0;--i)
+                    std::cerr << "process tribe..." << std::endl;
+                    //----------------------------------------------------------
+                    //
+                    // create a new tribe for each ready index
+                    //
+                    //----------------------------------------------------------
+                    Tribe::List  clan;
+                    const RList &rlist = *(oldTribe->ready);
+                    for(size_t id=1;id<=rlist->size;++id)
                     {
-
-                        Tribe * const clan = lineage.pushTail( new Tribe(*tr,mu,i,proc,args) );
-                        if(!clan->last)
+                        Tribe * const newTribe = clan.pushTail( new Tribe(*oldTribe,mu,id,proc,args) );
+                        assert(newTribe);
+                        assert(newTribe->ready->size()+1==oldTribe->ready->size());
+                        if(!newTribe->last)
                         {
-                            // mu[clan->irow] is null or included in sub-space
-                            if( IsNullVector(mu[clan->irow]) )
+                            // zr = oldTribe->ready[id]
+                            const size_t zr = newTribe->irow;
+                            assert(newTribe->hired->found(zr));
+                            assert(oldTribe->ready->found(zr));
+                            assert(oldTribe->ready[id]==zr);
+                            std::cerr << "mu[" << zr << "] = " << mu[zr];
+                            if( IsNullVector(mu[zr]) )
                             {
-                                std::cerr << "mu[" << clan->irow << "] is null" << std::endl;
+                                std::cerr << " is null" << std::endl;
+                                if(zset->found(zr))
+                                {
+                                    std::cerr << "multiple " << zr << std::endl;
+                                }
+                                zset << zr;
+                                // demote everywhere
+                                rdemote(newTribe->prev,zr);
+                                demote(lineage.head,zr);
+                                demote(oldTribe->next,zr);
                             }
+                            else
+                            {
+                                std::cerr << " is included in vector space " << (oldTribe->hired) << std::endl;
+                            }
+
                         }
                     }
-
+                    lineage.mergeTail(clan);
+                    //--------------------------------------------------------------
+                    //
+                    //
+                    // Leave: loop over old tribes
+                    //
+                    //
+                    //--------------------------------------------------------------
                 }
                 list.swapForList(lineage);
+
+                std::cerr << "-- zset = " << zset << std::endl;
 
                 if(strategy&NoMultiple) noMultiple();
                 return list.size;
@@ -190,6 +187,25 @@ namespace Yttrium
                 return true;
             }
 
+            static inline void demote(Tribe * curr, const size_t zr) noexcept
+            {
+                while(curr)
+                {
+                    curr->demote(zr);
+                    curr=curr->next;
+                }
+            }
+
+            static inline void rdemote(Tribe * curr, const size_t zr) noexcept
+            {
+                while(curr)
+                {
+                    curr->demote(zr);
+                    curr=curr->prev;
+                }
+
+            }
+
             //__________________________________________________________________
             //
             //
@@ -199,7 +215,7 @@ namespace Yttrium
 
         private:
             Tribe::List list;                  //!< current list of tribe
-            RList       indx;                  //!< auxiliary indices
+            RSet        zset;                  //!< auxiliary
             Y_Disable_Copy_And_Assign(Tribes); //!< discarded
             virtual const Tribe::List & locus() const noexcept;
 

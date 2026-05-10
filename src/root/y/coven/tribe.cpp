@@ -27,15 +27,19 @@ namespace Yttrium
             family.toXML(xml);
         }
 
-        void Tribe:: demoteNull(const RList &indx) noexcept
+        void Tribe:: demote(const RList &indx) noexcept
         {
             for(const RNode *node=indx->head;node;node=node->next)
-            {
-                const size_t  i = **node; if(hired->found(i)) continue;
-                RNode * const z  = Coerce(ready).remove(i); assert(z);
-                Coerce(hired).insert(z);
-            }
+                demote(**node);
         }
+
+        void Tribe:: demote(const size_t indx) noexcept
+        {
+            if(hired->found(indx)) return;
+            RNode * const z  = Coerce(ready).remove(indx); assert(z);
+            Coerce(hired).insert(z);
+        }
+
 
 
     }
