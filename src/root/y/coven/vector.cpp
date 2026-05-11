@@ -160,6 +160,9 @@ namespace Yttrium
             CoerceSwap(ncof,v.ncof);
             Coerce(mod2).xch( Coerce(v.mod2) );
         }
+
+        const zVector & Vector:: operator*() const noexcept { return *this; }
+
     }
 }
 
