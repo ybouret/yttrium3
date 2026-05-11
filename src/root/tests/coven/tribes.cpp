@@ -85,6 +85,8 @@ Y_UTEST(coven_tribes)
                 mu[i][j] = ran.in<int>(-1,1);
         std::cerr << "mu=" << mu << std::endl;
 
+        const apn maxGenerated = Coven::Tribes::MaxGenerated(nr);
+        Y_PRINTV(maxGenerated);
         std::cerr << "-- full generation" << std::endl;
         Coven::StandardSurvey vec0;
         const apn             num0 = TestTribes(mu,

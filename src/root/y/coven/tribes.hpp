@@ -34,6 +34,13 @@ namespace Yttrium
             static const unsigned NoColinear = 0x08; //!< drop colinear vectors when found
             //static const unsigned HyperPlane = 0x04; //!< only one next vector
 
+            static apn MaxGenerated(const size_t n)
+            {
+                apn sum = 0;
+                for(size_t k=1;k<=n;++k) sum += apn::Arrange(n,k);
+                return sum;
+            }
+
             //__________________________________________________________________
             //
             //
@@ -126,7 +133,6 @@ namespace Yttrium
                 //std::cerr << "useAllVectors=" << useAllVectors << std::endl;
 
 
-                zset.free();
                 ++Coerce(cycle);
                 //std::cerr << "-- generate cycle #" << cycle << std::endl;
                 //--------------------------------------------------------------
@@ -140,53 +146,58 @@ namespace Yttrium
                     Tribe::List lineage;
                     for(Tribe *oldTribe=list.head;oldTribe;oldTribe=oldTribe->next)
                     {
-                        //std::cerr << "\tenter tribe " << trIndex << " / zset=" << zset << std::endl;
-                        //----------------------------------------------------------
+                        //------------------------------------------------------
                         //
                         // create a new tribe for each ready index
                         //
-                        //----------------------------------------------------------
+                        //------------------------------------------------------
                         const RList &rlist = *(oldTribe->ready);
                         for(size_t id=1;id<=rlist->size;)
                         {
-                            //std::cerr << "\t\tid=" << id << " zset=" << zset << std::endl;
                             Tribe * const newTribe = lineage.pushTail( new Tribe(*oldTribe,mu,id,proc,args) );
                             assert(newTribe);
                             assert(newTribe->ready->size()+1==oldTribe->ready->size());
-                            assert(newTribe->hasHired(*zset));
 
+                            //--------------------------------------------------
+                            // check if necessary to post-process
+                            //--------------------------------------------------
                             if(useAllVectors || newTribe->last) { ++id; continue; }
-
                             assert(useRunTimeGTZ ||useNoColinear);
 
-                            const size_t zr = newTribe->irow; // row that led to a zero vector
-                            assert(!zset->found(zr));
+                            //--------------------------------------------------
+                            // row that led to a zero vector (null or colinear)
+                            //--------------------------------------------------
+                            const size_t zr = newTribe->irow;
                             assert(newTribe->hired->found(zr));
                             assert(oldTribe->ready->found(zr));
                             assert(oldTribe->ready[id]==zr);
 
-
-                            // update oldTribe: shorten rlist, no increase of id
+                            //--------------------------------------------------
+                            // update oldTribe:
+                            // shorten rlist => no increase of id
+                            //--------------------------------------------------
                             oldTribe->demote(zr); assert(oldTribe->hired->found(zr));
 
+                            //--------------------------------------------------
                             // check if zero vector
+                            //--------------------------------------------------
                             if( IsNullVector(mu[zr]) ) {
 
                                 std::cerr << "mu[" << zr << "] is null" << std::endl;
                                 if(useRunTimeGTZ)
                                 {
-                                    zset << zr;
                                     demote( oldTribe->next,zr); // propagate to future  tribes
                                     rdemote(newTribe->prev,zr); // propagate to created tribes
                                 }
                                 continue;
                             }
 
+                            //--------------------------------------------------
                             // mu[zr] was in oldTribe sub-space
+                            //--------------------------------------------------
                             //std::cerr << "mu[" << zr << "] is dependent" << std::endl;
 
                         }
-                        //std::cerr << "\tleave tribe " << trIndex << " / zset=" << zset << std::endl;
 
                     }
                     //--------------------------------------------------------------
