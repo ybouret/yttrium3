@@ -69,6 +69,7 @@ namespace Yttrium
             ready(rc),
             last(0),
             irow(ir),
+            nreq(0),
             next(0),
             prev(0)
             {
@@ -99,6 +100,7 @@ namespace Yttrium
             ready(tr.ready),
             last(0),
             irow(0),
+            nreq(0),
             next(0),
             prev(0)
             {
@@ -139,6 +141,7 @@ namespace Yttrium
             const RSet           ready;  //!< list of ready rows
             const Vector * const last;   //!< last added vector
             const size_t         irow;   //!< last used row index
+            const size_t         nreq;   //!< required orthogonality tests
             Tribe *              next;   //!< for list
             Tribe *              prev;   //!< for list
 
@@ -161,7 +164,7 @@ namespace Yttrium
             template <typename ARRAY> inline
             void process( ARRAY &arr, Callback proc, void * const args)
             {
-                Vector * const v = Coerce(family).accepted(arr);
+                Vector * const v = Coerce(family).accepted(arr, Coerce(nreq) );
                 if(v)
                 {
                     assert(v->ncof>0);

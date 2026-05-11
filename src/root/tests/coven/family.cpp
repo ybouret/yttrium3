@@ -17,7 +17,7 @@ Y_UTEST(coven_family)
         Coven::Family  family(vcache);
 
         CxxArray<int>  a(dims);
-
+        size_t         required=0;
         for(size_t iter=0;iter<=3;++iter)
         {
             do
@@ -26,7 +26,7 @@ Y_UTEST(coven_family)
                 {
                     a[i] = ran.in<int>(-10,10);
                 }
-                Coven::Vector * v = family.accepted(a);
+                Coven::Vector * v = family.accepted(a,required);
                 if(v)
                     family.grow(v);
 

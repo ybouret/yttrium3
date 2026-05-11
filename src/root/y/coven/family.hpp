@@ -61,8 +61,9 @@ namespace Yttrium
              \return remaining, not zero orthogonal vector, NULL otherwise
              */
             template <typename READABLE>
-            Vector * accepted(READABLE &a)
+            Vector * accepted(READABLE &a, size_t &required)
             {
+                required = 0;
                 //--------------------------------------------------------------
                 //
                 // filtering possibilities
@@ -76,6 +77,7 @@ namespace Yttrium
 
                     case TotalSpace:
                         assert(dimension==list.size);
+                        required = dimension;
                         return 0;
 
                     case Fragmental:
@@ -98,14 +100,16 @@ namespace Yttrium
                     // check against the first vector
                     //----------------------------------------------------------
                     const Vector * const V = list.head; assert(V);
+                    ++required; assert(1==required);
                     if( !V->keepOrtho(*Q,a) ) {
-                        pool.store(Q); return 0;
+                        pool.store(Q);
+                        return 0;
                     }
 
                     //----------------------------------------------------------
                     // check against remaining vectors
                     //----------------------------------------------------------
-                    return acceptedFrom(V->next,Q);
+                    return acceptedFrom(V->next,Q,required);
                 }
                 catch(...) { pool.store(Q); throw; }
             }
@@ -157,7 +161,7 @@ namespace Yttrium
                 } catch(...) { pool.store(Q); throw; }
             }
 
-            Vector * acceptedFrom(const Vector *, Vector * const);
+            Vector * acceptedFrom(const Vector *, Vector * const, size_t &);
             Vector & getWorkspace();
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)

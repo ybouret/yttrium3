@@ -172,7 +172,7 @@ namespace Yttrium
                             oldTribe->demote(zr); assert(oldTribe->hired->found(zr));
 
                             //--------------------------------------------------
-                            // check if zero vector
+                            // check if zero vector TODO beware of usePrecompile
                             //--------------------------------------------------
                             if( IsNullVector(mu[zr]) ) {
 
@@ -193,6 +193,8 @@ namespace Yttrium
                             if(useNoColinear)
                             {
                                 std::cerr << "mu[" << zr << "] is dependent" << std::endl;
+                                std::cerr << "#tests=" << newTribe->nreq << " / " << hired->size() << std::endl;
+                                if(0==newTribe->nreq) assert(IsNullVector(mu[zr]));
                             }
 
 

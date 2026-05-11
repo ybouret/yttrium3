@@ -80,11 +80,15 @@ namespace Yttrium
 
         }
 
-        Vector * Family:: acceptedFrom(const Vector *V, Vector * const Q)
+        Vector * Family:: acceptedFrom(const Vector *V,
+                                       Vector * const Q,
+                                       size_t & required)
         {
             assert(Q);
+            assert(1==required);
             while(V)
             {
+                ++required;
                 Vector &Qnew = getWorkspace();
                 if(!V->keepOrtho(Qnew,*Q))
                 {
