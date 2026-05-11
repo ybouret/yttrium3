@@ -35,6 +35,7 @@ namespace Yttrium
 
             //! compute max generated tribes
             /**
+             sum_{k=1}^n n!/(n-k)! = n! sum_{k=0}^{n-1} 1/k! approx e * n!
              \param n number of rows
              \return sum_{k=1}^n n!/(n-k)!
              */
@@ -84,7 +85,7 @@ namespace Yttrium
                         {
 
                             if(pre) {
-                                std::cerr << "\tnull#" << i << std::endl;
+                                //std::cerr << "\tnull#" << i << std::endl;
                                 zset << i;
                             }
                         }
@@ -133,6 +134,15 @@ namespace Yttrium
                     Tribe::List lineage;
                     for(Tribe *oldTribe=list.head;oldTribe;oldTribe=oldTribe->next)
                     {
+
+                        switch(oldTribe->family.quality)
+                        {
+                            case Family::TotalSpace: continue;
+                            case Family::Degenerate: break;
+                            case Family::Fragmental: break;
+                            case Family::HyperPlane: break;
+                        }
+
                         //------------------------------------------------------
                         //
                         // create a new tribe for each ready index
@@ -154,8 +164,8 @@ namespace Yttrium
                             // row that led to a zero vector (null or colinear)
                             //--------------------------------------------------
                             const size_t zr = newTribe->irow;
-                            assert(newTribe->hired->found(zr));
-                            assert(oldTribe->ready->found(zr));
+                            assert(newTribe->hired.contains(zr));
+                            assert(oldTribe->ready.contains(zr));
                             assert(oldTribe->ready[id]==zr);
 
                             //--------------------------------------------------
@@ -163,14 +173,14 @@ namespace Yttrium
                             // shorten rlist => no increase of id
                             //--------------------------------------------------
                             const RSet hired(oldTribe->hired);
-                            oldTribe->demote(zr); assert(oldTribe->hired->found(zr));
+                            oldTribe->demote(zr); assert(oldTribe->hired.contains(zr));
 
                             //--------------------------------------------------
                             // check if zero vector
                             //--------------------------------------------------
                             if( IsNullVector(mu[zr]) ) {
 
-                                std::cerr << "mu[" << zr << "] is null" << std::endl;
+                                //std::cerr << "mu[" << zr << "] is null" << std::endl;
                                 DemoteForward(oldTribe->next,zr); // propagate to future  tribes
                                 DemoteReverse(newTribe->prev,zr); // propagate to created tribes
                                 continue;
@@ -183,8 +193,9 @@ namespace Yttrium
                             assert(newTribe->nreq>0);
                             if(useNoColinear)
                             {
-                                std::cerr << "mu[" << zr << "] is dependent" << std::endl;
-                                std::cerr << "#tests=" << newTribe->nreq << " / " << hired->size() << std::endl;
+                                //std::cerr << "mu[" << zr << "]=" << mu[zr] << " is dependent of " << hired << std::endl;
+                                DemoteForward(oldTribe->next,hired,zr); // propagate to future  tribes
+                                DemoteReverse(newTribe->prev,hired,zr); // propagate to created tribes
                             }
 
 
@@ -206,14 +217,6 @@ namespace Yttrium
                 return list.size;
             }
 
-            //! \param arr compatible array \return true iff at least one element is not zero
-            template <typename ARRAY>
-            static inline bool IsNullVector( ARRAY &arr )
-            {
-                for(size_t i=arr.size();i>0;--i) if( 0 != arr[i] ) return false;
-                return true;
-            }
-
 
             //__________________________________________________________________
             //
@@ -228,25 +231,28 @@ namespace Yttrium
             Y_Disable_Copy_And_Assign(Tribes); //!< discarded
             virtual const Tribe::List & locus() const noexcept;
 
-            void precompile() noexcept;
+            void precompile() noexcept; //!< remove zero vector before start
             void noMultiple() noexcept; //!< remove exact same families
 
-            //! demote in forward way
-            /**
-             \param curr current node
-             \param zr   index of zeroing row
-             */
-            static void DemoteForward(Tribe * curr, const size_t zr) noexcept;
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
-            //! demote in reverse order
-            /**
-             \param curr current node
-             \param zr   index of zeroing row
-             */
+            template <typename ARRAY> static inline bool IsNullVector( ARRAY &arr )
+            {
+                for(size_t i=arr.size();i>0;--i) if( 0 != arr[i] ) return false;
+                return true;
+            }
+
+
+            static void DemoteForward(Tribe * curr, const size_t zr) noexcept;
             static void DemoteReverse(Tribe * curr, const size_t zr) noexcept;
 
+            static void DemoteForward(Tribe * curr, const RSet &hired, const size_t zr) noexcept;
+            static void DemoteReverse(Tribe * curr, const RSet &hired, const size_t zr) noexcept;
+
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
         public:
-            const size_t cycle;
+            const size_t cycle; //!< current cycle
         };
 
     }

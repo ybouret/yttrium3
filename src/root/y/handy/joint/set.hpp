@@ -122,6 +122,7 @@ namespace Yttrium
             }
 
 
+            //! \param value value to remove \return found node with given value, null otherwise
             inline NodeType * remove(ParamType value) noexcept
             {
                 for(NodeType *node=list->head;node;node=node->next)
@@ -155,13 +156,56 @@ namespace Yttrium
             inline bool contains(const JointSet &rhs) const noexcept
             {
                 if(rhs.list->size>list->size) return false;
-                for(const NodeType *node=list->head;node;node=node->next)
+                for(const NodeType *node=rhs.list->head;node;node=node->next)
                 {
-                    if(!list->found(**node)) return false;
+                    if(!list.found(**node)) return false;
                 }
                 return true;
             }
 
+
+            //! optimized search \param value value to look for \return true iff found value
+            inline bool contains(ParamType value) const noexcept
+            {
+
+                switch(list->size)
+                {
+                    case 0: return false;
+                    case 1: return value == **list->head;
+                    case 2: return value == **list->head || value == **list->tail;
+                    default:
+                        break;
+                }
+                assert(list->size>=3);
+
+                switch(compare(value,**list->head))
+                {
+                    case Negative: return false;
+                    case __Zero__: return true;
+                    case Positive: break;
+                }
+
+                switch(compare(value,**list->tail))
+                {
+                    case Positive: return false;
+                    case __Zero__: return true;
+                    case Negative: break;
+                }
+
+                for(const NodeType *node=list->head->next;node!=list->tail;node=node->next)
+                {
+                    // TODO: break at one point
+                    switch(compare(value,**node))
+                    {
+                        case __Zero__: return true;
+                        case Positive:
+                        case Negative:
+                            continue;
+                    }
+                }
+
+                return false;
+            }
 
 
 

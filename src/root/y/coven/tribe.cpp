@@ -35,11 +35,12 @@ namespace Yttrium
 
         void Tribe:: demote(const size_t indx) noexcept
         {
-            if(hired->found(indx)) return;
+            //if(hired->found(indx)) return;
+            if(hired.contains(indx)) return;
             RNode * const z  = Coerce(ready).remove(indx); assert(z);
             Coerce(hired).insert(z);
-            assert( hired->found(indx));
-            assert(!ready->found(indx));
+            assert( hired.contains(indx));
+            assert(!ready.contains(indx));
         }
 
         bool Tribe:: hasHired(const RList &zlist) const noexcept
@@ -47,7 +48,7 @@ namespace Yttrium
             for(RList::ConstIterator it=zlist.begin();it!=zlist.end();++it)
             {
                 const size_t zr = *it;
-                if( ! hired->found(zr) ) return false;
+                if( ! hired.contains(zr) ) return false;
             }
             return true;
         }

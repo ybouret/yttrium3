@@ -66,6 +66,18 @@ namespace
 
 #include "y/string/env.hpp"
 
+namespace
+{
+    static inline void Print(const apn           & num,
+                             const Coven::Survey & vec)
+    {
+        std::cerr
+        << "#generated="   << std::setw(8) << num
+        << "/ #vectors="   << std::setw(8) << vec->size
+        << " / #sampling=" << std::setw(8) << vec.sampling << std::endl;
+    }
+}
+
 Y_UTEST(coven_tribes)
 {
     Core::Rand    ran;
@@ -87,41 +99,40 @@ Y_UTEST(coven_tribes)
 
         const apn maxGenerated = Coven::Tribes::MaxGenerated(nr);
         Y_PRINTV(maxGenerated);
-        std::cerr << "-- full generation" << std::endl;
+        (std::cerr << "-- all generated : ").flush();
+
         Coven::StandardSurvey vec0;
         const apn             num0 = TestTribes(mu,
                                                 0x00,
                                                 vc,rc,xml,vec0);
-        std::cerr << "#generated=" << num0 << "/ #vectors=" << vec0->size << " / #sampling=" << vec0.sampling << std::endl;
+        Print(num0,vec0);
 
-
-        std::cerr << "-- use NoMultiple" << std::endl;
+        (std::cerr << "-- use NoMultiple: ").flush();
         Coven::StandardSurvey vec1;
         const apn             num1 = TestTribes(mu,
                                                 Coven::Tribes::NoMultiple,
                                                 vc,rc,xml,vec1);
-        std::cerr << "#generated=" << num1 << "/ #vectors=" << vec1->size << " / #sampling=" << vec1.sampling << std::endl;
-        Y_CHECK(vec1==vec0);
+        Print(num1,vec1);
+        Y_ASSERT(vec1==vec0);
 
 
-        std::cerr << "-- use Precompile" << std::endl;
+        (std::cerr << "-- use Precompile: ").flush();
         Coven::StandardSurvey vec2;
         const apn             num2 = TestTribes(mu,
                                                 Coven::Tribes::Precompile,
                                                 vc,rc,xml,vec2);
-        std::cerr << "#generated=" << num2 << "/ #vectors=" << vec2->size << " / #sampling=" << vec2.sampling << std::endl;
-        Y_CHECK(vec2==vec0);
+        Print(num2,vec2);
+        Y_ASSERT(vec2==vec0);
 
-
-        std::cerr << "-- use NoColinear" << std::endl;
+        (std::cerr << "-- use NoColinear: ").flush();
         Coven::StandardSurvey vec3;
         const apn             num3 = TestTribes(mu,
                                                 Coven::Tribes::NoColinear,
                                                 vc,rc,xml,vec3);
-        std::cerr << "#generated=" << num3 << "/ #vectors=" << vec3->size << " / #sampling=" << vec3.sampling << std::endl;
-        Y_CHECK(vec3==vec0);
+        Print(num3,vec3);
+        Y_ASSERT(vec3==vec0);
 
-        Y_PRINTV(maxGenerated);
+        std::cerr << "-- done" << std::endl;
     }
 
 

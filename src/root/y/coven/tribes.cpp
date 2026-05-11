@@ -94,5 +94,30 @@ namespace Yttrium
             }
 
         }
+
+
+        void Tribes:: DemoteForward(Tribe * curr, const RSet &hired, const size_t zr) noexcept
+        {
+            while(curr)
+            {
+                if(curr->hired.contains(hired) && curr->ready.contains(zr))
+                {
+                    curr->demote(zr);
+                }
+                curr = curr->next;
+            }
+        }
+
+        void Tribes:: DemoteReverse(Tribe * curr, const RSet &hired, const size_t zr) noexcept
+        {
+            while(curr)
+            {
+                if(curr->hired.contains(hired) && curr->ready.contains(zr))
+                {
+                    curr->demote(zr);
+                }
+                curr = curr->prev;
+            }
+        }
     }
 }

@@ -79,6 +79,7 @@ namespace Yttrium
                 setup(ir,mu.rows);
                 assert(hired->size()+ready->size()==mu.rows);
                 process(mu[ir],proc,args);
+                assert(0==nreq);
             }
 
             //! expand

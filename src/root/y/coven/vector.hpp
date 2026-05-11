@@ -151,6 +151,8 @@ namespace Yttrium
             void update();                    //!< simple update
             bool univocal();                  //!< univocal+update \return true iff not empty/nul
 
+            const zVector & operator*() const noexcept { return *this; } // for display
+
             //__________________________________________________________________
             //
             //

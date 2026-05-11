@@ -80,7 +80,7 @@ namespace Yttrium
 
         }
 
-        Vector * Family:: acceptedFrom(const Vector *V,
+        Vector * Family:: acceptedFrom(const Vector * V,
                                        Vector * const Q,
                                        size_t & required)
         {
