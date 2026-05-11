@@ -62,9 +62,8 @@ namespace Yttrium
              \return remaining, not zero orthogonal vector, NULL otherwise
              */
             template <typename READABLE>
-            Vector * accepted(READABLE &a, size_t &required)
+            Vector * accepted(READABLE &a)
             {
-                required = 0;
                 //--------------------------------------------------------------
                 //
                 // filtering possibilities
@@ -74,11 +73,11 @@ namespace Yttrium
                 {
                     case Degenerate:
                         assert(0==list.size);
-                        return acceptedFirst(a); // no test, vector must be not null
+                        return acceptedFirst(a);
 
                     case TotalSpace:
                         assert(dimension==list.size);
-                        return 0; // required = 0, all vectors are included
+                        return 0;
 
                     case Fragmental:
                     case HyperPlane:
@@ -100,7 +99,6 @@ namespace Yttrium
                     // check against the first vector
                     //----------------------------------------------------------
                     const Vector * const V = list.head; assert(V);
-                    ++required; assert(1==required);
                     if( !V->keepOrtho(*Q,a) ) {
                         pool.store(Q);
                         return 0;
@@ -109,7 +107,7 @@ namespace Yttrium
                     //----------------------------------------------------------
                     // check against remaining vectors
                     //----------------------------------------------------------
-                    return acceptedFrom(V->next,Q,required);
+                    return acceptedFrom(V->next,Q);
                 }
                 catch(...) { pool.store(Q); throw; }
             }
@@ -161,7 +159,7 @@ namespace Yttrium
                 } catch(...) { pool.store(Q); throw; }
             }
 
-            Vector * acceptedFrom(const Vector *, Vector * const, size_t &);
+            Vector * acceptedFrom(const Vector *, Vector * const);
             Vector & getWorkspace();
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)

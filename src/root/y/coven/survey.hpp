@@ -23,6 +23,7 @@ namespace Yttrium
         class Survey : public Proxy< const Vectors >, public Releasable
         {
         public:
+            
             //__________________________________________________________________
             //
             //

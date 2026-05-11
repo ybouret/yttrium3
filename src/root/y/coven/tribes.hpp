@@ -137,7 +137,33 @@ namespace Yttrium
                             case Family::HyperPlane:
                                 if(useHyperPlane)
                                 {
-                                    std::cerr << "should use HyperPlane with " << oldTribe->hired << " | " << oldTribe->ready << std::endl;
+                                    //std::cerr << "should use HyperPlane with " << oldTribe->hired << " | " << oldTribe->ready << std::endl;
+                                    const RSet hired(oldTribe->hired);
+                                    while(oldTribe->ready->size())
+                                    {
+                                        RNode * const node = Coerce(oldTribe->ready).popHead();
+                                        Coerce(oldTribe->hired).insert(node);
+                                        const size_t  ir = **node;
+                                        Coerce(oldTribe->irow) = ir;
+                                        oldTribe->process(mu[ir],proc,args);
+                                        if(oldTribe->last)
+                                        {
+                                            //std::cerr << "\tdone with #" << ir << std::endl;
+                                            assert(oldTribe->family.quality==Family::TotalSpace);
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            //std::cerr << "\tcolinear #" << ir << std::endl;
+                                            assert(oldTribe->family.quality==Family::HyperPlane);
+                                            if(useNoColinear)
+                                            {
+                                                DemoteForward(oldTribe->next,hired,ir);
+                                                DemoteForward(lineage.head,hired,ir);
+                                            }
+                                        }
+                                    }
+                                    continue; // to oldTribe->next
                                 }
                                 break;
                         }
@@ -189,7 +215,6 @@ namespace Yttrium
                             // mu[zr] was in oldTribe sub-space:
                             // if zr is hired, mu[zr] will produce zero
                             //--------------------------------------------------
-                            assert(newTribe->nreq>0);
                             if(useNoColinear)
                             {
                                 //std::cerr << "mu[" << zr << "]=" << mu[zr] << " is dependent of " << hired << std::endl;

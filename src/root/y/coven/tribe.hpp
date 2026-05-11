@@ -69,7 +69,6 @@ namespace Yttrium
             ready(rc),
             last(0),
             irow(ir),
-            nreq(0),
             next(0),
             prev(0)
             {
@@ -79,7 +78,6 @@ namespace Yttrium
                 setup(ir,mu.rows);
                 assert(hired->size()+ready->size()==mu.rows);
                 process(mu[ir],proc,args);
-                assert(0==nreq);
             }
 
             //! expand
@@ -101,7 +99,6 @@ namespace Yttrium
             ready(tr.ready),
             last(0),
             irow(0),
-            nreq(0),
             next(0),
             prev(0)
             {
@@ -142,12 +139,12 @@ namespace Yttrium
             const RSet           ready;  //!< list of ready rows
             const Vector * const last;   //!< last added vector
             const size_t         irow;   //!< last used row index
-            const size_t         nreq;   //!< required orthogonality tests
             Tribe *              next;   //!< for list
             Tribe *              prev;   //!< for list
 
         private:
             Y_Disable_Copy_And_Assign(Tribe); //!< discarded
+            friend class Tribes;
 
             //! prepare hired and ready
             /**
@@ -165,7 +162,8 @@ namespace Yttrium
             template <typename ARRAY> inline
             void process( ARRAY &arr, Callback proc, void * const args)
             {
-                Vector * const v = Coerce(family).accepted(arr, Coerce(nreq) );
+                Vector * const v = Coerce(family).accepted(arr);
+                Coerce(last) = 0;
                 if(v)
                 {
                     assert(v->ncof>0);

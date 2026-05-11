@@ -115,6 +115,17 @@ namespace Yttrium
                 return list->pop( list->fetch(i) );
             }
 
+            inline NodeType * popHead() noexcept
+            {
+                return list->popHead();
+            }
+
+            inline NodeType * popTail() noexcept
+            {
+                return list->popTail();
+            }
+
+            
             //! \param i node index in [1:size] \return data at i-th node
             inline ConstType & operator[](const size_t i) const noexcept
             {

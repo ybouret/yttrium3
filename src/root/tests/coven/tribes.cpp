@@ -80,6 +80,7 @@ namespace
 
 Y_UTEST(coven_tribes)
 {
+    //Coven::Survey::Trace = true;
     Core::Rand    ran;
     bool          verbose = Environment::Flag("VERBOSE");
     XML::Log      xml(std::cerr,verbose);

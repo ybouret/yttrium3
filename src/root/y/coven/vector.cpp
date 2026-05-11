@@ -74,6 +74,9 @@ namespace Yttrium
             try
             {
                 Coerce(ncof) = 0;
+                Coerce(npos) = 0;
+                Coerce(nneg) = 0;
+                Coerce(nnul) = 0;
                 apn &  nrm2  = Coerce(mod2);
                 nrm2.ldz();
                 for(size_t i=dimension;i>0;--i)
