@@ -52,6 +52,7 @@ namespace Yttrium
             //! setup \param sc shared cache
             inline explicit JointSet(const CacheType &sc) :
             ProxyType(),
+            Recyclable(),
             list(sc),
             compare()
             {
@@ -60,6 +61,7 @@ namespace Yttrium
             //! duplicate \param other another set
             inline JointSet(const JointSet &other) :
             ProxyType(),
+            Recyclable(),
             list(other.list),
             compare()
             {

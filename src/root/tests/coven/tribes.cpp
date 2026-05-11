@@ -116,7 +116,7 @@ Y_UTEST(coven_tribes)
                                                 Coven::Tribes::RunTimeGTZ,
                                                 vc,rc,xml,vec3);
         std::cerr << "#generated=" << num3 << "/ #vectors=" << vec3->size << " / #sampling=" << vec3.sampling << std::endl;
-        //Y_CHECK(vec2==vec0);
+        Y_CHECK(vec3==vec0);
     }
 
 

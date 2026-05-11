@@ -22,6 +22,7 @@ namespace Yttrium
         Family:: Family( const Family & other) :
         Object(),
         Metrics(other),
+        Proxy<const Vectors>(),
         Recyclable(),
         Logging(),
         list(),

@@ -71,8 +71,7 @@ namespace Yttrium
                         if(0==tr->family->size)
                         {
 
-                            if(pre)
-                            {
+                            if(pre) {
                                 std::cerr << "\tnull#" << i << std::endl;
                                 zset << i;
                             }
@@ -167,12 +166,12 @@ namespace Yttrium
                             assert(oldTribe->ready[id]==zr);
 
 
-
+                            // update oldTribe: shorten rlist, no increase of id
+                            oldTribe->demote(zr); assert(oldTribe->hired->found(zr));
 
                             // check if zero vector
                             if( IsNullVector(mu[zr]) ) {
-                                // update oldTribe: shorten rlist, no increase of id
-                                oldTribe->demote(zr); assert(oldTribe->hired->found(zr));
+
                                 std::cerr << "mu[" << zr << "] is null" << std::endl;
                                 if(useRunTimeGTZ)
                                 {
@@ -184,8 +183,7 @@ namespace Yttrium
                             }
 
                             // mu[zr] was in oldTribe sub-space
-                            ++id;
-                            std::cerr << "mu[" << zr << "] is dependent" << std::endl;
+                            //std::cerr << "mu[" << zr << "] is dependent" << std::endl;
 
                         }
                         //std::cerr << "\tleave tribe " << trIndex << " / zset=" << zset << std::endl;
