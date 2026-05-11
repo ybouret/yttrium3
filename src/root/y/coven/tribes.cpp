@@ -20,7 +20,7 @@ namespace Yttrium
         void Tribes:: toXML(XML::Log &xml) const
         {
             const size_t count = list.size;
-            Y_XML_Element_Attr(xml,Tribes, Y_XML_Attr(count) );
+            Y_XML_Element_Attr(xml,Tribes, Y_XML_Attr(cycle) << Y_XML_Attr(count) );
             for(const Tribe *tr=list.head;tr;tr=tr->next)
                 tr->toXML(xml);
         }

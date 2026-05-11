@@ -42,8 +42,7 @@ namespace
 
 
         apn num = tribes->size;
-#if 1
-        while(true)
+         while(true)
         {
             const size_t gen = tribes.generate(mu,strategy,Coven::Survey::Callback,&survey);
             tribes.toXML(xml);
@@ -60,7 +59,6 @@ namespace
                 Y_XMLog(xml,*node);
             }
         }
-#endif
         return num;
     }
 
@@ -87,20 +85,38 @@ Y_UTEST(coven_tribes)
                 mu[i][j] = ran.in<int>(-1,1);
         std::cerr << "mu=" << mu << std::endl;
 
+        std::cerr << "-- full generation" << std::endl;
         Coven::StandardSurvey vec0;
         const apn             num0 = TestTribes(mu,
                                                 0x00,
                                                 vc,rc,xml,vec0);
         std::cerr << "#generated=" << num0 << "/ #vectors=" << vec0->size << " / #sampling=" << vec0.sampling << std::endl;
 
-        return 0;
 
+        std::cerr << "-- use NoMultiple" << std::endl;
         Coven::StandardSurvey vec1;
         const apn             num1 = TestTribes(mu,
-                                                Coven::Tribes::NoMultiple | Coven::Tribes::Precompile,
+                                                Coven::Tribes::NoMultiple,
                                                 vc,rc,xml,vec1);
         std::cerr << "#generated=" << num1 << "/ #vectors=" << vec1->size << " / #sampling=" << vec1.sampling << std::endl;
+        Y_CHECK(vec1==vec0);
 
+
+        std::cerr << "-- use Precompile" << std::endl;
+        Coven::StandardSurvey vec2;
+        const apn             num2 = TestTribes(mu,
+                                                Coven::Tribes::Precompile,
+                                                vc,rc,xml,vec2);
+        std::cerr << "#generated=" << num2 << "/ #vectors=" << vec2->size << " / #sampling=" << vec2.sampling << std::endl;
+        Y_CHECK(vec2==vec0);
+
+        std::cerr << "-- use RunTimeGTZ" << std::endl;
+        Coven::StandardSurvey vec3;
+        const apn             num3 = TestTribes(mu,
+                                                Coven::Tribes::RunTimeGTZ,
+                                                vc,rc,xml,vec3);
+        std::cerr << "#generated=" << num3 << "/ #vectors=" << vec3->size << " / #sampling=" << vec3.sampling << std::endl;
+        //Y_CHECK(vec2==vec0);
     }
 
 

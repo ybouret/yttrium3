@@ -38,8 +38,19 @@ namespace Yttrium
             if(hired->found(indx)) return;
             RNode * const z  = Coerce(ready).remove(indx); assert(z);
             Coerce(hired).insert(z);
+            assert( hired->found(indx));
+            assert(!ready->found(indx));
         }
 
+        bool Tribe:: hasHired(const RList &zlist) const noexcept
+        {
+            for(RList::ConstIterator it=zlist.begin();it!=zlist.end();++it)
+            {
+                const size_t zr = *it;
+                if( ! hired->found(zr) ) return false;
+            }
+            return true;
+        }
 
 
     }

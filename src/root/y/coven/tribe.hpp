@@ -126,9 +126,9 @@ namespace Yttrium
             //__________________________________________________________________
 
             //! ensure all indices are in hired
-            void demote(const RList &indx) noexcept;
-            void demote(const size_t indx) noexcept;
-
+            void demote(const RList &) noexcept;
+            void demote(const size_t) noexcept;
+            bool hasHired(const RList &) const noexcept;
 
             //__________________________________________________________________
             //

@@ -28,9 +28,10 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            static const unsigned Precompile = 0x01; //!< remove zero vectors
-            static const unsigned NoMultiple = 0x02; //!< remove multiple same families
-            static const unsigned PostFusion = 0x04;
+            static const unsigned Precompile = 0x01; //!< remove initial zero vectors
+            static const unsigned RunTimeGTZ = 0x02; //!< remove zero vectors at run time
+            static const unsigned NoMultiple = 0x04; //!< remove multiple same families
+            static const unsigned NoColinear = 0x08; //!< drop colinear vectors when found
             //static const unsigned HyperPlane = 0x04; //!< only one next vector
 
             //__________________________________________________________________
@@ -56,7 +57,8 @@ namespace Yttrium
                             Tribe::Callback   proc=0,
                             void * const      args=0) :
             list(),
-            zset(rc)
+            zset(rc),
+            cycle(0)
             {
                 const size_t nr  = mu.rows;
                 const bool   pre = 0 != (strategy&Precompile);
@@ -68,9 +70,12 @@ namespace Yttrium
                         Tribe * const tr = list.pushHead( new Tribe(mu,i,vc,rc,proc,args) );
                         if(0==tr->family->size)
                         {
-                            std::cerr << "Null '" << mu[i] << "'" << std::endl;
+
                             if(pre)
+                            {
+                                std::cerr << "\tnull#" << i << std::endl;
                                 zset << i;
+                            }
                         }
                     }
                     if(pre) precompile();
@@ -95,7 +100,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            
+
             //! new generation
             /**
              \param mu       original matrix (hired+ready==mu.rows)
@@ -110,9 +115,21 @@ namespace Yttrium
                             Tribe::Callback   proc=0,
                             void * const      args=0)
             {
-                Tribe::List lineage;
-                zset.free();
+                const bool useRunTimeGTZ = 0!=(strategy & RunTimeGTZ);
+                const bool useNoColinear = 0!=(strategy & NoColinear);
+                const bool useNullVector = useRunTimeGTZ || useNoColinear;
+                const bool useAllVectors = !useNullVector;
 
+                //std::cerr << "strategy     =" << strategy << std::endl;
+                //std::cerr << "usePrecompile=" << usePrecompile << std::endl;
+                //std::cerr << "useNoColinear=" << useNoColinear << std::endl;
+                //std::cerr << "useNullVector=" << useNullVector << std::endl;
+                //std::cerr << "useAllVectors=" << useAllVectors << std::endl;
+
+
+                zset.free();
+                ++Coerce(cycle);
+                //std::cerr << "-- generate cycle #" << cycle << std::endl;
                 //--------------------------------------------------------------
                 //
                 //
@@ -120,50 +137,60 @@ namespace Yttrium
                 //
                 //
                 //--------------------------------------------------------------
-                for(Tribe *oldTribe=list.head;oldTribe;oldTribe=oldTribe->next)
                 {
-                    std::cerr << "process tribe..." << std::endl;
-                    //----------------------------------------------------------
-                    //
-                    // create a new tribe for each ready index
-                    //
-                    //----------------------------------------------------------
-                    Tribe::List  clan;
-                    const RList &rlist = *(oldTribe->ready);
-                    for(size_t id=1;id<=rlist->size;++id)
+                    Tribe::List lineage;
+                    for(Tribe *oldTribe=list.head;oldTribe;oldTribe=oldTribe->next)
                     {
-                        Tribe * const newTribe = clan.pushTail( new Tribe(*oldTribe,mu,id,proc,args) );
-                        assert(newTribe);
-                        assert(newTribe->ready->size()+1==oldTribe->ready->size());
-                        if(!newTribe->last)
+                        //std::cerr << "\tenter tribe " << trIndex << " / zset=" << zset << std::endl;
+                        //----------------------------------------------------------
+                        //
+                        // create a new tribe for each ready index
+                        //
+                        //----------------------------------------------------------
+                        const RList &rlist = *(oldTribe->ready);
+                        for(size_t id=1;id<=rlist->size;)
                         {
-                            // zr = oldTribe->ready[id]
-                            const size_t zr = newTribe->irow;
+                            //std::cerr << "\t\tid=" << id << " zset=" << zset << std::endl;
+                            Tribe * const newTribe = lineage.pushTail( new Tribe(*oldTribe,mu,id,proc,args) );
+                            assert(newTribe);
+                            assert(newTribe->ready->size()+1==oldTribe->ready->size());
+                            assert(newTribe->hasHired(*zset));
+
+                            if(useAllVectors || newTribe->last) { ++id; continue; }
+
+                            assert(useRunTimeGTZ ||useNoColinear);
+
+                            const size_t zr = newTribe->irow; // row that led to a zero vector
+                            assert(!zset->found(zr));
                             assert(newTribe->hired->found(zr));
                             assert(oldTribe->ready->found(zr));
                             assert(oldTribe->ready[id]==zr);
-                            std::cerr << "mu[" << zr << "] = " << mu[zr];
-                            if( IsNullVector(mu[zr]) )
-                            {
-                                std::cerr << " is null" << std::endl;
-                                if(zset->found(zr))
+
+
+
+
+                            // check if zero vector
+                            if( IsNullVector(mu[zr]) ) {
+                                // update oldTribe: shorten rlist, no increase of id
+                                oldTribe->demote(zr); assert(oldTribe->hired->found(zr));
+                                std::cerr << "mu[" << zr << "] is null" << std::endl;
+                                if(useRunTimeGTZ)
                                 {
-                                    std::cerr << "multiple " << zr << std::endl;
+                                    zset << zr;
+                                    demote( oldTribe->next,zr); // propagate to future  tribes
+                                    rdemote(newTribe->prev,zr); // propagate to created tribes
                                 }
-                                zset << zr;
-                                // demote everywhere
-                                rdemote(newTribe->prev,zr);
-                                demote(lineage.head,zr);
-                                demote(oldTribe->next,zr);
-                            }
-                            else
-                            {
-                                std::cerr << " is included in vector space " << (oldTribe->hired) << std::endl;
+                                continue;
                             }
 
+                            // mu[zr] was in oldTribe sub-space
+                            ++id;
+                            std::cerr << "mu[" << zr << "] is dependent" << std::endl;
+
                         }
+                        //std::cerr << "\tleave tribe " << trIndex << " / zset=" << zset << std::endl;
+
                     }
-                    lineage.mergeTail(clan);
                     //--------------------------------------------------------------
                     //
                     //
@@ -171,10 +198,9 @@ namespace Yttrium
                     //
                     //
                     //--------------------------------------------------------------
+                    list.swapForList(lineage);
                 }
-                list.swapForList(lineage);
 
-                std::cerr << "-- zset = " << zset << std::endl;
 
                 if(strategy&NoMultiple) noMultiple();
                 return list.size;
@@ -221,7 +247,8 @@ namespace Yttrium
 
             void precompile() noexcept;
             void noMultiple() noexcept; //!< remove exact same families
-
+        public:
+            const size_t cycle;
         };
 
     }
