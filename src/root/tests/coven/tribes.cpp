@@ -112,24 +112,15 @@ Y_UTEST(coven_tribes)
         std::cerr << "#generated=" << num2 << "/ #vectors=" << vec2->size << " / #sampling=" << vec2.sampling << std::endl;
         Y_CHECK(vec2==vec0);
 
-        std::cerr << "-- use RunTimeGTZ" << std::endl;
+
+        std::cerr << "-- use NoColinear" << std::endl;
         Coven::StandardSurvey vec3;
         const apn             num3 = TestTribes(mu,
-                                                Coven::Tribes::RunTimeGTZ,
+                                                Coven::Tribes::NoColinear,
                                                 vc,rc,xml,vec3);
         std::cerr << "#generated=" << num3 << "/ #vectors=" << vec3->size << " / #sampling=" << vec3.sampling << std::endl;
         Y_CHECK(vec3==vec0);
 
-#if 1
-        std::cerr << "-- use NoColinear" << std::endl;
-        Coven::StandardSurvey vec4;
-        const apn             num4 = TestTribes(mu,
-                                                Coven::Tribes::NoColinear,
-                                                vc,rc,xml,vec4);
-        std::cerr << "#generated=" << num4 << "/ #vectors=" << vec4->size << " / #sampling=" << vec4.sampling << std::endl;
-        Y_CHECK(vec4==vec0);
-#endif
-        
         Y_PRINTV(maxGenerated);
     }
 

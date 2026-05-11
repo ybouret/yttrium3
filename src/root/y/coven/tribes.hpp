@@ -29,9 +29,8 @@ namespace Yttrium
             //
             //__________________________________________________________________
             static const unsigned Precompile = 0x01; //!< remove initial zero vectors
-            static const unsigned RunTimeGTZ = 0x02; //!< remove zero vectors at run time
-            static const unsigned NoMultiple = 0x04; //!< remove multiple same families
-            static const unsigned NoColinear = 0x08; //!< drop colinear vectors when found
+            static const unsigned NoMultiple = 0x02; //!< remove multiple same families
+            static const unsigned NoColinear = 0x04; //!< drop colinear vectors when found
             //static const unsigned HyperPlane = 0x04; //!< only one next vector
 
             //! compute max generated tribes
@@ -127,11 +126,7 @@ namespace Yttrium
                             Tribe::Callback   proc=0,
                             void * const      args=0)
             {
-                const bool useRunTimeGTZ = 0!=(strategy & RunTimeGTZ);
                 const bool useNoColinear = 0!=(strategy & NoColinear);
-                //const bool usePrecompile = 0!=(strategy & Precompile);
-                const bool useNullVector = useRunTimeGTZ || useNoColinear;
-                const bool useAllVectors = !useNullVector;
 
                 ++Coerce(cycle);
                 {
@@ -153,8 +148,7 @@ namespace Yttrium
                             //--------------------------------------------------
                             // check if necessary to post-process
                             //--------------------------------------------------
-                            if(useAllVectors || newTribe->last) { ++id; continue; }
-                            assert(useRunTimeGTZ ||useNoColinear);
+                            if(!NoColinear || newTribe->last) { ++id; continue; }
 
                             //--------------------------------------------------
                             // row that led to a zero vector (null or colinear)
@@ -172,16 +166,13 @@ namespace Yttrium
                             oldTribe->demote(zr); assert(oldTribe->hired->found(zr));
 
                             //--------------------------------------------------
-                            // check if zero vector TODO beware of usePrecompile
+                            // check if zero vector
                             //--------------------------------------------------
                             if( IsNullVector(mu[zr]) ) {
 
                                 std::cerr << "mu[" << zr << "] is null" << std::endl;
-                                if(useRunTimeGTZ)
-                                {
-                                    DemoteForward(oldTribe->next,zr); // propagate to future  tribes
-                                    DemoteReverse(newTribe->prev,zr); // propagate to created tribes
-                                }
+                                DemoteForward(oldTribe->next,zr); // propagate to future  tribes
+                                DemoteReverse(newTribe->prev,zr); // propagate to created tribes
                                 continue;
                             }
 
@@ -189,12 +180,11 @@ namespace Yttrium
                             // mu[zr] was in oldTribe sub-space:
                             // if zr is hired, mu[zr] will produce zero
                             //--------------------------------------------------
-
+                            assert(newTribe->nreq>0);
                             if(useNoColinear)
                             {
                                 std::cerr << "mu[" << zr << "] is dependent" << std::endl;
                                 std::cerr << "#tests=" << newTribe->nreq << " / " << hired->size() << std::endl;
-                                if(0==newTribe->nreq) assert(IsNullVector(mu[zr]));
                             }
 
 
