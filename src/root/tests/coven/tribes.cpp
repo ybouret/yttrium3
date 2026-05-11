@@ -132,6 +132,15 @@ Y_UTEST(coven_tribes)
         Print(num3,vec3);
         Y_ASSERT(vec3==vec0);
 
+
+        (std::cerr << "-- use HyperPlane: ").flush();
+        Coven::StandardSurvey vec4;
+        const apn             num4 = TestTribes(mu,
+                                                Coven::Tribes::HyperPlane,
+                                                vc,rc,xml,vec4);
+        Print(num4,vec4);
+        Y_ASSERT(vec4==vec0);
+
         std::cerr << "-- done" << std::endl;
     }
 

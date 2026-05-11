@@ -62,17 +62,12 @@ namespace Yttrium
         }
 
 
-        void Tribes:: precompile() noexcept
+        void Tribes:: precompile(const RSet &zset) noexcept
         {
-            if(zset->size())
-            {
-                //std::cerr << "demoting indices " << zset << std::endl;
+            if(zset->size()) {
                 for(Tribe *tr=list.head;tr;tr=tr->next)
-                {
                     tr->demote(*zset);
-                }
             }
-            zset.free();
         }
 
 

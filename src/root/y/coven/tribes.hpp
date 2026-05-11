@@ -31,7 +31,7 @@ namespace Yttrium
             static const unsigned Precompile = 0x01; //!< remove initial zero vectors
             static const unsigned NoMultiple = 0x02; //!< remove multiple same families
             static const unsigned NoColinear = 0x04; //!< drop colinear vectors when found
-            //static const unsigned HyperPlane = 0x04; //!< only one next vector
+            static const unsigned HyperPlane = 0x08; //!< only one next vector
 
             //! compute max generated tribes
             /**
@@ -70,27 +70,21 @@ namespace Yttrium
                             Tribe::Callback   proc=0,
                             void * const      args=0) :
             list(),
-            zset(rc),
             cycle(0)
             {
-                const size_t nr  = mu.rows;
-                const bool   pre = 0 != (strategy&Precompile);
+                RSet         zset(rc);
+                const size_t nr            = mu.rows;
+                const bool   usePrecompile = 0 != (strategy&Precompile);
                 if(nr>0)
                 {
 
                     for(size_t i=mu.rows;i>0;--i)
                     {
                         Tribe * const tr = list.pushHead( new Tribe(mu,i,vc,rc,proc,args) );
-                        if(0==tr->family->size)
-                        {
-
-                            if(pre) {
-                                //std::cerr << "\tnull#" << i << std::endl;
-                                zset << i;
-                            }
-                        }
+                        if(usePrecompile && 0==tr->family->size)
+                            zset << i;
                     }
-                    if(pre) precompile();
+                    if(usePrecompile) precompile(zset);
                 }
             }
 
@@ -128,7 +122,7 @@ namespace Yttrium
                             void * const      args=0)
             {
                 const bool useNoColinear = 0!=(strategy & NoColinear);
-
+                const bool useHyperPlane = 0!=(strategy & HyperPlane);
                 ++Coerce(cycle);
                 {
                     Tribe::List lineage;
@@ -137,10 +131,15 @@ namespace Yttrium
 
                         switch(oldTribe->family.quality)
                         {
-                            case Family::TotalSpace: continue;
+                            case Family::TotalSpace: continue; // no more new vector
                             case Family::Degenerate: break;
                             case Family::Fragmental: break;
-                            case Family::HyperPlane: break;
+                            case Family::HyperPlane:
+                                if(useHyperPlane)
+                                {
+                                    std::cerr << "should use HyperPlane with " << oldTribe->hired << " | " << oldTribe->ready << std::endl;
+                                }
+                                break;
                         }
 
                         //------------------------------------------------------
@@ -227,11 +226,10 @@ namespace Yttrium
 
         private:
             Tribe::List list;                  //!< current list of tribe
-            RSet        zset;                  //!< auxiliary
             Y_Disable_Copy_And_Assign(Tribes); //!< discarded
             virtual const Tribe::List & locus() const noexcept;
 
-            void precompile() noexcept; //!< remove zero vector before start
+            void precompile(const RSet &) noexcept; //!< remove zero vector before start
             void noMultiple() noexcept; //!< remove exact same families
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
