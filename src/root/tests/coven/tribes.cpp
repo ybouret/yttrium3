@@ -119,6 +119,18 @@ Y_UTEST(coven_tribes)
                                                 vc,rc,xml,vec3);
         std::cerr << "#generated=" << num3 << "/ #vectors=" << vec3->size << " / #sampling=" << vec3.sampling << std::endl;
         Y_CHECK(vec3==vec0);
+
+#if 0
+        std::cerr << "-- use NoMultiple" << std::endl;
+        Coven::StandardSurvey vec4;
+        const apn             num4 = TestTribes(mu,
+                                                Coven::Tribes::NoMultiple,
+                                                vc,rc,xml,vec4);
+        std::cerr << "#generated=" << num4 << "/ #vectors=" << vec4->size << " / #sampling=" << vec4.sampling << std::endl;
+        Y_CHECK(vec4==vec0);
+#endif
+        
+        Y_PRINTV(maxGenerated);
     }
 
 

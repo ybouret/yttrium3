@@ -25,16 +25,21 @@ namespace Yttrium
                 tr->toXML(xml);
         }
 
-        static inline bool FoundSameFamilyIn(const Tribe::List &target, const Tribe * const lhs) noexcept
+        namespace
         {
-            for(const Tribe *rhs=target.head;rhs;rhs=rhs->next)
+            static inline
+            bool FoundSameFamilyIn(const Tribe::List & target,
+                                   const Tribe * const lhs) noexcept
             {
-                if( lhs->family == rhs->family)
+                for(const Tribe *rhs=target.head;rhs;rhs=rhs->next)
                 {
-                    return true;
+                    if( lhs->family == rhs->family)
+                    {
+                        return true;
+                    }
                 }
+                return false;
             }
-            return false;
         }
 
 
@@ -61,7 +66,7 @@ namespace Yttrium
         {
             if(zset->size())
             {
-                std::cerr << "demoting indices " << zset << std::endl;
+                //std::cerr << "demoting indices " << zset << std::endl;
                 for(Tribe *tr=list.head;tr;tr=tr->next)
                 {
                     tr->demote(*zset);
@@ -70,5 +75,24 @@ namespace Yttrium
             zset.free();
         }
 
+
+        void Tribes:: DemoteForward(Tribe * curr, const size_t zr) noexcept
+        {
+            while(curr)
+            {
+                curr->demote(zr);
+                curr=curr->next;
+            }
+        }
+
+        void Tribes:: DemoteReverse(Tribe * curr, const size_t zr) noexcept
+        {
+            while(curr)
+            {
+                curr->demote(zr);
+                curr=curr->prev;
+            }
+
+        }
     }
 }

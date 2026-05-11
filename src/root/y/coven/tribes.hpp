@@ -129,25 +129,11 @@ namespace Yttrium
             {
                 const bool useRunTimeGTZ = 0!=(strategy & RunTimeGTZ);
                 const bool useNoColinear = 0!=(strategy & NoColinear);
+                //const bool usePrecompile = 0!=(strategy & Precompile);
                 const bool useNullVector = useRunTimeGTZ || useNoColinear;
                 const bool useAllVectors = !useNullVector;
 
-                //std::cerr << "strategy     =" << strategy << std::endl;
-                //std::cerr << "usePrecompile=" << usePrecompile << std::endl;
-                //std::cerr << "useNoColinear=" << useNoColinear << std::endl;
-                //std::cerr << "useNullVector=" << useNullVector << std::endl;
-                //std::cerr << "useAllVectors=" << useAllVectors << std::endl;
-
-
                 ++Coerce(cycle);
-                //std::cerr << "-- generate cycle #" << cycle << std::endl;
-                //--------------------------------------------------------------
-                //
-                //
-                // ENTER: loop over old tribes
-                //
-                //
-                //--------------------------------------------------------------
                 {
                     Tribe::List lineage;
                     for(Tribe *oldTribe=list.head;oldTribe;oldTribe=oldTribe->next)
@@ -182,6 +168,7 @@ namespace Yttrium
                             // update oldTribe:
                             // shorten rlist => no increase of id
                             //--------------------------------------------------
+                            const RSet hired(oldTribe->hired);
                             oldTribe->demote(zr); assert(oldTribe->hired->found(zr));
 
                             //--------------------------------------------------
@@ -192,17 +179,22 @@ namespace Yttrium
                                 std::cerr << "mu[" << zr << "] is null" << std::endl;
                                 if(useRunTimeGTZ)
                                 {
-                                    Demote( oldTribe->next,zr); // propagate to future  tribes
-                                    rDemote(newTribe->prev,zr); // propagate to created tribes
+                                    DemoteForward(oldTribe->next,zr); // propagate to future  tribes
+                                    DemoteReverse(newTribe->prev,zr); // propagate to created tribes
                                 }
                                 continue;
                             }
 
                             //--------------------------------------------------
                             // mu[zr] was in oldTribe sub-space:
-                            // if zr is against hired, will produce zero
+                            // if zr is hired, mu[zr] will produce zero
                             //--------------------------------------------------
-                            //std::cerr << "mu[" << zr << "] is dependent" << std::endl;
+
+                            if(useNoColinear)
+                            {
+                                std::cerr << "mu[" << zr << "] is dependent" << std::endl;
+                            }
+
 
                         }
 
@@ -218,7 +210,7 @@ namespace Yttrium
                 }
 
 
-                if(strategy&NoMultiple) noMultiple();
+                if(0!=(strategy&NoMultiple)) noMultiple();
                 return list.size;
             }
 
@@ -230,34 +222,6 @@ namespace Yttrium
                 return true;
             }
 
-            //! demote in forward way
-            /**
-             \param curr current node
-             \param zr   index of zeroing row
-             */
-            static inline void Demote(Tribe * curr, const size_t zr) noexcept
-            {
-                while(curr)
-                {
-                    curr->demote(zr);
-                    curr=curr->next;
-                }
-            }
-
-            //! demote in reverse order
-            /**
-             \param curr current node
-             \param zr   index of zeroing row
-             */
-            static inline void rDemote(Tribe * curr, const size_t zr) noexcept
-            {
-                while(curr)
-                {
-                    curr->demote(zr);
-                    curr=curr->prev;
-                }
-
-            }
 
             //__________________________________________________________________
             //
@@ -274,6 +238,21 @@ namespace Yttrium
 
             void precompile() noexcept;
             void noMultiple() noexcept; //!< remove exact same families
+
+            //! demote in forward way
+            /**
+             \param curr current node
+             \param zr   index of zeroing row
+             */
+            static void DemoteForward(Tribe * curr, const size_t zr) noexcept;
+
+            //! demote in reverse order
+            /**
+             \param curr current node
+             \param zr   index of zeroing row
+             */
+            static void DemoteReverse(Tribe * curr, const size_t zr) noexcept;
+
         public:
             const size_t cycle;
         };

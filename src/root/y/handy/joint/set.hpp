@@ -146,6 +146,22 @@ namespace Yttrium
 
             inline virtual void free() noexcept { list.free(); }
 
+            //! check if rhs is included within this
+            /**
+             \todo optimize
+             \param rhs another set
+             \return true iff each rhs item is found within this
+             */
+            inline bool contains(const JointSet &rhs) const noexcept
+            {
+                if(rhs.list->size>list->size) return false;
+                for(const NodeType *node=list->head;node;node=node->next)
+                {
+                    if(!list->found(**node)) return false;
+                }
+                return true;
+            }
+
 
 
 
