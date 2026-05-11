@@ -34,6 +34,11 @@ namespace Yttrium
             static const unsigned NoColinear = 0x08; //!< drop colinear vectors when found
             //static const unsigned HyperPlane = 0x04; //!< only one next vector
 
+            //! compute max generated tribes
+            /**
+             \param n number of rows
+             \return sum_{k=1}^n n!/(n-k)!
+             */
             static apn MaxGenerated(const size_t n)
             {
                 apn sum = 0;
@@ -50,11 +55,12 @@ namespace Yttrium
 
             //! initialize to rows!/(rows-1)! = rows possibilites
             /**
-             \param mu   matrix with rows to test
-             \param vc   vector cache
-             \param rc   row indices cache
-             \param proc optional proc for new vector
-             \param args optional args for proc
+             \param mu        matrix with rows to test
+             \param strategy  optimization strategy
+             \param vc        vector cache
+             \param rc        row indices cache
+             \param proc      optional proc for new vector
+             \param args      optional args for proc
              */
             template <typename T> inline
             explicit Tribes(const Matrix<T> & mu,
@@ -186,14 +192,15 @@ namespace Yttrium
                                 std::cerr << "mu[" << zr << "] is null" << std::endl;
                                 if(useRunTimeGTZ)
                                 {
-                                    demote( oldTribe->next,zr); // propagate to future  tribes
-                                    rdemote(newTribe->prev,zr); // propagate to created tribes
+                                    Demote( oldTribe->next,zr); // propagate to future  tribes
+                                    rDemote(newTribe->prev,zr); // propagate to created tribes
                                 }
                                 continue;
                             }
 
                             //--------------------------------------------------
-                            // mu[zr] was in oldTribe sub-space
+                            // mu[zr] was in oldTribe sub-space:
+                            // if zr is against hired, will produce zero
                             //--------------------------------------------------
                             //std::cerr << "mu[" << zr << "] is dependent" << std::endl;
 
@@ -215,6 +222,7 @@ namespace Yttrium
                 return list.size;
             }
 
+            //! \param arr compatible array \return true iff at least one element is not zero
             template <typename ARRAY>
             static inline bool IsNullVector( ARRAY &arr )
             {
@@ -222,7 +230,12 @@ namespace Yttrium
                 return true;
             }
 
-            static inline void demote(Tribe * curr, const size_t zr) noexcept
+            //! demote in forward way
+            /**
+             \param curr current node
+             \param zr   index of zeroing row
+             */
+            static inline void Demote(Tribe * curr, const size_t zr) noexcept
             {
                 while(curr)
                 {
@@ -231,7 +244,12 @@ namespace Yttrium
                 }
             }
 
-            static inline void rdemote(Tribe * curr, const size_t zr) noexcept
+            //! demote in reverse order
+            /**
+             \param curr current node
+             \param zr   index of zeroing row
+             */
+            static inline void rDemote(Tribe * curr, const size_t zr) noexcept
             {
                 while(curr)
                 {

@@ -124,11 +124,9 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-
-            //! ensure all indices are in hired
-            void demote(const RList &) noexcept;
-            void demote(const size_t) noexcept;
-            bool hasHired(const RList &) const noexcept;
+            void demote(const RList &)         noexcept; //!< ensure all indices are in hired from ready
+            void demote(const size_t)          noexcept; //!< ensure index is hired from ready
+            bool hasHired(const RList &) const noexcept; //!< \return true if all indices are hired, mostly for debug
 
             //__________________________________________________________________
             //
