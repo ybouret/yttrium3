@@ -72,17 +72,16 @@ namespace Yttrium
             list(),
             cycle(0)
             {
-                RSet         zset(rc);
                 const size_t nr            = mu.rows;
-                const bool   usePrecompile = 0 != (strategy&Precompile);
                 if(nr>0)
                 {
-
-                    for(size_t i=mu.rows;i>0;--i)
+                    const bool usePrecompile = 0 != (strategy&Precompile);
+                    RSet       zset(rc);
+                    for(size_t ir=nr;ir>0;--ir)
                     {
-                        Tribe * const tr = list.pushHead( new Tribe(mu,i,vc,rc,proc,args) );
+                        Tribe * const tr = list.pushHead( new Tribe(mu,ir,vc,rc,proc,args) );
                         if(usePrecompile && 0==tr->family->size)
-                            zset << i;
+                            zset << ir;
                     }
                     if(usePrecompile) precompile(zset);
                 }
@@ -137,7 +136,6 @@ namespace Yttrium
                             case Family::HyperPlane:
                                 if(useHyperPlane)
                                 {
-                                    //std::cerr << "should use HyperPlane with " << oldTribe->hired << " | " << oldTribe->ready << std::endl;
                                     const RSet hired(oldTribe->hired);
                                     while(oldTribe->ready->size())
                                     {
@@ -205,7 +203,6 @@ namespace Yttrium
                             //--------------------------------------------------
                             if( IsNullVector(mu[zr]) ) {
 
-                                //std::cerr << "mu[" << zr << "] is null" << std::endl;
                                 DemoteForward(oldTribe->next,zr); // propagate to future  tribes
                                 DemoteReverse(newTribe->prev,zr); // propagate to created tribes
                                 continue;
@@ -217,7 +214,6 @@ namespace Yttrium
                             //--------------------------------------------------
                             if(useNoColinear)
                             {
-                                //std::cerr << "mu[" << zr << "]=" << mu[zr] << " is dependent of " << hired << std::endl;
                                 DemoteForward(oldTribe->next,hired,zr); // propagate to future  tribes
                                 DemoteReverse(newTribe->prev,hired,zr); // propagate to created tribes
                             }

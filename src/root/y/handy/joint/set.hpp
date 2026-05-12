@@ -115,11 +115,13 @@ namespace Yttrium
                 return list->pop( list->fetch(i) );
             }
 
+            //! \return head node
             inline NodeType * popHead() noexcept
             {
                 return list->popHead();
             }
 
+            //! \return tail node
             inline NodeType * popTail() noexcept
             {
                 return list->popTail();
@@ -205,13 +207,11 @@ namespace Yttrium
 
                 for(const NodeType *node=list->head->next;node!=list->tail;node=node->next)
                 {
-                    // TODO: break at one point
                     switch(compare(value,**node))
                     {
                         case __Zero__: return true;
-                        case Positive:
-                        case Negative:
-                            continue;
+                        case Positive: continue;
+                        case Negative: return false;
                     }
                 }
 

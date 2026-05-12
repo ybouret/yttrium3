@@ -44,7 +44,7 @@ namespace Yttrium
 
             static void Callback(const Vector &, void * const);     //!< helper for Tribes
             friend bool operator==(const Survey &, const Survey &); //!< \return vector-wise comparison
-
+            void        print(std::ostream &) const;                //!< pretty print content
 
             //__________________________________________________________________
             //

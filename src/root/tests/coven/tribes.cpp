@@ -87,6 +87,8 @@ Y_UTEST(coven_tribes)
 
     const size_t  nr = argc>1 ? ASCII::Convert::To<size_t>(argv[1],"nr",0) : 5;
     const size_t  nc = argc>2 ? ASCII::Convert::To<size_t>(argv[2],"nc",0) : 4;
+    const int     va = argc>3 ? ASCII::Convert::To<int>(argv[3],"va",0) : 1;
+
     Coven::RCache rc;
     {
         Matrix<int>     mu(nr,nc);
@@ -95,7 +97,7 @@ Y_UTEST(coven_tribes)
 
         for(size_t i=1;i<=nr;++i)
             for(size_t j=1;j<=nc;++j)
-                mu[i][j] = ran.in<int>(-1,1);
+                mu[i][j] = ran.in<int>(-va,va);
         std::cerr << "mu=" << mu << std::endl;
 
         const apn maxGenerated = Coven::Tribes::MaxGenerated(nr);
@@ -151,6 +153,7 @@ Y_UTEST(coven_tribes)
                                                 vc,rc,xml,vec5);
         Print(num5,vec5);
         Y_ASSERT(vec5==vec0);
+        vec0.print(std::cerr);
         std::cerr << "-- done" << std::endl;
     }
 

@@ -58,7 +58,6 @@ namespace Yttrium
             //! check if a vector can contribute to the family
             /**
              \param a compatible source vector
-             \param required number of taken tests
              \return remaining, not zero orthogonal vector, NULL otherwise
              */
             template <typename READABLE>

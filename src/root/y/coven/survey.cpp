@@ -1,5 +1,8 @@
 
 #include "y/coven/survey.hpp"
+#include "y/format/decimal.hpp"
+#include "y/string/format.hpp"
+#include <iomanip>
 
 namespace Yttrium
 {
@@ -71,6 +74,17 @@ namespace Yttrium
             assert(args);
             *static_cast<Survey *>(args) << v;
         }
+
+        void Survey:: print(std::ostream &os) const
+        {
+            size_t indx = 0;
+            for(const Vector *v=list.head;v;v=v->next)
+            {
+                const String uid = Formatted::Get("v%s",Decimal(++indx).c_str());
+                os << std::setw(6) << uid << " = " << *v << std::endl;
+            }
+        }
+
     }
 
 }
