@@ -124,7 +124,8 @@ namespace Yttrium
 
         Pattern * Or:: insensitive()
         {
-            return this;
+            insensitivePatterns();
+            return optimized();
         }
     }
 

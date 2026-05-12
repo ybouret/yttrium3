@@ -119,6 +119,7 @@ namespace Yttrium
 
         Pattern * And:: insensitive()
         {
+            insensitivePatterns();
             return this;
         }
     }

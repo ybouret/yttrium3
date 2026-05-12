@@ -105,6 +105,7 @@ namespace Yttrium
 
         Pattern * Counting:: insensitive()
         {
+            insensitiveMotif();
             return this;
         }
 

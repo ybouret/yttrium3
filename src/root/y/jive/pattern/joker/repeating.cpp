@@ -109,6 +109,7 @@ namespace Yttrium
 
         Pattern * Repeating:: insensitive()
         {
+            insensitiveMotif();
             return this;
         }
 

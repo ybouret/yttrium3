@@ -63,7 +63,7 @@ namespace Yttrium
             void             optimizePatterns();     //!< process all list
             void             noMultiple() noexcept;  //!< remove duplicates from list
             void             alterBasic();           //!< gather and optimize basic
-
+            void             insensitivePatterns();  //!< process all list
         private:
             Y_Disable_Assign(Logic); //!< discarded
                                      //!

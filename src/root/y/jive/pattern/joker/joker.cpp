@@ -43,6 +43,12 @@ namespace Yttrium
             Motif   m(motif->clone()->optimized());
             Coerce(motif).xch(m);
         }
+
+        void Joker:: insensitiveMotif()
+        {
+            Motif   m(motif->clone()->insensitive());
+            Coerce(motif).xch(m);
+        }
     }
 }
 

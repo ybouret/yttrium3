@@ -81,6 +81,14 @@ namespace Yttrium
             swapForList(ops);
         }
 
+        void Logic:: insensitivePatterns()
+        {
+            Patterns ops;
+            while(size)
+                ops.pushTail( popHead()->insensitive() );
+            swapForList(ops);
+        }
+
         void Logic:: noMultiple() noexcept
         {
             Patterns ops;

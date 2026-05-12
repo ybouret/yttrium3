@@ -80,6 +80,7 @@ namespace Yttrium
 
         Pattern * Optional:: insensitive()
         {
+            insensitiveMotif();
             return this;
         }
     }

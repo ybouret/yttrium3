@@ -90,7 +90,8 @@ namespace Yttrium
 
         Pattern * None:: insensitive()
         {
-            return this;
+            insensitivePatterns();
+            return optimized();
         }
 
     }

@@ -64,7 +64,8 @@ namespace Yttrium
             const Motif motif; //!< current motif
 
         protected:
-            void optimizeMotif(); //!< change motif for its optimized form
+            void optimizeMotif();    //!< change motif for its optimized form
+            void insensitiveMotif(); //!< change motif for its insensitive form
 
         private:
             Y_Disable_Assign(Joker); //!< discarded

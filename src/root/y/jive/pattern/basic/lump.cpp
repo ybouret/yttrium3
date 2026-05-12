@@ -129,10 +129,9 @@ namespace Yttrium
             }
 
             AutoPtr<Logic> p = new Or();
-            { Patterns      &l = *p; content.forEach(populate, &l); }
-
+            { Patterns    &l = *p; content.forEach(populate, &l); }
             delete this;
-            return p.yield();
+            return p.yield()->optimized();
         }
 
     }
