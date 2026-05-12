@@ -13,31 +13,96 @@ namespace Yttrium
     namespace Coven
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Common API for Inquiries
+        //
+        //
+        //______________________________________________________________________
         class InquiryCommon : public Proxy<const Survey>
         {
         public:
-            static int Width;
-            explicit InquiryCommon();
-            virtual ~InquiryCommon() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static int Width; //!< display width for output
 
-            void output(XML::Log &xml, const size_t nr) const;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit InquiryCommon();           //!< setup
+            virtual ~InquiryCommon() noexcept;  //!< cleanup
 
-            const apn generated;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! output statistics for num rows
+            void output(XML::Log &, const size_t) const;
+
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const apn generated; //!< generated tribes during inquiry
+
         private:
-            Y_Disable_Copy_And_Assign(InquiryCommon);
+            Y_Disable_Copy_And_Assign(InquiryCommon); //!< discarded
         };
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Hint to process initial rows
+        //
+        //
+        //______________________________________________________________________
         enum InquiryHint
         {
-            InquiryExcludesInitial,
-            InquiryIncludesInitial
+            InquiryExcludesInitial, //!< assume initial rows are excluded from solution
+            InquiryIncludesInitial  //!< assume initial rows may be part of solution
         };
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Perform inquiry on matrix rows to produce parametric survey
+        //
+        //
+        //______________________________________________________________________
         template <typename SURVEY>
         class Inquiry :  public InquiryCommon
         {
         public:
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup and perform inquiry
+            /**
+             \param mu matrix of row vectors
+             \param hint hint to process initial rows in survey
+             \param strategy optimization strategy
+             */
             template <typename T> inline
             explicit Inquiry(const Matrix<T> & mu,
                              const InquiryHint hint,
@@ -83,13 +148,18 @@ namespace Yttrium
                 }
             }
 
+            //! cleanup
             inline virtual ~Inquiry() noexcept {}
 
 
-
-
         private:
-            SURVEY    survey;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            SURVEY    survey; //!< target survey
 
             inline virtual const Survey & locus() const noexcept { return survey; }
 
