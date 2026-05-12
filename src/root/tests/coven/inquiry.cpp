@@ -25,15 +25,24 @@ Y_UTEST(coven_inquiry)
                 mu[i][j] = ran.in<int>(-va,va);
         std::cerr << "mu=" << mu << std::endl;
 
-        (std::cerr << "-- raw standard inquiry" << std::endl).flush();
-        Coven::Inquiry<Coven::StandardSurvey> rawStdInq(mu,Coven::InquiryIncludesInitial,0x0);
-        rawStdInq->print(std::cerr);
-        rawStdInq.output(xml,nr);
+        {
+            (std::cerr << "-- raw standard inquiry" << std::endl).flush();
+            Coven::Inquiry<Coven::StandardSurvey> rawStdInq(mu,Coven::InquiryIncludesInitial,0x0);
+            rawStdInq->print(std::cerr);
+            rawStdInq.output(xml,nr);
 
-        (std::cerr << "-- opt standard inquiry" << std::endl).flush();
-        Coven::Inquiry<Coven::StandardSurvey> optStdInq(mu,Coven::InquiryIncludesInitial,Coven::Tribes::Optimizing);
-        Y_CHECK(*rawStdInq==*optStdInq);
-        optStdInq.output(xml,nr);
+            (std::cerr << "-- opt standard inquiry" << std::endl).flush();
+            Coven::Inquiry<Coven::StandardSurvey> optStdInq(mu,Coven::InquiryIncludesInitial,Coven::Tribes::Optimizing);
+            Y_CHECK(*rawStdInq==*optStdInq);
+            optStdInq.output(xml,nr);
+        }
+
+        {
+            (std::cerr << "-- raw positive inquiry" << std::endl).flush();
+            Coven::Inquiry<Coven::PositiveSurvey> rawPosInq(mu,Coven::InquiryExcludesInitial,0x0);
+            rawPosInq->print(std::cerr);
+            rawPosInq.output(xml,nr);
+        }
 
     }
 

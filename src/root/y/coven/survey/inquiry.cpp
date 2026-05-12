@@ -10,7 +10,7 @@ namespace Yttrium
     {
         int InquiryCommon:: Width = 8;
 
-        InquiryCommon:: InquiryCommon() noexcept
+        InquiryCommon:: InquiryCommon() : generated()
         {
         }
 

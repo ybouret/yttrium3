@@ -17,7 +17,7 @@ namespace Yttrium
         {
         public:
             static int Width;
-            explicit InquiryCommon() noexcept;
+            explicit InquiryCommon();
             virtual ~InquiryCommon() noexcept;
 
             void output(XML::Log &xml, const size_t nr) const;

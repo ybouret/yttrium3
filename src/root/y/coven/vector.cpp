@@ -10,7 +10,9 @@ namespace Yttrium
         }
 
         Vector:: Vector(const Metrics &metrics) :
-        Object(), Metrics(metrics), zVector(dimension),
+        Object(),
+        Metrics(metrics),
+        zVector(dimension),
         ncof(0),
         nnul(0),
         npos(0),
@@ -35,19 +37,22 @@ namespace Yttrium
         next(0),
         prev(0)
         {
+            assert(__Zero__ == Compare(v,*this) );
         }
 
         Vector & Vector:: operator=( const Vector &source )
         {
             try
             {
+                zVector &self = *this;
                 Coerce(ncof) = source.ncof;
                 Coerce(nnul) = source.nnul;
                 Coerce(npos) = source.npos;
                 Coerce(nneg) = source.nneg;
                 Coerce(mod2) = source.mod2;
                 for(size_t i=dimension;i>0;--i)
-                    (*this)[i] = source[i];
+                    self[i] = source[i];
+                assert(__Zero__ == Compare(source,*this) );
             }
             catch(...)
             {
@@ -90,6 +95,7 @@ namespace Yttrium
                     }
                 }
                 Coerce(ncof) = Coerce(npos) + Coerce(nneg);
+                assert(nnul+ncof==dimension);
             }
             catch(...)
             {
@@ -132,6 +138,12 @@ namespace Yttrium
                 }
             }
 
+            assert(lhs.ncof==rhs.ncof);
+            assert(lhs.nnul==rhs.nnul);
+            assert(lhs.npos==rhs.npos);
+            assert(lhs.nneg==rhs.nneg);
+            assert(lhs.mod2==rhs.mod2);
+
             return __Zero__;
         }
 
@@ -154,13 +166,16 @@ namespace Yttrium
         std::ostream & operator<<(std::ostream &os, const Vector &v)
         {
             { const zVector &zv = v; os << zv; }
-            return os << " # |#" << v.ncof << "|^2=" << v.mod2;
+            return os << " # |#" << v.ncof << "|^2=" << v.mod2 << " [" << v.npos << "+] [" << v.nneg << "-]";
         }
 
         void Vector:: exchange(Vector &v) noexcept
         {
             xch(v);
             CoerceSwap(ncof,v.ncof);
+            CoerceSwap(nnul,v.nnul);
+            CoerceSwap(nneg,v.nneg);
+            CoerceSwap(npos,v.npos);
             Coerce(mod2).xch( Coerce(v.mod2) );
         }
 
