@@ -6,11 +6,14 @@ namespace Yttrium
     namespace Jive
     {
 
+        const char * const RXCompiler:: CallSign = "Regular Expresssion";
+        
         RXCompiler:: RXCompiler(const char * const       userExpr,
                                 const size_t             userSize,
                                 const Dictionary * const userDict) noexcept :
-        expr(userExpr),
-        last(expr+userSize),
+        curr(userExpr),
+        last(curr+userSize),
+        expr(curr),
         dict(userDict)
         {
             assert(0!=expr);

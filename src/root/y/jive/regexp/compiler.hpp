@@ -13,6 +13,7 @@ namespace Yttrium
         class RXCompiler
         {
         public:
+            static const char * const CallSign; //!< "Regular Expresssion"
             explicit RXCompiler(const char * const       userExpr,
                                 const size_t             userSize,
                                 const Dictionary * const userDict) noexcept;
@@ -21,9 +22,13 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(RXCompiler);
-            const char * const       expr;
+            const char *             curr;
             const char * const       last;
+            const char * const       expr;
             const Dictionary * const dict;
+
+            Pattern * subExpr();
+
         };
     }
 
