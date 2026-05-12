@@ -94,6 +94,7 @@ y/jive/pattern
 y/jive/pattern/basic
 y/jive/pattern/logic
 y/jive/pattern/joker
+y/jive/regexp
 y/graphviz
 y/functor
 y/vfs
