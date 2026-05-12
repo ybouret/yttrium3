@@ -65,7 +65,7 @@ namespace Yttrium
 
         protected:
             void optimizeMotif(); //!< change motif for its optimized form
-            
+
         private:
             Y_Disable_Assign(Joker); //!< discarded
 

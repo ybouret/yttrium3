@@ -116,6 +116,11 @@ namespace Yttrium
         {
             return Among(s.c_str(),s.size());
         }
+
+        Pattern * And:: insensitive()
+        {
+            return this;
+        }
     }
 
 

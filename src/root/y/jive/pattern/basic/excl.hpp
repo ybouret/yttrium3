@@ -51,6 +51,7 @@ namespace Yttrium
             virtual bool          univocal()       const noexcept;
             virtual OutputStream &viz(OutputStream &)       const;
             virtual Pattern *     optimized();
+            virtual Pattern *     insensitive();
 
             //__________________________________________________________________
             //

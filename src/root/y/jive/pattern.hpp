@@ -58,6 +58,7 @@ namespace Yttrium
             bool                  multiple()       const noexcept;     //!< \return !univocal()
             virtual OutputStream &viz(OutputStream &)       const = 0; //!< generate graphviz code \return output stream
             virtual Pattern *     optimized()                     = 0; //!< \return optimized version
+            virtual Pattern *     insensitive()                   = 0; //!< \return case insensitive version
 
             //__________________________________________________________________
             //

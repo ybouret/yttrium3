@@ -56,6 +56,7 @@ namespace Yttrium
             virtual bool          takes(Token&,Source&)     const;
             virtual OutputStream &viz(OutputStream &)       const;
             virtual Pattern *     optimized(); // TODO: improve
+            virtual Pattern *     insensitive();
 
             //__________________________________________________________________
             //

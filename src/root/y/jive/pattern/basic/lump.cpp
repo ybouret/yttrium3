@@ -94,6 +94,46 @@ namespace Yttrium
             }
         }
 
+    }
+
+}
+
+#include "y/jive/pattern/logic/or.hpp"
+#include <cctype>
+
+namespace Yttrium
+{
+    namespace Jive
+    {
+        namespace
+        {
+            static inline void populate(const Within &w, void * const args)
+            {
+                assert(args);
+                Patterns &list = *static_cast<Patterns *>(args);
+                list.pushTail(w.create());
+            }
+        }
+
+        Pattern * Lump:: insensitive()
+        {
+            Leading content;
+            {
+                const unsigned up = upper;
+                for(unsigned   i=lower;i<=up;++i)
+                {
+                    content.set( (uint8_t) i);
+                    if( islower(i) ) content.set( (uint8_t) toupper(i) );
+                    if( isupper(i) ) content.set( (uint8_t) tolower(i) );
+                }
+            }
+
+            AutoPtr<Logic> p = new Or();
+            { Patterns      &l = *p; content.forEach(populate, &l); }
+
+            delete this;
+            return p.yield();
+        }
 
     }
 

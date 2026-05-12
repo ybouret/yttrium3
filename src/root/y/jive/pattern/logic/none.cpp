@@ -88,6 +88,11 @@ namespace Yttrium
             return this;
         }
 
+        Pattern * None:: insensitive()
+        {
+            return this;
+        }
+
     }
 
 

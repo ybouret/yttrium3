@@ -107,6 +107,11 @@ namespace Yttrium
             return this;
         }
 
+        Pattern * Repeating:: insensitive()
+        {
+            return this;
+        }
+
     }
 
 }

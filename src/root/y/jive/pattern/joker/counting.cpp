@@ -103,6 +103,11 @@ namespace Yttrium
             return this;
         }
 
+        Pattern * Counting:: insensitive()
+        {
+            return this;
+        }
+
     }
 
 }

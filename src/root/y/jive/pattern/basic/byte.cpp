@@ -61,3 +61,37 @@ namespace Yttrium
     }
 
 }
+
+#include "y/jive/pattern/logic/or.hpp"
+#include "y/pointer/auto.hpp"
+#include <cctype>
+
+namespace Yttrium
+{
+    namespace Jive
+    {
+        Pattern * Byte:: insensitive()
+        {
+            if( islower(code) )
+            {
+                AutoPtr<Logic> p = new Or();
+                *p << code;
+                *p << (uint8_t) toupper(code);
+                delete this;
+                return p.yield();
+            }
+
+            if( isupper(code) )
+            {
+                AutoPtr<Logic> p = new Or();
+                *p << code;
+                *p << (uint8_t) tolower(code);
+                delete this;
+                return p.yield();
+            }
+
+            return this;
+        }
+    }
+
+}

@@ -77,6 +77,11 @@ namespace Yttrium
             optimizeMotif();
             return this;
         }
+
+        Pattern * Optional:: insensitive()
+        {
+            return this;
+        }
     }
 
 }

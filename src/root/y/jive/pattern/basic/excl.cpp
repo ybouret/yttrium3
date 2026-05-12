@@ -61,7 +61,41 @@ namespace Yttrium
         {
             return this;
         }
+    }
 
+}
+
+#include "y/jive/pattern/logic/none.hpp"
+#include "y/pointer/auto.hpp"
+
+namespace Yttrium
+{
+    namespace Jive
+    {
+        Pattern * Excl:: insensitive()
+        {
+            if( islower(code) )
+            {
+                AutoPtr<Logic> p = new None;
+                *p << code;
+                *p << (uint8_t) toupper(code);
+                delete this;
+                return p.yield();
+            }
+
+            if( isupper(code) )
+            {
+                AutoPtr<Logic> p = new None;
+                *p << code;
+                *p << (uint8_t) tolower(code);
+                delete this;
+                return p.yield();
+            }
+
+
+
+            return this;
+        }
 
     }
 

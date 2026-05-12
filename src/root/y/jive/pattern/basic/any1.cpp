@@ -57,6 +57,11 @@ namespace Yttrium
             return this;
         }
 
+        Pattern * Any1:: insensitive()
+        {
+            return this;
+        }
+
     }
 
 }

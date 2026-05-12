@@ -121,6 +121,11 @@ namespace Yttrium
                 return this;
             }
         }
+
+        Pattern * Or:: insensitive()
+        {
+            return this;
+        }
     }
 
 
