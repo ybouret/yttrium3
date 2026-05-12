@@ -13,6 +13,9 @@ Y_UTEST(jive_rx)
     {
         AutoPtr<Jive::Pattern> p = Jive::RegExp::Compile(argv[1],0);
 
+        {
+            Vizible::Render("rx.dot",*p);
+        }
     }
 
 

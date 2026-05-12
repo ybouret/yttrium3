@@ -1,4 +1,7 @@
 #include "y/jive/regexp/compiler.hpp"
+#include "y/pointer/auto.hpp"
+#include "y/exception.hpp"
+#include "y/format/decimal.hpp"
 
 namespace Yttrium
 {
@@ -13,6 +16,7 @@ namespace Yttrium
                                 const Dictionary * const userDict) noexcept :
         curr(userExpr),
         last(curr+userSize),
+        deep(0),
         expr(curr),
         dict(userDict)
         {
@@ -25,6 +29,15 @@ namespace Yttrium
         RXCompiler:: ~RXCompiler() noexcept
         {
         }
+
+        Pattern * RXCompiler:: operator()(void)
+        {
+            AutoPtr<Pattern> res = subExpr();
+            if(deep>0)
+                throw Specific::Exception(CallSign,"unfinished level-%s sub-expression in '%s'", Decimal(deep).c_str(),expr);
+            return Pattern::Optimized(res.yield());
+        }
+
 
     }
 

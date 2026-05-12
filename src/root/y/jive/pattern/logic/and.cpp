@@ -76,7 +76,7 @@ namespace Yttrium
         OutputStream & And:: viz(OutputStream &fp) const
         {
             nodeName(fp) << '[';
-            Label(fp, "||");
+            Label(fp, "&&");
             fp << ",shape=house";
             Endl(fp<<']');
             return emitLink(fp);

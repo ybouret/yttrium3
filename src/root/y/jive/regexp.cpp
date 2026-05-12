@@ -1,6 +1,7 @@
 
 #include "y/jive/regexp.hpp"
 #include "y/jive/regexp/compiler.hpp"
+#include "y/pointer/auto.hpp"
 
 namespace Yttrium
 {
@@ -10,10 +11,9 @@ namespace Yttrium
                                     const Dictionary * const dict)
         {
 
-
-            RXCompiler rx(content->c_str(),content->size(),dict);
-            
-            return 0;
+            RXCompiler       rxc(content->c_str(),content->size(),dict);
+            AutoPtr<Pattern> rx = rxc();
+            return rx.yield();
         }
     }
 
