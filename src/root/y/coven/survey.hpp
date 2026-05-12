@@ -39,12 +39,11 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            bool got(const Vector &) const noexcept; //!< \return true iff vector is not recorded
-            Survey & operator<< (const Vector &);    //!< insert not null, taken vector \return *this
-
-            static void Callback(const Vector &, void * const);     //!< helper for Tribes
+            bool        got(const Vector &) const noexcept;         //!< \return true iff vector is not recorded
+            Survey &    operator<< (const Vector &);                //!< insert not null, taken vector \return *this
             friend bool operator==(const Survey &, const Survey &); //!< \return vector-wise comparison
             void        print(std::ostream &) const;                //!< pretty print content
+            static void Callback(const Vector &, void * const);     //!< helper for Tribes
 
             //__________________________________________________________________
             //
@@ -65,7 +64,7 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            Vectors list; //!< list of univocal, ordered vectors
+            Vectors      list;     //!< list of univocal, ordered vectors
         public:
             const size_t sampling; //!< number of trials
         };

@@ -33,6 +33,9 @@ namespace Yttrium
             static const unsigned NoColinear = 0x04; //!< drop colinear vectors when found
             static const unsigned HyperPlane = 0x08; //!< only one next vector
 
+            //! full optimization flag
+            static const unsigned Optimizing = Precompile | NoMultiple | NoColinear | HyperPlane;
+
             //! compute max generated tribes
             /**
              sum_{k=1}^n n!/(n-k)! = n! sum_{k=0}^{n-1} 1/k! approx e * n!

@@ -41,12 +41,10 @@ namespace Yttrium
             if(v.ncof<=0) return *this;
             if(got(v))    return *this;
             if(!takes(v)) return *this;
-            //std::cerr << "\t [+] " << v << std::endl;
-
+            
             Vector * const node = list.pushTail( new Vector(v) );
             while(node->prev && Vector::Compare(*(node->prev),*node) == Positive )
                 list.towardsHead(node);
-
 
             return *this;
         }

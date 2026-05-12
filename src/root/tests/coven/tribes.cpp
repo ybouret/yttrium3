@@ -149,7 +149,7 @@ Y_UTEST(coven_tribes)
 
         Coven::StandardSurvey vec5;
         const apn             num5 = TestTribes(mu,
-                                                Coven::Tribes::HyperPlane | Coven::Tribes::NoColinear | Coven::Tribes::NoMultiple,
+                                                Coven::Tribes::Optimizing,
                                                 vc,rc,xml,vec5);
         Print(num5,vec5);
         Y_ASSERT(vec5==vec0);
