@@ -110,8 +110,7 @@ namespace Yttrium
             static inline void populate(const Within &w, void * const args)
             {
                 assert(args);
-                Patterns &list = *static_cast<Patterns *>(args);
-                list.pushTail(w.create());
+                static_cast<Patterns *>(args)->pushTail(w.create());
             }
         }
 
@@ -130,8 +129,9 @@ namespace Yttrium
 
             AutoPtr<Logic> p = new Or();
             { Patterns    &l = *p; content.forEach(populate, &l); }
+            Pattern * const res = Optimized(p.yield());
             delete this;
-            return p.yield()->optimized();
+            return res;
         }
 
     }

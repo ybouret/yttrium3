@@ -77,7 +77,7 @@ namespace Yttrium
         {
             Patterns ops;
             while(size)
-                ops.pushTail( popHead()->optimized() );
+                ops.pushTail( Optimized( popHead() ) );
             swapForList(ops);
         }
 
@@ -85,7 +85,7 @@ namespace Yttrium
         {
             Patterns ops;
             while(size)
-                ops.pushTail( popHead()->insensitive() );
+                ops.pushTail( Insensitive(popHead()) );
             swapForList(ops);
         }
 
