@@ -189,6 +189,7 @@ Y_UTEST(jive:source)
 Y_UTEST(jive:leading)
 Y_UTEST(jive:pattern)
 Y_UTEST(jive:posix)
+Y_UTEST(jive:rx)
 
 Y_UTEST(graphviz)
 
