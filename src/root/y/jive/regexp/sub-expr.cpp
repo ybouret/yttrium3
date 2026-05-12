@@ -3,6 +3,7 @@
 #include "y/jive/pattern/all.hpp"
 #include "y/exception.hpp"
 #include "y/pointer/auto.hpp"
+#include "y/jive/pattern/posix.hpp"
 
 namespace Yttrium
 {
@@ -60,7 +61,21 @@ namespace Yttrium
                     case '?': p->pushTail( Optional::  Make( extract(*p,'?') )   ); break;
                     case '+': p->pushTail( Repeating:: Make( extract(*p,'+'),1 ) ); break;
                     case '*': p->pushTail( Repeating:: Make( extract(*p,'*'),0 ) ); break;
-                        
+
+                        //------------------------------------------------------
+                        //
+                        // escape sequence
+                        //
+                        //------------------------------------------------------
+                    case '\\': p->pushTail( escExpr() ); continue;
+
+                        //------------------------------------------------------
+                        //
+                        // specific
+                        //
+                        //------------------------------------------------------
+                    case '.' : p->pushTail( posix::dot() ); continue;
+
                         //------------------------------------------------------
                         //
                         // default

@@ -41,7 +41,7 @@ namespace Yttrium
         static const char     UpperChar[16];       //!< ['0'..'F']
         static const char     LowerByte[256][4];   //!< [ "00".."ff" ]
         static const char     UpperByte[256][4];   //!< [ "00".."FF"]
-
+        
         //______________________________________________________________________
         //
         //
