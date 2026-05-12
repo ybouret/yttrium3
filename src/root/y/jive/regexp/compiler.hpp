@@ -15,7 +15,9 @@ namespace Yttrium
         public:
             static const char LPAREN = '(';
             static const char RPAREN = ')';
-
+            static const char ALT    = '|';
+            
+            
 
             static const char * const CallSign; //!< "Regular Expresssion"
 
@@ -27,6 +29,7 @@ namespace Yttrium
 
             Pattern * operator()(void);
 
+
         private:
             Y_Disable_Copy_And_Assign(RXCompiler);
             const char *             curr;
@@ -36,6 +39,7 @@ namespace Yttrium
             const Dictionary * const dict;
 
             Pattern * subExpr();
+            Pattern * extract(Patterns &, const char before);
 
         };
     }

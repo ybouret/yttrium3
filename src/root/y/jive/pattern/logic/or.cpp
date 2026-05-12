@@ -107,8 +107,25 @@ namespace Yttrium
 
         Pattern * Or:: optimized()
         {
-            noMultiple();
             optimizePatterns();
+            {
+                Patterns target;
+                while(size)
+                {
+                    Pattern * const p = popHead();
+                    if(UUID==p->uuid)
+                    {
+                        target.mergeTail( *dynamic_cast<Or*>(p) );
+                        delete p;
+                    }
+                    else
+                    {
+                        target.pushTail(p);
+                    }
+                }
+                swapForList(target);
+            }
+            noMultiple();
             alterBasic();
             if(1==size)
             {

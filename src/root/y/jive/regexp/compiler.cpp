@@ -34,8 +34,15 @@ namespace Yttrium
         {
             AutoPtr<Pattern> res = subExpr();
             if(deep>0)
-                throw Specific::Exception(CallSign,"unfinished level-%s sub-expression in '%s'", Decimal(deep).c_str(),expr);
+                throw Specific::Exception(CallSign,"unfinished %s-deep sub-expression in '%s'", Decimal(deep).c_str(),expr);
+            //return res.yield();
             return Pattern::Optimized(res.yield());
+        }
+
+        Pattern * RXCompiler:: extract(Patterns &list, const char before)
+        {
+            if(list.size<=0) throw Specific::Exception(CallSign, "no sub-expression before '%c'",before);
+            return list.popTail();
         }
 
 

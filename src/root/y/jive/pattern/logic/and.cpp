@@ -85,6 +85,23 @@ namespace Yttrium
         Pattern * And:: optimized()
         {
             optimizePatterns();
+            {
+                Patterns target;
+                while(size)
+                {
+                    Pattern * const p = popHead();
+                    if(UUID==p->uuid)
+                    {
+                        target.mergeTail( *dynamic_cast<And*>(p) );
+                        delete p;
+                    }
+                    else
+                    {
+                        target.pushTail(p);
+                    }
+                }
+                swapForList(target);
+            }
             if(1==size)
             {
                 Pattern *p = popHead(); assert(0==size);

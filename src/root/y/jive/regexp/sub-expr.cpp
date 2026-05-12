@@ -21,18 +21,51 @@ namespace Yttrium
                 switch(c)
                 {
 
+                        //------------------------------------------------------
+                        //
+                        // grouping
+                        //
+                        //------------------------------------------------------
                     case LPAREN: {
                         ++deep;
                         p->pushTail( subExpr() );
-                        break;
-                    }
+                    } break;
 
                     case RPAREN: {
                         if(!deep) throw Specific::Exception(CallSign,"extraneous '%c' in '%s'",RPAREN,expr);
                         --deep;
-                        goto RETURN;
-                    }
+                    } goto RETURN;
 
+                        //------------------------------------------------------
+                        //
+                        // Alternate
+                        //
+                        //------------------------------------------------------
+                    case ALT: {
+                        if(p->size<=0) throw Specific::Exception(CallSign, "no sub-expression before '%c' in '%s'", ALT, expr);
+                        AutoPtr<Logic>   alt = new Or(); // prepare new pattern
+                        AutoPtr<Logic>   lhs = new And();
+                        AutoPtr<Pattern> rhs = subExpr();
+                        lhs->swapForList(*p);
+                        alt->pushHead(lhs.yield());
+                        alt->pushTail(rhs.yield());
+                        p->pushHead( alt.yield() );
+                    }  goto RETURN;
+
+                        //------------------------------------------------------
+                        //
+                        // joker
+                        //
+                        //------------------------------------------------------
+                    case '?': p->pushTail( Optional::  Make( extract(*p,'?') )   ); break;
+                    case '+': p->pushTail( Repeating:: Make( extract(*p,'+'),1 ) ); break;
+                    case '*': p->pushTail( Repeating:: Make( extract(*p,'*'),0 ) ); break;
+                        
+                        //------------------------------------------------------
+                        //
+                        // default
+                        //
+                        //------------------------------------------------------
                     default:
                         *p << (uint8_t)c;
                 }
