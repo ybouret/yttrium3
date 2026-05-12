@@ -43,11 +43,11 @@ namespace  {
         }
 
         {
-            const Jive::Motif opt( p.clone()->optimized() );
+            const Jive::Motif opt( Jive::Pattern::Optimized(p.clone()) );
         }
 
         {
-            const Jive::Motif ign( p.clone()->insensitive() );
+            const Jive::Motif ign( Jive::Pattern::Insensitive(p.clone()) );
             const String dotName = String("ign-") + p.name + ".dot";
             Vizible::Render(dotName,*ign);
         }

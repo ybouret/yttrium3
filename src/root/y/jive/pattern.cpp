@@ -63,5 +63,34 @@ namespace Yttrium
         {
             return !Pattern::AreEqual(lhs,rhs);
         }
+
+
+        Pattern * Pattern:: Optimized(Pattern * const p)
+        {
+            assert(p);
+            assert(0==p->quantity());
+            try
+            {
+                return p->optimized();
+            }
+            catch(...)
+            {
+                delete p; throw;
+            }
+        }
+
+        Pattern * Pattern:: Insensitive(Pattern * const p)
+        {
+            assert(p);
+            assert(0==p->quantity());
+            try
+            {
+                return p->insensitive();
+            }
+            catch(...)
+            {
+                delete p; throw;
+            }
+        }
     }
 }
