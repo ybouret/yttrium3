@@ -399,8 +399,6 @@ template <> SignType String<CH>::Cmp(const CH * lhs, const size_t lhsSize,
             return __Zero__;
         }
     }
-
-
 }
 
 
@@ -409,6 +407,14 @@ template <> SignType String<CH>:: Cmp(const String &lhs, const String &rhs) noex
     return Cmp(lhs.code->entry,lhs.code->size,
                rhs.code->entry,rhs.code->size);
 }
+
+
+template <> SignType String<CH>:: Compare(const String &lhs, const String &rhs) noexcept
+{
+    return Cmp(lhs.code->entry,lhs.code->size,
+               rhs.code->entry,rhs.code->size);
+}
+
 
 template <> SignType String<CH>:: Cmp(const String &lhs, const CH * const rhs) noexcept
 {

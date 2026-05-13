@@ -143,6 +143,8 @@ Y_APQ_DECL(Rational,CALL) Y_APQ_Binary(OP,CALL) Y_APQ_Unary(OP,CALL)
             Y_APQ_CMP(<=,!= Positive)
             Y_APQ_CMP(>=,!= Negative)
 
+            static SignType Compare(const Rational &, const Rational &);
+
             //__________________________________________________________________
             //
             //

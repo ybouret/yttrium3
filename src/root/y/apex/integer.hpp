@@ -120,7 +120,8 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
             Y_Integer_Cmp(<=, != Positive )
             Y_Integer_Cmp(>=, != Negative )
 
-
+            static SignType Compare(const Integer &, const Integer &) noexcept;
+            
             //__________________________________________________________________
             //
             //

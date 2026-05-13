@@ -27,6 +27,11 @@ namespace Yttrium
             const KegType &    r = *static_cast<const KegType *>(rhs.code);
             return KegCmp::Result(l.word,l.words,r.word,r.words);
         }
+
+        SignType Natural:: Compare(const Natural &a, const Natural &b) noexcept
+        {
+            return Cmp(a,b);
+        }
     }
 }
 

@@ -152,6 +152,7 @@ inline friend bool operator OP (const T         lhs, const String  & rhs) noexce
             Y_String_Cmp(<=,  !=  Positive)
             Y_String_Cmp(>=,  !=  Negative)
 
+            static SignType Compare(const String &, const String &) noexcept;
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 

@@ -155,6 +155,8 @@ Y_Apex_Natural_Unary(OP,CALL)
             Y_Apex_Natural_Cmp(<=, != Positive)
             Y_Apex_Natural_Cmp(>=, != Negative)
 
+            static SignType Compare(const Natural &, const Natural &) noexcept;
+
             //__________________________________________________________________
             //
             //

@@ -3,11 +3,6 @@
 #include <assert.h>
 #include <string.h>
 
-//#define heap_parent(npos) ((int)(((npos) - 1) / 2))
-//#define heap_left(npos) (((npos) * 2) + 1)
-//#define heap_right(npos) (((npos) * 2) + 2)
-
-static size_t Parent(const size_t i) { return (i-1)>>1; }
 
 void Yttrium_PQ_Push_Balance(void * const   blockAddr,
                              const size_t   numBlocks,

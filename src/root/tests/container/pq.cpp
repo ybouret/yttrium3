@@ -1,10 +1,12 @@
-#include "y/libc/pq/api.h"
+#include "y/container/ordered/pq.hpp"
 #include "y/libc/block/zero.h"
 #include "y/utest/run.hpp"
 #include "y/core/rand.hpp"
 #include "y/type/sign.hpp"
 #include "y/core/display.hpp"
 #include "y/libc/sort.h"
+#include "y/apex/rational.hpp"
+#include "y/calculus/alignment.hpp"
 
 using namespace Yttrium;
 
@@ -66,6 +68,31 @@ namespace
 
         }
     }
+
+    template <size_t N>
+    static inline void testPrioQ(Core::Rand &ran)
+    {
+        std::cerr << "-- prioQ with " << N << " items" << std::endl;
+        void * wksp[ Alignment::WordsGEQ<N*sizeof(apz)>::Count ];
+        Y_BZero(wksp);
+
+        PrioQ<apz> pq(wksp,N);
+        std::cerr << "-- populating" << std::endl;
+        while(pq.size<pq.capacity)
+        {
+            const apz z(ran,ran.in<size_t>(0,10));
+            pq.push(Sign::Increasing<apz>,z);
+            std::cerr << pq.peek() << " : " << pq << std::endl;
+        }
+        std::cerr << "-- pulling" << std::endl;
+        while(pq.size)
+        {
+            const apz z = pq.pull(Sign::Increasing<apz>);
+            std::cerr << z << " : " << pq << std::endl;
+        }
+
+    }
+
 }
 
 Y_UTEST(container_pq)
@@ -73,6 +100,10 @@ Y_UTEST(container_pq)
     Core::Rand ran;
     testPQ<int,10>(ran);
     testPQ<uint16_t,16>(ran);
+
+    testPrioQ<10>(ran);
+
+
 
 }
 Y_UDONE()

@@ -226,7 +226,10 @@ namespace Yttrium
         }
 
         
-
+        SignType Rational:: Compare(const Rational &a, const Rational &b)
+        {
+            return Cmp(a,b);
+        }
     }
 }
 

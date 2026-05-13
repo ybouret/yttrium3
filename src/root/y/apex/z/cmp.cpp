@@ -99,6 +99,10 @@ namespace Yttrium
             return Sign::Opposite( Cmp(rhs,lhs) );
         }
 
+        SignType Integer:: Compare(const Integer &lhs, const Integer &rhs) noexcept
+        {
+            return Cmp(lhs,rhs);
+        }
 
     }
 }
