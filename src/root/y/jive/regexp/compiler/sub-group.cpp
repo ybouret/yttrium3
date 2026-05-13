@@ -11,7 +11,6 @@ namespace Yttrium
     {
         
 
-        const char RXCompiler:: EscGroup[] = "[]\\^-:";
 
 
         Pattern * RXCompiler:: subGroup()
@@ -27,12 +26,30 @@ namespace Yttrium
                 case ':': ++curr; return subPosix();
 
                 default:
+                    g = new Or();
                     break;
             }
 
-            throw Exception("not implemented yet");
+            while(curr<last)
+            {
+                const char c = *(curr++);
 
+                switch(c)
+                {
+                    case RBRACK:
+                        goto RETURN;
 
+                    default:
+                        *g << (uint8_t)c;
+                }
+                
+            }
+
+            throw Specific::Exception(CallSign,"unfinished sub-group in '%s'", expr);
+
+        RETURN:
+            if(g->size<=0) throw Specific::Exception(CallSign,"empty sub-group in '%s'",expr);
+            return g.yield();
         }
 
     }

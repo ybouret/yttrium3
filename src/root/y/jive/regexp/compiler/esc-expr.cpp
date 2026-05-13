@@ -16,11 +16,11 @@ namespace Yttrium
         const char RXCompiler:: EscCommSource[] = "nrtvfba";
         const char RXCompiler:: EscCommTarget[] = "\n\r\t\v\f\b\a";
 
-        const char RXCompiler:: EscExpr[] = "()&*+?.\\[]";
+        const char RXCompiler:: EscExpr[] = "()&*+?.\\[]{}";
 
         Pattern * RXCompiler:: escExpr()
         {
-            if(curr>=last) throw Specific::Exception(CallSign,"unfinished escape sequence in '%s'", expr);
+            if(curr>=last) throw Specific::Exception(CallSign,"unfinished sub-expression escape sequence in '%s'", expr);
 
             const char c = *(curr++);
 

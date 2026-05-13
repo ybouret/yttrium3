@@ -92,6 +92,7 @@ namespace Yttrium
 
             Pattern * subGroup();
             Pattern * subPosix();
+            Pattern * escGroup();
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             
         };
