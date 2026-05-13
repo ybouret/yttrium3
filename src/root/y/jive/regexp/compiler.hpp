@@ -83,6 +83,8 @@ namespace Yttrium
             size_t                   deep; //!< nesting depth
             const char * const       expr; //!< original expression
             const Dictionary * const dict; //!< optional dictionary
+            unsigned                 ixpr; //!< sub-expression index
+            unsigned                 igrp; //!< sub-group index
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             Pattern * subExpr();
@@ -93,6 +95,7 @@ namespace Yttrium
             Pattern * subGroup();
             Pattern * subPosix();
             Pattern * escGroup();
+            uint8_t   getUpper();
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             
         };

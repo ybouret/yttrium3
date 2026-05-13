@@ -19,7 +19,9 @@ namespace Yttrium
         last(curr+userSize),
         deep(0),
         expr(curr),
-        dict(userDict)
+        dict(userDict),
+        ixpr(0),
+        igrp(0)
         {
             assert(0!=expr);
             assert(0!=last);

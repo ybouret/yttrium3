@@ -14,7 +14,7 @@ namespace Yttrium
 
         Pattern * RXCompiler:: escGroup()
         {
-            if(curr>=last) throw Specific::Exception(CallSign,"unfinished sub-group escape sequence in '%s'", expr);
+            if(curr>=last) throw Specific::Exception(CallSign,"unfinished sub-group #%u escape sequence in '%s'", igrp, expr);
 
             const char c = *(curr++);
 
@@ -34,7 +34,8 @@ namespace Yttrium
             if('x'==c) return escHexa();
 
             throw Specific::Exception(CallSign,
-                                      "unknown sub-group escaped char '%s' in '%s'",
+                                      "unknown sub-group #%u escaped char '%s' in '%s'",
+                                      igrp,
                                       ASCII::Printable::Text(c),
                                       expr);
 

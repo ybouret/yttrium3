@@ -20,7 +20,7 @@ namespace Yttrium
 
         Pattern * RXCompiler:: escExpr()
         {
-            if(curr>=last) throw Specific::Exception(CallSign,"unfinished sub-expression escape sequence in '%s'", expr);
+            if(curr>=last) throw Specific::Exception(CallSign,"unfinished sub-expression #%u escape sequence in '%s'",ixpr,expr);
 
             const char c = *(curr++);
 
@@ -39,7 +39,8 @@ namespace Yttrium
             if('x'==c) return escHexa();
 
             throw Specific::Exception(CallSign,
-                                      "unknown sub-expression escaped char '%s' in '%s'",
+                                      "unknown sub-expression #%u escaped char '%s' in '%s'",
+                                      ixpr,
                                       ASCII::Printable::Text(c),
                                       expr);
 

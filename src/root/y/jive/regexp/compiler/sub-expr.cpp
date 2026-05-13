@@ -12,7 +12,8 @@ namespace Yttrium
     {
         Pattern * RXCompiler:: subExpr()
         {
-            if(curr>=last) throw Specific::Exception(CallSign, "early end of sub-expression in '%s'",expr);
+            ++ixpr;
+            if(curr>=last) throw Specific::Exception(CallSign, "early end of sub-expression #%u in '%s'",ixpr,expr);
             AutoPtr<Logic> p = new And();
 
             while(curr<last)
@@ -96,7 +97,7 @@ namespace Yttrium
             }
 
         RETURN:
-            if(p->size<=0) throw Specific::Exception(CallSign,"empty sub-expression in '%s'",expr);
+            if(p->size<=0) throw Specific::Exception(CallSign,"empty sub-expression #%u in '%s'",ixpr,expr);
             return p.yield();
         }
 
