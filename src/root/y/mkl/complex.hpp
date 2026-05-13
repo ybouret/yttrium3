@@ -4,8 +4,7 @@
 #ifndef Y_Type_Complex_Included
 #define Y_Type_Complex_Included 1
 
-#include "y/type/sign.hpp"
-//#include "y/mkl/api/pythagoras.hpp"
+#include "y/mkl/api/pythagoras.hpp"
 #include <iostream>
 
 namespace Yttrium
@@ -97,7 +96,7 @@ namespace Yttrium
 
         inline Complex conj() const noexcept { return Complex(re,-im); }        //!< \return conjugate
         inline T       mod2() const noexcept { return im*im + re*re;   }        //!< \return |z|^2
-        //inline T       abs()  const noexcept { return MKL::Pythagoras(re,im); } //!< \return |z|
+        inline T       abs()  const noexcept { return MKL::Pythagoras(re,im); } //!< \return |z|
 
         //______________________________________________________________________
         //

@@ -4,7 +4,7 @@
 #ifndef Y_MKL_Pythagoras_Included
 #define Y_MKL_Pythagoras_Included 1
 
-//#include "y/sorting/sort3.hpp"
+#include "y/core/sort3.hpp"
 #include "y/mkl/api/fabs.hpp"
 #include "y/mkl/api/sqrt.hpp"
 #include "y/check/static.hpp"
@@ -61,7 +61,7 @@ namespace Yttrium
         {
             Y_STATIC_CHECK(IsScalar<T>::Value,BadType);
             T absv[3] = { Fabs<T>(a), Fabs<T>(b), Fabs<T>(c) };
-            //Sorting::Sort3(absv);
+            Core::Sort3(absv);
             const T zero(0);
             if(absv[2]<=zero) return zero;
             const T one(1);

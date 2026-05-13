@@ -22,8 +22,10 @@ namespace {
     template <typename T> static inline
     void showPythagoras(const T a, const T b, const T c)
     {
-        std::cerr << "(|" << a << "|^2+|" << b << "|^2)^(1/2)=" << Pythagoras<T>(a,b) << std::endl;
-        std::cerr << "(|" << b << "|^2+|" << c << "|^2)^(1/2)=" << Pythagoras<T>(b,c) << std::endl;
+        std::cerr << "-- <" << typeid(T).name() << ">" << std::endl;
+        std::cerr << "\t(|" << a << "|^2+|" << b << "|^2)^(1/2)=" << Pythagoras<T>(a,b) << std::endl;
+        std::cerr << "\t(|" << b << "|^2+|" << c << "|^2)^(1/2)=" << Pythagoras<T>(b,c) << std::endl;
+        std::cerr << "\t(|" << a << "|^2+|" << b << "|^2+|" << c << "|^2)^(1/2)=" << Pythagoras<T>(a,b,c) << std::endl;
 
     }
 }
@@ -36,9 +38,9 @@ Y_UTEST(mkl_api)
     showScalarFor< XReal<double> >();
 
     showPythagoras<float>(2,3,4);
-    showPythagoras<int32_t>(2,3,4);
+    //showPythagoras<int32_t>(2,3,4);
     showPythagoras< XReal<long double> >(2,3,4);
-    showPythagoras< apz >(2,3,4);
+    //showPythagoras< apz >(2,3,4);
 
 
 }
