@@ -29,7 +29,7 @@ namespace Yttrium
                         //------------------------------------------------------
                     case LPAREN: {
                         ++deep;
-                        p->pushTail( subExpr() );
+                        *p << subExpr();
                     } break;
 
                     case RPAREN: {
@@ -48,9 +48,9 @@ namespace Yttrium
                         AutoPtr<Logic>   lhs = new And();
                         AutoPtr<Pattern> rhs = subExpr();
                         lhs->swapForList(*p);
-                        alt->pushHead(lhs.yield());
-                        alt->pushTail(rhs.yield());
-                        p->pushHead( alt.yield() );
+                        *alt << lhs.yield();
+                        *alt << rhs.yield();
+                        *p   << alt.yield();
                     }  goto RETURN;
 
                         //------------------------------------------------------
@@ -58,23 +58,24 @@ namespace Yttrium
                         // joker
                         //
                         //------------------------------------------------------
-                    case '?': p->pushTail( Optional::  Make( extract(*p,'?') )   ); break;
-                    case '+': p->pushTail( Repeating:: Make( extract(*p,'+'),1 ) ); break;
-                    case '*': p->pushTail( Repeating:: Make( extract(*p,'*'),0 ) ); break;
+                    case '?': *p << Optional::  Make( extract(*p,'?') );     break;
+                    case '+': *p << Repeating:: Make( extract(*p,'+'),1 );   break;
+                    case '*': *p << Repeating:: Make( extract(*p,'*'),0 );   break;
+                    case '&': *p << Pattern::Insensitive( extract(*p,'&') ); break;
 
                         //------------------------------------------------------
                         //
                         // escape sequence
                         //
                         //------------------------------------------------------
-                    case '\\': p->pushTail( escExpr() ); continue;
+                    case '\\': *p << escExpr(); continue;
 
                         //------------------------------------------------------
                         //
                         // specific
                         //
                         //------------------------------------------------------
-                    case '.' : p->pushTail( posix::dot() ); continue;
+                    case '.' : *p << posix::dot(); continue;
 
                         //------------------------------------------------------
                         //

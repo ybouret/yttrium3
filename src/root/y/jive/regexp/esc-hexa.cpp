@@ -4,6 +4,7 @@
 #include "y/exception.hpp"
 
 #include "y/format/hexadecimal.hpp"
+#include "y/ascii/printable.hpp"
 
 namespace Yttrium
 {
@@ -20,16 +21,11 @@ namespace Yttrium
             if(curr>=last) throw Specific::Exception(CallSign, "unfinished hexadecimal in '%s'",expr);
             const char lo = *(curr++);
 
-            const int upper = Hexadecimal::ToDec(up); if(upper<0) throw Specific::Exception(CallSign, "'%c' is not a xdigit in '%s'",up,expr);
-            const int lower = Hexadecimal::ToDec(lo); if(lower<0) throw Specific::Exception(CallSign, "'%c' is not a xdigit in '%s'",lo,expr);
+            const int upper = Hexadecimal::ToDec(up); if(upper<0) throw Specific::Exception(CallSign, "'%c' is not a xdigit in '%s'",ASCII::Printable::Text(up),expr);
+            const int lower = Hexadecimal::ToDec(lo); if(lower<0) throw Specific::Exception(CallSign, "'%c' is not a xdigit in '%s'",ASCII::Printable::Text(lo),expr);
 
             return new Byte( (uint8_t)(upper*16+lower) );
-
-
-
-
-            throw Specific::Exception(CallSign,"not implemented");
-
+            
         }
     }
 

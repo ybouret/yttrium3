@@ -1,4 +1,5 @@
 #include "y/utest/run.hpp"
+#include "y/ascii/printable.hpp"
 
 using namespace Yttrium;
 
@@ -25,6 +26,12 @@ Y_UTEST(exception)
     {
         excp.display(std::cerr);
     }
+
+    Exception X("%s%s%s",
+                ASCII::Printable::Text('\t'),
+                ASCII::Printable::Text('\n'),
+                ASCII::Printable::Char[0xf4]);
+    X.display(std::cerr);
 
 }
 

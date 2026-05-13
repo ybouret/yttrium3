@@ -2,6 +2,7 @@
 #include "y/pointer/auto.hpp"
 #include "y/exception.hpp"
 #include "y/format/decimal.hpp"
+#include "y/ascii/printable.hpp"
 
 namespace Yttrium
 {
@@ -41,7 +42,7 @@ namespace Yttrium
 
         Pattern * RXCompiler:: extract(Patterns &list, const char before)
         {
-            if(list.size<=0) throw Specific::Exception(CallSign, "no sub-expression before '%c'",before);
+            if(list.size<=0) throw Specific::Exception(CallSign, "no sub-expression before '%s'",ASCII::Printable::Text(before));
             return list.popTail();
         }
 

@@ -16,12 +16,14 @@ namespace Yttrium
             static const char LPAREN = '(';
             static const char RPAREN = ')';
             static const char ALT    = '|';
+            static const char LBRACK = '[';
+            static const char RBRACK = ']';
 
             static const char EscCommSource[]; //!< "nrtvf"
             static const char EscCommTarget[]; //!< matching source
             static const char EscExpr[];       //!< allowed escaped in subExpr
 
-
+            
             static const char * const CallSign; //!< "Regular Expresssion"
 
             explicit RXCompiler(const char * const       userExpr,
