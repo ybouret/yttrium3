@@ -86,14 +86,13 @@ namespace Yttrium
         // Interface
         //
         //______________________________________________________________________
-        inline virtual size_t size()     const noexcept { return pq->size;     }
-        inline virtual size_t capacity() const noexcept { return pq->capacity; }
-
-
-        inline virtual void        push(ParamType data)  { pq->push(cmp,data); }
-        inline virtual ConstType & peek() const noexcept { return pq->peek();  }
-        inline virtual void        pop()        noexcept { pq->pop(cmp); }
-
+        inline virtual size_t      size()     const noexcept { return pq->size;     }
+        inline virtual size_t      capacity() const noexcept { return pq->capacity; }
+        inline virtual void        push(ParamType data)      { pq->push(cmp,data); }
+        inline virtual ConstType & peek()     const noexcept { return pq->peek();  }
+        inline virtual void        pop()            noexcept { pq->pop(cmp); }
+        inline virtual void        free()           noexcept { pq->free(); }
+        
     private:
         Y_Disable_Assign(StaticPrioQ); //!< discarded
 
@@ -112,7 +111,7 @@ namespace Yttrium
 
         inline void init() noexcept { Coerce(pq) = new (Y_BZero(prio)) PQ(Y_BZero(wksp),N); }
         inline void quit() noexcept { Pulverize(pq); Coerce(pq) = 0; }
-        
+
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
     };
 

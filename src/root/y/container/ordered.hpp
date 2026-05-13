@@ -7,6 +7,7 @@
 
 #include "y/container.hpp"
 #include "y/type/args.hpp"
+#include "y/ability/recyclable.hpp"
 
 namespace Yttrium
 {
@@ -19,7 +20,7 @@ namespace Yttrium
     //
     //__________________________________________________________________________
     template <typename T>
-    class Ordered : public Container
+    class Ordered : public Container, public Recyclable
     {
     public:
         //______________________________________________________________________
@@ -62,6 +63,12 @@ namespace Yttrium
             ConstType saved = peek();
             pop();
             return saved;
+        }
+
+        inline Ordered<T> & operator<<(ParamType data)
+        {
+            push(data);
+            return *this;
         }
 
     private:

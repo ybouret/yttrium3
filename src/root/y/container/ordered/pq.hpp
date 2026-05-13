@@ -57,11 +57,10 @@ namespace Yttrium
                               const size_t numBlocks) noexcept :
         capacity(numBlocks),
         size(0),
-        addr( (MutableType *) blockAddr ),
-        bytes( capacity * sizeof(T) )
+        addr( (MutableType *) blockAddr )
         {
             assert( !(0==addr&&capacity>0) );
-            assert( Y_TRUE == Yttrium_Zeroed(addr,bytes) );
+            assert( Y_TRUE == Yttrium_Zeroed(addr,capacity*sizeof(T)) );
         }
 
         //! cleanup
@@ -122,7 +121,7 @@ namespace Yttrium
         {
             while(size>0)
                 Pulverize(&addr[--Coerce(size)]);
-            assert( Y_TRUE == Yttrium_Zeroed(addr,bytes) );
+            assert( Y_TRUE == Yttrium_Zeroed(addr,capacity*sizeof(T)) );
         }
 
         //! steal content (no throw) \param pq source
@@ -166,8 +165,6 @@ namespace Yttrium
         const size_t        size;     //!< variable size
     private:
         MutableType * const addr;     //!< top item location
-    public:
-        const size_t        bytes;    //!< provided bytes
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
     private:

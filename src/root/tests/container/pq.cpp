@@ -1,3 +1,5 @@
+
+#include "y/container/ordered/prio-q.hpp"
 #include "y/container/ordered/static-prio-q.hpp"
 #include "y/libc/block/zero.h"
 #include "y/utest/run.hpp"
@@ -119,6 +121,24 @@ Y_UTEST(container_pq)
         {
             const apn n = spq.pull();
             std::cerr << std::setw(10) << n << " : " << spq << std::endl;
+        }
+
+    }
+
+    {
+        PriorityQ<apz> pq;
+        std::cerr << "-- populating prioQ" << std::endl;
+        for(size_t i = 10 + ran.leq<size_t>(10);i>0;--i)
+        {
+            pq << apz(ran,ran.in<size_t>(0,10));
+            std::cerr << pq << " | size=" << pq.size() << " | capacity=" << pq.capacity() << std::endl;
+        }
+
+        std::cerr << "-- pulling" << std::endl;
+        while(pq.size())
+        {
+            const apz z = pq.pull();
+            std::cerr << std::setw(10) << z << " : " << pq << std::endl;
         }
 
     }
