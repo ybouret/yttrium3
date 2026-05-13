@@ -10,6 +10,7 @@
 #include "y/libc/pq/api.h"
 #include "y/libc/block/zeroed.h"
 #include "y/libc/block/zero.h"
+#include "y/libc/block/copy.h"
 #include "y/core/display.hpp"
 #include "y/type/pulverize.hpp"
 #include <cassert>
@@ -17,15 +18,41 @@
 namespace Yttrium
 {
 
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Basic priority queues operations in C++
+    //
+    //
+    //__________________________________________________________________________
     template <typename T>
     class PrioQ
     {
     public:
-        Y_Args_Declare(T,Type);
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        Y_Args_Declare(T,Type); //!< aliases
 
-        //! blockAddr[numBlocks*sizeof(T)]
-        inline PrioQ(void * const blockAddr,
-                     const size_t numBlocks) noexcept :
+
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+
+        //! setup
+        /**
+         \param blockAddr with at least numBlocks*sizeof(T) bytes
+         \param numBlocks initial capacity
+         */
+        inline explicit PrioQ(void * const blockAddr,
+                              const size_t numBlocks) noexcept :
         capacity(numBlocks),
         size(0),
         addr( (MutableType *) blockAddr ),
@@ -35,17 +62,27 @@ namespace Yttrium
             assert( Y_TRUE == Yttrium_Zeroed(addr,bytes) );
         }
 
-        inline virtual ~PrioQ() noexcept
-        {
-            free();
-        }
+        //! cleanup
+        inline virtual ~PrioQ() noexcept { free(); }
 
+        //! display
         inline friend std::ostream & operator<<(std::ostream &os, const PrioQ &pq)
         {
             return Core::Display(os,pq.addr,pq.size);
         }
 
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
 
+        //! push new value and balance
+        /**
+         \param proc comparison
+         \param data passed to constructor
+         */
         template <typename COMPARE> inline
         void push(COMPARE &proc, ParamType data) {
             assert(size<capacity);
@@ -53,12 +90,14 @@ namespace Yttrium
             Yttrium_PQ_Push_Balance(addr,++Coerce(size),sizeof(T), cmp<COMPARE>, (void *) &proc );
         }
 
-        inline ConstType & peek() const noexcept
-        {
+
+        //! \return top value
+        inline ConstType & peek() const noexcept {
             assert(size>0);
             return addr[0];
         }
 
+        //! remove to value \param proc comparison
         template <typename COMPARE> inline
         void pop(COMPARE &proc) noexcept
         {
@@ -67,15 +106,16 @@ namespace Yttrium
             Yttrium_PQ_Pull_Balance(addr,--Coerce(size),sizeof(T), cmp<COMPARE>, (void *) &proc );
         }
 
+        //! remove to value \param proc comparison \return saved top value
         template <typename COMPARE> inline
         Type pull(COMPARE &proc)
         {
             assert(size>0);
-            ConstType save = addr[0];
-            pop<COMPARE>(proc); return save;
+            ConstType saved = addr[0];
+            pop<COMPARE>(proc); return saved;
         }
 
-
+        //! free all items
         inline void free() noexcept
         {
             while(size>0)
@@ -83,15 +123,54 @@ namespace Yttrium
             assert( Y_TRUE == Yttrium_Zeroed(addr,bytes) );
         }
 
+        inline void steal(PrioQ &pq) noexcept
+        {
+            assert(0==size);
+            assert(pq.size<=capacity);
+            assert(this != &pq);
+            {
+                const size_t bs = pq.size * sizeof(T);
+                Yttrium_BCopy(addr,pq.addr,bs);
+                Yttrium_BZero(pq.addr,bs);
+            }
+            Coerce(size)    = pq.size;
+            Coerce(pq.size) = 0;
+        }
+
+        inline void duplicate(const PrioQ &pq)
+        {
+            assert(this != &pq);
+            assert(0==size);
+            try {
+                while(size<pq.size)
+                {
+                    new (addr+size) MutableType( pq.addr[size] );
+                    ++Coerce(size);
+                }
+            }
+            catch(...) { free(); throw; }
+        }
 
 
 
 
-        const size_t capacity;
-        const size_t size;
+        //______________________________________________________________________
+        //
+        //
+        // Members
+        //
+        //______________________________________________________________________
+
+        const size_t        capacity; //!< initial capacity
+        const size_t        size;     //!< variable size
+    private:
+        MutableType * const addr;     //!< top item location
+    public:
+        const size_t        bytes;    //!< provided bytes
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
     private:
         Y_Disable_Copy_And_Assign(PrioQ);
-        MutableType * const addr;
         template <typename COMPARE> static
         inline int cmp(const void * const lhs, const void * const rhs, void * const args)
         {
@@ -101,9 +180,8 @@ namespace Yttrium
             ConstType &robj = *static_cast<ConstType*>(rhs);
             return proc(lobj,robj);
         }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
-    public:
-        const size_t bytes;
     };
 
 }

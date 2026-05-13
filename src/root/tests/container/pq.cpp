@@ -1,4 +1,4 @@
-#include "y/container/ordered/pq.hpp"
+#include "y/container/ordered/static-prio-q.hpp"
 #include "y/libc/block/zero.h"
 #include "y/utest/run.hpp"
 #include "y/core/rand.hpp"
@@ -82,16 +82,18 @@ namespace
         {
             const apz z(ran,ran.in<size_t>(0,10));
             pq.push(Sign::Increasing<apz>,z);
-            std::cerr << pq.peek() << " : " << pq << std::endl;
+            std::cerr << std::setw(10) << pq.peek() << " : " << pq << std::endl;
         }
         std::cerr << "-- pulling" << std::endl;
         while(pq.size)
         {
             const apz z = pq.pull(Sign::Increasing<apz>);
-            std::cerr << z << " : " << pq << std::endl;
+            std::cerr << std::setw(10) << z << " : " << pq << std::endl;
         }
-
     }
+
+
+
 
 }
 
@@ -103,6 +105,10 @@ Y_UTEST(container_pq)
 
     testPrioQ<10>(ran);
 
+    {
+        StaticPrioQ<apn,10> spq;
+        
+    }
 
 
 }

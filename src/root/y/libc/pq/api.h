@@ -12,7 +12,11 @@ extern "C" {
     
     //! balance after push at numBlock-1
     /**
-
+     \param blockAddr address of first item
+     \param numBlocks number of items
+     \param blockSize bytes per item
+     \param compare   comparison
+     \param args      for compare
      */
     void Yttrium_PQ_Push_Balance(void * const   blockAddr,
                                  const size_t   numBlocks,
@@ -22,7 +26,11 @@ extern "C" {
 
     //! balance after pull at 0
     /**
-     
+     \param blockAddr address of first item
+     \param numBlocks number of items
+     \param blockSize bytes per item
+     \param compare   comparison
+     \param args      for compare
      */
     void Yttrium_PQ_Pull_Balance(void * const   blockAddr,
                                  const size_t   numBlocks,

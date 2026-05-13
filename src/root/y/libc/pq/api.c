@@ -69,7 +69,6 @@ void Yttrium_PQ_Pull_Balance(void * const   blockAddr,
             char * const i    = heap + ipos * blockSize;
             char * const l    = heap + lpos * blockSize;
             char * const r    = l+blockSize;
-
             char *       m    = 0;
             size_t       mpos = 0;
 
