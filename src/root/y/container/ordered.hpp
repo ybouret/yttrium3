@@ -10,23 +10,53 @@
 
 namespace Yttrium
 {
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Ordered container interface
+    //
+    //
+    //__________________________________________________________________________
     template <typename T>
     class Ordered : public Container
     {
     public:
-        Y_Args_Declare(T,Type);
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        Y_Args_Declare(T,Type); //!< aliases
 
-        inline explicit Ordered() noexcept : Container()
-        {
-        }
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+        inline explicit Ordered() noexcept : Container() {} //!< setup
+        inline virtual ~Ordered() noexcept               {} //!< cleanup
 
+        //______________________________________________________________________
+        //
+        //
+        // Interfac
+        //
+        //______________________________________________________________________
+        virtual void        push(ParamType)       = 0; //!< insert new item
+        virtual void        pop()        noexcept = 0; //!< remove top titem
+        virtual ConstType & peek() const noexcept = 0; //!< \return top item
 
-        inline virtual ~Ordered() noexcept {}
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
 
-        virtual void        push(ParamType)       = 0;
-        virtual void        pop()        noexcept = 0;
-        virtual ConstType & peek() const noexcept = 0;
-
+        //! extract first node \return saved content, queue is popped
         inline Type pull()
         {
             ConstType saved = peek();
@@ -35,7 +65,7 @@ namespace Yttrium
         }
 
     private:
-        Y_Disable_Copy_And_Assign(Ordered);
+        Y_Disable_Copy_And_Assign(Ordered); //!< discarded
     };
 }
 

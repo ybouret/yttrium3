@@ -23,7 +23,9 @@ namespace Yttrium
     //
     //
     //! Basic priority queues operations in C++
-    //
+    /**
+     \warning comparisons must NOT throw
+     */
     //
     //__________________________________________________________________________
     template <typename T>
@@ -123,6 +125,7 @@ namespace Yttrium
             assert( Y_TRUE == Yttrium_Zeroed(addr,bytes) );
         }
 
+        //! steal content (no throw) \param pq source
         inline void steal(PrioQ &pq) noexcept
         {
             assert(0==size);
@@ -137,6 +140,7 @@ namespace Yttrium
             Coerce(pq.size) = 0;
         }
 
+        //! duplicate \param pq source
         inline void duplicate(const PrioQ &pq)
         {
             assert(this != &pq);
@@ -150,10 +154,7 @@ namespace Yttrium
             }
             catch(...) { free(); throw; }
         }
-
-
-
-
+        
         //______________________________________________________________________
         //
         //

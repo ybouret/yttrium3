@@ -107,7 +107,20 @@ Y_UTEST(container_pq)
 
     {
         StaticPrioQ<apn,10> spq;
-        
+        std::cerr << "-- populating static prioQ" << std::endl;
+        while(spq.size()<spq.Capacity)
+        {
+            const apn n(ran,ran.in<size_t>(5,10));
+            spq.push(n);
+            std::cerr << std::setw(10) << spq.peek() << " : " << spq << std::endl;
+        }
+        std::cerr << "-- pulling" << std::endl;
+        while(spq.size())
+        {
+            const apn n = spq.pull();
+            std::cerr << std::setw(10) << n << " : " << spq << std::endl;
+        }
+
     }
 
 
