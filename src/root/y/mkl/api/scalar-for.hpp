@@ -15,14 +15,22 @@ namespace Yttrium
         //! defining scalar for a given type
         template <typename T> struct ScalarFor
         {
-            typedef T Type; //!< default is same type
+            typedef T         Type;        //!< default is same type
+            static const bool Flag = true; //!< scalar type
         };
 
         //! defining scalar for complexes
         template <typename T> struct ScalarFor< Complex<T> >
         {
-            typedef T Type; //!< base type
+            typedef T         Type;         //!< base type
+            static const bool Flag = false; //!< not a scalar type
         };
+
+        template <typename T> struct IsScalar
+        {
+            static const bool Value = ScalarFor<T>::Flag;
+        };
+
     }
 }
 
