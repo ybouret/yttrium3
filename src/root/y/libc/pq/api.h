@@ -9,14 +9,26 @@
 extern "C" {
 #endif
 
+    
+    //! balance after push at numBlock-1
+    /**
 
-    //! balance after insertion at numBlock-1
-    void Yttrium_PQ_Balance(void * const   blockAddr,
-                            const size_t   numBlocks,
-                            const size_t   blockSize,
-                            YttriumCompare compare,
-                            void * const   args);
+     */
+    void Yttrium_PQ_Push_Balance(void * const   blockAddr,
+                                 const size_t   numBlocks,
+                                 const size_t   blockSize,
+                                 YttriumCompare compare,
+                                 void * const   args);
 
+    //! balance after pull at 0
+    /**
+     
+     */
+    void Yttrium_PQ_Pull_Balance(void * const   blockAddr,
+                                 const size_t   numBlocks,
+                                 const size_t   blockSize,
+                                 YttriumCompare compare,
+                                 void * const   args);
 #if defined(__cplusplus)
 }
 #endif
