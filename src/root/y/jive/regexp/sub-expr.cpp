@@ -30,7 +30,7 @@ namespace Yttrium
                     case LPAREN: {
                         ++deep;
                         *p << subExpr();
-                    } break;
+                    } continue;
 
                     case RPAREN: {
                         if(!deep) throw Specific::Exception(CallSign,"extraneous '%c' in '%s'",RPAREN,expr);
@@ -58,10 +58,10 @@ namespace Yttrium
                         // joker
                         //
                         //------------------------------------------------------
-                    case '?': *p << Optional::  Make( extract(*p,'?') );     break;
-                    case '+': *p << Repeating:: Make( extract(*p,'+'),1 );   break;
-                    case '*': *p << Repeating:: Make( extract(*p,'*'),0 );   break;
-                    case '&': *p << Pattern::Insensitive( extract(*p,'&') ); break;
+                    case '?': *p << Optional::  Make( extract(*p,'?') );     continue;
+                    case '+': *p << Repeating:: Make( extract(*p,'+'),1 );   continue;
+                    case '*': *p << Repeating:: Make( extract(*p,'*'),0 );   continue;
+                    case '&': *p << Pattern::Insensitive( extract(*p,'&') ); continue;
 
                         //------------------------------------------------------
                         //
@@ -76,6 +76,14 @@ namespace Yttrium
                         //
                         //------------------------------------------------------
                     case '.' : *p << posix::dot(); continue;
+
+
+                        //------------------------------------------------------
+                        //
+                        // subGroup
+                        //
+                        //------------------------------------------------------
+                    case LBRACK: *p << subGroup(); continue;
 
                         //------------------------------------------------------
                         //

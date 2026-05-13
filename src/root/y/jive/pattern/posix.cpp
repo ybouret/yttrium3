@@ -137,7 +137,7 @@ namespace Yttrium
 
 #define Y_Jive_Posix(NAME) if(id == #NAME) return NAME()
 
-        Pattern * posix:: named(const String &id)
+        Pattern * posix:: named(const String &id) noexcept
         {
             Y_Jive_Posix(lower);
             Y_Jive_Posix(upper);
@@ -154,7 +154,7 @@ namespace Yttrium
             Y_Jive_Posix(consonant);
             Y_Jive_Posix(endl);
             Y_Jive_Posix(dot);
-            throw Specific::Exception("posix expression", "no name '%s'", id.c_str());
+            return 0;
         }
 
         Pattern * posix:: named(const char * const id)

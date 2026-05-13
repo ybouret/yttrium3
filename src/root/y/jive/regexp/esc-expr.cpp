@@ -16,7 +16,7 @@ namespace Yttrium
         const char RXCompiler:: EscCommSource[] = "nrtvfba";
         const char RXCompiler:: EscCommTarget[] = "\n\r\t\v\f\b\a";
 
-        const char RXCompiler:: EscExpr[] = "()&*+?.\\[";
+        const char RXCompiler:: EscExpr[] = "()&*+?.\\[]";
 
         Pattern * RXCompiler:: escExpr()
         {

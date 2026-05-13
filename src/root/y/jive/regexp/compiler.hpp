@@ -22,6 +22,7 @@ namespace Yttrium
             static const char EscCommSource[]; //!< "nrtvf"
             static const char EscCommTarget[]; //!< matching source
             static const char EscExpr[];       //!< allowed escaped in subExpr
+            static const char EscGroup[];      //!< allowed escaped in subGroup
 
             
             static const char * const CallSign; //!< "Regular Expresssion"
@@ -48,6 +49,8 @@ namespace Yttrium
             Pattern * escExpr();
             Pattern * escHexa();
 
+            Pattern * subGroup();
+            Pattern * subPosix();
 
         };
     }
