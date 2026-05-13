@@ -23,6 +23,7 @@ dft
 jive
 vfs
 hashing
+mkl
 )
 
 Y_LinkLibraries(test-root)
@@ -196,4 +197,8 @@ Y_UTEST(graphviz)
 Y_UTEST(vfs:scan)
 
 Y_UTEST(hashing:tests)
+
+Y_UTEST(mkl:numeric)
+Y_UTEST(mkl:api)
+
 

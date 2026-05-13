@@ -171,6 +171,9 @@ Y_UTEST_DECL(8)
     Y_UTEST(vfs_scan);
 
     Y_UTEST(hashing_tests);
+  
+    Y_UTEST(mkl_numeric);
+    Y_UTEST(mkl_api);
 
 }
 Y_UTEST_EXEC()
