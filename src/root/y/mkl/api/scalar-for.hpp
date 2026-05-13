@@ -12,14 +12,16 @@ namespace Yttrium
 
     namespace MKL
     {
+        //! defining scalar for a given type
         template <typename T> struct ScalarFor
         {
-            typedef T Type;
+            typedef T Type; //!< default is same type
         };
 
+        //! defining scalar for complexes
         template <typename T> struct ScalarFor< Complex<T> >
         {
-            typedef T Type;
+            typedef T Type; //!< base type
         };
     }
 }
