@@ -11,9 +11,25 @@ namespace Yttrium
     {
         class Dictionary;
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Regular Expression compilation
+        //
+        //
+        //______________________________________________________________________
         struct RegExp
         {
-
+            //__________________________________________________________________
+            //
+            // Compile any expression to matching pattern
+            /**
+             \param data string, text, char, Identifier...
+             \param dict optional dictionary
+             \return compiled, new pattern
+             */
+            //__________________________________________________________________
             template <typename STRING> static inline
             Pattern * Compile(const STRING &data, const Dictionary * const dict)
             {
@@ -21,9 +37,11 @@ namespace Yttrium
                 return Compile_(content,dict);
             }
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         private:
             static Pattern * Compile_(const Identifier &,const Dictionary * const);
-        
+#endif
+            
         };
     }
 

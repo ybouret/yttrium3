@@ -73,8 +73,8 @@ namespace Yttrium
             static Pattern * Among(const char * const, const size_t); //!< \return Or'd characters
             static Pattern * Exact(const char * const, const size_t); //!< \return And'd characters
 
-            static Pattern * Optimized(Pattern * const p); //!< \param p RAW pattern \return safely optimized pattern
-            static Pattern * Insensitive(Pattern * const); //!< \param p RAW pattern \return safely ignoring case pattern
+            static Pattern * Optimized(Pattern * const   p); //!< \param p RAW pattern \return safely optimized pattern
+            static Pattern * Insensitive(Pattern * const p); //!< \param p RAW pattern \return safely ignoring case pattern
 
 
 

@@ -10,40 +10,81 @@ namespace Yttrium
     namespace Jive
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Regular Expression Compiler
+        //
+        //
+        //______________________________________________________________________
         class RXCompiler
         {
         public:
-            static const char LPAREN = '(';
-            static const char RPAREN = ')';
-            static const char ALT    = '|';
-            static const char LBRACK = '[';
-            static const char RBRACK = ']';
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
 
-            static const char EscCommSource[]; //!< "nrtvf"
-            static const char EscCommTarget[]; //!< matching source
-            static const char EscExpr[];       //!< allowed escaped in subExpr
-            static const char EscGroup[];      //!< allowed escaped in subGroup
+            static const char         LPAREN = '(';    //!< alias
+            static const char         RPAREN = ')';    //!< alias
+            static const char         ALT    = '|';    //!< alias
+            static const char         LBRACK = '[';    //!< alias
+            static const char         RBRACK = ']';    //!< alias
+            static const char         EscCommSource[]; //!< "nrtvfab"
+            static const char         EscCommTarget[]; //!< matching EscCommSource
+            static const char         EscExpr[];       //!< allowed escaped char in subExpr
+            static const char         EscGroup[];      //!< allowed escaped char in subGroup
+            static const char * const CallSign;        //!< "Regular Expresssion"
 
-            
-            static const char * const CallSign; //!< "Regular Expresssion"
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
 
+            //! setup
+            /**
+             \param userExpr expression
+             \param userSize number of chars
+             \param userDict optional dictionary
+             */
             explicit RXCompiler(const char * const       userExpr,
                                 const size_t             userSize,
                                 const Dictionary * const userDict) noexcept;
 
+            //! cleanup
             ~RXCompiler() noexcept;
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            //! compile for setup \return compiled pattern
             Pattern * operator()(void);
 
 
         private:
-            Y_Disable_Copy_And_Assign(RXCompiler);
-            const char *             curr;
-            const char * const       last;
-            size_t                   deep;
-            const char * const       expr;
-            const Dictionary * const dict;
+            Y_Disable_Copy_And_Assign(RXCompiler); //!< dicarded
 
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const char *             curr; //!< current char
+            const char * const       last; //!< first invalid char
+            size_t                   deep; //!< nesting depth
+            const char * const       expr; //!< original expression
+            const Dictionary * const dict; //!< optional dictionary
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             Pattern * subExpr();
             Pattern * extract(Patterns &, const char before);
             Pattern * escExpr();
@@ -51,7 +92,8 @@ namespace Yttrium
 
             Pattern * subGroup();
             Pattern * subPosix();
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            
         };
     }
 
