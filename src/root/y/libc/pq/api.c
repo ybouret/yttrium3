@@ -3,6 +3,9 @@
 #include <assert.h>
 #include <string.h>
 
+size_t Yttrium_PQ_Trace = 0;
+
+#define Y_PQ_Trace 1
 
 void Yttrium_PQ_Push_Balance(void * const   blockAddr,
                              const size_t   numBlocks,
@@ -27,6 +30,9 @@ void Yttrium_PQ_Push_Balance(void * const   blockAddr,
             assert(i!=p);
             if( compare(p,i,args) < 0) break;
             Yttrium_BSwap(p,i,blockSize);
+#if defined(Y_PQ_Trace)
+            ++Yttrium_PQ_Trace;
+#endif
             ipos = ppos;
         }
 

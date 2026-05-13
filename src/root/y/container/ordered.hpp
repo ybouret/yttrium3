@@ -65,6 +65,7 @@ namespace Yttrium
             return saved;
         }
 
+        //! helper to push \param data new data \return *this
         inline Ordered<T> & operator<<(ParamType data)
         {
             push(data);

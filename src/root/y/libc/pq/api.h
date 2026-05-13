@@ -9,7 +9,8 @@
 extern "C" {
 #endif
 
-    
+    extern size_t Yttrium_PQ_Trace;
+
     //! balance after push at numBlock-1
     /**
      \param blockAddr address of first item

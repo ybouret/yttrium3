@@ -134,6 +134,11 @@ Y_UTEST(container_pq)
             std::cerr << pq << " | size=" << pq.size() << " | capacity=" << pq.capacity() << std::endl;
         }
 
+        {
+            const PriorityQ<apz> tmp(pq);
+            std::cerr << tmp << std::endl;
+        }
+
         std::cerr << "-- pulling" << std::endl;
         while(pq.size())
         {
