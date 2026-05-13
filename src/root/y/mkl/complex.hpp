@@ -38,7 +38,7 @@ namespace Yttrium
         //______________________________________________________________________
         typedef T             Type; //!< alias
         typedef Core::Complex Self; //!< alias
-        static const size_t   DIMENSIONS = 2; //!< alias
+        static const size_t   DIMENSION = 2; //!< alias
 
         //______________________________________________________________________
         //
@@ -63,7 +63,7 @@ namespace Yttrium
         //______________________________________________________________________
 
         //! \return DIMENSIONS
-        inline size_t size()            const noexcept { return DIMENSIONS; }
+        inline size_t size()            const noexcept { return DIMENSION; }
 
         //! \param indx [1..2] \return re or im
         inline T &    operator[](size_t indx) noexcept {
@@ -269,4 +269,4 @@ namespace Yttrium
     };
 }
 
-#endif
+#endif // !Y_Type_Complex_Included

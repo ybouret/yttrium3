@@ -17,6 +17,7 @@ namespace Yttrium
         namespace Kernel
         {
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             struct Fabs
             {
                 template <typename T> static inline
@@ -31,9 +32,11 @@ namespace Yttrium
                     return x.abs();
                 }
             };
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         }
 
+        //! \param x any valid value \return |x|
         template <typename T> inline
         typename ScalarFor<T>::Type Fabs(typename TypeTraits<T>::ParamType x) {
             static const typename Kernel::Selected<T>::API api = {};

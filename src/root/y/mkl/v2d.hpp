@@ -4,8 +4,7 @@
 #ifndef Y_MKL_V2D_Included
 #define Y_MKL_V2D_Included 1
 
-//#include "y/mkl/api/pythagoras.hpp"
-#include "y/config/setup.hpp"
+#include "y/mkl/api/pythagoras.hpp"
 #include <iostream>
 #include <cmath>
 
@@ -31,7 +30,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
         typedef T             Type; //!< alias
-        static const size_t   DIMENSIONS = 2; //!< alias
+        static const size_t   DIMENSION = 2; //!< alias
         
         //______________________________________________________________________
         //
@@ -53,7 +52,7 @@ namespace Yttrium
         //______________________________________________________________________
 
         //! pseudo writable \return 2
-        inline size_t size() const noexcept { return 2; }
+        inline size_t size() const noexcept { return DIMENSION; }
 
         //______________________________________________________________________
         //
@@ -123,7 +122,7 @@ namespace Yttrium
         //
         //! \return |v|^2
         //______________________________________________________________________
-        inline T norm2() const noexcept
+        inline T mod2() const noexcept
         {
             return x*x + y*y;
         }
@@ -132,7 +131,7 @@ namespace Yttrium
         //
         //! \return |v|
         //______________________________________________________________________
-        //inline T norm() const noexcept { return MKL::Pythagoras(x,y); }
+        inline T abs() const noexcept { return MKL::Pythagoras(x,y); }
 
         //! \return lower point \param lhs lhs \param rhs rhs
         inline static V2D MinOf(const V2D &lhs, const V2D &rhs) noexcept

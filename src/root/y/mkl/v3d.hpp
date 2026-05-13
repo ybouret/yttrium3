@@ -28,7 +28,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
         typedef T             Type; //!< alias
-        static const size_t   DIMENSIONS = 3; //!< alias
+        static const size_t   DIMENSION = 3; //!< alias
 
         //______________________________________________________________________
         //
@@ -51,7 +51,7 @@ namespace Yttrium
         //______________________________________________________________________
 
         //! pseudo writable
-        inline size_t size() const noexcept { return DIMENSIONS; } //!< \return 3
+        inline size_t size() const noexcept { return DIMENSION; } //!< \return 3
 
         //______________________________________________________________________
         //
@@ -121,10 +121,10 @@ namespace Yttrium
         //
         //! \return |v|^2
         //______________________________________________________________________
-        inline T norm2() const noexcept
+        inline T mod2() const noexcept
         {
             T data[3] = { x*x, y*y, z*z };
-            Sorting::Sort3(data);
+            Core::Sort3(data);
             return data[1] + (data[2]+data[3]);
         }
 
@@ -132,7 +132,7 @@ namespace Yttrium
         //
         //! \return |v|
         //______________________________________________________________________
-        inline T norm() const noexcept
+        inline T abs() const noexcept
         {
             return MKL::Pythagoras(x,y,z);
         }

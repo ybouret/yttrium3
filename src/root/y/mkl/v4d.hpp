@@ -26,7 +26,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
         typedef T             Type;           //!< alias
-        static const size_t   DIMENSIONS = 4; //!< alias
+        static const size_t   DIMENSION = 4; //!< alias
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         //______________________________________________________________________
@@ -49,7 +49,7 @@ namespace Yttrium
         //______________________________________________________________________
 
         //! pseudo writable
-        inline size_t size() const noexcept { return 4; }
+        inline size_t size() const noexcept { return DIMENSION; }
 
         //______________________________________________________________________
         //
@@ -62,12 +62,12 @@ namespace Yttrium
         //
         // addition
         //______________________________________________________________________
-        inline V4D        operator+() const noexcept 
+        inline V4D        operator+() const noexcept
         { return V4D(x,y,z,w); }                                         //!< unary +
 
         inline friend V4D operator+(const V4D  &lhs, const V4D &rhs) noexcept
         { return V4D(lhs.x+rhs.x,lhs.y+rhs.y,lhs.z+rhs.z,lhs.w+rhs.w); } //!< binary +
-        
+
         inline V4D &      operator+=(const V4D &rhs) noexcept
         { x+=rhs.x; y+=rhs.y; z+=rhs.z; w+=rhs.w; return *this; }        //!< in place +
 

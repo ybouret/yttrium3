@@ -1,4 +1,6 @@
 
+#include "y/mkl/api/fpow.hpp"
+#include "y/mkl/api/sgn.hpp"
 #include "y/mkl/api/pythagoras.hpp"
 
 #include "y/mkl/complex.hpp"
@@ -26,8 +28,14 @@ namespace {
         std::cerr << "\t(|" << a << "|^2+|" << b << "|^2)^(1/2)=" << Pythagoras<T>(a,b) << std::endl;
         std::cerr << "\t(|" << b << "|^2+|" << c << "|^2)^(1/2)=" << Pythagoras<T>(b,c) << std::endl;
         std::cerr << "\t(|" << a << "|^2+|" << b << "|^2+|" << c << "|^2)^(1/2)=" << Pythagoras<T>(a,b,c) << std::endl;
-
     }
+
+    template <typename T> static inline
+    void showFpow(const T x, const T a)
+    {
+        std::cerr << "-- " << x << "^" << a << " = " << Fpow(x,a) << std::endl;
+    }
+
 }
 
 Y_UTEST(mkl_api)
@@ -38,10 +46,10 @@ Y_UTEST(mkl_api)
     showScalarFor< XReal<double> >();
 
     showPythagoras<float>(2,3,4);
-    //showPythagoras<int32_t>(2,3,4);
     showPythagoras< XReal<long double> >(2,3,4);
-    //showPythagoras< apz >(2,3,4);
 
+    showFpow<float>(10,2.2);
+    showFpow< XReal<double> >(10,2.2);
 
 }
 Y_UDONE()

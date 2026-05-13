@@ -14,26 +14,26 @@ namespace Yttrium
     namespace MKL
     {
 
-
         namespace Kernel
         {
-            
+            //! named API to use
             enum Genus
             {
-                Integral,
-                Floating,
-                MustCall
+                Integral, //!< use Iabs
+                Floating, //!< use std::fabs
+                MustCall  //!< use .abs()
             };
 
-            typedef IntToType<Integral> IntegralAPI;
-            typedef IntToType<Floating> FloatingAPI;
-            typedef IntToType<MustCall> MustCallAPI;
+            typedef IntToType<Integral> IntegralAPI; //!< alias
+            typedef IntToType<Floating> FloatingAPI; //!< alias
+            typedef IntToType<MustCall> MustCallAPI; //!< alias
 
+            //! API Selector
             template <typename T> struct Selected
             {
-                static const bool UseIntegral = TypeTraits<T>::IsIntegral;
-                static const bool UseFloating = TypeTraits<T>::IsIsoFloatingPoint;
-                typedef typename Alternative<UseIntegral,IntegralAPI,UseFloating,FloatingAPI,MustCallAPI>::Type API;
+                static const bool UseIntegral = TypeTraits<T>::IsIntegral;         //!< alias
+                static const bool UseFloating = TypeTraits<T>::IsIsoFloatingPoint; //!< alias
+                typedef typename Alternative<UseIntegral,IntegralAPI,UseFloating,FloatingAPI,MustCallAPI>::Type API; //!< the API
             };
 
         }
