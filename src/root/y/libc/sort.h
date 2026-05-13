@@ -3,15 +3,13 @@
 #ifndef Y_Libc_Sort_Included
 #define Y_Libc_Sort_Included
 
-#include "y/config/setup.h"
+#include "y/libc/compare.h"
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-    //! comparison function prototype
-    typedef int (*YttriumCompare)(const void * const, const void * const, void * const);
-
+    
     //__________________________________________________________________________
     //
     //! heap-sort anonymous array

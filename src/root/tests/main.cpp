@@ -112,6 +112,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(container_matrix);
     Y_UTEST(container_suffix_set);
     Y_UTEST(container_suffix_map);
+    Y_UTEST(container_pq);
 
 
     Y_UTEST(apex_k);
