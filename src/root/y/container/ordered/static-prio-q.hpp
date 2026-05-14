@@ -49,7 +49,7 @@ namespace Yttrium
         //! setup empty
         inline explicit StaticPrioQ() noexcept :
         pq(0),
-        cmp(),
+        compare(),
         prio(),
         wksp()
         {
@@ -59,7 +59,7 @@ namespace Yttrium
         //! duplicate \param other another queue
         inline StaticPrioQ(const StaticPrioQ &other) :
         pq(0),
-        cmp(),
+        compare(),
         prio(),
         wksp()
         {
@@ -88,9 +88,9 @@ namespace Yttrium
         //______________________________________________________________________
         inline virtual size_t      size()     const noexcept { return pq->size;     }
         inline virtual size_t      capacity() const noexcept { return pq->capacity; }
-        inline virtual void        push(ParamType data)      { pq->push(cmp,data); }
+        inline virtual void        push(ParamType data)      { pq->push(compare,data); }
         inline virtual ConstType & peek()     const noexcept { return pq->peek();  }
-        inline virtual void        pop()            noexcept { pq->pop(cmp); }
+        inline virtual void        pop()            noexcept { pq->pop(compare); }
         inline virtual void        free()           noexcept { pq->free(); }
         
     private:
@@ -103,9 +103,11 @@ namespace Yttrium
         //
         //______________________________________________________________________
         PQ * const pq;   //!< implementation
-        COMPARATOR cmp;  //!< comparator class
-
+    public:
+        COMPARATOR compare;  //!< comparator class
+                         //!
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+    private:
         void *     prio[ Alignment::WordsFor<PQ>::Count ];
         void *     wksp[ Alignment::WordsGEQ<N*sizeof(T)>::Count ];
 

@@ -13,7 +13,6 @@
 #include "y/type/with-at-least.hpp"
 #include "y/ability/releasable.hpp"
 #include "y/ability/dynamic.hpp"
-#include "y/swap.hpp"
 
 namespace Yttrium
 {

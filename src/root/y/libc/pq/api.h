@@ -9,7 +9,7 @@
 extern "C" {
 #endif
 
-    extern size_t Yttrium_PQ_Trace;
+    extern size_t Yttrium_PQ_Trace; //!< count number of swaps if Y_PQ_Trace is defined
 
     //! balance after push at numBlock-1
     /**

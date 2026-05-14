@@ -153,9 +153,10 @@ namespace Yttrium
         //
         //______________________________________________________________________
         Code * const code;    //!< inner code
-        COMPARATOR   compare; //!< comparator
 
     public:
+        COMPARATOR   compare; //!< comparator
+
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         class Code : public Core::PQCode, public PQ
         {

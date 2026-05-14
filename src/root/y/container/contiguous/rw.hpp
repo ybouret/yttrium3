@@ -5,6 +5,7 @@
 
 #include "y/container/iter/linear.hpp"
 #include "y/container/algorithm/equality.hpp"
+#include "y/container/algorithm/flip.hpp"
 
 namespace Yttrium
 {
@@ -71,6 +72,13 @@ namespace Yttrium
         inline ConstType * operator()(void)  const noexcept
         {
             return (size()>0) ? & ask(1) : 0;
+        }
+
+        //! reverse content using memory swap
+        inline void flip() noexcept
+        {
+            ReadWriteContiguous &self = *this;
+            Algorithm::Flip(self(), self.size(), BSwap<Type> );
         }
 
 

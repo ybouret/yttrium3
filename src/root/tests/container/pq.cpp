@@ -94,10 +94,10 @@ namespace
         }
     }
 
-
-
-
 }
+
+#include "y/container/sequence/vector.hpp"
+#include "y/core/hsort.hpp"
 
 Y_UTEST(container_pq)
 {
@@ -145,6 +145,29 @@ Y_UTEST(container_pq)
             const apz z = pq.pull();
             std::cerr << std::setw(10) << z << " : " << pq << std::endl;
         }
+    }
+
+    {
+        PriorityQ<int>  pq;
+        const size_t    n  = 10 + ran.leq<size_t>(10);
+        Vector<int>     v(WithAtLeast,n);
+
+        for(size_t i=1;i<=n;++i) v << ran.in<int>(-100,100);
+
+        std::cerr << "-- in order" << std::endl;
+        Yttrium_PQ_Trace = 0;
+        Core::HSort::Make( v(), v.size(), pq.compare );
+        std::cerr << v << std::endl;
+        for(size_t i=1;i<=v.size();++i) pq << v[i];
+        std::cerr << "swaps=" << Yttrium_PQ_Trace << std::endl;
+
+        std::cerr << "-- in reverse order" << std::endl;
+        Yttrium_PQ_Trace = 0;
+        Core::HSort::Make( v(), v.size(), pq.compare );
+        v.flip();
+        std::cerr << v << std::endl;
+        for(size_t i=1;i<=v.size();++i) pq << v[i];
+        std::cerr << "swaps=" << Yttrium_PQ_Trace << std::endl;
 
     }
 
