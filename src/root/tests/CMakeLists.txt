@@ -24,6 +24,7 @@ jive
 vfs
 hashing
 mkl
+cameo
 )
 
 Y_LinkLibraries(test-root)
@@ -202,4 +203,5 @@ Y_UTEST(hashing:tests)
 Y_UTEST(mkl:numeric)
 Y_UTEST(mkl:api)
 
+Y_UTEST(cameo:static_geqz_sum)
 

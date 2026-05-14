@@ -105,6 +105,7 @@ y/vfs
 y/vfs/local
 y/hashing
 y/hashing/key
+y/cameo
 )
 
 add_subdirectory(tests)

@@ -176,6 +176,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(mkl_numeric);
     Y_UTEST(mkl_api);
 
+    Y_UTEST(cameo_static_geqz_sum);
 }
 Y_UTEST_EXEC()
 
