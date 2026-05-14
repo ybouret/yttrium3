@@ -204,4 +204,5 @@ Y_UTEST(mkl:numeric)
 Y_UTEST(mkl:api)
 
 Y_UTEST(cameo:static_geqz_sum)
+Y_UTEST(cameo:scal:sum)
 
