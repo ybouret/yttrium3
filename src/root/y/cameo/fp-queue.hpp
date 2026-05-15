@@ -13,18 +13,19 @@ namespace Yttrium
 {
     namespace Cameo
     {
-        struct Pith
+        namespace Pith
         {
-            typedef TL3(float,double,long double)                      StandardFloats;
-            typedef TL3(XReal<float>,XReal<double>,XReal<long double>) ExtendedFloats;
-        };
+            typedef TL3(float,double,long double)                      StandardFloats; //!< \return alias
+            typedef TL3(XReal<float>,XReal<double>,XReal<long double>) ExtendedFloats; //!< \return alias
+        }
 
+        //! compute parameters for given type
         template <typename T>
         struct UseFP_QueueAPI
         {
-            static const bool Standard = ( TL::IndexOf<Pith::StandardFloats,T>::Value >= 0 );
-            static const bool Extended = ( TL::IndexOf<Pith::ExtendedFloats,T>::Value >= 0 );
-            static const bool IsApplicable = Standard || Extended;
+            static const bool Standard     = ( TL::IndexOf<Pith::StandardFloats,T>::Value >= 0 ); //!< alias
+            static const bool Extended     = ( TL::IndexOf<Pith::ExtendedFloats,T>::Value >= 0 ); //!< alias
+            static const bool IsApplicable = Standard || Extended;                                //!< alias
         };
     }
 

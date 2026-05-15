@@ -1,4 +1,3 @@
-
 //! \file
 
 #ifndef Y_Cameo_Add_FP_Queue_Included
@@ -15,35 +14,24 @@ namespace Yttrium
     namespace Cameo
     {
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         template <typename T>
         class QAdd
         {
         public:
             Y_Args_Declare(T,Type);
-            inline QAdd(ParamType value) noexcept :
-            data(value),
-            rank(MKL::Fabs<MutableType>(data))
-            {
-            }
 
-            inline QAdd(const QAdd &it) noexcept :
-            data(it.data),
-            rank(it.rank)
-            {
-
-            }
-
+            inline  QAdd(ParamType value) noexcept : data(value), rank(MKL::Fabs<MutableType>(data)) { }
+            inline  QAdd(const QAdd &it)  noexcept : data(it.data), rank(it.rank) { }
             inline ~QAdd() noexcept {}
 
-            inline friend std::ostream & operator<<(std::ostream &os, const QAdd &self)
-            {
+            inline friend std::ostream & operator<<(std::ostream &os, const QAdd &self) {
                 return os << '|' << self.data << '|';
             }
 
             inline ConstType & operator*() const noexcept { return data; }
 
-            inline friend QAdd operator+(const QAdd &lhs, const QAdd &rhs) noexcept
-            {
+            inline friend QAdd operator+(const QAdd &lhs, const QAdd &rhs) noexcept {
                 return QAdd(lhs.data+rhs.data);
             }
 
@@ -52,9 +40,7 @@ namespace Yttrium
             public:
                 inline  Comparator() noexcept {}
                 inline ~Comparator() noexcept {}
-
-                inline int operator()(const QAdd &lhs, const QAdd &rhs) noexcept
-                {
+                inline int operator()(const QAdd &lhs, const QAdd &rhs) noexcept {
                     return (lhs.rank < rhs.rank) ? -1 : ( (rhs.rank<lhs.rank) ? 1 : 0);
                 }
 
@@ -65,7 +51,16 @@ namespace Yttrium
             ConstType rank;
             Y_Disable_Assign(QAdd);
         };
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Prototype for SCALAR FP_Queue summators
+        //
+        //
+        //______________________________________________________________________
         template <
         typename T,
         typename PQ // Priority queue for QAdd<T>
@@ -73,20 +68,38 @@ namespace Yttrium
         class FP_QAdd : public Summator<T>
         {
         public:
-            Y_Args_Declare(T,Type);
-            typedef QAdd<T> Item;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            Y_Args_Declare(T,Type); //!< alias
+            typedef QAdd<T> Item;   //!< alias
 
-            inline FP_QAdd() : pq() {}
-            inline FP_QAdd(const size_t minCapacity) : pq(minCapacity) {}
-            inline FP_QAdd(const FP_QAdd &other) : Summator<T>(), pq(other.pq) {}
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            inline FP_QAdd() : pq()                                            {} //!< setup empty
+            inline FP_QAdd(const size_t minCapacity) : pq(minCapacity)         {} //!< setup \param minCapacity for compatibility
+            inline FP_QAdd(const FP_QAdd &other) : Summator<T>(), pq(other.pq) {} //!< duplocate \param other another FP_QAdd
+            inline virtual ~FP_QAdd() noexcept                                 {} //!< cleanup
 
-            inline virtual ~FP_QAdd() noexcept {}
-
+            //! display
             inline friend std::ostream & operator<<(std::ostream &os, const FP_QAdd &self)
             {
                 return os << self.pq;
             }
 
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
             inline virtual void ldz() noexcept { pq.free(); }
             inline void         add(ConstType &data) {
                 const Item item(data); pq.push(item);
@@ -105,7 +118,6 @@ namespace Yttrium
                 {
                     const Item lhs = pq.pull(); assert(pq.size()>0);
                     const Item rhs = pq.pull();
-                    std::cerr << "=> " << lhs << " + " << rhs << std::endl;
                     pq << lhs+rhs;
                 }
                 assert(1==pq.size());
@@ -113,26 +125,54 @@ namespace Yttrium
             }
 
         private:
-            Y_Disable_Assign(FP_QAdd);
-            PQ pq;
+            Y_Disable_Assign(FP_QAdd); //!< discarded
+            PQ pq;                     //!< inner queue
         };
 
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Summator for SCALAR floating points, dynamic
+        //
+        //
+        //______________________________________________________________________
         template <typename T>
         class FP_QueueSummator : public FP_QAdd<T,PriorityQ< QAdd<T>, typename QAdd<T>::Comparator > >
         {
         public:
-            typedef QAdd<T> Item;
-            typedef PriorityQ<Item,typename Item::Comparator> PQ_Type;
-            typedef FP_QAdd<T,PQ_Type> SummatorType;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef QAdd<T>                                   Item;         //!< alias
+            typedef PriorityQ<Item,typename Item::Comparator> PQ_Type;      //!< alias
+            typedef FP_QAdd<T,PQ_Type>                        SummatorType; //!< alias
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup empty
             inline explicit FP_QueueSummator() : SummatorType() {}
+
+            //! setup \param minCapacity minimal capacity
             inline explicit FP_QueueSummator(const size_t minCapacity) : SummatorType(minCapacity) {}
+
+            //! cleanup
             inline virtual ~FP_QueueSummator() noexcept {}
 
+            //! duplicate \param other antother summatro
+            inline FP_QueueSummator(const FP_QueueSummator &other) : SummatorType(other) {}
 
         private:
-            Y_Disable_Copy_And_Assign(FP_QueueSummator);
+            Y_Disable_Assign(FP_QueueSummator); //!< discarded
         };
 
 

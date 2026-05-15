@@ -25,8 +25,8 @@ namespace Yttrium
         class AP_ProxySummator : public AP_ProxyCommon, public Summator<T>
         {
         public:
-            Y_Args_Declare(T,Type);
-            typedef typename UseAP_ProxyAPI<MutableType>::Type Accumulator;
+            Y_Args_Declare(T,Type); //!< aliases
+            typedef typename UseAP_ProxyAPI<MutableType>::Type Accumulator; //!< alias
 
             //__________________________________________________________________
             //
@@ -56,8 +56,8 @@ namespace Yttrium
             }
 
         private:
-            Y_Disable_Assign(AP_ProxySummator);
-            Accumulator acc;
+            Y_Disable_Assign(AP_ProxySummator); //!< discarded
+            Accumulator acc;                    //!< accumulator
         };
 
     }
