@@ -20,9 +20,9 @@ namespace Yttrium
             AP_Proxy  //!< for integer type using apex
         };
 
-        typedef IntToType<Straight> StraightAPI;
-        typedef IntToType<FP_Queue> FP_QueueAPI;
-        typedef IntToType<AP_Proxy> AP_ProxyAPI;
+        typedef IntToType<Straight> StraightAPI; //!< alias
+        typedef IntToType<FP_Queue> FP_QueueAPI; //!< alias
+        typedef IntToType<AP_Proxy> AP_ProxyAPI; //!< alias
 
 
         

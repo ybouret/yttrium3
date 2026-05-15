@@ -11,15 +11,41 @@ namespace Yttrium
     namespace Cameo
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Perform local sum of positive, floating point values
+        //
+        //
+        //______________________________________________________________________
         template <typename T, size_t N>
         class StaticGEQZSum : public Summator<T>
         {
         public:
-            Y_Args_Declare(T,Type);
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            Y_Args_Declare(T,Type); //!< aliases
 
-            inline explicit StaticGEQZSum() noexcept : Q()  {}
-            inline virtual ~StaticGEQZSum() noexcept {}
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            inline explicit StaticGEQZSum() noexcept : Q()  {} //!< setup
+            inline virtual ~StaticGEQZSum() noexcept        {} //!< cleanup
 
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
             inline virtual void ldz() noexcept { Q.free(); }
             inline virtual void add(ConstType &data) {
                 assert( Sign::GEQZ(data) );
@@ -39,6 +65,14 @@ namespace Yttrium
                 return Q.pull();
             }
 
+            //__________________________________________________________________
+            //
+            //
+            // Method
+            //
+            //__________________________________________________________________
+
+            //! \param arr array with N items \return sum(array)
             inline static Type Of(ConstType * const arr)
             {
                 assert(arr);
@@ -49,7 +83,8 @@ namespace Yttrium
 
 
         private:
-            StaticPrioQ< T,N,Sign::Comparator<T> > Q;
+            Y_Disable_Copy_And_Assign(StaticGEQZSum); //!< discarded
+            StaticPrioQ< T,N,Sign::Comparator<T>>  Q; //!< inner queue
 
         };
 

@@ -11,33 +11,69 @@ namespace Yttrium
     namespace Cameo
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Summator interface
+        //
+        //
+        //______________________________________________________________________
         template <typename T>
         class Summator
         {
         public:
-            Y_Args_Declare(T,Type);
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            Y_Args_Declare(T,Type); //!< aliases
 
-            inline explicit Summator() noexcept {}
-            inline virtual ~Summator() noexcept {}
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            inline explicit Summator() noexcept {} //!< setup
+            inline virtual ~Summator() noexcept {} //!< cleanup
 
-            virtual void ldz() noexcept   = 0;
-            virtual void add(ConstType &) = 0;
-            virtual Type operator()(void) = 0;
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
+            virtual void ldz() noexcept   = 0; //!< reset
+            virtual void add(ConstType &) = 0; //!< add data
+            virtual Type operator()(void) = 0; //!< \return result (MUST be zero afterwards)
 
+            //__________________________________________________________________
+            //
+            //
+            // Method
+            //
+            //__________________________________________________________________
+
+            //! helper \param data to add \return *this
             inline Summator & operator<<(ParamType data) {
                 add(data); return *this;
             }
 
+            //! helper \param data to add \return *this
             inline Summator operator +=(ParamType data) {
                 add(data); return *this;
             }
 
+            //! helper \param data to set \return *this
             inline Summator & operator=(ParamType data) {
                 ldz(); add(data); return *this;
             }
 
         private:
-            Y_Disable_Copy_And_Assign(Summator);
+            Y_Disable_Copy_And_Assign(Summator); //!< discarded
         };
 
     }
