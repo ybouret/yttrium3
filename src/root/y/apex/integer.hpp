@@ -267,7 +267,7 @@ inline Integer & operator OP##= (const integer_t rhs ) { Integer tmp = CALL(*thi
             template <typename T> inline
             bool tryCast(T &result, const IntToType<true> &) const noexcept
             {
-                static const integer_t MinValue = (integer_t) IntegerFor<T>::Maximum;
+                static const integer_t MinValue = (integer_t) IntegerFor<T>::Minimum;
                 static const integer_t MaxValue = (integer_t) IntegerFor<T>::Maximum;
                 if(*this<MinValue||*this>MaxValue) return false;
 
