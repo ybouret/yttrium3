@@ -22,7 +22,7 @@ namespace Yttrium
             Y_Args_Declare(T,Type);
             inline QAdd(ParamType value) noexcept :
             data(value),
-            rank(MKL::Fabs(data))
+            rank(MKL::Fabs<MutableType>(data))
             {
             }
 
@@ -35,6 +35,17 @@ namespace Yttrium
 
             inline ~QAdd() noexcept {}
 
+            inline friend std::ostream & operator<<(std::ostream &os, const QAdd &self)
+            {
+                return os << '|' << self.data << '|';
+            }
+
+            inline ConstType & operator*() const noexcept { return data; }
+
+            inline friend QAdd operator+(const QAdd &lhs, const QAdd &rhs) noexcept
+            {
+                return QAdd(lhs.data+rhs.data);
+            }
 
             class Comparator
             {
@@ -71,14 +82,57 @@ namespace Yttrium
 
             inline virtual ~FP_QAdd() noexcept {}
 
+            inline friend std::ostream & operator<<(std::ostream &os, const FP_QAdd &self)
+            {
+                return os << self.pq;
+            }
+
             inline virtual void ldz() noexcept { pq.free(); }
+            inline void         add(ConstType &data) {
+                const Item item(data); pq.push(item);
+            }
 
-
-
+            inline virtual Type operator()(void)
+            {
+                switch(pq.size())
+                {
+                    case 0: return 0;
+                    case 1: return *pq.pull();
+                    default:
+                        break;
+                }
+                while(pq.size()>1)
+                {
+                    const Item lhs = pq.pull(); assert(pq.size()>0);
+                    const Item rhs = pq.pull();
+                    std::cerr << "=> " << lhs << " + " << rhs << std::endl;
+                    pq << lhs+rhs;
+                }
+                assert(1==pq.size());
+                return *pq.pull();
+            }
 
         private:
             Y_Disable_Assign(FP_QAdd);
             PQ pq;
+        };
+
+
+        template <typename T>
+        class FP_QueueSummator : public FP_QAdd<T,PriorityQ< QAdd<T>, typename QAdd<T>::Comparator > >
+        {
+        public:
+            typedef QAdd<T> Item;
+            typedef PriorityQ<Item,typename Item::Comparator> PQ_Type;
+            typedef FP_QAdd<T,PQ_Type> SummatorType;
+
+            inline explicit FP_QueueSummator() : SummatorType() {}
+            inline explicit FP_QueueSummator(const size_t minCapacity) : SummatorType(minCapacity) {}
+            inline virtual ~FP_QueueSummator() noexcept {}
+
+
+        private:
+            Y_Disable_Copy_And_Assign(FP_QueueSummator);
         };
 
 

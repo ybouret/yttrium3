@@ -9,6 +9,7 @@
 #include "y/type/sign.hpp"
 #include "y/object.hpp"
 #include "y/ability/expandable.hpp"
+#include "y/type/destroy.hpp"
 
 namespace Yttrium
 {
