@@ -22,12 +22,42 @@ namespace Yttrium
         //
         //______________________________________________________________________
         template <typename T>
-        class AP_ProxySummator : public Summator<T>
+        class AP_ProxySummator : public AP_ProxyCommon, public Summator<T>
         {
         public:
+            Y_Args_Declare(T,Type);
+            typedef typename UseAP_ProxyAPI<MutableType>::Type Accumulator;
+
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            inline explicit AP_ProxySummator() : acc(0)             {  } //!< setup empty
+            inline explicit AP_ProxySummator(const size_t) : acc(0) {  } //!< setup empty (compatibility version)
+            inline virtual ~AP_ProxySummator() noexcept             { acc.ldz(); }          //!< cleanup
+            inline AP_ProxySummator(const AP_ProxySummator &other) : acc(other.acc) {}                      //!< duplicate \param other another summator
+
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
+            inline void ldz() noexcept       { acc.ldz(); }
+            inline void add(ConstType &data) { acc += data; }
+            inline Type operator()(void)
+            {
+                ConstType res = acc.template cast<MutableType>(VarName,VarPart);
+                acc.ldz();
+                return res;
+            }
 
         private:
-
+            Y_Disable_Assign(AP_ProxySummator);
+            Accumulator acc;
         };
 
     }
