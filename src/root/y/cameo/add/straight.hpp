@@ -5,8 +5,8 @@
 
 
 #include "y/cameo/summator.hpp"
-#include "y/apex/number.hpp"
-#include "y/type/conversion.hpp"
+#include "y/cameo/straight.hpp"
+
 #include "y/check/static.hpp"
 
 namespace Yttrium
@@ -34,7 +34,7 @@ namespace Yttrium
             Y_Args_Declare(T,Type); //!< aliases
 
             //! flag to test consistentcy
-            static const bool Applicable = Y_Is_SuperSubClass_Strict(Apex::Number,MutableType);
+            static const bool IsApplicable = UseStraightAPI<MutableType>::IsApplicable;
 
             //__________________________________________________________________
             //
@@ -43,8 +43,8 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            inline explicit StraightSummator() : sum(0)             { Y_STATIC_CHECK(Applicable,BadType); } //!< setup empty
-            inline explicit StraightSummator(const size_t) : sum(0) { Y_STATIC_CHECK(Applicable,BadType); } //!< setup empty (compatibility version)
+            inline explicit StraightSummator() : sum(0)             { Y_STATIC_CHECK(IsApplicable,BadType); } //!< setup empty
+            inline explicit StraightSummator(const size_t) : sum(0) { Y_STATIC_CHECK(IsApplicable,BadType); } //!< setup empty (compatibility version)
             inline virtual ~StraightSummator() noexcept                             { sum.ldz(); }          //!< cleanup
             inline StraightSummator(const StraightSummator &other) : sum(other.sum) {}                      //!< duplicate \param other another summator
 
