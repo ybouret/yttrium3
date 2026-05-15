@@ -1,4 +1,3 @@
-
 //! \file
 
 #ifndef Y_Cameo_AP_Proxy_Included

@@ -35,10 +35,10 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            inline explicit AP_ProxySummator() : acc(0)             {  } //!< setup empty
-            inline explicit AP_ProxySummator(const size_t) : acc(0) {  } //!< setup empty (compatibility version)
-            inline virtual ~AP_ProxySummator() noexcept             { acc.ldz(); }          //!< cleanup
-            inline AP_ProxySummator(const AP_ProxySummator &other) : acc(other.acc) {}                      //!< duplicate \param other another summator
+            inline explicit AP_ProxySummator() : acc(0)             {  }               //!< setup empty
+            inline explicit AP_ProxySummator(const size_t) : acc(0) {  }               //!< setup empty (compatibility version)
+            inline virtual ~AP_ProxySummator() noexcept             { acc.ldz(); }     //!< cleanup
+            inline AP_ProxySummator(const AP_ProxySummator &other) : acc(other.acc) {} //!< duplicate \param other another summator
 
             //__________________________________________________________________
             //
