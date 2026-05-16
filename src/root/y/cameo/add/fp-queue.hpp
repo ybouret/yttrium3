@@ -43,7 +43,6 @@ namespace Yttrium
                 inline int operator()(const QAdd &lhs, const QAdd &rhs) noexcept {
                     return (lhs.rank < rhs.rank) ? -1 : ( (rhs.rank<lhs.rank) ? 1 : 0);
                 }
-
             };
 
         private:
@@ -170,6 +169,11 @@ namespace Yttrium
 
             //! duplicate \param other antother summatro
             inline FP_QueueSummator(const FP_QueueSummator &other) : SummatorType(other) {}
+
+            inline virtual const char * callSign() const noexcept
+            {
+                return "Cameo::FP_Queue";
+            }
 
         private:
             Y_Disable_Assign(FP_QueueSummator); //!< discarded

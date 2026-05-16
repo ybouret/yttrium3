@@ -55,6 +55,10 @@ namespace Yttrium
                 return res;
             }
 
+            inline virtual const char * callSign() const noexcept
+            {
+                return "Cameo::AP_Proxy";
+            }
         private:
             Y_Disable_Assign(AP_ProxySummator); //!< discarded
             Accumulator acc;                    //!< accumulator

@@ -5,6 +5,7 @@
 
 #include "y/container.hpp"
 #include "y/type/args.hpp"
+#include "y/ability/identifiable.hpp"
 
 namespace Yttrium
 {
@@ -20,7 +21,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
         template <typename T>
-        class Summator
+        class Summator : public Identifiable
         {
         public:
             //__________________________________________________________________

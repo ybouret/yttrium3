@@ -50,6 +50,11 @@ namespace Yttrium
             //! duplicate \param other another summator
             inline StaticSummator(const StaticSummator &other) : SummatorType(other) {}
 
+            inline virtual const char * callSign() const noexcept
+            {
+                return "Cameo::SaticSummator";
+            }
+
         private:
             Y_Disable_Assign(StaticSummator); //!< discarded
         };

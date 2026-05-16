@@ -18,7 +18,8 @@ namespace Yttrium
         {
             static const bool UseSigned   = TypeTraits<T>::InStandardIntegers || TypeTraits<T>::InPlatformIntegers; //!< alias
             static const bool UseUnsigned = TypeTraits<T>::InStandardUnsigned || TypeTraits<T>::InPlatformUnsigned; //!< alias
-            typedef typename Alternative<UseSigned,apz,UseUnsigned,apz,NullType>::Type Type;                        //!< alias
+            static const bool IsProper    =  UseSigned || UseUnsigned;
+            typedef typename Alternative<UseSigned,apz,UseUnsigned,apn,NullType>::Type Type;                        //!< alias
         };
 
         //! common stuff for AP_Proxy

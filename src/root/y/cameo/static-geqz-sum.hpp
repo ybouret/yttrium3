@@ -65,6 +65,11 @@ namespace Yttrium
                 return Q.pull();
             }
 
+            inline virtual const char * callSign() const noexcept
+            {
+                return "Cameo::StaticGEQZSum";
+            }
+
             //__________________________________________________________________
             //
             //

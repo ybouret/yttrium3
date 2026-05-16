@@ -180,6 +180,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(cameo_add_straight);
     Y_UTEST(cameo_add_ap_proxy);
     Y_UTEST(cameo_add_fp_queue);
+    Y_UTEST(cameo_add_scalar);
 
 }
 Y_UTEST_EXEC()

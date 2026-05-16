@@ -6,7 +6,6 @@
 
 #include "y/cameo/summator.hpp"
 #include "y/cameo/straight.hpp"
-
 #include "y/check/static.hpp"
 
 namespace Yttrium
@@ -34,7 +33,7 @@ namespace Yttrium
             Y_Args_Declare(T,Type); //!< aliases
 
             //! flag to test consistentcy
-            static const bool IsApplicable = UseStraightAPI<MutableType>::IsApplicable;
+            static const bool IsProper = UseStraightAPI<MutableType>::IsProper;
 
             //__________________________________________________________________
             //
@@ -43,8 +42,8 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            inline explicit StraightSummator() : sum(0)             { Y_STATIC_CHECK(IsApplicable,BadType); } //!< setup empty
-            inline explicit StraightSummator(const size_t) : sum(0) { Y_STATIC_CHECK(IsApplicable,BadType); } //!< setup empty (compatibility version)
+            inline explicit StraightSummator() : sum(0)             { Y_STATIC_CHECK(IsProper,BadType); } //!< setup empty
+            inline explicit StraightSummator(const size_t) : sum(0) { Y_STATIC_CHECK(IsProper,BadType); } //!< setup empty (compatibility version)
             inline virtual ~StraightSummator() noexcept                             { sum.ldz(); }          //!< cleanup
             inline StraightSummator(const StraightSummator &other) : sum(other.sum) {}                      //!< duplicate \param other another summator
 
@@ -57,6 +56,11 @@ namespace Yttrium
             inline void ldz() noexcept       { sum.ldz(); }
             inline Type operator()(void)     { ConstType res = sum; sum.ldz(); return res; }
             inline void add(ConstType &data) { sum += data; }
+
+            inline virtual const char * callSign() const noexcept
+            {
+                return "Cameo::Straight";
+            }
 
         private:
             Y_Disable_Assign(StraightSummator); //!< discarded

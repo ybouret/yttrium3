@@ -48,6 +48,7 @@ namespace Yttrium
 
         //! setup empty
         inline explicit StaticPrioQ() noexcept :
+        Ordered<T>(),
         pq(0),
         compare(),
         prio(),
@@ -58,6 +59,7 @@ namespace Yttrium
 
         //! duplicate \param other another queue
         inline StaticPrioQ(const StaticPrioQ &other) :
+        Ordered<T>(),
         pq(0),
         compare(),
         prio(),

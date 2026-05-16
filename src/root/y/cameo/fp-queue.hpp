@@ -25,7 +25,7 @@ namespace Yttrium
         {
             static const bool Standard     = ( TL::IndexOf<Pith::StandardFloats,T>::Value >= 0 ); //!< alias
             static const bool Extended     = ( TL::IndexOf<Pith::ExtendedFloats,T>::Value >= 0 ); //!< alias
-            static const bool IsApplicable = Standard || Extended;                                //!< alias
+            static const bool IsProper     = Standard || Extended;                                //!< alias
         };
     }
 

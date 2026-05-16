@@ -207,5 +207,6 @@ Y_UTEST(cameo:static_geqz_sum)
 Y_UTEST(cameo:add:straight)
 Y_UTEST(cameo:add:ap_proxy)
 Y_UTEST(cameo:add:fp_queue)
+Y_UTEST(cameo:add:scalar)
 
 
