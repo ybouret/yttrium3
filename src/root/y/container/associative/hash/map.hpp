@@ -80,6 +80,14 @@ namespace Yttrium
 
     };
 
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Hash map of (key,value)
+    //
+    //
+    //__________________________________________________________________________
     template <typename KEY,
     typename T,
     typename HASHER = Hashing::KeyWith<Hashing::FNV> >
@@ -117,6 +125,7 @@ namespace Yttrium
 
         //! cleanup
         inline virtual ~HashMap() noexcept {}
+        
         //______________________________________________________________________
         //
         //
@@ -133,10 +142,6 @@ namespace Yttrium
             catch(...) { pool.store(node); throw; }
             return insertNode( node );
         }
-
-
-
-
 
     private:
         Y_Disable_Copy_And_Assign(HashMap); //!< discarded
