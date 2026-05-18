@@ -13,8 +13,13 @@ namespace Yttrium
     class Catalog : public Associative<KEY,T>
     {
     public:
+        Y_Args_Declare(KEY,Key);
+        Y_Args_Declare(T,Type);
+
         inline explicit Catalog() noexcept : Associative<KEY,T>() {}
         inline virtual ~Catalog() noexcept {}
+
+        virtual bool insert(ParamKey, ParamType) = 0;
 
     private:
         Y_Disable_Copy_And_Assign(Catalog);

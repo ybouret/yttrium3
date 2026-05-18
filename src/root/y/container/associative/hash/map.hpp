@@ -46,16 +46,17 @@ namespace Yttrium
     template <typename KEY,
     typename T,
     typename HASHER = Hashing::KeyWith<Hashing::FNV> >
-    class HashMap : public HashProto< HashMapNode<KEY,T>, Associative >
+    class HashMap : public HashProto< HashMapNode<KEY,T>, Catalog, HASHER>
     {
     public:
         Y_Args_Declare(KEY,Key);
         Y_Args_Declare(T,Type);
-        typedef HashMapNode<KEY,T>              NodeType;
-        typedef HashProto<NodeType,Associative> ProtoType;
+        typedef HashMapNode<KEY,T>                 NodeType;
+        typedef HashProto<NodeType,Catalog,HASHER> ProtoType;
         using ProtoType::list;
         using ProtoType::pool;
         using ProtoType::htab;
+        using ProtoType::hash;
         using ProtoType::insertNode;
 
         inline explicit HashMap(const size_t minTableSize=0) :
@@ -78,28 +79,10 @@ namespace Yttrium
         }
 
 
-        inline virtual Type * search(ParamKey key)
-        {
-            NodeType * const node = htab->search( hash(key), key);
-            return node ? & **node : 0;
-        }
-
-        inline virtual ConstType * search(ParamKey key) const
-        {
-            const NodeType * const node = htab->search( hash(key), key);
-            return node ? & **node : 0;
-        }
-
-        inline virtual bool remove(ParamKey key)
-        {
-            return htab->remove( hash(key), key, list, pool);
-        }
 
     private:
-        Y_Disable_Assign(HashMap);
+        Y_Disable_Copy_And_Assign(HashMap);
 
-    public:
-        mutable HASHER hash;
     };
 
 }

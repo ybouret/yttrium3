@@ -10,8 +10,6 @@
 #include "y/type/pulverize.hpp"
 #include "y/core/list.hpp"
 #include "y/core/pool.hpp"
-#include "y/type/args.hpp"
-
 
 namespace Yttrium
 {
@@ -218,7 +216,8 @@ namespace Yttrium
 
     template <
     typename NODE,
-    template <typename,typename> class ASSOCIATIVE
+    template <typename,typename> class ASSOCIATIVE,
+    typename HASHER
     >
     class HashProto : public ASSOCIATIVE<typename NODE::Key, typename NODE::Type>
     {
@@ -234,7 +233,8 @@ namespace Yttrium
         inline HashProto(const size_t minTableSize) :
         list(),
         pool(),
-        htab( new Table(minTableSize) )
+        htab( new Table(minTableSize) ),
+        hash()
         {
             
         }
@@ -278,13 +278,33 @@ namespace Yttrium
             return list.size + pool.size;
         }
 
-       
+        inline virtual Type * search(ParamKey key)
+        {
+            NODE * const node = htab->search( hash(key), key);
+            return node ? & **node : 0;
+        }
+
+        inline virtual ConstType * search(ParamKey key) const
+        {
+            const NODE * const node = htab->search( hash(key), key);
+            return node ? & **node : 0;
+        }
+
+        inline virtual bool remove(ParamKey key)
+        {
+            return htab->remove( hash(key), key, list, pool);
+        }
+
+
 
     protected:
         Core::ListOf<NODE> list; //!< living list
         Core::PoolOf<NODE> pool; //!< zombie pool
         Table * const      htab; //!< table
+    public:
+        mutable HASHER     hash;
 
+    protected:
         inline bool insertNode(NODE * const node)
         {
             assert(0!=node); assert(0==node->next); assert(0==node->prev);
@@ -300,6 +320,7 @@ namespace Yttrium
             }
         }
 
+    private:
         //! release all nodes
         inline void release_() noexcept
         {
@@ -308,6 +329,8 @@ namespace Yttrium
             while(list.size) Object::ReleaseZombie( Pulverized(list.popHead()) );
             while(pool.size) Object::ReleaseZombie( pool.query() );
         }
+
+        Y_Disable_Copy_And_Assign(HashProto);
 
     };
 

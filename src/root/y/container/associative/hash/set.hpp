@@ -5,6 +5,7 @@
 #define Y_Associative_HashSet_Inluded 1
 
 #include "y/container/associative/hash/proto.hpp"
+#include "y/container/associative/lexicon.hpp"
 #include "y/hashing/key/hasher.hpp"
 #include "y/hashing/fnv.hpp"
 
@@ -51,17 +52,18 @@ namespace Yttrium
     template <typename KEY,
     typename T,
     typename HASHER = Hashing::KeyWith<Hashing::FNV> >
-    class HashSet : public HashProto< HashSetNode<KEY,T>, Associative>
+    class HashSet : public HashProto< HashSetNode<KEY,T>, Lexicon, HASHER>
     {
     public:
         Y_Args_Declare(KEY,Key);
         Y_Args_Declare(T,Type);
-        typedef HashSetNode<KEY,T>              NodeType;
-        typedef HashProto<NodeType,Associative> ProtoType;
+        typedef HashSetNode<KEY,T>                 NodeType;
+        typedef HashProto<NodeType,Lexicon,HASHER> ProtoType;
         using ProtoType::list;
         using ProtoType::pool;
-        using ProtoType::insertNode;
         using ProtoType::htab;
+        using ProtoType::hash;
+        using ProtoType::insertNode;
 
         inline explicit HashSet(const size_t minTableSize=0) :
         ProtoType(minTableSize)
@@ -82,30 +84,13 @@ namespace Yttrium
             return insertNode( node );
         }
 
-        inline virtual Type * search(ParamKey key)
-        {
-            NodeType * const node = htab->search( hash(key), key);
-            return node ? & **node : 0;
-        }
-
-        inline virtual ConstType * search(ParamKey key) const
-        {
-            const NodeType * const node = htab->search( hash(key), key);
-            return node ? & **node : 0;
-        }
-
-        inline virtual bool remove(ParamKey key)
-        {
-            return htab->remove( hash(key), key, list, pool);
-        }
-
+      
 
 
     private:
-        Y_Disable_Assign(HashSet);
+        Y_Disable_Copy_And_Assign(HashSet);
 
-    public:
-        mutable HASHER hash;
+   
     };
 
 
