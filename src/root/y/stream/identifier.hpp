@@ -30,6 +30,8 @@ namespace Yttrium
         Identifier(const char);                    //!< setup from a character
         virtual ~Identifier()            noexcept; //!< cleanup
 
+        const String & key() const noexcept; //!< \return **this
+
     private:
         Y_Disable_Assign(Identifier); //!< discarded
     };

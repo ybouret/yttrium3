@@ -429,6 +429,18 @@ namespace Yttrium
             Coerce(htab) = tmp;
         }
 
+        //! remap above max load factor
+        inline void balance()
+        {
+            assert(htab);
+            if( htab->load() > Core::HTable::MaxLoad )
+            {
+                remap( htab->count / Core::HTable::MaxLoad );
+            }
+        }
+
+        inline const Table & operator->() const noexcept { assert(htab); return *htab; }
+
         //______________________________________________________________________
         //
         //
@@ -451,6 +463,7 @@ namespace Yttrium
             if( htab->insert(node,pool) )
             {
                 list.pushTail( node );
+                balance();
                 return true;
             }
             else
@@ -463,6 +476,7 @@ namespace Yttrium
         //! release all nodes
         inline void release_() noexcept
         {
+            assert(htab);
             htab->clear();
             htab->quit();
             while(list.size) Object::ReleaseZombie( Pulverized(list.popHead()) );

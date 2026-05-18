@@ -31,6 +31,12 @@ namespace Yttrium
     {
     }
 
+    const String & Identifier:: key() const noexcept
+    {
+        return **this;
+    }
+
+
 
 
 }
