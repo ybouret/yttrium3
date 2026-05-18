@@ -53,6 +53,11 @@ namespace Yttrium
         //! cleanup
         inline ~HashMapNode() noexcept {}
 
+        inline friend std::ostream & operator<<(std::ostream &os, const HashMapNode &self)
+        {
+            return os << self.key_ << ':' << self.data;
+        }
+        
         //______________________________________________________________________
         //
         //
@@ -125,7 +130,9 @@ namespace Yttrium
 
         //! cleanup
         inline virtual ~HashMap() noexcept {}
-        
+
+
+
         //______________________________________________________________________
         //
         //
@@ -136,7 +143,7 @@ namespace Yttrium
         //! [Catalog] \param key key \param args data \return true iff (key,data) was inserted
         inline virtual bool insert(ParamKey key, ParamType args)
         {
-            const size_t hkey = hash( key);
+            const size_t hkey = hash(key);
             NodeType *   node = pool.size ? pool.query() : Object::AcquireZombie<NodeType>();
             try { node = new (node) NodeType(hkey,key,args); }
             catch(...) { pool.store(node); throw; }

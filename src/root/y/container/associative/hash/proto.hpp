@@ -340,7 +340,17 @@ namespace Yttrium
         //! display
         inline friend std::ostream & operator<<(std::ostream &os, const HashProto &self)
         {
-            return os << self.list;
+            os << '[';
+            const NODE * node = self.list.head;
+            if( node )
+            {
+                os << *node;
+                for(node=node->next;node;node=node->next)
+                {
+                    os << ',' << *node;
+                }
+            }
+            return os << ']';
         }
 
 
@@ -397,6 +407,19 @@ namespace Yttrium
             return htab->remove( hash(key), key, list, pool);
         }
 
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+        inline void remap(const size_t minTableSize)
+        {
+            Table * const tmp = new Table(minTableSize);
+            tmp->steal(htab);
+            delete htab;
+            Coerce(htab) = tmp;
+        }
 
         //______________________________________________________________________
         //
