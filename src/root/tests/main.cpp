@@ -189,6 +189,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(cameo_sum_queued);
     Y_UTEST(cameo_sum_static_queued);
     Y_UTEST(cameo_sum_scalar);
+    Y_UTEST(cameo_sum_vectorial);
 
 }
 Y_UTEST_EXEC()
