@@ -27,10 +27,15 @@ namespace Yttrium
                 Y_Args_Declare(VECT,Type);
                 Y_Args_Expose(T,Scal);
 
-                inline Vectorial() :
-                xadd(0), wksp(), xnum(0)
+                inline Vectorial() : xadd(0), wksp(), xnum(0)
                 {
                     init();
+                }
+
+                inline Vectorial(const size_t minCapacity) :
+                xadd(0), wksp(), xnum(0)
+                {
+                    init(minCapacity);
                 }
 
                 inline virtual ~Vectorial() noexcept { quit(); }
@@ -72,29 +77,36 @@ namespace Yttrium
                 virtual const char * callSign() const noexcept { return "Cameo::Sum::Vectorial"; }
 
             private:
-                Y_Disable_Assign(Vectorial);
+                Y_Disable_Copy_And_Assign(Vectorial);
                 XAddition * const xadd;
                 void *            wksp[ Alignment::WordsGEQ<Requested>::Count ];
                 size_t            xnum;
 
-                inline void init()
-                {
+                inline void init() {
                     assert(0==xadd);
                     Coerce(xadd) = static_cast<XAddition*>( Y_BZero(wksp) );
-                    try
-                    {
-                        while(xnum<Dimension)
-                        {
+                    try {
+                        while(xnum<Dimension) {
                             new (xadd+xnum) XAddition();
                             ++xnum;
                         }
                     }
-                    catch(...)
-                    {
-                        quit(); throw;
-                    }
+                    catch(...) { quit(); throw; }
                 }
-                
+
+                inline void init(const size_t minCapacity)
+                {
+                    assert(0==xadd);
+                    Coerce(xadd) = static_cast<XAddition*>( Y_BZero(wksp) );
+                    try {
+                        while(xnum<Dimension) {
+                            new (xadd+xnum) XAddition(minCapacity);
+                            ++xnum;
+                        }
+                    }
+                    catch(...) { quit(); throw; }
+                }
+
                 inline void quit() noexcept
                 {
                     assert(xadd);

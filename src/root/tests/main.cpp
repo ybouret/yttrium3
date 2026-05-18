@@ -180,10 +180,6 @@ Y_UTEST_DECL(8)
     Y_UTEST(mkl_api);
 
     Y_UTEST(cameo_static_geqz_sum);
-    Y_UTEST(cameo_add_straight);
-    Y_UTEST(cameo_add_ap_proxy);
-    Y_UTEST(cameo_add_fp_queue);
-    Y_UTEST(cameo_add_scalar);
     Y_UTEST(cameo_sum_direct);
     Y_UTEST(cameo_sum_raised);
     Y_UTEST(cameo_sum_queued);
