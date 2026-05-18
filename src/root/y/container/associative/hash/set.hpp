@@ -128,7 +128,7 @@ namespace Yttrium
         {
         }
 
-
+        //! duplicate \param other another set
         inline HashSet(const HashSet &other ) :
         ProtoType(other)
         {

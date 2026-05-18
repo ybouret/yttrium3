@@ -138,6 +138,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(stream_serialize);
     Y_UTEST(stream_gz_in);
     Y_UTEST(stream_gz_out);
+    Y_UTEST(stream_identifiers);
     
     Y_UTEST(coven_univocal);
     Y_UTEST(coven_vector);

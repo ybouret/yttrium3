@@ -129,6 +129,7 @@ namespace Yttrium
         {
         }
 
+        //! duplicate \param other another map
         inline HashMap(const HashMap &other ) :
         ProtoType(other)
         {

@@ -284,6 +284,7 @@ namespace Yttrium
                 assert(0==other.count);
             }
 
+            //! duplicate \param other another table \param list target list
             inline void duplicate(const HashTable &other,
                                   ListOf<NODE>    &list)
             {
@@ -377,6 +378,7 @@ namespace Yttrium
             
         }
 
+        //! duplicate \param other another hash prototype
         inline HashProto(const HashProto &other) :
         ASSOCIATIVE<Key,Type>(),
         list(),
@@ -502,6 +504,7 @@ namespace Yttrium
             }
         }
 
+        //! access metrics from the table \return inner table
         inline const Table * operator->() const noexcept { assert(htab); return htab; }
 
         //______________________________________________________________________
