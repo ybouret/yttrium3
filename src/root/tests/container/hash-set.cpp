@@ -41,17 +41,16 @@ namespace {
 Y_UTEST(container_hash_set)
 {
 
-    typedef HashSetNode<String,Dummy> Node;
+    //typedef HashSetNode<String,Dummy> Node;
 
-    HashProto<Node> hp(0);
-    hp.free();
-
+    HashSet<String,Dummy> hset;
     {
         const Dummy dum("hello");
-        Node * const node = new ( Object::AcquireZombie<Node>() ) Node(7,dum);
-        Y_CHECK( hp.insertNode( node ) );
-        std::cerr << hp << std::endl;
+        Y_CHECK(hset.insert(dum));
+        Y_CHECK(!hset.insert(dum));
+
     }
+    std::cerr << hset << std::endl;
 
 
 }

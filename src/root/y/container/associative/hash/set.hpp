@@ -54,8 +54,12 @@ namespace Yttrium
     class HashSet : public HashProto< HashSetNode<KEY,T> >
     {
     public:
+        Y_Args_Declare(KEY,Key);
+        Y_Args_Declare(T,Type);
         typedef HashSetNode<KEY,T>  NodeType;
         typedef HashProto<NodeType> ProtoType;
+        using ProtoType::pool;
+        using ProtoType::insertNode;
 
         inline explicit HashSet(const size_t minTableSize=0) :
         ProtoType(minTableSize)
@@ -67,8 +71,23 @@ namespace Yttrium
             
         }
 
+        inline virtual bool insert(ParamType args)
+        {
+            const size_t hkey = hash( args.key() );
+            NodeType *   node = pool.size ? pool.query() : Object::AcquireZombie<NodeType>();
+            try { node = new (node) NodeType(hkey,args); }
+            catch(...) { pool.store(node); throw; }
+            return insertNode( node );
+        }
+
+
+
+
     private:
         Y_Disable_Assign(HashSet);
+
+    public:
+        mutable HASHER hash;
     };
 
 

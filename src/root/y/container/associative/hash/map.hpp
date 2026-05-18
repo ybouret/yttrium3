@@ -47,12 +47,25 @@ namespace Yttrium
     class HashMap : public HashProto< HashMapNode<KEY,T> >
     {
     public:
+        Y_Args_Declare(KEY,Key);
+        Y_Args_Declare(T,Type);
         typedef HashMapNode<KEY,T>  NodeType;
         typedef HashProto<NodeType> ProtoType;
+        using ProtoType::pool;
+        using ProtoType::insertNode;
 
         inline explicit HashMap(const size_t minTableSize=0) :
         ProtoType(minTableSize)
         {
+        }
+
+        inline virtual bool insert(ParamKey key, ParamType args)
+        {
+            const size_t hkey = hash( key);
+            NodeType *   node = pool.size ? pool.query() : Object::AcquireZombie<NodeType>();
+            try { node = new (node) NodeType(hkey,key,args); }
+            catch(...) { pool.store(node); throw; }
+            return insertNode( node );
         }
 
         inline virtual ~HashMap() noexcept
@@ -62,6 +75,9 @@ namespace Yttrium
 
     private:
         Y_Disable_Assign(HashMap);
+
+    public:
+        mutable HASHER hash;
     };
 
 }

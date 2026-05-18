@@ -26,6 +26,11 @@ Y_UTEST(container_hash_map)
 
     HashMap<String,Dummy> hmap;
 
+    const Dummy dum(7);
+    Y_CHECK(hmap.insert("hello",dum));
+    Y_CHECK(!hmap.insert("hello",dum));
+
+
 }
 Y_UDONE()
 
