@@ -55,6 +55,7 @@ y/container/algorithm
 y/container/matrix
 y/container/associative
 y/container/associative/suffix
+y/container/associative/hash
 y/container/ordered
 y/pointer
 y/utest
