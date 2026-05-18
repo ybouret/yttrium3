@@ -215,6 +215,7 @@ Y_UTEST(cameo:sum:direct)
 Y_UTEST(cameo:sum:raised)
 Y_UTEST(cameo:sum:queued)
 Y_UTEST(cameo:sum:static_queued)
+Y_UTEST(cameo:sum:scalar)
 
 
 
