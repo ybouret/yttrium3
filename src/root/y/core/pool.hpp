@@ -103,10 +103,9 @@ namespace Yttrium
             }
 
             //! merge contents \param other another pool
-            inline PoolOf * merge(PoolOf &other) noexcept
+            inline void merge(PoolOf &other) noexcept
             {
                 while(other.size) store( other.query() );
-                return *this;
             }
 
             //! exchange contents \param rhs another pool

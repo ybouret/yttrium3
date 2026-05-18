@@ -12,34 +12,71 @@
 
 namespace Yttrium
 {
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Node for HashMap
+    //
+    //
+    //__________________________________________________________________________
     template <typename KEY, typename T>
     class HashMapNode
     {
     public:
-        Y_Args_Declare(KEY,Key);
-        Y_Args_Declare(T,Type);
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        Y_Args_Declare(KEY,Key); //!< aliases
+        Y_Args_Declare(T,Type);  //!< aliases
 
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+
+        //! setup \param h hashed key \param k key \param t type
         inline HashMapNode(const size_t h, ParamKey k, ParamType t) :
         hkey(h), key_(k), data(t), next(0), prev(0)
         {
         }
 
+        //! duplicate \param node another node
         inline HashMapNode(const HashMapNode &node) :
         hkey(node.hkey), key_(node.key_), data(node.data), next(0), prev(0) {}
 
+        //! cleanup
         inline ~HashMapNode() noexcept {}
-        inline ConstType & operator*() const noexcept { return data; }
-        inline Type      & operator*()       noexcept { return data; }
-        inline ConstKey  & key()       const noexcept { return key_; }
 
-        const size_t hkey;
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+        inline ConstType & operator*() const noexcept { return data; } //!< \return const content
+        inline Type      & operator*()       noexcept { return data; } //!< \return content
+        inline ConstKey  & key()       const noexcept { return key_; } //!< \return key
+
+        //______________________________________________________________________
+        //
+        //
+        // Members
+        //
+        //______________________________________________________________________
+        const size_t hkey; //!< hashed key
     private:
-        ConstKey     key_;
-        Type         data;
-        Y_Disable_Assign(HashMapNode);
+        ConstKey     key_; //!< key
+        Type         data; //!< data
+        Y_Disable_Assign(HashMapNode); //!< discarded
     public:
-        HashMapNode * next;
-        HashMapNode * prev;
+        HashMapNode * next; //!< for list/pool
+        HashMapNode * prev; //!< for list
 
     };
 
@@ -49,21 +86,45 @@ namespace Yttrium
     class HashMap : public HashProto< HashMapNode<KEY,T>, Catalog, HASHER>
     {
     public:
-        Y_Args_Declare(KEY,Key);
-        Y_Args_Declare(T,Type);
-        typedef HashMapNode<KEY,T>                 NodeType;
-        typedef HashProto<NodeType,Catalog,HASHER> ProtoType;
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        Y_Args_Declare(KEY,Key);                              //!< aliases
+        Y_Args_Declare(T,Type);                               //!< aliases
+        typedef HashMapNode<KEY,T>                 NodeType;  //!< alias
+        typedef HashProto<NodeType,Catalog,HASHER> ProtoType; //!< alias
         using ProtoType::list;
         using ProtoType::pool;
         using ProtoType::htab;
         using ProtoType::hash;
         using ProtoType::insertNode;
 
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+
+        //! setup \param minTableSize minimal slots in table
         inline explicit HashMap(const size_t minTableSize=0) :
         ProtoType(minTableSize)
         {
         }
 
+        //! cleanup
+        inline virtual ~HashMap() noexcept {}
+        //______________________________________________________________________
+        //
+        //
+        // Interface
+        //
+        //______________________________________________________________________
+
+        //! [Catalog] \param key key \param args data \return true iff (key,data) was inserted
         inline virtual bool insert(ParamKey key, ParamType args)
         {
             const size_t hkey = hash( key);
@@ -73,15 +134,12 @@ namespace Yttrium
             return insertNode( node );
         }
 
-        inline virtual ~HashMap() noexcept
-        {
 
-        }
 
 
 
     private:
-        Y_Disable_Copy_And_Assign(HashMap);
+        Y_Disable_Copy_And_Assign(HashMap); //!< discarded
 
     };
 

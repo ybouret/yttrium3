@@ -15,43 +15,84 @@ namespace Yttrium
 {
     namespace Core
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Node for Slots in HashTable
+        //
+        //
+        //______________________________________________________________________
         template <typename NODE>
         class HashNode
         {
         public:
-            typedef ListOf<HashNode> Slot;
-            typedef PoolOf<HashNode> Pool;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef ListOf<HashNode> Slot; //!< alias
+            typedef PoolOf<HashNode> Pool; //!< alias
 
-            inline HashNode(NODE * const user) noexcept :
-            node(user), next(0), prev(0)
-            {
-                assert(0!=user);
-            }
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
 
-            inline ~HashNode() noexcept {}
+            //! setup \param user data node
+            inline HashNode(NODE * const user) noexcept : node(user), next(0), prev(0) { assert(0!=user); }
+            inline ~HashNode() noexcept {} //!< cleanup
 
-
-
-            NODE * const node;
-            HashNode *   next;
-            HashNode *   prev;
-
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            NODE * const node; //!< user's node
+            HashNode *   next; //!< for list/pool
+            HashNode *   prev; //!< for pool
         private:
-            Y_Disable_Copy_And_Assign(HashNode);
+            Y_Disable_Copy_And_Assign(HashNode); //!< discarded
         };
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Manage Abstract Chained Hash Table
+        //
+        //
+        //______________________________________________________________________
         template <typename NODE>
         class HashTable : public Object, public HTable
         {
         public:
-            typedef typename NODE::Key       Key;
-            typedef typename NODE::ConstKey  ConstKey;
-            typedef typename NODE::ParamKey  ParamKey;
-            typedef HashNode<NODE>           HNode;
-            typedef typename HNode::Slot     HSlot;
-            typedef typename HNode::Pool     HPool;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef typename NODE::Key       Key;      //!< alias
+            typedef typename NODE::ConstKey  ConstKey; //!< alias
+            typedef typename NODE::ParamKey  ParamKey; //!< alias
+            typedef HashNode<NODE>           HNode;    //!< alias
+            typedef typename HNode::Slot     HSlot;    //!< alias
+            typedef typename HNode::Pool     HPool;    //!< alias
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
 
+            //! setup \param minSlots minimal table slots
             inline explicit HashTable(const size_t minSlots) :
             Object(),
             HTable(minSlots,sizeof(HSlot)),
@@ -61,12 +102,22 @@ namespace Yttrium
             {
             }
 
+            //! cleanup: MUST have count==0
             inline virtual ~HashTable() noexcept { quit(); }
+
+
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
 
             //! try to insert new node
             /**
-             \param node new, unlinked node
+             \param node new, unlinked node: taken care of in case of error
              \param pool where to return node in case of error
+             \return true iff node was insert
              */
             inline bool insert(NODE * const   node,
                                PoolOf<NODE> & pool)
@@ -129,7 +180,14 @@ namespace Yttrium
                 return 0;
             }
 
-            //! remove \param hkey hash key \param key key \return true if node was removed
+            //! remove
+            /**
+             \param hkey hash key
+             \param key  key
+             \param list extract data from it if found
+             \param pool put extracted data if found
+             \return true if node was removed
+             */
             inline bool remove(const size_t  hkey,
                                ConstKey &    key,
                                ListOf<NODE> &list,
@@ -152,6 +210,10 @@ namespace Yttrium
             }
 
             //! free content, keep memory
+            /**
+             \param list source list
+             \param pool target pool
+             */
             inline void free( ListOf<NODE> &list, PoolOf<NODE> &pool ) noexcept
             {
                 for(size_t i=0;i<tsize;++i)
@@ -187,6 +249,7 @@ namespace Yttrium
             }
 
 
+            //! steal content \param other another table
             inline void steal(HashTable &other) noexcept
             {
                 assert(0==count);
@@ -204,16 +267,30 @@ namespace Yttrium
                 assert(0==other.count);
             }
 
-
-            const size_t  count;
-            HSlot * const slots;
-            HPool         zpool;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const size_t  count; //!< items in table
+            HSlot * const slots; //!< allocated tsize slots
+            HPool         zpool; //!< pool of zombie hash nodes
 
         private:
-            Y_Disable_Copy_And_Assign(HashTable);
+            Y_Disable_Copy_And_Assign(HashTable); //!< discarded
         };
     }
 
+
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Hash container prototype (up to insert)
+    //
+    //
+    //__________________________________________________________________________
     template <
     typename NODE,
     template <typename,typename> class ASSOCIATIVE,
@@ -222,14 +299,28 @@ namespace Yttrium
     class HashProto : public ASSOCIATIVE<typename NODE::Key, typename NODE::Type>
     {
     public:
-        typedef typename NODE::Key       Key;
-        typedef typename NODE::ConstKey  ConstKey;
-        typedef typename NODE::ParamKey  ParamKey;
-        typedef typename NODE::Type      Type;
-        typedef typename NODE::ConstType ConstType;
-        typedef typename NODE::ParamType ParamType;
-        typedef Core::HashTable<NODE>    Table;
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        typedef typename NODE::Key       Key;       //!< alias
+        typedef typename NODE::ConstKey  ConstKey;  //!< alias
+        typedef typename NODE::ParamKey  ParamKey;  //!< alias
+        typedef typename NODE::Type      Type;      //!< alias
+        typedef typename NODE::ConstType ConstType; //!< alias
+        typedef typename NODE::ParamType ParamType; //!< alias
+        typedef Core::HashTable<NODE>    Table;     //!< alias
 
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+
+        //! setup \param minTableSize minimal slots in table
         inline HashProto(const size_t minTableSize) :
         list(),
         pool(),
@@ -239,71 +330,88 @@ namespace Yttrium
             
         }
 
-
-
+        //! cleanup
         inline virtual ~HashProto() noexcept
         {
             release_();
             Destroy(htab);
         }
 
+        //! display
         inline friend std::ostream & operator<<(std::ostream &os, const HashProto &self)
         {
             return os << self.list;
         }
 
 
+        //______________________________________________________________________
+        //
+        //
         // Interface
+        //
+        //______________________________________________________________________
+
+        //! [Recyclable] free content, keep memory
         inline virtual void free() noexcept
         {
             htab->free(list,pool);
         }
 
+        //! [Releasable] free content, release maximum memory
         inline virtual void release() noexcept
         {
             release_();
         }
 
-
-
+        //! [Container] \return items in container
         inline virtual size_t size() const noexcept
         {
             assert(list.size==htab->count);
             return list.size;
         }
 
+        //! [Container] \return current capacity
         inline virtual size_t capacity() const noexcept
         {
             assert(list.size==htab->count);
             return list.size + pool.size;
         }
 
+        //! [Associative] \param key key to search \return item address if found, 0 otherwise
         inline virtual Type * search(ParamKey key)
         {
             NODE * const node = htab->search( hash(key), key);
             return node ? & **node : 0;
         }
 
+        //! [Associative] \param key key to search \return const item address if found, 0 otherwise
         inline virtual ConstType * search(ParamKey key) const
         {
             const NODE * const node = htab->search( hash(key), key);
             return node ? & **node : 0;
         }
 
+        //! [Associative] \param key key to remove \return true iff found and removed item with key
         inline virtual bool remove(ParamKey key)
         {
             return htab->remove( hash(key), key, list, pool);
         }
 
 
-
+        //______________________________________________________________________
+        //
+        //
+        // Members
+        //
+        //______________________________________________________________________
     protected:
         Core::ListOf<NODE> list; //!< living list
         Core::PoolOf<NODE> pool; //!< zombie pool
         Table * const      htab; //!< table
     public:
-        mutable HASHER     hash;
+        mutable HASHER     hash; //!< hasher
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
     protected:
         inline bool insertNode(NODE * const node)
         {
@@ -331,7 +439,7 @@ namespace Yttrium
         }
 
         Y_Disable_Copy_And_Assign(HashProto);
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
     };
 
 }
