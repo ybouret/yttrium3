@@ -31,6 +31,7 @@ namespace Yttrium
             //__________________________________________________________________
             static const char * const CallSign;     //!< "Core::HTable"
             static const size_t       MinSlots = 8; //!< alias
+            static const size_t       MaxLoad  = 4; //!< max load factor
 
             //__________________________________________________________________
             //
@@ -47,6 +48,12 @@ namespace Yttrium
             explicit HTable(const size_t minSlots, const size_t bytesPerSlot);
             virtual ~HTable() noexcept; //!< cleanup
 
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
             const size_t   tsize; //!< power of two number of slots
             const size_t   tmask; //!< for fast modulo
             const unsigned shift; //!< inner memory = 2^shift bytes

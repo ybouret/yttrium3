@@ -113,6 +113,12 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
+            //! \return load factor
+            inline size_t load() const noexcept
+            {
+                return count/tsize;
+            }
+
             //! try to insert new node
             /**
              \param node new, unlinked node: taken care of in case of error
@@ -259,7 +265,7 @@ namespace Yttrium
                     {
                         HNode * const scan = source.popHead();
                         slots[scan->node->hkey&tmask].pushTail(scan);
-                        --Coerce(source.count);
+                        --Coerce(other.count);
                         ++Coerce(count);
                     }
                 }
@@ -413,10 +419,12 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
+
+        //! remap to another table \param minTableSize minimal table size
         inline void remap(const size_t minTableSize)
         {
             Table * const tmp = new Table(minTableSize);
-            tmp->steal(htab);
+            tmp->steal(*htab);
             delete htab;
             Coerce(htab) = tmp;
         }

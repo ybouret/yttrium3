@@ -3,22 +3,25 @@
 #include "y/utest/run.hpp"
 
 #include "y/string.hpp"
+#include "y/pointer/keyed.hpp"
 
 using namespace Yttrium;
 
 namespace {
 
 
-    class Dummy
+    class Dummy : public CountedObject
     {
     public:
+        typedef Keyed<String,ArcPtr<Dummy>> Pointer;
+
         inline Dummy(const char * const id) : name(id)
         {
         }
 
         ~Dummy() noexcept {}
 
-        Dummy(const Dummy&dum) : name(dum.name) {}
+        Dummy(const Dummy&dum) : CountedObject(), name(dum.name) {}
 
         const String & key() const noexcept
         {
@@ -41,9 +44,8 @@ namespace {
 Y_UTEST(container_hash_set)
 {
 
-    //typedef HashSetNode<String,Dummy> Node;
-
-    HashSet<String,Dummy> hset;
+    HashSet<String,Dummy>          hset;
+    HashSet<String,Dummy::Pointer> pset;
     {
         const Dummy dum("hello");
         Y_CHECK(hset.insert(dum));
@@ -51,6 +53,15 @@ Y_UTEST(container_hash_set)
 
     }
     std::cerr << hset << std::endl;
+
+    {
+        const Dummy::Pointer p( new Dummy("world") );
+        Y_CHECK( pset.insert(p));
+        Y_CHECK(!pset.insert(p));
+    }
+    std::cerr << pset << std::endl;
+
+
 
 
 }

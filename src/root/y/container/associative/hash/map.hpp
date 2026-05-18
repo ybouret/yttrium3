@@ -53,6 +53,7 @@ namespace Yttrium
         //! cleanup
         inline ~HashMapNode() noexcept {}
 
+        //! display key:data
         inline friend std::ostream & operator<<(std::ostream &os, const HashMapNode &self)
         {
             return os << self.key_ << ':' << self.data;

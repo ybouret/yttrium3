@@ -51,6 +51,7 @@ namespace Yttrium
         inline  HashSetNode(const HashSetNode &node) :
         hkey(node.hkey), data(node.data), next(0), prev(0) {}
 
+        //! display data
         inline friend std::ostream & operator<<(std::ostream &os, const HashSetNode &self)
         {
             return os << self.data;

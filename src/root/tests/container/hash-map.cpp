@@ -38,6 +38,9 @@ Y_UTEST(container_hash_map)
     Y_CHECK(!hmap.insert("world",dum));
 
     std::cerr << hmap << std::endl;
+    hmap.remap(100);
+    std::cerr << hmap << std::endl;
+
 
 }
 Y_UDONE()
