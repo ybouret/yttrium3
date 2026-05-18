@@ -1,0 +1,157 @@
+
+//! \file
+
+#ifndef Y_Cameo_Sum_Queued_Common
+#define Y_Cameo_Sum_Queued_Common 1
+
+
+#include "y/cameo/summator.hpp"
+#include "y/mkl/xreal.hpp"
+#include "y/mkl/api/fabs.hpp"
+#include "y/check/static.hpp"
+
+namespace Yttrium
+{
+    namespace Cameo
+    {
+        namespace Sum
+        {
+            namespace Pith
+            {
+                typedef TL3(float,double,long double)                      StandardFloats; //!< \return alias
+                typedef TL3(XReal<float>,XReal<double>,XReal<long double>) ExtendedFloats; //!< \return alias
+            }
+
+            //! compute parameters for given type
+            template <typename T>
+            struct ByQueuedAPI
+            {
+                static const bool Standard     = ( TL::IndexOf<Pith::StandardFloats,T>::Value >= 0 ); //!< alias
+                static const bool Extended     = ( TL::IndexOf<Pith::ExtendedFloats,T>::Value >= 0 ); //!< alias
+                static const bool IsProper     = Standard || Extended;                                //!< alias
+            };
+
+#define Y_Cameo_Sum_Queued_Check() Y_STATIC_CHECK(ByQueuedAPI<MutableType>::IsProper,BadType)
+
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            template <typename T>
+            class QAdd
+            {
+            public:
+                Y_Args_Declare(T,Type);
+
+                inline  QAdd(ParamType value) noexcept : data(value), rank(MKL::Fabs<MutableType>(data)) { }
+                inline  QAdd(const QAdd &it)  noexcept : data(it.data), rank(it.rank) { }
+                inline ~QAdd() noexcept {}
+
+                inline friend std::ostream & operator<<(std::ostream &os, const QAdd &self) {
+                    return os << '|' << self.data << '|';
+                }
+
+                inline ConstType & operator*() const noexcept { return data; }
+
+                inline friend QAdd operator+(const QAdd &lhs, const QAdd &rhs) noexcept {
+                    return QAdd(lhs.data+rhs.data);
+                }
+
+                class Comparator
+                {
+                public:
+                    inline  Comparator() noexcept {}
+                    inline ~Comparator() noexcept {}
+                    inline int operator()(const QAdd &lhs, const QAdd &rhs) noexcept {
+                        return (lhs.rank < rhs.rank) ? -1 : ( (rhs.rank<lhs.rank) ? 1 : 0);
+                    }
+                };
+
+            private:
+                ConstType data;
+                ConstType rank;
+                Y_Disable_Assign(QAdd);
+            };
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+            //______________________________________________________________________
+            //
+            //
+            //
+            //! Prototype for SCALAR Queued summators
+            //
+            //
+            //______________________________________________________________________
+            template <
+            typename T,
+            typename PQ // Priority queue for QAdd<T>
+            >
+            class QueuedCode : public Summator<T>
+            {
+            public:
+                //__________________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //__________________________________________________________________
+                Y_Args_Declare(T,Type); //!< alias
+                typedef QAdd<T> Item;   //!< alias
+
+                //__________________________________________________________________
+                //
+                //
+                // C++
+                //
+                //__________________________________________________________________
+                inline QueuedCode() : pq()                                               { Y_Cameo_Sum_Queued_Check(); } //!< setup empty
+                inline QueuedCode(const size_t minCapacity) : pq(minCapacity)            { Y_Cameo_Sum_Queued_Check(); } //!< setup \param minCapacity for compatibility
+                inline QueuedCode(const QueuedCode &other) : Summator<T>(), pq(other.pq) { Y_Cameo_Sum_Queued_Check(); } //!< duplicate \param other another FP_QAdd
+                inline virtual ~QueuedCode() noexcept                                    {} //!< cleanup
+
+                //! display
+                inline friend std::ostream & operator<<(std::ostream &os, const QueuedCode &self)
+                {
+                    return os << self.pq;
+                }
+
+                //__________________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //__________________________________________________________________
+                inline virtual void ldz() noexcept { pq.free(); }
+                inline void         add(ConstType &data) {
+                    const Item item(data); pq.push(item);
+                }
+
+                inline virtual Type operator()(void)
+                {
+                    switch(pq.size())
+                    {
+                        case 0: return 0;
+                        case 1: return *pq.pull();
+                        default:
+                            break;
+                    }
+                    while(pq.size()>1)
+                    {
+                        const Item lhs = pq.pull(); assert(pq.size()>0);
+                        const Item rhs = pq.pull();
+                        pq << lhs+rhs;
+                    }
+                    assert(1==pq.size());
+                    return *pq.pull();
+                }
+
+            private:
+                Y_Disable_Assign(QueuedCode); //!< discarded
+                PQ pq;                        //!< inner queue
+            };
+
+        }
+    }
+
+}
+
+#endif // !Y_Cameo_Sum_Queued_Common
+

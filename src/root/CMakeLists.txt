@@ -108,6 +108,8 @@ y/hashing
 y/hashing/key
 y/cameo
 y/cameo/add
+y/cameo/sum
+y/cameo/product
 )
 
 add_subdirectory(tests)

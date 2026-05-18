@@ -211,5 +211,10 @@ Y_UTEST(cameo:add:straight)
 Y_UTEST(cameo:add:ap_proxy)
 Y_UTEST(cameo:add:fp_queue)
 Y_UTEST(cameo:add:scalar)
+Y_UTEST(cameo:sum:direct)
+Y_UTEST(cameo:sum:raised)
+Y_UTEST(cameo:sum:queued)
+Y_UTEST(cameo:sum:static_queued)
+
 
 
