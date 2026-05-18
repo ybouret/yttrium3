@@ -47,7 +47,7 @@ namespace Yttrium
         //______________________________________________________________________
         virtual Type *      search(ParamKey)          = 0; //!< \return address of matching key, 0 if not found
         virtual ConstType * search(ParamKey) const    = 0; //!< \return address of matching key, 0 if not found
-        virtual bool        remove(ParamKey) noexcept = 0; //!< \return true if key was found and removed
+        virtual bool        remove(ParamKey)          = 0; //!< \return true if key was found and removed
 
     private:
         Y_Disable_Copy_And_Assign(Associative); //!< discarded

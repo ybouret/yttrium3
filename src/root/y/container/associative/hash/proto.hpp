@@ -121,7 +121,7 @@ namespace Yttrium
                 HSlot & slot = slots[hkey&tmask];
                 for(HNode *hn=slot.head;hn;hn=hn->next)
                 {
-                    const NODE * const mine = hn->node;
+                    NODE * const mine = hn->node;
                     if(hkey == mine->hkey && key == mine->key() )
                     {
                         slot.moveToHead(hn); // for next search...
@@ -132,8 +132,8 @@ namespace Yttrium
             }
 
             //! remove \param hkey hash key \param key key \return true if node was removed
-            inline bool remove(const size_t hkey,
-                               ConstKey &key,
+            inline bool remove(const size_t  hkey,
+                               ConstKey &    key,
                                ListOf<NODE> &list,
                                PoolOf<NODE> &pool)
             {
@@ -216,8 +216,11 @@ namespace Yttrium
         };
     }
 
-    template <typename NODE>
-    class HashProto
+    template <
+    typename NODE,
+    template <typename,typename> class ASSOCIATIVE
+    >
+    class HashProto : public ASSOCIATIVE<typename NODE::Key, typename NODE::Type>
     {
     public:
         typedef typename NODE::Key       Key;
@@ -250,6 +253,7 @@ namespace Yttrium
         }
 
 
+        // Interface
         inline virtual void free() noexcept
         {
             htab->free(list,pool);
@@ -259,6 +263,27 @@ namespace Yttrium
         {
             release_();
         }
+
+
+
+        inline virtual size_t size() const noexcept
+        {
+            assert(list.size==htab->count);
+            return list.size;
+        }
+
+        inline virtual size_t capacity() const noexcept
+        {
+            assert(list.size==htab->count);
+            return list.size + pool.size;
+        }
+
+       
+
+    protected:
+        Core::ListOf<NODE> list; //!< living list
+        Core::PoolOf<NODE> pool; //!< zombie pool
+        Table * const      htab; //!< table
 
         inline bool insertNode(NODE * const node)
         {
@@ -275,14 +300,7 @@ namespace Yttrium
             }
         }
 
-
-    protected:
-
-
-        Core::ListOf<NODE> list; //!< living list
-        Core::PoolOf<NODE> pool; //!< zombie pool
-        Table * const      htab; //!< table
-
+        //! release all nodes
         inline void release_() noexcept
         {
             htab->clear();

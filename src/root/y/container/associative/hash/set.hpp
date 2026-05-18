@@ -51,15 +51,17 @@ namespace Yttrium
     template <typename KEY,
     typename T,
     typename HASHER = Hashing::KeyWith<Hashing::FNV> >
-    class HashSet : public HashProto< HashSetNode<KEY,T> >
+    class HashSet : public HashProto< HashSetNode<KEY,T>, Associative>
     {
     public:
         Y_Args_Declare(KEY,Key);
         Y_Args_Declare(T,Type);
-        typedef HashSetNode<KEY,T>  NodeType;
-        typedef HashProto<NodeType> ProtoType;
+        typedef HashSetNode<KEY,T>              NodeType;
+        typedef HashProto<NodeType,Associative> ProtoType;
+        using ProtoType::list;
         using ProtoType::pool;
         using ProtoType::insertNode;
+        using ProtoType::htab;
 
         inline explicit HashSet(const size_t minTableSize=0) :
         ProtoType(minTableSize)
@@ -80,6 +82,22 @@ namespace Yttrium
             return insertNode( node );
         }
 
+        inline virtual Type * search(ParamKey key)
+        {
+            NodeType * const node = htab->search( hash(key), key);
+            return node ? & **node : 0;
+        }
+
+        inline virtual ConstType * search(ParamKey key) const
+        {
+            const NodeType * const node = htab->search( hash(key), key);
+            return node ? & **node : 0;
+        }
+
+        inline virtual bool remove(ParamKey key)
+        {
+            return htab->remove( hash(key), key, list, pool);
+        }
 
 
 
