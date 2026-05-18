@@ -6,6 +6,8 @@
 #define Y_Associative_HashMap_Inluded 1
 
 #include "y/container/associative/hash/proto.hpp"
+#include "y/hashing/key/hasher.hpp"
+#include "y/hashing/fnv.hpp"
 
 namespace Yttrium
 {
@@ -37,6 +39,29 @@ namespace Yttrium
         HashMapNode * next;
         HashMapNode * prev;
 
+    };
+
+    template <typename KEY,
+    typename T,
+    typename HASHER = Hashing::KeyWith<Hashing::FNV> >
+    class HashMap : public HashProto< HashMapNode<KEY,T> >
+    {
+    public:
+        typedef HashMapNode<KEY,T>  NodeType;
+        typedef HashProto<NodeType> ProtoType;
+
+        inline explicit HashMap(const size_t minTableSize=0) :
+        ProtoType(minTableSize)
+        {
+        }
+
+        inline virtual ~HashMap() noexcept
+        {
+
+        }
+
+    private:
+        Y_Disable_Assign(HashMap);
     };
 
 }

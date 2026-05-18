@@ -5,6 +5,9 @@
 #define Y_Associative_HashSet_Inluded 1
 
 #include "y/container/associative/hash/proto.hpp"
+#include "y/hashing/key/hasher.hpp"
+#include "y/hashing/fnv.hpp"
+
 
 namespace Yttrium
 {
@@ -22,6 +25,16 @@ namespace Yttrium
         inline  HashSetNode(const HashSetNode &node) :
         hkey(node.hkey), data(node.data), next(0), prev(0) {}
 
+
+        inline ConstType & operator*() const noexcept { return data; }
+        inline Type &      operator*()       noexcept { return data; }
+
+        //! display
+        inline friend std::ostream & operator<<(std::ostream &os, const HashSetNode &node)
+        {
+            return os << node.data;
+        }
+
         inline ConstKey & key() const noexcept { return data.key(); }
 
         const size_t hkey;
@@ -32,6 +45,32 @@ namespace Yttrium
         HashSetNode * next;
         HashSetNode * prev;
     };
+
+
+
+    template <typename KEY,
+    typename T,
+    typename HASHER = Hashing::KeyWith<Hashing::FNV> >
+    class HashSet : public HashProto< HashSetNode<KEY,T> >
+    {
+    public:
+        typedef HashSetNode<KEY,T>  NodeType;
+        typedef HashProto<NodeType> ProtoType;
+
+        inline explicit HashSet(const size_t minTableSize=0) :
+        ProtoType(minTableSize)
+        {
+        }
+
+        inline virtual ~HashSet() noexcept
+        {
+            
+        }
+
+    private:
+        Y_Disable_Assign(HashSet);
+    };
+
 
 }
 

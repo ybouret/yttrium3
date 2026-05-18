@@ -32,21 +32,6 @@ namespace Yttrium
 
             inline ~HashNode() noexcept {}
 
-            static inline HashNode * AcquireZombie()
-            {
-                return Object::AcquireZombie<HashNode>();
-            }
-
-            static inline void ReleaseLiving(HashNode * const hnode) noexcept
-            {
-                assert(hnode);
-                ReleaseZombie( Pulverized(hnode) );
-            }
-            static inline void ReleaseZombie(HashNode * const hnode) noexcept
-            {
-                assert(hnode);
-                Object::ReleaseZombie<HashNode>();
-            }
 
 
             NODE * const node;
@@ -78,7 +63,7 @@ namespace Yttrium
             {
             }
 
-            inline virtual ~HashTable() noexcept { release(); }
+            inline virtual ~HashTable() noexcept { quit(); }
 
             //! try to insert new node
             /**
@@ -108,7 +93,7 @@ namespace Yttrium
                         }
                     }
 
-                    slot.pushHead( new (zpool.size ? zpool.query() : HNode:: AcquireZombie()) HNode(node) );
+                    slot.pushHead( new (zpool.size ? zpool.query() : Object:: AcquireZombie<HNode>()) HNode(node) );
                     ++Coerce(count);
                     return true;
                 }
@@ -168,6 +153,7 @@ namespace Yttrium
                 return false;
             }
 
+            //! free content, keep memory
             inline void free( ListOf<NODE> &list, PoolOf<NODE> &pool ) noexcept
             {
                 for(size_t i=0;i<tsize;++i)
@@ -184,24 +170,41 @@ namespace Yttrium
                 Coerce(count) = 0;
             }
 
-            inline void erase() noexcept
+            //! FORCE erase content, NODEs are not taken care of
+            inline void clear() noexcept
             {
-                for(size_t i=0;i<tsize;++i)
-                {
+                for(size_t i=0;i<tsize;++i) {
                     HSlot & slot = slots[i];
                     while(slot.size)
-                        zpool.store( Pulverize(slot.popHead()));
+                        zpool.store( Pulverized(slot.popHead()));
                 }
                 Coerce(count) = 0;
             }
 
-            inline void release() noexcept
+            //! release pool and EMPTY table
+            inline void quit() noexcept
             {
                 assert(0==count);
                 while(zpool.size) Object::ReleaseZombie( zpool.query() );
             }
 
 
+            inline void steal(HashTable &other) noexcept
+            {
+                assert(0==count);
+                for(size_t i=0;i<other.tsize;++i) {
+                    HSlot & source = other.slots[i];
+                    while(source.size)
+                    {
+                        HNode * const scan = source.popHead();
+                        slots[scan->node->hkey&tmask].pushTail(scan);
+                        --Coerce(source.count);
+                        ++Coerce(count);
+                    }
+                }
+                zpool.merge(other.zpool);
+                assert(0==other.count);
+            }
 
 
             const size_t  count;
@@ -233,20 +236,60 @@ namespace Yttrium
             
         }
 
+
+
         inline virtual ~HashProto() noexcept
         {
+            release_();
+            Destroy(htab);
         }
+
+        inline friend std::ostream & operator<<(std::ostream &os, const HashProto &self)
+        {
+            return os << self.list;
+        }
+
 
         inline virtual void free() noexcept
         {
             htab->free(list,pool);
         }
 
-    private:
+        inline virtual void release() noexcept
+        {
+            release_();
+        }
+
+        inline bool insertNode(NODE * const node)
+        {
+            assert(0!=node); assert(0==node->next); assert(0==node->prev);
+            assert(0!=htab);
+            if( htab->insert(node,pool) )
+            {
+                list.pushTail( node );
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+    protected:
+
+
         Core::ListOf<NODE> list; //!< living list
         Core::PoolOf<NODE> pool; //!< zombie pool
         Table * const      htab; //!< table
 
+        inline void release_() noexcept
+        {
+            htab->clear();
+            htab->quit();
+            while(list.size) Object::ReleaseZombie( Pulverized(list.popHead()) );
+            while(pool.size) Object::ReleaseZombie( pool.query() );
+        }
 
     };
 
