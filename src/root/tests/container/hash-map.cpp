@@ -31,15 +31,23 @@ Y_UTEST(container_hash_map)
 
     HashMap<String,Dummy> hmap;
 
-    const Dummy dum(7);
-    Y_CHECK(hmap.insert("hello",dum));
-    Y_CHECK(!hmap.insert("hello",dum));
-    Y_CHECK(hmap.insert("world",dum));
-    Y_CHECK(!hmap.insert("world",dum));
-
-    std::cerr << hmap << std::endl;
+    {
+        const Dummy dum(7);
+        Y_CHECK(hmap.insert("hello",dum));
+        Y_CHECK(!hmap.insert("hello",dum));
+        Y_CHECK(hmap.insert("world",dum));
+        Y_CHECK(!hmap.insert("world",dum));
+    }
+    
+    std::cerr << "hmap=" << hmap << std::endl;
     hmap.remap(100);
-    std::cerr << hmap << std::endl;
+    std::cerr << "hmap=" << hmap << std::endl;
+
+    {
+        const HashMap<String,Dummy> htmp(hmap);
+        std::cerr << "htmp=" << htmp << std::endl;
+    }
+
 
 
 }

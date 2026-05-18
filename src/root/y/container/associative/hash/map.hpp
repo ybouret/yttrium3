@@ -129,6 +129,11 @@ namespace Yttrium
         {
         }
 
+        inline HashMap(const HashMap &other ) :
+        ProtoType(other)
+        {
+        }
+
         //! cleanup
         inline virtual ~HashMap() noexcept {}
 
@@ -152,7 +157,7 @@ namespace Yttrium
         }
 
     private:
-        Y_Disable_Copy_And_Assign(HashMap); //!< discarded
+        Y_Disable_Assign(HashMap); //!< discarded
 
     };
 

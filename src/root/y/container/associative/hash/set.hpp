@@ -44,6 +44,7 @@ namespace Yttrium
         inline  HashSetNode(const size_t h, ParamType t) :
         hkey(h), data(t), next(0), prev(0) { }
 
+        
         //! cleanup
         inline ~HashSetNode() noexcept {}
 
@@ -127,6 +128,12 @@ namespace Yttrium
         {
         }
 
+
+        inline HashSet(const HashSet &other ) :
+        ProtoType(other)
+        {
+        }
+
         //! cleanup
         inline virtual ~HashSet() noexcept
         {
@@ -154,7 +161,7 @@ namespace Yttrium
 
 
     private:
-        Y_Disable_Copy_And_Assign(HashSet); //!< discarded
+        Y_Disable_Assign(HashSet); //!< discarded
 
    
     };

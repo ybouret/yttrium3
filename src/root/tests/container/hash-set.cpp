@@ -52,15 +52,24 @@ Y_UTEST(container_hash_set)
         Y_CHECK(!hset.insert(dum));
 
     }
-    std::cerr << hset << std::endl;
+    std::cerr << "hset=" << hset << std::endl;
 
     {
         const Dummy::Pointer p( new Dummy("world") );
         Y_CHECK( pset.insert(p));
         Y_CHECK(!pset.insert(p));
     }
-    std::cerr << pset << std::endl;
+    std::cerr << "pset=" << pset << std::endl;
 
+    {
+        const HashSet<String,Dummy> htmp(hset);
+        std::cerr << "htmp=" << htmp << std::endl;
+    }
+
+    {
+        const HashSet<String,Dummy::Pointer> ptmp(pset);
+        std::cerr << "ptmp=" << ptmp << std::endl;
+    }
 
 
 

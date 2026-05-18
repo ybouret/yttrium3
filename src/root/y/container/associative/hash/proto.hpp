@@ -236,13 +236,24 @@ namespace Yttrium
                 Coerce(count) = 0;
             }
 
-            //! FORCE erase content, NODEs are not taken care of
+            //! FORCE free content, NODEs are not taken care of
             inline void clear() noexcept
             {
                 for(size_t i=0;i<tsize;++i) {
                     HSlot & slot = slots[i];
                     while(slot.size)
                         zpool.store( Pulverized(slot.popHead()));
+                }
+                Coerce(count) = 0;
+            }
+
+            //! FORCE release content
+            inline void purge() noexcept
+            {
+                for(size_t i=0;i<tsize;++i) {
+                    HSlot & slot = slots[i];
+                    while(slot.size)
+                        Object::ReleaseZombie( Pulverized(slot.popHead()) );
                 }
                 Coerce(count) = 0;
             }
@@ -271,6 +282,36 @@ namespace Yttrium
                 }
                 zpool.merge(other.zpool);
                 assert(0==other.count);
+            }
+
+            inline void duplicate(const HashTable &other,
+                                  ListOf<NODE>    &list)
+            {
+                assert(0==count);
+                assert(0==zpool.size);
+                try
+                {
+                    for(size_t i=0;i<other.tsize;++i)
+                    {
+                        const HSlot & source = other.slots[i];
+                        for(const HNode * scan=source.head;scan;scan=scan->next)
+                        {
+                            NODE *        node = Object::AcquireZombie<NODE>();
+                            try { node = new (node) NODE(*scan->node); }
+                            catch(...) { Object::ReleaseZombie<NODE>(node); throw; }
+                            list.pushTail(node); // now protected by list
+                            HNode * const mine = new ( Object::AcquireZombie<HNode>() ) HNode(node);
+                            slots[node->hkey&tmask].pushTail(mine);
+                            ++Coerce(count);
+                        }
+                    }
+                }
+                catch(...)
+                {
+                    assert(0==zpool.size);
+                    while(list.size) Object::ReleaseZombie( Pulverized(list.popTail()));
+                    throw;
+                }
             }
 
             //__________________________________________________________________
@@ -336,12 +377,29 @@ namespace Yttrium
             
         }
 
+        inline HashProto(const HashProto &other) :
+        ASSOCIATIVE<Key,Type>(),
+        list(),
+        pool(),
+        htab( new Table(other->count/Core::HTable::MaxLoad) ),
+        hash()
+        {
+            assert(other->count==other.list.size);
+            htab->duplicate(*other.htab,list);
+            assert(list.size==other.list.size);
+            assert(htab->count==list.size);
+        }
+
+
         //! cleanup
         inline virtual ~HashProto() noexcept
         {
+            assert(htab->count==list.size);
             release_();
             Destroy(htab);
         }
+
+
 
         //! display
         inline friend std::ostream & operator<<(std::ostream &os, const HashProto &self)
@@ -370,7 +428,9 @@ namespace Yttrium
         //! [Recyclable] free content, keep memory
         inline virtual void free() noexcept
         {
+            assert(htab->count==list.size);
             htab->free(list,pool);
+            assert(htab->count==list.size);
         }
 
         //! [Releasable] free content, release maximum memory
@@ -396,6 +456,7 @@ namespace Yttrium
         //! [Associative] \param key key to search \return item address if found, 0 otherwise
         inline virtual Type * search(ParamKey key)
         {
+            assert(htab->count==list.size);
             NODE * const node = htab->search( hash(key), key);
             return node ? & **node : 0;
         }
@@ -403,6 +464,7 @@ namespace Yttrium
         //! [Associative] \param key key to search \return const item address if found, 0 otherwise
         inline virtual ConstType * search(ParamKey key) const
         {
+            assert(htab->count==list.size);
             const NODE * const node = htab->search( hash(key), key);
             return node ? & **node : 0;
         }
@@ -410,6 +472,7 @@ namespace Yttrium
         //! [Associative] \param key key to remove \return true iff found and removed item with key
         inline virtual bool remove(ParamKey key)
         {
+            assert(htab->count==list.size);
             return htab->remove( hash(key), key, list, pool);
         }
 
@@ -439,7 +502,7 @@ namespace Yttrium
             }
         }
 
-        inline const Table & operator->() const noexcept { assert(htab); return *htab; }
+        inline const Table * operator->() const noexcept { assert(htab); return htab; }
 
         //______________________________________________________________________
         //
@@ -477,13 +540,13 @@ namespace Yttrium
         inline void release_() noexcept
         {
             assert(htab);
-            htab->clear();
+            htab->purge();
             htab->quit();
             while(list.size) Object::ReleaseZombie( Pulverized(list.popHead()) );
             while(pool.size) Object::ReleaseZombie( pool.query() );
         }
 
-        Y_Disable_Copy_And_Assign(HashProto);
+        Y_Disable_Assign(HashProto);
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
     };
 
