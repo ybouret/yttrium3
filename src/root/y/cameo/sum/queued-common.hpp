@@ -31,6 +31,7 @@ namespace Yttrium
                 static const bool IsProper     = Standard || Extended;                                //!< alias
             };
 
+            //! helper for static check
 #define Y_Cameo_Sum_Queued_Check() Y_STATIC_CHECK(ByQueuedAPI<MutableType>::IsProper,BadType)
 
 
@@ -72,14 +73,14 @@ namespace Yttrium
             };
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
-            //______________________________________________________________________
+            //__________________________________________________________________
             //
             //
             //
             //! Prototype for SCALAR Queued summators
             //
             //
-            //______________________________________________________________________
+            //__________________________________________________________________
             template <
             typename T,
             typename PQ // Priority queue for QAdd<T>
@@ -87,21 +88,21 @@ namespace Yttrium
             class QueuedCode : public Summator<T>
             {
             public:
-                //__________________________________________________________________
+                //______________________________________________________________
                 //
                 //
                 // Definitions
                 //
-                //__________________________________________________________________
+                //______________________________________________________________
                 Y_Args_Declare(T,Type); //!< alias
                 typedef QAdd<T> Item;   //!< alias
 
-                //__________________________________________________________________
+                //______________________________________________________________
                 //
                 //
                 // C++
                 //
-                //__________________________________________________________________
+                //______________________________________________________________
                 inline QueuedCode() : pq()                                               { Y_Cameo_Sum_Queued_Check(); } //!< setup empty
                 inline QueuedCode(const size_t minCapacity) : pq(minCapacity)            { Y_Cameo_Sum_Queued_Check(); } //!< setup \param minCapacity for compatibility
                 inline QueuedCode(const QueuedCode &other) : Summator<T>(), pq(other.pq) { Y_Cameo_Sum_Queued_Check(); } //!< duplicate \param other another FP_QAdd
@@ -113,12 +114,12 @@ namespace Yttrium
                     return os << self.pq;
                 }
 
-                //__________________________________________________________________
+                //______________________________________________________________
                 //
                 //
                 // Interface
                 //
-                //__________________________________________________________________
+                //______________________________________________________________
                 inline virtual void ldz() noexcept { pq.free(); }
                 inline void         add(ConstType &data) {
                     const Item item(data); pq.push(item);

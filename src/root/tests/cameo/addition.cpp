@@ -15,6 +15,7 @@ namespace
     static inline
     void testScal()
     {
+        Y_CHECK(Cameo::Addition<T>::IsSummator);
         Cameo::Addition<T> xadd;
 
         xadd << 1 << 3 << 4 << 2;
@@ -27,6 +28,7 @@ namespace
     static inline
     void testVect()
     {
+        Y_CHECK(Cameo::Addition<T>::IsSummator);
         Cameo::Addition<T> xadd;
 
         T v;

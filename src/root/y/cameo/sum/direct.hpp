@@ -22,25 +22,52 @@ namespace Yttrium
                 static const bool IsProper = Y_Is_SuperSubClass_Strict(Apex::Number,T); //!< alias
             };
 
+            //! helper for static check
 #define Y_Cameo_Sum_Direct_Check() Y_STATIC_CHECK(ByDirectAPI<MutableType>::IsProper,BadType)
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Direct, Scalar summator
+            //
+            //
+            //__________________________________________________________________
             template <typename T>
             class Direct : public Summator<T>
             {
             public:
-                Y_Args_Expose(T,Type);
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                Y_Args_Expose(T,Type); //!< aliases
 
-                inline explicit Direct()             : acc(0)         { Y_Cameo_Sum_Direct_Check(); }
-                inline explicit Direct(const size_t) : acc(0)         { Y_Cameo_Sum_Direct_Check(); }
-                inline Direct(const Direct &other)   : acc(other.acc) { Y_Cameo_Sum_Direct_Check(); }
-                inline virtual ~Direct() noexcept { acc.ldz(); }
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                inline explicit Direct()             : acc(0)         { Y_Cameo_Sum_Direct_Check(); } //!< setup
+                inline explicit Direct(const size_t) : acc(0)         { Y_Cameo_Sum_Direct_Check(); } //!< setup, compatibility
+                inline Direct(const Direct &other)   : acc(other.acc) { Y_Cameo_Sum_Direct_Check(); } //!< duplicate \param other another Direct
+                inline virtual ~Direct() noexcept                     { acc.ldz(); }                  //!< cleanup
 
+                //! display status
                 inline friend std::ostream & operator<<(std::ostream &os, const Direct &self)
                 {
                     return os << self.acc;
                 }
 
-
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
                 inline virtual void ldz()       noexcept { acc.ldz(); }
                 inline virtual void add(ConstType &data) { acc += data; }
                 inline virtual Type operator()(void)
@@ -57,8 +84,8 @@ namespace Yttrium
 
 
             private:
-                Y_Disable_Assign(Direct);
-                MutableType acc;
+                Y_Disable_Assign(Direct); //!< discarded
+                MutableType acc;          //!< inner accumulator
             };
 
 

@@ -17,35 +17,57 @@ namespace Yttrium
 
         namespace Sum
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Vectorial summator from matching Scalar summators
+            //
+            //
+            //__________________________________________________________________
             template <typename T, typename VECT>
             class Vectorial: public Summator<VECT>
             {
             public:
-                static const size_t        Dimension = sizeof(VECT)/sizeof(T);
-                typedef Scalar<T>          XAddition;
-                static const size_t        Requested = Dimension*sizeof(XAddition);
-                Y_Args_Declare(VECT,Type);
-                Y_Args_Expose(T,Scal);
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                static const size_t  Dimension = sizeof(VECT)/sizeof(T);                //!< alias
+                typedef Scalar<T>    XAddition;                                         //!< alias
+                static const size_t  Requested = Dimension*sizeof(XAddition);           //!< inner bytes
+                static const size_t  WordCount = Alignment::WordsGEQ<Requested>::Count; //!< inner words
+                Y_Args_Declare(VECT,Type);                                              //!< aliases
+                Y_Args_Expose(T,Scal);                                                  //!< aliases
 
-                inline Vectorial() : xadd(0), wksp(), xnum(0)
-                {
-                    init();
-                }
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
 
+                //! setup
+                inline Vectorial() : xadd(0), wksp(), xnum(0) { init(); }
+
+                //! setup \param minCapacity compatibility
                 inline Vectorial(const size_t minCapacity) :
-                xadd(0), wksp(), xnum(0)
-                {
+                xadd(0), wksp(), xnum(0) {
                     init(minCapacity);
                 }
 
+                //! duplicate \param other another Vectorial
                 inline Vectorial(const Vectorial &other) :
-                xadd(0), wksp(), xnum(0)
-                {
+                xadd(0), wksp(), xnum(0) {
                     init(other);
                 }
 
+                //! cleanup
                 inline virtual ~Vectorial() noexcept { quit(); }
 
+                //! display status
                 inline friend std::ostream & operator<<(std::ostream &os, const Vectorial &self)
                 {
                     os << '{' << std::endl;
@@ -54,11 +76,18 @@ namespace Yttrium
                     return os << '}';
                 }
 
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
+
                 inline virtual void ldz() noexcept {
                     for(size_t i=0;i<Dimension;++i) xadd[i].ldz();
                 }
 
-                inline virtual void add(ParamType v)
+                inline virtual void add(ConstType &v)
                 {
                     ConstScal * const scal = Hide::Cast<ConstScal>(&v);
                     try {
@@ -83,11 +112,12 @@ namespace Yttrium
                 virtual const char * callSign() const noexcept { return "Cameo::Sum::Vectorial"; }
 
             private:
-                Y_Disable_Assign(Vectorial);
-                XAddition * const xadd;
-                void *            wksp[ Alignment::WordsGEQ<Requested>::Count ];
-                size_t            xnum;
+                Y_Disable_Assign(Vectorial);         //!< discarded
+                XAddition * const xadd;              //!< [Dimension]
+                void *            wksp[ WordCount ]; //!< inner memory
+                size_t            xnum;              //!< built xadd
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
                 inline void init() {
                     assert(0==xadd);
                     Coerce(xadd) = static_cast<XAddition*>( Y_BZero(wksp) );
@@ -134,6 +164,8 @@ namespace Yttrium
                     Coerce(xadd) = 0;
                     Y_BZero(wksp);
                 }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
             };
         }
 

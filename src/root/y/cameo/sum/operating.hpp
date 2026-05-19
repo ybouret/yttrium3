@@ -15,26 +15,28 @@ namespace Yttrium
         namespace Sum
         {
 
-            template <typename T, const bool>
-            struct Genus;
+            template <typename T, const bool> struct Genus;
 
+            //! genus for scalar type
             template <typename T>
             struct Genus<T,true>
             {
-                typedef Scalar<T> Type;
+                typedef Scalar<T> Type; //!< alias
             };
 
+            //! genus for vectorial type
             template <typename T>
             struct Genus<T,false>
             {
-                typedef Vectorial<typename T::Type,T> Type;
+                typedef Vectorial<typename T::Type,T> Type; //!< aluas
             };
 
+            //! select operating summator
             template <typename T>
             struct Operating
             {
-                static const bool IsScalar = MKL::IsScalar<T>::Value;
-                typedef typename Genus<T,IsScalar>::Type Type;
+                static const bool IsScalar = MKL::IsScalar<T>::Value; //!< alias
+                typedef typename Genus<T,IsScalar>::Type        Type; //!< alias
             };
 
         }

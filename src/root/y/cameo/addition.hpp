@@ -11,20 +11,40 @@ namespace Yttrium
 {
     namespace Cameo
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Generic addition class
+        //
+        //
+        //______________________________________________________________________
         template <typename T>
         class Addition : public Sum::Operating<T>::Type
         {
         public:
-            typedef typename  Sum::Operating<T>::Type SummatorType;
-            static const bool IsSummator = Y_Is_SuperSubClass_Strict(Summator<T>,Addition);
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef typename  Sum::Operating<T>::Type SummatorType; //!< alias
+            static const bool IsSummator = Y_Is_SuperSubClass_Strict(Summator<T>,Addition); //!< alias
 
-            inline explicit Addition() : SummatorType() {}
-            inline explicit Addition(const size_t minCapacity) : SummatorType(minCapacity) {}
-            inline virtual ~Addition() noexcept {}
-            inline Addition(const Addition &other) : SummatorType(other) {}
-            
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            inline explicit Addition() : SummatorType()                                    {} //!< setup
+            inline explicit Addition(const size_t minCapacity) : SummatorType(minCapacity) {} //!< setup \param minCapacity compatibility
+            inline Addition(const Addition &other) : SummatorType(other)                   {} //!< duplicate \param other another addition
+            inline virtual ~Addition() noexcept                                            {} //!< cleanup
+
         private:
-            Y_Disable_Assign(Addition);
+            Y_Disable_Assign(Addition); //!< discarded
         };
     }
 }
