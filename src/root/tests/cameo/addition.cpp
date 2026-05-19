@@ -16,6 +16,8 @@ namespace
     void testScal()
     {
         Y_CHECK(Cameo::Addition<T>::IsSummator);
+        Y_CHECK(Y_Is_SuperSubClass_Strict(Object,Cameo::Addition<T>));
+        Y_SIZEOF(Cameo::Addition<T>);
         Cameo::Addition<T> xadd;
 
         xadd << 1 << 3 << 4 << 2;
@@ -29,6 +31,9 @@ namespace
     void testVect()
     {
         Y_CHECK(Cameo::Addition<T>::IsSummator);
+        Y_CHECK(Y_Is_SuperSubClass_Strict(Object,Cameo::Addition<T>));
+        Y_SIZEOF(Cameo::Addition<T>);
+
         Cameo::Addition<T> xadd;
 
         T        v;

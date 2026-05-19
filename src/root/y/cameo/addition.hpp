@@ -20,7 +20,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
         template <typename T>
-        class Addition : public Sum::Operating<T>::Type
+        class Addition : public Object, public Sum::Operating<T>::Type
         {
         public:
             //__________________________________________________________________
@@ -38,11 +38,40 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            inline explicit Addition() : SummatorType()                                    {} //!< setup
-            inline explicit Addition(const size_t minCapacity) : SummatorType(minCapacity) {} //!< setup \param minCapacity compatibility
-            inline Addition(const Addition &other) : SummatorType(other)                   {} //!< duplicate \param other another addition
-            inline virtual ~Addition() noexcept                                            {} //!< cleanup
+            //! setup
+            inline explicit Addition() :
+            Object(),
+            SummatorType(),
+            next(0),
+            prev(0) {}
 
+            //! setup \param minCapacity compatibility
+            inline explicit Addition(const size_t minCapacity) :
+            Object(),
+            SummatorType(minCapacity),
+            next(0),
+            prev(0)
+            {}
+
+            //! duplicate \param other another addition
+            inline Addition(const Addition &other) :
+            Object(),
+            SummatorType(other),
+            next(0),
+            prev(0)
+            {}
+
+            //! cleanup
+            inline virtual ~Addition() noexcept {}
+
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            Addition * next; //!< for list
+            Addition * prev; //!< for list
         private:
             Y_Disable_Assign(Addition); //!< discarded
         };
