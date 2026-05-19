@@ -10,6 +10,8 @@ namespace Yttrium
     namespace Jive
     {
 
+        class Logic;
+        
         //______________________________________________________________________
         //
         //
@@ -33,6 +35,8 @@ namespace Yttrium
             static const char         ALT    = '|';    //!< alias
             static const char         LBRACK = '[';    //!< alias
             static const char         RBRACK = ']';    //!< alias
+            static const char         LBRACE = '{';    //!< alias
+            static const char         RBRACE = '}';    //!< alias
             static const char         EscCommSource[]; //!< "nrtvfab"
             static const char         EscCommTarget[]; //!< matching EscCommSource
             static const char         EscExpr[];       //!< allowed escaped char in subExpr
@@ -96,6 +100,9 @@ namespace Yttrium
             Pattern * subPosix();
             Pattern * escGroup();
             uint8_t   getUpper();
+
+            void      braces(Logic &);
+
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             
         };

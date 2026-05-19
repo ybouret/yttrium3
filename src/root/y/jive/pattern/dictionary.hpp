@@ -26,6 +26,8 @@ namespace Yttrium
         class Dictionary : public DictMap
         {
         public:
+            static const char * const CallSign; //!< "Jive::Dictionary"
+                                                //!
             //__________________________________________________________________
             //
             //
@@ -44,9 +46,12 @@ namespace Yttrium
             //__________________________________________________________________
             void operator()(const String &,      Pattern * const); //!< insert a new key/pattern
             void operator()(const char * const , Pattern * const); //!< insert a new key/pattern
+            Pattern * clone(const String &) const; //!< \return cloned pattern, 0 if not found
 
-            Pattern * clone(const String &); //!< \return cloned pattern, 0 if not found
+            void operator()(const char * const, const char * const); //!< append named regular expression
 
+            const Pattern & operator[](const String &)     const; //!< \return named pattern
+            const Pattern & operator[](const char * const) const; //!< \return named pattern
 
 
         private:
