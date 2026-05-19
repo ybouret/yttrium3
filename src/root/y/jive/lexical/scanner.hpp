@@ -1,10 +1,11 @@
 //! \file
 
-#ifndef Y_Jive_Lexical_Unit_Included
-#define Y_Jive_Lexical_Unit_Included 1
+#ifndef Y_Jive_Lexical_Scanner_Included
+#define Y_Jive_Lexical_Scanner_Included 1
 
 #include "y/jive/lexical/unit.hpp"
 #include "y/jive/lexical/rule.hpp"
+#include "y/jive/regexp.hpp"
 
 namespace Yttrium
 {
@@ -44,6 +45,8 @@ namespace Yttrium
 
                 virtual ~Scanner() noexcept; //!< cleanup
 
+                void add(Rule * const);
+
                 const Identifier name;
 
             private:
@@ -57,5 +60,5 @@ namespace Yttrium
 
 }
 
-#endif // !Y_Jive_Lexical_Unit_Included
+#endif // !Y_Jive_Lexical_Scanner_Included
 
