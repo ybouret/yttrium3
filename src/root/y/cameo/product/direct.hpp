@@ -29,7 +29,7 @@ namespace Yttrium
             //
             //
             //
-            //! Direct, Scalar summator
+            //! Direct multiplier
             //
             //
             //__________________________________________________________________
@@ -43,7 +43,7 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
-                Y_Args_Expose(T,Type);
+                Y_Args_Expose(T,Type); //!< aliases
 
                 //______________________________________________________________
                 //
@@ -51,17 +51,16 @@ namespace Yttrium
                 // C++
                 //
                 //______________________________________________________________
-                inline explicit Direct() :             prod() { Y_Cameo_Product_Direct_Check(); }
-                inline explicit Direct(const size_t) : prod() { Y_Cameo_Product_Direct_Check();}
+                inline explicit Direct() :             prod(1) { Y_Cameo_Product_Direct_Check(); } //!< setup
+                inline explicit Direct(const size_t) : prod(1) { Y_Cameo_Product_Direct_Check(); } //!< setup, compatibility
                 inline Direct(const Direct &other) : Multiplier<T>(), prod(other.prod)
-                { Y_Cameo_Product_Direct_Check(); }
-
-                inline virtual ~Direct() noexcept { ld1(); }
+                { Y_Cameo_Product_Direct_Check(); }                                                //!< duplicate \param other another direct multiplier
+                inline virtual ~Direct() noexcept { ld1(); }                                       //!< cleanup
 
                 //! display status
                 inline friend std::ostream & operator<<(std::ostream &os, const Direct &self)
                 {
-                    return os << self.acc;
+                    return os << self.prod;
                 }
 
                 //______________________________________________________________

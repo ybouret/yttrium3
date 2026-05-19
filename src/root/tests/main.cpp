@@ -190,6 +190,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(cameo_product_direct);
     Y_UTEST(cameo_product_raised);
     Y_UTEST(cameo_product_queued);
+    Y_UTEST(cameo_multiplication);
 
 }
 Y_UTEST_EXEC()
