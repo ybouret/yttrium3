@@ -237,6 +237,20 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                 assert(sanity());
             }
 
+            //! make one
+            void ld1() noexcept
+            {
+                assert(sanity());
+                memset(word,0,words*WordBytes);
+                Coerce(words) = 1;
+                Coerce(bytes) = 1;
+                Coerce(bits)  = 1;
+                word[0] = 1;
+                assert(sanity());
+            }
+
+
+
             //! zpad when necessary
             inline void zpad() noexcept
             {

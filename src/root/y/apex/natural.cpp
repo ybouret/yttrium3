@@ -100,6 +100,11 @@ namespace Yttrium
             static_cast<KegType *>(code)->ldz();
         }
 
+        void Natural:: ld1() noexcept
+        {
+            static_cast<KegType *>(code)->ld1();
+        }
+
         bool Natural:: is0() const noexcept
         {
             assert(code);

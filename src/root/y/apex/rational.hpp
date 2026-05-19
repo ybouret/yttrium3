@@ -97,6 +97,7 @@ Y_APQ_DECL(Rational,CALL) Y_APQ_Binary(OP,CALL) Y_APQ_Unary(OP,CALL)
             //
             //__________________________________________________________________
             virtual void         ldz()            noexcept;
+            virtual void         ld1()            noexcept;
             virtual bool         is0()      const noexcept;
             virtual bool         is1()      const noexcept;
             virtual const char * callSign() const noexcept;

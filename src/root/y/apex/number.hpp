@@ -25,6 +25,7 @@ namespace Yttrium
             virtual ~Number() noexcept; //!< cleanup
 
             virtual void ldz()       noexcept = 0; //!< set to zero, nothrow
+            virtual void ld1()       noexcept = 0; //!< set to one, nothrow
             virtual bool is0() const noexcept = 0; //!< \return test against zero
             virtual bool is1() const noexcept = 0; //!< \return test against one
 

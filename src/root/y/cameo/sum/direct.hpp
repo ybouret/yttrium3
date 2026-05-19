@@ -53,8 +53,9 @@ namespace Yttrium
                 //______________________________________________________________
                 inline explicit Direct()             : acc(0)         { Y_Cameo_Sum_Direct_Check(); } //!< setup
                 inline explicit Direct(const size_t) : acc(0)         { Y_Cameo_Sum_Direct_Check(); } //!< setup, compatibility
-                inline Direct(const Direct &other)   : acc(other.acc) { Y_Cameo_Sum_Direct_Check(); } //!< duplicate \param other another Direct
                 inline virtual ~Direct() noexcept                     { acc.ldz(); }                  //!< cleanup
+                inline Direct(const Direct &other)   :
+                Summator<T>(), acc(other.acc) { Y_Cameo_Sum_Direct_Check(); } //!< duplicate \param other another Direct
 
                 //! display status
                 inline friend std::ostream & operator<<(std::ostream &os, const Direct &self)

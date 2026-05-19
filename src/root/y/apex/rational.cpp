@@ -24,7 +24,13 @@ namespace Yttrium
         void Rational:: ldz() noexcept
         {
             Coerce(numer).ldz();
-            Coerce(denom) = 1;
+            Coerce(denom).ld1();
+        }
+
+        void Rational:: ld1() noexcept
+        {
+            Coerce(numer).ld1();
+            Coerce(denom).ld1();
         }
 
 

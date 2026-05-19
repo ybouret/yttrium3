@@ -21,6 +21,12 @@ namespace Yttrium
             Coerce(n).ldz();
         }
 
+        void Integer:: ld1() noexcept
+        {
+            Coerce(s) = Positive;
+            Coerce(n).ld1();
+        }
+
         Integer:: Integer(const SignType S, const Natural &N) :
         s(S),
         n(N)

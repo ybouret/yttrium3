@@ -48,9 +48,9 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual void ldz() noexcept   = 0; //!< reset
-            virtual void mul(ConstType &) = 0; //!< mul by data
-            virtual Type operator()(void) = 0; //!< \return result (MUST be zero afterwards)
+            virtual void ld1() noexcept     = 0; //!< reset
+            virtual void mul(ConstType &)   = 0; //!< mul by data
+            virtual Type operator()(void)   = 0; //!< \return result (MUST be 1 afterwards)
 
             //__________________________________________________________________
             //
@@ -65,13 +65,13 @@ namespace Yttrium
             }
 
             //! helper \param data to add \return *this
-            inline Multiplier operator *=(ParamType data) {
+            inline Multiplier & operator *=(ParamType data) {
                 mul(data); return *this;
             }
 
             //! helper \param data to set \return *this
             inline Multiplier & operator=(ParamType data) {
-                ldz(); mul(data); return *this;
+                ld1(); mul(data); return *this;
             }
 
         private:
@@ -82,5 +82,5 @@ namespace Yttrium
 
 }
 
-#endif // !Y_Cameo_Summator_Included
+#endif // !Y_Cameo_Multiplier_Included
 
