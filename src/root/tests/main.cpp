@@ -169,6 +169,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(jive_pattern);
     Y_UTEST(jive_posix);
     Y_UTEST(jive_rx);
+    Y_UTEST(jive_scanner);
 
     Y_UTEST(graphviz);
 
@@ -191,7 +192,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(cameo_product_raised);
     Y_UTEST(cameo_product_queued);
     Y_UTEST(cameo_multiplication);
-
+    Y_UTEST(cameo_addenda);
 }
 Y_UTEST_EXEC()
 

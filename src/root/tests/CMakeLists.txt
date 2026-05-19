@@ -196,6 +196,7 @@ Y_UTEST(jive:leading)
 Y_UTEST(jive:pattern)
 Y_UTEST(jive:posix)
 Y_UTEST(jive:rx)
+Y_UTEST(jive:scanner)
 
 Y_UTEST(graphviz)
 
@@ -218,6 +219,6 @@ Y_UTEST(cameo:product:direct)
 Y_UTEST(cameo:product:raised)
 Y_UTEST(cameo:product:queued)
 Y_UTEST(cameo:multiplication)
-
+Y_UTEST(cameo:addenda)
 
 
