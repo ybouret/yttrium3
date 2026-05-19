@@ -64,7 +64,7 @@ namespace Yttrium
             }
 
             //! helper \param data to add \return *this
-            inline Summator operator +=(ParamType data) {
+            inline Summator & operator +=(ParamType data) {
                 add(data); return *this;
             }
 
