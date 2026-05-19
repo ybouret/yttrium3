@@ -216,6 +216,7 @@ Y_UTEST(cameo:sum:vectorial)
 Y_UTEST(cameo:addition)
 Y_UTEST(cameo:product:direct)
 Y_UTEST(cameo:product:raised)
+Y_UTEST(cameo:product:queued)
 
 
 

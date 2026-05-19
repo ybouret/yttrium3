@@ -117,7 +117,7 @@ inline friend bool operator OP (const T      lhs, const XReal &rhs) noexcept { r
         Y_XREAL_BINARY(/,Div)
         Y_XREAL_BINARY(+,Add)
         Y_XREAL_BINARY(-,Sub)
-#endif
+#endif // !DOXYGEN_SHOULD_SKIP_THIS
 
         XReal operator+() const noexcept; //!< unary + \return   *this
         XReal operator-() const noexcept; //!< unary - \return - *this
@@ -140,7 +140,7 @@ inline friend bool operator OP (const T      lhs, const XReal &rhs) noexcept { r
         Y_XREAL_CMP(>,   == Positive )
         Y_XREAL_CMP(<=,  != Positive )
         Y_XREAL_CMP(>=,  != Negative )
-#endif
+#endif // !DOXYGEN_SHOULD_SKIP_THIS
 
         //______________________________________________________________________
         //
@@ -171,5 +171,5 @@ inline friend bool operator OP (const T      lhs, const XReal &rhs) noexcept { r
 
 }
 
-#endif
+#endif // !Y_Type_XReal_Included
 

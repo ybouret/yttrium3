@@ -1,5 +1,3 @@
-
-
 //! \file
 
 #ifndef Y_Cameo_Product_Raised
@@ -99,4 +97,4 @@ namespace Yttrium
 
 }
 
-#endif // !Y_Cameo_Sum_Raised
+#endif // !Y_Cameo_Product_Raised
