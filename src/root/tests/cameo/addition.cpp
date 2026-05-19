@@ -31,7 +31,7 @@ namespace
         Y_CHECK(Cameo::Addition<T>::IsSummator);
         Cameo::Addition<T> xadd;
 
-        T v;
+        T        v;
         unsigned k = 0;
         for(size_t n=0;n<3;++n)
 
