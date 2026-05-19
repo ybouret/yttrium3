@@ -28,7 +28,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
         typedef T             Type; //!< alias
-        static const size_t   DIMENSION = 3; //!< alias
+        static const size_t   Dimension = 3; //!< alias
 
         //______________________________________________________________________
         //
@@ -51,7 +51,7 @@ namespace Yttrium
         //______________________________________________________________________
 
         //! pseudo writable
-        inline size_t size() const noexcept { return DIMENSION; } //!< \return 3
+        inline size_t size() const noexcept { return Dimension; } //!< \return 3
 
         //______________________________________________________________________
         //

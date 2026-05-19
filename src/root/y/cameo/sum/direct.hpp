@@ -35,6 +35,11 @@ namespace Yttrium
                 inline Direct(const Direct &other)   : acc(other.acc) { Y_Cameo_Sum_Direct_Check(); }
                 inline virtual ~Direct() noexcept { acc.ldz(); }
 
+                inline friend std::ostream & operator<<(std::ostream &os, const Direct &self)
+                {
+                    return os << self.acc;
+                }
+
 
                 inline virtual void ldz()       noexcept { acc.ldz(); }
                 inline virtual void add(ConstType &data) { acc += data; }

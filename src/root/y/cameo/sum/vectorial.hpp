@@ -38,6 +38,12 @@ namespace Yttrium
                     init(minCapacity);
                 }
 
+                inline Vectorial(const Vectorial &other) :
+                xadd(0), wksp(), xnum(0)
+                {
+                    init(other);
+                }
+
                 inline virtual ~Vectorial() noexcept { quit(); }
 
                 inline friend std::ostream & operator<<(std::ostream &os, const Vectorial &self)
@@ -77,7 +83,7 @@ namespace Yttrium
                 virtual const char * callSign() const noexcept { return "Cameo::Sum::Vectorial"; }
 
             private:
-                Y_Disable_Copy_And_Assign(Vectorial);
+                Y_Disable_Assign(Vectorial);
                 XAddition * const xadd;
                 void *            wksp[ Alignment::WordsGEQ<Requested>::Count ];
                 size_t            xnum;
@@ -106,6 +112,20 @@ namespace Yttrium
                     }
                     catch(...) { quit(); throw; }
                 }
+
+                inline void init(const Vectorial &other)
+                {
+                    assert(0==xadd);
+                    Coerce(xadd) = static_cast<XAddition*>( Y_BZero(wksp) );
+                    try {
+                        while(xnum<Dimension) {
+                            new (xadd+xnum) XAddition(other.xadd[xnum]);
+                            ++xnum;
+                        }
+                    }
+                    catch(...) { quit(); throw; }
+                }
+
 
                 inline void quit() noexcept
                 {

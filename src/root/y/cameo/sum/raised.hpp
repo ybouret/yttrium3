@@ -38,6 +38,12 @@ namespace Yttrium
                 inline Raised(const Raised &other)    : acc(other.acc) { Y_Cameo_Sum_Raised_Check(); }
                 inline virtual ~Raised() noexcept { acc.ldz(); }
 
+                inline friend std::ostream & operator<<(std::ostream &os, const Raised &self)
+                {
+                    return os << self.acc;
+                }
+
+
                 inline virtual void ldz()       noexcept { acc.ldz(); }
                 inline virtual void add(ConstType &data) { acc += data; }
                 inline virtual Type operator()(void)
