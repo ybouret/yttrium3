@@ -57,8 +57,9 @@ namespace Yttrium
                 //______________________________________________________________
                 inline explicit Raised()              : prod(0)          { Y_Cameo_Product_Raised_Check(); } //!< setup
                 inline explicit Raised(const size_t ) : prod(0)          { Y_Cameo_Product_Raised_Check(); } //!< setup, compatibility
-                inline Raised(const Raised &other)    : prod(other.prod) { Y_Cameo_Product_Raised_Check(); } //!< duplicate \param other another Raised
-                inline virtual ~Raised() noexcept                        { prod.ld1(); }                  //!< cleanup
+                inline Raised(const Raised &other)    :
+                Multiplier<T>(), prod(other.prod)                        { Y_Cameo_Product_Raised_Check(); } //!< duplicate \param other another Raised
+                inline virtual ~Raised() noexcept                        { prod.ld1(); }                     //!< cleanup
 
                 //! display status
                 inline friend std::ostream & operator<<(std::ostream &os, const Raised &self)
