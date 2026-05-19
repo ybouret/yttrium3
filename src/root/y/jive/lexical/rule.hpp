@@ -11,20 +11,46 @@ namespace Yttrium
     namespace Jive
     {
 
-        class Rule : public Object
+        namespace Lexical
         {
-        public:
+
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Rule to govern scanner/lexer when motif is matched
+            //
+            //
+            //__________________________________________________________________
+            class Rule : public Object
+            {
+            public:
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
 
 
-            virtual ~Rule() noexcept;
+                virtual ~Rule() noexcept;
 
-            const Identifier name;
-            const Motif      motif;
-            Rule *           next;
-            Rule *           prev;
-        private:
-            Y_Disable_Copy_And_Assign(Rule);
-        };
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                const Identifier name;   //!< name
+                const Motif      motif;  //!< matching motif
+                Rule *           next;   //!< for list
+                Rule *           prev;   //!< for list
+            private:
+                Y_Disable_Copy_And_Assign(Rule); //!< discarded
+            };
+        }
+
+        
     }
 }
 

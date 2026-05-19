@@ -9,6 +9,10 @@ namespace Yttrium
         namespace Lexical
         {
 
+            Rule:: ~Rule() noexcept
+            {
+                
+            }
         }
 
     }

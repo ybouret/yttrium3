@@ -12,14 +12,28 @@ namespace Yttrium
 
         namespace Lexical
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Produce units with a set of rules
+            //
+            //
+            //__________________________________________________________________
             class Scanner
             {
             public:
-
-                virtual ~Scanner() noexcept;
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                
+                virtual ~Scanner() noexcept; //!< cleanup
                 
             private:
-                Y_Disable_Copy_And_Assign(Scanner);
+                Y_Disable_Copy_And_Assign(Scanner); //!< discarded
             };
         }
 

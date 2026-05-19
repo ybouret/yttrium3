@@ -13,18 +13,39 @@ namespace Yttrium
 
         namespace Lexical
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Unit: named, localized token
+            //
+            //
+            //__________________________________________________________________
             class Unit : public Object, public Spot, public Token
             {
             public:
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
 
+                //! setup \param spot localisation \param uid identifier
                 explicit Unit(const Spot &spot, const Identifier &uid) noexcept;
-                virtual ~Unit() noexcept;
+                virtual ~Unit() noexcept; //!< cleanup
 
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
                 const Identifier name; //!< identifier
                 Unit *           next; //!< for list
                 Unit *           prev; //!< for list
             private:
-                Y_Disable_Copy_And_Assign(Unit);
+                Y_Disable_Copy_And_Assign(Unit); //!< discarded
             };
         }
     }
