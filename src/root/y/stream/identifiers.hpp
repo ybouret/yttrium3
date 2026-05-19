@@ -53,21 +53,19 @@ namespace Yttrium
          \return new or existing identifier
          */
         template <typename NAME> inline
-        const Identifier & operator[](const NAME &name)
+        const Identifier  operator[](const NAME &name)
         {
-            const Identifier id(name); record(id);
-            const Identifier * const pid = search(*id); assert(pid);
-            return *pid;
+            return record(name);
         }
-
 
 
 
     private:
         Y_Disable_Assign(Identifiers); //!< discarded
         Code * const code;             //!< inner code
-
-        void               record(const Identifier &);   //!< ensure existing identifier
+        const Identifier   record(const Identifier &);   //!< \return matching found/created identifier
+        const Identifier   record(const String     &);   //!< \return matching found/created identifier
+        const Identifier   record(const char * const);   //!< \return matching found/created identifier
         const Identifier * search(const String &) const; //!< \return matching identifier
     };
 

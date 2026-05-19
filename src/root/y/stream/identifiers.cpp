@@ -37,11 +37,39 @@ namespace Yttrium
     }
 
 
-    void Identifiers:: record(const Identifier &id)
+    //void Identifiers:: record(const Identifier &id)
+    //{
+    //    assert(code);
+    //    if( !code->search(*id) && !code->insert(id)) throw Specific::Exception(CallSign,"failed to insert missing '%s'", id->c_str());
+    //}
+
+    const Identifier  Identifiers:: record(const Identifier &id)
     {
         assert(code);
-        if( !code->search(*id) && !code->insert(id)) throw Specific::Exception(CallSign,"failed to insert missing '%s'", id->c_str());
+        (void) code->insert(id);
+        return id;
     }
+
+
+    const Identifier Identifiers:: record(const String &s)
+    {
+        assert(code);
+        {
+            const Identifier * const pid = code->search(s);
+            if(pid) return *pid;
+        }
+
+        const Identifier id(s);
+        if(!code->insert(id)) throw Specific::Exception(CallSign,"failed to insert missing '%s'", id->c_str());
+        return id;
+
+    }
+
+    const Identifier Identifiers:: record(const char * const s)
+    {
+        const String _(s); return record(_);
+    }
+
 
 
     const Identifier * Identifiers:: search(const String &key) const
