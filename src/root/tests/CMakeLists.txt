@@ -25,6 +25,7 @@ vfs
 hashing
 mkl
 cameo
+info
 )
 
 Y_LinkLibraries(test-root)
@@ -224,4 +225,4 @@ Y_UTEST(cameo:product:queued)
 Y_UTEST(cameo:multiplication)
 Y_UTEST(cameo:addenda)
 
-
+Y_UTEST(info:bwt)
