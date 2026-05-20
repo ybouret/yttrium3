@@ -5,6 +5,7 @@
 
 #include "y/jive/lexical/unit.hpp"
 #include "y/jive/lexical/rule.hpp"
+#include "y/jive/lexical/command.hpp"
 #include "y/jive/regexp.hpp"
 
 namespace Yttrium
@@ -51,7 +52,9 @@ namespace Yttrium
                 // Methods
                 //
                 //______________________________________________________________
-                void add(Rule * const); //!< add newly created rule
+                void  add(Rule * const); //!< add newly created rule
+                Unit *get(Source &source, Command &command);
+
 
                 //______________________________________________________________
                 //

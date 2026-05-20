@@ -26,6 +26,7 @@ namespace Yttrium
 
                 Command() noexcept;
                 ~Command() noexcept;
+                void reset() noexcept;
 
                 const Kind           kind;
                 const String * const args;

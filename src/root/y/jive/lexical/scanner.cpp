@@ -1,6 +1,4 @@
-
 #include "y/jive/lexical/scanner/code.hpp"
-#include "y/exception.hpp"
 
 
 namespace Yttrium
@@ -10,8 +8,6 @@ namespace Yttrium
 
         namespace Lexical
         {
-
-           
 
 
             Scanner:: ~Scanner() noexcept
@@ -24,10 +20,8 @@ namespace Yttrium
             {
                 assert(rule);
                 assert(code);
-
                 code->add(rule);
             }
-
 
         }
 
