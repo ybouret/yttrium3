@@ -109,11 +109,7 @@ namespace Yttrium
         Y_Args_Declare(T,Type);                               //!< aliases
         typedef HashSetNode<KEY,T>                 NodeType;  //!< alias
         typedef HashProto<NodeType,Lexicon,HASHER> ProtoType; //!< alias
-        using ProtoType::list;
-        using ProtoType::pool;
-        using ProtoType::htab;
-        using ProtoType::hash;
-        using ProtoType::insertNode;
+       
 
         //______________________________________________________________________
         //
@@ -124,13 +120,13 @@ namespace Yttrium
 
         //! setup \param minTableSize minimal slots in table
         inline explicit HashSet(const size_t minTableSize=0) :
-        ProtoType(minTableSize)
+            HashProto<NodeType, Lexicon, HASHER>(minTableSize)
         {
         }
 
         //! duplicate \param other another set
         inline HashSet(const HashSet &other ) :
-        ProtoType(other)
+            HashProto<NodeType, Lexicon, HASHER>(other)
         {
         }
 

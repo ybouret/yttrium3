@@ -109,12 +109,7 @@ namespace Yttrium
         Y_Args_Declare(KEY,Key);                              //!< aliases
         Y_Args_Declare(T,Type);                               //!< aliases
         typedef HashMapNode<KEY,T>                 NodeType;  //!< alias
-        typedef HashProto<NodeType,Catalog,HASHER> ProtoType; //!< alias
-        using ProtoType::list;
-        using ProtoType::pool;
-        using ProtoType::htab;
-        using ProtoType::hash;
-        using ProtoType::insertNode;
+        //typedef HashProto<NodeType,Catalog,HASHER> ProtoType; //!< alias
 
         //______________________________________________________________________
         //
@@ -125,13 +120,13 @@ namespace Yttrium
 
         //! setup \param minTableSize minimal slots in table
         inline explicit HashMap(const size_t minTableSize=0) :
-        ProtoType(minTableSize)
+        HashProto< HashMapNode<KEY, T>, Catalog, HASHER>(minTableSize)
         {
         }
 
         //! duplicate \param other another map
         inline HashMap(const HashMap &other ) :
-        ProtoType(other)
+        HashProto< HashMapNode<KEY, T>, Catalog, HASHER>(other)
         {
         }
 
