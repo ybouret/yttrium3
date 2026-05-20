@@ -42,11 +42,20 @@ namespace Yttrium
                 // C++
                 //
                 //______________________________________________________________
+
+                //! setup
+                /**
+                 \param ruleName rule name
+                 \param ruleForm rule pattern, EXCEPTION iff FRAIL
+                 \param ruleDeed behavior
+                 \param ruleInfo parameters for behavior
+                 */
                 explicit Rule(const Identifier & ruleName,
                               const Motif      & ruleForm,
                               const unsigned     ruleDeed,
-                              const Identifier & ruleInfo) noexcept;
+                              const Identifier & ruleInfo);
 
+                //! cleanup
                 virtual ~Rule() noexcept;
 
                 //______________________________________________________________
@@ -57,7 +66,7 @@ namespace Yttrium
                 //______________________________________________________________
                 const Identifier name; //!< name
                 const Motif      form; //!< matching motif
-                const unsigned   deed;
+                const unsigned   deed; //!< encoded action
                 const Identifier info; //!< name of argument for call/jump
                 Rule *           next; //!< for list
                 Rule *           prev; //!< for list

@@ -18,7 +18,7 @@ namespace Yttrium
         impl(m),
         buff()
         {
-            
+
         }
 
         Char * Source:: get()
@@ -126,6 +126,35 @@ namespace Yttrium
             }
         }
 
+
+        static inline bool IsStop(const uint8_t code) noexcept
+        {
+            switch(code)
+            {
+                case ' ':
+                case '\t':
+                case '\n':
+                case '\r':
+                    return true;
+
+                default:
+                    break;
+            }
+            return false;
+        }
+
+        String Source:: guessInvalidString()
+        {
+            Token token;
+            while(true)
+            {
+                const Char * const ch = peek();
+                if(!ch)            break;
+                if( IsStop(**ch) ) break;
+                token.pushTail( get() );
+            }
+            return token.toString();
+        }
 
     }
 }

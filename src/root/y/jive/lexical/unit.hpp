@@ -49,7 +49,8 @@ namespace Yttrium
             };
         }
 
-        typedef Lexical::Unit Lexeme;
+        typedef Lexical::Unit     Lexeme;
+        typedef CxxListOf<Lexeme> Lexemes;
     }
 
 }

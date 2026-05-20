@@ -15,26 +15,32 @@ Y_UTEST(jive_scanner)
     {
         const Identifier name = "INT";
         const Motif      form = RegExp::Compile("[:digit:]+",0);
-        scan.add(new Lexical::Rule(name,form,0x00,name) );
+        scan.add(new Lexical::Rule(name,form,Lexical::Rule::Emit,name) );
     }
 
     {
         const Identifier name = "DBL";
         const Motif      form = RegExp::Compile("[:digit:]+([.][:digit:]+)?",0);
-        scan.add(new Lexical::Rule(name,form,0x00,name) );
+        scan.add(new Lexical::Rule(name,form,Lexical::Rule::Emit,name) );
     }
 
 
     {
         const Identifier name = "ID";
         const Motif      form = RegExp::Compile("[:alpha:][:word:]*",0);
-        scan.add(new Lexical::Rule(name,form,0x00,name) );
+        scan.add(new Lexical::Rule(name,form,Lexical::Rule::Emit,name) );
     }
 
     {
         const Identifier name = "BLANK";
         const Motif      form = RegExp::Compile("[:blank:]",0);
-        scan.add(new Lexical::Rule(name,form,0x00,name) );
+        scan.add(new Lexical::Rule(name,form,Lexical::Rule::Drop,name) );
+    }
+
+    {
+        const Identifier name = "ENDL";
+        const Motif      form = RegExp::Compile("[:endl:]",0);
+        scan.add(new Lexical::Rule(name,form,Lexical::Rule::Drop|Lexical::Rule::Endl,name) );
     }
 
 
@@ -43,7 +49,19 @@ Y_UTEST(jive_scanner)
     {
         Source           source( Module::OpenFile(argv[1]) );
         Lexical::Command cmd;
-        Lexeme * const   lx = scan.get(source,cmd);
+        Lexemes          lxm;
+        while(true)
+        {
+            Lexeme * const lx = scan.get(source,cmd);
+            if(!lx) break;
+            lxm.pushTail(lx);
+        }
+
+        for(const Lexeme *lx = lxm.head;lx;lx=lx->next)
+        {
+            std::cerr << lx->title << ":" << lx->line << ":" << lx->column << ": '" << lx->name << "' " << *lx << std::endl;
+        }
+
     }
 
 
