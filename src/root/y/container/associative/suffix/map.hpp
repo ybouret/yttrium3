@@ -6,6 +6,7 @@
 #define Y_Associative_SuffixMap_Inluded 1
 
 #include "y/container/associative/suffix/proto.hpp"
+#include "y/container/associative/catalog.hpp"
 
 namespace Yttrium
 {
@@ -99,7 +100,7 @@ namespace Yttrium
     //
     //__________________________________________________________________________
     template <typename KEY, typename T>
-    class SuffixMap :  public SuffixProto<KEY, T, SuffixMapNode>
+    class SuffixMap :  public SuffixProto<KEY,T,SuffixMapNode,Catalog<KEY,T>>
     {
     public:
         //______________________________________________________________________
@@ -123,7 +124,7 @@ namespace Yttrium
 
         //! duplicate \param other another suffix map
         inline SuffixMap(const SuffixMap &other) :
-        SuffixProto<KEY,T,SuffixMapNode>(other)
+        SuffixProto<KEY,T,SuffixMapNode,Catalog<KEY,T>>(other)
         {}
         //______________________________________________________________________
         //

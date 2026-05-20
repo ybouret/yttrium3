@@ -32,9 +32,10 @@ namespace Yttrium
     template <
     typename KEY,
     typename T,
-    template <typename, typename> class NODE >
+    template <typename, typename> class NODE,
+    typename ASSOCIATIVE>
     class SuffixProto :
-    public Associative<KEY,T>,
+    public ASSOCIATIVE,
     public Releasable
     {
     public:
@@ -64,8 +65,11 @@ namespace Yttrium
 
         //! duplicate \param proto another SuffixProtor
         inline SuffixProto(const SuffixProto &proto) :
-        Associative<KEY,T>(), Releasable(),
-        list(), tree(), pool()
+        ASSOCIATIVE(),
+        Releasable(),
+        list(),
+        tree(),
+        pool()
         {
             duplicate(proto);
         }

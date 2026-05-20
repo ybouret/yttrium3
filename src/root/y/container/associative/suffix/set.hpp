@@ -5,6 +5,7 @@
 #define Y_Associative_SuffixSet_Inluded 1
 
 #include "y/container/associative/suffix/proto.hpp"
+#include "y/container/associative/lexicon.hpp"
 
 namespace Yttrium
 {
@@ -88,7 +89,7 @@ namespace Yttrium
     //
     //__________________________________________________________________________
     template <typename KEY, typename T>
-    class SuffixSet :  public SuffixProto<KEY,T,SuffixSetNode>
+    class SuffixSet :  public SuffixProto<KEY,T,SuffixSetNode,Lexicon<KEY,T>>
     {
     public:
         //______________________________________________________________________
@@ -112,7 +113,7 @@ namespace Yttrium
 
         //! duplicate \param other another suffix set
         inline SuffixSet(const SuffixSet &other) :
-        SuffixProto<KEY,T,SuffixSetNode>(other)
+        SuffixProto<KEY,T,SuffixSetNode,Lexicon<KEY,T>>(other)
         {}
 
         //______________________________________________________________________
