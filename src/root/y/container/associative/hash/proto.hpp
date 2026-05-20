@@ -341,10 +341,10 @@ namespace Yttrium
     //__________________________________________________________________________
     template <
     typename NODE,
-    template <typename,typename> class ASSOCIATIVE,
+    typename ASSOCIATIVE,
     typename HASHER
     >
-    class HashProto : public ASSOCIATIVE<typename NODE::Key, typename NODE::Type>
+    class HashProto : public ASSOCIATIVE
     {
     public:
         //______________________________________________________________________
@@ -370,6 +370,7 @@ namespace Yttrium
 
         //! setup \param minTableSize minimal slots in table
         inline HashProto(const size_t minTableSize) :
+        ASSOCIATIVE(),
         list(),
         pool(),
         htab( new Table(minTableSize) ),
@@ -380,7 +381,7 @@ namespace Yttrium
 
         //! duplicate \param other another hash prototype
         inline HashProto(const HashProto &other) :
-        ASSOCIATIVE<Key,Type>(),
+        ASSOCIATIVE(),
         list(),
         pool(),
         htab( new Table(other->count/Core::HTable::MaxLoad) ),

@@ -96,7 +96,7 @@ namespace Yttrium
     template <typename KEY,
     typename T,
     typename HASHER = Hashing::KeyWith<Hashing::FNV> >
-    class HashSet : public HashProto< HashSetNode<KEY,T>, Lexicon, HASHER>
+    class HashSet : public HashProto< HashSetNode<KEY,T>, Lexicon<KEY,T>, HASHER>
     {
     public:
         //______________________________________________________________________
@@ -107,9 +107,11 @@ namespace Yttrium
         //______________________________________________________________________
         Y_Args_Declare(KEY,Key);                              //!< aliases
         Y_Args_Declare(T,Type);                               //!< aliases
-        typedef HashSetNode<KEY,T>                 NodeType;  //!< alias
-        typedef HashProto<NodeType,Lexicon,HASHER> ProtoType; //!< alias
-       
+        typedef HashSetNode<KEY,T>                        NodeType;  //!< alias
+        typedef HashProto<NodeType,Lexicon<KEY,T>,HASHER> ProtoType; //!< alias
+        using ProtoType::pool;
+        using ProtoType::hash;
+        using ProtoType::insertNode;
 
         //______________________________________________________________________
         //
@@ -120,13 +122,13 @@ namespace Yttrium
 
         //! setup \param minTableSize minimal slots in table
         inline explicit HashSet(const size_t minTableSize=0) :
-            HashProto<NodeType, Lexicon, HASHER>(minTableSize)
+        ProtoType(minTableSize)
         {
         }
 
         //! duplicate \param other another set
         inline HashSet(const HashSet &other ) :
-            HashProto<NodeType, Lexicon, HASHER>(other)
+        ProtoType(other)
         {
         }
 

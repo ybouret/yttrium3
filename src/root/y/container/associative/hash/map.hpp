@@ -97,7 +97,7 @@ namespace Yttrium
     template <typename KEY,
     typename T,
     typename HASHER = Hashing::KeyWith<Hashing::FNV> >
-    class HashMap : public HashProto< HashMapNode<KEY,T>, Catalog, HASHER>
+    class HashMap : public HashProto< HashMapNode<KEY,T>, Catalog<KEY,T>, HASHER>
     {
     public:
         //______________________________________________________________________
@@ -109,8 +109,11 @@ namespace Yttrium
         Y_Args_Declare(KEY,Key);                              //!< aliases
         Y_Args_Declare(T,Type);                               //!< aliases
         typedef HashMapNode<KEY,T>                 NodeType;  //!< alias
-        //typedef HashProto<NodeType,Catalog,HASHER> ProtoType; //!< alias
-
+        typedef HashProto<NodeType,Catalog<KEY,T>,HASHER> ProtoType; //!< alias
+        using ProtoType::pool;
+        using ProtoType::hash;
+        using ProtoType::insertNode;
+        
         //______________________________________________________________________
         //
         //
@@ -120,13 +123,13 @@ namespace Yttrium
 
         //! setup \param minTableSize minimal slots in table
         inline explicit HashMap(const size_t minTableSize=0) :
-        HashProto< HashMapNode<KEY, T>, Catalog, HASHER>(minTableSize)
+        ProtoType(minTableSize)
         {
         }
 
         //! duplicate \param other another map
         inline HashMap(const HashMap &other ) :
-        HashProto< HashMapNode<KEY, T>, Catalog, HASHER>(other)
+        ProtoType(other)
         {
         }
 
