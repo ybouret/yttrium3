@@ -16,11 +16,20 @@ namespace Yttrium
                 Destroy(code);
             }
 
-            void Scanner:: add(Rule * const rule)
+            const Rule & Scanner:: add(Rule * const rule)
             {
                 assert(rule);
                 assert(code);
                 code->add(rule);
+                return *rule;
+            }
+
+
+            const Rule & Scanner:: processing(const Identifier &_name,
+                                              const Motif &_form,
+                                              const unsigned _deed)
+            {
+                return add( new Rule(_name,_form,_deed,_name) );
             }
 
         }

@@ -11,6 +11,7 @@ Y_UTEST(jive_rx)
 {
 
     Jive::Dictionary dict;
+    Y_SIZEOF(Jive::Dictionary);
 
     dict("INT","[0-9]+");
     Vizible::Render("int.dot", dict["INT"]);

@@ -23,7 +23,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Dictionary : public DictMap
+        class Dictionary : public CountedObject, public DictMap
         {
         public:
             static const char * const CallSign; //!< "Jive::Dictionary"

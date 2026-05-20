@@ -9,39 +9,12 @@ Y_UTEST(jive_scanner)
 {
     Lexical::Scanner scan("MyScanner");
 
-    Y_SIZEOF( CxxListOf<Lexical::Rule> );
-    Y_SIZEOF( Core::ListOf<Lexical::Rule> );
+    scan.emit("INT","[:digit:]+");
+    scan.emit("DBL","[:digit:]+([.][:digit:]+)?");
+    scan.emit("ID","[:alpha:][:word:]*");
+    scan.drop("BLANK","[:blank:]");
+    scan.endl("ENDL","[:endl:]");
 
-    {
-        const Identifier name = "INT";
-        const Motif      form = RegExp::Compile("[:digit:]+",0);
-        scan.add(new Lexical::Rule(name,form,Lexical::Rule::Emit,name) );
-    }
-
-    {
-        const Identifier name = "DBL";
-        const Motif      form = RegExp::Compile("[:digit:]+([.][:digit:]+)?",0);
-        scan.add(new Lexical::Rule(name,form,Lexical::Rule::Emit,name) );
-    }
-
-
-    {
-        const Identifier name = "ID";
-        const Motif      form = RegExp::Compile("[:alpha:][:word:]*",0);
-        scan.add(new Lexical::Rule(name,form,Lexical::Rule::Emit,name) );
-    }
-
-    {
-        const Identifier name = "BLANK";
-        const Motif      form = RegExp::Compile("[:blank:]",0);
-        scan.add(new Lexical::Rule(name,form,Lexical::Rule::Drop,name) );
-    }
-
-    {
-        const Identifier name = "ENDL";
-        const Motif      form = RegExp::Compile("[:endl:]",0);
-        scan.add(new Lexical::Rule(name,form,Lexical::Rule::Drop|Lexical::Rule::Endl,name) );
-    }
 
 
 

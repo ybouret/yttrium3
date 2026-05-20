@@ -52,7 +52,7 @@ namespace Yttrium
                 // Methods
                 //
                 //______________________________________________________________
-                void  add(Rule * const); //!< add newly created rule
+                const Rule & add(Rule * const); //!< add newly created rule
 
                 //! get next Unit
                 /**
@@ -69,7 +69,35 @@ namespace Yttrium
                 // API
                 //
                 //______________________________________________________________
-                
+
+                template <typename ID, typename RX> inline
+                const Rule & emit(const ID &id, const RX &rx)
+                {
+                    const  Identifier _name(id);
+                    const  Motif      _form( RegExp::Compile(rx,0) );
+                    return processing(_name,_form,Rule::Emit);
+                }
+
+                template <typename ID, typename RX> inline
+                const Rule & drop(const ID &id, const RX &rx)
+                {
+                    const  Identifier _name(id);
+                    const  Motif      _form( RegExp::Compile(rx,0) );
+                    return processing(_name,_form,Rule::Drop);
+                }
+
+                template <typename ID, typename RX> inline
+                const Rule & endl(const ID &id, const RX &rx, const bool doEmit = false)
+                {
+                    const  Identifier _name(id);
+                    const  Motif      _form( RegExp::Compile(rx,0) );
+                    return processing(_name,_form,(doEmit ? Rule::Emit :Rule::Drop)|Rule::Endl);
+                }
+
+
+
+
+
 
                 //______________________________________________________________
                 //
@@ -85,6 +113,8 @@ namespace Yttrium
 
                 //! \return code instance
                 static Code * CreateCode(const Identifier &);
+                const Rule &processing(const Identifier &, const Motif &, const unsigned);
+
             };
         }
 

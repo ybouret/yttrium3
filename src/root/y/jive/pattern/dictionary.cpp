@@ -14,7 +14,7 @@ namespace Yttrium
         Dictionary:: Dictionary() : DictMap() {}
         Dictionary:: ~Dictionary() noexcept {}
 
-        Dictionary:: Dictionary(const Dictionary &dict) : DictMap(dict)
+        Dictionary:: Dictionary(const Dictionary &dict) : CountedObject(), DictMap(dict)
         {
         }
 
