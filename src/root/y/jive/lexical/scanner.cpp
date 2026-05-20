@@ -25,9 +25,9 @@ namespace Yttrium
             }
 
 
-            const Rule & Scanner:: processing(const Identifier &_name,
-                                              const Motif &_form,
-                                              const unsigned _deed)
+            const Rule & Scanner:: processing(const Identifier & _name,
+                                              const Motif      & _form,
+                                              const unsigned     _deed)
             {
                 return add( new Rule(_name,_form,_deed,_name) );
             }

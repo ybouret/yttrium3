@@ -52,7 +52,7 @@ namespace Yttrium
                 // Methods
                 //
                 //______________________________________________________________
-                const Rule & add(Rule * const); //!< add newly created rule
+                const Rule & add(Rule * const); //!< add newly created rule \return persistent reference
 
                 //! get next Unit
                 /**
@@ -70,6 +70,12 @@ namespace Yttrium
                 //
                 //______________________________________________________________
 
+                //! emit a lexeme
+                /**
+                 \param id rule/lexeme name
+                 \param rx regular expression
+                 \return created rule
+                 */
                 template <typename ID, typename RX> inline
                 const Rule & emit(const ID &id, const RX &rx)
                 {
@@ -78,6 +84,12 @@ namespace Yttrium
                     return processing(_name,_form,Rule::Emit);
                 }
 
+                //! drop a lexeme
+                /**
+                 \param id rule/lexeme name
+                 \param rx regular expression
+                 \return created rule
+                 */
                 template <typename ID, typename RX> inline
                 const Rule & drop(const ID &id, const RX &rx)
                 {
@@ -86,6 +98,13 @@ namespace Yttrium
                     return processing(_name,_form,Rule::Drop);
                 }
 
+                //! end-of-line lexeme
+                /**
+                 \param id rule/lexeme name
+                 \param rx regular expression
+                 \param doEmit if necessary, default is false
+                 \return created rule
+                 */
                 template <typename ID, typename RX> inline
                 const Rule & endl(const ID &id, const RX &rx, const bool doEmit = false)
                 {
@@ -94,8 +113,34 @@ namespace Yttrium
                     return processing(_name,_form,(doEmit ? Rule::Emit :Rule::Drop)|Rule::Endl);
                 }
 
+                template <typename ID, typename RX> inline
+                const Rule & call(const ID &id, const RX &rx)
+                {
+                    const Identifier _dest(id);
+                    const String     _call = *name + "->" + *_dest;
+                    const Identifier _name(_call);
+                    const  Motif     _form( RegExp::Compile(rx,0) );
+                    return add( new Rule(_name,_form,Rule::Call,_dest) );
+                }
 
+                template <typename ID, typename RX> inline
+                const Rule & jump(const ID &id, const RX &rx)
+                {
+                    const Identifier _dest(id);
+                    const String     _call = *name + "=>" + *_dest;
+                    const Identifier _name(_call);
+                    const  Motif     _form( RegExp::Compile(rx,0) );
+                    return add( new Rule(_name,_form,Rule::Jump,_dest) );
+                }
 
+                template <typename RX> inline
+                const Rule & back(const RX &rx)
+                {
+                    const String     _back = "<-" + *name;
+                    const Identifier _name(_back);
+                    const  Motif     _form( RegExp::Compile(rx,0) );
+                    return add( new Rule(_name,_form,Rule::Jump,_name) );
+                }
 
 
 
@@ -113,7 +158,7 @@ namespace Yttrium
 
                 //! \return code instance
                 static Code * CreateCode(const Identifier &);
-                const Rule &processing(const Identifier &, const Motif &, const unsigned);
+                const Rule &  processing(const Identifier &, const Motif &, const unsigned);
 
             };
         }
