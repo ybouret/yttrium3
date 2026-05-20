@@ -1,12 +1,17 @@
 
 #include "y/jive/lexical/scanner.hpp"
-#include "y/calculus/meta2.hpp"
-#include "y/memory/allocator/archon.hpp"
 #include "y/exception.hpp"
 #include "y/pointer/auto.hpp"
 #include "y/jive/pattern/leading.hpp"
 #include "y/type/destruct.hpp"
 #include "y/ascii/printable.hpp"
+#include "y/handy/basic/light/list.hpp"
+#include "y/threading/single-threaded-class.hpp"
+#include "y/pointer/arc.hpp"
+#include "y/pointer/keyed.hpp"
+//#include "y/hashing/ibj32.hpp"
+#include "y/container/associative/hash/set.hpp"
+#include "y/container/associative/hash/map.hpp"
 
 namespace Yttrium
 {
@@ -18,97 +23,88 @@ namespace Yttrium
 
             namespace
             {
+                typedef Handy::BasicLightList<const Rule,SingleThreadedClass> RList;
 
-                class MetaRule : public Object
+                class MetaList : public CountedObject, public RList
                 {
                 public:
-                    inline MetaRule(const Rule &userRule) noexcept :
-                    rule(userRule), next(0)
-                    {
-                    }
-                    inline ~MetaRule() noexcept {}
-
-                    const Rule &rule;
-                    MetaRule   *next;
-                    MetaRule   *prev;
+                    inline explicit MetaList() noexcept {}
+                    inline virtual ~MetaList() noexcept {}
                     
                 private:
-                    Y_Disable_Copy_And_Assign(MetaRule);
+                    Y_Disable_Copy_And_Assign(MetaList);
                 };
 
-                typedef Core::ListOf<MetaRule> MetaSlot;
-
-                class MetaRules
+                class MetaHasher
                 {
                 public:
-                    static const size_t   NumSlots   = 256;
-                    static const size_t   BlockBytes = NumSlots * sizeof(MetaSlot);
-                    static const unsigned BlockShift = MetaCeilLog2<BlockBytes>::Value;
+                    inline  MetaHasher() noexcept {}
+                    inline ~MetaHasher() noexcept {}
 
-                    explicit MetaRules() : slot( Acquire() )
+                    inline size_t operator()(const uint8_t &k) const noexcept
                     {
-                        for(size_t i=0;i<NumSlots;++i)
-                        {
-                            new ( slot+i ) MetaSlot();
-                        }
+                        return k;
                     }
-
-                    inline void dispatch(const Rule &rule)
-                    {
-                        try
-                        {
-                            Leading leading;
-                            rule.form->glean(leading);
-                            for(unsigned i=0;i<256;++i)
-                            {
-                                const uint8_t b = (uint8_t)i;
-                                if( leading.get( b ) )
-                                {
-                                    std::cerr << "\t '" << rule.name << "' -> '" << ASCII::Printable::Char[b] << "'" << std::endl;
-                                    slot[i].pushTail( new MetaRule(rule) );
-                                }
-                            }
-                        }
-                        catch(...)
-                        {
-                            eraseLast(rule);
-                            throw;
-                        }
-                    }
-
-                    inline virtual ~MetaRules() noexcept
-                    {
-                        static Memory::Archon & archon = Memory::Archon::Location();
-                        for(size_t i=0;i<NumSlots;++i)
-                        {
-                            MetaSlot & sl = slot[i];
-                            while(sl.size) delete sl.popTail();
-                            Destruct( &sl );
-                        }
-                        archon.releaseBlock(slot,BlockShift);
-                    }
-
 
                 private:
-                    Y_Disable_Copy_And_Assign(MetaRules);
-                    MetaSlot * const slot;
+                    Y_Disable_Copy_And_Assign(MetaHasher);
+                };
 
-                    static inline MetaSlot * Acquire()
+
+                typedef ArcPtr<MetaList>                           SharedMetaList;
+                typedef HashMap<uint8_t,SharedMetaList,MetaHasher> MetaMap;
+
+                class MetaTable : public MetaMap
+                {
+                public:
+                    inline explicit MetaTable(const Identifier &sid) :
+                    MetaMap(),
+                    name(sid)
                     {
-                        static Memory::Archon & archon = Memory::Archon::Instance();
-                        return static_cast<MetaSlot*>(archon.acquireBlock(BlockShift));
                     }
 
-                    inline void eraseLast(const Rule &rule) noexcept
+                    inline virtual ~MetaTable() noexcept
                     {
-                        for(size_t i=0;i<NumSlots;++i)
+                    }
+
+                    MetaList & operator[](const uint8_t code)
+                    {
+                        // look for existing
                         {
-                            MetaSlot &sl = slot[i];
-                            if(sl.tail && (&rule == &(sl.tail->rule)) )
-                                delete sl.popTail();
+                            SharedMetaList * const psml = search(code);
+                            if(psml) return **psml;
+                        }
+
+                        // create new meta list
+                        SharedMetaList sml( new MetaList() );
+                        if( !insert(code,sml) )
+                            throw Specific::Exception(name->c_str(),
+                                                      "unexpected table construction failure for '%s'",
+                                                      ASCII::Printable::Char[code]);
+                        return *sml;
+                    }
+
+                    // dispatch rule in (all) matching list(s)
+                    void dispatch(const Rule &rule)
+                    {
+                        MetaTable & table = *this;
+                        Leading     lead;
+
+                        rule.form->glean(lead);
+                        for(unsigned i=0;i<256;++i)
+                        {
+                            const uint8_t b = (uint8_t)i;
+                            if(!lead.get(b)) continue;
+                            table[b] << rule;
                         }
                     }
+
+                    const Identifier name;
+
+                private:
+                    Y_Disable_Copy_And_Assign(MetaTable);
                 };
+
 
 
             }
@@ -120,13 +116,9 @@ namespace Yttrium
 
                 inline explicit Code(const Identifier &sid) :
                 name(sid),
-                rlist(),
-                mlist()
+                rlist()
                 {
                     std::cerr << "sizeof(Scanner::Code) = " << sizeof(Code) << std::endl;
-                    std::cerr << "MetaRules::BlockBytes = " << MetaRules::BlockBytes << std::endl;
-                    std::cerr << "MetaRules::BlockShift = " << MetaRules::BlockShift << std::endl;
-                    std::cerr << "sizeof(MetaRule)      = " << sizeof(MetaRule) << std::endl;
                 }
 
 
@@ -149,13 +141,11 @@ namespace Yttrium
                             }
                         }
                     }
-                    mlist.dispatch(*rule);
                     rlist.pushTail( guard.yield() );
                 }
 
                 const Identifier name;
                 CxxListOf<Rule>  rlist;
-                MetaRules        mlist;
 
             private:
                 Y_Disable_Copy_And_Assign(Code);

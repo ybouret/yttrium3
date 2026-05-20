@@ -35,5 +35,5 @@ namespace Yttrium
 
 }
 
-#endif
+#endif // !Y_Hashing_BJH32_Included
 

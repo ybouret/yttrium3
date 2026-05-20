@@ -203,6 +203,7 @@ Y_UTEST(graphviz)
 Y_UTEST(vfs:scan)
 
 Y_UTEST(hashing:tests)
+Y_UTEST(hashing:key:dumper)
 
 Y_UTEST(mkl:numeric)
 Y_UTEST(mkl:api)

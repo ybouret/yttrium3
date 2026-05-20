@@ -56,5 +56,5 @@ namespace Yttrium
 
 }
 
-#endif
+#endif // !Y_Hashing_IBJ64_Included
 
