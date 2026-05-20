@@ -115,6 +115,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(container_hash_set);
     Y_UTEST(container_hash_map);
     Y_UTEST(container_pq);
+    Y_UTEST(container_lexicon);
 
 
     Y_UTEST(apex_k);

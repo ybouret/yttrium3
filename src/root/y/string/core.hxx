@@ -212,6 +212,12 @@ template <> const CH * String<CH>:: c_str() const noexcept
     return code->entry;
 }
 
+
+template <> const String<CH> & String<CH>:: key() const noexcept
+{
+    return *this;
+}
+
 //------------------------------------------------------------------------------
 //
 //

@@ -120,7 +120,7 @@ namespace Yttrium
             String &       reverse()          noexcept;        //!< reverse content \return *this, reversed
             const T *      c_str()      const noexcept;        //!< pseudo universal c_str \return data
             String &       cat(const T * const, const size_t); //!< \return cat valid buffer
-
+            const String & key()        const noexcept;        //!< \return *this
 
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
