@@ -47,7 +47,7 @@ namespace Yttrium
             const Char * peek();                        //!< \return NULL if EOF
             void         endl() noexcept;               //!< signal new line
             void         fetch(size_t);                 //!< prefetch if possible
-            String       guessInvalidString();          //!< extract 'bad' string
+            String       guessInvalidString();          //!< \return extracted 'bad' string
 
             //__________________________________________________________________
             //

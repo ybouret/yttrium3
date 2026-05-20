@@ -14,8 +14,8 @@ namespace Yttrium
 
         namespace Lexical
         {
-            typedef Handy::BasicLightList<const Rule> RList; //!< alias
-            typedef RList::NodeType MetaNode;
+            typedef Handy::BasicLightList<const Rule> RList;    //!< alias
+            typedef RList::NodeType                   MetaNode; //!< alias
 
             //__________________________________________________________________
             //

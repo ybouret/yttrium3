@@ -39,8 +39,9 @@ namespace Yttrium
 
             virtual ~Spot()    noexcept; //!< cleanup
             Spot(const Spot &) noexcept; //!< duplicate
-            
-            Exception & stamp(Exception &excp) const noexcept;
+
+            //! \return stamped exception
+            Exception & stamp(Exception &) const noexcept;
 
             //__________________________________________________________________
             //

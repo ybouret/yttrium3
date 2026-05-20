@@ -18,7 +18,7 @@ namespace Yttrium
 
         Exception & Spot:: stamp(Exception &excp) const noexcept
         {
-            return excp.pre("%s:%u: ", title->c_str(),line);
+            return excp.pre("%s:%u:%u: ", title->c_str(),line,column);
         }
 
 

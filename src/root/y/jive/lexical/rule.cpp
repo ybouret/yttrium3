@@ -28,7 +28,7 @@ namespace Yttrium
             next(0),
             prev(0)
             {
-                assert(deed);
+                assert(deed&UsedMask);
                 
                 if(form->frail())
                     throw Specific::Exception(name->c_str(),"cannot use frail rule!");

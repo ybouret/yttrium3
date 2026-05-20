@@ -14,21 +14,47 @@ namespace Yttrium
 
         namespace Lexical
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Inner Scanner code
+            //
+            //
+            //__________________________________________________________________
             class Scanner:: Code : public Object
             {
             public:
-                explicit Code(const Identifier &);
-                virtual ~Code() noexcept;
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                explicit Code(const Identifier &); //!< setup
+                virtual ~Code() noexcept;          //!< cleanup
 
-                void add(Rule * const rule);
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+                void add(Rule * const); //!< add and dispatch new rule
 
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
                 const Identifier name;  //!< from scanner
                 CxxListOf<Rule>  rlist; //!< list of rules
                 MetaTable        table; //!< table of list or rules
 
             private:
-                Y_Disable_Copy_And_Assign(Code); //!< discarded
-                void noMultiple(const Rule & rule) const;
+                Y_Disable_Copy_And_Assign(Code);     //!< discarded
+                void noMultiple(const Rule &) const; //!< check no multiple name
             };
 
           

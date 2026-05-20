@@ -12,26 +12,61 @@ namespace Yttrium
     {
         namespace Lexical
         {
-
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Command when control lexeme is met
+            //
+            //
+            //__________________________________________________________________
             class Command
             {
             public:
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+
+                //! what to do
                 enum Kind
                 {
-                    Call,
-                    Back,
-                    Jump,
-                    Quit
+                    Call, //!< call another scanner
+                    Back, //!< back from current scanner
+                    Jump, //!< jump to anotehr scanner
+                    Quit  //!< met end of stream
                 };
 
-                Command() noexcept;
-                ~Command() noexcept;
-                void reset() noexcept;
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                Command()    noexcept; //!< setup to quit,null
+                ~Command()   noexcept; //!< cleanup
 
-                const Kind           kind;
-                const String * const args;
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+                void reset() noexcept; //!< reset to quit,null
+
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                const Kind           kind; //!< kind
+                const String * const args; //!< persistent argument
+
             private:
-                Y_Disable_Copy_And_Assign(Command);
+                Y_Disable_Copy_And_Assign(Command); //!< cleanup
             };
             
         }

@@ -53,8 +53,23 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 void  add(Rule * const); //!< add newly created rule
+
+                //! get next Unit
+                /**
+                 \param source  source to probe
+                 \param command modified upon control lexeme
+                 \return 0 if EOS or control lexeme, a new unit otherwise
+                 */
                 Unit *get(Source &source, Command &command);
 
+
+                //______________________________________________________________
+                //
+                //
+                // API
+                //
+                //______________________________________________________________
+                
 
                 //______________________________________________________________
                 //
