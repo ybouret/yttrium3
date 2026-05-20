@@ -201,14 +201,11 @@ namespace Yttrium
             inline bool found(ParamType value) const
             {
                 for(const NodeType *node=list.head;node;node=node->next) {
-                    if( value == **node ) return true;
+                    if( node->isEqualTo(value) ) return true;
                 }
                 return false;
             }
-
-
-
-
+            
 
         protected:
             CoreList list; //!< current content

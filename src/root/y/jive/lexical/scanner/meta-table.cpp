@@ -49,6 +49,7 @@ namespace Yttrium
                 {
                     const uint8_t b = (uint8_t)i;
                     if(!lead.get(b)) continue;
+                    assert( !table[b].found(rule) );
                     table[b] << rule;
                 }
             }

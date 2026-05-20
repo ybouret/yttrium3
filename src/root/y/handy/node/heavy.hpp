@@ -51,6 +51,11 @@ namespace Yttrium
             inline Type      & operator*()       noexcept { return data; } //!< \return inner data
             inline ConstType & operator*() const noexcept { return data; } //!< \return inner data
 
+            inline bool isEqualTo(ConstType &value) const
+            {
+                return value == data;
+            }
+
         private:
             Y_Disable_Assign(HeavyNode); //!< discarded
             Type        data; //!< inner data
