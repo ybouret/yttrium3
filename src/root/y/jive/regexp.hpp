@@ -30,17 +30,17 @@ namespace Yttrium
              \return compiled, new pattern
              */
             //__________________________________________________________________
-            template <typename STRING> static inline
-            Pattern * Compile(const STRING &data, const Dictionary * const dict)
-            {
-                const Identifier content(data);
-                return Compile_(content,dict);
-            }
+            static Pattern * Compile(const String &,      const Dictionary * const);
+            static Pattern * Compile(const char * const,  const Dictionary * const);
+            static Pattern * Compile(const Identifier &,  const Dictionary * const);
+            static Pattern * Compile(const char,          const Dictionary * const);
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         private:
-            static Pattern * Compile_(const Identifier &,const Dictionary * const);
-#endif
+            static Pattern * Compile_(const char * const buffer,
+                                      const size_t       length,
+                                      const Dictionary * const);
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             
         };
     }

@@ -32,7 +32,8 @@ namespace Yttrium
             //! initialize \param id lexer name
             template <typename ID> inline
             explicit Lexer(const ID &id) :
-            Lexical::Scanner(id)
+            Lexical::Scanner(id,Lexical::AcceptEOS),
+            buffer()
             {
             }
 
@@ -41,6 +42,8 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(Lexer); //!< discarded
+            Lexemes buffer;
+
         };
 
     }

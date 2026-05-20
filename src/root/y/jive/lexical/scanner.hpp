@@ -15,6 +15,14 @@ namespace Yttrium
 
         namespace Lexical
         {
+
+            enum OnEOS
+            {
+                AcceptEOS,
+                RejectEOS
+            };
+
+
             //__________________________________________________________________
             //
             //
@@ -36,9 +44,10 @@ namespace Yttrium
 
                 //! setup \param sid name
                 template <typename SID> inline
-                explicit Scanner(const SID &sid) :
+                explicit Scanner(const SID &sid, const OnEOS eos = AcceptEOS) :
                 name(sid),
-                code( CreateCode(sid) )
+                code( CreateCode(sid) ),
+                onEOS(eos)
                 {
 
                 }
@@ -135,12 +144,12 @@ namespace Yttrium
                 }
 
                 template <typename RX> inline
-                const Rule & back(const RX &rx)
+                const Rule & back(const RX &rx, const bool newLine = false)
                 {
                     const String     _back = "<-" + *name;
                     const Identifier _name(_back);
                     const  Motif     _form( RegExp::Compile(rx,0) );
-                    return add( new Rule(_name,_form,Rule::Jump,_name) );
+                    return add( new Rule(_name,_form,Rule::Back | (newLine ? Rule::Endl : 0),_name) );
                 }
 
 
@@ -152,12 +161,13 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 const Identifier name; //!< identifier
+            private:
+                Code * const     code; //!< inner code
+            public:
+                const OnEOS      onEOS;
 
             private:
-                Y_Disable_Copy_And_Assign(Scanner); //!< discarded
-                Code * const code;                  //!< inner code
-
-                //! \return code instance
+                Y_Disable_Copy_And_Assign(Scanner);
                 static Code * CreateCode(const Identifier &);
                 const Rule &  processing(const Identifier &, const Motif &, const unsigned);
 

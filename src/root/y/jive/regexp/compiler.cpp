@@ -38,6 +38,7 @@ namespace Yttrium
             AutoPtr<Pattern> res = subExpr();
             if(deep>0)
                 throw Specific::Exception(CallSign,"unfinished %s-deep sub-expression in '%s'", Decimal(deep).c_str(),expr);
+
             //return res.yield();
             return Pattern::Optimized(res.yield());
         }
