@@ -33,7 +33,7 @@ namespace Yttrium
             
             if( 0 == strcmp(fileName,Y_STDIN) )
             {
-                std::cerr << "STDIN!!" << std::endl;
+                //std::cerr << "STDIN!!" << std::endl;
                 closeDown = false;
                 if(!stdin) throw Libc::Exception(EIO,"no stdin!");
                 return stdin;

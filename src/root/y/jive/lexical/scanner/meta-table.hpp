@@ -46,7 +46,10 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 //! \return on the fly get/create meta list
-                MetaList & operator[](const uint8_t);
+                MetaList &       operator[](const uint8_t);
+
+                //! \return matching list with look up optimization, 0 otherwise
+                const MetaList * query(const uint8_t) noexcept;
 
                 //! dispatch rule reference in (all) matching list(s)
                 void dispatch(const Rule &);

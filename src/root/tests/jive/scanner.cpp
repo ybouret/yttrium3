@@ -31,6 +31,22 @@ Y_UTEST(jive_scanner)
         scan.add(new Lexical::Rule(name,form,0x00,name) );
     }
 
+    {
+        const Identifier name = "BLANK";
+        const Motif      form = RegExp::Compile("[:blank:]",0);
+        scan.add(new Lexical::Rule(name,form,0x00,name) );
+    }
+
+
+
+    if(argc>1)
+    {
+        Source           source( Module::OpenFile(argv[1]) );
+        Lexical::Command cmd;
+        Lexeme * const   lx = scan.get(source,cmd);
+    }
+
+
 }
 Y_UDONE()
 

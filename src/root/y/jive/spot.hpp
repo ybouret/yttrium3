@@ -7,6 +7,8 @@
 
 namespace Yttrium
 {
+    class Exception;
+
     namespace Jive
     {
 
@@ -37,6 +39,8 @@ namespace Yttrium
 
             virtual ~Spot()    noexcept; //!< cleanup
             Spot(const Spot &) noexcept; //!< duplicate
+
+            Exception & stamp(Exception &excp) const noexcept;
 
             //__________________________________________________________________
             //

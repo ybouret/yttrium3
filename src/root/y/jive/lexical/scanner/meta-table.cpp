@@ -38,6 +38,13 @@ namespace Yttrium
                 return *sml;
             }
 
+            const MetaList * MetaTable:: query(const uint8_t code) noexcept
+            {
+                const SharedMetaList * const psml = search(code);
+                if(!psml) return 0;
+                return & **psml;
+            }
+
 
             void MetaTable:: dispatch(const Rule &rule)
             {

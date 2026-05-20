@@ -1,5 +1,5 @@
 #include "y/jive/spot.hpp"
-//#include "y/exception.hpp"
+#include "y/exception.hpp"
 
 namespace Yttrium
 {
@@ -14,6 +14,11 @@ namespace Yttrium
         line(spot.line),
         column(spot.column)
         {
+        }
+
+        Exception & Spot:: stamp(Exception &excp) const noexcept
+        {
+            return excp.pre("%s:%u: ", title->c_str(),line);
         }
 
 

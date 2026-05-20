@@ -48,6 +48,8 @@ namespace Yttrium
                 Y_Disable_Copy_And_Assign(Unit); //!< discarded
             };
         }
+
+        typedef Lexical::Unit Lexeme;
     }
 
 }
