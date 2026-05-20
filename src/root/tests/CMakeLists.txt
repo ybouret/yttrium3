@@ -167,6 +167,7 @@ Y_UTEST(stream:serialize)
 Y_UTEST(stream:gz:in)
 Y_UTEST(stream:gz:out)
 Y_UTEST(stream:identifiers)
+Y_UTEST(stream:input:proc)
 
 Y_UTEST(coven:univocal)
 Y_UTEST(coven:vector)

@@ -23,7 +23,7 @@ namespace Yttrium
             //
             //
             //__________________________________________________________________
-            class Scanner
+            class Scanner : public CountedObject
             {
             public:
                 //______________________________________________________________
@@ -52,7 +52,8 @@ namespace Yttrium
                 // Methods
                 //
                 //______________________________________________________________
-                const Rule & add(Rule * const); //!< add newly created rule \return persistent reference
+                const String & key() const noexcept; //!< \return *name
+                const Rule   & add(Rule * const);    //!< add newly created rule \return persistent reference
 
                 //! get next Unit
                 /**

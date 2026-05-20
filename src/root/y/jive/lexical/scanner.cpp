@@ -24,6 +24,10 @@ namespace Yttrium
                 return *rule;
             }
 
+            const String &  Scanner:: key() const noexcept
+            {
+                return *name;
+            }
 
             const Rule & Scanner:: processing(const Identifier & _name,
                                               const Motif      & _form,

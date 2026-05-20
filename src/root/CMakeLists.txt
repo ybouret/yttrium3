@@ -63,6 +63,7 @@ y/stream
 y/stream/io
 y/stream/libc
 y/stream/memory
+y/stream/proc
 y/stream/gz
 y/object
 y/object/light
