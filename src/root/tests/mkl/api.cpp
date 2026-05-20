@@ -48,7 +48,7 @@ Y_UTEST(mkl_api)
     showPythagoras<float>(2,3,4);
     showPythagoras< XReal<long double> >(2,3,4);
 
-    showFpow<float>(10,2.2);
+    showFpow<float>(10.0f,2.2f);
     showFpow< XReal<double> >(10,2.2);
 
 }

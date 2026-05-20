@@ -118,8 +118,8 @@ namespace Yttrium
         {
             Leading content;
             {
-                const unsigned up = upper;
-                for(unsigned   i=lower;i<=up;++i)
+                const int up = upper;
+                for(int   i=lower;i<=up;++i)
                 {
                     content.set( (uint8_t) i);
                     if( islower(i) ) content.set( (uint8_t) toupper(i) );

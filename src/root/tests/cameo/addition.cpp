@@ -43,7 +43,7 @@ namespace
         {
             for(unsigned i=1;i<=T::Dimension;++i)
             {
-                v[i] = k++;
+                v[i] = (typename T::Type) k++;
             }
             xadd << v;
         }

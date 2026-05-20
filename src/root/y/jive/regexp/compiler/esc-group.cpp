@@ -21,7 +21,7 @@ namespace Yttrium
             // test common
             {
                 const char * const src = strchr(EscCommSource,c);
-                if(src) return new Byte( EscCommTarget[ (size_t)(src-EscCommSource)] );
+                if(src) return new Byte( (uint8_t) EscCommTarget[ (size_t)(src-EscCommSource)] );
             }
 
             // test for subExpr
