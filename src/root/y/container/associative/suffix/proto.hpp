@@ -99,6 +99,8 @@ namespace Yttrium
         // Interface
         //
         //______________________________________________________________________
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         inline virtual size_t size()     const noexcept { return list.size; }
         inline virtual size_t capacity() const noexcept { return list.size+pool.size; }
         inline virtual void   free()           noexcept { free_();    }
@@ -128,7 +130,14 @@ namespace Yttrium
             assert(tree.size==list.size);
             return true;
         }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
+        //______________________________________________________________________
+        //
+        //
+        // Iterators
+        //
+        //______________________________________________________________________
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         typedef Iter::Linked<Iter::Forward,Node>       Iterator;
         typedef Iter::Linked<Iter::Forward,const Node> ConstIterator;

@@ -162,7 +162,7 @@ namespace Yttrium
             SURVEY    survey; //!< target survey
 
             inline virtual const Survey & locus() const noexcept { return survey; }
-            Y_Disable_Copy_And_Assign(Inquiry);
+            Y_Disable_Copy_And_Assign(Inquiry); //!< discarded
         };
 
     }

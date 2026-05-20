@@ -54,6 +54,7 @@ namespace Yttrium
             inline Type      & operator*()       noexcept { return data; } //!< \return inner data
             inline ConstType & operator*() const noexcept { return data; } //!< \return inner data
 
+            //! \param ref reference to compare \return true iff same references
             inline bool isEqualTo(ConstType &ref) const noexcept
             {
                 return & data == & ref;

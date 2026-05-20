@@ -15,26 +15,55 @@ namespace Yttrium
     {
         namespace Lexical
         {
-            typedef ArcPtr<MetaList>                           SharedMetaList;
-            typedef Hashing::KeyDumper<uint8_t>                MetaHasher;
-            typedef HashMap<uint8_t,SharedMetaList,MetaHasher> MetaMap;
+            typedef ArcPtr<MetaList>                           SharedMetaList; //!< alias
+            typedef Hashing::KeyDumper<uint8_t>                MetaHasher;     //!< alias
+            typedef HashMap<uint8_t,SharedMetaList,MetaHasher> MetaMap;        //!< alias
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Table of meta-lists
+            //
+            //
+            //__________________________________________________________________
             class MetaTable : public MetaMap
             {
             public:
-                explicit MetaTable(const Identifier &);
-                virtual ~MetaTable() noexcept;
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                explicit MetaTable(const Identifier &); //!< setup
+                virtual ~MetaTable() noexcept;          //!< cleanup
 
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+                //! \return on the fly get/create meta list
                 MetaList & operator[](const uint8_t);
 
-
-                // dispatch rule in (all) matching list(s)
+                //! dispatch rule reference in (all) matching list(s)
                 void dispatch(const Rule &);
 
-                const Identifier name;
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                const Identifier name; //!< from scanner
 
             private:
-                Y_Disable_Copy_And_Assign(MetaTable);
+                Y_Disable_Copy_And_Assign(MetaTable); //!< discarded
+
+                //! remove tail matching rule
+                void emergencyRemove(const Rule &) noexcept;
             };
 
 

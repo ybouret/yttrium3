@@ -25,6 +25,11 @@ Y_UTEST(jive_scanner)
     }
 
 
+    {
+        const Identifier name = "ID";
+        const Motif      form = RegExp::Compile("[:alpha:][:word:]*",0);
+        scan.add(new Lexical::Rule(name,form,0x00,name) );
+    }
 
 }
 Y_UDONE()

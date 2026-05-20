@@ -14,16 +14,30 @@ namespace Yttrium
 
         namespace Lexical
         {
-            typedef Handy::BasicLightList<const Rule> RList;
+            typedef Handy::BasicLightList<const Rule> RList; //!< alias
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! list of rules with same leading char
+            //
+            //
+            //__________________________________________________________________
             class MetaList : public CountedObject, public RList
             {
             public:
-                explicit MetaList() noexcept;
-                virtual ~MetaList() noexcept;
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                explicit MetaList() noexcept; //!< setup
+                virtual ~MetaList() noexcept; //!< cleanup
 
             private:
-                Y_Disable_Copy_And_Assign(MetaList);
+                Y_Disable_Copy_And_Assign(MetaList); //!< discarded
             };
         }
 

@@ -41,18 +41,40 @@ namespace Yttrium
 
             void MetaTable:: dispatch(const Rule &rule)
             {
-                MetaTable & table = *this;
-                Leading     lead;
-
-                rule.form->glean(lead);
-                for(unsigned i=0;i<256;++i)
+                try
                 {
-                    const uint8_t b = (uint8_t)i;
-                    if(!lead.get(b)) continue;
-                    assert( !table[b].found(rule) );
-                    table[b] << rule;
+                    MetaTable & table = *this;
+                    Leading     lead;
+                    rule.form->glean(lead);
+                    for(unsigned i=0;i<256;++i)
+                    {
+                        const uint8_t code = (uint8_t)i;
+                        if(!lead.get(code)) continue;
+                        assert( !table[code].found(rule) );
+                        table[code] << rule;
+                        std::cerr << "\t'" << ASCII::Printable::Char[code] << " => '" << rule.name << "'" << std::endl;
+                    }
+                }
+                catch(...)
+                {
+                    emergencyRemove(rule);
+                    throw;
                 }
             }
+
+            void MetaTable:: emergencyRemove(const Rule &rule) noexcept
+            {
+                for(Iterator it=begin();it!=end();++it)
+                {
+                    MetaList &L = **it;
+                    if(L->tail->isEqualTo(rule))
+                    {
+                        L.popTail();
+                    }
+                }
+            }
+
+
         }
     }
 }

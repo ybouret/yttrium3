@@ -35,16 +35,8 @@ namespace Yttrium
                     assert(rule);
                     AutoPtr<Rule> guard(rule);
                     std::cerr << "-- adding " << rule->name << " to " << name << std::endl;
-                    {
-                        const String &rid = *rule->name;
-                        for(const Rule *mine=rlist.head;mine;mine=mine->next)
-                        {
-                            if( rid == *mine->name )
-                            {
-                                throw Specific::Exception(name->c_str(),"mulitple rule '%s'",rid.c_str());
-                            }
-                        }
-                    }
+                    noMultiple(*rule);
+                    table.dispatch(*rule);
                     rlist.pushTail( guard.yield() );
                 }
 
@@ -54,6 +46,17 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(Code);
+                inline void noMultiple(const Rule & rule) const
+                {
+                    const String &rid = *rule.name;
+                    for(const Rule *mine=rlist.head;mine;mine=mine->next)
+                    {
+                        if( rid == *mine->name )
+                        {
+                            throw Specific::Exception(name->c_str(),"mulitple rule '%s'",rid.c_str());
+                        }
+                    }
+                }
             };
 
             Scanner::Code * Scanner:: CreateCode(const Identifier &sid)

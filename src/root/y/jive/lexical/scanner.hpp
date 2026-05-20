@@ -33,6 +33,7 @@ namespace Yttrium
                 //______________________________________________________________
                 class Code;
 
+                //! setup \param sid name
                 template <typename SID> inline
                 explicit Scanner(const SID &sid) :
                 name(sid),
@@ -41,17 +42,30 @@ namespace Yttrium
 
                 }
 
-
-
+                //! cleanup
                 virtual ~Scanner() noexcept; //!< cleanup
 
-                void add(Rule * const);
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+                void add(Rule * const); //!< add newly created rule
 
-                const Identifier name;
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                const Identifier name; //!< identifier
 
             private:
                 Y_Disable_Copy_And_Assign(Scanner); //!< discarded
-                Code * const code;
+                Code * const code;                  //!< inner code
+
+                //! \return code instance
                 static Code * CreateCode(const Identifier &);
             };
         }

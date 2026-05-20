@@ -51,6 +51,7 @@ namespace Yttrium
             inline Type      & operator*()       noexcept { return data; } //!< \return inner data
             inline ConstType & operator*() const noexcept { return data; } //!< \return inner data
 
+            //! \param value value to compare \return true iff content is value
             inline bool isEqualTo(ConstType &value) const
             {
                 return value == data;
