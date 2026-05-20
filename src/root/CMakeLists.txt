@@ -101,6 +101,7 @@ y/jive/pattern/joker
 y/jive/regexp
 y/jive/regexp/compiler
 y/jive/lexical
+y/jive/lexical/scanner
 y/graphviz
 y/functor
 y/vfs
