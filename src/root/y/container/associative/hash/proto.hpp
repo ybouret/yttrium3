@@ -10,6 +10,7 @@
 #include "y/type/pulverize.hpp"
 #include "y/core/list.hpp"
 #include "y/core/pool.hpp"
+#include "y/container/iter/linked.hpp"
 
 namespace Yttrium
 {
@@ -507,6 +508,30 @@ namespace Yttrium
 
         //! access metrics from the table \return inner table
         inline const Table * operator->() const noexcept { assert(htab); return htab; }
+
+        //______________________________________________________________________
+        //
+        //
+        // Iterators
+        //
+        //______________________________________________________________________
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+        typedef Iter::Linked<Iter::Forward,NODE>       Iterator;
+        typedef Iter::Linked<Iter::Forward,const NODE> ConstIterator;
+
+        inline Iterator      begin()       noexcept { return list.head; }
+        inline Iterator      end()         noexcept { return 0; }
+        inline ConstIterator begin() const noexcept { return list.head; }
+        inline ConstIterator end()   const noexcept { return 0; }
+
+        typedef Iter::Linked<Iter::Reverse,NODE>       ReverseIterator;
+        typedef Iter::Linked<Iter::Reverse,const NODE> ConstReverseIterator;
+
+        inline ReverseIterator      rbegin()       noexcept { return list.tail; }
+        inline ReverseIterator      rend()         noexcept { return 0; }
+        inline ConstReverseIterator rbegin() const noexcept { return list.tail; }
+        inline ConstReverseIterator rend()   const noexcept { return 0; }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         //______________________________________________________________________
         //
