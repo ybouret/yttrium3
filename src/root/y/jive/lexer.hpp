@@ -5,6 +5,9 @@
 #define Y_Jive_Lexer_Included 1
 
 #include "y/jive/lexical/scanner.hpp"
+#include "y/pointer/keyed.hpp"
+#include "y/pointer/arc.hpp"
+#include "y/container/associative/hash/set.hpp"
 
 namespace Yttrium
 {
@@ -22,6 +25,10 @@ namespace Yttrium
         class Lexer : public Lexical::Scanner
         {
         public:
+            typedef Lexical::Scanner              Scanner;
+            typedef Keyed<String,ArcPtr<Scanner>> SPtr;
+            typedef HashSet<String,SPointer>      
+
             //__________________________________________________________________
             //
             //
@@ -32,7 +39,7 @@ namespace Yttrium
             //! initialize \param id lexer name
             template <typename ID> inline
             explicit Lexer(const ID &id) :
-            Lexical::Scanner(id,Lexical::AcceptEOS),
+            Scanner(id,Lexical::AcceptEOS),
             buffer()
             {
             }
