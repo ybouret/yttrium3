@@ -68,13 +68,13 @@ namespace Yttrium
                 const String & key() const noexcept; //!< \return *name
                 const Rule   & add(Rule * const);    //!< add newly created rule \return persistent reference
 
-                //! get next Unit
+                //! probe next Unit
                 /**
                  \param source  source to probe
                  \param command modified upon control lexeme
                  \return 0 if EOS or control lexeme, a new unit otherwise
                  */
-                Unit *get(Source &source, Command &command);
+                Unit *probe(Source &source, Command &command);
 
 
                 //______________________________________________________________
@@ -112,6 +112,7 @@ namespace Yttrium
                     return processing(_name,_form,Rule::Drop);
                 }
 
+                
                 //! end-of-line lexeme
                 /**
                  \param id rule/lexeme name
@@ -126,6 +127,8 @@ namespace Yttrium
                     const  Motif      _form( RegExp::Compile(rx,0) );
                     return processing(_name,_form,(doEmit ? Rule::Emit :Rule::Drop)|Rule::Endl);
                 }
+
+
 
                 template <typename ID, typename RX> inline
                 const Rule & call(const ID &id, const RX &rx)

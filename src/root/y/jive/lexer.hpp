@@ -9,6 +9,7 @@
 #include "y/pointer/arc.hpp"
 #include "y/container/associative/hash/set.hpp"
 #include "y/handy/plain/light/list.hpp"
+#include "y/type-to-type.hpp"
 
 namespace Yttrium
 {
@@ -65,12 +66,20 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            //template <typename PLUGIN, typename PID> inline
-            //const Rule & load(const IntToType<PLUGIN> &,
-            //                  const PID               &pid)
-            //{
 
-            //}
+            Lexeme * get(Source&);
+            void     unget(Lexeme * const) noexcept;
+
+
+            //! plugin with no arguments
+            template <typename PLUGIN, typename PID> inline
+            const Lexical:: Rule & load(const TypeToType<PLUGIN> &,
+                                        const PID                &pid)
+            {
+                const PScanner ps( new PLUGIN(pid,*this) );
+                const Scanner &sc = record(ps);
+                //call(sc.name)
+            }
 
 
 
@@ -81,7 +90,8 @@ namespace Yttrium
             Lexemes   lexemes;                  //!< buffer of lexemes
             History   history;                  //!< call stack
 
-            void initialize();
+            void      initialize();
+            Scanner & record(const PScanner &);
         };
 
     }

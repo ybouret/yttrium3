@@ -29,6 +29,34 @@ namespace Yttrium
             }
         }
 
+        Lexical::Scanner & Lexer:: record(const PScanner &ps)
+        {
+            if(!psdb.insert(ps))
+                throw Specific::Exception(name->c_str(),"multiple extension '%s", ps->name->c_str());
+            return Coerce(*ps);
+        }
+
+        void Lexer:: unget(Lexeme * const lx) noexcept
+        {
+            assert(lx);
+            lexemes.pushHead(lx);
+        }
+
+        Lexeme * Lexer:: get(Source &source)
+        {
+            if(lexemes.size)
+            {
+                return lexemes.popHead();
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
+
+
+
     }
 
 }

@@ -47,6 +47,21 @@ namespace Yttrium
             };
 
 
+            class HashTagComment : public SingleLineComment
+            {
+            public:
+                template <typename ID>
+                inline explicit HashTagComment(const ID &id, Lexer &lxr) :
+                SingleLineComment(id,'#',lxr)
+                {
+                }
+                
+                inline virtual ~HashTagComment() noexcept {}
+
+            private:
+                Y_Disable_Copy_And_Assign(HashTagComment);
+            };
+
 
         }
 

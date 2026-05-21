@@ -25,7 +25,7 @@ Y_UTEST(jive_scanner)
         Lexemes          lxm;
         while(true)
         {
-            Lexeme * const lx = scan.get(source,cmd);
+            Lexeme * const lx = scan.probe(source,cmd);
             if(!lx) break;
             lxm.pushTail(lx);
         }

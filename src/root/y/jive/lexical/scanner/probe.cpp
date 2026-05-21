@@ -9,7 +9,7 @@ namespace Yttrium
 
         namespace Lexical
         {
-            Unit * Scanner:: get(Source &source, Command &command)
+            Unit * Scanner:: probe(Source &source, Command &command)
             {
                 assert(code);
 
