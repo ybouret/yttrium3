@@ -34,6 +34,8 @@ namespace Yttrium
                 //! setup \param spot localisation \param uid identifier
                 explicit Unit(const Spot &spot, const Identifier &uid) noexcept;
                 virtual ~Unit() noexcept; //!< cleanup
+                Y_OSTREAM_PROTO(Unit);
+
 
                 //______________________________________________________________
                 //

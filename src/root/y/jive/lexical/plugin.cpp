@@ -14,11 +14,12 @@ namespace Yttrium
 
             void Plugin:: enter()
             {
-                
+                std::cerr << "Enter <" << name << ">" << std::endl;
             }
 
             void Plugin:: leave()
             {
+                std::cerr << "Leave <" << name << ">" << std::endl;
 
             }
         }

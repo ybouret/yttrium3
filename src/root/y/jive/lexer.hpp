@@ -4,7 +4,7 @@
 #ifndef Y_Jive_Lexer_Included
 #define Y_Jive_Lexer_Included 1
 
-#include "y/jive/lexical/scanner.hpp"
+#include "y/jive/lexical/plugin.hpp"
 #include "y/pointer/keyed.hpp"
 #include "y/pointer/arc.hpp"
 #include "y/container/associative/hash/set.hpp"
@@ -34,6 +34,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             typedef Lexical::Scanner               Scanner;  //!< alias
+            typedef Lexical::Plugin                Plugin;
             typedef Keyed<String,ArcPtr<Scanner>>  PScanner; //!< alias
             typedef HashSet<String,PScanner>       Scanners; //!< alias
             typedef Handy::PlainLightList<Scanner> History;  //!< alias
@@ -76,22 +77,29 @@ namespace Yttrium
             const Lexical:: Rule & load(const TypeToType<PLUGIN> &,
                                         const PID                &pid)
             {
-                const PScanner ps( new PLUGIN(pid,*this) );
-                const Scanner &sc = record(ps);
-                //call(sc.name)
+                return makeCall( record( new PLUGIN(pid,*this) ) );
             }
 
 
 
         private:
             Y_Disable_Copy_And_Assign(Lexer); //!< discarded
-            Scanner * curr;
-            Scanners  psdb;
-            Lexemes   lexemes;                  //!< buffer of lexemes
-            History   history;                  //!< call stack
+            Scanner * curr;                   //!< current scanner
+            Scanners  psdb;                   //!< set of scanners/plugins
+            Lexemes   lexemes;                //!< buffer of lexemes
+            History   history;                //!< call stack
 
             void      initialize();
-            Scanner & record(const PScanner &);
+
+            template <typename PLUGIN> inline
+            PLUGIN &  record(PLUGIN * const plugin) { insert(plugin); return *plugin; }
+            void      insert(Scanner * const);
+            void      remove(const Identifier &) noexcept;
+
+
+            const Lexical::Rule & makeCall(Plugin &);
+
+
         };
 
     }

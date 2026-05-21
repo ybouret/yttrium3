@@ -135,13 +135,13 @@ namespace Yttrium
                 }
 
                 if( Rule::Call & deed ) {
-                    Coerce(command.kind) = Command::Back;
+                    Coerce(command.kind) = Command::Call;
                     Coerce(command.args) = & *bestRule->info;
                     return 0;
                 }
 
                 if( Rule::Jump & deed ) {
-                    Coerce(command.kind) = Command::Back;
+                    Coerce(command.kind) = Command::Jump;
                     Coerce(command.args) = & *bestRule->info;
                     return 0;
                 }

@@ -129,26 +129,15 @@ namespace Yttrium
                 }
 
 
-
-                template <typename ID, typename RX> inline
-                const Rule & call(const ID &id, const RX &rx)
+                template <typename ID> inline
+                const Rule & call(const ID &id, const Motif &spark)
                 {
                     const Identifier _dest(id);
                     const String     _call = *name + "->" + *_dest;
                     const Identifier _name(_call);
-                    const  Motif     _form( RegExp::Compile(rx,0) );
-                    return add( new Rule(_name,_form,Rule::Call,_dest) );
+                    return add( new Rule(_name,spark,Rule::Call,_dest) );
                 }
 
-                template <typename ID, typename RX> inline
-                const Rule & jump(const ID &id, const RX &rx)
-                {
-                    const Identifier _dest(id);
-                    const String     _call = *name + "=>" + *_dest;
-                    const Identifier _name(_call);
-                    const  Motif     _form( RegExp::Compile(rx,0) );
-                    return add( new Rule(_name,_form,Rule::Jump,_dest) );
-                }
 
                 template <typename RX> inline
                 const Rule & back(const RX &rx, const bool newLine = false)

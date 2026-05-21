@@ -54,7 +54,7 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 virtual void enter(); //!< invoked on enter
-                virtual void leave(); //!< invoked on leave
+                virtual void leave(); //!< invoked on leave, possibility to modify lexer
 
                 //______________________________________________________________
                 //
