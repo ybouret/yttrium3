@@ -16,10 +16,14 @@ namespace Yttrium
         namespace Lexical
         {
 
+            //__________________________________________________________________
+            //
+            //! End Of Stream Policy
+            //__________________________________________________________________
             enum OnEOS
             {
-                AcceptEOS,
-                RejectEOS
+                AcceptEOS, //!< scanner is ok to quit
+                RejectEOS  //!< scanner is not done!
             };
 
 
@@ -42,7 +46,7 @@ namespace Yttrium
                 //______________________________________________________________
                 class Code;
 
-                //! setup \param sid name
+                //! setup \param sid name \param eos End Of Stream policy
                 template <typename SID> inline
                 explicit Scanner(const SID &sid, const OnEOS eos = AcceptEOS) :
                 name(sid),
@@ -164,13 +168,14 @@ namespace Yttrium
             private:
                 Code * const     code; //!< inner code
             public:
-                const OnEOS      onEOS;
+                const OnEOS      onEOS; //!< End Of Stream policy
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             private:
                 Y_Disable_Copy_And_Assign(Scanner);
                 static Code * CreateCode(const Identifier &);
                 const Rule &  processing(const Identifier &, const Motif &, const unsigned);
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             };
         }
 

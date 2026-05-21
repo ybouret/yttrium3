@@ -21,19 +21,11 @@ namespace Yttrium
         //______________________________________________________________________
         struct RegExp
         {
-            //__________________________________________________________________
-            //
-            // Compile any expression to matching pattern
-            /**
-             \param data string, text, char, Identifier...
-             \param dict optional dictionary
-             \return compiled, new pattern
-             */
-            //__________________________________________________________________
-            static Pattern * Compile(const String &,      const Dictionary * const);
-            static Pattern * Compile(const char * const,  const Dictionary * const);
-            static Pattern * Compile(const Identifier &,  const Dictionary * const);
-            static Pattern * Compile(const char,          const Dictionary * const);
+
+            static Pattern * Compile(const String &,     const Dictionary * const); //!< \return compiled string with optional dictionary
+            static Pattern * Compile(const char * const, const Dictionary * const); //!< \return compiled text with optional dictionary
+            static Pattern * Compile(const Identifier &, const Dictionary * const); //!< \return compiled identifier content with optional dictionary
+            static Pattern * Compile(const char,         const Dictionary * const); //!< \return single byte, dictionary is never used (compatibility only)
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         private:

@@ -13,9 +13,23 @@ namespace Yttrium
 
         namespace Lexical
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Single Line Comment Plugin
+            //
+            //
+            //__________________________________________________________________
             class SingleLineComment : public Plugin
             {
             public:
+                //! setup
+                /**
+                 \param id  name
+                 \param rx  trigger regular expression
+                 \param lxr parent lexer
+                 */
                 template <typename ID, typename RX>
                 explicit SingleLineComment(const ID & id,
                                            const RX & rx,
@@ -25,14 +39,15 @@ namespace Yttrium
                     setup();
                 }
                 
-                virtual ~SingleLineComment() noexcept;
+                virtual ~SingleLineComment() noexcept; //!< cleanup
 
             private:
-                Y_Disable_Copy_And_Assign(SingleLineComment);
-                void setup();
-                
-
+                Y_Disable_Copy_And_Assign(SingleLineComment); //!< discarded
+                void setup(); //!< drop dot, back on endl
             };
+
+
+
         }
 
     }

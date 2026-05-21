@@ -26,23 +26,29 @@ namespace Yttrium
         class Lexer : public Lexical::Scanner
         {
         public:
-            typedef Lexical::Scanner               Scanner;
-            typedef Keyed<String,ArcPtr<Scanner>>  PScanner;
-            typedef HashSet<String,PScanner>       Scanners;
-            typedef Handy::PlainLightList<Scanner> History;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef Lexical::Scanner               Scanner;  //!< alias
+            typedef Keyed<String,ArcPtr<Scanner>>  PScanner; //!< alias
+            typedef HashSet<String,PScanner>       Scanners; //!< alias
+            typedef Handy::PlainLightList<Scanner> History;  //!< alias
 
             //__________________________________________________________________
             //
             //
             // C++
             //
-            //___________________________________________________________________
+            //__________________________________________________________________
 
             //! initialize \param id lexer name
             template <typename ID> inline
             explicit Lexer(const ID &id) :
             Scanner(id,Lexical::AcceptEOS),
-            buffer(),
+            lexemes(),
             history()
             {
             }
@@ -52,8 +58,8 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(Lexer); //!< discarded
-            Lexemes buffer;
-            History history;
+            Lexemes lexemes;                  //!< buffer of lexemes
+            History history;                  //!< call stack
         };
 
     }
