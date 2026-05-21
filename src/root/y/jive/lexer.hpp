@@ -8,6 +8,7 @@
 #include "y/pointer/keyed.hpp"
 #include "y/pointer/arc.hpp"
 #include "y/container/associative/hash/set.hpp"
+#include "y/handy/plain/light/list.hpp"
 
 namespace Yttrium
 {
@@ -25,9 +26,10 @@ namespace Yttrium
         class Lexer : public Lexical::Scanner
         {
         public:
-            typedef Lexical::Scanner              Scanner;
-            typedef Keyed<String,ArcPtr<Scanner>> SPtr;
-            typedef HashSet<String,SPointer>      
+            typedef Lexical::Scanner               Scanner;
+            typedef Keyed<String,ArcPtr<Scanner>>  PScanner;
+            typedef HashSet<String,PScanner>       Scanners;
+            typedef Handy::PlainLightList<Scanner> History;
 
             //__________________________________________________________________
             //
@@ -40,7 +42,8 @@ namespace Yttrium
             template <typename ID> inline
             explicit Lexer(const ID &id) :
             Scanner(id,Lexical::AcceptEOS),
-            buffer()
+            buffer(),
+            history()
             {
             }
 
@@ -50,7 +53,7 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(Lexer); //!< discarded
             Lexemes buffer;
-
+            History history;
         };
 
     }

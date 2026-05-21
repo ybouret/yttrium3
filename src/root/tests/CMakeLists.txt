@@ -200,6 +200,7 @@ Y_UTEST(jive:pattern)
 Y_UTEST(jive:posix)
 Y_UTEST(jive:rx)
 Y_UTEST(jive:scanner)
+Y_UTEST(jive:lexer)
 
 Y_UTEST(graphviz)
 

@@ -172,6 +172,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(jive_posix);
     Y_UTEST(jive_rx);
     Y_UTEST(jive_scanner);
+    Y_UTEST(jive_lexer);
 
     Y_UTEST(graphviz);
 

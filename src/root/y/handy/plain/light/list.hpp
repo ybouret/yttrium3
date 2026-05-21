@@ -7,7 +7,7 @@
 
 #include "y/handy/plain/list.hpp"
 #include "y/handy/node/light.hpp"
-
+#include "y/threading/single-threaded-class.hpp"
 
 namespace Yttrium
 {
@@ -21,7 +21,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        template <typename T, typename THREADING_POLICY>
+        template <typename T, typename THREADING_POLICY = SingleThreadedClass >
         class PlainLightList : public PlainList<LightNode<T>,THREADING_POLICY>
         {
         public:
