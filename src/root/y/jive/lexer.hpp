@@ -48,18 +48,40 @@ namespace Yttrium
             template <typename ID> inline
             explicit Lexer(const ID &id) :
             Scanner(id,Lexical::AcceptEOS),
+            curr(this),
+            psdb(),
             lexemes(),
             history()
             {
+                initialize();
             }
 
             //! cleanup
             virtual ~Lexer() noexcept;
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            //template <typename PLUGIN, typename PID> inline
+            //const Rule & load(const IntToType<PLUGIN> &,
+            //                  const PID               &pid)
+            //{
+
+            //}
+
+
+
         private:
             Y_Disable_Copy_And_Assign(Lexer); //!< discarded
-            Lexemes lexemes;                  //!< buffer of lexemes
-            History history;                  //!< call stack
+            Scanner * curr;
+            Scanners  psdb;
+            Lexemes   lexemes;                  //!< buffer of lexemes
+            History   history;                  //!< call stack
+
+            void initialize();
         };
 
     }
