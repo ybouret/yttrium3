@@ -49,6 +49,8 @@ namespace Yttrium
             void         fetch(size_t);                 //!< prefetch if possible
             String       guessInvalidString();          //!< \return extracted 'bad' string
 
+            const Module * operator->() const noexcept { return impl; }
+
             //__________________________________________________________________
             //
             //

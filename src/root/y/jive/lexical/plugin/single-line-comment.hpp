@@ -32,9 +32,8 @@ namespace Yttrium
                  */
                 template <typename ID, typename RX>
                 explicit SingleLineComment(const ID & id,
-                                           const RX & rx,
-                                           Lexer    & lxr) :
-                Plugin(id,rx,lxr,AcceptEOS)
+                                           const RX & rx) :
+                Plugin(id,rx,AcceptEOS)
                 {
                     setup();
                 }
@@ -47,16 +46,16 @@ namespace Yttrium
             };
 
 
-#define Y_Jive_Single_Line_Comment(CLASS,EXPR)                \
-/**/    class CLASS : public SingleLineComment                \
-/**/    {                                                     \
-/**/    public:                                               \
-/**/        template <typename ID>                            \
-/**/        inline explicit CLASS(const ID &id, Lexer &lxr) : \
-/**/        SingleLineComment(id,EXPR,lxr)   {}               \
-/**/        inline virtual ~CLASS() noexcept {}               \
-/**/    private:                                              \
-/**/        Y_Disable_Copy_And_Assign(CLASS);                 \
+#define Y_Jive_Single_Line_Comment(CLASS,EXPR)    \
+/**/    class CLASS : public SingleLineComment    \
+/**/    {                                         \
+/**/    public:                                   \
+/**/        template <typename ID>                \
+/**/        inline explicit CLASS(const ID &id):  \
+/**/        SingleLineComment(id,EXPR)       {}   \
+/**/        inline virtual ~CLASS() noexcept {}   \
+/**/    private:                                  \
+/**/        Y_Disable_Copy_And_Assign(CLASS);     \
 /**/    }
 
             Y_Jive_Single_Line_Comment(ShellComment,'#');

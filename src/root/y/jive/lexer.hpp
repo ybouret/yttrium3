@@ -77,7 +77,7 @@ namespace Yttrium
             const Lexical:: Rule & load(const TypeToType<PLUGIN> &,
                                         const PID                &pid)
             {
-                return makeCall( record( new PLUGIN(pid,*this) ) );
+                return makeCall( record( new PLUGIN(pid) ) );
             }
 
 

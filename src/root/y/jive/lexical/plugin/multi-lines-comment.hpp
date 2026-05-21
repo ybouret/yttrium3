@@ -33,9 +33,8 @@ namespace Yttrium
                 template <typename ID, typename INI, typename END>
                 explicit MultiLinesComment(const ID  & id,
                                            const INI & ini,
-                                           const END & end,
-                                           Lexer     & lxr) :
-                Plugin(id,ini,lxr)
+                                           const END & end) :
+                Plugin(id,ini,RejectEOS)
                 {
                     (void) back(end);
                     setup();
@@ -50,6 +49,22 @@ namespace Yttrium
 
 
             };
+
+#define Y_Jive_Multi_Lines_Comment(CLASS,INI,END)    \
+/**/    class CLASS : public MultiLinesComment    \
+/**/    {                                         \
+/**/    public:                                   \
+/**/        template <typename ID>                \
+/**/        inline explicit CLASS(const ID &id):  \
+/**/        MultiLinesComment(id,INI,END)    {}   \
+/**/        inline virtual ~CLASS() noexcept {}   \
+/**/    private:                                  \
+/**/        Y_Disable_Copy_And_Assign(CLASS);     \
+/**/    }
+
+
+            Y_Jive_Multi_Lines_Comment(C_Comment,"/\\*","\\*/");
+
         }
 
     }

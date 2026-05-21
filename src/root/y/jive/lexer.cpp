@@ -84,8 +84,10 @@ namespace Yttrium
                             {
                                 case Lexical::AcceptEOS:
                                     return 0; // EOS
-                                case Lexical::RejectEOS:
-                                    throw Specific::Exception(name->c_str(), "End Of Stream in <%s>", here);
+                                case Lexical::RejectEOS: {
+                                    Specific::Exception excp(name->c_str(), "End Of Stream in <%s>", here);
+                                    throw source->stamp(excp);
+                                }
                             }
                             break;
 
@@ -93,7 +95,11 @@ namespace Yttrium
                             assert(0!=cmd.args);
                             const String     id = *cmd.args; std::cerr << "call  to  <" << id << ">" << std::endl;
                             PScanner * const ps = psdb.search(id);
-                            if(!ps) throw Specific::Exception(name->c_str(),"<%s> got no <%s> to call", here, id.c_str());
+                            if(!ps)
+                            {
+                                Specific::Exception excp(name->c_str(),"<%s> got no <%s> to call", here, id.c_str());
+                                throw source->stamp(excp);
+                            }
                             history << *curr;
                             curr = & **ps;
                             if(Plugin * const plugin = dynamic_cast<Plugin *>(curr)) plugin->enter();
@@ -102,7 +108,10 @@ namespace Yttrium
 
                         case Lexical::Command::Back: {
                             assert(0==cmd.args);  std::cerr << "back from <" << curr->name << ">" << std::endl;
-                            if(history->size<=0) throw Specific::Exception(name->c_str(),"no possible coming back from <%s>", here);
+                            if(history->size<=0) {
+                                Specific::Exception excp(name->c_str(),"no possible coming back from <%s>", here);
+                                throw source->stamp(excp);
+                            }
                             if(Plugin * const plugin = dynamic_cast<Plugin *>(curr)) plugin->leave();
                             curr = & history.tail(); history.popTail();
                         } goto GET;

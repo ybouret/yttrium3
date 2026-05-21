@@ -2,6 +2,7 @@
 #include "y/jive/lexer.hpp"
 #include "y/utest/run.hpp"
 #include "y/jive/lexical/plugin/single-line-comment.hpp"
+#include "y/jive/lexical/plugin/multi-lines-comment.hpp"
 
 using namespace Yttrium;
 
@@ -15,6 +16,7 @@ namespace
         {
             emit("ID","[:alpha:][:word:]+");
             load( TypeToType<Jive::Lexical::ShellComment>(), "shellComment");
+            load( TypeToType<Jive::Lexical::C_Comment>(), "C_Comment");
             drop("blank","[:blank:]");
             endl("endl","[:endl:]");
         }

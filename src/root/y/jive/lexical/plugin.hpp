@@ -11,8 +11,6 @@ namespace Yttrium
 {
     namespace Jive
     {
-        class Lexer;
-
         namespace Lexical
         {
             //__________________________________________________________________
@@ -36,11 +34,9 @@ namespace Yttrium
                 template <typename ID, typename RX> inline
                 explicit Plugin(const ID &   id,
                                 const RX &   rx,
-                                Lexer    &   lxr,
                                 const OnEOS  eos) :
                 Scanner(id,eos),
-                spark( RegExp::Compile(rx,0) ),
-                lexer( lxr )
+                spark( RegExp::Compile(rx,0) )
                 {
                 }
 
@@ -63,7 +59,6 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 const Motif spark; //!< compile pattern that call the plugin
-                Lexer      &lexer; //!< parent lexer
 
             private:
                 Y_Disable_Copy_And_Assign(Plugin); //!< discarded
