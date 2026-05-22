@@ -73,6 +73,7 @@ namespace Yttrium
                 //______________________________________________________________
                 inline virtual void ldz()       noexcept { acc.ldz(); }
                 inline virtual void add(ConstType &data) { acc += data; }
+                inline virtual void sub(ConstType &data) { acc -= data; }
                 inline virtual Type operator()(void)
                 {
                     ConstType res = acc.template cast<MutableType>(0,0);

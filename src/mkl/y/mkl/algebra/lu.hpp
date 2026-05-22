@@ -6,7 +6,6 @@
 
 #include "y/mkl/api/scalar-for.hpp"
 #include "y/container/matrix.hpp"
-#include "y/container/gradual.hpp"
 
 namespace Yttrium
 {
@@ -142,7 +141,7 @@ namespace Yttrium
                 {
                     for(size_t j=n;j>0;--j)
                     {
-                        a.assign(MinorOf,i,j,M);
+                        //a.assign(MinorOf,i,j,M);
                         if(build(a))
                         {
                             A[j][i] = (0 == ((i+j) & 1) ) ? det(a) : -det(a);

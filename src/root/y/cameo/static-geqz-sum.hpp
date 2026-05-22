@@ -51,7 +51,13 @@ namespace Yttrium
                 assert( Sign::GEQZ(data) );
                 Q.push(data);
             }
-            
+
+            inline virtual void sub(ConstType &data) {
+                assert( Sign::GEQZ(data) );
+                ConstType _(-data);
+                Q.push(_);
+            }
+
             inline virtual Type operator()(void)
             {
                 if(Q.size()<=0) return 0;

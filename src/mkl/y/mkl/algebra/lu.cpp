@@ -16,7 +16,7 @@ namespace Yttrium
         {
         public:
 
-            typedef typename Matrix<T>::Row Row;
+            typedef MatrixRow<T> Row;
 
             explicit Code(const size_t n) :
             Object(),
@@ -54,7 +54,7 @@ namespace Yttrium
                         const Row &a_i = a[i];
                         for(size_t j=n;j>0;--j)
                         {
-                            const ScalarType atmp = Fabs<T>::Of(a_i[j]);
+                            const ScalarType atmp = Fabs<T>(a_i[j]);
                             if(atmp>apiv) apiv = atmp;
                         }
                     }
@@ -70,7 +70,7 @@ namespace Yttrium
                         Row &a_i = a[i];
                         xadd = a_i[j];
                         for(size_t k=1;k<i;++k) xadd -= a[i][k]*a[k][j];
-                        a_i[j] = xadd.sum();
+                        a_i[j] = xadd();
                     }
 
                     ScalarType apiv(0);
@@ -81,7 +81,7 @@ namespace Yttrium
                         xadd     = a_i[j];
                         for (size_t k=1;k<j;++k)
                             xadd -= a_i[k]*a[k][j];
-                        const ScalarType atmp = Fabs<T>::Of(a_i[j]=xadd.sum()) * scal[i];
+                        const ScalarType atmp = Fabs<T>(a_i[j]=xadd()) * scal[i];
                         if(atmp>=apiv)
                         {
                             apiv = atmp;
@@ -98,7 +98,7 @@ namespace Yttrium
                     }
                     indx[j] = imax;
                     {
-                        const ScalarType aa = Fabs<T>::Of(a[j][j]);
+                        const ScalarType aa = Fabs<T>(a[j][j]);
                         if( Sign::LEQZ(aa) ) return false;
                     }
 
@@ -126,7 +126,7 @@ namespace Yttrium
                 for(size_t i=n;i>1;--i)
                     xmul *= a[i][i];
 
-                return dneg ? -xmul.product() : xmul.product();
+                return dneg ? -xmul() : xmul();
             }
 
 
@@ -150,11 +150,11 @@ namespace Yttrium
                         const Row &a_i = a[i];
                         for(size_t j=ii;j<i;++j)
                             xadd -= a_i[j]*b[j];
-                        sum = xadd.sum();
+                        sum = xadd();
                     }
                     else
                     {
-                        if( Sign::GTZ( Fabs<T>::Of(sum) ) )
+                        if( Sign::GTZ( Fabs<T>(sum) ) )
                             ii=i;
                     }
                     b[i]=sum;
@@ -166,7 +166,7 @@ namespace Yttrium
                     xadd = b[i];
                     for(size_t j=n;j>i;--j)
                         xadd -= a_i[j]*b[j];
-                    b[i] = xadd.sum()/a_i[i];
+                    b[i] = xadd()/a_i[i];
                 }
             }
 

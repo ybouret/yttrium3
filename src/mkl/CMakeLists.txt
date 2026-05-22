@@ -7,3 +7,4 @@ y/mkl/interpolation
 y/mkl/derivatives
 )
 
+add_subdirectory(tests)

@@ -124,6 +124,9 @@ namespace Yttrium
                 inline void         add(ConstType &data) {
                     const Item item(data); pq.push(item);
                 }
+                inline void         sub(ConstType &data) {
+                    const Item item(-data); pq.push(item);
+                }
 
                 inline virtual Type operator()(void)
                 {

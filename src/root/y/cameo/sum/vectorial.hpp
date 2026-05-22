@@ -96,6 +96,16 @@ namespace Yttrium
                     catch(...) { ldz(); throw; }
                 }
 
+                inline virtual void sub(ConstType &v)
+                {
+                    ConstScal * const scal = Hide::Cast<ConstScal>(&v);
+                    try {
+                        for(size_t i=0;i<Dimension;++i) xadd[i].sub(scal[i]);
+                    }
+                    catch(...) { ldz(); throw; }
+                }
+
+
                 inline virtual Type operator()(void)
                 {
                     MutableType v;

@@ -71,7 +71,10 @@ namespace Yttrium
          */
         void releaseWorkspace(void * &addr, size_t &length) noexcept;
 
-        
+        bool isSquare() const noexcept;
+
+        bool gotSameMetricsThan(const MatrixMetrics &) const noexcept;
+
         //______________________________________________________________________
         //
         //

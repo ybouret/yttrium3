@@ -10,6 +10,18 @@ namespace Yttrium
 
     const char * const MatrixMetrics:: CallSign = "Matrix";
 
+    bool MatrixMetrics:: isSquare() const noexcept
+    {
+        return cols == rows;
+    }
+
+    bool MatrixMetrics:: gotSameMetricsThan(const MatrixMetrics &m) const noexcept
+    {
+        return rows==m.rows && cols==m.cols;
+    }
+
+
+
 
     void MatrixMetrics:: clear() noexcept
     {

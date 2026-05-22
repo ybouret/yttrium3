@@ -49,6 +49,7 @@ namespace Yttrium
             //__________________________________________________________________
             virtual void ldz() noexcept   = 0; //!< reset
             virtual void add(ConstType &) = 0; //!< add data
+            virtual void sub(ConstType &) = 0; //!< sub data
             virtual Type operator()(void) = 0; //!< \return result (MUST be zero afterwards)
 
             //__________________________________________________________________
@@ -67,6 +68,12 @@ namespace Yttrium
             inline Summator & operator +=(ParamType data) {
                 add(data); return *this;
             }
+
+            //! helper \param data to add \return *this
+            inline Summator & operator -=(ParamType data) {
+                sub(data); return *this;
+            }
+
 
             //! helper \param data to set \return *this
             inline Summator & operator=(ParamType data) {
