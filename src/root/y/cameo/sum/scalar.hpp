@@ -77,7 +77,6 @@ namespace Yttrium
                 //______________________________________________________________
                 //! alias
                 typedef typename SelectedScalar<T,Strategy<T>::Index>::API SummatorType;
-                Y_Args_Expose(T,Type);
 
                 //______________________________________________________________
                 //
@@ -89,18 +88,7 @@ namespace Yttrium
                 inline explicit Scalar(const size_t minCapacity) : SummatorType(minCapacity) {} //!< setup \param minCapacity compatibility
                 inline Scalar(const Scalar &other) : SummatorType(other)                     {} //!< duplicate \param other another Scalar
                 inline virtual ~Scalar() noexcept                                            {} //!< cleanup
-
-                //______________________________________________________________
-                //
-                //
-                // Methods
-                //
-                //______________________________________________________________
-
-              
-
-
-
+                
             private:
                 Y_Disable_Assign(Scalar); //!< discarded
             };

@@ -101,7 +101,7 @@ inline friend bool operator OP (const T      lhs, const XReal &rhs) noexcept { r
         T                  log10()            const;   //!< \return log10
         XReal              pow(const T alpha) const;   //!< \param alpha exponent \return this^alpha
         Core::String<char> str()              const;   //!<  \return "%.15g"
-        XReal              mod2()    const noexcept;
+        XReal              mod2()    const noexcept;   //!< \return |*this|^2
         static Core::String<char> ToString(const XReal &x); //!< \param x xreal \return x.str()
 
 

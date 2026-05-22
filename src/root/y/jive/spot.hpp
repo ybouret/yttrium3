@@ -55,7 +55,7 @@ namespace Yttrium
             const unsigned   column; //!< current column
 
         private:
-            Spot & operator=(const Spot &) noexcept;
+            Y_Disable_Assign(Spot); //!< discarded
 
         };
 

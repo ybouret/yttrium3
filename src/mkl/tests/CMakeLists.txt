@@ -7,4 +7,5 @@ Y_LinkLibraries(test-mkl y-mkl)
 enable_testing()
 
 Y_UTEST(algebra:lu)
+Y_UTEST(algebra:adjoint)
 

@@ -162,7 +162,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
 
-        //! change size if necessary \param nr new rows \param new cols \return *this
+        //! change size if necessary \param nr new rows \param nc new cols \return *this
         inline Matrix & make(const size_t nr, const size_t nc)
         {
             if(rows!=nr||cols!=nc)
@@ -245,6 +245,7 @@ namespace Yttrium
         }
 
 
+        //! extract mino \param m target \param I excluded row \param J excluded column
         template <typename U>
         inline void minor(Matrix<U> &m, const size_t I, const size_t J) const
         {
@@ -256,7 +257,7 @@ namespace Yttrium
             for(size_t i=I+1; i<=nr; ++i,++ir) copyMinorRow(m,ir,i,J);
         }
 
-        //! in place multiplication
+        //! in place multiplication: target = *this * source \param target output vector \param source input vector
         template <typename TARGET, typename SOURCE> inline
         void mul(TARGET &target, SOURCE &source) const
         {
@@ -266,7 +267,12 @@ namespace Yttrium
                 target[i] = xadd.dot( row[i], source);
         }
 
-        //! in place multiplication and subtraction
+        //! in place multiplication and subtraction : target = *this * source - rhs
+        /**
+         \param target output vector
+         \param source input vector
+         \param rhs    vector to subtract
+         */
         template <typename TARGET, typename SOURCE, typename RHS> inline
         void mulsub(TARGET &target, SOURCE &source, RHS &rhs) const
         {
@@ -277,10 +283,7 @@ namespace Yttrium
             for(size_t i=rows;i>0;--i)
                 target[i] = xadd.dotsub( row[i], source, rhs[i]);
         }
-
-
-
-
+        
     private:
         size_t              length; //!< bytes
         RowType * const     row;    //!< row in [1:rows]

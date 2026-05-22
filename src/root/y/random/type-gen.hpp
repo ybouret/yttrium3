@@ -16,12 +16,14 @@ namespace Yttrium
     namespace Random
     {
 
+        //! generation parameters
         struct GenInfo
         {
-            static size_t       MaxStringLength; //!< default to 8
-            static const size_t MaxApexBits = 11;
+            static size_t   MaxStringLength; //!< default to 8
+            static size_t   MaxApexBits;     //!< default to 11
         };
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         template <typename T>
         struct Gen
         {
@@ -163,7 +165,7 @@ namespace Yttrium
                 }
             }
         };
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
     }
 

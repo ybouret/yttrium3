@@ -127,8 +127,9 @@ namespace Yttrium
         }
 
     public:
-        template <typename U> inline
-        CxxArray & ld(const Readable<U> &a)
+        //! load content \param a a compatible source \return
+        template <typename ARRAY> inline
+        CxxArray & ld(ARRAY &a)
         {
             assert(size()==a.size());
             for(size_t i=size();i>0;--i) code->cxx[i] = a[i];

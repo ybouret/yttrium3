@@ -30,7 +30,7 @@ namespace Yttrium
             //
             //______________________________________________________________
             typedef typename Product::Operating<T>::Type MulType; //!< alias
-            Y_Args_Declare(T,Type);
+            Y_Args_Declare(T,Type);                               //!< aliases
 
             //______________________________________________________________
             //
@@ -51,6 +51,7 @@ namespace Yttrium
             //! cleanup
             inline virtual ~Multiplication() noexcept    {}
 
+            //! set \param data initial value \return *this
             inline Multiplication & operator=(ParamType data)
             {
                 this->set(data); return *this;

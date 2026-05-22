@@ -52,7 +52,7 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
-
+    protected:
         //! anonymous memory allocation
         /**
          \param bytesPerItem size of each item
@@ -71,9 +71,9 @@ namespace Yttrium
          */
         void releaseWorkspace(void * &addr, size_t &length) noexcept;
 
-        bool isSquare() const noexcept;
-
-        bool gotSameMetricsThan(const MatrixMetrics &) const noexcept;
+    public:
+        bool isSquare()                                const noexcept; //!< \return cols == rows
+        bool gotSameMetricsThan(const MatrixMetrics &) const noexcept; //!< \return true if same rows and same cols
 
         //______________________________________________________________________
         //

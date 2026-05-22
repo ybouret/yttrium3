@@ -4,5 +4,6 @@
 Y_UTEST_DECL(4)
 {
     Y_UTEST(algebra_lu);
+    Y_UTEST(algebra_adjoint);
 }
 Y_UTEST_EXEC()

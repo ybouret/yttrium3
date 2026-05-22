@@ -31,9 +31,9 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            typedef typename  Sum::Operating<T>::Type SummatorType; //!< alias
+            typedef typename  Sum::Operating<T>::Type SummatorType;                         //!< alias
             static const bool IsSummator = Y_Is_SuperSubClass_Strict(Summator<T>,Addition); //!< alias
-            Y_Args_Declare(T,Type);
+            Y_Args_Declare(T,Type);                                                         //!< aliases
 
             //__________________________________________________________________
             //
@@ -64,6 +64,7 @@ namespace Yttrium
             prev(0)
             {}
 
+            //! set \param param value \return *this
             inline Addition & operator=(ParamType param)
             {
                 this->set(param);
@@ -82,7 +83,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            //! single product addition
+            //! single product addition of lhs*rhs  \param lhs lhs \param rhs
             template <typename LHS, typename RHS> inline
             void addProd(LHS &lhs, RHS &rhs)
             {
@@ -91,7 +92,7 @@ namespace Yttrium
                 this->add(prod);
             }
 
-            //! single product subdtraction
+            //! single product subtraction of lhs*rhs  \param lhs lhs \param rhs
             template <typename LHS, typename RHS> inline
             void subProd(LHS &lhs, RHS &rhs)
             {
@@ -100,6 +101,12 @@ namespace Yttrium
                 this->sub(prod);
             }
 
+            //! dot product of same-sized arrays
+            /**
+             \param lhs array
+             \param rhs array
+             \return <lhs|rhs>
+             */
             template <typename LARRAY, typename RARRAY> inline
             Type dot(LARRAY &lhs, RARRAY &rhs)
             {
@@ -110,6 +117,13 @@ namespace Yttrium
                 return self();
             }
 
+            //! dot product minus value of same-sized arrays
+            /**
+             \param lhs array
+             \param rhs array
+             \param arg subtracted
+             \return <lhs|rhs> - arg
+             */
             template <typename LARRAY, typename RARRAY, typename ARG> inline
             Type dotsub(LARRAY &lhs, RARRAY &rhs, ARG &arg)
             {
@@ -121,6 +135,7 @@ namespace Yttrium
                 return self();
             }
 
+            //! mod2 of array whose scalar type is Type \param arr compatible array \return |arr|^2
             template <typename ARRAY> inline
             Type mod2(ARRAY &arr)
             {

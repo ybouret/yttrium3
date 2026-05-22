@@ -9,6 +9,7 @@
 namespace Yttrium
 {
 
+    //! binary copy \param a target \param b source
     template <typename T> inline
     void BCopy( T &a , const T &b) noexcept
     {

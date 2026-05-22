@@ -7,6 +7,7 @@
 
 namespace Yttrium
 {
+    //! \param a \return a+a
     template <typename T>
     inline T Twice(T a)
     {

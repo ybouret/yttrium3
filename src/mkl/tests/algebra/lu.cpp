@@ -44,6 +44,7 @@ namespace
                 //std::cerr << "d  = " << v << std::endl;
                 const SType r2 = sadd.mod2(v) / (SType)n;
                 std::cerr << " r2 = " << r2 << std::endl;
+                std::cerr << " det= " << lu.det(a) << std::endl;
             }
 
         }
