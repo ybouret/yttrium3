@@ -118,7 +118,8 @@ namespace Yttrium
                             break;
 
                             //--------------------------------------------------
-                        case Lexical::Command::Call: {
+                        case Lexical::Command::Call:
+                        case Lexical::Command::Jump: {
                             //--------------------------------------------------
                             assert(0!=cmd.args);
                             // search scanner to call
@@ -128,8 +129,9 @@ namespace Yttrium
                                 Specific::Exception excp(name->c_str(),"<%s> got no <%s> to call", here, id.c_str());
                                 throw source->stamp(excp);
                             }
+                            
                             // modify history and current scanner
-                            history << *curr;
+                            if(Lexical::Command::Call == cmd.kind) history << *curr;
                             curr = & **ps;
                             if(Plugin * const plugin = dynamic_cast<Plugin *>(curr)) plugin->enter();
                         } goto PROBE; // still no lexeme
@@ -146,8 +148,7 @@ namespace Yttrium
                             curr = & history.tail(); history.popTail();
                         } goto GET; // may have created a lexeme
 
-                        default:
-                            throw Exception("command not processed yet");
+                        //default: throw Exception("command not processed yet");
                     }
 
                     return 0;
