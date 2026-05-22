@@ -18,7 +18,7 @@ namespace Yttrium
 
             typedef MatrixRow<T> Row;
 
-            explicit Code(const size_t n) :
+            inline explicit Code(const size_t n) :
             Object(),
             dneg(false),
             dims(n),
@@ -31,9 +31,7 @@ namespace Yttrium
                 assert(dims>0);
             }
 
-            virtual ~Code() noexcept
-            {
-            }
+            inline virtual ~Code() noexcept {}
 
 
             inline bool build(Matrix<T> &a)
@@ -42,8 +40,13 @@ namespace Yttrium
                 assert(a.rows<=dims);
                 const size_t n = a.rows; if(n<=0) return false;
 
-
+                //--------------------------------------------------------------
+                //
+                //
                 // initialize determinant sign
+                //
+                //
+                //--------------------------------------------------------------
                 dneg = false;
 
                 // find scaling
@@ -55,14 +58,20 @@ namespace Yttrium
                         for(size_t j=n;j>0;--j)
                         {
                             const ScalarType atmp = Fabs<T>(a_i[j]);
-                            if(atmp>apiv) apiv = atmp;
+                            if(atmp>apiv)    apiv = atmp;
                         }
                     }
                     if( Sign::LEQZ(apiv) ) return false; // null row
                     scal[i] = S1/apiv;
                 }
 
+                //--------------------------------------------------------------
+                //
+                //
                 // Crout's algorithm
+                //
+                //
+                //--------------------------------------------------------------
                 for(size_t j=1;j<=n;++j)
                 {
                     for(size_t i=1;i<j;++i)

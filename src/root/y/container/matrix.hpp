@@ -258,13 +258,27 @@ namespace Yttrium
 
         //! in place multiplication
         template <typename TARGET, typename SOURCE> inline
-        void operator()(TARGET &target, SOURCE &source) const
+        void mul(TARGET &target, SOURCE &source) const
         {
-            assert(rows==target.size); assert(cols==source.size());
+            assert(rows==target.size()); assert(cols==source.size());
             Cameo::Addition<T> xadd(cols);
             for(size_t i=rows;i>0;--i)
                 target[i] = xadd.dot( row[i], source);
         }
+
+        //! in place multiplication and subtraction
+        template <typename TARGET, typename SOURCE, typename RHS> inline
+        void mulsub(TARGET &target, SOURCE &source, RHS &rhs) const
+        {
+            assert(rows==target.size());
+            assert(cols==source.size());
+            assert(rows==rhs.size());
+            Cameo::Addition<T> xadd(cols);
+            for(size_t i=rows;i>0;--i)
+                target[i] = xadd.dotsub( row[i], source, rhs[i]);
+        }
+
+
 
 
     private:

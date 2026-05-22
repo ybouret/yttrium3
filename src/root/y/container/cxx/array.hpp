@@ -126,6 +126,14 @@ namespace Yttrium
             CoerceSwap(code,other.code); return *this;
         }
 
+    public:
+        template <typename U> inline
+        CxxArray & ld(const Readable<U> &a)
+        {
+            assert(size()==a.size());
+            for(size_t i=size();i>0;--i) code->cxx[i] = a[i];
+            return *this;
+        }
 
         //______________________________________________________________________
         //

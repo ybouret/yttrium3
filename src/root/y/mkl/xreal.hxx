@@ -90,6 +90,12 @@ namespace Yttrium
 		}
 	}
 
+    template <>
+    XReal<real_t> XReal<real_t>:: mod2() const noexcept
+    {
+        return Mul(*this,*this);
+    }
+
 	template <>
 	XReal<real_t>:: operator real_t() const
 	{
