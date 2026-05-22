@@ -7,6 +7,9 @@
 #include "y/random/coin-flip.hpp"
 #include "y/type/ints.hpp"
 #include "y/apex/rational.hpp"
+#include "y/core/twice.hpp"
+#include "y/mkl/complex.hpp"
+#include "y/mkl/v4d.hpp"
 
 namespace Yttrium
 {
@@ -87,6 +90,55 @@ namespace Yttrium
             }
         };
 
+        template <> struct Gen<float> {
+            static inline float Get(Random::CoinFlip &coin) {
+                return 1.0f - Twice(coin.uniform<float>());
+            }
+        };
+
+        template <> struct Gen<double> {
+            static inline double Get(Random::CoinFlip &coin) {
+                return 1.0 - Twice(coin.uniform<double>());
+            }
+        };
+
+        template <> struct Gen<long double> {
+            static inline long double Get(Random::CoinFlip &coin) {
+                return 1.0L - Twice(coin.uniform<long double>());
+            }
+        };
+
+        template <typename T> struct Gen< XReal<T> >
+        {
+            static inline XReal<T> Get(Random::CoinFlip &coin)
+            {
+                return Gen<T>::Get(coin);
+            }
+        };
+
+        template <typename T> struct Gen< Complex<T> >
+        {
+            static inline Complex<T> Get(Random::CoinFlip &coin)
+            {
+                return Complex<T>(Gen<T>::Get(coin),Gen<T>::Get(coin));
+            }
+        };
+
+        template <typename T> struct Gen< V2D<T> >
+        {
+            static inline V2D<T> Get(Random::CoinFlip &coin)
+            {
+                return V2D<T>(Gen<T>::Get(coin),Gen<T>::Get(coin));
+            }
+        };
+
+        template <typename T> struct Gen< V3D<T> >
+        {
+            static inline V3D<T> Get(Random::CoinFlip &coin)
+            {
+                return V3D<T>(Gen<T>::Get(coin),Gen<T>::Get(coin),Gen<T>::Get(coin));
+            }
+        };
 
     }
 

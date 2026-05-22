@@ -63,6 +63,15 @@ namespace Yttrium
                 }
             }
 
+            template <typename T> inline T uniform()
+            {
+                static const T denom = 65536;
+                static const T half(0.5f);
+                uint16_t       numer = 0;
+                for(size_t i=16;i>0;--i) { numer <<= 1; if(heads()) numer |= 1; }
+                return (half + (T) numer)/denom;
+            }
+
 
 
         private:
