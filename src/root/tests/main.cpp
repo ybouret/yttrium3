@@ -200,6 +200,8 @@ Y_UTEST_DECL(8)
     Y_UTEST(cameo_addenda);
 
     Y_UTEST(info_bwt);
+
+    Y_UTEST(random_type_gen);
 }
 Y_UTEST_EXEC()
 
