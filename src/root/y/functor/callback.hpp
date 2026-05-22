@@ -1,6 +1,6 @@
 //! \file
-#ifndef YACK_FUNCTOR_CALLBACK_INCLUDED
-#define YACK_FUNCTOR_CALLBACK_INCLUDED 1
+#ifndef Y_Functor_Callback_Included
+#define Y_Functor_Callback_Included 1
 
 #include "y/functor/call.hpp"
 
@@ -113,6 +113,23 @@ namespace Yttrium {
                 return function_( P1, P2, P3, P4, P5);
             }
 
+            //! six arguments call
+            /**
+             \param P1 param1
+             \param P2 param2
+             \param P3 param3
+             \param P4 param4
+             \param P5 param5
+             \param P6 param6
+             \return call value
+             */
+            inline R operator()( param1 P1, param2 P2, param3 P3, param4 P4, param5 P5, param6 P6)
+            {
+                return function_( P1, P2, P3, P4, P5, P6 );
+            }
+
+
+
 
         private:
             Y_Disable_Assign(callback); //!< discarding
@@ -127,5 +144,5 @@ namespace Yttrium {
 
 }
 
-#endif
+#endif // !Y_Functor_Callback_Included
 

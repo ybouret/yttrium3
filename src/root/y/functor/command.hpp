@@ -1,6 +1,6 @@
 //! \file
-#ifndef YACK_FUNCTOR_COMMAND_INCLUDED
-#define YACK_FUNCTOR_COMMAND_INCLUDED 1
+#ifndef Y_Functor_Command_Included
+#define Y_Functor_Command_Included 1
 
 #include "y/functor/call.hpp"
 
@@ -159,8 +159,8 @@ namespace Yttrium {
 #pragma warning (push)
 #pragma warning (disable : 4371)
 #endif
-            OBJECT_POINTER object_;    //!< object pointer
-            METHOD_POINTER method_;    //!< method pointer
+            OBJECT_POINTER const object_;    //!< object pointer
+            METHOD_POINTER const method_;    //!< method pointer
 
 #if defined(_MSC_VER)
 #pragma warning (pop)
@@ -181,5 +181,5 @@ namespace Yttrium {
 
 }
 
-#endif
+#endif // !Y_Functor_Command_Included
 

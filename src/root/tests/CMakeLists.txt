@@ -37,6 +37,7 @@ Y_UTEST(exception)
 Y_UTEST(xml)
 Y_UTEST(object)
 Y_UTEST(light_object)
+Y_UTEST(functor)
 
 Y_UTEST(config:platform)
 Y_UTEST(config:compiler)

@@ -7,6 +7,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(xml);
     Y_UTEST(object);
     Y_UTEST(light_object);
+    Y_UTEST(functor);
 
     Y_UTEST(config_platform);
     Y_UTEST(config_compiler);

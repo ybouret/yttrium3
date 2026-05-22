@@ -29,15 +29,15 @@ namespace Yttrium
             class Rule : public Object
             {
             public:
-                static const unsigned Emit     = 0x01;              //!< emit lexeme
-                static const unsigned Drop     = 0x02;              //!< drop lexeme
+                static const unsigned Emit     = 0x0001;            //!< emit lexeme
+                static const unsigned Drop     = 0x0002;            //!< drop lexeme
                 static const unsigned ProcMask = Emit|Drop;         //!< emit|drop
-                static const unsigned Call     = 0x04;              //!< call scanner
-                static const unsigned Back     = 0x08;              //!< back from scanner
-                static const unsigned Jump     = 0x10;              //!< jump to scanner
+                static const unsigned Call     = 0x0100;            //!< call scanner
+                static const unsigned Back     = 0x0200;            //!< back from scanner
+                static const unsigned Jump     = 0x0400;            //!< jump to scanner
                 static const unsigned CntlMask = Call|Back|Jump;    //!< call|back|jump
                 static const unsigned UsedMask = ProcMask|CntlMask; //!< usage mask
-                static const unsigned Endl     = 0x80;              //!< propagate endl
+                static const unsigned Endl     = 0x8000;            //!< propagate endl
 
                 //______________________________________________________________
                 //

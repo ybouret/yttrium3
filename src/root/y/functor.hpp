@@ -1,6 +1,6 @@
 //! \file
-#ifndef Y_FUNCTOR_INCLUDED
-#define Y_FUNCTOR_INCLUDED 1
+#ifndef Y_Functor_Included
+#define Y_Functor_Included 1
 
 #include <cassert>
 
@@ -358,4 +358,4 @@ namespace Yttrium
 
 }
 
-#endif
+#endif // !Y_Functor_Included
