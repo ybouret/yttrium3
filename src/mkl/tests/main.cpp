@@ -1,8 +1,8 @@
 #include "y/utest/driver.hpp"
 
 
-Y_UTEST_DECL(8)
+Y_UTEST_DECL(4)
 {
-
+    Y_UTEST(algebra_lu);
 }
 Y_UTEST_EXEC()

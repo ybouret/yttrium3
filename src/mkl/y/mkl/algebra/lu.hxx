@@ -70,6 +70,13 @@ size_t LU<real_t>:: size() const noexcept
 }
 
 template <>
+size_t LU<real_t>:: capacity() const noexcept
+{
+    return size();
+}
+
+
+template <>
 void LU<real_t>:: solve(const Matrix<real_t> &a, Writable<real_t> &b)
 {
     assert( a.isSquare() );

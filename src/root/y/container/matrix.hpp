@@ -10,6 +10,7 @@
 #include "y/swap.hpp"
 #include "y/ability/releasable.hpp"
 #include "y/hide.hpp"
+#include "y/cameo/addition.hpp"
 
 namespace Yttrium
 {
@@ -255,6 +256,15 @@ namespace Yttrium
             for(size_t i=I+1; i<=nr; ++i,++ir) copyMinorRow(m,ir,i,J);
         }
 
+        //! in place multiplication
+        template <typename TARGET, typename SOURCE> inline
+        void operator()(TARGET &target, SOURCE &source) const
+        {
+            assert(rows==target.size); assert(cols==source.size());
+            Cameo::Addition<T> xadd(cols);
+            for(size_t i=rows;i>0;--i)
+                target[i] = xadd.dot( row[i], source);
+        }
 
 
     private:

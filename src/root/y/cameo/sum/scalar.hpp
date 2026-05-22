@@ -9,6 +9,7 @@
 #include "y/cameo/sum/raised.hpp"
 #include "y/cameo/sum/queued.hpp"
 #include "y/calculus/integer-log2.hpp"
+#include "y/mkl/api/adaptor.hpp"
 
 namespace Yttrium
 {
@@ -77,6 +78,7 @@ namespace Yttrium
                 //______________________________________________________________
                 //! alias
                 typedef typename SelectedScalar<T,Strategy<T>::Index>::API SummatorType;
+                Y_Args_Expose(T,Type);
 
                 //______________________________________________________________
                 //
@@ -88,6 +90,43 @@ namespace Yttrium
                 inline explicit Scalar(const size_t minCapacity) : SummatorType(minCapacity) {} //!< setup \param minCapacity compatibility
                 inline Scalar(const Scalar &other) : SummatorType(other)                     {} //!< duplicate \param other another Scalar
                 inline virtual ~Scalar() noexcept                                            {} //!< cleanup
+
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+
+                //! single product addition
+                template <typename LHS, typename RHS> inline
+                void addProd(LHS &lhs, RHS &rhs)
+                {
+                    static const TypeToType<T> Mine = { };
+                    ConstType prod = MKL::AdaptedTo(Mine,lhs) * MKL::AdaptedTo(Mine,rhs);
+                    this->add(prod);
+                }
+
+                //! single product subdtraction
+                template <typename LHS, typename RHS> inline
+                void subProd(LHS &lhs, RHS &rhs)
+                {
+                    static const TypeToType<T> Mine = { };
+                    ConstType prod = (MKL::AdaptedTo(Mine,lhs) * MKL::AdaptedTo(Mine,rhs));
+                    this->sub(prod);
+                }
+
+                template <typename LARRAY, typename RARRAY> inline
+                Type dot(LARRAY &lhs, RARRAY &rhs)
+                {
+                    assert(lhs.size()==rhs.size());
+                    SummatorType &self = *this;
+                    self.ldz();
+                    for(size_t i=lhs.size();i>0;--i) addProd(lhs[i],rhs[i]);
+                    return self();
+                }
+
+
 
             private:
                 Y_Disable_Assign(Scalar); //!< discarded

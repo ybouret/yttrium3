@@ -48,8 +48,9 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual void   release()    noexcept;
-            virtual size_t size() const noexcept;
+            virtual void   release()        noexcept;
+            virtual size_t size()     const noexcept;
+            virtual size_t capacity() const noexcept;
 
             //__________________________________________________________________
             //

@@ -140,6 +140,31 @@ namespace Yttrium
             }
         };
 
+        struct Generate
+        {
+            template <typename ARRAY> static inline
+            void Array(Random::CoinFlip &coin, ARRAY &arr)
+            {
+                for(size_t i=arr.size();i>0;--i)
+                {
+                    arr[i] = Gen< typename ARRAY::Type >::Get(coin);
+                }
+            }
+
+            template <typename MATRIX> static inline
+            void Matrix(Random::CoinFlip &coin, MATRIX &a)
+            {
+                for(size_t i=a.rows;i>0;--i)
+                {
+                    for(size_t j=a.cols;j>0;--j)
+                    {
+                         a[i][j] = Gen< typename MATRIX::Type >::Get(coin);
+                    }
+                }
+            }
+        };
+
+
     }
 
 }
