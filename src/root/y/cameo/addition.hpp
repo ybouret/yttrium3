@@ -31,6 +31,7 @@ namespace Yttrium
             //__________________________________________________________________
             typedef typename  Sum::Operating<T>::Type SummatorType; //!< alias
             static const bool IsSummator = Y_Is_SuperSubClass_Strict(Summator<T>,Addition); //!< alias
+            Y_Args_Declare(T,Type);
 
             //__________________________________________________________________
             //
@@ -60,6 +61,13 @@ namespace Yttrium
             next(0),
             prev(0)
             {}
+
+            inline Addition & operator=(ParamType param)
+            {
+                this->set(param);
+                return *this;
+            }
+
 
             //! cleanup
             inline virtual ~Addition() noexcept {}

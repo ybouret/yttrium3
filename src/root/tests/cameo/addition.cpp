@@ -15,12 +15,14 @@ namespace
     static inline
     void testScal()
     {
-        Y_CHECK(Cameo::Addition<T>::IsSummator);
-        Y_CHECK(Y_Is_SuperSubClass_Strict(Object,Cameo::Addition<T>));
+        Y_ASSERT(Cameo::Addition<T>::IsSummator);
+        Y_ASSERT(Y_Is_SuperSubClass_Strict(Object,Cameo::Addition<T>));
         Y_SIZEOF(Cameo::Addition<T>);
         Cameo::Addition<T> xadd;
 
+        xadd = 10;
         xadd << 1 << 3 << 4 << 2;
+
 
         std::cerr << "xadd=" << xadd   << " / " << xadd.callSign() << std::endl;
         std::cerr << "sum =" << xadd() << std::endl;
@@ -30,8 +32,8 @@ namespace
     static inline
     void testVect()
     {
-        Y_CHECK(Cameo::Addition<T>::IsSummator);
-        Y_CHECK(Y_Is_SuperSubClass_Strict(Object,Cameo::Addition<T>));
+        Y_ASSERT(Cameo::Addition<T>::IsSummator);
+        Y_ASSERT(Y_Is_SuperSubClass_Strict(Object,Cameo::Addition<T>));
         Y_SIZEOF(Cameo::Addition<T>);
 
         Cameo::Addition<T> xadd;
@@ -62,6 +64,7 @@ Y_UTEST(cameo_addition)
 {
 
     testScal<apq>();
+#if 1
     testScal<apn>();
     testScal<apz>();
     testScal<int>();
@@ -79,7 +82,8 @@ Y_UTEST(cameo_addition)
     testVect< Complex< XReal<long double> > >();
 
     testVect< V3D<double> >();
-
+#endif
+    
 }
 Y_UDONE()
 

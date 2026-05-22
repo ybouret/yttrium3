@@ -75,9 +75,9 @@ namespace Yttrium
             }
 
 
-            //! helper \param data to set \return *this
-            inline Summator & operator=(ParamType data) {
-                ldz(); add(data); return *this;
+            //! helper \param data to set 
+            inline void set(ParamType data) {
+                ldz(); add(data);
             }
 
         private:

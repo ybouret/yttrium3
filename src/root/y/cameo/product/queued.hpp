@@ -211,7 +211,7 @@ namespace Yttrium
 
                 inline virtual Type operator()(void)
                 {
-                    if(list.size<=0) return 1;
+                    if(list.size<=0) return Type(1);
                     while(list.size>1)
                     {
                         ConstType lhs = list.head->data;

@@ -171,7 +171,6 @@ namespace Yttrium
             }
 
 
-
             inline void solve(const Matrix<T> &a, Matrix<T> &rhs, Writable<T> &tmp)
             {
                 assert(a.rows>0);
@@ -214,8 +213,7 @@ namespace Yttrium
                     solve(a,b);
                     for(size_t j=n;j>0;--j) ia[j][i] = b[j];
                 }
-
-
+                
             }
 
 

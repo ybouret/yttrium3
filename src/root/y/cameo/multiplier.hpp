@@ -69,9 +69,9 @@ namespace Yttrium
                 mul(data); return *this;
             }
 
-            //! helper \param data to set \return *this
-            inline Multiplier & operator=(ParamType data) {
-                ld1(); mul(data); return *this;
+            //! helper \param data to set  
+            inline void set(ParamType data) {
+                ld1(); mul(data);
             }
 
         private:
