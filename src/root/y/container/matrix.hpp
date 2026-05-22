@@ -284,6 +284,7 @@ namespace Yttrium
                 target[i] = xadd.dotsub( row[i], source, rhs[i]);
         }
 
+        //! *this = lhs * rhs \param lhs matrix \param rhs matrix
         template <typename LHS, typename RHS> inline
         void mmul(LHS &lhs, RHS &rhs)
         {
@@ -304,8 +305,28 @@ namespace Yttrium
                     (*this)[i][j] = xadd();
                 }
             }
+        }
+
+        //! *this = lhs * rhs \param lhs matrix \param rhs matrix
+        template <typename LHS, typename RHS> inline
+        void mmul(LHS &lhs, const TransposeOf_ &, RHS &rhs)
+        {
+            assert(rows==lhs.rows);
+            
+            const size_t nr = rows;
+            const size_t nc = cols;
+            Cameo::Addition<T> xadd(nc);
+            for(size_t i=1;i<=nr;++i)
+            {
+                (*this)[i][i] = xadd.dot(lhs[i],rhs[i]);
+                for(size_t j=i+1;j<=nr;++j)
+                {
+                    (*this)[i][j] = (*this)[j][i] = xadd.dot(lhs[i],rhs[i]);
+                }
+            }
 
         }
+
 
 
     private:
