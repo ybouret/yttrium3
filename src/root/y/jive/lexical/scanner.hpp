@@ -6,6 +6,7 @@
 #include "y/jive/lexical/unit.hpp"
 #include "y/jive/lexical/rule.hpp"
 #include "y/jive/lexical/command.hpp"
+#include "y/jive/lexical/action.hpp"
 #include "y/jive/regexp.hpp"
 
 namespace Yttrium

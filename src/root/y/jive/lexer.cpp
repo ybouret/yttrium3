@@ -148,7 +148,6 @@ namespace Yttrium
                             curr = & history.tail(); history.popTail();
                         } goto GET; // may have created a lexeme
 
-                        //default: throw Exception("command not processed yet");
                     }
 
                     return 0;

@@ -49,7 +49,8 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 const Identifier name;  //!< from scanner
-                CxxListOf<Rule>  rlist; //!< list of rules
+                Rule::List       rlist; //!< list of rules
+                Action::List     alist; //!< list of actions
                 MetaTable        table; //!< table of list or rules
 
             private:

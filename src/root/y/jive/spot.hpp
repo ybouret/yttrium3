@@ -40,6 +40,7 @@ namespace Yttrium
             virtual ~Spot()    noexcept; //!< cleanup
             Spot(const Spot &) noexcept; //!< duplicate
 
+
             //! \return stamped exception
             Exception & stamp(Exception &) const noexcept;
 
@@ -54,7 +55,8 @@ namespace Yttrium
             const unsigned   column; //!< current column
 
         private:
-            Y_Disable_Assign(Spot); //!< discarded
+            Spot & operator=(const Spot &) noexcept;
+
         };
 
     }

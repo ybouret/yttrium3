@@ -121,6 +121,7 @@ namespace Yttrium
                 const unsigned deed = bestRule->deed;
                 if( Rule::Endl & deed ) source.endl();
                 if( Rule::Drop & deed ) goto LOOP;
+                
                 if( Rule::Emit & deed )
                 {
                     Unit * unit = new Unit(spot,bestRule->name);

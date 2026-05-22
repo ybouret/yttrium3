@@ -21,6 +21,13 @@ namespace Yttrium
             return excp.pre("%s:%u:%u: ", title->c_str(),line,column);
         }
 
+        Spot & Spot:: operator=(const Spot &spot) noexcept
+        {
+            { Identifier temp(spot.title); Coerce(title).xch(temp); }
+            Coerce(line)   = spot.line;
+            Coerce(column) = spot.column;
+            return *this;
+        }
 
 
 
