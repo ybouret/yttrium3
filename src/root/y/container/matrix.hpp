@@ -89,29 +89,6 @@ namespace Yttrium
             duplicateTranspose(m);
         }
 
-        //! assign all items for same metrics \param m source matrix
-        template <typename U> inline
-        void assign( const Matrix<U> &m )
-        {
-            assert(cols==m.cols); assert(rows==m.rows);
-            for(size_t i=rows;i>0;--i) {
-                MatrixRow<T>        &tgt_i = (*this)[i];
-                const MatrixRow<U>  &src_i = m[i];
-                for(size_t j=cols;j>0;--j) tgt_i[j] = src_i[j];
-            }
-        }
-
-        //! assign all items for transpose metrics \param m source matrix
-        template <typename U> inline
-        void assignTranspose( const Matrix<U> &m )
-        {
-            assert(cols==m.rows); assert(rows==m.cols);
-            for(size_t i=rows;i>0;--i) {
-                MatrixRow<T>        &tgt_i = (*this)[i];
-                for(size_t j=cols;j>0;--j) tgt_i[j] = m[j][i];
-            }
-        }
-
         //! assign any metrics matrix \param m source matrix \return *this
         inline Matrix & operator=(const Matrix &m)
         {
@@ -137,7 +114,6 @@ namespace Yttrium
 
         inline virtual ~Matrix() noexcept { deallocate(); } //!< cleanup
 
-
         //______________________________________________________________________
         //
         //
@@ -146,6 +122,37 @@ namespace Yttrium
         //______________________________________________________________________
         inline virtual void release() noexcept { deallocate(); }
 
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+
+        //! assign all items for same metrics \param m source matrix
+        template <typename U> inline
+        void assign( const Matrix<U> &m )
+        {
+            assert(cols==m.cols); assert(rows==m.rows);
+            for(size_t i=rows;i>0;--i) {
+                MatrixRow<T>        &tgt_i = (*this)[i];
+                const MatrixRow<U>  &src_i = m[i];
+                for(size_t j=cols;j>0;--j) tgt_i[j] = src_i[j];
+            }
+        }
+
+        //! assign all items for transpose metrics \param m source matrix
+        template <typename U> inline
+        void assignTranspose( const Matrix<U> &m )
+        {
+            assert(cols==m.rows); assert(rows==m.cols);
+            for(size_t i=rows;i>0;--i) {
+                MatrixRow<T>        &tgt_i = (*this)[i];
+                for(size_t j=cols;j>0;--j) tgt_i[j] = m[j][i];
+            }
+        }
+
+
 
         //______________________________________________________________________
         //
@@ -153,6 +160,17 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
+
+        //! change size if necessary \param nr new rows \param new cols \return *this
+        inline Matrix & make(const size_t nr, const size_t nc)
+        {
+            if(rows!=nr||cols!=nc)
+            {
+                Matrix M(nr,nc); return xch(M);
+            }
+            else
+                return *this;
+        }
 
         //! Julia display \param os output \return os
         inline std::ostream & print(std::ostream &os) const
@@ -226,11 +244,36 @@ namespace Yttrium
         }
 
 
+        template <typename U>
+        inline void minor(Matrix<U> &m, const size_t I, const size_t J) const
+        {
+            assert(m.rows+1==rows);
+            assert(m.cols+1==cols);
+            const size_t nr = rows;
+            size_t       ir = 1;
+            for(size_t i=1;   i<I;   ++i,++ir) copyMinorRow(m,ir,i,J);
+            for(size_t i=I+1; i<=nr; ++i,++ir) copyMinorRow(m,ir,i,J);
+        }
+
+
+
     private:
         size_t              length; //!< bytes
         RowType * const     row;    //!< row in [1:rows]
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+        template <typename U> inline
+        void copyMinorRow(Matrix<U> &m, const size_t ir, const size_t i, const size_t J) const
+        {
+            assert(i>=1); assert(i<=rows);
+            MatrixRow<U>       & mrow = m[ir];
+            const MatrixRow<T> & self = row[i];
+            const size_t         nc   = cols;
+            size_t               jr   = 1;
+            for(size_t j=1;   j<J;   ++j,++jr) mrow[jr] = self[j];
+            for(size_t j=J+1; j<=nc; ++j,++jr) mrow[jr] = self[j];
+        }
+
         inline void allocate()
         {
             if(items<=0) return;

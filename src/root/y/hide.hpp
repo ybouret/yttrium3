@@ -33,8 +33,7 @@ namespace Yttrium
             return static_cast<const T*>( Address(addr) );
         }
 
-
-
+        
     };
 
 }
