@@ -283,7 +283,31 @@ namespace Yttrium
             for(size_t i=rows;i>0;--i)
                 target[i] = xadd.dotsub( row[i], source, rhs[i]);
         }
-        
+
+        template <typename LHS, typename RHS> inline
+        void mmul(LHS &lhs, RHS &rhs)
+        {
+            assert(lhs.rows==rows);
+            assert(rhs.cols==cols);
+            assert(lhs.cols==rhs.rows);
+            const size_t nr = rows;
+            const size_t nc = cols;
+            const size_t nx = lhs.cols;
+            Cameo::Addition<T> xadd(nx);
+            for(size_t i=nr;i>0;--i)
+            {
+                for(size_t j=nc;j>0;--j)
+                {
+                    xadd.ldz();
+                    for(size_t k=nx;k>0;--k)
+                        xadd << lhs[i][k] * rhs[k][j];
+                    (*this)[i][j] = xadd();
+                }
+            }
+
+        }
+
+
     private:
         size_t              length; //!< bytes
         RowType * const     row;    //!< row in [1:rows]

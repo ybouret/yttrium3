@@ -218,7 +218,7 @@ namespace Yttrium
                         ConstType rhs = list.tail->data; pool.store( Pulverized( list.popHead() ));
                         ConstType prd = lhs * rhs;
                         update( list.pushTail( new ( Pulverized( list.popTail()) ) Item(prd) ) );
-                        std::cerr << *this << std::endl;
+                        //std::cerr << *this << std::endl;
                     }
                     ConstType res = list.head->data;
                     pool.store( Pulverized(list.popHead()) );

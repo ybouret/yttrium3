@@ -20,11 +20,25 @@ namespace
         {
             Matrix<T> a(n,n);
             Matrix<T> b(n,n);
+            Matrix<T> p(n,n);
+            T         d (0);
+            {
+                Matrix<T> tmp(n,n);
+                do
+                {
+                    Random::Generate::Matrix(ran,a);
+                    tmp.assign(a);
+                } while(!lu.build(tmp));
+                d = lu.det(tmp);
+            }
 
-            Random::Generate::Matrix(ran,a);
             lu.adjoint(b,a);
-            std::cerr << "a=" << a << std::endl;
-            std::cerr << "b=" << b << std::endl;
+            p.mmul(a,b);
+            for(size_t i=n;i>0;--i) p[i][i] /= d;
+            //std::cerr << "a=" << a << std::endl;
+            //std::cerr << "b=" << b << std::endl;
+            std::cerr << "p=" << p << std::endl;
+            //std::cerr << "d=" << d << std::endl;
         }
 
     }
