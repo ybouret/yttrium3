@@ -179,6 +179,7 @@ Y_UTEST(coven:family)
 Y_UTEST(coven:colinear)
 Y_UTEST(coven:tribes)
 Y_UTEST(coven:inquiry)
+Y_UTEST(coven:compress)
 
 Y_UTEST(counting:perm)
 Y_UTEST(counting:comb)

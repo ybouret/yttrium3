@@ -61,6 +61,15 @@ namespace Yttrium
             return  this->ask(indx);
         }
 
+        //! load content \param a a compatible source \return
+        template <typename ARRAY> inline
+        Writable & ld(ARRAY &a)
+        {
+            assert(this->size()==a.size());
+            for(size_t i=this->size();i>0;--i) (*this)[i] = a[i];
+            return *this;
+        }
+
     private:
         Y_Disable_Copy_And_Assign(Writable); //!< discarded
     };

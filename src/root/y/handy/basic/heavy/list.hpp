@@ -7,7 +7,7 @@
 #include "y/handy/list-proto.hpp"
 #include "y/handy/node/heavy.hpp"
 #include "y/handy/cache/direct.hpp"
-
+#include "y/threading/single-threaded-class.hpp"
 
 namespace Yttrium
 {
@@ -21,7 +21,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        template <typename T, typename THREADING_POLICY>
+        template <typename T, typename THREADING_POLICY = SingleThreadedClass>
         class BasicHeavyList : public ListProto< HeavyNode<T>, DirectCache, THREADING_POLICY>
         {
         public:

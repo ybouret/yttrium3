@@ -126,16 +126,7 @@ namespace Yttrium
             CoerceSwap(code,other.code); return *this;
         }
 
-    public:
-        //! load content \param a a compatible source \return
-        template <typename ARRAY> inline
-        CxxArray & ld(ARRAY &a)
-        {
-            assert(size()==a.size());
-            for(size_t i=size();i>0;--i) code->cxx[i] = a[i];
-            return *this;
-        }
-
+        
         //______________________________________________________________________
         //
         //
