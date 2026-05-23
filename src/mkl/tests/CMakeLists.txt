@@ -7,9 +7,11 @@ Y_LinkLibraries(test-mkl y-mkl)
 enable_testing()
 
 Y_UTEST(algebra:mmul)
+Y_UTEST(algebra:rank)
 Y_UTEST(algebra:lu)
 Y_UTEST(algebra:adjoint)
 Y_UTEST(algebra:ortho:space)
+Y_UTEST(algebra:tridiag)
 
 Y_UTEST(chem)
 

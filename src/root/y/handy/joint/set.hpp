@@ -232,7 +232,7 @@ namespace Yttrium
                 return *this;
             }
 
-            inline JointSet & operator ^= (const JointSet &rhs)
+            inline JointSet & operator -= (const JointSet &rhs)
             {
                 if(this != &rhs)
                 {
@@ -248,6 +248,7 @@ namespace Yttrium
                 }
                 return *this;
             }
+
 
 
 

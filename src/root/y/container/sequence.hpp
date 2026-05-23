@@ -4,6 +4,7 @@
 #define Y_Sequence_Included 1
 
 #include "y/type/args.hpp"
+#include "y/type/sign.hpp"
 
 namespace Yttrium
 {
@@ -49,8 +50,20 @@ namespace Yttrium
         virtual void popTail() noexcept = 0; //!< remove element at tail
         virtual void popHead() noexcept = 0; //!< remove element at head
 
+        inline void adjust(const size_t n, ParamType pad)
+        {
+            const size_t now = this->size();
+            switch( Sign::Of(n,now) )
+            {
+                case Negative: assert(n<this->size()); while(this->size()>n) popTail(); break;
+                case __Zero__: break;
+                case Positive: assert(n>this->size()); while(this->size()<n) pushTail(pad); break;
+            }
 
-        
+            assert(n==this->size());
+        }
+
+
     private:
         Y_Disable_Copy_And_Assign(Sequence); //!< discarded
 
