@@ -84,7 +84,7 @@ namespace Yttrium
             //! insert NON-EXISTING data
             /**
              \param args data
-             \return *this*
+             \return *this
              */
             JointSet & operator<<(ParamType args)
             {
@@ -103,7 +103,6 @@ namespace Yttrium
             {
                 assert(node);
                 assert(!list.found(**node));
-                Y_Lock(list);
                 list->pushTail(node);
                 update();
                 return *this;
@@ -216,6 +215,38 @@ namespace Yttrium
                 }
 
                 return false;
+            }
+
+
+            inline JointSet & operator |= (const JointSet &rhs)
+            {
+                if(this != &rhs)
+                {
+                    for(const NodeType *node=rhs.list->head;node;node=node->next)
+                    {
+                        ConstType &data = **node;
+                        if(!list.found(data))
+                            (*this) << data;
+                    }
+                }
+                return *this;
+            }
+
+            inline JointSet & operator ^= (const JointSet &rhs)
+            {
+                if(this != &rhs)
+                {
+                    for(const NodeType *node=rhs.list->head;node;node=node->next)
+                    {
+                        NodeType * const mine = remove(**node);
+                        if(mine) this->cache->banish(mine);
+                    }
+                }
+                else
+                {
+                    free();
+                }
+                return *this;
             }
 
 
