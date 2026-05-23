@@ -21,7 +21,7 @@ Y_UTEST(algebra_ortho_space)
 
             std::cerr << "P=" << P << std::endl;
 
-            if(MKL::OrthoSpace::Of(Q,P))
+            if(MKL::OrthoSpace::Get(Q,P))
             {
                 std::cerr << "Q=" << Q << std::endl;
             }

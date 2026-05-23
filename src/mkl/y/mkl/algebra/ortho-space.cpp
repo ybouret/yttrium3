@@ -8,7 +8,7 @@ namespace Yttrium
     namespace MKL
     {
 
-        bool OrthoSpace::Compute(Matrix<apz> &Q, const Matrix<apz> &P)
+        bool OrthoSpace:: Eval(Matrix<apz> &Q, const Matrix<apz> &P)
         {
             const size_t n = P.rows; if(n<=0) { Q.release(); return false;}
             const size_t m = P.cols; if(n>=m) { Q.release(); return false;}

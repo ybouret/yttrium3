@@ -106,7 +106,7 @@ namespace Yttrium
             template <typename T> inline
             explicit Inquiry(const Matrix<T> & mu,
                              const InquiryHint hint,
-                             const unsigned    strategy) :
+                             const unsigned    strategy = Tribes::Optimizing ) :
             survey()
             {
                 const size_t dimension = mu.cols;

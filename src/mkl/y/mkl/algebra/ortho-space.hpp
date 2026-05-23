@@ -15,13 +15,13 @@ namespace Yttrium
 
         struct OrthoSpace
         {
-            static bool Compute(Matrix<apz> &Q, const Matrix<apz> &P);
+            static bool Eval(Matrix<apz> &Q, const Matrix<apz> &P);
 
             template <typename T> static inline
-            bool Of(Matrix<apz> &Q, const Matrix<T> &P)
+            bool Get(Matrix<apz> &Q, const Matrix<T> &P)
             {
                 Matrix<apz> _(CopyOf,P);
-                return Compute(Q,_);
+                return Eval(Q,_);
             }
 
         };

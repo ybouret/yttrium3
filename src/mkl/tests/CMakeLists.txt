@@ -11,3 +11,5 @@ Y_UTEST(algebra:lu)
 Y_UTEST(algebra:adjoint)
 Y_UTEST(algebra:ortho:space)
 
+Y_UTEST(chem)
+
