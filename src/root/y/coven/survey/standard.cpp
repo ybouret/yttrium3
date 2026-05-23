@@ -5,7 +5,8 @@ namespace Yttrium
 
     namespace Coven
     {
-        StandardSurvey:: StandardSurvey() noexcept
+        StandardSurvey:: StandardSurvey(const size_t nmin) noexcept :
+        Survey(nmin)
         {
         }
 

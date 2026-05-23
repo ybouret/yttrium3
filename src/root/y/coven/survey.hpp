@@ -30,7 +30,7 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Survey() noexcept;
+            explicit Survey(const size_t nmin) noexcept;
             virtual ~Survey() noexcept;
 
             //__________________________________________________________________
@@ -67,6 +67,7 @@ namespace Yttrium
             Vectors      list;     //!< list of univocal, ordered vectors
         public:
             const size_t sampling; //!< number of trials
+            const size_t min_ncof; //!< minimal number of coefficients
         };
 
     }

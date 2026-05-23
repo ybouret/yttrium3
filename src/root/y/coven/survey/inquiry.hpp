@@ -99,15 +99,17 @@ namespace Yttrium
 
             //! setup and perform inquiry
             /**
-             \param mu matrix of row vectors
-             \param hint hint to process initial rows in survey
+             \param mu       matrix of row vectors
+             \param hint     hint to process initial rows in survey
+             \param nmin     min ncof in each vector
              \param strategy optimization strategy
              */
             template <typename T> inline
             explicit Inquiry(const Matrix<T> & mu,
                              const InquiryHint hint,
-                             const unsigned    strategy = Tribes::Optimizing ) :
-            survey()
+                             const size_t      nmin     = 2,
+                             const unsigned    strategy = Tribes::Optimizing) :
+            survey(nmin)
             {
                 const size_t dimension = mu.cols;
                 if(dimension>0)

@@ -55,10 +55,9 @@ namespace Yttrium
                 if(keep) ok << i;
             }
 
-            std::cerr << "output=" << output << std::endl;
-            std::cerr << "ok=" << ok << std::endl;
+            //std::cerr << "output=" << output << std::endl;
+            //std::cerr << "ok=" << ok << std::endl;
             const size_t nr = ok->size; if(!nr) { target.release(); return false; }
-
             target.make(nr,output.cols);
             {
                 size_t i=1;

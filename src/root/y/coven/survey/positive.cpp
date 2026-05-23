@@ -6,7 +6,8 @@ namespace Yttrium
 
     namespace Coven
     {
-        PositiveSurvey::  PositiveSurvey() noexcept
+        PositiveSurvey::  PositiveSurvey(const size_t nmin) noexcept :
+        Survey(nmin)
         {
         }
 

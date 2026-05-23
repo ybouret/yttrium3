@@ -23,7 +23,7 @@ namespace Yttrium
         class StandardSurvey : public Survey
         {
         public:
-            explicit StandardSurvey() noexcept; //!< setup
+            explicit StandardSurvey(const size_t = 1) noexcept; //!< setup
             virtual ~StandardSurvey() noexcept; //!< cleanup
 
         private:

@@ -18,8 +18,8 @@ namespace Yttrium
             const apz   dP2 =     lu.determinant(P2); if(dP2.is0()) { Q.release(); return false;}
             Matrix<apz> aP2(n,n); lu.adjoint(aP2,P2);
 
-            std::cerr << "P2=" << P2 << std::endl;
-            std::cerr << "aP2=" << aP2 << std::endl;
+            //std::cerr << "P2=" << P2 << std::endl;
+            //std::cerr << "aP2=" << aP2 << std::endl;
 
             Q.make(m,m);
             {

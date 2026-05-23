@@ -2,6 +2,7 @@
 #include "y/coven/survey.hpp"
 #include "y/format/decimal.hpp"
 #include "y/string/format.hpp"
+#include "y/core/max.hpp"
 #include <iomanip>
 
 namespace Yttrium
@@ -11,10 +12,11 @@ namespace Yttrium
     {
         //bool Survey::Trace = false;
 
-        Survey:: Survey() noexcept :
+        Survey:: Survey(const size_t nmin) noexcept :
         Proxy<const Vectors>(),
         list(),
-        sampling(0)
+        sampling(0),
+        min_ncof( Max<size_t>(1,nmin) )
         {
         }
 
@@ -38,9 +40,9 @@ namespace Yttrium
         {
             ++Coerce(sampling);
 
-            if(v.ncof<=0) return *this;
-            if(got(v))    return *this;
-            if(!takes(v)) return *this;
+            if(v.ncof<=min_ncof) return *this;
+            if(got(v))           return *this;
+            if(!takes(v))        return *this;
             
             Vector * const node = list.pushTail( new Vector(v) );
             while(node->prev && Vector::Compare(*(node->prev),*node) == Positive )
