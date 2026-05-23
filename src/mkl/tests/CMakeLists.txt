@@ -9,4 +9,5 @@ enable_testing()
 Y_UTEST(algebra:mmul)
 Y_UTEST(algebra:lu)
 Y_UTEST(algebra:adjoint)
+Y_UTEST(algebra:ortho:space)
 

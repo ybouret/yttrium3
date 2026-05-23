@@ -11,15 +11,25 @@
 
 \begin{document}
 
-Let $\bm{P} \in M_{n,m}$ be a matrix of row vectors $n\leq m$.
-Then:
+Let $\bm{P} \in M_{n,m}$ be a matrix of row vectors of $\mathbb{R}^m$, $n\leq m$ .
+Let $\bm{Q} \in M_{m-n,m}$ be a set of orthogonal vectors to $\bm{P}$:
 \begin{equation}
-	(\vec{x} \in \mathbb{R}^n) \in \mathrm{Im}(\bm{P}) \iff \exists \vec \lambda \in \mathbb{R}^m, \vec{x} = \bm{P}^T \vec \lambda
+	\bm{P}.\bm{Q}^T = \bm{0}
+\end{equation} 
+ 
+\begin{equation}
+\forall \vec x \in \mathbb{R}^m, \; \exists \vec \lambda \in \mathbb{R}^m, \; \exists \vec \mu \in \mathbb{R}^{m-n}, \;
+\vec{x} = \bm{P}^T \vec \lambda + \bm{Q}^T \vec \mu
+\end{equation} 
+ 
+\begin{equation}
+	\bm{P} \vec{x} = \bm{P}\bm{P}^T \vec \lambda \implies \vec \lambda = \left(\bm{P}\bm{P}^T\right)^{-1} \bm{P} \vec{x}
 \end{equation}
 
-
 \begin{equation}
-	\vec{x} = \bm{P}^T \vec \lambda + \left( \vec{x} - \bm{P}^T \vec \lambda \right)
+	 	\vec{x} = 
+		\underbrace{\bm{P}^T \left(\bm{P}\bm{P}^T\right)^{-1} \bm{P} \vec{x}}_{\parallel \bm{P}^T}
+		+ \underbrace{\left( \bm{I}_m - \bm{P}^T \left(\bm{P}\bm{P}^T\right)^{-1} \bm{P}\right) \vec{x}}_{\perp \bm{P}^T}
 \end{equation}
 
 \end{document}

@@ -60,8 +60,8 @@ namespace Yttrium
 
     void MatrixMetrics:: trade(MatrixMetrics &other) noexcept
     {
-        CoerceSwap(rows,other.cols);
-        CoerceSwap(rows,other.cols);
+        CoerceSwap(rows,other.rows);
+        CoerceSwap(cols,other.cols);
         CoerceSwap(items,other.items);
     }
 

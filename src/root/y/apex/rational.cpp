@@ -107,7 +107,7 @@ namespace Yttrium
         s(q.numer.s),
         n(q.numer.n)
         {
-            if(q.denom<=1) throw Libc::Exception(EDOM,"rational is not integer");
+            if(q.denom>1) throw Libc::Exception(EDOM,"rational is not integer");
         }
 
         Integer & Integer:: operator=( const Rational &q )
