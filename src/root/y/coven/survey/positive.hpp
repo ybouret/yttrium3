@@ -24,7 +24,7 @@ namespace Yttrium
         class PositiveSurvey : public Survey
         {
         public:
-            explicit PositiveSurvey(const size_t = 1) noexcept; //!< setup
+            explicit PositiveSurvey(const size_t) noexcept; //!< setup
             virtual ~PositiveSurvey() noexcept; //!< cleanup
 
         private:

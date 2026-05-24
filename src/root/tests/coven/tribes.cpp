@@ -104,14 +104,14 @@ Y_UTEST(coven_tribes)
         Y_PRINTV(maxGenerated);
         (std::cerr << "-- all generated : ").flush();
 
-        Coven::StandardSurvey vec0;
+        Coven::StandardSurvey vec0(1);
         const apn             num0 = TestTribes(mu,
                                                 0x00,
                                                 vc,rc,xml,vec0);
         Print(num0,vec0);
 
         (std::cerr << "-- use NoMultiple: ").flush();
-        Coven::StandardSurvey vec1;
+        Coven::StandardSurvey vec1(1);
         const apn             num1 = TestTribes(mu,
                                                 Coven::Tribes::NoMultiple,
                                                 vc,rc,xml,vec1);
@@ -120,7 +120,7 @@ Y_UTEST(coven_tribes)
 
 
         (std::cerr << "-- use Precompile: ").flush();
-        Coven::StandardSurvey vec2;
+        Coven::StandardSurvey vec2(1);
         const apn             num2 = TestTribes(mu,
                                                 Coven::Tribes::Precompile,
                                                 vc,rc,xml,vec2);
@@ -128,7 +128,7 @@ Y_UTEST(coven_tribes)
         Y_ASSERT(vec2==vec0);
 
         (std::cerr << "-- use NoColinear: ").flush();
-        Coven::StandardSurvey vec3;
+        Coven::StandardSurvey vec3(1);
         const apn             num3 = TestTribes(mu,
                                                 Coven::Tribes::NoColinear,
                                                 vc,rc,xml,vec3);
@@ -137,7 +137,7 @@ Y_UTEST(coven_tribes)
 
 
         (std::cerr << "-- use HyperPlane: ").flush();
-        Coven::StandardSurvey vec4;
+        Coven::StandardSurvey vec4(1);
         const apn             num4 = TestTribes(mu,
                                                 Coven::Tribes::HyperPlane,
                                                 vc,rc,xml,vec4);
@@ -147,7 +147,7 @@ Y_UTEST(coven_tribes)
 
         (std::cerr << "-- use Optimizing: ").flush();
 
-        Coven::StandardSurvey vec5;
+        Coven::StandardSurvey vec5(1);
         const apn             num5 = TestTribes(mu,
                                                 Coven::Tribes::Optimizing,
                                                 vc,rc,xml,vec5);
