@@ -3,6 +3,7 @@
 
 Y_UTEST_DECL(4)
 {
+    Y_UTEST(algebra_rank);
     Y_UTEST(algebra_mmul);
     Y_UTEST(algebra_lu);
     Y_UTEST(algebra_adjoint);
