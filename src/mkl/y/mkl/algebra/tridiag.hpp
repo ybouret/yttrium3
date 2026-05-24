@@ -63,7 +63,6 @@ namespace Yttrium
 
             //! res = *this * rhs
             /**
-             \param xadd for inner additions
              \param res  result
              \param rhs  rhs
              */

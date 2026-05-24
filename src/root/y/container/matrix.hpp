@@ -350,6 +350,7 @@ namespace Yttrium
             }
         }
 
+        //! compute Gram matrix \param P to compute P'*P
         template <typename MATRIX> inline
         void gram(MATRIX &P)
         {
@@ -362,9 +363,7 @@ namespace Yttrium
             {
                 self[i][i] = xadd.dot(P[i],P[i]);
                 for(size_t j=i+1;j<=nr;++j)
-                {
                     self[i][j] = self[j][i] = xadd.dot(P[i],P[j]);
-                }
             }
         }
 

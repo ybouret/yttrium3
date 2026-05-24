@@ -50,6 +50,7 @@ namespace Yttrium
         virtual void popTail() noexcept = 0; //!< remove element at tail
         virtual void popHead() noexcept = 0; //!< remove element at head
 
+        //! adjust size \param n new size \param pad in case of increase
         inline void adjust(const size_t n, ParamType pad)
         {
             const size_t now = this->size();

@@ -218,6 +218,7 @@ namespace Yttrium
             }
 
 
+            //! merge content \param rhs content to merge \return *this
             inline JointSet & operator |= (const JointSet &rhs)
             {
                 if(this != &rhs)
@@ -232,6 +233,7 @@ namespace Yttrium
                 return *this;
             }
 
+            //! exclude content \param rhs content to exclude \return *this
             inline JointSet & operator -= (const JointSet &rhs)
             {
                 if(this != &rhs)

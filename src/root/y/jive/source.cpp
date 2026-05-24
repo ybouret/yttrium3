@@ -153,8 +153,10 @@ namespace Yttrium
                 if( IsStop(**ch) ) break;
                 token.pushTail( get() );
             }
-            return token.toString();
+            return token.str();
         }
+
+        const Module * Source:: operator->() const noexcept { return impl; }
 
     }
 }

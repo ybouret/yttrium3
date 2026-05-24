@@ -14,11 +14,20 @@ namespace Yttrium
     namespace Coven
     {
 
+        //! Compress mode
         enum CompressMode
         {
-            CompressTranspose,
-            CompressDuplicate
+            CompressTranspose, //!< compress transpose of source matrix
+            CompressDuplicate  //!< compress duplicate of source matrix
         };
+
+        //! compress to univocal (not nul) uniq vectors
+        /**
+         \param target target matrix, empty upon failure
+         \param source source matrix
+         \param mode compression mode
+         \return true if target is not empty
+         */
         template <typename T>
         inline bool Compress(Matrix<apz>        &target,
                              const Matrix<T>    &source,

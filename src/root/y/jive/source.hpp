@@ -38,18 +38,17 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            Char *       get();                         //!< \return character, NULL on EOF
-            void         unget(Char * const)  noexcept; //!< unget read character
-            void         unget(Token &)       noexcept; //!< unget read token
-            void         uncpy(const Token &);          //!< unget of copy of token
-            void         skip(size_t)   noexcept;       //!< skip chars from buffer
-            size_t       cached() const noexcept;       //!< \return buff.size
-            const Char * peek();                        //!< \return NULL if EOF
-            void         endl() noexcept;               //!< signal new line
-            void         fetch(size_t);                 //!< prefetch if possible
-            String       guessInvalidString();          //!< \return extracted 'bad' string
-
-            const Module * operator->() const noexcept { return impl; }
+            Char *         get();                         //!< \return character, NULL on EOF
+            void           unget(Char * const)  noexcept; //!< unget read character
+            void           unget(Token &)       noexcept; //!< unget read token
+            void           uncpy(const Token &);          //!< unget of copy of token
+            void           skip(size_t)   noexcept;       //!< skip chars from buffer
+            size_t         cached() const noexcept;       //!< \return buff.size
+            const Char *   peek();                        //!< \return NULL if EOF
+            void           endl() noexcept;               //!< signal new line
+            void           fetch(size_t);                 //!< prefetch if possible
+            String         guessInvalidString();          //!< \return extracted 'bad' string
+            const Module * operator->()   const noexcept; //!< \return this module
 
             //__________________________________________________________________
             //

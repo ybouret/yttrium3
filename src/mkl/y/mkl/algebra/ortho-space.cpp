@@ -23,9 +23,9 @@ namespace Yttrium
 
             Q.make(m,m);
             {
-                Matrix<apz>       P3(n,m);P3.mmul(aP2,P);
-                const Matrix<apz> PT(TransposeOf,P);
-                Q.mmul(PT,P3);
+                Matrix<apz> P3(n,m);
+                P3.mmul(aP2,P);
+                Q.mmul(TransposeOf,P,P3);
             }
 
             for(size_t i=m;i>0;--i)

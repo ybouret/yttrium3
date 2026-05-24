@@ -30,7 +30,7 @@ namespace Yttrium
             return *this;
         }
 
-        String Token:: toString() const
+        String Token:: str() const
         {
             String res;
             for(const Char *ch=head;ch;ch=ch->next)
@@ -42,7 +42,7 @@ namespace Yttrium
 
         std::ostream & operator<<(std::ostream &os, const Token &token)
         {
-            return os << token.toString();
+            return os << token.str();
         }
 
     }

@@ -145,6 +145,13 @@ namespace Yttrium
                 return self();
             }
 
+            //! helper to sum three items
+            /**
+             \param a first item
+             \param b second item
+             \param c thirs  item
+             \return a+b+c
+             */
             inline Type sum(ParamType a, ParamType b, ParamType c)
             {
                 SummatorType &self = *this;

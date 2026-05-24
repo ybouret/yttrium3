@@ -30,7 +30,7 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Survey(const size_t nmin) noexcept;
+            explicit Survey(const size_t nmin) noexcept; //!< setup \param nmin for min_ncof
             virtual ~Survey() noexcept;
 
             //__________________________________________________________________
