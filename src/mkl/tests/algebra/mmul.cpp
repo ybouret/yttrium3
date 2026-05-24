@@ -15,6 +15,7 @@ Y_UTEST(algebra_mmul)
         for(size_t nc=1;nc<=5;++nc)
         {
             Matrix<apz> M(nr,nc);
+
             for(size_t nx=1;nx<=8;++nx)
             {
                 Matrix<apz> a(nr,nx);
@@ -24,6 +25,10 @@ Y_UTEST(algebra_mmul)
                     Matrix<apz> b(nx,nc);
                     Random::Generate::Matrix(ran,b);
                     M.mmul(a,b);
+
+                    Matrix<apz> c(nx,nr);
+                    Random::Generate::Matrix(ran,c);
+                    M.mmul(TransposeOf,c,b);
                 }
 
                 {

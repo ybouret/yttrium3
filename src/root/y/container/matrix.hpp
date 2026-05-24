@@ -308,7 +308,7 @@ namespace Yttrium
             }
         }
 
-        //! *this = lhs * rhs \param lhs matrix \param rhs matrix
+        //! *this = lhs * rhs' \param lhs matrix \param rhs matrix
         template <typename LHS, typename RHS> inline
         void mmul(LHS &lhs, const TransposeOf_ &, RHS &rhs)
         {
@@ -326,6 +326,29 @@ namespace Yttrium
             }
         }
 
+        //! *this = lhs' * rhs \param lhs matrix \param rhs matrix
+        template <typename LHS, typename RHS> inline
+        void mmul(const TransposeOf_ &, LHS &lhs, RHS &rhs)
+        {
+            assert(rows==lhs.cols);
+            assert(cols==rhs.cols);
+            assert(lhs.rows==rhs.rows);
+            Matrix &           self = *this;
+            const size_t       nr   = rows;
+            const size_t       nc   = cols;
+            const size_t       nx   = lhs.rows;
+            Cameo::Addition<T> xadd(nx);
+            for(size_t i=nr;i>0;--i)
+            {
+                for(size_t j=nc;j>0;--j)
+                {
+                    xadd.ldz();
+                    for(size_t k=nx;k>0;--k)
+                        xadd.addProd(lhs[k][i],rhs[k][j]);
+                    self[i][j] = xadd();
+                }
+            }
+        }
 
         template <typename MATRIX> inline
         void gram(MATRIX &P)
@@ -343,8 +366,9 @@ namespace Yttrium
                     self[i][j] = self[j][i] = xadd.dot(P[i],P[j]);
                 }
             }
-
         }
+
+
 
 
 
