@@ -68,9 +68,9 @@ namespace Yttrium
              \param rhs  rhs
              */
             template <typename RES, typename RHS> inline
-            void mul(Cameo::Addition<T> &xadd, RES &res, RHS &rhs) const
+            void mul( RES &res, RHS &rhs) const
             {
-
+                Cameo::Addition<T> xadd(3);
                 const size_t n = size;
                 switch(n)
                 {
@@ -87,7 +87,7 @@ namespace Yttrium
                     const T A = a[i] * rhs[im];
                     const T B = b[i] * rhs[i];
                     const T C = c[i] * rhs[ip];
-                    res[i] = xadd(A,B,C);
+                    res[i] = xadd.sum(A,B,C);
                 }
                 res[n] = a[n] * rhs[nm] + b[n] * rhs[n];
             }
@@ -140,5 +140,5 @@ namespace Yttrium
     }
 }
 
-#endif
+#endif // !Y_MKL_Algebra_TriDiag_Included
 

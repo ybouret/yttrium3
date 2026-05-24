@@ -145,6 +145,14 @@ namespace Yttrium
                 return self();
             }
 
+            inline Type sum(ParamType a, ParamType b, ParamType c)
+            {
+                SummatorType &self = *this;
+                self.ldz();
+                self << a << b << c;
+                return self();
+            }
+
             //__________________________________________________________________
             //
             //
