@@ -217,6 +217,11 @@ namespace Yttrium
                 return false;
             }
 
+            inline JointSet & operator |= (ParamType value)
+            {
+                if(!contains(value)) return (*this) << value;
+                return *this;
+            }
 
             //! merge content \param rhs content to merge \return *this
             inline JointSet & operator |= (const JointSet &rhs)

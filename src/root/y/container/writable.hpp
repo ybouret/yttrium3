@@ -28,8 +28,7 @@ namespace Yttrium
         // Definitions
         //
         //______________________________________________________________________
-        typedef typename Readable<T>::Type      Type; //!< alias
-        typedef typename Readable<T>::ConstType ConstType; //!< alias
+        Y_Args_Declare(T,Type);
 
         //______________________________________________________________________
         //
@@ -61,14 +60,22 @@ namespace Yttrium
             return  this->ask(indx);
         }
 
+        inline Writable & ld(ParamType value)
+        {
+            for(size_t i=this->size();i>0;--i) (*this)[i] = value;
+            return *this;
+        }
+        
         //! load content \param a a compatible source \return
         template <typename ARRAY> inline
-        Writable & ld(ARRAY &a)
+        Writable & load(ARRAY &a)
         {
             assert(this->size()==a.size());
             for(size_t i=this->size();i>0;--i) (*this)[i] = a[i];
             return *this;
         }
+
+
 
     private:
         Y_Disable_Copy_And_Assign(Writable); //!< discarded

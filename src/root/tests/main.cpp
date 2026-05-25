@@ -151,6 +151,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(coven_tribes);
     Y_UTEST(coven_inquiry);
     Y_UTEST(coven_compress);
+    Y_UTEST(coven_chem);
 
     Y_UTEST(counting_perm);
     Y_UTEST(counting_comb);

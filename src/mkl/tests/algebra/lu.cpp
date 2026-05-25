@@ -35,7 +35,7 @@ namespace
 
                 Random::Generate::Array(ran,b);
                 //std::cerr << "b  = " << b << std::endl;
-                lu.solve(a, u.ld(b) );
+                lu.solve(a, u.load(b) );
                 //std::cerr << "u  = " << u << std::endl;
 
                 a0.mul(v,u);

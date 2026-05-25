@@ -71,7 +71,7 @@ namespace Yttrium
             {
                 size_t i=1;
                 for(const Node *node=ok->head;node;node=node->next,++i)
-                    target[i].ld( output[**node] );
+                    target[i].load(output[**node]);
             }
             return true;
         }

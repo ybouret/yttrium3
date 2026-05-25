@@ -1,16 +1,25 @@
 
+
 #include "y/coven/survey/inquiry.hpp"
 #include "y/coven/survey/standard.hpp"
-#include "y/coven/survey/positive.hpp"
 
 #include "y/utest/run.hpp"
 #include "y/core/rand.hpp"
-#include "y/ascii/convert.hpp"
 
 using namespace Yttrium;
 
-Y_UTEST(coven_inquiry)
+Y_UTEST(coven_chem)
 {
+
+    for(size_t dim=2;dim<=3;++dim)
+    {
+        Matrix<int> mu(1,dim);
+        mu[1].ld(1);
+        std::cerr << "mu=" << mu << std::endl;
+
+    }
+
+#if 0
     Core::Rand    ran;
     const size_t  nr = argc>1 ? ASCII::Convert::To<size_t>(argv[1],"nr",0) : 5;
     const size_t  nc = argc>2 ? ASCII::Convert::To<size_t>(argv[2],"nc",0) : 4;
@@ -52,7 +61,7 @@ Y_UTEST(coven_inquiry)
         }
 
     }
-
+#endif
 
 
 }

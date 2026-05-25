@@ -131,7 +131,7 @@ namespace Yttrium
                     switch(hint)
                     {
                         case InquiryExcludesInitial: break;
-                        case InquiryIncludesInitial: proc = Survey::Callback;
+                        case InquiryIncludesInitial: proc = Survey::Callback; break;
                     }
                     Tribes tribes(mu,strategy,vc,rc,proc,args);
                     Coerce(generated) = tribes->size;
