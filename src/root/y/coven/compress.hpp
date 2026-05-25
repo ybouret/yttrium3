@@ -14,67 +14,80 @@ namespace Yttrium
     namespace Coven
     {
 
-        //! Compress mode
-        enum CompressMode
+        struct Compress
         {
-            CompressTranspose, //!< compress transpose of source matrix
-            CompressDuplicate  //!< compress duplicate of source matrix
+            //! Compress mode
+            enum  Mode
+            {
+                Transpose, //!< compress transpose of source matrix
+                Duplicate  //!< compress duplicate of source matrix
+            };
+
+            static size_t CountNonZeroIn(const Readable<apz> &a) noexcept;
+
+
+            //! compress to univocal (not nul) uniq vectors
+            /**
+             \param target target matrix, empty upon failure
+             \param source source matrix
+             \param mode   compression mode
+             \return true if target is not empty
+             */
+            template <typename T> static inline
+            bool Build(Matrix<apz>        &target,
+                       const Matrix<T>    &source,
+                       const  Mode         mode,
+                       const size_t        nmin = 0)
+
+            {
+                typedef Handy::BasicHeavyList<size_t> List;
+                typedef List::NodeType                Node;
+                if(source.rows<=0) { target.release(); return false; }
+
+                // prepare data
+                Matrix<apz>  output;
+                switch(mode)
+                {
+                    case Duplicate: output.make(source.rows,source.cols); output.assign(source); break;
+                    case Transpose: output.make(source.cols,source.rows); output.assignTranspose(source); break;
+                }
+
+                const size_t n = output.rows;
+                List         ok;
+
+                // study each row
+                for(size_t i=1;i<=n;++i)
+                {
+                    MatrixRow<apz> &out = output[i];
+                    if(!Univocal::Make(out)) continue;
+                    if(nmin>1&&CountNonZeroIn(out)<nmin) continue;
+                    bool keep = true;
+                    for(size_t j=1;j<i;++j)
+                    {
+                        if(  out == output[j] ) {
+                            keep = false;
+                            break;
+                        }
+                    }
+                    if(keep) ok << i;
+                }
+
+                //std::cerr << "output=" << output << std::endl;
+                //std::cerr << "ok=" << ok << std::endl;
+                const size_t nr = ok->size; if(!nr) { target.release(); return false; }
+                target.make(nr,output.cols);
+                {
+                    size_t i=1;
+                    for(const Node *node=ok->head;node;node=node->next,++i)
+                        target[i].load(output[**node]);
+                }
+                return true;
+            }
+
         };
 
-        //! compress to univocal (not nul) uniq vectors
-        /**
-         \param target target matrix, empty upon failure
-         \param source source matrix
-         \param mode compression mode
-         \return true if target is not empty
-         */
-        template <typename T>
-        inline bool Compress(Matrix<apz>        &target,
-                             const Matrix<T>    &source,
-                             const CompressMode  mode)
 
-        {
-            typedef Handy::BasicHeavyList<size_t> List;
-            typedef List::NodeType                Node;
-            if(source.rows<=0) { target.release(); return false; }
 
-            // prepare data
-            Matrix<apz>  output;
-            switch(mode)
-            {
-                case CompressDuplicate: output.make(source.rows,source.cols); output.assign(source); break;
-                case CompressTranspose: output.make(source.cols,source.rows); output.assignTranspose(source); break;
-            }
-
-            const size_t n = output.rows;
-            List         ok;
-
-            // study each row
-            for(size_t i=1;i<=n;++i)
-            {
-                if(!Univocal::Make(output[i])) continue;
-                bool keep = true;
-                for(size_t j=1;j<i;++j)
-                {
-                    if( output[i] == output[j] ) {
-                        keep = false;
-                        break;
-                    }
-                }
-                if(keep) ok << i;
-            }
-
-            //std::cerr << "output=" << output << std::endl;
-            //std::cerr << "ok=" << ok << std::endl;
-            const size_t nr = ok->size; if(!nr) { target.release(); return false; }
-            target.make(nr,output.cols);
-            {
-                size_t i=1;
-                for(const Node *node=ok->head;node;node=node->next,++i)
-                    target[i].load(output[**node]);
-            }
-            return true;
-        }
 
     }
 

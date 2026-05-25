@@ -25,7 +25,7 @@ Y_UTEST(coven_compress)
     std::cerr << "nu=" << nu << std::endl;
 
     {
-        if(Coven::Compress(out,nu,Coven::CompressDuplicate))
+        if(Coven::Compress::Build(out,nu,Coven::Compress::Duplicate))
         {
             std::cerr << "dup=" << out << std::endl;
         }
@@ -37,7 +37,7 @@ Y_UTEST(coven_compress)
 
 
     {
-        if(Coven::Compress(out,nu,Coven::CompressTranspose))
+        if(Coven::Compress::Build(out,nu,Coven::Compress::Transpose))
         {
             std::cerr << "trn=" << out << std::endl;
         }

@@ -54,9 +54,10 @@ namespace Yttrium
             virtual void release() noexcept;
 
         private:
-            const Vectors & locus() const noexcept;
+            const Vectors & locus()               const noexcept;
             virtual bool    takes(const Vector &) const noexcept = 0; //!< \return true iff criterion is matched
             Y_Disable_Copy_And_Assign(Survey); //!< discards
+
 
             //__________________________________________________________________
             //

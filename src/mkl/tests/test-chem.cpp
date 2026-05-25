@@ -9,6 +9,8 @@
 
 #include "y/utest/run.hpp"
 #include "y/pointer/auto.hpp"
+#include "y/core/min.hpp"
+#include "y/counting/combination.hpp"
 
 using namespace Yttrium;
 
@@ -35,13 +37,9 @@ namespace {
     static inline
     void checkSys(const Matrix<int> &nu)
     {
-
-
-
-
+        std::cerr << "nu=" << nu << std::endl;
         Matrix<apz> Q;
         Matrix<apz> mu;
-        std::cerr << "nu=" << nu << std::endl;
         iCache      cache;
         iSet        source(cache);
         iSet        target(cache);
@@ -51,11 +49,48 @@ namespace {
             std::cerr << "Q=" << Q << std::endl;
             Coven::Inquiry<Coven::PositiveSurvey> survey(Q,2,Coven::Tribes::Optimizing);
             survey->print(std::cerr << "-- conservations: " << std::endl);
+            std::cerr << "--" << std::endl;
+
         }
 
         {
-            Coven::Compress(mu,nu,Coven::CompressTranspose);
-            std::cerr << "mu = " << mu << std::endl;
+            if(!Coven::Compress::Build(mu,nu,Coven::Compress::Transpose,2))
+            {
+                std::cerr << "empty mu!" << std::endl;
+                return;
+            }
+            std::cerr << "mu   = " << mu << std::endl;
+            const size_t p    = mu.rows;    // max
+            const size_t m    = mu.cols;    // total space
+            const size_t pmax = Min(p,m-1); // max possible rows to check together
+            std::cerr << "p    = " << p << std::endl;
+            std::cerr << "m    = " << m << std::endl;
+            std::cerr << "pmax = " << pmax << std::endl;
+
+            for(size_t k=1;k<=pmax;++k)
+            {
+                Combination comb(p,k);
+                do
+                {
+                    std::cerr << "using " << comb << std::endl;
+                    Matrix<apz> P(k,m);
+                    for(size_t i=1;i<=k;++i)
+                    {
+                        P[i].load(mu[ comb[i] ]);
+                    }
+                    std::cerr << "\tP=" << P << std::endl;
+                    if( !MKL::OrthoSpace::Get(Q,P)) { std::cerr << "\tno Q!" << std::endl; continue; }
+                    std::cerr << "\tQ=" << Q << std::endl;
+                    Coven::Inquiry<Coven::StandardSurvey> survey(Q,2,Coven::Tribes::Optimizing);
+                    survey->print(std::cerr << "-- lincomb: " << std::endl);
+
+
+                } while(comb.next());
+            }
+
+
+
+#if 0
             Coven::Inquiry<Coven::StandardSurvey> survey(mu,2,Coven::Tribes::Optimizing);
             survey->print(std::cerr << "-- combinations: " << std::endl);
 
@@ -93,6 +128,7 @@ namespace {
                 std::cerr << "st    =" << st << std::endl;
 
             }
+#endif
 
 
         }
@@ -105,21 +141,7 @@ Y_UTEST(chem)
 {
 
 
-    {
-        for(size_t dims=2;dims<=3;++dims)
-        {
-            Matrix<int> mu(1,dims);
-            mu[1].ld(1);
-            std::cerr << "mu=" << mu << std::endl;
-            Matrix<apz> Q;
-            Y_ASSERT(MKL::OrthoSpace::Get(Q,mu));
-            std::cerr << "Q=" << Q << std::endl;
-            Coven::Inquiry<Coven::StandardSurvey> survey(Q,2,Coven::Tribes::Optimizing);
-            survey->print(std::cerr << "-- output: " << std::endl);
-            std::cerr << std::endl;
-        }
-    }
-    return 0;
+
 
     {
         // H+ HO-
