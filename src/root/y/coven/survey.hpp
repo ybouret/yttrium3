@@ -44,7 +44,8 @@ namespace Yttrium
             friend bool operator==(const Survey &, const Survey &); //!< \return vector-wise comparison
             void        print(std::ostream &) const;                //!< pretty print content
             static void Callback(const Vector &, void * const);     //!< helper for Tribes
-            void        merge(Survey &source) noexcept;
+            void        fusion(Survey &) noexcept;                  //!< fusion source (new) content, source is emptied
+            bool        insert(const Vector &);                     //!< try to insert new vector \return true iff new, taken vector
 
             //__________________________________________________________________
             //

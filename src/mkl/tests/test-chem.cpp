@@ -107,12 +107,13 @@ namespace {
 
                     // build combination coefficients and gather source species indices
                     {
-                        const Coven::Vector & cf   = *vn; // combination factors
-                        std::cerr << "-- use " << cf << std::endl;
-                        for(size_t i=cf.size();i>0;--i)
+                        const Coven::Vector & weights   = *vn; // combination factors
+                        std::cerr << "-- weights = " << weights << std::endl;
+                        Y_ASSERT(weights.size()==nu.rows); // change to N for chem
+                        for(size_t i=weights.size();i>0;--i)
                         {
-                            const apz &factor = cf[i];
-                            if(factor.s == __Zero__) continue; // discarded equilibrium
+                            const apz &w = weights[i];
+                            if(w.s == __Zero__) continue; // discarded equilibrium
                             const Readable<int> &nu_i = nu[i];
                             for(size_t j=M;j>0;--j)
                             {
@@ -120,7 +121,7 @@ namespace {
                                 if(n)
                                 {
                                     source |= j;
-                                    st[j] += n * factor;
+                                    st[j] += n * w;
                                 }
                             }
                         }
@@ -137,11 +138,14 @@ namespace {
                     source -= target;
                     std::cerr << "\tmissing = " << source << std::endl;
                     std::cerr << "\tst      = " << st << std::endl;
-                    if(stoi.got(st))
+                    if(!stoi.insert(st))
                     {
                         std::cerr << "\t\t --> already exists!! <--" << std::endl;
+                        continue;
                     }
-                    stoi << st;
+
+
+
                 }
                 std::cerr << "nu:" << std::endl;
                 for(size_t i=1;i<=nu.rows;++i)

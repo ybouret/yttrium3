@@ -38,16 +38,21 @@ namespace Yttrium
             return false;
         }
 
-        Survey & Survey:: operator<< (const Vector &v)
+
+        bool Survey:: insert(const Vector &v)
         {
             ++Coerce(sampling);
-            if(v.ncof<min_ncof)  return *this;
-            if(got(v))           return *this;
-            if(!takes(v))        return *this;
-
+            if(v.ncof<min_ncof)  return false;
+            if(got(v))           return false;
+            if(!takes(v))        return false;
             place( new Vector(v) );
+            return true;
+        }
 
 
+        Survey & Survey:: operator<< (const Vector &v)
+        {
+            (void) insert(v);
             return *this;
         }
 
@@ -60,7 +65,7 @@ namespace Yttrium
         }
 
         
-        void Survey:: merge(Survey &source) noexcept
+        void Survey:: fusion(Survey &source) noexcept
         {
             assert(source.min_ncof==min_ncof);
             if( &source != this )

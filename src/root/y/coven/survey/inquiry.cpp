@@ -20,8 +20,7 @@ namespace Yttrium
 
         void InquiryCommon:: sendTo(Survey &parent) noexcept
         {
-            parent.merge( Coerce(**this) );
-            
+            parent.fusion( Coerce(**this) );
         }
 
 
