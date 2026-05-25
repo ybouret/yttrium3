@@ -44,6 +44,7 @@ namespace Yttrium
             friend bool operator==(const Survey &, const Survey &); //!< \return vector-wise comparison
             void        print(std::ostream &) const;                //!< pretty print content
             static void Callback(const Vector &, void * const);     //!< helper for Tribes
+            void        merge(Survey &source) noexcept;
 
             //__________________________________________________________________
             //
@@ -54,9 +55,10 @@ namespace Yttrium
             virtual void release() noexcept;
 
         private:
+            Y_Disable_Copy_And_Assign(Survey); //!< discards
+            void            place(Vector * const newVector) noexcept;
             const Vectors & locus()               const noexcept;
             virtual bool    takes(const Vector &) const noexcept = 0; //!< \return true iff criterion is matched
-            Y_Disable_Copy_And_Assign(Survey); //!< discards
 
 
             //__________________________________________________________________

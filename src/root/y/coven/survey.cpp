@@ -4,6 +4,7 @@
 #include "y/string/format.hpp"
 #include "y/core/max.hpp"
 #include <iomanip>
+#include "y/pointer/auto.hpp"
 
 namespace Yttrium
 {
@@ -31,6 +32,7 @@ namespace Yttrium
         {
             for(const Vector *node=list.head;node;node=node->next)
             {
+                assert( node->size() == v.size() );
                 if(v == *node) return true;
             }
             return false;
@@ -42,16 +44,44 @@ namespace Yttrium
             if(v.ncof<min_ncof)  return *this;
             if(got(v))           return *this;
             if(!takes(v))        return *this;
-            
-            Vector * const node = list.pushTail( new Vector(v) );
-            while(node->prev && Vector::Compare(*(node->prev),*node) == Positive )
-                list.towardsHead(node);
+
+            place( new Vector(v) );
+
 
             return *this;
         }
 
-        
+        void Survey:: place(Vector *const newVector) noexcept
+        {
+            assert(newVector);
+            Vector * const node = list.pushTail( newVector );
+            while(node->prev && Vector::Compare(*(node->prev),*node) == Positive )
+                list.towardsHead(node);
+        }
 
+        
+        void Survey:: merge(Survey &source) noexcept
+        {
+            assert(source.min_ncof==min_ncof);
+            if( &source != this )
+            {
+                try
+                {
+                    while( source.list.size )
+                    {
+                        AutoPtr<Vector> pv = source.list.popHead(); assert( takes(*pv) );
+                        if( got(*pv) ) continue;
+                        place( pv.yield() );
+                    }
+                    Coerce(sampling) += source.sampling;
+                    Coerce(source.sampling) = 0;
+                }
+                catch(...)
+                {
+                    release(); throw;
+                }
+            }
+        }
 
         void Survey:: release() noexcept
         {

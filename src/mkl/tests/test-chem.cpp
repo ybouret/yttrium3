@@ -54,81 +54,103 @@ namespace {
         }
 
         {
+            Coven::StandardSurvey blend(2);
+
+            // compute all possible vanishing species
             if(!Coven::Compress::Build(mu,nu,Coven::Compress::Transpose,2))
             {
                 std::cerr << "empty mu!" << std::endl;
                 return;
             }
             std::cerr << "mu   = " << mu << std::endl;
-            const size_t p    = mu.rows;    // max
-            const size_t m    = mu.cols;    // total space
-            const size_t pmax = Min(p,m-1); // max possible rows to check together
-            std::cerr << "p    = " << p << std::endl;
-            std::cerr << "m    = " << m << std::endl;
-            std::cerr << "pmax = " << pmax << std::endl;
-
-            for(size_t k=1;k<=pmax;++k)
             {
-                Combination comb(p,k);
-                do
+                const size_t p    = mu.rows;    // max vanishing species
+                const size_t m    = mu.cols;    // number of species
+                const size_t pmax = Min(p,m-1); // max possible rows to check together
+                std::cerr << "p    = " << p << std::endl;
+                std::cerr << "m    = " << m << std::endl;
+                std::cerr << "pmax = " << pmax << std::endl;
+
+                // collect all vanishing possibilities
+                for(size_t k=1;k<=pmax;++k)
                 {
-                    std::cerr << "using " << comb << std::endl;
-                    Matrix<apz> P(k,m);
-                    for(size_t i=1;i<=k;++i)
+                    Combination comb(p,k);
+                    do
                     {
-                        P[i].load(mu[ comb[i] ]);
-                    }
-                    std::cerr << "\tP=" << P << std::endl;
-                    if( !MKL::OrthoSpace::Get(Q,P)) { std::cerr << "\tno Q!" << std::endl; continue; }
-                    std::cerr << "\tQ=" << Q << std::endl;
-                    Coven::Inquiry<Coven::StandardSurvey> survey(Q,2,Coven::Tribes::Optimizing);
-                    survey->print(std::cerr << "-- lincomb: " << std::endl);
-
-
-                } while(comb.next());
+                        std::cerr << "using " << comb << std::endl;
+                        Matrix<apz> P(k,m);
+                        for(size_t i=1;i<=k;++i)
+                        {
+                            P[i].load(mu[ comb[i] ]);
+                        }
+                        std::cerr << "\tP=" << P << std::endl;
+                        if( !MKL::OrthoSpace::Get(Q,P)) { std::cerr << "\tno Q!" << std::endl; continue; }
+                        std::cerr << "\tQ=" << Q << std::endl;
+                        Coven::Inquiry<Coven::StandardSurvey> survey(Q,2,Coven::Tribes::Optimizing);
+                        survey->print(std::cerr << "-- lincomb: " << std::endl);
+                        survey.sendTo(blend);
+                    } while(comb.next());
+                }
             }
+            blend.print(std::cerr << "-- all:" << std::endl);
 
 
-
-#if 0
-            Coven::Inquiry<Coven::StandardSurvey> survey(mu,2,Coven::Tribes::Optimizing);
-            survey->print(std::cerr << "-- combinations: " << std::endl);
-
-            Coven::Vectors       stoi;
-            const size_t         M = nu.cols;
-            const Coven::Metrics m(M);
-            for(const Coven::Vector *vn= (*survey)->head;vn;vn=vn->next)
+            Coven::StandardSurvey stoi(2);
             {
-                source.free();
-                target.free();
-                const Coven::Vector & cf   = *vn;
-                Coven::Vector       & st   = *stoi.pushTail( new Coven::Vector(m) );
-                for(size_t i=cf.size();i>0;--i)
+                const size_t         M = nu.cols;
+                const Coven::Metrics m(M);
+                for(const Coven::Vector *vn= blend->head;vn;vn=vn->next)
                 {
-                    const apz &factor = cf[i];
-                    if(factor.s == __Zero__) continue;
-                    const Readable<int> &nu_i = nu[i];
+                    source.free();
+                    target.free();
+                    Coven::Vector st(m);
+
+                    // build combination coefficients and gather source species indices
+                    {
+                        const Coven::Vector & cf   = *vn; // combination factors
+                        std::cerr << "-- use " << cf << std::endl;
+                        for(size_t i=cf.size();i>0;--i)
+                        {
+                            const apz &factor = cf[i];
+                            if(factor.s == __Zero__) continue; // discarded equilibrium
+                            const Readable<int> &nu_i = nu[i];
+                            for(size_t j=M;j>0;--j)
+                            {
+                                const int n = nu_i[j];
+                                if(n)
+                                {
+                                    source |= j;
+                                    st[j] += n * factor;
+                                }
+                            }
+                        }
+                        st.update();
+                    }
+
+                    // gather target indices
                     for(size_t j=M;j>0;--j)
                     {
-                        const int n = nu_i[j];
-                        if(n)
-                        {
-                            source |= j;
-                            st[j] += n * factor;
-                        }
+                        if(st[j].s!=__Zero__) target |= j;
                     }
+                    Y_ASSERT(target->size()<source->size());
+                    std::cerr << "\tindices = " << source << " => " << target << std::endl;
+                    source -= target;
+                    std::cerr << "\tmissing = " << source << std::endl;
+                    std::cerr << "\tst      = " << st << std::endl;
+                    if(stoi.got(st))
+                    {
+                        std::cerr << "\t\t --> already exists!! <--" << std::endl;
+                    }
+                    stoi << st;
                 }
-                st.update();
-                for(size_t j=M;j>0;--j)
-                {
-                    if(st[j].s!=__Zero__) target |= j;
-                }
-                std::cerr << "source=" << source << std::endl;
-                std::cerr << "target=" << target << std::endl;
-                std::cerr << "st    =" << st << std::endl;
-
+                std::cerr << "nu:" << std::endl;
+                for(size_t i=1;i<=nu.rows;++i)
+                std::cerr << "\t" << nu[i] << std::endl;
+                stoi.print(std::cerr << "stoichiometry:" << std::endl);
             }
-#endif
+
+
+
 
 
         }
@@ -157,6 +179,7 @@ Y_UTEST(chem)
         nu[2][1] = 1; nu[2][3] = -1; nu[2][4] = 1;
         checkSys(nu);
     }
+
 
     {
         // H+ HO- AH2 AH- A2-

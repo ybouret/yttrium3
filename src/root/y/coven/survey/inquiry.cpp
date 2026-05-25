@@ -18,6 +18,12 @@ namespace Yttrium
         {
         }
 
+        void InquiryCommon:: sendTo(Survey &parent) noexcept
+        {
+            parent.merge( Coerce(**this) );
+            
+        }
+
 
         void InquiryCommon:: output(XML::Log &xml, const size_t num_rows) const
         {

@@ -51,6 +51,9 @@ namespace Yttrium
             //! output statistics for num rows
             void output(XML::Log &, const size_t) const;
 
+            //! send to parent survey
+            void sendTo(Survey &) noexcept;
+
             //__________________________________________________________________
             //
             //

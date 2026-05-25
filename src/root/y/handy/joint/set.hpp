@@ -246,7 +246,7 @@ namespace Yttrium
                     for(const NodeType *node=rhs.list->head;node;node=node->next)
                     {
                         NodeType * const mine = remove(**node);
-                        if(mine) this->cache->banish(mine);
+                        if(mine) list.cache->banish(mine);
                     }
                 }
                 else
