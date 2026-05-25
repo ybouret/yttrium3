@@ -49,14 +49,14 @@ namespace {
         {
             Y_ASSERT(MKL::OrthoSpace::Get(Q,nu));
             std::cerr << "Q=" << Q << std::endl;
-            Coven::Inquiry<Coven::PositiveSurvey> survey(Q,Coven::InquiryIncludesInitial,2,Coven::Tribes::Optimizing);
+            Coven::Inquiry<Coven::PositiveSurvey> survey(Q,2,Coven::Tribes::Optimizing);
             survey->print(std::cerr << "-- conservations: " << std::endl);
         }
 
         {
             Coven::Compress(mu,nu,Coven::CompressTranspose);
             std::cerr << "mu = " << mu << std::endl;
-            Coven::Inquiry<Coven::StandardSurvey> survey(mu,Coven::InquiryExcludesInitial,2,Coven::Tribes::Optimizing);
+            Coven::Inquiry<Coven::StandardSurvey> survey(mu,2,Coven::Tribes::Optimizing);
             survey->print(std::cerr << "-- combinations: " << std::endl);
 
             Coven::Vectors       stoi;
@@ -104,6 +104,22 @@ namespace {
 Y_UTEST(chem)
 {
 
+
+    {
+        for(size_t dims=2;dims<=3;++dims)
+        {
+            Matrix<int> mu(1,dims);
+            mu[1].ld(1);
+            std::cerr << "mu=" << mu << std::endl;
+            Matrix<apz> Q;
+            Y_ASSERT(MKL::OrthoSpace::Get(Q,mu));
+            std::cerr << "Q=" << Q << std::endl;
+            Coven::Inquiry<Coven::StandardSurvey> survey(Q,2,Coven::Tribes::Optimizing);
+            survey->print(std::cerr << "-- output: " << std::endl);
+            std::cerr << std::endl;
+        }
+    }
+    return 0;
 
     {
         // H+ HO-

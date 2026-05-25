@@ -39,8 +39,7 @@ namespace Yttrium
         Survey & Survey:: operator<< (const Vector &v)
         {
             ++Coerce(sampling);
-
-            if(v.ncof<=min_ncof) return *this;
+            if(v.ncof<min_ncof)  return *this;
             if(got(v))           return *this;
             if(!takes(v))        return *this;
             

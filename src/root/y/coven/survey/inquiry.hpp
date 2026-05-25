@@ -63,19 +63,6 @@ namespace Yttrium
             Y_Disable_Copy_And_Assign(InquiryCommon); //!< discarded
         };
 
-        //______________________________________________________________________
-        //
-        //
-        //
-        //! Hint to process initial rows
-        //
-        //
-        //______________________________________________________________________
-        enum InquiryHint
-        {
-            InquiryExcludesInitial, //!< assume initial rows are excluded from solution
-            InquiryIncludesInitial  //!< assume initial rows may be part of solution
-        };
 
         //______________________________________________________________________
         //
@@ -106,7 +93,6 @@ namespace Yttrium
              */
             template <typename T> inline
             explicit Inquiry(const Matrix<T> & mu,
-                             const InquiryHint hint,
                              const size_t      nmin,
                              const unsigned    strategy) :
             survey(nmin)
@@ -126,13 +112,8 @@ namespace Yttrium
                     //
                     // prepare for initial tribes
                     //__________________________________________________________
-                    Tribe::Callback proc = 0;
-                    void * const    args = (void*) & locus();
-                    switch(hint)
-                    {
-                        case InquiryExcludesInitial: break;
-                        case InquiryIncludesInitial: proc = Survey::Callback; break;
-                    }
+                    Tribe::Callback const proc = Survey::Callback;
+                    void * const          args = (void*) & locus();
                     Tribes tribes(mu,strategy,vc,rc,proc,args);
                     Coerce(generated) = tribes->size;
 
@@ -140,7 +121,6 @@ namespace Yttrium
                     //
                     // prepare for other data and iterate
                     //__________________________________________________________
-                    proc = Survey::Callback;
                     while(true)
                     {
                         const size_t gen = tribes.generate(mu,strategy,proc,args);
