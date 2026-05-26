@@ -40,7 +40,7 @@ namespace Yttrium
                                 const RX &   rx,
                                 const OnEOS  eos) :
                 Scanner(id,eos),
-                spark( RegExp::Compile(rx,0) )
+                spark( rx )
                 {
                 }
 
@@ -62,7 +62,7 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
-                const Motif spark; //!< compile pattern that call the plugin
+                const String spark; //!< regexp that triggers the call to the plugin
 
             private:
                 Y_Disable_Copy_And_Assign(Plugin); //!< discarded

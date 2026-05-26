@@ -96,6 +96,25 @@ namespace Yttrium
                     return add( Rule::New(EmitLexeme,id,rx,NoEndOfLine) );
                 }
 
+                //! emit a lexeme with hook
+                /**
+                 \param id rule/lexeme name
+                 \param rx regular expression
+                 \param host object address
+                 \param meth object method to call
+                 \return created rule
+                 */
+                template <
+                typename ID,
+                typename RX,
+                typename OBJECT_POINTER,
+                typename METHOD_POINTER>
+                inline
+                const Rule & emit(const ID &id, const RX &rx, OBJECT_POINTER * const host, METHOD_POINTER const meth)
+                {
+                    return add( Rule::New(EmitLexeme,id,rx,NoEndOfLine,host,meth) );
+                }
+
 
 
                 //! drop a lexeme
@@ -110,12 +129,33 @@ namespace Yttrium
                     return add( Rule::New(DropLexeme,id,rx,NoEndOfLine) );
                 }
 
-                
-                //! end-of-line lexeme
+                //! drop a lexeme with hook
                 /**
                  \param id rule/lexeme name
                  \param rx regular expression
-                 \param doEmit if necessary, default is false
+                 \param host object address
+                 \param meth object method to call
+                 \return created rule
+                 */
+                template <
+                typename ID,
+                typename RX,
+                typename OBJECT_POINTER,
+                typename METHOD_POINTER>
+                inline
+                const Rule & drop(const ID &id, const RX &rx, OBJECT_POINTER * const host, METHOD_POINTER const meth)
+                {
+                    return add( Rule::New(DropLexeme,id,rx,NoEndOfLine,host,meth) );
+                }
+
+
+
+
+                //! end-of-line lexeme
+                /**
+                 \param id  rule/lexeme name
+                 \param rx  regular expression
+                 \param lxp default is DropLexeme, use EmitLexeme if necessary
                  \return created rule
                  */
                 template <typename ID, typename RX> inline
