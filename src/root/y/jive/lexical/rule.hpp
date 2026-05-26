@@ -32,6 +32,8 @@ namespace Yttrium
                 Y_Disable_Copy_And_Assign(Action);
             };
 
+            typedef EasyPtr<Action> RuleHook;
+
 
             //__________________________________________________________________
             //
@@ -46,7 +48,8 @@ namespace Yttrium
             public:
                 static const unsigned   Emit     = 0x0001;            //!< emit lexeme
                 static const unsigned   Drop     = 0x0002;            //!< drop lexeme
-                static const unsigned   ProcMask = Emit|Drop;         //!< emit|drop
+                static const unsigned   Hook     = 0x0004;            //!< perform action
+                static const unsigned   ProcMask = Emit|Drop|Hook;    //!< emit|drop
                 static const unsigned   Call     = 0x0100;            //!< call scanner
                 static const unsigned   Back     = 0x0200;            //!< back from scanner
                 static const unsigned   Jump     = 0x0400;            //!< jump to scanner
@@ -54,7 +57,6 @@ namespace Yttrium
                 static const unsigned   UsedMask = ProcMask|CntlMask; //!< usage mask
                 static const unsigned   Endl     = 0x8000;            //!< propagate endl
                 typedef CxxListOf<Rule> List;
-                typedef EasyPtr<Action> Hook;
 
                 //______________________________________________________________
                 //
@@ -68,14 +70,14 @@ namespace Yttrium
                  \param ruleName rule name
                  \param ruleForm rule pattern, EXCEPTION iff FRAIL
                  \param ruleDeed behavior
-                 \param ruleInfo parameters for behavior
+                 \param ruleInfo parameters for behavior, may default to ruleName
                  \param ruleHook
                  */
                 explicit Rule(const Identifier & ruleName,
                               const Motif      & ruleForm,
                               const unsigned     ruleDeed,
                               const Identifier & ruleInfo,
-                              const Hook       & ruleHook);
+                              const RuleHook   & ruleHook);
 
                 //! cleanup
                 virtual ~Rule() noexcept;
@@ -90,7 +92,7 @@ namespace Yttrium
                 const Motif      form; //!< matching motif
                 const unsigned   deed; //!< encoded action
                 const Identifier info; //!< name of argument for call/jump
-                Hook             hook; //!< optional action
+                RuleHook         hook; //!< optional action
                 Rule *           next; //!< for list
                 Rule *           prev; //!< for list
 

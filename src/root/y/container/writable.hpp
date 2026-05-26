@@ -28,7 +28,7 @@ namespace Yttrium
         // Definitions
         //
         //______________________________________________________________________
-        Y_Args_Declare(T,Type);
+        Y_Args_Declare(T,Type); //!< aliases
 
         //______________________________________________________________________
         //
@@ -60,6 +60,7 @@ namespace Yttrium
             return  this->ask(indx);
         }
 
+        //! load same value \param value for each item \return *this
         inline Writable & ld(ParamType value)
         {
             for(size_t i=this->size();i>0;--i) (*this)[i] = value;

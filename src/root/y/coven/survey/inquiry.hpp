@@ -90,7 +90,6 @@ namespace Yttrium
             //! setup and perform inquiry
             /**
              \param mu       matrix of row vectors
-             \param hint     hint to process initial rows in survey
              \param nmin     min ncof in each vector
              \param strategy optimization strategy
              */

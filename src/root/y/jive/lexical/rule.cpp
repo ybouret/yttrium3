@@ -21,7 +21,7 @@ namespace Yttrium
                         const Motif      & ruleForm,
                         const unsigned     ruleDeed,
                         const Identifier & ruleInfo,
-                        const Hook       & ruleHook) :
+                        const RuleHook   & ruleHook) :
             name(ruleName),
             form(ruleForm),
             deed(ruleDeed),
@@ -33,7 +33,7 @@ namespace Yttrium
                 assert(deed&UsedMask);
                 
                 if(form->frail())
-                    throw Specific::Exception(name->c_str(),"cannot use frail rule!");
+                    throw Specific::Exception(name->c_str(),"cannot use frail pattern!");
             }
 
         }
