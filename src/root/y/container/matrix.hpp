@@ -245,9 +245,9 @@ namespace Yttrium
         }
 
 
-        //! extract mino \param m target \param I excluded row \param J excluded column
+        //! extract minor \param m target \param I excluded row \param J excluded column
         template <typename U>
-        inline void minor(Matrix<U> &m, const size_t I, const size_t J) const
+        inline void getMinor(Matrix<U> &m, const size_t I, const size_t J) const
         {
             assert(m.rows+1==rows);
             assert(m.cols+1==cols);

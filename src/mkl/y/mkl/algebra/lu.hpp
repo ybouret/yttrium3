@@ -143,7 +143,7 @@ namespace Yttrium
                     for(size_t j=n;j>0;--j)
                     {
                         //a.assign(MinorOf,i,j,M);
-                        M.minor(a,i,j);
+                        M.getMinor(a,i,j);
                         if(build(a))
                         {
                             A[j][i] = (0 == ((i+j) & 1) ) ? det(a) : -det(a);
