@@ -138,4 +138,4 @@ namespace Yttrium
 
 }
 
-#endif
+#endif // !Y_MKL_Algebra_Cyclic_Included

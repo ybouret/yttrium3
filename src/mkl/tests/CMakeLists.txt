@@ -12,6 +12,7 @@ Y_UTEST(algebra:lu)
 Y_UTEST(algebra:adjoint)
 Y_UTEST(algebra:ortho:space)
 Y_UTEST(algebra:tridiag)
+Y_UTEST(algebra:cyclic)
 
 Y_UTEST(chem)
 

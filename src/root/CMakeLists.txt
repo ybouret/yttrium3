@@ -112,6 +112,7 @@ y/hashing
 y/hashing/key
 y/cameo
 y/cameo/sum
+y/cameo/sum/api
 y/cameo/product
 y/information
 y/information/bwt
