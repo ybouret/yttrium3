@@ -1,13 +1,9 @@
-
 //! \file
 
 #ifndef Y_Cameo_Sum3_Included
 #define Y_Cameo_Sum3_Included 1
 
-#include "y/cameo/sum/strategy.hpp"
-#include "y/cameo/sum/3/queued.hpp"
-#include "y/cameo/sum/3/raised.hpp"
-#include "y/cameo/sum/3/direct.hpp"
+#include "y/cameo/sum/3/operating.hpp"
 
 namespace Yttrium
 {
@@ -45,7 +41,7 @@ namespace Yttrium
         //
         //__________________________________________________________________
         template <typename T>
-        class Sum3 : public Sum::Selected3<T,Sum::Strategy<T>::Index>::API
+        class Sum3 : public Sum::OperatingThree<T>::Type
         {
         public:
             inline explicit Sum3() noexcept {} //!< setup

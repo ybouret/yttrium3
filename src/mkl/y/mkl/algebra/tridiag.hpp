@@ -4,6 +4,7 @@
 #define Y_MKL_Algebra_TriDiag_Included 1
 
 #include "y/container/matrix.hpp"
+#include "y/cameo/sum3.hpp"
 
 namespace Yttrium
 {
@@ -66,9 +67,9 @@ namespace Yttrium
              \param rhs  rhs
              */
             template <typename RES, typename RHS> inline
-            void mul( RES &res, RHS &rhs) const
+            void mul(RES &res, RHS &rhs) const
             {
-                Cameo::Addition<T> xadd(3);
+                Cameo::Sum3<T>     s3;
                 const size_t n = size;
                 switch(n)
                 {
@@ -85,7 +86,7 @@ namespace Yttrium
                     const T A = a[i] * rhs[im];
                     const T B = b[i] * rhs[i];
                     const T C = c[i] * rhs[ip];
-                    res[i] = xadd.sum(A,B,C);
+                    res[i] = s3(A,B,C);
                 }
                 res[n] = a[n] * rhs[nm] + b[n] * rhs[n];
             }
