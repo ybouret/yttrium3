@@ -113,6 +113,7 @@ y/hashing/key
 y/cameo
 y/cameo/sum
 y/cameo/sum/api
+y/cameo/sum/3
 y/cameo/product
 y/information
 y/information/bwt

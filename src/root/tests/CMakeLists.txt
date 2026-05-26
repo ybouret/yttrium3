@@ -229,6 +229,7 @@ Y_UTEST(cameo:product:raised)
 Y_UTEST(cameo:product:queued)
 Y_UTEST(cameo:multiplication)
 Y_UTEST(cameo:addenda)
+Y_UTEST(cameo:sum3)
 
 Y_UTEST(info:bwt)
 

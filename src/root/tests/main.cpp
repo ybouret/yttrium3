@@ -200,6 +200,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(cameo_product_queued);
     Y_UTEST(cameo_multiplication);
     Y_UTEST(cameo_addenda);
+    Y_UTEST(cameo_sum3);
 
     Y_UTEST(info_bwt);
 
