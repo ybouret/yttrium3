@@ -4,7 +4,7 @@
 #ifndef Y_Jive_Lexical_Rule_Included
 #define Y_Jive_Lexical_Rule_Included 1
 
-#include "y/jive/pattern.hpp"
+#include "y/jive/regexp.hpp"
 #include "y/functor.hpp"
 #include "y/pointer/easy.hpp"
 
@@ -22,7 +22,7 @@ namespace Yttrium
             {
             public:
                 template <typename OBJECT_POINTER, typename METHOD_POINTER> inline
-                explicit Action(OBJECT_POINTER * const objectPointer, METHOD_POINTER * methodPointer) :
+                explicit Action(OBJECT_POINTER * const objectPointer, METHOD_POINTER const methodPointer) :
                 ActionType(objectPointer,methodPointer)
                 {
                 }
@@ -34,6 +34,18 @@ namespace Yttrium
 
             typedef EasyPtr<Action> RuleHook;
 
+
+            enum LexemeProcess
+            {
+                EmitLexeme,
+                DropLexeme
+            };
+
+            enum EndOfLineFlag
+            {
+                IsEndOfLine,
+                NoEndOfLine
+            };
 
             //__________________________________________________________________
             //
@@ -81,6 +93,63 @@ namespace Yttrium
 
                 //! cleanup
                 virtual ~Rule() noexcept;
+
+                static unsigned DeedFor(const LexemeProcess lxp,
+                                        const EndOfLineFlag eol) noexcept
+                {
+                    unsigned ruleDeed = 0;
+                    switch(lxp)
+                    {
+                        case EmitLexeme: ruleDeed |= Emit; break;
+                        case DropLexeme: ruleDeed |= Drop; break;
+                    }
+                    switch(eol)
+                    {
+                        case IsEndOfLine: ruleDeed |= Endl; break;
+                        case NoEndOfLine:                   break;
+                    }
+                    return ruleDeed;
+                }
+
+
+
+                template <typename ID, typename RX> static inline
+                Rule * New(const LexemeProcess lxp,
+                           const ID           &rid,
+                           const RX           &rrx,
+                           const EndOfLineFlag eol)
+                {
+                    const Identifier ruleName = rid;
+                    const Motif      ruleForm = RegExp::Compile(rrx,0);
+                    const unsigned   ruleDeed = DeedFor(lxp,eol);
+                    const Identifier ruleInfo = ruleName;
+                    const RuleHook   ruleHook = 0;
+                    return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
+                }
+
+                template <
+                typename ID,
+                typename RX,
+                typename OBJECT_POINTER,
+                typename METHOD_POINTER> static inline
+                Rule * New(const LexemeProcess    lxp,
+                           const ID           &   rid,
+                           const RX           &   rrx,
+                           const EndOfLineFlag    eol,
+                           OBJECT_POINTER * const objectPointer,
+                           METHOD_POINTER const   methodPointer)
+                {
+                    assert(objectPointer); assert(methodPointer);
+                    const Identifier ruleName = rid;
+                    const Motif      ruleForm = RegExp::Compile(rrx,0);
+                    const unsigned   ruleDeed = DeedFor(lxp,eol) | Hook;
+                    const Identifier ruleInfo = ruleName;
+                    const RuleHook   ruleHook = new Action(objectPointer,methodPointer);
+                    return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
+                }
+                
+
+
 
                 //______________________________________________________________
                 //
