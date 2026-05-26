@@ -7,6 +7,7 @@
 #include "y/pointer/immediate.hpp"
 #include "y/pointer/accept-null.hpp"
 #include "y/ability/recyclable.hpp"
+#include <iostream>
 
 namespace Yttrium
 {
@@ -69,6 +70,13 @@ namespace Yttrium
                 Coerce(other.pointee) = 0;
             }
             return *this;
+        }
+
+        //! display
+        inline friend std::ostream & operator<<(std::ostream &os, const AutoPtr &self)
+        {
+            if(self.pointee) os << *self.pointee; else os << Core::NullPtr;
+            return os;
         }
 
         //______________________________________________________________________

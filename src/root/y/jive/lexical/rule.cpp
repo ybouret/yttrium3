@@ -20,11 +20,13 @@ namespace Yttrium
             Rule:: Rule(const Identifier & ruleName,
                         const Motif      & ruleForm,
                         const unsigned     ruleDeed,
-                        const Identifier & ruleInfo) :
+                        const Identifier & ruleInfo,
+                        Action * const     ruleHook) :
             name(ruleName),
             form(ruleForm),
             deed(ruleDeed),
             info(ruleInfo),
+            hook(ruleHook),
             next(0),
             prev(0)
             {

@@ -113,6 +113,7 @@ Y_UTEST(memory:buffer)
 
 
 Y_UTEST(pointer:auto)
+Y_UTEST(pointer:easy)
 
 Y_UTEST(ascii:base64)
 Y_UTEST(ascii:conv:u64)

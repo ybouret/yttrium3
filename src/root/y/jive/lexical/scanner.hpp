@@ -135,7 +135,7 @@ namespace Yttrium
                     const Identifier _dest(id);
                     const String     _call = *name + "->" + *_dest;
                     const Identifier _name(_call);
-                    return add( new Rule(_name,spark,Rule::Call,_dest) );
+                    return add( new Rule(_name,spark,Rule::Call,_dest,0) );
                 }
 
 
@@ -145,7 +145,7 @@ namespace Yttrium
                     const String     _back = "<-" + *name;
                     const Identifier _name(_back);
                     const  Motif     _form( RegExp::Compile(rx,0) );
-                    return add( new Rule(_name,_form,Rule::Back | (newLine ? Rule::Endl : 0),_name) );
+                    return add( new Rule(_name,_form,Rule::Back | (newLine ? Rule::Endl : 0),_name,0) );
                 }
 
 

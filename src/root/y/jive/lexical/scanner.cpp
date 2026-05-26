@@ -33,7 +33,7 @@ namespace Yttrium
                                               const Motif      & _form,
                                               const unsigned     _deed)
             {
-                return add( new Rule(_name,_form,_deed,_name) );
+                return add( new Rule(_name,_form,_deed,_name,0) );
             }
 
         }

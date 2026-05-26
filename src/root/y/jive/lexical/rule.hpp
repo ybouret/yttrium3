@@ -59,7 +59,8 @@ namespace Yttrium
                 explicit Rule(const Identifier & ruleName,
                               const Motif      & ruleForm,
                               const unsigned     ruleDeed,
-                              const Identifier & ruleInfo);
+                              const Identifier & ruleInfo,
+                              Action * const     ruleHook);
 
                 //! cleanup
                 virtual ~Rule() noexcept;
@@ -74,8 +75,10 @@ namespace Yttrium
                 const Motif      form; //!< matching motif
                 const unsigned   deed; //!< encoded action
                 const Identifier info; //!< name of argument for call/jump
+                Hook             hook; //!< optional action
                 Rule *           next; //!< for list
                 Rule *           prev; //!< for list
+
             private:
                 Y_Disable_Copy_And_Assign(Rule); //!< discarded
             };
