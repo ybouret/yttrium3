@@ -9,7 +9,8 @@ using namespace Jive;
 Y_UTEST(jive_scanner)
 {
 
-    Y_CHECK( Y_Is_SuperSubClass_Strict(Object,Lexical::Action) );
+    Y_CHECK( Y_Is_SuperSubClass_Strict(Counted,Lexical::Action) );
+    Y_CHECK( Y_Is_SuperSubClass_Strict(Object,Lexical::Action)  );
 
     Lexical::Scanner scan("MyScanner");
 

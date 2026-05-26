@@ -6,7 +6,7 @@
 
 #include "y/jive/pattern.hpp"
 #include "y/functor.hpp"
-#include "y/pointer/auto.hpp"
+#include "y/pointer/easy.hpp"
 
 namespace Yttrium
 {
@@ -16,7 +16,21 @@ namespace Yttrium
         namespace Lexical
         {
 
-            typedef Functor<void,TL1(Token)> Action;
+            typedef Functor<void,TL1(Token)> ActionType;
+
+            class Action : public ActionType, public Counted
+            {
+            public:
+                template <typename OBJECT_POINTER, typename METHOD_POINTER> inline
+                explicit Action(OBJECT_POINTER * const objectPointer, METHOD_POINTER * methodPointer) :
+                ActionType(objectPointer,methodPointer)
+                {
+                }
+                
+                virtual ~Action() noexcept;
+            private:
+                Y_Disable_Copy_And_Assign(Action);
+            };
 
 
             //__________________________________________________________________
@@ -40,7 +54,7 @@ namespace Yttrium
                 static const unsigned   UsedMask = ProcMask|CntlMask; //!< usage mask
                 static const unsigned   Endl     = 0x8000;            //!< propagate endl
                 typedef CxxListOf<Rule> List;
-                typedef AutoPtr<Action> Hook;
+                typedef EasyPtr<Action> Hook;
 
                 //______________________________________________________________
                 //
