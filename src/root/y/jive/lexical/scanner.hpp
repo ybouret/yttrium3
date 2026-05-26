@@ -93,10 +93,10 @@ namespace Yttrium
                 template <typename ID, typename RX> inline
                 const Rule & emit(const ID &id, const RX &rx)
                 {
-                    const  Identifier _name(id);
-                    const  Motif      _form( RegExp::Compile(rx,0) );
-                    return processing(_name,_form,Rule::Emit);
+                    return add( Rule::New(EmitLexeme,id,rx,NoEndOfLine) );
                 }
+
+
 
                 //! drop a lexeme
                 /**
@@ -107,9 +107,7 @@ namespace Yttrium
                 template <typename ID, typename RX> inline
                 const Rule & drop(const ID &id, const RX &rx)
                 {
-                    const  Identifier _name(id);
-                    const  Motif      _form( RegExp::Compile(rx,0) );
-                    return processing(_name,_form,Rule::Drop);
+                    return add( Rule::New(DropLexeme,id,rx,NoEndOfLine) );
                 }
 
                 
@@ -121,11 +119,9 @@ namespace Yttrium
                  \return created rule
                  */
                 template <typename ID, typename RX> inline
-                const Rule & endl(const ID &id, const RX &rx, const bool doEmit = false)
+                const Rule & endl(const ID &id, const RX &rx, const LexemeProcess lxp = DropLexeme )
                 {
-                    const  Identifier _name(id);
-                    const  Motif      _form( RegExp::Compile(rx,0) );
-                    return processing(_name,_form,(doEmit ? Rule::Emit :Rule::Drop)|Rule::Endl);
+                    return add( Rule::New(lxp,id,rx,IsEndOfLine) );
                 }
 
 
