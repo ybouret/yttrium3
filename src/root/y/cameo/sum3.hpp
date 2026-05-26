@@ -1,0 +1,55 @@
+
+//! \file
+
+#ifndef Y_Cameo_Sum3_Included
+#define Y_Cameo_Sum3_Included 1
+
+#include "y/cameo/sum/strategy.hpp"
+#include "y/cameo/sum/3/queued.hpp"
+#include "y/cameo/sum/3/raised.hpp"
+#include "y/cameo/sum/3/direct.hpp"
+
+namespace Yttrium
+{
+    namespace Cameo
+    {
+        namespace Sum {
+
+            template <typename T,const unsigned strategy> struct Selected3;
+
+            //! select Direct
+            template <typename T> struct Selected3<T,0>
+            {
+                typedef Direct3<T> API; //!<alias
+            };
+
+            //! select Raised
+            template <typename T> struct Selected3<T,1>
+            {
+                typedef Raised3<T> API; //!< alias
+            };
+
+            //! select Queued
+            template <typename T> struct Selected3<T,2>
+            {
+                typedef Queued3<T> API; //!< alias
+            };
+        }
+
+        template <typename T>
+        class Sum3 : public Sum::Selected3<T,Sum::Strategy<T>::Index>::API
+        {
+        public:
+            inline explicit Sum3() noexcept {}
+            inline virtual ~Sum3() noexcept {}
+            
+        private:
+            Y_Disable_Copy_And_Assign(Sum3);
+        };
+
+    }
+
+}
+
+#endif // !Y_Cameo_Sum3_Included
+
