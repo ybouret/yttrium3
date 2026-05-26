@@ -57,11 +57,11 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(Survey); //!< discards
-            void            place(Vector * const newVector) noexcept;
-            const Vectors & locus()               const noexcept;
+            void            place(Vector * const)       noexcept;     //!< push tail and move new vector at its palce
             virtual bool    takes(const Vector &) const noexcept = 0; //!< \return true iff criterion is matched
+            const Vectors & locus()               const noexcept;
 
-
+            
             //__________________________________________________________________
             //
             //
