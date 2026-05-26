@@ -5,7 +5,7 @@
 #include "y/jive/lexical/plugin/multi-lines-comment.hpp"
 
 using namespace Yttrium;
-
+#if 0
 namespace
 {
 
@@ -28,9 +28,11 @@ namespace
         Y_Disable_Copy_And_Assign(MyLexer);
     };
 }
+#endif
 
 Y_UTEST(jive_lexer)
 {
+#if 0
     MyLexer lxr;
 
     if(argc>1)
@@ -48,7 +50,8 @@ Y_UTEST(jive_lexer)
 
 
     }
-
+#endif
+    
 
 }
 Y_UDONE()

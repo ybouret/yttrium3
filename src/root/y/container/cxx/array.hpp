@@ -53,7 +53,7 @@ namespace Yttrium
          \param n     required size
          \param value filling value
          */
-        inline explicit CxxArray(const size_t n, const ParamType value) :
+        inline explicit CxxArray(const size_t n, ParamType value) :
         code( new Code(n,value) )
         {
         }

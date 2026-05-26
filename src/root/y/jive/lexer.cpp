@@ -6,7 +6,7 @@ namespace Yttrium
 {
     namespace Jive
     {
-
+#if 0
         Lexer:: ~Lexer() noexcept
         {
             psdb.release();
@@ -157,7 +157,7 @@ namespace Yttrium
         }
 
 
-
+#endif
     }
 
 }

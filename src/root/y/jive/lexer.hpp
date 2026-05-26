@@ -16,6 +16,7 @@ namespace Yttrium
     namespace Jive
     {
 
+#if 0
         //______________________________________________________________________
         //
         //
@@ -101,7 +102,8 @@ namespace Yttrium
 
 
         };
-
+#endif
+        
     }
 
 }
