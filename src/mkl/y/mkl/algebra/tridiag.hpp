@@ -4,7 +4,6 @@
 #define Y_MKL_Algebra_TriDiag_Included 1
 
 #include "y/container/matrix.hpp"
-#include "y/cameo/addition.hpp"
 
 namespace Yttrium
 {

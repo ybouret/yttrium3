@@ -11,36 +11,41 @@ using namespace Yttrium;
 namespace
 {
     template <typename T> static inline
-    void testCyclic(Core::Rand & ran, const size_t nmax=5)
+    void testCyclic(Core::Rand & ran, const size_t nmax=10)
     {
-#if 0
         typedef typename MKL::ScalarFor<T>::Type SType;
 
         std::cerr << "-- " << typeid(T).name() << std::endl;
         Cameo::Addition<SType> sadd(nmax);
-        for(size_t n=1;n<=nmax;++n)
+        const SType s0 = 0;
+        for(size_t n=3;n<=nmax;++n)
         {
             std::cerr << "\tn=" << n << std::endl;
-            MKL::TriDiag<T> td(n);
+            MKL::Cyclic<T>  cy(n);
             CxxArray<T>     u(n), r(n), v(n);
             do
             {
-                for(size_t i=1;i<=n;++i) td.b[i] = Random::Gen<T>::Get(ran);
-                for(size_t i=2;i<=n;++i) td.a[i] = Random::Gen<T>::Get(ran);
-                for(size_t i=1;i<n;++i)  td.c[i] = Random::Gen<T>::Get(ran);
+                for(size_t i=1;i<=n;++i)
+                {
+                    while( MKL::Fabs<T>(cy.b[i]) <= s0)
+                        cy.b[i] = Random::Gen<T>::Get(ran);
+                }
+                for(size_t i=2;i<=n;++i) cy.a[i] = Random::Gen<T>::Get(ran);
+                for(size_t i=1;i<n;++i)  cy.c[i] = Random::Gen<T>::Get(ran);
+                cy.alpha = Random::Gen<T>::Get(ran);
+                cy.beta  = Random::Gen<T>::Get(ran);
                 Random::Generate::Array(ran,r);
-            } while( !td.solve(u,r) );
+            } while( !cy.solve(u,r) );
 
-            //std::cerr << td << std::endl;
+            //std::cerr << cy << std::endl;
 
-            td.mul(v,u);
+            cy.mul(v,u);
             //std::cerr << "r=" << r << std::endl;
             //std::cerr << "v=" << v << std::endl;
             for(size_t i=n;i>0;--i) v[i] -= r[i];
             const SType r2 = sadd.mod2(v) / (SType)n;
             std::cerr << "\t\tr2=" << r2 << std::endl;
         }
-#endif
 
     }
 }

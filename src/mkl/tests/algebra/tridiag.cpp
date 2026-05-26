@@ -11,7 +11,7 @@ using namespace Yttrium;
 namespace
 {
     template <typename T> static inline
-    void testTridiag(Core::Rand & ran, const size_t nmax=5)
+    void testTridiag(Core::Rand & ran, const size_t nmax=10)
     {
         typedef typename MKL::ScalarFor<T>::Type SType;
         

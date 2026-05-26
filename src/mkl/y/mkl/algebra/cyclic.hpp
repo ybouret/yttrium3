@@ -68,16 +68,17 @@ namespace Yttrium
              \param rhs rhs vector
              */
             template <typename RES, typename RHS> inline
-            void mul(Cameo::Addition<T> &xadd, RES &res, RHS &rhs) const
+            void mul( RES &res, RHS &rhs) const
             {
-                const size_t n = size; assert(n>=2);
+                Cameo::Addition<T> xadd(3);
+                const size_t n = size; assert(n>=3);
 
                 // first row
                 {
                     const T u = b[1] * rhs[1];
                     const T v = c[1] * rhs[2];
                     const T w = beta * rhs[n];
-                    res[1]    = xadd(u,v,w);
+                    res[1]    = xadd.sum(u,v,w);
                 }
 
                 // core
@@ -87,7 +88,7 @@ namespace Yttrium
                     const T A = a[i] * rhs[im];
                     const T B = b[i] * rhs[i];
                     const T C = c[i] * rhs[ip];
-                    res[i]    = xadd(A,B,C);
+                    res[i]    = xadd.sum(A,B,C);
                 }
 
                 // last row
@@ -95,7 +96,7 @@ namespace Yttrium
                     const T u = b[n]  * rhs[n];
                     const T v = a[n]  * rhs[nm];
                     const T w = alpha * rhs[1];
-                    res[n]    = xadd(u,v,w);
+                    res[n]    = xadd.sum(u,v,w);
                 }
 
             }

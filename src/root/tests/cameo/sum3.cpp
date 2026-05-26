@@ -1,4 +1,4 @@
-
+#include "y/cameo/addition.hpp"
 #include "y/cameo/sum3.hpp"
 #include "y/utest/run.hpp"
 
