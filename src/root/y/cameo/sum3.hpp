@@ -36,15 +36,23 @@ namespace Yttrium
             };
         }
 
+        //__________________________________________________________________
+        //
+        //
+        //
+        //! Performing summation of 3 items
+        //
+        //
+        //__________________________________________________________________
         template <typename T>
         class Sum3 : public Sum::Selected3<T,Sum::Strategy<T>::Index>::API
         {
         public:
-            inline explicit Sum3() noexcept {}
-            inline virtual ~Sum3() noexcept {}
-            
+            inline explicit Sum3() noexcept {} //!< setup
+            inline virtual ~Sum3() noexcept {} //!< cleanup
+
         private:
-            Y_Disable_Copy_And_Assign(Sum3);
+            Y_Disable_Copy_And_Assign(Sum3); //!< discarded
         };
 
     }

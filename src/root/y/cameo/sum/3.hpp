@@ -24,14 +24,35 @@ namespace Yttrium
             class Three
             {
             public:
-                Y_Args_Declare(T,Type);
-                inline explicit Three() noexcept {}
-                inline virtual ~Three() noexcept {}
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                Y_Args_Declare(T,Type); //!< aliases
 
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                inline explicit Three() noexcept {} //!< setup
+                inline virtual ~Three() noexcept {} //!< cleanup
+
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
+
+                //! \return sum of three items
                 virtual Type operator()(ParamType,ParamType,ParamType) = 0;
 
             private:
-                Y_Disable_Copy_And_Assign(Three);
+                Y_Disable_Copy_And_Assign(Three); //!< discarded
             };
         }
         

@@ -18,15 +18,41 @@ namespace Yttrium
     {
         namespace Sum
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Queued sum of 3 times
+            //
+            //
+            //__________________________________________________________________
             template <typename T>
             class Queued3 : public Three<T>
             {
             public:
-                Y_Args_Declare(T,Type);
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                Y_Args_Declare(T,Type); //!< aliases
 
-                inline explicit Queued3() noexcept : Three<T>() { Y_Cameo_Sum_Queued_Check(); }
-                inline virtual ~Queued3() noexcept              {}
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                inline explicit Queued3() noexcept : Three<T>() { Y_Cameo_Sum_Queued_Check(); } //!< setup
+                inline virtual ~Queued3() noexcept              {} //!< cleanup
 
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
                 inline virtual Type operator()(ParamType a, ParamType b, ParamType c)
                 {
                     MutableType rank[3] = {
@@ -40,7 +66,7 @@ namespace Yttrium
                 }
                 
             private:
-                Y_Disable_Copy_And_Assign(Queued3);
+                Y_Disable_Copy_And_Assign(Queued3); //!< discarded
             };
         }
 

@@ -217,6 +217,7 @@ namespace Yttrium
                 return false;
             }
 
+            //! \param value any value \return or'd with value
             inline JointSet & operator |= (ParamType value)
             {
                 if(!contains(value)) return (*this) << value;

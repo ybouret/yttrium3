@@ -76,7 +76,7 @@ namespace Yttrium
             return *this;
         }
 
-        
+        //! display
         inline friend std::ostream & operator<<(std::ostream &os, const EasyPtr &self)
         {
             if(self.pointee) os << *self.pointee; else os << Core::NullPtr;
