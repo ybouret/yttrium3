@@ -5,6 +5,8 @@
 #define Y_Jive_Lexical_Rule_Included 1
 
 #include "y/jive/pattern.hpp"
+#include "y/functor.hpp"
+#include "y/pointer/auto.hpp"
 
 namespace Yttrium
 {
@@ -13,6 +15,8 @@ namespace Yttrium
 
         namespace Lexical
         {
+
+            typedef Functor<void,TL1(Token)> Action;
 
 
             //__________________________________________________________________
@@ -36,6 +40,8 @@ namespace Yttrium
                 static const unsigned   UsedMask = ProcMask|CntlMask; //!< usage mask
                 static const unsigned   Endl     = 0x8000;            //!< propagate endl
                 typedef CxxListOf<Rule> List;
+                typedef AutoPtr<Action> Hook;
+
                 //______________________________________________________________
                 //
                 //

@@ -1,4 +1,5 @@
 #include "y/jive/lexical/scanner.hpp"
+#include "y/type/conversion.hpp"
 
 #include "y/utest/run.hpp"
 
@@ -7,6 +8,9 @@ using namespace Jive;
 
 Y_UTEST(jive_scanner)
 {
+
+    Y_CHECK( Y_Is_SuperSubClass_Strict(Object,Lexical::Action) );
+
     Lexical::Scanner scan("MyScanner");
 
     scan.emit("INT","[:digit:]+");

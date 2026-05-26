@@ -14,7 +14,6 @@ namespace Yttrium
             Scanner::Code:: Code(const Identifier &sid) :
             name(sid),
             rlist(),
-            alist(),
             table(sid)
             {
             }

@@ -50,7 +50,6 @@ namespace Yttrium
                 //______________________________________________________________
                 const Identifier name;  //!< from scanner
                 Rule::List       rlist; //!< list of rules
-                Action::List     alist; //!< list of actions
                 MetaTable        table; //!< table of list or rules
 
             private:
