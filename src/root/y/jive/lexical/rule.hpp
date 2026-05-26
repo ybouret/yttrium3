@@ -69,12 +69,13 @@ namespace Yttrium
                  \param ruleForm rule pattern, EXCEPTION iff FRAIL
                  \param ruleDeed behavior
                  \param ruleInfo parameters for behavior
+                 \param ruleHook
                  */
                 explicit Rule(const Identifier & ruleName,
                               const Motif      & ruleForm,
                               const unsigned     ruleDeed,
                               const Identifier & ruleInfo,
-                              Action * const     ruleHook);
+                              const Hook       & ruleHook);
 
                 //! cleanup
                 virtual ~Rule() noexcept;

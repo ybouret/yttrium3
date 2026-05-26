@@ -21,7 +21,7 @@ namespace Yttrium
                         const Motif      & ruleForm,
                         const unsigned     ruleDeed,
                         const Identifier & ruleInfo,
-                        Action * const     ruleHook) :
+                        const Hook       & ruleHook) :
             name(ruleName),
             form(ruleForm),
             deed(ruleDeed),
