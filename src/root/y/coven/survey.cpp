@@ -64,27 +64,20 @@ namespace Yttrium
                 list.towardsHead(node);
         }
 
-        
+
         void Survey:: fusion(Survey &source) noexcept
         {
             assert(source.min_ncof==min_ncof);
             if( &source != this )
             {
-                try
+                while( source.list.size )
                 {
-                    while( source.list.size )
-                    {
-                        AutoPtr<Vector> pv = source.list.popHead(); assert( takes(*pv) );
-                        if( got(*pv) ) continue;
-                        place( pv.yield() );
-                    }
-                    Coerce(sampling) += source.sampling;
-                    Coerce(source.sampling) = 0;
+                    AutoPtr<Vector> pv = source.list.popHead(); assert( takes(*pv) );
+                    if( got(*pv) ) continue;
+                    place( pv.yield() );
                 }
-                catch(...)
-                {
-                    release(); throw;
-                }
+                Coerce(sampling) += source.sampling;
+                Coerce(source.sampling) = 0;
             }
         }
 
