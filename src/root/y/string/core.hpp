@@ -84,6 +84,7 @@ namespace Yttrium
             virtual ~String() noexcept; //!< cleanup
 
 
+
             //! display
             inline friend std::ostream & operator<<(std::ostream &os, const String &s) {
                 return s.print(os);
@@ -167,10 +168,11 @@ inline friend bool operator OP (const T         lhs, const String  & rhs) noexce
             virtual ConstType & getHead() const noexcept;
             virtual ConstType & getTail() const noexcept;
 
-        private:
-            // for additions
+        public:
+            // generic addition constructor
             String(const T * const lhs, const size_t lhsSize,
                    const T * const rhs, const size_t rhsSize);
+        private:
             static String Add(const String  &, const String  &);
             static String Add(const String  &, const T * const);
             static String Add(const T * const, const String  &);

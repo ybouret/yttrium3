@@ -29,6 +29,7 @@ namespace Yttrium
         Identifier(const char * const);            //!< setup from a text
         Identifier(const char);                    //!< setup from a character
         virtual ~Identifier()            noexcept; //!< cleanup
+        
 
         const String & key() const noexcept; //!< \return **this
 

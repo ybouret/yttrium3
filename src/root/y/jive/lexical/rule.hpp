@@ -69,6 +69,8 @@ namespace Yttrium
                 static const unsigned   UsedMask = ProcMask|CntlMask; //!< usage mask
                 static const unsigned   Endl     = 0x8000;            //!< propagate endl
                 typedef CxxListOf<Rule> List;
+                static const char   BackPrefix[]; //! "<-"
+                static const size_t BackLength;   //!< strlen(BackPrefix)
 
                 //______________________________________________________________
                 //
@@ -112,7 +114,14 @@ namespace Yttrium
                 }
 
 
-
+                //! creating a rule without hook
+                /**
+                 \param lxp what to do with lexeme
+                 \param rid rule name
+                 \param rrx rule regular expression
+                 \param eol is it an end of line?
+                 \return new rule
+                 */
                 template <typename ID, typename RX> static inline
                 Rule * New(const LexemeProcess lxp,
                            const ID           &rid,
@@ -127,6 +136,16 @@ namespace Yttrium
                     return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
                 }
 
+                //! creating a rule with a hook
+                /**
+                 \param lxp what to do with lexeme
+                 \param rid rule name
+                 \param rrx rule regular expression
+                 \param eol is it an end of line?
+                 \param objectPointer object pointer
+                 \param methodPointer method pointer to call
+                 \return new rule
+                 */
                 template <
                 typename ID,
                 typename RX,
@@ -137,7 +156,7 @@ namespace Yttrium
                            const RX           &   rrx,
                            const EndOfLineFlag    eol,
                            OBJECT_POINTER * const objectPointer,
-                           METHOD_POINTER const   methodPointer)
+                           METHOD_POINTER   const methodPointer)
                 {
                     assert(objectPointer); assert(methodPointer);
                     const Identifier ruleName = rid;
@@ -147,7 +166,31 @@ namespace Yttrium
                     const RuleHook   ruleHook = new Action(objectPointer,methodPointer);
                     return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
                 }
-                
+
+                //! creating a 'back' rule without hook
+                /**
+                 \param lxp what to do with lexeme
+                 \param rid rule name
+                 \param rrx rule regular expression
+                 \param eol is it an end of line?
+                 \param objectPointer object pointer
+                 \param methodPointer method pointer to call
+                 \return new rule
+                 */
+                template <typename RX> static inline
+                Rule * BackFrom(const Identifier   & org,
+                                const RX           & brx,
+                                const EndOfLineFlag  eol)
+                {
+                    const Identifier ruleName = new String(BackPrefix,BackLength,org->c_str(), org->size() );
+                    const Motif      ruleForm = RegExp::Compile(brx,0);
+                    const unsigned   ruleDeed = DeedFor(DropLexeme,eol) | Back;
+                    const Identifier ruleInfo = ruleName;
+                    const RuleHook   ruleHook = 0;
+                    return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
+                }
+
+
 
 
 

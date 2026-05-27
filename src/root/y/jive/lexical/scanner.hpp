@@ -164,7 +164,7 @@ namespace Yttrium
                     return add( Rule::New(lxp,id,rx,IsEndOfLine) );
                 }
 
-
+#if 0
                 template <typename ID> inline
                 const Rule & call(const ID &id, const Motif &spark)
                 {
@@ -173,17 +173,17 @@ namespace Yttrium
                     const Identifier _name(_call);
                     return add( new Rule(_name,spark,Rule::Call,_dest,0) );
                 }
-
+#endif
 
                 template <typename RX> inline
-                const Rule & back(const RX &rx, const bool newLine = false)
+                const Rule & back(const RX &brx, const EndOfLineFlag eol)
                 {
-                    const String     _back = "<-" + *name;
-                    const Identifier _name(_back);
-                    const  Motif     _form( RegExp::Compile(rx,0) );
-                    return add( new Rule(_name,_form,Rule::Back | (newLine ? Rule::Endl : 0),_name,0) );
+                    return add( Rule::BackFrom(name,brx,eol) );
+                    //const String     _back = "<-" + *name;
+                    //const Identifier _name(_back);
+                    //const  Motif     _form( RegExp::Compile(rx,0) );
+                    //return add( new Rule(_name,_form,Rule::Back | (newLine ? Rule::Endl : 0),_name,0) );
                 }
-
 
 
                 //______________________________________________________________

@@ -8,8 +8,8 @@ namespace Yttrium
 
         namespace Lexical
         {
-
-
+            const char   Rule:: BackPrefix[] = "<-";
+            const size_t Rule:: BackLength   = sizeof(BackPrefix)-1;
 
             Rule:: ~Rule() noexcept
             {

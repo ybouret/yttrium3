@@ -16,7 +16,7 @@ namespace Yttrium
             void SingleLineComment:: setup()
             {
                 drop("dot",".");
-                back("[:endl:]",true);
+                back("[:endl:]",IsEndOfLine);
             }
         }
 
