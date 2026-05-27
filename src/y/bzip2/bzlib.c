@@ -29,7 +29,7 @@
 */
 
 #include "bzlib_private.h"
-
+#include <stdio.h>
 
 /*---------------------------------------------------*/
 /*--- Compression stuff                           ---*/
