@@ -152,7 +152,7 @@ namespace Yttrium
             {
                 assert(sanity());
                 assert(size<capacity);
-                memcpy(entry+1,entry,(Coerce(size)++)*sizeof(T));
+                memmove(entry+1,entry,(Coerce(size)++)*sizeof(T));
                 *entry = ch;
                 assert(sanity());
             }
