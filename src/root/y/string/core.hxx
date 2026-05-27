@@ -474,6 +474,7 @@ template <> void String<CH>::pushTail(ParamType c)
 template <> void String<CH>::pushHead(ParamType c)
 {
     assert(code);
+    std::cerr << "pushHead('" << c << "')@'" << *this << "' => '";
     if(code->size<code->capacity)
     {
         code->pre(c);
@@ -483,7 +484,7 @@ template <> void String<CH>::pushHead(ParamType c)
         String tmp = Add(c,*this);
        (void) xch(tmp);
     }
-    std::cerr << "pushHead(" << c << ") => '" << *this << "'" << std::endl;
+    std::cerr << *this << "'" << std::endl;
 
 }
 
