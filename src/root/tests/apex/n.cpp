@@ -54,7 +54,10 @@ Y_UTEST(apex_n)
 
         String       h;
         for(size_t i=n.bytes();i>0;)
+        {
             h += Hexadecimal::UpperByte[ n[--i] ];
+            std::cerr << "\th=" << h << " / " << H << std::endl;
+        }
         Algorithm::Skip(h,IsZero);
         h >> 'x' >> '0';
         std::cerr << std::setw(32) << H << " => " << h << std::endl;
