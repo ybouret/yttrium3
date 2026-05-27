@@ -56,7 +56,13 @@ namespace Yttrium
 
             unsigned Rule:: DeedForBack(const EndOfLineFlag eol) noexcept
             {
-                return DeedFor(DropLexeme,eol) | Back;
+                unsigned ruleDeed = Back;
+                switch(eol)
+                {
+                    case IsEndOfLine: ruleDeed |= Endl; break;
+                    case NoEndOfLine:                   break;
+                }
+                return ruleDeed;
             }
 
             String * Rule:: GetBackName(const Identifier &org)

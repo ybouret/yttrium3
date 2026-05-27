@@ -15,8 +15,10 @@ namespace Yttrium
         {
 
           
+           // int Bypassing;
+           // int Intrusive;
 
-          
+
             //__________________________________________________________________
             //
             //
@@ -40,21 +42,14 @@ namespace Yttrium
                                 const RX &   rx,
                                 const OnEOS  eos) :
                 Scanner(id,eos),
-                spark( rx )
+                expr( rx )
                 {
                 }
 
                 //! cleanup
                 virtual ~Plugin() noexcept;
 
-                //______________________________________________________________
-                //
-                //
-                // Interface
-                //
-                //______________________________________________________________
-                virtual void enter(); //!< invoked on enter
-                virtual void leave(); //!< invoked on leave, possibility to modify lexer
+                
 
                 //______________________________________________________________
                 //
@@ -62,7 +57,7 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
-                const String spark; //!< regexp that triggers the call to the plugin
+                const String expr; //!< expression that triggers the call to the plugin
 
             private:
                 Y_Disable_Copy_And_Assign(Plugin); //!< discarded

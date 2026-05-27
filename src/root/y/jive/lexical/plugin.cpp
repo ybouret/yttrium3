@@ -12,6 +12,7 @@ namespace Yttrium
             {
             }
 
+#if 0
             void Plugin:: enter()
             {
                 std::cerr << "Enter <" << name << ">" << std::endl;
@@ -22,6 +23,7 @@ namespace Yttrium
                 std::cerr << "Leave <" << name << ">" << std::endl;
 
             }
+#endif
         }
 
     }

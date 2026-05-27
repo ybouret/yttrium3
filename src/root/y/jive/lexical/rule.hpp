@@ -48,7 +48,7 @@ namespace Yttrium
             public:
                 static const unsigned   Emit     = 0x0001;            //!< emit lexeme
                 static const unsigned   Drop     = 0x0002;            //!< drop lexeme
-                static const unsigned   Hook     = 0x0004;            //!< perform action
+                static const unsigned   Hook     = 0x0080;            //!< perform action
                 static const unsigned   ProcMask = Emit|Drop|Hook;    //!< emit|drop
                 static const unsigned   Call     = 0x0100;            //!< call scanner
                 static const unsigned   Back     = 0x0200;            //!< back from scanner
