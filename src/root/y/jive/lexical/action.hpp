@@ -17,23 +17,52 @@ namespace Yttrium
         namespace Lexical
         {
 
+            //__________________________________________________________________
+            //
+            //! Action base type
+            //__________________________________________________________________
             typedef Functor<void,TL1(Token)> ActionType;
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Action to perform on a given token
+            //
+            //
+            //__________________________________________________________________
             class Action : public ActionType, public Counted
             {
             public:
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+
+                //! setup
+                /**
+                 \param objectPointer object pointer
+                 \param methodPointer method pointer to call
+                 */
                 template <typename OBJECT_POINTER, typename METHOD_POINTER> inline
                 explicit Action(OBJECT_POINTER * const objectPointer, METHOD_POINTER const methodPointer) :
                 ActionType(objectPointer,methodPointer)
                 {
                 }
 
+                //! cleanup
                 virtual ~Action() noexcept;
                 
             private:
-                Y_Disable_Copy_And_Assign(Action);
+                Y_Disable_Copy_And_Assign(Action); //!< discarded
             };
 
+            //__________________________________________________________________
+            //
+            //! Hook for a rule
+            //__________________________________________________________________
             typedef EasyPtr<Action> RuleHook;
 
         }

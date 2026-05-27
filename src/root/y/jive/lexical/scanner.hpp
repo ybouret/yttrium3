@@ -143,7 +143,10 @@ namespace Yttrium
                 typename OBJECT_POINTER,
                 typename METHOD_POINTER>
                 inline
-                const Rule & drop(const ID &id, const RX &rx, OBJECT_POINTER * const host, METHOD_POINTER const meth)
+                const Rule & drop(const ID &             id,
+                                  const RX &             rx,
+                                  OBJECT_POINTER * const host,
+                                  METHOD_POINTER   const meth)
                 {
                     return add( Rule::New(DropLexeme,id,rx,NoEndOfLine,host,meth) );
                 }
@@ -175,11 +178,41 @@ namespace Yttrium
                 }
 #endif
 
-                template <typename RX> inline
+                //! comming back without hook
+                /**
+                 \param brx back regular expression
+                 \param eol end of line flag
+                 \return new rule
+                 */
+                template < typename RX> inline
                 const Rule & back(const RX &brx, const EndOfLineFlag eol)
                 {
                     return add( Rule::BackFrom(name,brx,eol) );
+
                 }
+
+
+                //! comming back with hook
+                /**
+                 \param brx back regular expression
+                 \param eol end of line flag
+                 \param host object address
+                 \param meth object method to call
+                 \return new rule
+                 */
+                template <
+                typename RX,
+                typename OBJECT_POINTER,
+                typename METHOD_POINTER> inline
+                const Rule & back(const RX &             brx,
+                                  const EndOfLineFlag    eol,
+                                  OBJECT_POINTER * const host,
+                                  METHOD_POINTER   const meth)
+                {
+                    return add( Rule::BackFrom(name,brx,eol,host,meth) );
+                }
+
+
 
 
                 //______________________________________________________________

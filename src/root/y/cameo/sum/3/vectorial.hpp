@@ -31,14 +31,26 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
-                static const size_t       Dimension = sizeof(VECT)/sizeof(T);                //!< alias
-                typedef ScalarThree<T>    XAddition;                                         //!< alias
-                Y_Args_Declare(VECT,Type);                                              //!< aliases
-                Y_Args_Expose(T,Scal);                                                  //!< aliases
+                static const size_t       Dimension = sizeof(VECT)/sizeof(T); //!< alias
+                typedef ScalarThree<T>    XAddition;                          //!< alias
+                Y_Args_Declare(VECT,Type);                                    //!< aliases
+                Y_Args_Expose(T,Scal);                                        //!< aliases
 
-                inline explicit VectorialThree() noexcept : sum3() {}
-                inline virtual ~VectorialThree() noexcept {}
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                inline explicit VectorialThree() noexcept : sum3() {} //!< setup
+                inline virtual ~VectorialThree() noexcept          {} //!< cleanup
 
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
                 inline virtual Type operator()(ParamType a, ParamType b, ParamType c)
                 {
                     MutableType v;
@@ -54,8 +66,8 @@ namespace Yttrium
                 }
 
             private:
-                Y_Disable_Copy_And_Assign(VectorialThree);
-                XAddition sum3;
+                Y_Disable_Copy_And_Assign(VectorialThree); //!< discarded
+                XAddition sum3;                            //!< inner scalar sum3
             };
 
         }

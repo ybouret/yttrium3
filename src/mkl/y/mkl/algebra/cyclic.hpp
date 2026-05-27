@@ -63,7 +63,6 @@ namespace Yttrium
 
             //! multiplication res = *this * rhs
             /**
-             \param xadd for inner additions
              \param res result vector
              \param rhs rhs vector
              */

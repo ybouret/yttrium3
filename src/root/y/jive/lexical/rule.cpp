@@ -64,6 +64,12 @@ namespace Yttrium
                 return new String(BackPrefix,BackLength,org->c_str(), org->size() );
             }
 
+
+            unsigned Rule:: GetHookDeed(const RuleHook &ruleHook) noexcept
+            {
+                return ruleHook.isValid() ? Hook : 0x00;
+            }
+
         }
 
     }

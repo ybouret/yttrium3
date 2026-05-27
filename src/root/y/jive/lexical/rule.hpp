@@ -15,17 +15,24 @@ namespace Yttrium
         namespace Lexical
         {
 
-
+            //__________________________________________________________________
+            //
+            //! what to do with found lexeme
+            //__________________________________________________________________
             enum LexemeProcess
             {
-                EmitLexeme,
-                DropLexeme
+                EmitLexeme, //!< emit as unit
+                DropLexeme  //!< drop
             };
 
+            //__________________________________________________________________
+            //
+            //! Hook for a rule
+            //__________________________________________________________________
             enum EndOfLineFlag
             {
-                IsEndOfLine,
-                NoEndOfLine
+                IsEndOfLine, //!< forwarded to source/module
+                NoEndOfLine  //!< [:dot:]
             };
 
             //__________________________________________________________________
@@ -49,9 +56,9 @@ namespace Yttrium
                 static const unsigned   CntlMask = Call|Back|Jump;    //!< call|back|jump
                 static const unsigned   UsedMask = ProcMask|CntlMask; //!< usage mask
                 static const unsigned   Endl     = 0x8000;            //!< propagate endl
-                typedef CxxListOf<Rule> List;
-                static const char   BackPrefix[]; //! "<-"
-                static const size_t BackLength;   //!< strlen(BackPrefix)
+                typedef CxxListOf<Rule> List;                         //!< alias
+                static const char       BackPrefix[];                 //!< "<-"
+                static const size_t     BackLength;                   //!< strlen(BackPrefix)
 
                 //______________________________________________________________
                 //
@@ -80,6 +87,8 @@ namespace Yttrium
 
 
 
+
+
                 //! creating a rule without hook
                 /**
                  \param lxp what to do with lexeme
@@ -89,17 +98,13 @@ namespace Yttrium
                  \return new rule
                  */
                 template <typename ID, typename RX> static inline
-                Rule * New(const LexemeProcess lxp,
-                           const ID           &rid,
-                           const RX           &rrx,
-                           const EndOfLineFlag eol)
+                Rule * New(const LexemeProcess  lxp,
+                           const ID           & rid,
+                           const RX           & rrx,
+                           const EndOfLineFlag  eol)
                 {
-                    const Identifier ruleName = rid;
-                    const Motif      ruleForm = RegExp::Compile(rrx,0);
-                    const unsigned   ruleDeed = DeedFor(lxp,eol);
-                    const Identifier ruleInfo = ruleName;
                     const RuleHook   ruleHook = 0;
-                    return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
+                    return New_(lxp,rid,rrx,eol,ruleHook);
                 }
 
                 //! creating a rule with a hook
@@ -125,13 +130,10 @@ namespace Yttrium
                            METHOD_POINTER   const methodPointer)
                 {
                     assert(objectPointer); assert(methodPointer);
-                    const Identifier ruleName = rid;
-                    const Motif      ruleForm = RegExp::Compile(rrx,0);
-                    const unsigned   ruleDeed = DeedFor(lxp,eol) | Hook;
-                    const Identifier ruleInfo = ruleName;
                     const RuleHook   ruleHook = new Action(objectPointer,methodPointer);
-                    return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
+                    return New_(lxp,rid,rrx,eol,ruleHook);
                 }
+
 
 
 
@@ -147,12 +149,8 @@ namespace Yttrium
                                 const RX           & brx,
                                 const EndOfLineFlag  eol)
                 {
-                    const Identifier ruleName = GetBackName(org);
-                    const Motif      ruleForm = RegExp::Compile(brx,0);
-                    const unsigned   ruleDeed = DeedForBack(eol);
-                    const Identifier ruleInfo = ruleName;
                     const RuleHook   ruleHook = 0;
-                    return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
+                    return BackFrom_(org,brx,eol,ruleHook);
                 }
 
                 //! creating a 'back' rule with a hook
@@ -173,12 +171,8 @@ namespace Yttrium
                                 OBJECT_POINTER * const objectPointer,
                                 METHOD_POINTER   const methodPointer)
                 {
-                    const Identifier ruleName = GetBackName(org);
-                    const Motif      ruleForm = RegExp::Compile(brx,0);
-                    const unsigned   ruleDeed = DeedForBack(eol) | Hook;
-                    const Identifier ruleInfo = ruleName;
                     const RuleHook   ruleHook = new Action(objectPointer,methodPointer);
-                    return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
+                    return BackFrom_(org,brx,eol,ruleHook);
                 }
 
 
@@ -202,6 +196,34 @@ namespace Yttrium
                 static unsigned DeedFor(const LexemeProcess,const EndOfLineFlag) noexcept;
                 static unsigned DeedForBack(const EndOfLineFlag) noexcept;
                 static String * GetBackName(const Identifier &);
+                static unsigned GetHookDeed(const RuleHook &) noexcept;
+
+                template <typename ID, typename RX> static inline
+                Rule * New_(const LexemeProcess lxp,
+                            const ID           &rid,
+                            const RX           &rrx,
+                            const EndOfLineFlag eol,
+                            const RuleHook     &ruleHook)
+                {
+                    const Identifier ruleName = rid;
+                    const Motif      ruleForm = RegExp::Compile(rrx,0);
+                    const unsigned   ruleDeed = DeedFor(lxp,eol) | GetHookDeed(ruleHook);
+                    const Identifier ruleInfo = ruleName;
+                    return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
+                }
+
+                template <typename RX> static inline
+                Rule * BackFrom_(const Identifier   & org,
+                                 const RX           & brx,
+                                 const EndOfLineFlag  eol,
+                                 const RuleHook &     ruleHook)
+                {
+                    const Identifier ruleName = GetBackName(org);
+                    const Motif      ruleForm = RegExp::Compile(brx,0);
+                    const unsigned   ruleDeed = DeedForBack(eol) | GetHookDeed(ruleHook);
+                    const Identifier ruleInfo = ruleName;
+                    return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
+                }
             };
         }
 
