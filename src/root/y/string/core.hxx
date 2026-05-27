@@ -474,20 +474,15 @@ template <> void String<CH>::pushTail(ParamType c)
 template <> void String<CH>::pushHead(ParamType c)
 {
     assert(code);
-    std::cerr << "pushHead('" << c << "')@'" << *this << "' => ";
     if(code->size<code->capacity)
     {
-        std::cerr << "[pre]";
         code->pre(c);
     }
     else
     {
-        std::cerr << "[add]";
         String tmp = Add(c,*this);
        (void) xch(tmp);
     }
-    std::cerr << " '" << *this << "'" << std::endl;
-
 }
 
 template <> String<CH>::ConstType & String<CH>:: getHead() const noexcept
