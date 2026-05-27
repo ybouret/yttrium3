@@ -179,10 +179,6 @@ namespace Yttrium
                 const Rule & back(const RX &brx, const EndOfLineFlag eol)
                 {
                     return add( Rule::BackFrom(name,brx,eol) );
-                    //const String     _back = "<-" + *name;
-                    //const Identifier _name(_back);
-                    //const  Motif     _form( RegExp::Compile(rx,0) );
-                    //return add( new Rule(_name,_form,Rule::Back | (newLine ? Rule::Endl : 0),_name,0) );
                 }
 
 

@@ -4,9 +4,8 @@
 #ifndef Y_Jive_Lexical_Rule_Included
 #define Y_Jive_Lexical_Rule_Included 1
 
+#include "y/jive/lexical/action.hpp"
 #include "y/jive/regexp.hpp"
-#include "y/functor.hpp"
-#include "y/pointer/easy.hpp"
 
 namespace Yttrium
 {
@@ -15,24 +14,6 @@ namespace Yttrium
 
         namespace Lexical
         {
-
-            typedef Functor<void,TL1(Token)> ActionType;
-
-            class Action : public ActionType, public Counted
-            {
-            public:
-                template <typename OBJECT_POINTER, typename METHOD_POINTER> inline
-                explicit Action(OBJECT_POINTER * const objectPointer, METHOD_POINTER const methodPointer) :
-                ActionType(objectPointer,methodPointer)
-                {
-                }
-                
-                virtual ~Action() noexcept;
-            private:
-                Y_Disable_Copy_And_Assign(Action);
-            };
-
-            typedef EasyPtr<Action> RuleHook;
 
 
             enum LexemeProcess
@@ -96,22 +77,7 @@ namespace Yttrium
                 //! cleanup
                 virtual ~Rule() noexcept;
 
-                static unsigned DeedFor(const LexemeProcess lxp,
-                                        const EndOfLineFlag eol) noexcept
-                {
-                    unsigned ruleDeed = 0;
-                    switch(lxp)
-                    {
-                        case EmitLexeme: ruleDeed |= Emit; break;
-                        case DropLexeme: ruleDeed |= Drop; break;
-                    }
-                    switch(eol)
-                    {
-                        case IsEndOfLine: ruleDeed |= Endl; break;
-                        case NoEndOfLine:                   break;
-                    }
-                    return ruleDeed;
-                }
+
 
 
                 //! creating a rule without hook
@@ -167,14 +133,13 @@ namespace Yttrium
                     return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
                 }
 
+
+
                 //! creating a 'back' rule without hook
                 /**
-                 \param lxp what to do with lexeme
-                 \param rid rule name
-                 \param rrx rule regular expression
+                 \param org current scanner name
+                 \param brx rule regular expression
                  \param eol is it an end of line?
-                 \param objectPointer object pointer
-                 \param methodPointer method pointer to call
                  \return new rule
                  */
                 template <typename RX> static inline
@@ -182,15 +147,39 @@ namespace Yttrium
                                 const RX           & brx,
                                 const EndOfLineFlag  eol)
                 {
-                    const Identifier ruleName = new String(BackPrefix,BackLength,org->c_str(), org->size() );
+                    const Identifier ruleName = GetBackName(org);
                     const Motif      ruleForm = RegExp::Compile(brx,0);
-                    const unsigned   ruleDeed = DeedFor(DropLexeme,eol) | Back;
+                    const unsigned   ruleDeed = DeedForBack(eol);
                     const Identifier ruleInfo = ruleName;
                     const RuleHook   ruleHook = 0;
                     return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
                 }
 
-
+                //! creating a 'back' rule with a hook
+                /**
+                 \param org current scanner name
+                 \param brx rule regular expression
+                 \param eol is it an end of line?
+                 \param objectPointer object pointer
+                 \param methodPointer method pointer to call
+                 \return new rule
+                 */
+                template <typename RX,
+                typename OBJECT_POINTER,
+                typename METHOD_POINTER> static inline
+                Rule * BackFrom(const Identifier   &   org,
+                                const RX           &   brx,
+                                const EndOfLineFlag    eol,
+                                OBJECT_POINTER * const objectPointer,
+                                METHOD_POINTER   const methodPointer)
+                {
+                    const Identifier ruleName = GetBackName(org);
+                    const Motif      ruleForm = RegExp::Compile(brx,0);
+                    const unsigned   ruleDeed = DeedForBack(eol) | Hook;
+                    const Identifier ruleInfo = ruleName;
+                    const RuleHook   ruleHook = new Action(objectPointer,methodPointer);
+                    return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
+                }
 
 
 
@@ -210,6 +199,9 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(Rule); //!< discarded
+                static unsigned DeedFor(const LexemeProcess,const EndOfLineFlag) noexcept;
+                static unsigned DeedForBack(const EndOfLineFlag) noexcept;
+                static String * GetBackName(const Identifier &);
             };
         }
 
