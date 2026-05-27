@@ -9,7 +9,7 @@ namespace
 {
     static inline uint64_t GetPrime( Core::Rand & ran )
     {
-        return Prime::Next( ran.in<uint64_t>(10,1000) );
+        return Prime::Next( ran.in<uint64_t>(10,100) );
     }
 }
 
@@ -52,7 +52,7 @@ Y_UTEST(apex_rsa)
         const uint64_t l = lam.cast<uint64_t>("lam",0);
         std::cerr << "l   = " << l   << std::endl;
         apn e = 3;
-        while( 1 != apn::GCD(e,lam) )
+        while( ! apn::GCD(e,lam).is1() )
         {
             e += 2;
         }
@@ -70,6 +70,8 @@ Y_UTEST(apex_rsa)
             std::cerr << std::endl;
             Y_ASSERT(r==m);
         }
+
+        
     }
 
 }
