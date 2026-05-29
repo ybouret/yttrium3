@@ -109,15 +109,23 @@ namespace Yttrium
 
         };
 
+        template <typename T>
+        static inline void InSituSquared(T &z) noexcept
+        {
+            z *= z;
+        }
+
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         //! using Fourier Multiplication
         struct KegDFT
         {
-            static uint64_t Trace; //!< to trace call ticks
-            static unsigned BigBlockShift; //!< to trace blocks
+            static uint64_t   Trace;                //!< to trace call ticks
+            static unsigned   BigBlockShift;        //!< to trace blocks
+            static const char AlgebraicFailure[];  //!< "Algebraic Failure"
 
-            //! compute lhs * rhs by fourier transform
+
+            //! compute lhs * rhs by Fourier transform
             /**
              \param  lhs first argument
              \param  rhs second argument
@@ -215,7 +223,7 @@ namespace Yttrium
                         w[j] = (uint8_t)(t-cy*RX);
                     }
                     if (cy >= RX)
-                        throw Specific::Exception("DFT::Multiplication","algebraic failure");
+                        throw Specific::Exception("DFT::Multiplication","%s",AlgebraicFailure);
 
                     Coerce(dft->words) = Alignment::To<WORD>::Ceil(mpn) / sizeof(WORD);
                     assert(dft->words*sizeof(WORD)>=mpn);
@@ -245,7 +253,107 @@ namespace Yttrium
 
                 return dft.yield();
             }
+
+            //! compute arg^2 by Fourier transform
+            /**
+             \param  arg   argument
+             \return arg^2
+             */
+            template <typename WORD> static inline
+            Keg<WORD> * Square(const Keg<WORD> &arg)
+            {
+                static Memory::Archon  &archon = Memory::Archon::Instance();
+
+                const size_t n  = arg.bytes; if(n<=0) return new Keg<WORD>();
+                size_t       nn = 1;
+                unsigned     ns = 0;
+                while (nn < n)
+                {
+                    nn <<= 1; ++ns; assert( size_t(1) << ns == nn);
+                }
+                const size_t nc = nn; // number of complexes
+                nn <<= 1; ++ns;       // number of reals
+                assert( size_t(1) << ns == nn);
+
+                //--------------------------------------------------------------
+                //
+                // Allocate result
+                //
+                //--------------------------------------------------------------
+                const size_t          mpn = n<<1; assert(mpn>=2);
+                AutoPtr< Keg<WORD> >  dft = new Keg<WORD>(mpn);
+
+                //--------------------------------------------------------------
+                //
+                // Allocate enough memory
+                //
+                //--------------------------------------------------------------
+                const unsigned blockShift = ns+1+IntegerLog2For<double>::Value;
+                void   * const blockEntry = archon.acquireBlock(blockShift);
+                InSituMax(BigBlockShift,blockShift);
+                {
+                    double * const  b = (static_cast<double *>(blockEntry)-1)+nn; // b[1:nn]
+                    uint8_t * const w = static_cast<uint8_t*>(blockEntry);        // w[0:..] to use result memory
+
+                    //#define Y_APEX_DFT_RAW_SEND 1
+#if defined(Y_APEX_DFT_RAW_SEND)
+                    for(size_t i=m,j=0;i>0;--i) b[i] = arg.getByte(j++);
+#else
+                    Transfer<WORD>::Send(b,arg.word,arg.words);
+#endif
+
+                    DFT::RealForward(b,nn);
+
+
+                    b[1] *= b[1];
+                    b[2] *= b[2];
+                    {
+                        Complex<double> * zb = (Complex<double> *) &b[1];
+                        for(size_t i=nc-1;i>0;--i)
+                            InSituSquared( *(++zb) );
+                    }
+
+
+                    DFT::RealReverse(b,nn);
+                    double              cy  = 0;
+                    static const double RX  = 256.0;
+                    for(size_t j=nn;j>0;--j) {
+                        const double t = floor( b[j]/(double)nc+cy+0.5 );
+                        cy=(unsigned long) (t*0.00390625);
+                        w[j] = (uint8_t)(t-cy*RX);
+                    }
+                    if (cy >= RX)
+                        throw Specific::Exception("DFT::Square","%s",AlgebraicFailure);
+
+                    Coerce(dft->words) = Alignment::To<WORD>::Ceil(mpn) / sizeof(WORD);
+                    assert(dft->words*sizeof(WORD)>=mpn);
+
+                    //#define Y_APEX_DFT_RAW_RECV 1
+#if defined(Y_APEX_DFT_RAW_RECV)
+                    {
+                        size_t top = mpn-1;
+                        dft->or_(top, (uint8_t) cy);
+                        for(size_t j=1;j<mpn;++j)
+                            dft->or_(--top,w[j]);
+                    }
+#else
+                    {
+                        w[0] = (uint8_t)cy;
+                        Transfer<WORD>::Recv(dft->word,w,mpn);
+                    }
+#endif
+                    dft->update();
+
+                }
+
+                archon.releaseBlock(blockEntry,blockShift);
+                return dft.yield();
+
+            }
+
+
         };
+
 
     }
 

@@ -73,6 +73,16 @@ Y_UTEST(apex_n)
         const apn m = lhs % rhs;
     }
 
+    std::cerr << "-- testing mod2" << std::endl;
+    for(size_t k=0;k<1024;++k)
+    {
+        const apn lhs(ran,ran.in<size_t>(1,1000));
+        const apn sqr = lhs * lhs;
+        Y_ASSERT(sqr == lhs.mod2());
+    }
+
+
+
     std::cerr << "-- testing ratio" << std::endl;
     for(size_t iter=0;iter<8;++iter)
     {

@@ -23,7 +23,7 @@ namespace
     void testDFT(Core::Rand &ran)
     {
 
-        std::cerr << "-- WORD = " << ( sizeof(WORD) * 8) << " bits | CORE = " << ( sizeof(CORE) * 8) << " bits" << std::endl;
+        std::cerr << "-- [MUL] WORD = " << ( sizeof(WORD) * 8) << " bits | CORE = " << ( sizeof(CORE) * 8) << " bits" << std::endl;
         System::WallTime chrono;
         uint64_t mul64 = 0;
         uint64_t dft64 = 0;
@@ -35,9 +35,9 @@ namespace
                 (std::cerr << " " <<  std::setw(4) << lbits<< " x " << std::setw(4) << rbits).flush();
                 KegDFT::Trace = 0;
                 KegMul::Trace = 0;
-                mul64 = 0;
-                dft64 = 0;
-                size_t nops = 0;
+                mul64         = 0;
+                dft64         = 0;
+                size_t nops   = 0;
                 do
                 {
                     ++nops;
@@ -79,11 +79,14 @@ namespace
         std::cerr << std::endl;
     }
 
+   
+
 }
+
 
 #include "y/ascii/convert.hpp"
 
-Y_UTEST(apex_k_dft)
+Y_UTEST(apex_k_dft_mul)
 {
     Core::Rand ran;
 

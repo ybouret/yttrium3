@@ -114,7 +114,7 @@ Y_UTEST(apex_n64)
                 { const apn     P   = L * rhs; Y_ASSERT(P==prod); }
                 { apn P = L; P *= R;           Y_ASSERT(P==prod);  }
                 { apn P = L; P *= rhs;         Y_ASSERT(P==prod);  }
-
+                
             }
         }
     }

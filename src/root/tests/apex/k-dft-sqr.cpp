@@ -1,0 +1,100 @@
+
+#include "y/apex/k/dft.hpp"
+#include "y/utest/run.hpp"
+#include "y/core/rand.hpp"
+#include "y/pointer/auto.hpp"
+#include "y/apex/k/mul.hpp"
+#include "y/apex/k/cmp.hpp"
+#include "y/format/human-readable.hpp"
+#include "y/system/wall-time.hpp"
+
+using namespace Yttrium;
+using namespace Apex;
+
+namespace
+{
+
+    const size_t minBits = 128;
+    const size_t maxBits = 8192;
+    long double  tmx     = 0.01L;
+
+
+    template <typename WORD, typename CORE>
+    static inline
+    void testSQR(Core::Rand &ran)
+    {
+
+        std::cerr << "-- [SQR] WORD = " << ( sizeof(WORD) * 8) << " bits | CORE = " << ( sizeof(CORE) * 8) << " bits" << std::endl;
+        System::WallTime chrono;
+        uint64_t mul64 = 0;
+        uint64_t dft64 = 0;
+
+        for(size_t lbits=minBits;lbits<=maxBits;lbits <<=1)
+        {
+            (std::cerr << " " <<  std::setw(4) << lbits<< " bits:").flush();
+            KegDFT::Trace = 0;
+            KegMul::Trace = 0;
+            mul64         = 0;
+            dft64         = 0;
+            size_t nops   = 0;
+            do
+            {
+                ++nops;
+                AutoPtr< Keg<WORD> > lhs = Keg<WORD>::MakeRandom(ran, lbits ); Y_ASSERT(lbits==lhs->bits);
+
+                uint64_t mark = System::WallTime::Ticks();
+                AutoPtr< Keg<WORD> > mul = KegMul::Square<WORD,CORE>(lhs->word,lhs->words);
+                mul64 += System::WallTime::Ticks() - mark;
+
+                mark = System::WallTime::Ticks();
+                AutoPtr< Keg<WORD> > dft = KegDFT::Square<WORD>(*lhs);
+                dft64 += System::WallTime::Ticks() - mark;
+
+                Y_ASSERT( __Zero__ == KegCmp::ResultFor(*mul,*dft) );
+            }
+            while( Max(chrono(mul64),chrono(dft64)) < tmx );
+
+            const long double cycles = (long double)nops;
+            if(KegDFT::Trace&&KegMul::Trace)
+            {
+                const long double mulRate = cycles / chrono(KegMul::Trace);
+                const long double dftRate = cycles / chrono(KegDFT::Trace);
+                std::cerr << " | [in]  mul: " <<  HumanReadable( (uint64_t)mulRate)  << " dft: " <<  HumanReadable( (uint64_t) dftRate);
+                if(dftRate>=mulRate) std::cerr << " (+)"; else std::cerr << " (-)";
+            }
+            {
+                const long double mulRate = cycles / chrono(mul64);
+                const long double dftRate = cycles / chrono(dft64);
+                std::cerr << " | [out]  mul: " <<  HumanReadable( (uint64_t)mulRate)  << " dft: " <<  HumanReadable( (uint64_t) dftRate);
+                if(dftRate>=mulRate) std::cerr << " (+)"; else std::cerr << " (-)";
+            }
+            std::cerr << " |";
+            (std::cerr << std::endl).flush();
+
+        }
+
+    }
+
+}
+
+
+#include "y/ascii/convert.hpp"
+
+Y_UTEST(apex_k_dft_sqr)
+{
+    Core::Rand ran;
+
+    if(argc>1)
+    {
+        tmx = ASCII::Convert::To<long double>(argv[1],"tmx",0);
+    }
+
+    testSQR<uint8_t,uint16_t>(ran);
+    testSQR<uint8_t,uint32_t>(ran);
+    testSQR<uint8_t,uint64_t>(ran);
+    testSQR<uint16_t,uint32_t>(ran);
+    testSQR<uint16_t,uint64_t>(ran);
+    testSQR<uint32_t,uint64_t>(ran);
+
+}
+Y_UDONE()

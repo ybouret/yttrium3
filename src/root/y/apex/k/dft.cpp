@@ -10,8 +10,9 @@ namespace Yttrium
     namespace Apex
     {
 
-        uint64_t   KegDFT::Trace = 0;
-        unsigned   KegDFT::BigBlockShift = 0;
+        const char KegDFT:: AlgebraicFailure[] = "Algebraic Failure";
+        uint64_t   KegDFT:: Trace = 0;
+        unsigned   KegDFT:: BigBlockShift = 0;
 
     }
 
