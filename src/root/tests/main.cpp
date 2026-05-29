@@ -134,6 +134,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(apex_in_threads);
     Y_UTEST(apex_rsa);
     Y_UTEST(apex_perf);
+    Y_UTEST(apex_perf2);
     Y_UTEST(apex_scatter);
 
     Y_UTEST(stream_u64);

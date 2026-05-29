@@ -1,3 +1,4 @@
+
 #include "y/apex/k/dft.hpp"
 #include "y/apex/k/mul.hpp"
 #include "y/utest/run.hpp"
@@ -30,14 +31,13 @@ SignType CompareDFT(const size_t nbits)
     do {
         //++nops;
         AutoPtr< Keg<WORD> > lhs  = Keg<WORD>::MakeRandom(ran, nbits);
-        AutoPtr< Keg<WORD> > rhs  = Keg<WORD>::MakeRandom(ran, nbits);
 
         uint64_t             mark = System::WallTime::Ticks();
-        AutoPtr< Keg<WORD> > dft  = KegDFT::Compute(*lhs,*rhs);
+        AutoPtr< Keg<WORD> > dft  = KegDFT::Square(*lhs);
         dft64 += System::WallTime::Ticks() - mark;
 
         mark = System::WallTime::Ticks();
-        AutoPtr< Keg<WORD> > mul  = KegMul::Compute<WORD,CORE>(lhs->word, lhs->words, rhs->word, rhs->words);
+        AutoPtr< Keg<WORD> > mul  = KegMul::Square<WORD,CORE>(lhs->word, lhs->words);
         mul64 += System::WallTime::Ticks() - mark;
 
         const SignType curr = Sign::Of(dft64,mul64);
@@ -62,7 +62,7 @@ static const size_t MaxOps = 30;
 template <typename WORD, typename CORE> static inline
 void TestDFT()
 {
-    (std::cerr << "-- DFT [MUL]" << std::setw(3) << sizeof(WORD)*8 << "-bits | " << std::setw(3) << sizeof(CORE)*8 << "-bits: ").flush();
+    (std::cerr << "-- DFT [SQR] " << std::setw(3) << sizeof(WORD)*8 << "-bits | " << std::setw(3) << sizeof(CORE)*8 << "-bits: ").flush();
     size_t   lowerBits = 8;
     SignType lowerSign = CompareDFT<WORD,CORE>(lowerBits); Y_ASSERT(lowerSign == Positive);
     size_t   upperBits = lowerBits;
@@ -98,7 +98,7 @@ void TestDFT()
 
 
 
-Y_UTEST(apex_perf)
+Y_UTEST(apex_perf2)
 {
     Core::Rand ran;
     if(argc>1) tmx = ASCII::Convert::To<long double>(argv[1],"tmx",0);
