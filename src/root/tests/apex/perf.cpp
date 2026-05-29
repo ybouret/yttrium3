@@ -154,22 +154,6 @@ Y_UTEST(apex_perf)
     Core::Rand ran;
     if(argc>1) tmx = ASCII::Convert::To<long double>(argv[1],"tmx",0);
 
-#if 0
-    {
-        testDFT<uint8_t,uint16_t>(ran);
-        testDFT<uint8_t,uint32_t>(ran);
-        testDFT<uint8_t,uint64_t>(ran);
-
-        testDFT<uint16_t,uint32_t>(ran);
-        testDFT<uint16_t,uint64_t>(ran);
-
-        testDFT<uint32_t,uint64_t>(ran);
-
-        std::cerr << "BigBlockShift=" << KegDFT::BigBlockShift << std::endl;
-    }
-#endif
-
-
     TestDFT<uint8_t,uint16_t>();
     TestDFT<uint8_t,uint32_t>();
     TestDFT<uint8_t,uint64_t>();
