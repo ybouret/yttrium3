@@ -10,7 +10,7 @@ namespace Yttrium
         namespace Lexical
         {
 
-            static inline void checkHook(const Rule * const rule, const Token &token)
+            static inline void ApplyOptionalHook(const Rule * const rule, const Token &token)
             {
                 assert(rule);
                 RuleHook ruleHook(rule->hook);
@@ -134,11 +134,19 @@ namespace Yttrium
                 // execute prioritary code
                 //
                 //--------------------------------------------------------------
-                if( Rule::Endl & deed ) source.endl(); // forward endl to source
-                checkHook(bestRule,bestData);          // check high level code
+                if( Rule::Endl & deed ) source.endl(); //
+                ApplyOptionalHook(bestRule,bestData);  //
 
+                //--------------------------------------------------------------
+                //
+                // act on main deed
+                //
+                //--------------------------------------------------------------
+
+                // no produced lexeme of action
                 if( Rule::Drop & deed ) goto LOOP;
 
+                // single lexeme emission
                 if( Rule::Emit & deed )
                 {
                     Unit * unit = new Unit(spot,bestRule->name);
@@ -146,18 +154,21 @@ namespace Yttrium
                     return unit;
                 }
 
+                // go back
                 if( Rule::Back & deed ) {
                     Coerce(command.kind) = Command::Back;
                     assert(0==command.args);
                     return 0;
                 }
 
+                // call
                 if( Rule::Call & deed ) {
                     Coerce(command.kind) = Command::Call;
                     Coerce(command.args) = & *bestRule->info;
                     return 0;
                 }
 
+                // jump
                 if( Rule::Jump & deed ) {
                     Coerce(command.kind) = Command::Jump;
                     Coerce(command.args) = & *bestRule->info;
@@ -165,8 +176,9 @@ namespace Yttrium
                 }
 
 
+                // corrupted rule
                 {
-                    Specific::Exception excp(name->c_str(),"invalid rule deed=0x%u",deed);
+                    Specific::Exception excp(name->c_str(),"corrupted rule deed=0x%u",deed);
                     throw spot.stamp(excp);
                 }
             }
