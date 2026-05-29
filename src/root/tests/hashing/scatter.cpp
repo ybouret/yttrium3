@@ -95,7 +95,7 @@ namespace
 #include "y/format/decimal.hpp"
 #include "y/string/env.hpp"
 
-Y_UTEST(apex_scatter)
+Y_UTEST(hashing_scatter)
 {
     verbose = Environment::Flag("VERBOSE");
     Hashing::MD2    md2;

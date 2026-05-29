@@ -135,7 +135,6 @@ Y_UTEST_DECL(8)
     Y_UTEST(apex_rsa);
     Y_UTEST(apex_perf);
     Y_UTEST(apex_perf2);
-    Y_UTEST(apex_scatter);
 
     Y_UTEST(stream_u64);
     Y_UTEST(stream_output_file);
@@ -186,6 +185,7 @@ Y_UTEST_DECL(8)
 
     Y_UTEST(hashing_tests);
     Y_UTEST(hashing_key_dumper);
+    Y_UTEST(hashing_scatter);
 
     Y_UTEST(mkl_numeric);
     Y_UTEST(mkl_api);

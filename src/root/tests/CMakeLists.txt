@@ -163,7 +163,6 @@ Y_UTEST(apex:in_threads)
 Y_UTEST(apex:rsa)
 Y_UTEST(apex:perf)
 Y_UTEST(apex:perf2)
-Y_UTEST(apex:scatter)
 
 
 Y_UTEST(stream:u64)
@@ -215,6 +214,7 @@ Y_UTEST(vfs:scan)
 
 Y_UTEST(hashing:tests)
 Y_UTEST(hashing:key:dumper)
+Y_UTEST(hashing:scatter)
 
 Y_UTEST(mkl:numeric)
 Y_UTEST(mkl:api)
