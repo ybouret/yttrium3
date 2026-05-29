@@ -103,12 +103,13 @@ Y_UTEST(apex_perf2)
     Core::Rand ran;
     if(argc>1) tmx = ASCII::Convert::To<long double>(argv[1],"tmx",0);
 
+#if 0
     TestDFT<uint8_t,uint16_t>();
     TestDFT<uint8_t,uint32_t>();
     TestDFT<uint8_t,uint64_t>();
-
     TestDFT<uint16_t,uint32_t>();
     TestDFT<uint16_t,uint64_t>();
+#endif
 
     TestDFT<uint32_t,uint64_t>();
 

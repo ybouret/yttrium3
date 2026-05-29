@@ -163,6 +163,7 @@ Y_UTEST(apex:in_threads)
 Y_UTEST(apex:rsa)
 Y_UTEST(apex:perf)
 Y_UTEST(apex:perf2)
+Y_UTEST(apex:frontier)
 
 
 Y_UTEST(stream:u64)
