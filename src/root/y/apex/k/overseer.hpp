@@ -17,7 +17,7 @@ namespace Yttrium
         public:
             static const char * const CallSign;
             static const Longevity    LifeTime         = 0;
-            static const unsigned     StaticBlockShift = 14;
+            static const unsigned     StaticBlockShift = 15;
             static const size_t       StaticBlockBytes = size_t(1) << StaticBlockShift;
             static const size_t       NumStaticWords   = Alignment::WordsGEQ<StaticBlockBytes>::Count;
             static void *             StaticWords[ NumStaticWords ];
