@@ -24,10 +24,10 @@ namespace
     static inline
     void testDFT(Core::Rand &ran)
     {
-        const String id = DFT_Allocator:: CallSign;
-        const String fn = id + ".dat";
-        OutputFile   fp(fn);
-        unsigned     cr = 0;
+        //const String id = DFT_Allocator:: CallSign;
+        //const String fn = id + ".dat";
+        //OutputFile   fp(fn);
+        //unsigned     cr = 0;
 
         std::cerr << "-- [MUL] WORD = " << ( sizeof(WORD) * 8) << " bits | CORE = " << ( sizeof(CORE) * 8) << " bits" << std::endl;
         System::WallTime chrono;
@@ -75,7 +75,7 @@ namespace
                     const long double dftRate = cycles / chrono(dft64);
                     std::cerr << " | [out]  mul: " <<  HumanReadable( (uint64_t)mulRate)  << " dft: " <<  HumanReadable( (uint64_t) dftRate);
                     if(dftRate>=mulRate) std::cerr << " (+)"; else std::cerr << " (-)";
-                    fp("%u %.15llg\n",cr++,dftRate);
+                    //fp("%u %.15llg\n",cr++,dftRate);
                 }
                 std::cerr << " |";
                 (std::cerr << std::endl).flush();

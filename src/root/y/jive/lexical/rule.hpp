@@ -46,20 +46,18 @@ namespace Yttrium
             class Rule : public Object
             {
             public:
-                static const unsigned   Emit     = 0x0001;            //!< emit lexeme
-                static const unsigned   Drop     = 0x0002;            //!< drop lexeme
-                static const unsigned   Hook     = 0x0080;            //!< perform action
-                static const unsigned   ProcMask = Emit|Drop|Hook;    //!< emit|drop
-                static const unsigned   Call     = 0x0100;            //!< call scanner
-                static const unsigned   Back     = 0x0200;            //!< back from scanner
-                static const unsigned   Jump     = 0x0400;            //!< jump to scanner
-                static const unsigned   CntlMask = Call|Back|Jump;    //!< call|back|jump
-                static const unsigned   UsedMask = ProcMask|CntlMask; //!< usage mask
-                static const unsigned   Endl     = 0x8000;            //!< propagate endl
-                typedef CxxListOf<Rule> List;                         //!< alias
-                static const char       BackPrefix[];                 //!< "<-"
-                static const size_t     BackLength;                   //!< strlen(BackPrefix)
+                static const unsigned   Emit = 0x01;                     //!< emit lexeme
+                static const unsigned   Drop = 0x02;                     //!< drop lexeme
+                static const unsigned   Call = 0x04;                     //!< call scanner
+                static const unsigned   Back = 0x08;                     //!< back from scanner
+                static const unsigned   Jump = 0x10;                     //!< jump to scanner
+                static const unsigned   Endl = 0x80;                     //!< propagate endl
+                static const unsigned   Mask = Emit|Drop|Call|Back|Jump; //!<
+                typedef CxxListOf<Rule> List;                            //!< alias
+                static const char       BackPrefix[];                    //!< "<-"
+                static const size_t     BackLength;                      //!< strlen(BackPrefix)
 
+                
                 //______________________________________________________________
                 //
                 //
@@ -133,9 +131,7 @@ namespace Yttrium
                     const RuleHook   ruleHook = new Action(objectPointer,methodPointer);
                     return New_(lxp,rid,rrx,eol,ruleHook);
                 }
-
-
-
+                
 
                 //! creating a 'back' rule without hook
                 /**
@@ -196,8 +192,7 @@ namespace Yttrium
                 static unsigned DeedFor(const LexemeProcess,const EndOfLineFlag) noexcept;
                 static unsigned DeedForBack(const EndOfLineFlag) noexcept;
                 static String * GetBackName(const Identifier &);
-                static unsigned GetHookDeed(const RuleHook &) noexcept;
-
+                
                 template <typename ID, typename RX> static inline
                 Rule * New_(const LexemeProcess lxp,
                             const ID           &rid,
@@ -207,7 +202,7 @@ namespace Yttrium
                 {
                     const Identifier ruleName = rid;
                     const Motif      ruleForm = RegExp::Compile(rrx,0);
-                    const unsigned   ruleDeed = DeedFor(lxp,eol) | GetHookDeed(ruleHook);
+                    const unsigned   ruleDeed = DeedFor(lxp,eol);
                     const Identifier ruleInfo = ruleName;
                     return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
                 }
@@ -220,7 +215,7 @@ namespace Yttrium
                 {
                     const Identifier ruleName = GetBackName(org);
                     const Motif      ruleForm = RegExp::Compile(brx,0);
-                    const unsigned   ruleDeed = DeedForBack(eol) | GetHookDeed(ruleHook);
+                    const unsigned   ruleDeed = DeedForBack(eol);
                     const Identifier ruleInfo = ruleName;
                     return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
                 }

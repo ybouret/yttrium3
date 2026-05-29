@@ -10,12 +10,12 @@ namespace Yttrium
         namespace Lexical
         {
 
-            static inline void callHook(const Rule * const rule, const Token &token)
+            static inline void checkHook(const Rule * const rule, const Token &token)
             {
                 assert(rule);
                 RuleHook ruleHook(rule->hook);
-                assert(ruleHook.isValid());
-                (*ruleHook)(token);
+                if(ruleHook.isValid())
+                    (*ruleHook)(token);
             }
 
             Unit * Scanner:: probe(Source &source, Command &command)
@@ -129,11 +129,16 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 const unsigned deed = bestRule->deed;
 
-                // execute common code
-                if( Rule::Endl & deed ) source.endl();
-                if( Rule::Hook & deed ) callHook(bestRule,bestData);
+                //--------------------------------------------------------------
+                //
+                // execute prioritary code
+                //
+                //--------------------------------------------------------------
+                if( Rule::Endl & deed ) source.endl(); // forward endl to source
+                checkHook(bestRule,bestData);          // check high level code
+
                 if( Rule::Drop & deed ) goto LOOP;
-                
+
                 if( Rule::Emit & deed )
                 {
                     Unit * unit = new Unit(spot,bestRule->name);

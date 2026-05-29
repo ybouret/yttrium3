@@ -17,6 +17,8 @@ namespace Yttrium
             }
 
 
+
+
             Rule:: Rule(const Identifier & ruleName,
                         const Motif      & ruleForm,
                         const unsigned     ruleDeed,
@@ -30,7 +32,17 @@ namespace Yttrium
             next(0),
             prev(0)
             {
-                assert(deed&UsedMask);
+                switch(deed&Mask)
+                {
+                    case Emit:
+                    case Drop:
+                    case Call:
+                    case Jump:
+                    case Back:
+                        break;
+                    default:
+                        throw Specific::Exception(name->c_str(),"invalid deed=0x%x",deed);
+                }
 
                 if(form->frail())
                     throw Specific::Exception(name->c_str(),"cannot use frail pattern!");
@@ -71,10 +83,7 @@ namespace Yttrium
             }
 
 
-            unsigned Rule:: GetHookDeed(const RuleHook &ruleHook) noexcept
-            {
-                return ruleHook.isValid() ? Hook : 0x00;
-            }
+
 
         }
 
