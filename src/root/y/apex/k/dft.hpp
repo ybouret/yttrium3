@@ -117,13 +117,22 @@ namespace Yttrium
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
+        //______________________________________________________________________
+        //
+        //
+        //
         //! using Fourier Multiplication
+        //
+        //
+        //______________________________________________________________________
         struct KegDFT
         {
-            static uint64_t   Trace;                //!< to trace call ticks
-            static unsigned   BigBlockShift;        //!< to trace blocks
-            static const char AlgebraicFailure[];  //!< "Algebraic Failure"
-
+            static uint64_t       Trace;                //!< to trace call ticks
+            static unsigned       BigBlockShift;        //!< to trace blocks
+            static const char     AlgebraicFailure[];  //!< "Algebraic Failure"
+            static const unsigned MaxBlockShift = 15;
+            static const size_t   MaxBlockBytes = size_t(1) << MaxBlockShift;
+            static char           StaticBlock[ MaxBlockBytes ];
 
             //! compute lhs * rhs by Fourier transform
             /**
