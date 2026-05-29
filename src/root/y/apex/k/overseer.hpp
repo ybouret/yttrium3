@@ -22,9 +22,9 @@ namespace Yttrium
             static const size_t       NumStaticWords   = Alignment::WordsGEQ<StaticBlockBytes>::Count;
             static void *             StaticWords[ NumStaticWords ];
 
-            void * get(const unsigned blockShift);
-            void   put(void * const blockEntry, const unsigned blockShift) noexcept;
-            
+            void * acquireBlock(const unsigned blockShift);
+            void   releaseBlock(void * const blockEntry, const unsigned blockShift) noexcept;
+
         private:
             Y_Disable_Copy_And_Assign(Overseer);
             friend class Singleton<Overseer,ClassLockPolicy>;

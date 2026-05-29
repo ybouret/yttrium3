@@ -8,6 +8,8 @@
 #include "y/format/human-readable.hpp"
 #include "y/system/wall-time.hpp"
 
+#include "y/stream/libc/output.hpp"
+
 using namespace Yttrium;
 using namespace Apex;
 
@@ -22,6 +24,10 @@ namespace
     static inline
     void testDFT(Core::Rand &ran)
     {
+        const String id = DFT_Allocator:: CallSign;
+        const String fn = id + ".dat";
+        OutputFile   fp(fn);
+        unsigned     cr = 0;
 
         std::cerr << "-- [MUL] WORD = " << ( sizeof(WORD) * 8) << " bits | CORE = " << ( sizeof(CORE) * 8) << " bits" << std::endl;
         System::WallTime chrono;
@@ -69,6 +75,7 @@ namespace
                     const long double dftRate = cycles / chrono(dft64);
                     std::cerr << " | [out]  mul: " <<  HumanReadable( (uint64_t)mulRate)  << " dft: " <<  HumanReadable( (uint64_t) dftRate);
                     if(dftRate>=mulRate) std::cerr << " (+)"; else std::cerr << " (-)";
+                    fp("%u %.15llg\n",cr++,dftRate);
                 }
                 std::cerr << " |";
                 (std::cerr << std::endl).flush();
@@ -95,12 +102,14 @@ Y_UTEST(apex_k_dft_mul)
         tmx = ASCII::Convert::To<long double>(argv[1],"tmx",0);
     }
 
-    testDFT<uint8_t,uint16_t>(ran); 
-    testDFT<uint8_t,uint32_t>(ran);
-    testDFT<uint8_t,uint64_t>(ran);
-
-    testDFT<uint16_t,uint32_t>(ran);
-    testDFT<uint16_t,uint64_t>(ran);
+    if(0)
+    {
+        testDFT<uint8_t,uint16_t>(ran);
+        testDFT<uint8_t,uint32_t>(ran);
+        testDFT<uint8_t,uint64_t>(ran);
+        testDFT<uint16_t,uint32_t>(ran);
+        testDFT<uint16_t,uint64_t>(ran);
+    }
 
     testDFT<uint32_t,uint64_t>(ran);
 

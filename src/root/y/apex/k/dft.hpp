@@ -6,11 +6,17 @@
 
 #include "y/apex/k/keg.hpp"
 #include "y/core/max.hpp"
-#include "y/memory/allocator/archon.hpp"
 #include "y/dft/dft.hpp"
 #include "y/exception.hpp"
 #include "y/pointer/auto.hpp"
+
+//#define Y_Apex_Use_Archon 1
+
+#if defined(Y_Apex_Use_Archon)
+#include "y/memory/allocator/archon.hpp"
+#else
 #include "y/apex/k/overseer.hpp"
+#endif
 
 
 
@@ -25,8 +31,13 @@ namespace Yttrium
     namespace Apex
     {
 
-        template <typename T> struct Transfer;
+#if defined(Y_Apex_Use_Archon)
+        typedef Memory::Archon DFT_Allocator;
+#else
+        typedef Overseer       DFT_Allocator;
+#endif
 
+        template <typename T> struct Transfer;
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         template <> struct Transfer<uint32_t>
         {
@@ -141,7 +152,7 @@ namespace Yttrium
             Keg<WORD> * Compute(const Keg<WORD> &lhs,
                                 const Keg<WORD> &rhs)
             {
-                static Memory::Archon  &archon = Memory::Archon::Instance();
+                static DFT_Allocator &mgr = DFT_Allocator::Instance();
 
                 //--------------------------------------------------------------
                 //
@@ -187,7 +198,7 @@ namespace Yttrium
                 //
                 //--------------------------------------------------------------
                 const unsigned blockShift = ns+1+IntegerLog2For<double>::Value;
-                void   * const blockEntry = archon.acquireBlock(blockShift);
+                void   * const blockEntry = mgr.acquireBlock(blockShift);
                 InSituMax(BigBlockShift,blockShift);
                 {
 #if defined(Y_Apex_Trace)
@@ -255,7 +266,7 @@ namespace Yttrium
 #if defined(Y_Apex_Trace)
                 Trace += System::WallTime::Ticks() - mark;
 #endif
-                archon.releaseBlock(blockEntry,blockShift);
+                mgr.releaseBlock(blockEntry,blockShift);
 
                 return dft.yield();
             }
@@ -275,7 +286,7 @@ namespace Yttrium
             template <typename WORD> static inline
             Keg<WORD> * Square(const Keg<WORD> &arg)
             {
-                static Memory::Archon  &archon = Memory::Archon::Instance();
+                static DFT_Allocator  &mgr = DFT_Allocator::Instance();
 
                 const size_t n  = arg.bytes; if(n<=0) return new Keg<WORD>();
                 size_t       nn = 1;
@@ -302,7 +313,7 @@ namespace Yttrium
                 //
                 //--------------------------------------------------------------
                 const unsigned blockShift = ns+1+IntegerLog2For<double>::Value;
-                void   * const blockEntry = archon.acquireBlock(blockShift);
+                void   * const blockEntry = mgr.acquireBlock(blockShift);
                 InSituMax(BigBlockShift,blockShift);
                 {
                     double * const  b = (static_cast<double *>(blockEntry)-1)+nn; // b[1:nn]
@@ -359,7 +370,7 @@ namespace Yttrium
 
                 }
 
-                archon.releaseBlock(blockEntry,blockShift);
+                mgr.releaseBlock(blockEntry,blockShift);
                 return dft.yield();
 
             }

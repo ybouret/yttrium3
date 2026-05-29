@@ -1,6 +1,7 @@
 
 #include "y/apex/k/overseer.hpp"
 #include "y/memory/allocator/archon.hpp"
+#include "y/libc/block/zero.h"
 #include "y/hide.hpp"
 
 namespace Yttrium
@@ -21,13 +22,12 @@ namespace Yttrium
         void * Overseer:: StaticWords[NumStaticWords];
 
 
-        void * Overseer:: get(const unsigned blockShift)
+        void * Overseer:: acquireBlock(const unsigned blockShift)
         {
             if(blockShift<=StaticBlockShift)
             {
-                static void * const entry = Hide::Address(StaticWords);
-                // TODO: check if need to zero...
-                return entry;
+                static const size_t _1 = 1;
+                return Yttrium_BZero(StaticWords, _1 << blockShift);
             }
             else
             {
@@ -36,7 +36,7 @@ namespace Yttrium
             }
         }
 
-        void  Overseer:: put(void * const blockEntry, const unsigned blockShift) noexcept
+        void  Overseer:: releaseBlock(void * const blockEntry, const unsigned blockShift) noexcept
         {
             assert(blockEntry);
             if(blockShift<=StaticBlockShift)
