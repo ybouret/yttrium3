@@ -164,6 +164,7 @@ Y_UTEST(apex:rsa)
 Y_UTEST(apex:perf)
 Y_UTEST(apex:perf2)
 Y_UTEST(apex:frontier)
+Y_UTEST(apex:overseer)
 
 
 Y_UTEST(stream:u64)

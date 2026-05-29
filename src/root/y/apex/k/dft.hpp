@@ -10,6 +10,9 @@
 #include "y/dft/dft.hpp"
 #include "y/exception.hpp"
 #include "y/pointer/auto.hpp"
+#include "y/apex/k/overseer.hpp"
+
+
 
 #if defined(Y_Apex_Trace)
 #include "y/system/wall-time.hpp"
@@ -109,11 +112,7 @@ namespace Yttrium
 
         };
 
-        template <typename T>
-        static inline void InSituSquared(T &z) noexcept
-        {
-            z *= z;
-        }
+
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
@@ -130,9 +129,7 @@ namespace Yttrium
             static uint64_t       Trace;                //!< to trace call ticks
             static unsigned       BigBlockShift;        //!< to trace blocks
             static const char     AlgebraicFailure[];  //!< "Algebraic Failure"
-            static const unsigned MaxBlockShift = 15;
-            static const size_t   MaxBlockBytes = size_t(1) << MaxBlockShift;
-            static char           StaticBlock[ MaxBlockBytes ];
+
 
             //! compute lhs * rhs by Fourier transform
             /**
@@ -261,6 +258,13 @@ namespace Yttrium
                 archon.releaseBlock(blockEntry,blockShift);
 
                 return dft.yield();
+            }
+
+            //! square in place \param z replaced by z^2
+            template <typename T>
+            static inline void InSituSquared(T &z) noexcept
+            {
+                z *= z;
             }
 
             //! compute arg^2 by Fourier transform
