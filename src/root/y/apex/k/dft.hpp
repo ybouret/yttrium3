@@ -10,7 +10,7 @@
 #include "y/exception.hpp"
 #include "y/pointer/auto.hpp"
 
-#define Y_Apex_Use_Archon 1
+#define Y_Apex_Use_Archon 1 //!< help archon directly
 
 #if defined(Y_Apex_Use_Archon)
 #include "y/memory/allocator/archon.hpp"
@@ -32,7 +32,7 @@ namespace Yttrium
     {
 
 #if defined(Y_Apex_Use_Archon)
-        typedef Memory::Archon DFT_Allocator;
+        typedef Memory::Archon DFT_Allocator; //!< alias
 #else
         typedef Overseer       DFT_Allocator;
 #endif

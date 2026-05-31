@@ -101,7 +101,7 @@ namespace Yttrium
                  \param id rule/lexeme name
                  \param rx regular expression
                  \param host object address
-                 \param meth object method to call
+                 \param meth object method to invoke
                  \return created rule
                  */
                 template <
@@ -134,7 +134,7 @@ namespace Yttrium
                  \param id rule/lexeme name
                  \param rx regular expression
                  \param host object address
-                 \param meth object method to call
+                 \param meth object method to invoke
                  \return created rule
                  */
                 template <
@@ -167,16 +167,73 @@ namespace Yttrium
                     return add( Rule::New(lxp,id,rx,IsEndOfLine) );
                 }
 
-#if 0
-                template <typename ID> inline
-                const Rule & call(const ID &id, const Motif &spark)
+
+                //! call another scanner without hook
+                /**
+                 \param id other scanner's name
+                 \param rx triggering regular expression
+                 \return created rule
+                 */
+                template <typename ID, typename RX>
+                const Rule & call(const ID &id, const RX &rx)
                 {
-                    const Identifier _dest(id);
-                    const String     _call = *name + "->" + *_dest;
-                    const Identifier _name(_call);
-                    return add( new Rule(_name,spark,Rule::Call,_dest,0) );
+                    return add( Rule::MakeCall(name,id,rx) );
                 }
-#endif
+
+                //! call another scanner with hook
+                /**
+                 \param id other scanner's name
+                 \param rx triggering regular expression
+                 \param host object address
+                 \param meth object method to invoke
+                 \return created rule
+                 */
+                template <
+                typename ID,
+                typename RX,
+                typename OBJECT_POINTER,
+                typename METHOD_POINTER>
+                const Rule & call(const ID       &       id,
+                                  const RX       &       rx,
+                                  OBJECT_POINTER * const host,
+                                  METHOD_POINTER   const meth)
+                {
+                    return add( Rule::MakeCall(name,id,rx,host,meth) );
+                }
+
+
+                //! jump to another scanner without hook
+                /**
+                 \param id other scanner's name
+                 \param rx triggering regular expression
+                 \return created rule
+                 */
+                template <typename ID, typename RX>
+                const Rule & jump(const ID &id, const RX &rx)
+                {
+                    return add( Rule::MakeJump(name,id,rx) );
+                }
+
+                //! jump to another scanner with hook
+                /**
+                 \param id other scanner's name
+                 \param rx triggering regular expression
+                 \param host object address
+                 \param meth object method to invoke
+                 \return created rule
+                 */
+                template <
+                typename ID,
+                typename RX,
+                typename OBJECT_POINTER,
+                typename METHOD_POINTER>
+                const Rule & jump(const ID       &       id,
+                                  const RX       &       rx,
+                                  OBJECT_POINTER * const host,
+                                  METHOD_POINTER   const meth)
+                {
+                    return add( Rule::MakeJump(name,id,rx,host,meth) );
+                }
 
                 //! comming back without hook
                 /**
@@ -190,7 +247,6 @@ namespace Yttrium
                     return add( Rule::BackFrom(name,brx,eol) );
 
                 }
-
 
                 //! comming back with hook
                 /**

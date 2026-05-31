@@ -52,12 +52,15 @@ namespace Yttrium
                 static const unsigned   Back = 0x08;                     //!< back from scanner
                 static const unsigned   Jump = 0x10;                     //!< jump to scanner
                 static const unsigned   Endl = 0x80;                     //!< propagate endl
-                static const unsigned   Mask = Emit|Drop|Call|Back|Jump; //!<
+                static const unsigned   Mask = Emit|Drop|Call|Back|Jump; //!< alias
                 typedef CxxListOf<Rule> List;                            //!< alias
                 static const char       BackPrefix[];                    //!< "<-"
                 static const size_t     BackLength;                      //!< strlen(BackPrefix)
+                static const char       CallMarker[];                    //!< "->"
+                static const size_t     CallLength;                      //!< strlen(CallPrefix)
+                static const char       JumpMarker[];                    //!< "=>"
+                static const size_t     JumpLength;                      //!< strlen(JumpMarker)
 
-                
                 //______________________________________________________________
                 //
                 //
@@ -131,7 +134,7 @@ namespace Yttrium
                     const RuleHook   ruleHook = new Action(objectPointer,methodPointer);
                     return New_(lxp,rid,rrx,eol,ruleHook);
                 }
-                
+
 
                 //! creating a 'back' rule without hook
                 /**
@@ -171,6 +174,79 @@ namespace Yttrium
                     return BackFrom_(org,brx,eol,ruleHook);
                 }
 
+                //! creating a 'change'
+                /**
+
+                 \return new rule
+                 */
+                template <typename SRC, typename TGT, typename GRX> static inline
+                Rule * GoTo_(const SRC          & src,
+                             const TGT          & tgt,
+                             const GRX          & grx,
+                             const bool           jmp,
+                             const RuleHook     & rcb)
+                {
+                    const Identifier _original = src;
+                    const Identifier _ruleInfo = tgt;
+                    const Identifier _ruleName = GetGoToName(_original,jmp,_ruleInfo);
+                    const Motif      _ruleForm = RegExp::Compile(grx,0);
+                    const unsigned   _ruleDeed = jmp ? Jump : Call;
+                    return new Rule(_ruleName,_ruleForm,_ruleDeed,_ruleInfo,rcb);
+                }
+
+                template <typename SRC, typename TGT, typename GRX> static inline
+                Rule *MakeCall(const SRC          & src,
+                               const TGT          & tgt,
+                               const GRX          & grx)
+                {
+                    const RuleHook rcb = 0;
+                    return GoTo_(src,tgt,grx,false,rcb);
+                }
+
+
+                template <
+                typename SRC,
+                typename TGT,
+                typename GRX,
+                typename OBJECT_POINTER,
+                typename METHOD_POINTER> static inline
+                Rule *MakeCall(const SRC          & src,
+                               const TGT          & tgt,
+                               const GRX          & grx,
+                               OBJECT_POINTER * const objectPointer,
+                               METHOD_POINTER   const methodPointer)
+                {
+                    const RuleHook rcb = new Action(objectPointer,methodPointer);
+                    return GoTo_(src,tgt,grx,false,rcb);
+                }
+
+
+
+                template <typename SRC, typename TGT, typename GRX> static inline
+                Rule *MakeJump(const SRC          & src,
+                               const TGT          & tgt,
+                               const GRX          & grx)
+                {
+                    const RuleHook rcb = 0;
+                    return GoTo_(src,tgt,grx,true,rcb);
+                }
+
+                template <
+                typename SRC,
+                typename TGT,
+                typename GRX,
+                typename OBJECT_POINTER,
+                typename METHOD_POINTER> static inline
+                Rule *MakeJump(const SRC          & src,
+                               const TGT          & tgt,
+                               const GRX          & grx,
+                               OBJECT_POINTER * const objectPointer,
+                               METHOD_POINTER   const methodPointer)
+                {
+                    const RuleHook rcb = new Action(objectPointer,methodPointer);
+                    return GoTo_(src,tgt,grx,true,rcb);
+                }
+
 
 
                 //______________________________________________________________
@@ -192,7 +268,8 @@ namespace Yttrium
                 static unsigned DeedFor(const LexemeProcess,const EndOfLineFlag) noexcept;
                 static unsigned DeedForBack(const EndOfLineFlag) noexcept;
                 static String * GetBackName(const Identifier &);
-                
+                static String * GetGoToName(const Identifier &, const bool, const Identifier &);
+
                 template <typename ID, typename RX> static inline
                 Rule * New_(const LexemeProcess lxp,
                             const ID           &rid,

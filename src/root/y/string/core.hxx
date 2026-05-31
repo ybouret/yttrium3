@@ -237,6 +237,21 @@ code( new Code(lhsSize+rhsSize) )
     code->cat(rhs,rhsSize);
 }
 
+template <> String<CH> :: String(const CH * const a, const size_t na,
+                                 const CH * const b, const size_t nb,
+                                 const CH * const c, const size_t nc) :
+DynamicClass(),
+SequenceType(),
+code( new Code(na+nb+nc) )
+{
+    assert(!(0==a&&na>0));
+    assert(!(0==b&&nb>0));
+    assert(!(0==c&&nc>0));
+    code->cat(a,na);
+    code->cat(b,nb);
+    code->cat(c,nc);
+}
+
 
 
 

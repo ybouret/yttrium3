@@ -172,6 +172,11 @@ inline friend bool operator OP (const T         lhs, const String  & rhs) noexce
             // generic addition constructor
             String(const T * const lhs, const size_t lhsSize,
                    const T * const rhs, const size_t rhsSize);
+
+            String(const T * const a, const size_t na,
+                   const T * const b, const size_t nb,
+                   const T * const c, const size_t nc);
+            
         private:
             static String Add(const String  &, const String  &);
             static String Add(const String  &, const T * const);

@@ -11,6 +11,12 @@ namespace Yttrium
             const char   Rule:: BackPrefix[] = "<-";
             const size_t Rule:: BackLength   = sizeof(BackPrefix)-1;
 
+            const char   Rule:: CallMarker[] = "->";
+            const size_t Rule:: CallLength   = sizeof(CallMarker)-1;
+
+            const char   Rule:: JumpMarker[] = "=>";
+            const size_t Rule:: JumpLength   = sizeof(JumpMarker)-1;
+
             Rule:: ~Rule() noexcept
             {
 
@@ -82,6 +88,12 @@ namespace Yttrium
                 return new String(BackPrefix,BackLength,org->c_str(), org->size() );
             }
 
+            String * Rule:: GetGoToName(const Identifier &from, const bool jmp, const Identifier &to)
+            {
+                return jmp ?
+                new String(from->c_str(),from->size(),JumpMarker,JumpLength,to->c_str(),to->size()) :
+                new String(from->c_str(),from->size(),CallMarker,CallLength,to->c_str(),to->size());
+            }
 
 
 

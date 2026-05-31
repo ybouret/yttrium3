@@ -134,8 +134,8 @@ namespace Yttrium
                 // execute prioritary code
                 //
                 //--------------------------------------------------------------
-                if( Rule::Endl & deed ) source.endl(); //
-                ApplyOptionalHook(bestRule,bestData);  //
+                if( Rule::Endl & deed ) source.endl(); // forward to module
+                ApplyOptionalHook(bestRule,bestData);  // high-level code
 
                 //--------------------------------------------------------------
                 //
