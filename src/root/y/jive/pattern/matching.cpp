@@ -1,5 +1,6 @@
 
 #include "y/jive/pattern/matching.hpp"
+#include "y/jive/regexp.hpp"
 
 namespace Yttrium
 {
@@ -11,6 +12,25 @@ namespace Yttrium
         {
 
         }
+
+        Matching:: Matching(const String &s) :
+        Token(),
+        Motif( RegExp::Compile(s,0) )
+        {
+        }
+
+        Matching:: Matching(const char * const s) :
+        Token(),
+        Motif( RegExp::Compile(s,0) )
+        {
+        }
+
+        Matching:: Matching(const Matching &other) :
+        Token(other),
+        Motif(other)
+        {
+        }
+        
 
         Matching:: ~Matching() noexcept
         {
@@ -53,7 +73,7 @@ namespace Yttrium
             goto TRY;
         }
 
-        bool Matching:: operator()(const How &how, Module * const m)
+        bool Matching:: operator()(const Request how, Module * const m)
         {
             switch(how)
             {
