@@ -158,7 +158,7 @@ namespace Yttrium
                  \param brx rule regular expression
                  \param eol is it an end of line?
                  \param objectPointer object pointer
-                 \param methodPointer method pointer to call
+                 \param methodPointer method pointer to invoke
                  \return new rule
                  */
                 template <typename RX,
@@ -174,26 +174,13 @@ namespace Yttrium
                     return BackFrom_(org,brx,eol,ruleHook);
                 }
 
-                //! creating a 'change'
+                //! creating a 'call' rule without hook
                 /**
-
+                 \param src source scanner's name
+                 \param tgt target scanner's name
+                 \param grx goto regular expression
                  \return new rule
                  */
-                template <typename SRC, typename TGT, typename GRX> static inline
-                Rule * GoTo_(const SRC          & src,
-                             const TGT          & tgt,
-                             const GRX          & grx,
-                             const bool           jmp,
-                             const RuleHook     & rcb)
-                {
-                    const Identifier _original = src;
-                    const Identifier _ruleInfo = tgt;
-                    const Identifier _ruleName = GetGoToName(_original,jmp,_ruleInfo);
-                    const Motif      _ruleForm = RegExp::Compile(grx,0);
-                    const unsigned   _ruleDeed = jmp ? Jump : Call;
-                    return new Rule(_ruleName,_ruleForm,_ruleDeed,_ruleInfo,rcb);
-                }
-
                 template <typename SRC, typename TGT, typename GRX> static inline
                 Rule *MakeCall(const SRC          & src,
                                const TGT          & tgt,
@@ -204,6 +191,15 @@ namespace Yttrium
                 }
 
 
+                //! creating a 'call' rule with a hook
+                /**
+                 \param src           source scanner's name
+                 \param tgt           target scanner's name
+                 \param grx           goto regular expression
+                 \param objectPointer object pointer
+                 \param methodPointer method pointer to invoke
+                 \return new rule
+                 */
                 template <
                 typename SRC,
                 typename TGT,
@@ -221,7 +217,13 @@ namespace Yttrium
                 }
 
 
-
+                //! creating a 'jump' rule without hook
+                /**
+                 \param src source scanner's name
+                 \param tgt target scanner's name
+                 \param grx goto regular expression
+                 \return new rule
+                 */
                 template <typename SRC, typename TGT, typename GRX> static inline
                 Rule *MakeJump(const SRC          & src,
                                const TGT          & tgt,
@@ -231,6 +233,15 @@ namespace Yttrium
                     return GoTo_(src,tgt,grx,true,rcb);
                 }
 
+                //! creating a 'jump' rule with a hook
+                /**
+                 \param src           source scanner's name
+                 \param tgt           target scanner's name
+                 \param grx           goto regular expression
+                 \param objectPointer object pointer
+                 \param methodPointer method pointer to invoke
+                 \return new rule
+                 */
                 template <
                 typename SRC,
                 typename TGT,
@@ -264,7 +275,9 @@ namespace Yttrium
                 Rule *           prev; //!< for list
 
             private:
-                Y_Disable_Copy_And_Assign(Rule); //!< discarded
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+                Y_Disable_Copy_And_Assign(Rule);
                 static unsigned DeedFor(const LexemeProcess,const EndOfLineFlag) noexcept;
                 static unsigned DeedForBack(const EndOfLineFlag) noexcept;
                 static String * GetBackName(const Identifier &);
@@ -284,6 +297,26 @@ namespace Yttrium
                     return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
                 }
 
+                //! creating a 'go to'
+                /**
+
+                 \return new rule
+                 */
+                template <typename SRC, typename TGT, typename GRX> static inline
+                Rule * GoTo_(const SRC          & src,
+                             const TGT          & tgt,
+                             const GRX          & grx,
+                             const bool           jmp,
+                             const RuleHook     & rcb)
+                {
+                    const Identifier _original = src;
+                    const Identifier _ruleInfo = tgt;
+                    const Identifier _ruleName = GetGoToName(_original,jmp,_ruleInfo);
+                    const Motif      _ruleForm = RegExp::Compile(grx,0);
+                    const unsigned   _ruleDeed = jmp ? Jump : Call;
+                    return new Rule(_ruleName,_ruleForm,_ruleDeed,_ruleInfo,rcb);
+                }
+
                 template <typename RX> static inline
                 Rule * BackFrom_(const Identifier   & org,
                                  const RX           & brx,
@@ -296,6 +329,7 @@ namespace Yttrium
                     const Identifier ruleInfo = ruleName;
                     return new Rule(ruleName,ruleForm,ruleDeed,ruleInfo,ruleHook);
                 }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             };
         }
 

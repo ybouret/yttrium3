@@ -61,8 +61,8 @@ namespace Yttrium
                 unsigned ruleDeed = 0;
                 switch(lxp)
                 {
-                    case EmitLexeme: ruleDeed |= Emit; break;
-                    case DropLexeme: ruleDeed |= Drop; break;
+                    case EmitLexeme: ruleDeed = Emit; break;
+                    case DropLexeme: ruleDeed = Drop; break;
                 }
                 switch(eol)
                 {
