@@ -16,7 +16,7 @@ namespace Yttrium
     namespace Jive
     {
 
-        
+        namespace Lexical { class AdvancedPlugin; }
 
         //______________________________________________________________________
         //
@@ -35,12 +35,13 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            typedef Lexical::Scanner               Scanner;  //!< alias
-            typedef Lexical::Plugin                Plugin;
-            typedef Keyed<String,ArcPtr<Scanner>>  PScanner; //!< alias
-            typedef HashSet<String,PScanner>       Scanners; //!< alias
-            typedef Handy::PlainLightList<Scanner> History;  //!< alias
-            
+            typedef Lexical::Scanner               Scanner;        //!< alias
+            typedef Lexical::Plugin                Plugin;         //!< alias
+            typedef Lexical::AdvancedPlugin        AdvancedPlugin; //!< alias
+            typedef Keyed<String,ArcPtr<Scanner>>  PScanner;       //!< alias
+            typedef HashSet<String,PScanner>       Scanners;       //!< alias
+            typedef Handy::PlainLightList<Scanner> History;        //!< alias
+
             //__________________________________________________________________
             //
             //
@@ -97,6 +98,14 @@ namespace Yttrium
                 return makeCall( record( new PLUGIN(pid,xpr) ) );
             }
 
+            //! advanced plugin with no argument
+            template <typename PLUGIN, typename PID> inline
+            const Lexical::Rule & dial(const TypeToType<PLUGIN>,
+                                       const PID & pid)
+            {
+                return makeDial( record( new PLUGIN(pid,*this) ) );
+            }
+
 
         private:
             Y_Disable_Copy_And_Assign(Lexer); //!< discarded
@@ -115,6 +124,7 @@ namespace Yttrium
 
 
             const Lexical::Rule & makeCall(Plugin &);
+            const Lexical::Rule & makeDial(AdvancedPlugin &);
 
 
         };

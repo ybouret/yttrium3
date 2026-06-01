@@ -21,7 +21,7 @@ namespace Yttrium
             //
             //! Action base type
             //__________________________________________________________________
-            typedef Functor<void,TL1(Token)> ActionType;
+            typedef Functor<void,TL1(Token&)> ActionType;
 
             //__________________________________________________________________
             //

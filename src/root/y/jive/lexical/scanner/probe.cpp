@@ -11,7 +11,7 @@ namespace Yttrium
         namespace Lexical
         {
 
-            static inline void ApplyOptionalHook(const Rule * const rule, const Token &token)
+            static inline void ApplyOptionalHook(const Rule * const rule, Token &token)
             {
                 assert(rule);
                 RuleHook ruleHook(rule->hook);

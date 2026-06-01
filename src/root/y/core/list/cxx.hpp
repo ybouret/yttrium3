@@ -64,6 +64,26 @@ namespace Yttrium
         //______________________________________________________________________
         inline virtual void release() noexcept { release_(); }
 
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+        inline CxxListOf & mergeTailCopyOf(const CxxListOf<NODE> &rhs)
+        {
+            CxxListOf<NODE> tmp(rhs);
+            (void) this->mergeTail(tmp);
+            return *this;
+        }
+
+        inline CxxListOf & mergeHeadCopyOf(const CxxListOf<NODE> &rhs)
+        {
+            CxxListOf<NODE> tmp(rhs);
+            (void) this->mergeHead(tmp);
+            return *this;
+        }
+
     private:
         Y_Disable_Assign(CxxListOf); //!< discared
 

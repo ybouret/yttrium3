@@ -3,6 +3,7 @@
 #include "y/utest/run.hpp"
 #include "y/jive/lexical/plugin/single-line-comment.hpp"
 #include "y/jive/lexical/plugin/multi-lines-comment.hpp"
+#include "y/jive/lexical/plugin/verbatim.hpp"
 
 using namespace Yttrium;
 
@@ -19,6 +20,9 @@ namespace
             load( TypeToType<Jive::Lexical::ShellComment>(), "shellComment");
             load( TypeToType<Jive::Lexical::C_Comment>(), "C_Comment");
             load( TypeToType<Jive::Lexical::SingleLineComment>(), "LuaComment", "--");
+
+            dial( TypeToType<Jive::Lexical::Verbatim>(), "Verbatim");
+
 
             drop("blank","[:blank:]");
             endl("endl","[:endl:]");

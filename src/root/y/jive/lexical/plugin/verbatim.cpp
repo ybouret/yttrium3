@@ -1,0 +1,33 @@
+
+#include "y/jive/lexical/plugin/verbatim.hpp"
+
+namespace Yttrium
+{
+    namespace Jive
+    {
+        namespace Lexical
+        {
+            const char * const Verbatim:: Expression = "\\x5cverb";
+
+            Verbatim:: ~Verbatim() noexcept
+            {
+            }
+
+            void Verbatim:: setup()
+            {
+                backOn(Expression,NoEndOfLine);
+                drop("char", "[\\x00-\\xff]",this, & Verbatim::onChar);
+            }
+
+            void Verbatim:: onChar(Token &token)
+            {
+                assert(1==token.size);
+                data.mergeTail(token);
+            }
+
+        }
+    }
+
+}
+
+

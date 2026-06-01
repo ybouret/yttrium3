@@ -1,6 +1,7 @@
-
 #include "y/jive/lexer.hpp"
 #include "y/exception.hpp"
+#include "y/jive/lexical/plugin/advanced.hpp"
+
 
 namespace Yttrium
 {
@@ -59,6 +60,11 @@ namespace Yttrium
             catch(...) { remove(plugin.name); throw; }
         }
         
+        const Lexical::Rule & Lexer::makeDial(AdvancedPlugin &plugin)
+        {
+            try { return call(plugin.name,plugin.expr,&plugin, & AdvancedPlugin::onEnter); }
+            catch(...) { remove(plugin.name); throw; }
+        }
 
 
         Lexeme * Lexer:: pull(Source &source)
