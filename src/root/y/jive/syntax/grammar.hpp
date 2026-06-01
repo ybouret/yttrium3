@@ -37,7 +37,8 @@ namespace Yttrium
                 //! setup \param id lang
                 template <typename ID> inline
                 explicit Grammar(const ID &id) :
-                lang(id)
+                lang(id),
+                rules()
                 {
                 }
 

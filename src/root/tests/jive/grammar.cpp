@@ -1,4 +1,6 @@
 #include "y/jive/syntax/grammar.hpp"
+#include "y/jive/syntax/rule/all.hpp"
+
 #include "y/jive/lexical/plugin/single-line-comment.hpp"
 #include "y/jive/lexer.hpp"
 #include "y/utest/run.hpp"
