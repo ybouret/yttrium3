@@ -13,16 +13,44 @@ namespace Yttrium
     {
         namespace Syntax
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Option
+            //
+            //
+            //__________________________________________________________________
             class Option : public Wildcard
             {
             public:
-                static const uint32_t UUID = Y_FOURCC('O','P','T','_');
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                static const uint32_t UUID = Y_FOURCC('O','P','T','_'); //!< alias
 
-                explicit Option(const Rule &source);
-                virtual ~Option() noexcept;
-                
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                explicit Option(const Rule & );//!< setup with automatic naming
+                virtual ~Option() noexcept;    //!< cleanup
+
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
+                virtual OutputStream & vizSelf(OutputStream &) const;
+
             private:
-                Y_Disable_Copy_And_Assign(Option);
+                Y_Disable_Copy_And_Assign(Option); //!< discarde
             };
         }
 

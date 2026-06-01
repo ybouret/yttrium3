@@ -59,8 +59,8 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
-                virtual OutputStream & vizSelf(OutputStream &) const = 0;
-                virtual OutputStream & vizLink(OutputStream &) const;
+                virtual OutputStream & vizSelf(OutputStream &) const = 0; //!< emit graphviz code for this, no link \return output stream
+                virtual OutputStream & vizLink(OutputStream &) const;     //!< emit graphviz code for links         \return output stream
 
 
                 //______________________________________________________________

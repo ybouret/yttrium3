@@ -6,7 +6,6 @@
 
 #include "y/jive/syntax/rule/internal.hpp"
 #include "y/handy/basic/light/list.hpp"
-//#include "y/type/proxy.hpp"
 
 namespace Yttrium
 {
@@ -14,13 +13,32 @@ namespace Yttrium
     {
         namespace Syntax
         {
-            typedef Handy::BasicLightList<const Rule> RList;
-            typedef RList::NodeType                   RNode;
+            typedef Handy::BasicLightList<const Rule> RList; //!< alias
+            typedef RList::NodeType                   RNode; //!< alias
 
-
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Compound base class
+            //
+            //
+            //__________________________________________________________________
             class Compound : public Internal, public RList
             {
             public:
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+
+                //! setup empty
+                /**
+                 \param ruleName name
+                 \param ruleUUID uuid
+                 */
                 template <typename ID>
                 explicit Compound(const ID      & ruleName,
                                   const uint32_t  ruleUUID) :
@@ -28,15 +46,30 @@ namespace Yttrium
                 {
                 }
 
-                
+                //! cleanup
                 virtual ~Compound() noexcept;
 
-                Compound & operator<<(const Rule &);
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
                 virtual OutputStream & vizLink(OutputStream &) const;
+
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+                Compound & operator<<(const Rule &); //!< append a rule \return *this
+
+
 
 
             private:
-                Y_Disable_Copy_And_Assign(Compound);
+                Y_Disable_Copy_And_Assign(Compound); //!< discarded
 
             };
 

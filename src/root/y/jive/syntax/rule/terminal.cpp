@@ -25,6 +25,7 @@ namespace Yttrium
                             case Standard: return "plain,filled";
                             case Univocal: return "plain,filled,rounded";
                         }
+                        break;
 
                     case Dividing:
                         switch(load)
@@ -32,7 +33,7 @@ namespace Yttrium
                             case Standard: return "dashed,filled";
                             case Univocal: return "dashed,filled,rounded";
                         }
-
+                        break;
                 }
 
                 return "plain";

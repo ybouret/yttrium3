@@ -69,6 +69,11 @@ namespace Yttrium
                 const XList  & list()              const noexcept; //!< \return list   for internal node (const
                 void returnTo(Lexical::Stack &)          noexcept; //!< return to lexer using its stack
 
+                //! grow tree with new node
+                /**
+                 \param tree NULL or existing (Internal) tree
+                 \param node new node
+                 */
                 static void Grow(XNode * &tree, XNode * const node) noexcept;
 
                 //______________________________________________________________
