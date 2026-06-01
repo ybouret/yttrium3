@@ -54,9 +54,9 @@ namespace Yttrium
                 static const unsigned   Endl = 0x80;                     //!< propagate endl
                 static const unsigned   Mask = Emit|Drop|Call|Back|Jump; //!< alias
                 typedef CxxListOf<Rule> List;                            //!< alias
-                static const char       BackPrefix[];                    //!< "<-"
+                static const char       BackMarker[];                    //!< "$"
                 static const size_t     BackLength;                      //!< strlen(BackPrefix)
-                static const char       CallMarker[];                    //!< "->"
+                static const char       CallMarker[];                    //!< "@"
                 static const size_t     CallLength;                      //!< strlen(CallPrefix)
                 static const char       JumpMarker[];                    //!< "=>"
                 static const size_t     JumpLength;                      //!< strlen(JumpMarker)

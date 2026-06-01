@@ -8,10 +8,10 @@ namespace Yttrium
 
         namespace Lexical
         {
-            const char   Rule:: BackPrefix[] = "<-";
-            const size_t Rule:: BackLength   = sizeof(BackPrefix)-1;
+            const char   Rule:: BackMarker[] = "$";
+            const size_t Rule:: BackLength   = sizeof(BackMarker)-1;
 
-            const char   Rule:: CallMarker[] = "->";
+            const char   Rule:: CallMarker[] = "@";
             const size_t Rule:: CallLength   = sizeof(CallMarker)-1;
 
             const char   Rule:: JumpMarker[] = "=>";
@@ -85,7 +85,7 @@ namespace Yttrium
 
             String * Rule:: GetBackName(const Identifier &org)
             {
-                return new String(BackPrefix,BackLength,org->c_str(), org->size() );
+                return new String(org->c_str(), org->size(),BackMarker,BackLength);
             }
 
             String * Rule:: GetGoToName(const Identifier &from, const bool jmp, const Identifier &to)

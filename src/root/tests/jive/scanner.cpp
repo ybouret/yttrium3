@@ -11,9 +11,8 @@ Y_UTEST(jive_scanner)
 
     Y_CHECK( Y_Is_SuperSubClass_Strict(Counted,Lexical::Action) );
     Y_CHECK( Y_Is_SuperSubClass_Strict(Object,Lexical::Action)  );
-    Y_PRINTV(Lexical::Rule::BackPrefix);
-    Y_PRINTV(Lexical::Rule::BackLength);
-
+    
+    Lexical::Scanner::Verbose = true;
 
     Lexical::Scanner scan("MyScanner");
 

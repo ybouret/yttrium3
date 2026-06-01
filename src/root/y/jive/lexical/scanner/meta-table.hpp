@@ -52,7 +52,7 @@ namespace Yttrium
                 const MetaList * query(const uint8_t) noexcept;
 
                 //! dispatch rule reference in (all) matching list(s)
-                void dispatch(const Rule &);
+                Leading dispatch(const Rule &);
 
                 //______________________________________________________________
                 //

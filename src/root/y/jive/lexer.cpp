@@ -84,6 +84,7 @@ namespace Yttrium
                 //
                 //
                 //--------------------------------------------------------------
+                Y_Jive_Lexical(*lexemes.head << " (cached)");
                 return lexemes.popHead();
             }
             else
@@ -105,6 +106,7 @@ namespace Yttrium
                     // found a regular lexeme
                     //
                     //----------------------------------------------------------
+                    Y_Jive_Lexical(*lxm);
                     return lxm;
                 }
                 else
@@ -121,6 +123,7 @@ namespace Yttrium
                             //--------------------------------------------------
                         case Lexical::Command::Quit:
                             //--------------------------------------------------
+                            Y_Jive_Lexical("[EOS]@" << source->str() );
                             switch(curr->onEOS)
                             {
                                 case Lexical::AcceptEOS: break; // EOS: normal return
@@ -136,8 +139,10 @@ namespace Yttrium
                         case Lexical::Command::Jump: { assert(0!=cmd.args);
                             //--------------------------------------------------
                             // search scanner to call
-                            const String     id = *cmd.args; std::cerr << "call  to  <" << id << ">" << std::endl;
-                            PScanner * const ps = psdb.search(id);
+                            const bool       jmp = (Lexical::Command::Jump == cmd.kind);
+                            const String     id  = *cmd.args; 
+                            PScanner * const ps  = psdb.search(id);
+                            Y_Jive_Lexical(source->str() << (jmp? "jump" : "call") << ' ' << id);
                             if(!ps) {
                                 Specific::Exception excp(name->c_str(),"<%s> got no <%s> to call", here, id.c_str());
                                 throw source->stamp(excp);
@@ -151,7 +156,7 @@ namespace Yttrium
                             //--------------------------------------------------
                         case Lexical::Command::Back: { assert(0==cmd.args);
                             //--------------------------------------------------
-                             std::cerr << "back from <" << curr->name << ">" << std::endl;
+                            Y_Jive_Lexical(source->str() << "done " << curr->name);
                             if(history->size<=0) {
                                 Specific::Exception excp(name->c_str(),"no possible coming back from <%s>", here);
                                 throw source->stamp(excp);

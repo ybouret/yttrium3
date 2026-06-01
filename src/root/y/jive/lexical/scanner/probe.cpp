@@ -1,6 +1,7 @@
 #include "y/jive/lexical/scanner/code.hpp"
 #include "y/exception.hpp"
 #include "y/ascii/printable.hpp"
+#include <iomanip>
 
 namespace Yttrium
 {
@@ -120,6 +121,7 @@ namespace Yttrium
                 }
 
 
+
                 //--------------------------------------------------------------
                 //
                 //
@@ -128,6 +130,7 @@ namespace Yttrium
                 //
                 //--------------------------------------------------------------
                 const unsigned deed = bestRule->deed;
+                
 
                 //--------------------------------------------------------------
                 //

@@ -41,10 +41,19 @@ namespace Yttrium
                 //______________________________________________________________
                 //
                 //
-                // C++
+                // Definitions
                 //
                 //______________________________________________________________
                 class Code;
+                static bool     Verbose;
+                static unsigned Aligned;
+                
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
 
                 //! setup \param sid name \param eos End Of Stream policy
                 template <typename SID> inline
@@ -290,6 +299,9 @@ namespace Yttrium
                 const Rule &  processing(const Identifier &, const Motif &, const unsigned);
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             };
+
+#define Y_Jive_Lexical(MSG) do { if( Lexical::Scanner::Verbose ) { std::cerr << MSG << std::endl; } } while(false)
+
         }
 
     }

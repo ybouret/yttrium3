@@ -1,5 +1,6 @@
 #include "y/jive/spot.hpp"
 #include "y/exception.hpp"
+#include "y/string/format.hpp"
 
 namespace Yttrium
 {
@@ -19,6 +20,12 @@ namespace Yttrium
         Exception & Spot:: stamp(Exception &excp) const noexcept
         {
             return excp.pre("%s:%u:%u: ", title->c_str(),line,column);
+        }
+
+
+        String Spot:: str() const
+        {
+            return Formatted::Get("%s:%u:%u: ",title->c_str(),line,column);
         }
 
 #if 0

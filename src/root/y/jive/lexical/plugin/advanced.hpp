@@ -13,13 +13,35 @@ namespace Yttrium
         namespace Lexical
         {
 
-            class AdvancedPlugin
+            class AdvancedPlugin : public Plugin
             {
             public:
-                
+                template <typename ID, typename RX> inline
+                explicit AdvancedPlugin(const ID &  id,
+                                        const RX &  rx,
+                                        Stack    &  stk,
+                                        const OnEOS eos) :
+                Plugin(id,rx,eos),
+                stack(stk)
+                {
+                }
+
                 virtual ~AdvancedPlugin() noexcept;
+
+                void onEnter(const Token &);
+
+            protected:
+                Stack &stack;
+
+                template <typename BACK_EXPR> inline
+                void backOn(const BACK_EXPR &brx, const EndOfLineFlag eol)
+                {
+                    back(brx,eol,this, & AdvancedPlugin::onLeave );
+                }
+
             private:
                 Y_Disable_Copy_And_Assign(AdvancedPlugin);
+                void onLeave(const Token &);
             };
         }
 

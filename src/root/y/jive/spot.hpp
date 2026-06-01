@@ -43,6 +43,7 @@ namespace Yttrium
 
             //! \return stamped exception
             Exception & stamp(Exception &) const noexcept;
+            String      str() const;
 
             //__________________________________________________________________
             //

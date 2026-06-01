@@ -13,7 +13,18 @@ namespace Yttrium
             {
             }
 
+            void AdvancedPlugin:: onEnter(const Token &ini)
+            {
+            }
+
+            void AdvancedPlugin:: onLeave(const Token &end)
+            {
+                
+            }
+
+
         }
+
 
     }
 }

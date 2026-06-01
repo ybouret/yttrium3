@@ -2,6 +2,8 @@
 #include "y/jive/lexical/scanner/code.hpp"
 #include "y/exception.hpp"
 #include "y/pointer/auto.hpp"
+#include "y/jive/pattern/leading.hpp"
+#include <iomanip>
 
 namespace Yttrium
 {
@@ -26,9 +28,9 @@ namespace Yttrium
             {
                 assert(rule);
                 AutoPtr<Rule> guard(rule);
-                std::cerr << "-- adding " << rule->name << " to " << name << std::endl;
                 noMultiple(*rule);
-                table.dispatch(*rule);
+                const Leading leading = table.dispatch(*rule);
+                Y_Jive_Lexical( std::setw(Aligned) << name << " [+] " << std::setw(Aligned) << rule->name  << " | " << leading);
                 rlist.pushTail( guard.yield() );
             }
 
@@ -38,9 +40,7 @@ namespace Yttrium
                 for(const Rule *mine=rlist.head;mine;mine=mine->next)
                 {
                     if( rid == *mine->name )
-                    {
                         throw Specific::Exception(name->c_str(),"mulitple rule '%s'",rid.c_str());
-                    }
                 }
             }
 

@@ -46,14 +46,13 @@ namespace Yttrium
             }
 
 
-            void MetaTable:: dispatch(const Rule &rule)
+            Leading MetaTable:: dispatch(const Rule &rule)
             {
                 try
                 {
                     MetaTable & table = *this;
                     Leading     lead;
                     rule.form->glean(lead);
-                    std::cerr << "\t" << lead << " => " << rule.name << std::endl;
                     for(unsigned i=0;i<256;++i)
                     {
                         const uint8_t code = (uint8_t)i;
@@ -61,6 +60,7 @@ namespace Yttrium
                         assert( !table[code].found(rule) );
                         table[code] << rule;
                     }
+                    return lead;
                 }
                 catch(...)
                 {

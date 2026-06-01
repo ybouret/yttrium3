@@ -34,6 +34,7 @@ namespace
 
 Y_UTEST(jive_lexer)
 {
+    Jive::Lexical::Scanner::Verbose = true;
     MyLexer lxr;
 
     if(argc>1)
@@ -46,7 +47,6 @@ Y_UTEST(jive_lexer)
             Jive::Lexeme * const lx = lxr.pull(source);
             if(!lx) break;
             lxm.pushTail(lx);
-            std::cerr << *lx << std::endl;
         }
 
     }

@@ -9,7 +9,9 @@ namespace Yttrium
         namespace Lexical
         {
 
-
+            bool     Scanner:: Verbose = false;
+            unsigned Scanner:: Aligned = 20;
+            
             Scanner:: ~Scanner() noexcept
             {
                 assert(code);
