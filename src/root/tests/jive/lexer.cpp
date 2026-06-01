@@ -15,8 +15,8 @@ namespace
         inline explicit MyLexer() : Jive::Lexer("MyLexer")
         {
             emit("ID","[:alpha:][:word:]+");
-            //load( TypeToType<Jive::Lexical::ShellComment>(), "shellComment");
-            //load( TypeToType<Jive::Lexical::C_Comment>(), "C_Comment");
+            load( TypeToType<Jive::Lexical::ShellComment>(), "shellComment");
+            load( TypeToType<Jive::Lexical::C_Comment>(), "C_Comment");
             drop("blank","[:blank:]");
             endl("endl","[:endl:]");
         }

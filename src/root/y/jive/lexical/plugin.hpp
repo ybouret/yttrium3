@@ -6,6 +6,7 @@
 #define Y_Jive_Lexical_Plugin_Included 1
 
 #include "y/jive/lexical/scanner.hpp"
+#include "y/jive/lexical/stack.hpp"
 
 namespace Yttrium
 {
@@ -13,10 +14,6 @@ namespace Yttrium
     {
         namespace Lexical
         {
-
-          
-           // int Bypassing;
-           // int Intrusive;
 
 
             //__________________________________________________________________

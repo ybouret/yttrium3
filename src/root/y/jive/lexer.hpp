@@ -16,6 +16,8 @@ namespace Yttrium
     namespace Jive
     {
 
+        
+
         //______________________________________________________________________
         //
         //
@@ -24,7 +26,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Lexer : public Lexical::Scanner
+        class Lexer : public Lexical::Scanner, public Lexical::Stack
         {
         public:
             //__________________________________________________________________
@@ -38,7 +40,7 @@ namespace Yttrium
             typedef Keyed<String,ArcPtr<Scanner>>  PScanner; //!< alias
             typedef HashSet<String,PScanner>       Scanners; //!< alias
             typedef Handy::PlainLightList<Scanner> History;  //!< alias
-
+            
             //__________________________________________________________________
             //
             //
@@ -64,15 +66,20 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
+            // Interface
+            //
+            //__________________________________________________________________
+            virtual void push(Lexeme * const) noexcept;
+
+            //__________________________________________________________________
+            //
+            //
             // Methods
             //
             //__________________________________________________________________
-
-            Lexeme * get(Source&);
-            void     unget(Lexeme * const) noexcept;
+            Lexeme * pull(Source&);
 
 
-#if 0
             //! plugin with no arguments
             template <typename PLUGIN, typename PID> inline
             const Lexical:: Rule & load(const TypeToType<PLUGIN> &,
@@ -80,7 +87,6 @@ namespace Yttrium
             {
                 return makeCall( record( new PLUGIN(pid) ) );
             }
-#endif
 
 
         private:
@@ -94,6 +100,7 @@ namespace Yttrium
 
             template <typename PLUGIN> inline
             PLUGIN &  record(PLUGIN * const plugin) { insert(plugin); return *plugin; }
+
             void      insert(Scanner * const);
             void      remove(const Identifier &) noexcept;
 

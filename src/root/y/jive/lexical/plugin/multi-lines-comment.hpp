@@ -36,7 +36,7 @@ namespace Yttrium
                                            const END & end) :
                 Plugin(id,ini,RejectEOS)
                 {
-                    (void) back(end);
+                    (void) back(end,NoEndOfLine);
                     setup();
                 }
 

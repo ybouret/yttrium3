@@ -138,6 +138,24 @@ namespace Yttrium
                 list.pushHead( cache->summon(args) );
             }
 
+            //! \return cut head COPY
+            inline Type pullHead()
+            {
+                assert(list.head);
+                ConstType saved = **list.head;
+                popHead();
+                return saved;
+            }
+
+            //! \return cut tail COPY
+            inline Type pullTail()
+            {
+                assert(list.tail);
+                ConstType saved = **list.tail;
+                popTail();
+                return saved;
+            }
+
 
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
