@@ -39,11 +39,19 @@ namespace Yttrium
 
             virtual ~Spot()    noexcept; //!< cleanup
             Spot(const Spot &) noexcept; //!< duplicate
+            Spot & operator=(const Spot &) noexcept;
+
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
 
 
-            //! \return stamped exception
-            Exception & stamp(Exception &) const noexcept;
-            String      str() const;
+            Exception & stamp(Exception &) const noexcept; //!< \return stamped exception
+            String      str()                       const; //!< \return stamped string
+            void        set(const Identifier &)  noexcept; //!< reset
 
             //__________________________________________________________________
             //
@@ -54,9 +62,6 @@ namespace Yttrium
             const Identifier title;  //!< title
             const unsigned   line;   //!< current line
             const unsigned   column; //!< current column
-
-        private:
-            Y_Disable_Assign(Spot); //!< discarded
 
         };
 

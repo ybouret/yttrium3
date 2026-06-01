@@ -28,7 +28,7 @@ namespace Yttrium
 
                 virtual ~AdvancedPlugin() noexcept;
 
-                void onEnter(const Token &);
+                void onEnter(Token &);
 
             protected:
                 Stack &stack;
@@ -41,7 +41,11 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(AdvancedPlugin);
-                void onLeave(const Token &);
+                void onLeave(Token &);
+
+                virtual void enter(Token&) = 0;
+                virtual void leave(Token&) = 0;
+
             };
         }
 

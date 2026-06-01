@@ -25,6 +25,25 @@ namespace Yttrium
                 data.mergeTail(token);
             }
 
+            
+
+            void Verbatim:: enter(Token &ini) noexcept
+            {
+                // ini should be '\verb'
+                assert(ini.size>0);
+                spot = *ini.tail;
+                data.release();
+            }
+
+            void Verbatim:: leave(Token &) noexcept
+            {
+                Unit * lx = new Unit(spot,name);
+                lx->swapForList(data);
+                assert(0==data.size);
+                spot.set(name);
+                stack.push(lx);
+            }
+
         }
     }
 

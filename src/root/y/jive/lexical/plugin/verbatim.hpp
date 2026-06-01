@@ -22,6 +22,7 @@ namespace Yttrium
                 explicit Verbatim(const PID & pid,
                                   Stack     & stk) :
                 AdvancedPlugin(pid,Expression,stk,RejectEOS),
+                spot(name),
                 data()
                 {
                     setup();
@@ -31,10 +32,15 @@ namespace Yttrium
 
                 virtual ~Verbatim() noexcept;
             private:
+                Spot  spot;
+                Token data;
+
                 Y_Disable_Copy_And_Assign(Verbatim);
                 void setup();
                 void onChar(Token &);
-                Token data;
+                virtual void enter(Token&) noexcept;
+                virtual void leave(Token&) noexcept;
+                
             };
         }
 

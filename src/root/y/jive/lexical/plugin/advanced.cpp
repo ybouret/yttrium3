@@ -13,17 +13,18 @@ namespace Yttrium
             {
             }
 
-            void AdvancedPlugin:: onEnter(const Token &ini)
+            void AdvancedPlugin:: onEnter(Token &ini)
             {
                 Y_Jive_Lexical(name << ".enter('" << ini << "')");
+                enter(ini);
             }
 
-            void AdvancedPlugin:: onLeave(const Token &end)
+            void AdvancedPlugin:: onLeave(Token &end)
             {
                 Y_Jive_Lexical(name << ".leave('" << end << "')");
-                
+                leave(end);
             }
-
+            
 
         }
 

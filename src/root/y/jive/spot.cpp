@@ -28,7 +28,6 @@ namespace Yttrium
             return Formatted::Get("%s:%u:%u: ",title->c_str(),line,column);
         }
 
-#if 0
         Spot & Spot:: operator=(const Spot &spot) noexcept
         {
             { Identifier temp(spot.title); Coerce(title).xch(temp); }
@@ -36,7 +35,14 @@ namespace Yttrium
             Coerce(column) = spot.column;
             return *this;
         }
-#endif
+
+        void Spot:: set(const Identifier &id) noexcept
+        {
+            { Identifier temp(id); Coerce(title).xch(temp); }
+            Coerce(line)   = 1;
+            Coerce(column) = 1;
+        }
+
 
 
     }

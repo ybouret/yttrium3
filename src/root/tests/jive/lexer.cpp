@@ -52,6 +52,11 @@ Y_UTEST(jive_lexer)
             if(!lx) break;
             lxm.pushTail(lx);
         }
+        std::cerr << "-- lexemes: " << std::endl;
+        for(const Jive::Lexeme *lx=lxm.head;lx;lx=lx->next)
+        {
+            std::cerr << *lx << std::endl;
+        }
 
     }
     
