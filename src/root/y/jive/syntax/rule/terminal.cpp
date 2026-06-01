@@ -1,5 +1,5 @@
 
-#include "y/jive/syntax/rules/terminal.hpp"
+#include "y/jive/syntax/rule/terminal.hpp"
 
 namespace Yttrium
 {

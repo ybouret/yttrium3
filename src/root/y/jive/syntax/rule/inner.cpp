@@ -1,5 +1,5 @@
 
-#include "y/jive/syntax/rules/inner.hpp"
+#include "y/jive/syntax/rule/inner.hpp"
 
 namespace Yttrium
 {

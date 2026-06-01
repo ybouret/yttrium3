@@ -4,7 +4,7 @@
 #ifndef Y_Jive_Syntax_Inner_Included
 #define Y_Jive_Syntax_Inner_Included 1
 
-#include "y/jive/syntax/rules/internal.hpp"
+#include "y/jive/syntax/rule/internal.hpp"
 #include "y/type/fourcc.hpp"
 
 namespace Yttrium

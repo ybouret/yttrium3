@@ -105,7 +105,7 @@ y/jive/lexical
 y/jive/lexical/scanner
 y/jive/lexical/plugin
 y/jive/syntax
-y/jive/syntax/rules
+y/jive/syntax/rule
 y/graphviz
 y/functor
 y/vfs

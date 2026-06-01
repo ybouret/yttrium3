@@ -17,7 +17,8 @@ namespace Yttrium
             public:
 
                 template <typename ID> inline
-                explicit Internal(const ID &ruleName, const uint32_t ruleUUID) :
+                explicit Internal(const ID &     ruleName,
+                                  const uint32_t ruleUUID) :
                 Rule(ruleName,IsInternal,ruleUUID)
                 {
 
