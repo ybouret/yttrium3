@@ -14,7 +14,15 @@ namespace Yttrium
             XList:: XList() noexcept
             {
             }
-            
+
+            void XList:: returnTo(Lexical::Stack &stack) noexcept
+            {
+                while(size) {
+                    tail->returnTo(stack);
+                    delete popTail();
+                }
+            }
+
         }
     }
 }

@@ -21,13 +21,22 @@ namespace Yttrium
             class XNode : public XObject
             {
             public:
-                typedef AutoPtr<Lexeme> LPtr;
-                static const size_t     NumBytes = MetaMax<sizeof(LPtr),sizeof(XList)>::Value;
+                typedef AutoPtr<Lexeme> LxPtr;
+                static const size_t     NumBytes = MetaMax<sizeof(LxPtr),sizeof(XList)>::Value;
                 static const size_t     NumWords = Alignment::WordsGEQ<NumBytes>::Count;
 
                 explicit XNode(const Identifier &) noexcept;
                 explicit XNode(Lexeme * const)      noexcept;
                 virtual ~XNode() noexcept;
+
+                Lexeme       & lexeme()                  noexcept;
+                const Lexeme & lexeme()            const noexcept;
+                const char *   humanReadableKind() const noexcept;
+                XList        & list()                    noexcept;
+                const XList  & list()              const noexcept;
+
+                void returnTo(Lexical::Stack &stack) noexcept;
+
 
                 const Identifier name;
                 const Kind       kind;
@@ -36,7 +45,9 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(XNode);
+                void * const     addr;
                 void *           wksp[ NumWords ];
+                
             };
         }
 

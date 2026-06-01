@@ -20,6 +20,8 @@ namespace Yttrium
                 explicit XList() noexcept;
                 virtual ~XList() noexcept;
 
+                void     returnTo(Lexical::Stack &) noexcept;
+
             private:
                 Y_Disable_Copy_And_Assign(XList);
             };
