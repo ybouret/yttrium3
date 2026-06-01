@@ -1,0 +1,40 @@
+
+
+//! \file
+
+#ifndef Y_Jive_Syntax_Terminal_Included
+#define Y_Jive_Syntax_Terminal_Included 1
+
+#include "y/jive/syntax/rule.hpp"
+#include "y/type/fourcc.hpp"
+
+namespace Yttrium
+{
+    namespace Jive
+    {
+        namespace Syntax
+        {
+            class Terminal : public Rule
+            {
+            public:
+                static const uint32_t UUID = Y_FOURCC('T','E','R','M');
+
+                template <typename ID> inline
+                explicit Terminal(const ID &id) :
+                Rule(id,IsTerminal,UUID)
+                {
+
+                }
+
+                virtual ~Terminal() noexcept;
+
+            private:
+                Y_Disable_Copy_And_Assign(Terminal);
+            };
+        }
+
+    }
+
+}
+
+#endif // !Y_Jive_Syntax_Terminal_Included
