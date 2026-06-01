@@ -11,11 +11,28 @@ namespace Yttrium
     {
         namespace Syntax
         {
-
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Internal base class
+            //
+            //
+            //__________________________________________________________________
             class Internal : public Rule
             {
             public:
-
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                //! setup
+                /**
+                 \param ruleName name
+                 \param ruleUUID uuid
+                 */
                 template <typename ID> inline
                 explicit Internal(const ID &     ruleName,
                                   const uint32_t ruleUUID) :
@@ -24,10 +41,10 @@ namespace Yttrium
 
                 }
 
-                virtual ~Internal() noexcept;
+                virtual ~Internal() noexcept; //!< cleanup
 
             private:
-                Y_Disable_Copy_And_Assign(Internal);
+                Y_Disable_Copy_And_Assign(Internal); //!< discarded
             };
         }
 

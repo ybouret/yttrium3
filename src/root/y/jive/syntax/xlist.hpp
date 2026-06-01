@@ -14,16 +14,38 @@ namespace Yttrium
         {
             class XNode;
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! XList for AST
+            //
+            //
+            //__________________________________________________________________
             class XList : public CxxListOf<XNode>
             {
             public:
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
                 explicit XList() noexcept;
                 virtual ~XList() noexcept;
 
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+
+                //! return content to lexer
                 void     returnTo(Lexical::Stack &) noexcept;
 
             private:
-                Y_Disable_Copy_And_Assign(XList);
+                Y_Disable_Copy_And_Assign(XList); //!< discarded
             };
 
         }

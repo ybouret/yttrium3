@@ -16,35 +16,74 @@ namespace Yttrium
     {
         namespace Syntax
         {
-            typedef LightObject XObject;
+            typedef LightObject XObject; //!< alias
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! XNode for AST
+            //
+            //
+            //__________________________________________________________________
             class XNode : public XObject
             {
             public:
-                typedef AutoPtr<Lexeme> LxPtr;
-                static const size_t     NumBytes = MetaMax<sizeof(LxPtr),sizeof(XList)>::Value;
-                static const size_t     NumWords = Alignment::WordsGEQ<NumBytes>::Count;
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                typedef AutoPtr<Lexeme> LxPtr;                                                  //!< alias
+                static const size_t     NumBytes = MetaMax<sizeof(LxPtr),sizeof(XList)>::Value; //!< variant bytes
+                static const size_t     NumWords = Alignment::WordsGEQ<NumBytes>::Count;        //!< for workspace
 
-                explicit XNode(const Rule &)                 noexcept;
-                explicit XNode(const Rule &, Lexeme * const) noexcept;
-                virtual ~XNode() noexcept;
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                explicit XNode(const Rule &)                 noexcept; //!< new internal node
+                explicit XNode(const Rule &, Lexeme * const) noexcept; //!< new terminal node
+                virtual ~XNode()                             noexcept; //!< cleanup
 
-                Lexeme       & lexeme()                  noexcept;
-                const Lexeme & lexeme()            const noexcept;
-                XList        & list()                    noexcept;
-                const XList  & list()              const noexcept;
-                void returnTo(Lexical::Stack &stack) noexcept;
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
 
 
-                const Rule  & rule;
-                XNode *       next;
-                XNode *       prev;
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+                Lexeme       & lexeme()                  noexcept; //!< \return lexeme for terminal node
+                const Lexeme & lexeme()            const noexcept; //!< \return lexeme for terminal node (const)
+                XList        & list()                    noexcept; //!< \return list   for internal node
+                const XList  & list()              const noexcept; //!< \return list   for internal node (const
+                void returnTo(Lexical::Stack &)          noexcept; //!< return to lexer using its stack
+
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                const Rule  & rule; //!< creating rule
+                XNode *       next; //!< for xlist
+                XNode *       prev; //!< for xlist
 
             private:
-                Y_Disable_Copy_And_Assign(XNode);
-                void * const     addr;
-                void *           wksp[ NumWords ];
-                
+                Y_Disable_Copy_And_Assign(XNode);  //!< discarded
+                void * const     addr;             //!< inner address
+                void *           wksp[ NumWords ]; //!< inner workspace
+
             };
         }
 

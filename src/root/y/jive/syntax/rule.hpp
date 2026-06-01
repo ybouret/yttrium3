@@ -14,10 +14,30 @@ namespace Yttrium
     {
         namespace Syntax
         {
-
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Rule base class
+            //
+            //
+            //__________________________________________________________________
             class Rule : public Object, public Vizible
             {
             public:
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+
+                //! setup
+                /**
+                 \param ruleName name
+                 \param ruleKind kind
+                 \param ruleUUID uuid
+                 */
                 template <typename RID> inline
                 explicit Rule(const RID &    ruleName,
                               const Kind     ruleKind,
@@ -25,21 +45,40 @@ namespace Yttrium
                 name(ruleName),
                 kind(ruleKind),
                 uuid(ruleUUID),
-                next(0)
+                next(0),
+                prev(0)
                 {
                 }
-                
+
+                //! cleanup
                 virtual ~Rule() noexcept;
 
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
+
+
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+
+                //! \return human readable kind
                 const char *   humanReadableKind() const noexcept;
 
-                const Identifier name;
-                const Kind       kind;
-                const uint32_t   uuid;
-                Rule *           next;
-                
+                const Identifier name; //!< name
+                const Kind       kind; //!< kind
+                const uint32_t   uuid; //!< uuid
+                Rule *           next; //!< for list
+                Rule *           prev; //!< for list
+
             private:
-                Y_Disable_Copy_And_Assign(Rule);
+                Y_Disable_Copy_And_Assign(Rule); //!< discarded
             };
 
         }

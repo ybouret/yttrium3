@@ -13,12 +13,14 @@ namespace Yttrium
     {
         namespace Syntax
         {
+            //! top-level kind of rule/terminal
             enum Kind
             {
-                IsTerminal,
-                IsInternal
+                IsTerminal, //!< terminal kind
+                IsInternal  //!< internal kind
             };
 
+            //! \return human readable kind
             const char * HumanReadableKind(const Kind) noexcept;
 
         }

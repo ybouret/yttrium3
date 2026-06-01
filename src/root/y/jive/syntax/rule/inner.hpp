@@ -13,15 +13,22 @@ namespace Yttrium
     {
         namespace Syntax
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Dummy internal rule, to test
+            //
+            //
+            //__________________________________________________________________
             class Inner : public Internal
             {
             public:
-                static const uint32_t UUID = Y_FOURCC('I','N','N','R');
-                explicit Inner();
-                virtual ~Inner() noexcept;
-
+                static const uint32_t UUID = Y_FOURCC('I','N','N','R'); //!< alias
+                explicit Inner();                                       //!< setup
+                virtual ~Inner() noexcept;                              //!< cleanup
             private:
-                Y_Disable_Copy_And_Assign(Inner);
+                Y_Disable_Copy_And_Assign(Inner);                       //!< discarded
             };
         }
 
