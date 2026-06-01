@@ -25,7 +25,8 @@ namespace Yttrium
                 static const size_t     NumBytes = MetaMax<sizeof(LPtr),sizeof(XList)>::Value;
                 static const size_t     NumWords = Alignment::WordsGEQ<NumBytes>::Count;
 
-                explicit XNode(Lexeme * const) noexcept;
+                explicit XNode(const Identifier &) noexcept;
+                explicit XNode(Lexeme * const)      noexcept;
                 virtual ~XNode() noexcept;
 
                 const Identifier name;
@@ -35,7 +36,7 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(XNode);
-                void *        wksp[ NumWords ];
+                void *           wksp[ NumWords ];
             };
         }
 
