@@ -1,4 +1,5 @@
-#include "y/jive/lexical/plugin.hpp"
+
+#include "y/jive/lexical/plugin/advanced.hpp"
 
 namespace Yttrium
 {
@@ -8,10 +9,10 @@ namespace Yttrium
         namespace Lexical
         {
 
-            Plugin:: ~Plugin() noexcept
+            AdvancedPlugin:: ~AdvancedPlugin() noexcept
             {
             }
-            
+
         }
 
     }
