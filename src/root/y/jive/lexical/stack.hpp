@@ -11,17 +11,36 @@ namespace Yttrium
     {
         namespace Lexical
         {
-
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Stack interface for Lexer
+            //
+            //
+            //__________________________________________________________________
             class Stack
             {
             public:
-                explicit Stack() noexcept;
-                virtual ~Stack() noexcept;
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                explicit Stack() noexcept; //!< setup
+                virtual ~Stack() noexcept; //!< cleanup
 
-                virtual void         push(Unit * const) noexcept = 0;
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
+                virtual void push(Unit * const) noexcept = 0; //!< push a new unit on stack
 
             private:
-                Y_Disable_Copy_And_Assign(Stack);
+                Y_Disable_Copy_And_Assign(Stack); //!< discarded
             };
         }
 

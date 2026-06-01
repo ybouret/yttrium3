@@ -27,11 +27,17 @@ namespace Yttrium
             class Plugin : public Scanner
             {
             public:
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+
                 //! setup
                 /**
                  \param id  name
                  \param rx  regular expression triggering call
-                 \param lxr parent lexer
                  \param eos End Of Stream policy
                  */
                 template <typename ID, typename RX> inline
@@ -51,7 +57,7 @@ namespace Yttrium
                 //______________________________________________________________
                 //
                 //
-                // Interface
+                // Members
                 //
                 //______________________________________________________________
                 const String expr; //!< expression that triggers the call to the plugin

@@ -78,10 +78,14 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            Lexeme * pull(Source&);
+            Lexeme * pull(Source&); //!< \return next lexeme, NULL on EOS
 
 
             //! plugin with no argument
+            /**
+             \param pid plugin name
+             \return created rule
+             */
             template <typename PLUGIN, typename PID> inline
             const Lexical:: Rule & load(const TypeToType<PLUGIN>,
                                         const PID & pid)
@@ -90,6 +94,11 @@ namespace Yttrium
             }
 
             //! plugin with 1 argument
+            /**
+             \param pid plugin name
+             \param xpr trigger expression
+             \return created rule
+             */
             template <typename PLUGIN, typename PID, typename XPR> inline
             const Lexical:: Rule & load(const TypeToType<PLUGIN>,
                                         const PID & pid,
@@ -99,6 +108,10 @@ namespace Yttrium
             }
 
             //! advanced plugin with no argument
+            /**
+             \param pid plugin name
+             \return created rule
+             */
             template <typename PLUGIN, typename PID> inline
             const Lexical::Rule & dial(const TypeToType<PLUGIN>,
                                        const PID & pid)
@@ -114,18 +127,15 @@ namespace Yttrium
             Lexemes   lexemes;                //!< buffer of lexemes
             History   history;                //!< call stack
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             void      initialize();
-
             template <typename PLUGIN> inline
-            PLUGIN &  record(PLUGIN * const plugin) { insert(plugin); return *plugin; }
-
-            void      insert(Scanner * const);
-            void      remove(const Identifier &) noexcept;
-
-
+            PLUGIN &              record(PLUGIN * const plugin) { insert(plugin); return *plugin; }
+            void                  insert(Scanner * const);
+            void                  remove(const Identifier &) noexcept;
             const Lexical::Rule & makeCall(Plugin &);
             const Lexical::Rule & makeDial(AdvancedPlugin &);
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         };
 

@@ -28,7 +28,6 @@ namespace Yttrium
                 /**
                  \param id  name
                  \param rx  trigger regular expression
-                 \param lxr parent lexer
                  */
                 template <typename ID, typename RX>
                 explicit SingleLineComment(const ID & id,
@@ -45,7 +44,7 @@ namespace Yttrium
                 void setup(); //!< drop dot, back on endl
             };
 
-
+            //! helper
 #define Y_Jive_Single_Line_Comment(CLASS,EXPR)    \
 /**/    class CLASS : public SingleLineComment    \
 /**/    {                                         \
@@ -58,7 +57,8 @@ namespace Yttrium
 /**/        Y_Disable_Copy_And_Assign(CLASS);     \
 /**/    }
 
-            Y_Jive_Single_Line_Comment(ShellComment,'#');
+
+            Y_Jive_Single_Line_Comment(ShellComment,'#'); //!< shell comment
         }
 
     }

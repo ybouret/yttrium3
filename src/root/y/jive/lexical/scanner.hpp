@@ -45,9 +45,9 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 class Code;
-                static bool     Verbose;
-                static unsigned Aligned;
-                
+                static bool     Verbose; //!< verbosity flag
+                static unsigned Aligned; //!< help to format
+
                 //______________________________________________________________
                 //
                 //
@@ -300,6 +300,7 @@ namespace Yttrium
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             };
 
+            //! helper to trace algorithm
 #define Y_Jive_Lexical(MSG) do { if( Lexical::Scanner::Verbose ) { std::cerr << MSG << std::endl; } } while(false)
 
         }

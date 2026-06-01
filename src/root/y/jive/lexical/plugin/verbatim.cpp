@@ -13,7 +13,7 @@ namespace Yttrium
             {
             }
 
-            void Verbatim:: setup()
+            void Verbatim:: initialize()
             {
                 backOn(Expression,NoEndOfLine);
                 drop("char", "[\\x00-\\xff]",this, & Verbatim::onChar);

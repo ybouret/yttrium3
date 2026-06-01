@@ -70,6 +70,12 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
+
+        //! append a duplicated list
+        /**
+         \param rhs list to duplicate/merge
+         \return *this
+         */
         inline CxxListOf & mergeTailCopyOf(const CxxListOf<NODE> &rhs)
         {
             CxxListOf<NODE> tmp(rhs);
@@ -77,6 +83,11 @@ namespace Yttrium
             return *this;
         }
 
+        //! prepend a duplicated list
+        /**
+         \param rhs list to duplicate/merge
+         \return *this
+         */
         inline CxxListOf & mergeHeadCopyOf(const CxxListOf<NODE> &rhs)
         {
             CxxListOf<NODE> tmp(rhs);

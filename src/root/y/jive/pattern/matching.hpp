@@ -43,11 +43,11 @@ namespace Yttrium
             //
             //__________________________________________________________________
             Matching(Pattern * const) noexcept; //!< setup
-            virtual ~Matching()                noexcept; //!< setup
-            Matching(const char * const);
-            Matching(const String &);
-            Matching(const Matching &);
-            
+            virtual ~Matching()       noexcept; //!< setup
+            Matching(const char * const);       //!< setup from regular expression
+            Matching(const String &);           //!< setup from regular expression
+            Matching(const Matching &);         //!< duplicate
+
             //__________________________________________________________________
             //
             //
@@ -58,6 +58,13 @@ namespace Yttrium
             bool exactly(Module * const); //!< \return true iff full module matches pattern
             bool somehow(Module * const); //!< \return true iff pattern is found in module
 
+            //! check matching in data
+            /**
+             \param how request type
+             \param moduleName name the module
+             \param moduleData data to probe
+             \return true if match was met
+             */
             template <typename NAME, typename DATA> inline
             bool found(const Request how, const NAME & moduleName, const DATA & moduleData )
             {

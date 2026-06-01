@@ -51,7 +51,7 @@ namespace Yttrium
                 //! \return matching list with look up optimization, 0 otherwise
                 const MetaList * query(const uint8_t) noexcept;
 
-                //! dispatch rule reference in (all) matching list(s)
+                //! dispatch rule reference in (all) matching list(s) \return leading from pattern
                 Leading dispatch(const Rule &);
 
                 //______________________________________________________________

@@ -12,12 +12,39 @@ namespace Yttrium
     {
         namespace Lexical
         {
-
+            
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Advanced Plugin example: extract all between Expression
+            //
+            //
+            //__________________________________________________________________
             class Verbatim : public AdvancedPlugin
             {
             public:
-                static const char * const Expression;
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
 
+                static const char * const Expression; //!< "\verb"
+
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+
+                //! setup
+                /**
+                 \param pid plugin name
+                 \param stk lexer stack
+                 */
                 template <typename PID> inline
                 explicit Verbatim(const PID & pid,
                                   Stack     & stk) :
@@ -25,19 +52,36 @@ namespace Yttrium
                 spot(name),
                 data()
                 {
-                    setup();
+                    initialize();
                 }
 
 
-
+                //! cleanup
                 virtual ~Verbatim() noexcept;
-            private:
-                Spot  spot;
-                Token data;
 
-                Y_Disable_Copy_And_Assign(Verbatim);
-                void setup();
-                void onChar(Token &);
+            private:
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                Spot  spot; //!< origin spot
+                Token data; //!< current data
+
+                Y_Disable_Copy_And_Assign(Verbatim); //!< dicarded
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+                void         initialize();
+                void         onChar(Token &);
+#endif
+
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
                 virtual void enter(Token&) noexcept;
                 virtual void leave(Token&) noexcept;
                 

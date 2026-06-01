@@ -28,7 +28,6 @@ namespace Yttrium
                  \param id  name
                  \param ini trigger regular expression
                  \param end trigger return from the plugin
-                 \param lxr parent lexer
                  */
                 template <typename ID, typename INI, typename END>
                 explicit MultiLinesComment(const ID  & id,
@@ -50,6 +49,7 @@ namespace Yttrium
 
             };
 
+            //! helper
 #define Y_Jive_Multi_Lines_Comment(CLASS,INI,END)    \
 /**/    class CLASS : public MultiLinesComment    \
 /**/    {                                         \
@@ -63,7 +63,7 @@ namespace Yttrium
 /**/    }
 
 
-            Y_Jive_Multi_Lines_Comment(C_Comment,"/\\*","\\*/");
+            Y_Jive_Multi_Lines_Comment(C_Comment,"/\\*","\\*/"); //!< C comment plugin
 
         }
 

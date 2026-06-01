@@ -26,6 +26,15 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const unsigned DefaultLine   = 1; //!< alias
+            static const unsigned DefaultColumn = 1; //!< alias
+
+            //__________________________________________________________________
+            //
+            //
             // C++
             //
             //__________________________________________________________________
@@ -33,13 +42,13 @@ namespace Yttrium
             //! setup \param name compatible initializer for title
             template <typename NAME> inline
             explicit Spot(const NAME &name) :
-            title(name), line(1), column(1)
+            title(name), line(DefaultLine), column(DefaultColumn)
             {
             }
 
-            virtual ~Spot()    noexcept; //!< cleanup
-            Spot(const Spot &) noexcept; //!< duplicate
-            Spot & operator=(const Spot &) noexcept;
+            virtual ~Spot()                noexcept; //!< cleanup
+            Spot(const Spot &)             noexcept; //!< duplicate
+            Spot & operator=(const Spot &) noexcept; //!< assign \return *this
 
             //__________________________________________________________________
             //

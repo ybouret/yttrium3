@@ -39,8 +39,8 @@ namespace Yttrium
         void Spot:: set(const Identifier &id) noexcept
         {
             { Identifier temp(id); Coerce(title).xch(temp); }
-            Coerce(line)   = 1;
-            Coerce(column) = 1;
+            Coerce(line)   = DefaultLine;
+            Coerce(column) = DefaultColumn;
         }
 
 
