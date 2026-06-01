@@ -15,8 +15,9 @@ namespace
         inline explicit MyLexer() : Jive::Lexer("MyLexer")
         {
             emit("ID","[:alpha:][:word:]+");
-            load( TypeToType<Jive::Lexical::ShellComment>(), "shellComment");
-            load( TypeToType<Jive::Lexical::C_Comment>(), "C_Comment");
+            emit("INT","[:digit:]+");
+            Jive::Attach<Jive::Lexical::ShellComment>::To(*this,"shellComment");
+            Jive::Attach<Jive::Lexical::C_Comment>::To(*this,"C_Comment");
             drop("blank","[:blank:]");
             endl("endl","[:endl:]");
         }
@@ -38,15 +39,13 @@ Y_UTEST(jive_lexer)
         Jive::Source   source( Jive::Module::OpenFile(argv[1]) );
         Jive::Lexemes  lxm;
 
-#if 0
         while( true )
         {
-            Jive::Lexeme * const lx = lxr.get(source);
+            Jive::Lexeme * const lx = lxr.pull(source);
             if(!lx) break;
             lxm.pushTail(lx);
             std::cerr << *lx << std::endl;
         }
-#endif
 
     }
     

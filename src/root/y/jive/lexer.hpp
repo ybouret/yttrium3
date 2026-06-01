@@ -109,7 +109,19 @@ namespace Yttrium
 
 
         };
-        
+
+        template <typename PLUGIN>
+        struct Attach
+        {
+            typedef TypeToType<PLUGIN> PluginType;
+
+            template <typename PID> static inline
+            const Lexical::Rule & To(Lexer &lexer, const PID &pid)
+            {
+                static const PluginType _ = {};
+                return lexer.load(_,pid);
+            }
+        };
     }
 
 }

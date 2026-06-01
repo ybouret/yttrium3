@@ -21,7 +21,10 @@ namespace Yttrium
 
             std::ostream & operator<<(std::ostream &os, const Unit &unit)
             {
-                return os << unit.title << ':' << unit.line << ':' << unit.column << ": '" << (const Token &)unit << "'";
+                return os
+                << unit.title << ':' << unit.line << ':' << unit.column << ':'
+                << " [" << unit.name << "]"
+                << " '" << (const Token &)unit << "'";
             }
         }
         
