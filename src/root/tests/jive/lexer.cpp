@@ -16,8 +16,10 @@ namespace
         {
             emit("ID","[:alpha:][:word:]+");
             emit("INT","[:digit:]+");
-            Jive::Attach<Jive::Lexical::ShellComment>::To(*this,"shellComment");
-            Jive::Attach<Jive::Lexical::C_Comment>::To(*this,"C_Comment");
+            load( TypeToType<Jive::Lexical::ShellComment>(), "shellComment");
+            load( TypeToType<Jive::Lexical::C_Comment>(), "C_Comment");
+            load( TypeToType<Jive::Lexical::SingleLineComment>(), "LuaComment", "--");
+
             drop("blank","[:blank:]");
             endl("endl","[:endl:]");
         }

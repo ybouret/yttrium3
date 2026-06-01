@@ -80,12 +80,21 @@ namespace Yttrium
             Lexeme * pull(Source&);
 
 
-            //! plugin with no arguments
+            //! plugin with no argument
             template <typename PLUGIN, typename PID> inline
-            const Lexical:: Rule & load(const TypeToType<PLUGIN> &,
-                                        const PID                &pid)
+            const Lexical:: Rule & load(const TypeToType<PLUGIN>,
+                                        const PID & pid)
             {
                 return makeCall( record( new PLUGIN(pid) ) );
+            }
+
+            //! plugin with 1 argument
+            template <typename PLUGIN, typename PID, typename XPR> inline
+            const Lexical:: Rule & load(const TypeToType<PLUGIN>,
+                                        const PID & pid,
+                                        const XPR & xpr)
+            {
+                return makeCall( record( new PLUGIN(pid,xpr) ) );
             }
 
 
@@ -110,18 +119,7 @@ namespace Yttrium
 
         };
 
-        template <typename PLUGIN>
-        struct Attach
-        {
-            typedef TypeToType<PLUGIN> PluginType;
-
-            template <typename PID> static inline
-            const Lexical::Rule & To(Lexer &lexer, const PID &pid)
-            {
-                static const PluginType _ = {};
-                return lexer.load(_,pid);
-            }
-        };
+        
     }
 
 }
