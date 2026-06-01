@@ -16,7 +16,11 @@ namespace Yttrium
             {
             }
 
-            
+            OutputStream & Rule:: vizLink(OutputStream &fp) const
+            {
+                return fp;
+            }
+
 
 
         }

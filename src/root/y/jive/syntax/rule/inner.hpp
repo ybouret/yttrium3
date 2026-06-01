@@ -27,6 +27,9 @@ namespace Yttrium
                 static const uint32_t UUID = Y_FOURCC('I','N','N','R'); //!< alias
                 explicit Inner();                                       //!< setup
                 virtual ~Inner() noexcept;                              //!< cleanup
+
+                virtual OutputStream & vizSelf(OutputStream &) const;
+
             private:
                 Y_Disable_Copy_And_Assign(Inner);                       //!< discarded
             };

@@ -85,6 +85,7 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
+                virtual OutputStream & vizSelf(OutputStream &) const;
 
                 //______________________________________________________________
                 //

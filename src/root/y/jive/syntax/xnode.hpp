@@ -69,6 +69,8 @@ namespace Yttrium
                 const XList  & list()              const noexcept; //!< \return list   for internal node (const
                 void returnTo(Lexical::Stack &)          noexcept; //!< return to lexer using its stack
 
+                static void Grow(XNode * &tree, XNode * const node) noexcept;
+
                 //______________________________________________________________
                 //
                 //
@@ -81,8 +83,8 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(XNode);  //!< discarded
-                void * const     addr;             //!< inner address
-                void *           wksp[ NumWords ]; //!< inner workspace
+                void * const  addr;             //!< inner address
+                void *        wksp[ NumWords ]; //!< inner workspace
 
             };
         }

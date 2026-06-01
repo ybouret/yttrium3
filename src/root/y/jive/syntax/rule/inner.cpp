@@ -15,7 +15,11 @@ namespace Yttrium
             Internal("Inner",UUID)
             {
             }
-            
+
+            OutputStream & Inner:: vizSelf(OutputStream &fp) const
+            {
+                return fp;
+            }
         }
 
     }

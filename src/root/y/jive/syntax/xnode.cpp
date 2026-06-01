@@ -10,8 +10,6 @@ namespace Yttrium
         {
 
 
-
-
             XNode:: ~XNode() noexcept
             {
                 switch(rule.kind)
@@ -86,6 +84,19 @@ namespace Yttrium
                 }
             }
 
+
+            void XNode:: Grow(XNode * &tree, XNode * const node) noexcept
+            {
+                if(0==tree)
+                {
+                    tree = node;
+                }
+                else
+                {
+                    assert(tree->rule.kind == IsInternal);
+                    tree->list().pushTail(node);
+                }
+            }
 
         }
     }
