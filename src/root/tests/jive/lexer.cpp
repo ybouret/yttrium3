@@ -5,7 +5,7 @@
 #include "y/jive/lexical/plugin/multi-lines-comment.hpp"
 
 using namespace Yttrium;
-#if 0
+
 namespace
 {
 
@@ -15,8 +15,8 @@ namespace
         inline explicit MyLexer() : Jive::Lexer("MyLexer")
         {
             emit("ID","[:alpha:][:word:]+");
-            load( TypeToType<Jive::Lexical::ShellComment>(), "shellComment");
-            load( TypeToType<Jive::Lexical::C_Comment>(), "C_Comment");
+            //load( TypeToType<Jive::Lexical::ShellComment>(), "shellComment");
+            //load( TypeToType<Jive::Lexical::C_Comment>(), "C_Comment");
             drop("blank","[:blank:]");
             endl("endl","[:endl:]");
         }
@@ -28,11 +28,9 @@ namespace
         Y_Disable_Copy_And_Assign(MyLexer);
     };
 }
-#endif
 
 Y_UTEST(jive_lexer)
 {
-#if 0
     MyLexer lxr;
 
     if(argc>1)
@@ -40,6 +38,7 @@ Y_UTEST(jive_lexer)
         Jive::Source   source( Jive::Module::OpenFile(argv[1]) );
         Jive::Lexemes  lxm;
 
+#if 0
         while( true )
         {
             Jive::Lexeme * const lx = lxr.get(source);
@@ -47,10 +46,9 @@ Y_UTEST(jive_lexer)
             lxm.pushTail(lx);
             std::cerr << *lx << std::endl;
         }
-
+#endif
 
     }
-#endif
     
 
 }

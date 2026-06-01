@@ -6,7 +6,6 @@ namespace Yttrium
 {
     namespace Jive
     {
-#if 0
         Lexer:: ~Lexer() noexcept
         {
             psdb.release();
@@ -43,17 +42,19 @@ namespace Yttrium
             try { (void) psdb.remove(*id); } catch(...) {}
         }
 
-        const Lexical::Rule & Lexer:: makeCall(Plugin &plugin)
-        {
-            try { return call(plugin.name,plugin.spark); }
-            catch(...) { remove(plugin.name); throw; }
-        }
 
 
         void Lexer:: unget(Lexeme * const lx) noexcept
         {
             assert(lx);
             lexemes.pushHead(lx);
+        }
+
+#if 0
+        const Lexical::Rule & Lexer:: makeCall(Plugin &plugin)
+        {
+            try { return call(plugin.name,plugin.spark); }
+            catch(...) { remove(plugin.name); throw; }
         }
 
         Lexeme * Lexer:: get(Source &source)

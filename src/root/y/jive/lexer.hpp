@@ -16,7 +16,6 @@ namespace Yttrium
     namespace Jive
     {
 
-#if 0
         //______________________________________________________________________
         //
         //
@@ -73,6 +72,7 @@ namespace Yttrium
             void     unget(Lexeme * const) noexcept;
 
 
+#if 0
             //! plugin with no arguments
             template <typename PLUGIN, typename PID> inline
             const Lexical:: Rule & load(const TypeToType<PLUGIN> &,
@@ -80,7 +80,7 @@ namespace Yttrium
             {
                 return makeCall( record( new PLUGIN(pid) ) );
             }
-
+#endif
 
 
         private:
@@ -102,7 +102,6 @@ namespace Yttrium
 
 
         };
-#endif
         
     }
 
