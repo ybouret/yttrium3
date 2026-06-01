@@ -26,6 +26,7 @@ namespace Yttrium
             class Grammar : public Proxy< const Core::ListOf<Rule> >
             {
             public:
+                typedef Syntax::Rule Rule;
                 //______________________________________________________________
                 //
                 //
@@ -59,6 +60,9 @@ namespace Yttrium
 
                 const Rule & topLevel()       const noexcept; //!< \return topLevel rule (rules.size>0)
                 void         topLevel(const Rule &) noexcept; //!< set toplevel (existing) rule
+
+                OutputStream & viz(OutputStream&) const;
+                void           render() const;
 
                 //______________________________________________________________
                 //

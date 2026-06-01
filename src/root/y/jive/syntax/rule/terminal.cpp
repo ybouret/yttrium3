@@ -22,8 +22,8 @@ namespace Yttrium
                     case Semantic:
                         switch(load)
                         {
-                            case Standard: return "plain,filled";
-                            case Univocal: return "plain,filled,rounded";
+                            case Standard: return "solid,filled";
+                            case Univocal: return "solid,filled,rounded";
                         }
                         break;
 
@@ -36,7 +36,7 @@ namespace Yttrium
                         break;
                 }
 
-                return "plain";
+                return "solid";
             }
 
             OutputStream & Terminal:: vizSelf(OutputStream &fp) const
@@ -44,7 +44,7 @@ namespace Yttrium
                 nodeName(fp) << '[';
                 Label(fp,*name);
                 fp << ",shape=box";
-                fp << ",style=" << TermStyle(role,load);
+                fp << ",style=\"" << TermStyle(role,load) << "\"";
                 return Endl(fp<<']');
             }
 

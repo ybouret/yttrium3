@@ -182,6 +182,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(jive_lexer);
     Y_UTEST(jive_vfs);
     Y_UTEST(jive_xnode);
+    Y_UTEST(jive_grammar);
 
     Y_UTEST(graphviz);
 

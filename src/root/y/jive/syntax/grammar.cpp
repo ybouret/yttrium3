@@ -24,7 +24,7 @@ namespace Yttrium
                     if(*mine->name == *rule->name)
                         throw Specific::Exception(lang->c_str(), "multiple rule [%s]", mine->name->c_str());
                 }
-                rules.pushHead( guard.yield() );
+                rules.pushTail( guard.yield() );
             }
 
             const Rule & Grammar:: topLevel() const noexcept
@@ -37,6 +37,25 @@ namespace Yttrium
             {
                 assert( rules.owns(&rule) );
                 rules.moveToHead( & Coerce(rule) );
+            }
+
+            OutputStream & Grammar:: viz(OutputStream &fp) const
+            {
+                for(const Rule *rule=rules.head;rule;rule=rule->next)
+                {
+                    rule->vizSelf(fp);
+                }
+                for(const Rule *rule=rules.head;rule;rule=rule->next)
+                {
+                    rule->vizLink(fp);
+                }
+                return fp;
+            }
+
+            void Grammar:: render() const
+            {
+                const String dotFile = *lang + ".dot";
+                Vizible::Render(dotFile,*this);
             }
 
         }

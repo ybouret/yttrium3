@@ -211,6 +211,7 @@ Y_UTEST(jive:scanner)
 Y_UTEST(jive:lexer)
 Y_UTEST(jive:vfs)
 Y_UTEST(jive:xnode)
+Y_UTEST(jive:grammar)
 
 Y_UTEST(graphviz)
 
