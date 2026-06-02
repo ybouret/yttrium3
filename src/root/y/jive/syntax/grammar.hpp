@@ -91,7 +91,7 @@ namespace Yttrium
                     return add( new Aggregate(ruleName) );
                 }
 
-
+                void validate();
 
 
             private:
