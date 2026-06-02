@@ -1,4 +1,4 @@
-#include "y/jive/syntax/grammar.hpp"
+#include "y/jive/syntax/core-grammar.hpp"
 #include "y/jive/syntax/rule/all.hpp"
 
 #include "y/jive/lexical/plugin/single-line-comment.hpp"
@@ -32,10 +32,10 @@ namespace
         Y_Disable_Copy_And_Assign(MyLexer);
     };
 
-    class MyGrammar : public Syntax::Grammar
+    class MyGrammar : public Syntax::CoreGrammar
     {
     public:
-        explicit MyGrammar() : Syntax::Grammar("MyGrammar")
+        explicit MyGrammar() : Syntax::CoreGrammar("MyGrammar")
         {
             const Rule & ID  = add( new Syntax::Terminal("ID") );
             const Rule & IDS = add( new Syntax::Repeat(ID,1)   );

@@ -1,5 +1,5 @@
 
-#include "y/jive/syntax/grammar.hpp"
+#include "y/jive/syntax/core-grammar.hpp"
 #include "y/pointer/auto.hpp"
 #include "y/exception.hpp"
 
@@ -9,13 +9,13 @@ namespace Yttrium
     {
         namespace Syntax
         {
-            Grammar:: ~Grammar() noexcept
+            CoreGrammar:: ~CoreGrammar() noexcept
             {
             }
 
-            Y_Proxy_Impl(Grammar,rules)
+            Y_Proxy_Impl(CoreGrammar,rules)
 
-            void Grammar:: append(Rule * const rule)
+            void CoreGrammar:: append(Rule * const rule)
             {
                 assert(rule);
                 AutoPtr<Rule> guard(rule);
@@ -27,19 +27,19 @@ namespace Yttrium
                 rules.pushTail( guard.yield() );
             }
 
-            const Rule & Grammar:: topLevel() const noexcept
+            const Rule & CoreGrammar:: topLevel() const noexcept
             {
                 assert(rules.size>0);
                 return *rules.head;
             }
 
-            void Grammar:: topLevel(const Rule &rule) noexcept
+            void CoreGrammar:: topLevel(const Rule &rule) noexcept
             {
                 assert( rules.owns(&rule) );
                 rules.moveToHead( & Coerce(rule) );
             }
 
-            OutputStream & Grammar:: viz(OutputStream &fp) const
+            OutputStream & CoreGrammar:: viz(OutputStream &fp) const
             {
                 for(const Rule *rule=rules.head;rule;rule=rule->next)
                 {
@@ -52,7 +52,7 @@ namespace Yttrium
                 return fp;
             }
 
-            void Grammar:: render() const
+            void CoreGrammar:: render() const
             {
                 const String dotFile = *lang + ".dot";
                 Vizible::Render(dotFile,*this);
