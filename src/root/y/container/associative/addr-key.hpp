@@ -10,31 +10,67 @@
 
 namespace Yttrium
 {
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Convert address into key
+    //
+    //
+    //__________________________________________________________________________
     class AddrKey : public Memory::ReadOnlyBuffer
     {
     public:
-        static const size_t Length = sizeof(void*);
-        typedef UnsignedFor<Length>::Alias::Type UType;
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        static const size_t Length = sizeof(void*);     //!< alias
+        typedef UnsignedFor<Length>::Alias::Type UType; //!< alias
 
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+
+        //! setup \param ref reference to use address from
         template <typename T> inline
         explicit AddrKey(T &ref) noexcept :
         data()
         {
             fillWith( &ref );
         }
-        AddrKey(const AddrKey &) noexcept;
-        virtual ~AddrKey() noexcept;
-        Y_OSTREAM_PROTO(AddrKey);
-        
+        AddrKey(const AddrKey &) noexcept; //!< duplicate
+        virtual ~AddrKey()       noexcept; //!< cleanup
+        Y_OSTREAM_PROTO(AddrKey);          //!< display
+
+        //______________________________________________________________________
+        //
+        //
+        // Interface
+        //
+        //______________________________________________________________________
         virtual const void * ro()     const noexcept;
         virtual size_t       length() const noexcept;
 
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+
+        //! \return true iff same data
         friend bool operator==(const AddrKey&, const AddrKey&) noexcept;
 
     private:
-        Y_Disable_Assign(AddrKey);
-        void fillWith(const void * const addr) noexcept;
-        uint8_t data[Length];
+        Y_Disable_Assign(AddrKey);                  //!< discarded
+        void fillWith(const void * const) noexcept; //!< initialize
+        uint8_t data[Length];                       //!< inner key
     };
 
 }

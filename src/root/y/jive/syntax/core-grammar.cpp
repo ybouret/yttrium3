@@ -19,6 +19,8 @@ namespace Yttrium
             {
                 assert(rule);
                 AutoPtr<Rule> guard(rule);
+                if(frozen) throw Specific::Exception(lang->c_str(), "frozen: cannot append <%s>", rule->name->c_str());
+
                 for(const Rule *mine=rules.head;mine;mine=mine->next)
                 {
                     if(*mine->name == *rule->name)

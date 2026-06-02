@@ -7,6 +7,7 @@
 #include "y/jive/syntax/rule.hpp"
 #include "y/core/list/cxx.hpp"
 #include "y/type/proxy.hpp"
+#include "y/ability/freezable.hpp"
 
 namespace Yttrium
 {
@@ -23,10 +24,19 @@ namespace Yttrium
             //
             //
             //__________________________________________________________________
-            class CoreGrammar : public Proxy< const Core::ListOf<Rule> >
+            class CoreGrammar :
+            public Proxy< const Core::ListOf<Rule> >,
+            public Freezable
             {
             public:
-                typedef Syntax::Rule Rule;
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                typedef Syntax::Rule Rule; //!< echo
+
                 //______________________________________________________________
                 //
                 //
@@ -62,8 +72,8 @@ namespace Yttrium
                 const Rule & topLevel()       const noexcept; //!< \return topLevel rule (rules.size>0)
                 void         topLevel(const Rule &) noexcept; //!< set toplevel (existing) rule
 
-                OutputStream & viz(OutputStream&) const;
-                void           render() const;
+                OutputStream & viz(OutputStream&) const; //!< top-level graphviz code \return output stream
+                void           render() const;           //!< render 
 
                 //______________________________________________________________
                 //
@@ -74,9 +84,10 @@ namespace Yttrium
                 const Identifier lang; //!< lang identifier
 
 
-            private:
+            protected:
                 CxxListOf<Rule> rules; //!< list of distinct rules, head is toplevel
 
+            private:
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
                 Y_Disable_Copy_And_Assign(CoreGrammar);
                 Y_Proxy_Decl();
@@ -89,5 +100,5 @@ namespace Yttrium
 
 }
 
-#endif // !Y_Jive_Syntax_Grammar_Included
+#endif // !Y_Jive_Syntax_CoreGrammar_Included
 
