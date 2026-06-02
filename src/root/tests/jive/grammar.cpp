@@ -1,5 +1,4 @@
-#include "y/jive/syntax/core-grammar.hpp"
-#include "y/jive/syntax/rule/all.hpp"
+#include "y/jive/syntax/grammar.hpp"
 
 #include "y/jive/lexical/plugin/single-line-comment.hpp"
 #include "y/jive/lexer.hpp"
@@ -32,13 +31,13 @@ namespace
         Y_Disable_Copy_And_Assign(MyLexer);
     };
 
-    class MyGrammar : public Syntax::CoreGrammar
+    class MyGrammar : public Syntax::Grammar
     {
     public:
-        explicit MyGrammar() : Syntax::CoreGrammar("MyGrammar")
+        explicit MyGrammar() : Syntax:: Grammar("MyGrammar")
         {
-            const Rule & ID  = add( new Syntax::Terminal("ID") );
-            const Rule & IDS = add( new Syntax::Repeat(ID,1)   );
+            const Rule & ID  = trm("ID");
+            const Rule & IDS = oom(ID);
             topLevel(IDS);
         }
 
@@ -58,7 +57,7 @@ Y_UTEST(jive_grammar)
     MyGrammar G;
 
     G.render();
-
+    G.validate();
 
 }
 Y_UDONE()

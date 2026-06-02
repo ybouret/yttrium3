@@ -1,5 +1,5 @@
 
-#include "y/jive/syntax/core-grammar.hpp"
+#include "y/jive/syntax/grammar/core.hpp"
 #include "y/pointer/auto.hpp"
 #include "y/exception.hpp"
 

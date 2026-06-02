@@ -4,7 +4,7 @@
 #ifndef Y_Jive_Syntax_Grammar_Included
 #define Y_Jive_Syntax_Grammar_Included 1
 
-#include "y/jive/syntax/core-grammar.hpp"
+#include "y/jive/syntax/grammar/core.hpp"
 #include "y/jive/syntax/rule/all.hpp"
 
 namespace Yttrium
@@ -91,6 +91,7 @@ namespace Yttrium
                     return add( new Aggregate(ruleName) );
                 }
 
+                //! validate rules and freeze
                 void validate();
 
 

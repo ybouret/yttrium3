@@ -65,8 +65,9 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
-        inline const AddrKey & key() const noexcept { return key_; } //!< \return  key_
-
+        inline const AddrKey & key()       const noexcept { return key_; } //!< \return inner key_
+        inline ConstType     & operator*() const noexcept { return data; } //!< \return inner data
+                                                                           //!
     private:
         Y_Disable_Assign(BookEntry); //!< discard
         ConstType&     data; //!< inner reference

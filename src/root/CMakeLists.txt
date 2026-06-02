@@ -108,6 +108,7 @@ y/jive/syntax
 y/jive/syntax/rule
 y/jive/syntax/rule/wildcard
 y/jive/syntax/rule/compound
+y/jive/syntax/grammar
 y/graphviz
 y/functor
 y/vfs
