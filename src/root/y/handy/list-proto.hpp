@@ -138,6 +138,7 @@ namespace Yttrium
                 list.pushHead( cache->summon(args) );
             }
 
+#if 0
             //! \return cut head COPY
             inline Type pullHead()
             {
@@ -155,6 +156,7 @@ namespace Yttrium
                 popTail();
                 return saved;
             }
+#endif // 0
 
 
 
