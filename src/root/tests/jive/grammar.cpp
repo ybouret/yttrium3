@@ -37,9 +37,9 @@ namespace
     public:
         explicit MyGrammar() : Syntax::Grammar("MyGrammar")
         {
-            const Rule & ID = add( new Syntax::Terminal("ID") );
-
-            (void)ID;
+            const Rule & ID  = add( new Syntax::Terminal("ID") );
+            const Rule & IDS = add( new Syntax::Repeat(ID,1)   );
+            topLevel(IDS);
         }
 
         virtual ~MyGrammar() noexcept

@@ -12,10 +12,16 @@
 #include "y/hashing/pjw.hpp"
 #include "y/hashing/elf.hpp"
 #include "y/hashing/crc32.hpp"
+#include "y/hashing/adler32.hpp"
 
 #include "y/utest/run.hpp"
 #include "y/format/hexadecimal.hpp"
 #include "y/core/hsort.hpp"
+
+#include "y/cameo/addition.hpp"
+#include "y/stream/libc/output.hpp"
+
+#include <cmath>
 
 using namespace Yttrium;
 
@@ -73,19 +79,48 @@ namespace
             if( collided(dw,table32,i) ) ++n16;
             if(verbose) std::cerr << std::endl;
         }
-        std::cerr
+        std::cerr << "(*) "
         << std::setw(10) << H.callSign() << " collisions :"
         << std::setw(4) << n8  << " | "
         << std::setw(4) << n16 << " | "
         << std::setw(4) << n32 << std::endl;
         if(!n8)
         {
+            {
+                String     fn = H.callSign(); fn += ".dat";
+                OutputFile fp(fn);
+                for(unsigned i=0;i<255;++i)
+                {
+                    fp("%u\n", table8[i]);
+                }
+            }
+            Cameo::Addition<double> xadd(256);
+            for(unsigned i=0;i<255;++i)
+            {
+                const double a = table8[i];
+                const double b = table8[i+1];
+                xadd << fabs(b-a);
+            }
+            const double ave = xadd() / 255.0;
+            for(unsigned i=0;i<255;++i)
+            {
+                const double a = table8[i];
+                const double b = table8[i+1];
+                const double c = fabs(b-a);
+                const double d = c - ave;
+                xadd << d*d;
+            }
+            const double sig = sqrt( xadd() / 255.0 );
+            std::cerr << "\t\tave = " << ave << std::endl;
+            std::cerr << "\t\tsig = " << sig << std::endl;
+
+
             Core::HSort::Increasing(table8,256);
             for(unsigned i=0;i<256;++i)
             {
                 Y_ASSERT(i==table8[i]);
             }
-            std::cerr << H.callSign() << " is a 8-bits permutation" << std::endl;
+            std::cerr << "    " << std::setw(10) << H.callSign() << " is a 8-bits permutation" << std::endl;
         }
     }
 }
@@ -112,21 +147,24 @@ Y_UTEST(hashing_scatter)
     Hashing::RMD128 rmd128;
     Hashing::RMD160 rmd160;
     Hashing::CRC32  crc32;
+    Hashing::Adler32 adler32;
 
     scatter(md2);
     scatter(md4);
     scatter(md5);
     scatter(sha1);
-    scatter(fnv);
-    scatter(pjw);
-    scatter(elf);
     scatter(sha224);
     scatter(sha256);
     scatter(sha384);
     scatter(sha512);
     scatter(rmd128);
     scatter(rmd160);
+
+    scatter(fnv);
+    scatter(pjw);
+    scatter(elf);
     scatter(crc32);
+    scatter(adler32);
 
 
 
