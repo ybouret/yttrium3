@@ -53,7 +53,7 @@ namespace Yttrium
             template <typename ID> inline
             explicit Lexer(const ID &id) :
             Scanner(id,Lexical::AcceptEOS),
-            curr(this),
+            curr( self() ),
             psdb(),
             lexemes(),
             history()

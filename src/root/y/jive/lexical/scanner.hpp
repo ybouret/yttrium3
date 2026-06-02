@@ -10,302 +10,304 @@
 
 namespace Yttrium
 {
-    namespace Jive
-    {
+	namespace Jive
+	{
 
-        namespace Lexical
-        {
+		namespace Lexical
+		{
 
-            //__________________________________________________________________
-            //
-            //! End Of Stream Policy
-            //__________________________________________________________________
-            enum OnEOS
-            {
-                AcceptEOS, //!< scanner is ok to quit
-                RejectEOS  //!< scanner is not done!
-            };
-
-
-            //__________________________________________________________________
-            //
-            //
-            //
-            //! Produce units with a set of rules
-            //
-            //
-            //__________________________________________________________________
-            class Scanner : public CountedObject
-            {
-            public:
-                //______________________________________________________________
-                //
-                //
-                // Definitions
-                //
-                //______________________________________________________________
-                class Code;
-                static bool     Verbose; //!< verbosity flag
-                static unsigned Aligned; //!< help to format
-
-                //______________________________________________________________
-                //
-                //
-                // C++
-                //
-                //______________________________________________________________
-
-                //! setup \param sid name \param eos End Of Stream policy
-                template <typename SID> inline
-                explicit Scanner(const SID &sid, const OnEOS eos = AcceptEOS) :
-                name(sid),
-                code( CreateCode(sid) ),
-                onEOS(eos)
-                {
-
-                }
-
-                //! cleanup
-                virtual ~Scanner() noexcept; //!< cleanup
-
-                //______________________________________________________________
-                //
-                //
-                // Methods
-                //
-                //______________________________________________________________
-                const String & key() const noexcept; //!< \return *name
-                const Rule   & add(Rule * const);    //!< add newly created rule \return persistent reference
-
-                //! probe next Unit
-                /**
-                 \param source  source to probe
-                 \param command modified upon control lexeme
-                 \return 0 if EOS or control lexeme, a new unit otherwise
-                 */
-                Unit *probe(Source &source, Command &command);
+			//__________________________________________________________________
+			//
+			//! End Of Stream Policy
+			//__________________________________________________________________
+			enum OnEOS
+			{
+				AcceptEOS, //!< scanner is ok to quit
+				RejectEOS  //!< scanner is not done!
+			};
 
 
-                //______________________________________________________________
-                //
-                //
-                // API
-                //
-                //______________________________________________________________
+			//__________________________________________________________________
+			//
+			//
+			//
+			//! Produce units with a set of rules
+			//
+			//
+			//__________________________________________________________________
+			class Scanner : public CountedObject
+			{
+			public:
+				//______________________________________________________________
+				//
+				//
+				// Definitions
+				//
+				//______________________________________________________________
+				class Code;
+				static bool     Verbose; //!< verbosity flag
+				static unsigned Aligned; //!< help to format
 
-                //! emit a lexeme
-                /**
-                 \param id rule/lexeme name
-                 \param rx regular expression
-                 \return created rule
-                 */
-                template <typename ID, typename RX> inline
-                const Rule & emit(const ID &id, const RX &rx)
-                {
-                    return add( Rule::New(EmitLexeme,id,rx,NoEndOfLine) );
-                }
+				//______________________________________________________________
+				//
+				//
+				// C++
+				//
+				//______________________________________________________________
 
-                //! emit a lexeme with hook
-                /**
-                 \param id rule/lexeme name
-                 \param rx regular expression
-                 \param host object address
-                 \param meth object method to invoke
-                 \return created rule
-                 */
-                template <
-                typename ID,
-                typename RX,
-                typename OBJECT_POINTER,
-                typename METHOD_POINTER>
-                inline
-                const Rule & emit(const ID &id, const RX &rx, OBJECT_POINTER * const host, METHOD_POINTER const meth)
-                {
-                    return add( Rule::New(EmitLexeme,id,rx,NoEndOfLine,host,meth) );
-                }
+				//! setup \param sid name \param eos End Of Stream policy
+				template <typename SID> inline
+					explicit Scanner(const SID& sid, const OnEOS eos = AcceptEOS) :
+					name(sid),
+					code(CreateCode(sid)),
+					onEOS(eos)
+				{
+
+				}
+
+				//! cleanup
+				virtual ~Scanner() noexcept; //!< cleanup
+
+				//______________________________________________________________
+				//
+				//
+				// Methods
+				//
+				//______________________________________________________________
+				const String& key() const noexcept; //!< \return *name
+				const Rule& add(Rule* const);    //!< add newly created rule \return persistent reference
+
+				//! probe next Unit
+				/**
+				 \param source  source to probe
+				 \param command modified upon control lexeme
+				 \return 0 if EOS or control lexeme, a new unit otherwise
+				 */
+				Unit* probe(Source& source, Command& command);
 
 
+				//______________________________________________________________
+				//
+				//
+				// API
+				//
+				//______________________________________________________________
 
-                //! drop a lexeme
-                /**
-                 \param id rule/lexeme name
-                 \param rx regular expression
-                 \return created rule
-                 */
-                template <typename ID, typename RX> inline
-                const Rule & drop(const ID &id, const RX &rx)
-                {
-                    return add( Rule::New(DropLexeme,id,rx,NoEndOfLine) );
-                }
+				//! emit a lexeme
+				/**
+				 \param id rule/lexeme name
+				 \param rx regular expression
+				 \return created rule
+				 */
+				template <typename ID, typename RX> inline
+					const Rule& emit(const ID& id, const RX& rx)
+				{
+					return add(Rule::New(EmitLexeme, id, rx, NoEndOfLine));
+				}
 
-                //! drop a lexeme with hook
-                /**
-                 \param id rule/lexeme name
-                 \param rx regular expression
-                 \param host object address
-                 \param meth object method to invoke
-                 \return created rule
-                 */
-                template <
-                typename ID,
-                typename RX,
-                typename OBJECT_POINTER,
-                typename METHOD_POINTER>
-                inline
-                const Rule & drop(const ID &             id,
-                                  const RX &             rx,
-                                  OBJECT_POINTER * const host,
-                                  METHOD_POINTER   const meth)
-                {
-                    return add( Rule::New(DropLexeme,id,rx,NoEndOfLine,host,meth) );
-                }
+				//! emit a lexeme with hook
+				/**
+				 \param id rule/lexeme name
+				 \param rx regular expression
+				 \param host object address
+				 \param meth object method to invoke
+				 \return created rule
+				 */
+				template <
+					typename ID,
+					typename RX,
+					typename OBJECT_POINTER,
+					typename METHOD_POINTER>
+				inline
+					const Rule& emit(const ID& id, const RX& rx, OBJECT_POINTER* const host, METHOD_POINTER const meth)
+				{
+					return add(Rule::New(EmitLexeme, id, rx, NoEndOfLine, host, meth));
+				}
 
 
 
+				//! drop a lexeme
+				/**
+				 \param id rule/lexeme name
+				 \param rx regular expression
+				 \return created rule
+				 */
+				template <typename ID, typename RX> inline
+					const Rule& drop(const ID& id, const RX& rx)
+				{
+					return add(Rule::New(DropLexeme, id, rx, NoEndOfLine));
+				}
 
-                //! end-of-line lexeme
-                /**
-                 \param id  rule/lexeme name
-                 \param rx  regular expression
-                 \param lxp default is DropLexeme, use EmitLexeme if necessary
-                 \return created rule
-                 */
-                template <typename ID, typename RX> inline
-                const Rule & endl(const ID &id, const RX &rx, const LexemeProcess lxp = DropLexeme )
-                {
-                    return add( Rule::New(lxp,id,rx,IsEndOfLine) );
-                }
-
-
-                //! call another scanner without hook
-                /**
-                 \param id other scanner's name
-                 \param rx triggering regular expression
-                 \return created rule
-                 */
-                template <typename ID, typename RX>
-                const Rule & call(const ID &id, const RX &rx)
-                {
-                    return add( Rule::MakeCall(name,id,rx) );
-                }
-
-                //! call another scanner with hook
-                /**
-                 \param id other scanner's name
-                 \param rx triggering regular expression
-                 \param host object address
-                 \param meth object method to invoke
-                 \return created rule
-                 */
-                template <
-                typename ID,
-                typename RX,
-                typename OBJECT_POINTER,
-                typename METHOD_POINTER>
-                const Rule & call(const ID       &       id,
-                                  const RX       &       rx,
-                                  OBJECT_POINTER * const host,
-                                  METHOD_POINTER   const meth)
-                {
-                    return add( Rule::MakeCall(name,id,rx,host,meth) );
-                }
-
-
-                //! jump to another scanner without hook
-                /**
-                 \param id other scanner's name
-                 \param rx triggering regular expression
-                 \return created rule
-                 */
-                template <typename ID, typename RX>
-                const Rule & jump(const ID &id, const RX &rx)
-                {
-                    return add( Rule::MakeJump(name,id,rx) );
-                }
-
-                //! jump to another scanner with hook
-                /**
-                 \param id other scanner's name
-                 \param rx triggering regular expression
-                 \param host object address
-                 \param meth object method to invoke
-                 \return created rule
-                 */
-                template <
-                typename ID,
-                typename RX,
-                typename OBJECT_POINTER,
-                typename METHOD_POINTER>
-                const Rule & jump(const ID       &       id,
-                                  const RX       &       rx,
-                                  OBJECT_POINTER * const host,
-                                  METHOD_POINTER   const meth)
-                {
-                    return add( Rule::MakeJump(name,id,rx,host,meth) );
-                }
-
-                //! comming back without hook
-                /**
-                 \param brx back regular expression
-                 \param eol end of line flag
-                 \return new rule
-                 */
-                template < typename RX> inline
-                const Rule & back(const RX &brx, const EndOfLineFlag eol)
-                {
-                    return add( Rule::BackFrom(name,brx,eol) );
-
-                }
-
-                //! comming back with hook
-                /**
-                 \param brx back regular expression
-                 \param eol end of line flag
-                 \param host object address
-                 \param meth object method to call
-                 \return new rule
-                 */
-                template <
-                typename RX,
-                typename OBJECT_POINTER,
-                typename METHOD_POINTER> inline
-                const Rule & back(const RX &             brx,
-                                  const EndOfLineFlag    eol,
-                                  OBJECT_POINTER * const host,
-                                  METHOD_POINTER   const meth)
-                {
-                    return add( Rule::BackFrom(name,brx,eol,host,meth) );
-                }
+				//! drop a lexeme with hook
+				/**
+				 \param id rule/lexeme name
+				 \param rx regular expression
+				 \param host object address
+				 \param meth object method to invoke
+				 \return created rule
+				 */
+				template <
+					typename ID,
+					typename RX,
+					typename OBJECT_POINTER,
+					typename METHOD_POINTER>
+				inline
+					const Rule& drop(const ID& id,
+						const RX& rx,
+						OBJECT_POINTER* const host,
+						METHOD_POINTER   const meth)
+				{
+					return add(Rule::New(DropLexeme, id, rx, NoEndOfLine, host, meth));
+				}
 
 
 
 
-                //______________________________________________________________
-                //
-                //
-                // Members
-                //
-                //______________________________________________________________
-                const Identifier name; //!< identifier
-            private:
-                Code * const     code; //!< inner code
-            public:
-                const OnEOS      onEOS; //!< End Of Stream policy
+				//! end-of-line lexeme
+				/**
+				 \param id  rule/lexeme name
+				 \param rx  regular expression
+				 \param lxp default is DropLexeme, use EmitLexeme if necessary
+				 \return created rule
+				 */
+				template <typename ID, typename RX> inline
+					const Rule& endl(const ID& id, const RX& rx, const LexemeProcess lxp = DropLexeme)
+				{
+					return add(Rule::New(lxp, id, rx, IsEndOfLine));
+				}
+
+
+				//! call another scanner without hook
+				/**
+				 \param id other scanner's name
+				 \param rx triggering regular expression
+				 \return created rule
+				 */
+				template <typename ID, typename RX>
+				const Rule& call(const ID& id, const RX& rx)
+				{
+					return add(Rule::MakeCall(name, id, rx));
+				}
+
+				//! call another scanner with hook
+				/**
+				 \param id other scanner's name
+				 \param rx triggering regular expression
+				 \param host object address
+				 \param meth object method to invoke
+				 \return created rule
+				 */
+				template <
+					typename ID,
+					typename RX,
+					typename OBJECT_POINTER,
+					typename METHOD_POINTER>
+				const Rule& call(const ID& id,
+					const RX& rx,
+					OBJECT_POINTER* const host,
+					METHOD_POINTER   const meth)
+				{
+					return add(Rule::MakeCall(name, id, rx, host, meth));
+				}
+
+
+				//! jump to another scanner without hook
+				/**
+				 \param id other scanner's name
+				 \param rx triggering regular expression
+				 \return created rule
+				 */
+				template <typename ID, typename RX>
+				const Rule& jump(const ID& id, const RX& rx)
+				{
+					return add(Rule::MakeJump(name, id, rx));
+				}
+
+				//! jump to another scanner with hook
+				/**
+				 \param id other scanner's name
+				 \param rx triggering regular expression
+				 \param host object address
+				 \param meth object method to invoke
+				 \return created rule
+				 */
+				template <
+					typename ID,
+					typename RX,
+					typename OBJECT_POINTER,
+					typename METHOD_POINTER>
+				const Rule& jump(const ID& id,
+					const RX& rx,
+					OBJECT_POINTER* const host,
+					METHOD_POINTER   const meth)
+				{
+					return add(Rule::MakeJump(name, id, rx, host, meth));
+				}
+
+				//! comming back without hook
+				/**
+				 \param brx back regular expression
+				 \param eol end of line flag
+				 \return new rule
+				 */
+				template < typename RX> inline
+					const Rule& back(const RX& brx, const EndOfLineFlag eol)
+				{
+					return add(Rule::BackFrom(name, brx, eol));
+
+				}
+
+				//! comming back with hook
+				/**
+				 \param brx back regular expression
+				 \param eol end of line flag
+				 \param host object address
+				 \param meth object method to call
+				 \return new rule
+				 */
+				template <
+					typename RX,
+					typename OBJECT_POINTER,
+					typename METHOD_POINTER> inline
+					const Rule& back(const RX& brx,
+						const EndOfLineFlag    eol,
+						OBJECT_POINTER* const host,
+						METHOD_POINTER   const meth)
+				{
+					return add(Rule::BackFrom(name, brx, eol, host, meth));
+				}
+
+
+
+
+				//______________________________________________________________
+				//
+				//
+				// Members
+				//
+				//______________________________________________________________
+				const Identifier name; //!< identifier
+			private:
+				Code* const     code; //!< inner code
+			public:
+				const OnEOS      onEOS; //!< End Of Stream policy
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            private:
-                Y_Disable_Copy_And_Assign(Scanner);
-                static Code * CreateCode(const Identifier &);
-                const Rule &  processing(const Identifier &, const Motif &, const unsigned);
+			private:
+				Y_Disable_Copy_And_Assign(Scanner);
+				static Code* CreateCode(const Identifier&);
+				const Rule& processing(const Identifier&, const Motif&, const unsigned);
+			protected:
+				Scanner* self() noexcept;
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            };
+			};
 
-            //! helper to trace algorithm
+			//! helper to trace algorithm
 #define Y_Jive_Lexical(MSG) do { if( Lexical::Scanner::Verbose ) { std::cerr << MSG << std::endl; } } while(false)
 
-        }
+		}
 
-    }
+	}
 
 }
 

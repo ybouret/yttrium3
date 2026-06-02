@@ -32,7 +32,7 @@ namespace
         Random::Shuffle(ran,keys(),keys.size());
         for(size_t i=keys.size();i>0;--i)
         {
-            Y_ASSERT(lexicon.search(keys[i]));
+            Y_ASSERT(0!=lexicon.search(keys[i]));
         }
         const size_t nmax = keys.size()/2;
         while(keys.size()>nmax)

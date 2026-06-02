@@ -1,3 +1,7 @@
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4668 )
+#endif
+
 #include "y/stream/gz/input.hpp"
 #include "y/ability/lockable.hpp"
 #include "y/zlib/zlib.h"

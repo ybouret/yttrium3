@@ -13,17 +13,7 @@ namespace Yttrium
         memcpy(data,k.data,sizeof(data));
     }
 
-    std::ostream & operator<<(std::ostream &os, const AddrKey &key)
-    {
-        char s[ 2*AddrKey::Length + 2];
-        memset(s,0,sizeof(s));
-        for(size_t i=0;i<AddrKey::Length;++i)
-        {
-            const char * const h = Hexadecimal::LowerByte[key.data[i]];
-            strcat(s,h);
-        }
-        return os << s;
-    }
+   
 
 
     const void * AddrKey:: ro() const noexcept
@@ -52,4 +42,19 @@ namespace Yttrium
         memset(data,0,sizeof(data));
     }
 
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4996 )
+#endif
+
+    std::ostream& operator<<(std::ostream& os, const AddrKey& key)
+    {
+        char s[2 * AddrKey::Length + 2];
+        memset(s, 0, sizeof(s));
+        for (size_t i = 0; i < AddrKey::Length; ++i)
+        {
+            const char* const h = Hexadecimal::LowerByte[key.data[i]];
+            strcat(s, h);
+        }
+        return os << s;
+    }
 }

@@ -38,6 +38,11 @@ namespace Yttrium
                 return add( new Rule(_name,_form,_deed,_name,0) );
             }
 
+            Scanner * Scanner:: self() noexcept
+            {
+                return this;
+            }
+
         }
 
     }
