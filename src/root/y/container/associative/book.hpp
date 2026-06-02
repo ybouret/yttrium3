@@ -9,7 +9,6 @@ namespace Yttrium
 {
 
 
-
     template <typename T>
     class BookEntry
     {
@@ -37,6 +36,8 @@ namespace Yttrium
         ConstType    & data;
         const AddrKey  key_;
     };
+
+
 
 }
 
