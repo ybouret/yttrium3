@@ -22,10 +22,10 @@ namespace Yttrium
         {
             fillWith( &ref );
         }
-        Y_OSTREAM_PROTO(AddrKey);
-
+        AddrKey(const AddrKey &) noexcept;
         virtual ~AddrKey() noexcept;
-
+        Y_OSTREAM_PROTO(AddrKey);
+        
         virtual const void * ro()     const noexcept;
         virtual size_t       length() const noexcept;
 

@@ -5,6 +5,14 @@
 
 namespace Yttrium
 {
+
+    AddrKey:: AddrKey(const AddrKey &k) noexcept :
+    Memory::ReadOnlyBuffer(),
+    data()
+    {
+        memcpy(data,k.data,sizeof(data));
+    }
+
     std::ostream & operator<<(std::ostream &os, const AddrKey &key)
     {
         char s[ 2*AddrKey::Length + 2];
