@@ -20,6 +20,12 @@ namespace Yttrium
             {
                 return fp;
             }
+
+            Y_Jive_Syntax_Rule_Impl(Inner)
+            {
+                
+            }
+
         }
 
     }

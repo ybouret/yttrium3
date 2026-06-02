@@ -49,6 +49,7 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 virtual OutputStream & vizSelf(OutputStream &) const;
+                Y_Jive_Syntax_Rule_Decl();
 
                 //______________________________________________________________
                 //

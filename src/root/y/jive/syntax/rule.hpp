@@ -12,8 +12,15 @@ namespace Yttrium
 {
     namespace Jive
     {
+        class Lexer;
+
         namespace Syntax
         {
+            class XNode;
+
+#define Y_Jive_Syntax_Rule_Decl() virtual XNode * accepts(Lexer &) const
+#define Y_Jive_Syntax_Rule_Impl(CLASS) XNode * CLASS:: accepts(Lexer &lexer) const
+
             //__________________________________________________________________
             //
             //
@@ -59,9 +66,10 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
+                Y_Jive_Syntax_Rule_Decl() = 0;
                 virtual OutputStream & vizSelf(OutputStream &) const = 0; //!< emit graphviz code for this, no link \return output stream
                 virtual OutputStream & vizLink(OutputStream &) const;     //!< emit graphviz code for links         \return output stream
-                
+
 
                 //______________________________________________________________
                 //

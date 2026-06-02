@@ -20,6 +20,10 @@ namespace Yttrium
                 return Endl(fp << ']');
             }
 
+            Y_Jive_Syntax_Rule_Impl(Alternate)
+            {
+
+            }
         }
 
     }

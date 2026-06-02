@@ -75,6 +75,9 @@ namespace Yttrium
                 OutputStream & viz(OutputStream&) const; //!< top-level graphviz code \return output stream
                 void           render() const;           //!< render 
 
+                
+
+
                 //______________________________________________________________
                 //
                 //

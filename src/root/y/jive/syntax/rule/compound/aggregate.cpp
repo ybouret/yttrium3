@@ -20,6 +20,10 @@ namespace Yttrium
 
             }
 
+            Y_Jive_Syntax_Rule_Impl(Aggregate)
+            {
+
+            }
         }
 
     }
