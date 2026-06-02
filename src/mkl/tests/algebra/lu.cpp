@@ -42,7 +42,9 @@ namespace
                 //std::cerr << "v  = " << v << std::endl;
                 a0.mulsub(v,u,b);
                 //std::cerr << "d  = " << v << std::endl;
-                const SType r2 = sadd.mod2(v) / (SType)n;
+                SType den = 0;
+                for (size_t i = n; i > 0; --i) den += 1;
+                const SType r2 = sadd.mod2(v) / den;
                 std::cerr << " r2 = " << r2 << std::endl;
                 std::cerr << " det= " << lu.det(a) << std::endl;
             }

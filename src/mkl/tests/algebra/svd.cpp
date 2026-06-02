@@ -43,6 +43,7 @@ namespace
             //std::cerr << "b=" << b << std::endl;
 
             xadd.ldz();
+            T den = 0;
             for(size_t i=1;i<=n;++i)
             {
                 for(size_t j=1;j<=n;++j)
@@ -50,8 +51,9 @@ namespace
                     const T delta = b[i][j] - a[i][j];
                     xadd << delta*delta;
                 }
+                den += 1;
             }
-            const T r2 = xadd() / (T)(n*n);
+            const T r2 = xadd() / (den * den);
             std::cerr << "\tr2=" << r2 << std::endl;
         }
         std::cerr << std::endl;

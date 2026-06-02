@@ -35,8 +35,12 @@ namespace
             td.mul(v,u);
             //std::cerr << "r=" << r << std::endl;
             //std::cerr << "v=" << v << std::endl;
-            for(size_t i=n;i>0;--i) v[i] -= r[i];
-            const SType r2 = sadd.mod2(v) / (SType)n;
+            SType den = 0;
+            for (size_t i = n; i > 0; --i) {
+                v[i] -= r[i];
+                den += 1;
+            }
+            const SType r2 = sadd.mod2(v) / den;
             std::cerr << "\t\tr2=" << r2 << std::endl;
         }
 
