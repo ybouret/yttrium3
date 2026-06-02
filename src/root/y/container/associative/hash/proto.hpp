@@ -8,6 +8,7 @@
 #include "y/core/htable.hpp"
 #include "y/object.hpp"
 #include "y/type/pulverize.hpp"
+#include "y/type/destroy.hpp"
 #include "y/core/list.hpp"
 #include "y/core/pool.hpp"
 #include "y/container/iter/linked.hpp"

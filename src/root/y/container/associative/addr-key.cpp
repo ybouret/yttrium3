@@ -42,6 +42,11 @@ namespace Yttrium
         memset(data,0,sizeof(data));
     }
 
+    bool operator==(const AddrKey &lhs, const AddrKey &rhs) noexcept
+    {
+        return 0 == memcmp(lhs.data, rhs.data, AddrKey::Length);
+    }
+
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4996 )
 #endif

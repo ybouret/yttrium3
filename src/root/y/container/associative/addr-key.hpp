@@ -29,6 +29,8 @@ namespace Yttrium
         virtual const void * ro()     const noexcept;
         virtual size_t       length() const noexcept;
 
+        friend bool operator==(const AddrKey&, const AddrKey&) noexcept;
+
     private:
         Y_Disable_Assign(AddrKey);
         void fillWith(const void * const addr) noexcept;
