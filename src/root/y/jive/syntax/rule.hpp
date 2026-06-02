@@ -13,13 +13,23 @@ namespace Yttrium
     namespace Jive
     {
         class Lexer;
-
+        class Source;
+        
         namespace Syntax
         {
             class XNode;
 
-#define Y_Jive_Syntax_Rule_Decl() virtual XNode * accepts(Lexer &) const
-#define Y_Jive_Syntax_Rule_Impl(CLASS) XNode * CLASS:: accepts(Lexer &lexer) const
+            enum Outcome
+            {
+                Accepted, //!< accepted with new node
+                Rejected, //!< rejected
+                Weakened, //!< accepted with NO node
+                Finished  //!< no more lexeme
+            };
+
+#define Y_Jive_Syntax_Rule_Decl() virtual Outcome       accepts(XNode * &, Lexer &, Source &) const
+#define Y_Jive_Syntax_Rule_Impl(CLS)      Outcome CLS:: accepts(XNode * &tree, Lexer &lexer, Source &source) const
+
 
             //__________________________________________________________________
             //

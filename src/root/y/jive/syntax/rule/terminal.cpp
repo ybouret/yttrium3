@@ -1,6 +1,8 @@
 
 #include "y/jive/syntax/rule/terminal.hpp"
 #include "y/stream/output.hpp"
+#include "y/jive/syntax/xnode.hpp"
+#include "y/jive/lexer.hpp"
 
 namespace Yttrium
 {
@@ -50,7 +52,17 @@ namespace Yttrium
 
             Y_Jive_Syntax_Rule_Impl(Terminal)
             {
+                Lexeme * const lexeme = lexer.pull(source);
+                if(!lexeme)
+                    return Finished;
 
+                if( *lexeme->name!= *name)
+                {
+                    lexer.push(lexeme);
+                    return Rejected;
+                }
+
+                return Accepted;
             }
 
         }

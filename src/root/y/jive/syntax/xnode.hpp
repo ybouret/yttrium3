@@ -45,9 +45,14 @@ namespace Yttrium
                 // C++
                 //
                 //______________________________________________________________
+            private:
                 explicit XNode(const Rule &)                 noexcept; //!< new internal node
                 explicit XNode(const Rule &, Lexeme * const) noexcept; //!< new terminal node
+            public:
                 virtual ~XNode()                             noexcept; //!< cleanup
+
+                static XNode * Create(const Rule &, Lexeme * const);
+                static XNode * Create(const Rule &);
 
                 //______________________________________________________________
                 //

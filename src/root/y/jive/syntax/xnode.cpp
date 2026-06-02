@@ -98,6 +98,25 @@ namespace Yttrium
                 }
             }
 
+            XNode * XNode:: Create(const Rule &r, Lexeme * const l)
+            {
+                assert(l);
+                try {
+                    return new XNode(r,l);
+                }
+                catch(...)
+                {
+                    delete l; throw;
+                }
+            }
+
+
+            XNode * XNode:: Create(const Rule &r)
+            {
+                return new XNode(r);
+            }
+
+
         }
     }
 }

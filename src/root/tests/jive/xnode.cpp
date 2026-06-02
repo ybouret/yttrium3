@@ -19,14 +19,14 @@ Y_UTEST(jive_xnode)
     Y_SIZEOF(Syntax::XNode);
     Y_SIZEOF(Lexeme);
 
-    const Jive::Spot    spot("demo");
-    Syntax::Terminal    rterm("INT");
-    Jive::Syntax::XNode xterm(rterm,new Jive::Lexeme(spot,"INT") );
-    Y_PRINTV(xterm.rule.name);
+    const Jive::Spot       spot("demo");
+    Syntax::Terminal       rterm("INT");
+    AutoPtr<Syntax::XNode> xterm = Syntax::XNode::Create(rterm,new Jive::Lexeme(spot,"INT") );
+    Y_PRINTV(xterm->rule.name);
 
-    Syntax::Inner       rinnr;
-    Jive::Syntax::XNode xinnr(rinnr);
-    Y_PRINTV(xinnr.rule.name);
+    Syntax::Inner          rinnr;
+    AutoPtr<Syntax::XNode> xinnr = Syntax::XNode::Create(rinnr);
+    Y_PRINTV(xinnr->rule.name);
 
     
 }
