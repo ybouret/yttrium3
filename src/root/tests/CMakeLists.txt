@@ -27,6 +27,7 @@ mkl
 cameo
 info
 random
+field
 )
 
 Y_LinkLibraries(test-root)
@@ -243,3 +244,5 @@ Y_UTEST(cameo:sum3)
 Y_UTEST(info:bwt)
 
 Y_UTEST(random:type_gen)
+
+Y_UTEST(field:layouts)

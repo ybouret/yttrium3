@@ -122,6 +122,8 @@ y/cameo/sum/3
 y/cameo/product
 y/information
 y/information/bwt
+y/field
+y/field/layout
 )
 
 add_subdirectory(tests)
