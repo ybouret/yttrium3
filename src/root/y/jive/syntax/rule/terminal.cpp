@@ -52,25 +52,23 @@ namespace Yttrium
 
             Y_Jive_Syntax_Rule_Impl(Terminal)
             {
-#if 0
-                // pull next lexeme
+                 // pull next lexeme
                 Lexeme * const lexeme = framework.get();
 
                 // check if finished
                 if(!lexeme)
-                    return Outcome::Finished;
+                    return Outcome(Rejected,Healthy,Blocked);
 
                 // check name
                 if( *lexeme->name!= *name)
                 {
                     framework.put(lexeme);
-                    return Outcome::Rejected;
+                    return Outcome(Rejected,Healthy,Running);
                 }
 
                 // grow tree and return accepted
                 framework.grow( XNode::Create(*this,lexeme) );
-                return Outcome::Accepted;
-#endif
+                return Outcome(Accepted,Healthy,Running);
             }
 
         }

@@ -21,16 +21,9 @@ namespace Yttrium
         {
             class XNode;
 
-
-
-
-           
-
-
-
-
-#define Y_Jive_Syntax_Rule_Decl() virtual unsigned       accepts(Framework &) const
-#define Y_Jive_Syntax_Rule_Impl(CLS)      unsigned CLS:: accepts(Framework &framework) const
+            
+#define Y_Jive_Syntax_Rule_Decl() virtual Outcome       accepts(Framework &) const
+#define Y_Jive_Syntax_Rule_Impl(CLS)      Outcome CLS:: accepts(Framework &framework) const
 
 
             //__________________________________________________________________
