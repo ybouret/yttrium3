@@ -98,8 +98,18 @@ namespace Yttrium
                     return add( new Aggregate(ruleName,Grouping) );
                 }
 
+
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+
                 //! validate rules and freeze
                 void validate();
+
+                
 
 
             private:

@@ -41,23 +41,30 @@ namespace Yttrium
                 return "solid";
             }
 
+            const char * Terminal:: vizStyle() const noexcept
+            {
+                return TermStyle(role,load);
+            }
+
             OutputStream & Terminal:: vizSelf(OutputStream &fp) const
             {
                 nodeName(fp) << '[';
                 Label(fp,*name);
-                fp << ",shape=box";
-                fp << ",style=\"" << TermStyle(role,load) << "\"";
+                fp << ",shape=box,style=\"" << vizStyle() << "\"";
                 return Endl(fp<<']');
             }
 
             Y_Jive_Syntax_Rule_Impl(Terminal)
             {
-                 // pull next lexeme
+                Y_Jive_Syntax("[" << name << "]");
+                // pull next lexeme
                 Lexeme * const lexeme = framework.get();
 
                 // check if finished
                 if(!lexeme)
+                {
                     return Outcome(Rejected,Healthy,Blocked);
+                }
 
                 // check name
                 if( *lexeme->name!= *name)

@@ -6,6 +6,7 @@
 
 #include "y/pointer/auto.hpp"
 #include "y/type/replicate.hpp"
+#include "y/jive/syntax/xnode.hpp"
 
 namespace Yttrium
 {
@@ -17,7 +18,6 @@ namespace Yttrium
 
         namespace Syntax
         {
-            class XNode;
 
             //__________________________________________________________________
             //
@@ -55,6 +55,8 @@ namespace Yttrium
                 XNode *         pop()                noexcept; //!< \return xtree.yield(), checked
                 XNode *         set(XNode * const)   noexcept; //!< \return xnode as new xtree
 
+                std::ostream & indent(std::ostream&) const;
+
                 //______________________________________________________________
                 //
                 //
@@ -90,6 +92,7 @@ namespace Yttrium
                 Framework &framework;               //!< persistent host
             };
 
+#define Y_Jive_Syntax(MSG) do { if(Jive::Syntax::Rule::Verbose) { framework.indent(std::cerr) << MSG << std::endl; } } while(false)
 
         }
 

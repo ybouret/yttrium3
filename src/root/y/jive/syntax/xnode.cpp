@@ -1,4 +1,4 @@
-#include "y/jive/syntax/xnode.hpp"
+#include "y/jive/syntax/rule.hpp"
 #include "y/libc/block/zero.h"
 #include "y/type/destruct.hpp"
 

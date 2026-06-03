@@ -74,8 +74,9 @@ namespace Yttrium
                 const Rule & topLevel()       const noexcept; //!< \return topLevel rule (rules.size>0)
                 void         topLevel(const Rule &) noexcept; //!< set toplevel (existing) rule
 
-                OutputStream & viz(OutputStream&) const; //!< top-level graphviz code \return output stream
-                void           render() const;           //!< render 
+                OutputStream & viz(OutputStream&) const;     //!< top-level graphviz code \return output stream
+                void           render() const;               //!< render
+                XNode *        run(Lexer &, Source &) const; 
 
                 
 

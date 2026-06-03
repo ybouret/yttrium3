@@ -4,11 +4,11 @@
 #define Y_Jive_Syntax_XNode_Included 1
 
 #include "y/jive/syntax/xlist.hpp"
-#include "y/jive/syntax/rule.hpp"
 #include "y/pointer/auto.hpp"
 #include "y/object/light.hpp"
 #include "y/core/meta-max.hpp"
 #include "y/calculus/alignment.hpp"
+#include "y/graphviz/vizible.hpp"
 
 namespace Yttrium
 {
@@ -17,7 +17,7 @@ namespace Yttrium
         namespace Syntax
         {
             typedef LightObject XObject; //!< alias
-
+            class Rule;
             //__________________________________________________________________
             //
             //
@@ -26,7 +26,7 @@ namespace Yttrium
             //
             //
             //__________________________________________________________________
-            class XNode : public XObject
+            class XNode : public XObject, public Vizible
             {
             public:
                 //______________________________________________________________
@@ -60,7 +60,7 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
-
+                OutputStream & viz(OutputStream &) const; //!< emit graphviz code
 
                 //______________________________________________________________
                 //

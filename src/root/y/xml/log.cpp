@@ -1,5 +1,6 @@
 
 #include "y/xml/log.hpp"
+#include "y/core/indent.hpp"
 #include <iostream>
 
 namespace Yttrium
@@ -21,8 +22,9 @@ namespace Yttrium
 
         std::ostream & Log:: Indent(std::ostream &out, const size_t n)
         {
-            for(size_t i=n<<1;i>0;--i) out << ' ';
-            return out;
+            return Core::Indent(out,n<<1,' ');
+            //for(size_t i=n<<1;i>0;--i) out << ' ';
+            //return out;
         }
 
         std::ostream & Log:: operator()(void) noexcept

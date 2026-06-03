@@ -2,6 +2,7 @@
 #include "y/jive/syntax/grammar/framework.hpp"
 #include "y/jive/syntax/xnode.hpp"
 #include "y/jive/lexer.hpp"
+#include "y/core/indent.hpp"
 
 namespace Yttrium
 {
@@ -10,6 +11,12 @@ namespace Yttrium
 
         namespace Syntax
         {
+
+            std::ostream & Framework::indent(std::ostream &os) const
+            {
+                return Core::Indent(os,depth<<1,' ');
+            }
+
 
             Framework:: Framework( Lexer &lxr, Source &src ) noexcept :
             xtree(0),

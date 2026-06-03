@@ -7,6 +7,8 @@ namespace Yttrium
     {
         namespace Syntax
         {
+            bool Rule::Verbose = false;
+            
             const char * Rule:: humanReadableKind() const noexcept
             {
                 return HumanReadableKind(kind);

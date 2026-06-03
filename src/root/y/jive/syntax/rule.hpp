@@ -20,7 +20,6 @@ namespace Yttrium
         namespace Syntax
         {
             class XNode;
-
             
 #define Y_Jive_Syntax_Rule_Decl() virtual Outcome       accepts(Framework &) const          //!< declaration   prolog
 #define Y_Jive_Syntax_Rule_Impl(CLS)      Outcome CLS:: accepts(Framework &framework) const //!< implementatin prolog
@@ -37,6 +36,14 @@ namespace Yttrium
             class Rule : public Object, public Vizible
             {
             public:
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                static bool Verbose;
+
                 //______________________________________________________________
                 //
                 //
