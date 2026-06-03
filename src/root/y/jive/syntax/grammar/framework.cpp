@@ -41,6 +41,18 @@ namespace Yttrium
                 XNode::Grow(xtree,xnode);
             }
 
+            void Framework:: join(Framework &sub) noexcept
+            {
+                XNode::Join(xtree,sub.xtree);
+            }
+
+
+            XNode * Framework:: operator->() noexcept
+            {
+                assert( xtree.isValid() );
+                return & *xtree;
+            }
+
             Framework:: Framework(const Replicate_ &, const Framework &parent) noexcept :
             xtree(0),
             lexer(parent.lexer),
@@ -48,6 +60,13 @@ namespace Yttrium
             depth(parent.depth)
             {
 
+            }
+
+            void Framework:: dump() noexcept
+            {
+                assert(xtree.isValid());
+                xtree->returnTo(lexer);
+                xtree.free();
             }
 
         }

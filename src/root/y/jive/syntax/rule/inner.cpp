@@ -23,7 +23,8 @@ namespace Yttrium
 
             Y_Jive_Syntax_Rule_Impl(Inner)
             {
-                
+                (void) framework;
+                return Outcome(Rejected,Healthy,Running);
             }
 
         }

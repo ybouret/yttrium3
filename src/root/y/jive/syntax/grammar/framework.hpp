@@ -22,13 +22,16 @@ namespace Yttrium
             class Framework
             {
             public:
-                Framework(Lexer &,Source &) noexcept;
-                ~Framework() noexcept;
-                Framework(const Replicate_ &, const Framework &) noexcept;
-                
+                Framework(Lexer &,Source &)                      noexcept;
+                ~Framework()                                     noexcept;
+                Framework(const Replicate_ &, const Framework &) noexcept; //!< replicate lexer,source,depth, NO xtree
+
                 Lexical::Unit * get();
                 void            put(Lexical::Unit *) noexcept;
                 void            grow(XNode * const)  noexcept;
+                void            join(Framework &)    noexcept;
+                void            dump()               noexcept;
+                XNode *         operator->()         noexcept;
 
                 AutoPtr<XNode> xtree;
                 Lexer  &       lexer;

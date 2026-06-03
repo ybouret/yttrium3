@@ -75,14 +75,16 @@ namespace Yttrium
                 void returnTo(Lexical::Stack &)          noexcept; //!< return to lexer using its stack
                 const Rule * operator->()          const noexcept; //!< \return rule address
                 const Rule & operator*()           const noexcept; //!< \return rule
+
+
                 //! grow tree with new node
                 /**
                  \param tree NULL or existing (Internal) tree
                  \param node new node
                  */
-                static void Grow(AutoPtr<XNode> tree, XNode * const node) noexcept;
-
-
+                static void Grow(AutoPtr<XNode> &tree, XNode * const node) noexcept;
+                
+                static void Join(AutoPtr<XNode> &tree, AutoPtr<XNode> &sub) noexcept;
 
                 //______________________________________________________________
                 //

@@ -30,7 +30,7 @@ namespace Yttrium
 
             Y_Jive_Syntax_Rule_Impl(Option)
             {
-                const Nesting  nest(framework);
+                const Nesting  nesting(framework);
                 Outcome        outcome = rule.accepts(framework);
                 if(Rejected==outcome.result)
                 {

@@ -94,7 +94,7 @@ namespace Yttrium
             }
 
 
-            void XNode:: Grow(AutoPtr<XNode> tree, XNode * const node) noexcept
+            void XNode:: Grow(AutoPtr<XNode> &tree, XNode * const node) noexcept
             {
                 assert(0!=node);
                 if(tree.isEmpty())
@@ -105,6 +105,26 @@ namespace Yttrium
                 {
                     assert((**tree).isInternal());
                     tree->list().pushTail(node);
+                }
+            }
+
+            void XNode:: Join(AutoPtr<XNode> &tree, AutoPtr<XNode> &sub) noexcept
+            {
+                assert(sub.isValid());
+                if(tree.isEmpty())
+                {
+                    // bad design ?
+                    tree.xch(sub);
+                }
+                else
+                {
+                    assert(tree->rule.isInternal());
+                    XList &target = tree->list();
+                    switch(sub->rule.kind)
+                    {
+                        case IsTerminal: target.pushTail(  sub.yield() ); break;
+                        case IsInternal: target.mergeTail( sub->list() ); break;
+                    }
                 }
             }
 
