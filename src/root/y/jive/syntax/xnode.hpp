@@ -60,7 +60,7 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
-                OutputStream & viz(OutputStream &) const; //!< emit graphviz code
+                OutputStream & viz(OutputStream &) const; //!< emit graphviz code \return output stream
 
                 //______________________________________________________________
                 //

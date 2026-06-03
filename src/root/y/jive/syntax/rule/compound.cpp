@@ -31,6 +31,11 @@ namespace Yttrium
                 return fp;
             }
 
+            Compound & Compound:: operator<<(const Rule &r)
+            {
+                pushTail(r);
+                return *this;
+            }
         }
 
     }

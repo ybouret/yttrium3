@@ -19,7 +19,7 @@ namespace
         explicit MyLexer() : Lexer("MyLexer")
         {
             emit("ID","[:alpha:][:word:]+");
-            //emit("INT","[:digit:]+");
+            emit("INT","[:digit:]+");
             drop("blank","[:blank:]");
             endl("endl","[:endl:]");
             load( TypeToType<Jive::Lexical::ShellComment>(), "COM");
@@ -36,9 +36,11 @@ namespace
     public:
         explicit MyGrammar() : Syntax:: Grammar("MyGrammar")
         {
+            Alternate  & TOP = alt(lang);
             const Rule & ID  = trm("ID");
-            const Rule & IDS = zom(ID);
-            topLevel(IDS);
+            const Rule & II  = ( agg("II") << trm("INT") );
+            const Rule & ITEM = (alt("ITEM") << ID << II);
+            TOP << zom(ITEM);
         }
 
         virtual ~MyGrammar() noexcept

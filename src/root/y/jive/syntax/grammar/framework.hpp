@@ -55,7 +55,7 @@ namespace Yttrium
                 XNode *         pop()                noexcept; //!< \return xtree.yield(), checked
                 XNode *         set(XNode * const)   noexcept; //!< \return xnode as new xtree
                 bool            ok() const noexcept;           //!< \return xtree.isValid()
-                std::ostream & indent(std::ostream&) const;
+                std::ostream & indent(std::ostream&) const;    //!< \return indented stream
 
                 //______________________________________________________________
                 //
@@ -92,6 +92,7 @@ namespace Yttrium
                 Framework &framework;               //!< persistent host
             };
 
+            //! helper to trace
 #define Y_Jive_Syntax(MSG) do { if(Jive::Syntax::Rule::Verbose) { framework.indent(std::cerr) << MSG << std::endl; } } while(false)
 
         }

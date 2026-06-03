@@ -76,7 +76,8 @@ namespace Yttrium
 
                 OutputStream & viz(OutputStream&) const;     //!< top-level graphviz code \return output stream
                 void           render() const;               //!< render
-                XNode *        run(Lexer &, Source &) const; 
+                
+                XNode *        run(Lexer &, Source &) const;
 
                 
 

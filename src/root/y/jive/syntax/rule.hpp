@@ -42,7 +42,7 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
-                static bool Verbose;
+                static bool Verbose; //!< verbosity flag
 
                 //______________________________________________________________
                 //
@@ -80,8 +80,8 @@ namespace Yttrium
                 //______________________________________________________________
                 Y_Jive_Syntax_Rule_Decl() = 0;                            //!< accepts(...)
                 virtual OutputStream & vizLink(OutputStream &) const;     //!< emit graphviz code for links         \return output stream
-                virtual const char *   vizShape()     const noexcept = 0;
-                virtual const char *   vizStyle()     const noexcept = 0;
+                virtual const char *   vizShape()     const noexcept = 0; //!< \return shape for GraphViz
+                virtual const char *   vizStyle()     const noexcept = 0; //!< \return style for GraphViz
 
                 //______________________________________________________________
                 //

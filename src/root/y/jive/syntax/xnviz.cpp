@@ -14,7 +14,6 @@ namespace Yttrium
 
             OutputStream & XNode:: viz(OutputStream &fp) const
             {
-                nodeName(fp);
 
                 if(rule.isTerminal())
                 {
@@ -22,20 +21,27 @@ namespace Yttrium
                     const Token    & token  = lexeme();
                     String           label  = *rule.name;
                     if(token.size>0) label += "='" + token.str() + "'";
-                    fp << '[';
+                    nodeName(fp) << '[';
                     Label(fp,label);
                     rule.vizPpty(fp);
                     Endl(fp<<']');
                 }
                 else
                 {
-                    rule.vizSelf(fp);
+                    nodeName(fp) << '[';
+                    Label(fp,*rule.name);
+                    rule.vizPpty(fp);
+                    Endl(fp<<']');
+
                     const XList &xlist = list();
                     const bool   xshow = xlist.size>1;
                     unsigned     count = 0;
                     for(const XNode *node=xlist.head;node;node=node->next,++count)
                     {
+                        // emit child
                         node->viz(fp);
+
+                        // link to child
                         to(node,fp);
                         if(xshow)
                         {

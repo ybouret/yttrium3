@@ -32,7 +32,7 @@ namespace Yttrium
                 }
 
                 AutoPtr<XNode> tree = framework.pop();
-                Vizible::Render("tree.dot",*tree);
+                Vizible::Render("tree.dot",*tree,true);
                 return 0;
             }
         }
