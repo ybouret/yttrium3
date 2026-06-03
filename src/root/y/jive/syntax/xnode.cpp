@@ -74,6 +74,15 @@ namespace Yttrium
                 new ( Coerce(addr) = Y_BZero(wksp) ) XList();
             }
 
+            const Rule * XNode:: operator->() const noexcept
+            {
+                return &rule;
+            }
+
+            const Rule & XNode:: operator*() const noexcept
+            {
+                return rule;
+            }
 
             void XNode:: returnTo(Lexical::Stack &stack) noexcept
             {
@@ -85,15 +94,16 @@ namespace Yttrium
             }
 
 
-            void XNode:: Grow(XNode * &tree, XNode * const node) noexcept
+            void XNode:: Grow(AutoPtr<XNode> tree, XNode * const node) noexcept
             {
-                if(0==tree)
+                assert(0!=node);
+                if(tree.isEmpty())
                 {
                     tree = node;
                 }
                 else
                 {
-                    assert(tree->rule.kind == IsInternal);
+                    assert((**tree).isInternal());
                     tree->list().pushTail(node);
                 }
             }

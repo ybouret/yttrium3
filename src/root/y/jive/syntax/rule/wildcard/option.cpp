@@ -30,8 +30,8 @@ namespace Yttrium
 
             Y_Jive_Syntax_Rule_Impl(Option)
             {
-#if 0
-                const unsigned outcome = rule.accepts(tree,lexer,source);
+                const Nesting  nest(framework);
+                const unsigned outcome = rule.accepts(framework);
                 if( outcome & Outcome::Rejected )
                 {
                     return (outcome & Outcome::Modifier) | (Outcome::Accepted|Outcome::Weakened);
@@ -41,7 +41,7 @@ namespace Yttrium
                     assert(outcome & Outcome::Accepted);
                     return outcome;
                 }
-#endif
+                
             }
         }
 

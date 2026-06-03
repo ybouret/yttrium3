@@ -26,7 +26,8 @@ namespace Yttrium
 
                 Lexical::Unit * get();
                 void            put(Lexical::Unit *) noexcept;
-                
+                void            grow(XNode * const)  noexcept;
+
                 AutoPtr<XNode> xtree;
                 Lexer  &       lexer;
                 Source &       source;

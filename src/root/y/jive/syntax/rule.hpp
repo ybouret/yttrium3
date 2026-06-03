@@ -97,7 +97,15 @@ namespace Yttrium
 
                 //! \return human readable kind
                 const char *   humanReadableKind() const noexcept;
+                bool           isInternal()        const noexcept;
+                bool           isTerminal()        const noexcept;
 
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
                 const Identifier name; //!< name
                 const Kind       kind; //!< kind
                 const uint32_t   uuid; //!< uuid

@@ -67,7 +67,7 @@ namespace Yttrium
                 }
 
                 // grow tree and return accepted
-                //XNode::Grow(tree, XNode::Create(*this,lexeme) );
+                framework.grow( XNode::Create(*this,lexeme) );
                 return Outcome::Accepted;
             }
 

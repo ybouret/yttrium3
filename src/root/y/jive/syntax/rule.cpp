@@ -21,7 +21,8 @@ namespace Yttrium
                 return fp;
             }
 
-
+            bool Rule:: isInternal() const noexcept { return IsInternal == kind; }
+            bool Rule:: isTerminal() const noexcept { return IsTerminal == kind; }
 
         }
 

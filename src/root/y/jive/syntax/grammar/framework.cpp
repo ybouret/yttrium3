@@ -35,6 +35,13 @@ namespace Yttrium
                 assert(lexeme);
                 lexer.push(lexeme);
             }
+
+            void Framework:: grow(XNode * const xnode) noexcept
+            {
+                XNode::Grow(xtree,xnode);
+            }
+
+
         }
 
         namespace Syntax
