@@ -61,6 +61,7 @@ namespace Yttrium
                 // Methods
                 //
                 //______________________________________________________________
+            protected:
                 //! append \param rule \return added rule
                 template <typename RULE>
                 RULE & add( RULE * const rule)
@@ -69,6 +70,7 @@ namespace Yttrium
                     return *rule;
                 }
 
+            public:
                 const Rule & topLevel()       const noexcept; //!< \return topLevel rule (rules.size>0)
                 void         topLevel(const Rule &) noexcept; //!< set toplevel (existing) rule
 

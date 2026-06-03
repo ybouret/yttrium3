@@ -84,11 +84,18 @@ namespace Yttrium
                     return add( new Alternate(ruleName) );
                 }
 
-                //! create aggregate \param ruleName name \return added aggregate
+                //! create entitled aggregate \param ruleName name \return added aggregate
                 template <typename ID> inline
                 Aggregate & agg(const ID & ruleName)
                 {
-                    return add( new Aggregate(ruleName) );
+                    return add( new Aggregate(ruleName,Entitled) );
+                }
+
+                //! create grouping aggregate \param ruleName name \return added aggregate
+                template <typename ID> inline
+                Aggregate & grp(const ID & ruleName)
+                {
+                    return add( new Aggregate(ruleName,Grouping) );
                 }
 
                 //! validate rules and freeze

@@ -68,7 +68,7 @@ namespace Yttrium
                 const Nesting  nesting(framework);
                 Framework      workspace(Replicate,framework);
                 size_t         accepted = 0;
-                bool           blocked  = false;
+                Outcome        outcome(Accepted,Healthy,Running);
 
                 workspace.xtree = XNode::Create(*this);
 
@@ -81,10 +81,10 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 while(true)
                 {
-                    const Outcome outcome = rule.accepts(workspace);
-                    if(outcome.status==Blocked)  blocked = true;
-                    if(outcome.result==Rejected) break;
-                    if(outcome.sanity==Fragile)  throw Specific::Exception(rule.name->c_str(),"infinite repeat detected!");
+                    const Outcome rout = rule.accepts(workspace);
+                    if(rout.status==Blocked)  outcome.status = Blocked;
+                    if(rout.result==Rejected) break;
+                    if(rout.sanity==Fragile)  throw Specific::Exception(rule.name->c_str(),"infinite repeat detected!");
                     ++accepted;
                 }
 
@@ -95,7 +95,6 @@ namespace Yttrium
                 //
                 //
                 //--------------------------------------------------------------
-                const Status status = blocked ? Blocked : Running;
                 if(accepted<atLeast)
                 {
                     //----------------------------------------------------------
@@ -104,7 +103,8 @@ namespace Yttrium
                     //
                     //----------------------------------------------------------
                     workspace.dump();
-                    return Outcome(Rejected,Healthy,status);
+                    outcome.result = Rejected;
+                    return outcome;
                 }
 
                 if(accepted>0)
@@ -115,7 +115,7 @@ namespace Yttrium
                     //
                     //----------------------------------------------------------
                     framework.join(workspace);
-                    return Outcome(Accepted,Healthy,status);
+                    return outcome;
                 }
                 else
                 {
@@ -125,7 +125,8 @@ namespace Yttrium
                     //
                     //----------------------------------------------------------
                     assert(0==atLeast);
-                    return Outcome(Accepted,Fragile,status);
+                    outcome.sanity = Fragile;
+                    return outcome;
                 }
 
 
