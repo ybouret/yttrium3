@@ -47,14 +47,10 @@ namespace Yttrium
             {
             }
 
-            OutputStream & Repeat:: vizSelf(OutputStream &fp) const
-            {
-                nodeName(fp) << '[';
-                Label(fp,*name);
-                fp << ",shape=hexagon";
-                return Endl(fp<< ']');
-            }
+            const char *  Repeat::  vizShape() const noexcept { return "hexagon";   }
+            const char *  Repeat::  vizStyle() const noexcept { return "solid"; }
 
+            
 
             Y_Jive_Syntax_Rule_Impl(Repeat)
             {

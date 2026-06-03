@@ -46,13 +46,12 @@ namespace Yttrium
                 return TermStyle(role,load);
             }
 
-            OutputStream & Terminal:: vizSelf(OutputStream &fp) const
+            const char * Terminal:: vizShape() const noexcept
             {
-                nodeName(fp) << '[';
-                Label(fp,*name);
-                fp << ",shape=box,style=\"" << vizStyle() << "\"";
-                return Endl(fp<<']');
+                return "box";
             }
+
+            
 
             Y_Jive_Syntax_Rule_Impl(Terminal)
             {

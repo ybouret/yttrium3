@@ -12,13 +12,17 @@ namespace Yttrium
             {
             }
 
-            OutputStream & Alternate:: vizSelf(OutputStream &fp) const
+            const char * Alternate:: vizShape() const noexcept
             {
-                nodeName(fp) << '[';
-                Label(fp,*name);
-                fp << ",shape=egg";
-                return Endl(fp << ']');
+                return "egg";
             }
+
+            const char * Alternate:: vizStyle() const noexcept
+            {
+                return "solid";
+            }
+
+            
 
             Y_Jive_Syntax_Rule_Impl(Alternate)
             {

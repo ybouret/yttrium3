@@ -89,6 +89,11 @@ namespace Yttrium
                 return node;
             }
 
+            bool Framework:: ok() const noexcept
+            {
+                return xtree.isValid();
+            }
+
         }
 
         namespace Syntax

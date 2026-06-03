@@ -19,15 +19,10 @@ namespace Yttrium
             {
             }
 
-            OutputStream & Option:: vizSelf(OutputStream &fp) const
-            {
-                nodeName(fp) << '[';
-                Label(fp,*name);
-                fp << ",shape=diamond";
-                return Endl(fp<< ']');
-            }
+            const char *   Option:: vizShape()     const noexcept { return "diamond"; }
+            const char *   Option:: vizStyle()     const noexcept { return "solid";   }
 
-
+            
             Y_Jive_Syntax_Rule_Impl(Option)
             {
                 const Nesting  nesting(framework);

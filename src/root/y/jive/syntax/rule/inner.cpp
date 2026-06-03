@@ -16,10 +16,8 @@ namespace Yttrium
             {
             }
 
-            OutputStream & Inner:: vizSelf(OutputStream &fp) const
-            {
-                return fp;
-            }
+            const char *  Inner::  vizShape() const noexcept { return "box";   }
+            const char *  Inner::  vizStyle() const noexcept { return "solid"; }
 
             Y_Jive_Syntax_Rule_Impl(Inner)
             {

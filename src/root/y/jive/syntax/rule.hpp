@@ -79,9 +79,9 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 Y_Jive_Syntax_Rule_Decl() = 0;                            //!< accepts(...)
-                virtual OutputStream & vizSelf(OutputStream &) const = 0; //!< emit graphviz code for this, no link \return output stream
                 virtual OutputStream & vizLink(OutputStream &) const;     //!< emit graphviz code for links         \return output stream
-
+                virtual const char *   vizShape()     const noexcept = 0;
+                virtual const char *   vizStyle()     const noexcept = 0;
 
                 //______________________________________________________________
                 //
@@ -89,6 +89,8 @@ namespace Yttrium
                 // Methods
                 //
                 //______________________________________________________________
+                OutputStream & vizSelf(OutputStream &)      const; //!< emit graphviz code for this, no link \return output stream
+                OutputStream & vizPpty(OutputStream &)      const; //!< emit shape and stype \return output stream
                 const char *   humanReadableKind() const noexcept; //!< \return human readable kind
                 bool           isInternal()        const noexcept; //!< \return true iff internal
                 bool           isTerminal()        const noexcept; //!< \return true iff terminal

@@ -19,17 +19,17 @@ namespace Yttrium
                 if(rule.isTerminal())
                 {
                     assert(Terminal::UUID==rule.uuid);
-                    const Terminal & term  = dynamic_cast<const Terminal&>(rule);
-                    const Token    & token = lexeme();
-                    String           label = *rule.name;
+                    const Token    & token  = lexeme();
+                    String           label  = *rule.name;
                     if(token.size>0) label += "='" + token.str() + "'";
                     fp << '[';
                     Label(fp,label);
-                    fp << ",shape=box,style=\"" << term.vizStyle() << "\"";
+                    rule.vizPpty(fp);
                     Endl(fp<<']');
                 }
                 else
                 {
+                    rule.vizSelf(fp);
                     const XList &xlist = list();
                     const bool   xshow = xlist.size>1;
                     unsigned     count = 0;

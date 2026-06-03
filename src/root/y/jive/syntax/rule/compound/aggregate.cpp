@@ -12,14 +12,17 @@ namespace Yttrium
             {
             }
 
-            OutputStream & Aggregate:: vizSelf(OutputStream &fp) const
+            const char * Aggregate:: vizShape() const noexcept
             {
-                nodeName(fp) << '[';
-                Label(fp,*name);
-                fp << ",shape=house";
-                return Endl(fp << ']');
-
+                return "house";
             }
+
+            const char * Aggregate:: vizStyle() const noexcept
+            {
+                return "solid";
+            }
+
+
 
             Y_Jive_Syntax_Rule_Impl(Aggregate)
             {

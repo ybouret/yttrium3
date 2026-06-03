@@ -54,7 +54,7 @@ namespace Yttrium
                 XNode *         operator->()         noexcept; //!< \return checked xtree content
                 XNode *         pop()                noexcept; //!< \return xtree.yield(), checked
                 XNode *         set(XNode * const)   noexcept; //!< \return xnode as new xtree
-
+                bool            ok() const noexcept;           //!< \return xtree.isValid()
                 std::ostream & indent(std::ostream&) const;
 
                 //______________________________________________________________

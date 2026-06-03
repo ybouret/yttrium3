@@ -47,7 +47,8 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
-                virtual OutputStream & vizSelf(OutputStream &) const;
+                virtual const char *   vizShape()     const noexcept;
+                virtual const char *   vizStyle()     const noexcept;
                 Y_Jive_Syntax_Rule_Decl(); //!< accepts
 
             private:
