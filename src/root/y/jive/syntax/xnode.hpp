@@ -51,8 +51,8 @@ namespace Yttrium
             public:
                 virtual ~XNode()                             noexcept; //!< cleanup
 
-                static XNode * Create(const Rule &, Lexeme * const);
-                static XNode * Create(const Rule &);
+                static XNode * Create(const Rule &, Lexeme * const); //!< \return new terminal node, lexeme was protected
+                static XNode * Create(const Rule &);                 //!< \return new internal node
 
                 //______________________________________________________________
                 //
@@ -79,11 +79,16 @@ namespace Yttrium
 
                 //! grow tree with new node
                 /**
-                 \param tree NULL or existing (Internal) tree
+                 \param tree NULL or existing (Internal) node
                  \param node new node
                  */
                 static void Grow(AutoPtr<XNode> &tree, XNode * const node) noexcept;
-                
+
+                //! join tree or tree content
+                /**
+                 \param tree NULL or existing (Internal) tree
+                 \param sub  existing node, growing or merging to tree accordingly
+                 */
                 static void Join(AutoPtr<XNode> &tree, AutoPtr<XNode> &sub) noexcept;
 
                 //______________________________________________________________

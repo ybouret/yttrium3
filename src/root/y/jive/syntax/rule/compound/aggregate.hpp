@@ -14,6 +14,12 @@ namespace Yttrium
         namespace Syntax
         {
 
+            //__________________________________________________________________
+            //
+            //
+            //! Aggregate duty
+            //
+            //__________________________________________________________________
             enum Duty
             {
                 Entitled, //!< never yields
@@ -47,7 +53,7 @@ namespace Yttrium
                 //
                 //______________________________________________________________
 
-                //! setup emtpy \param ruleName name
+                //! setup emtpy \param ruleName name \param ruleDuty duty
                 template <typename ID> inline
                 explicit Aggregate(const ID &ruleName, const Duty ruleDuty) :
                 Compound(ruleName,UUID),
@@ -66,7 +72,7 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 virtual OutputStream & vizSelf(OutputStream &) const;
-                Y_Jive_Syntax_Rule_Decl();
+                Y_Jive_Syntax_Rule_Decl(); //!< accepts
 
                 //______________________________________________________________
                 //
@@ -74,7 +80,7 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                const Duty duty;
+                const Duty duty; //!< duty
 
             private:
                 Y_Disable_Copy_And_Assign(Aggregate); //!< discarded

@@ -13,24 +13,47 @@ namespace Yttrium
     {
         template <typename COORD> struct WidthFor;
 
+        //! 1D
         template <> struct WidthFor<unit_t>
         {
-            typedef size_t Type;
+            typedef size_t Type; //!< alias
         };
 
+        //! [2|3|4]D
         template <template <typename> class VECT> struct WidthFor< VECT<unit_t> >
         {
-            typedef VECT<size_t> Type;
+            typedef VECT<size_t> Type; //!< alias
         };
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Core Layout
+        //
+        //
+        //______________________________________________________________________
         template <typename COORD>
         class CoreLayout : public Sketch
         {
         public:
-            static const unsigned Dimensions = sizeof(COORD)/sizeof(unit_t);
-            typedef typename WidthFor<COORD>::Type Width;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const unsigned Dimensions = sizeof(COORD)/sizeof(unit_t); //!< alias
+            typedef typename WidthFor<COORD>::Type Width; //!< alias
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
 
+            //! setup \param lo lower coordinates \param up upper coordinates
             inline explicit CoreLayout(const COORD &lo, const COORD &up) noexcept :
             lower(lo),
             upper(up),
@@ -42,18 +65,27 @@ namespace Yttrium
             {
             }
 
+            //! cleanup
             inline virtual ~CoreLayout() noexcept {}
 
+            //! display metrics
             inline friend std::ostream & operator<<(std::ostream &os, const CoreLayout &L) {
                 return os << "|" << L.lower << "->" << L.upper << "#" << L.width << "|=" << L.items;
             }
 
-            const COORD  lower;
-            const COORD  upper;
-            const Width  width;
-            const size_t items;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const COORD  lower; //!< (fixed) lower coordinates
+            const COORD  upper; //!< (fixed) upper coordinates
+            const Width  width; //!< width per dimension
+            const size_t items; //!< total items
+
         private:
-            Y_Disable_Assign(CoreLayout);
+            Y_Disable_Assign(CoreLayout); //!< discarde
         };
     }
 }

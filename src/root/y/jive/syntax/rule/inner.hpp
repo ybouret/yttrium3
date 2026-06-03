@@ -29,7 +29,7 @@ namespace Yttrium
                 virtual ~Inner() noexcept;                              //!< cleanup
 
                 virtual OutputStream & vizSelf(OutputStream &) const;
-                Y_Jive_Syntax_Rule_Decl();
+                Y_Jive_Syntax_Rule_Decl(); //!< accepts
 
             private:
                 Y_Disable_Copy_And_Assign(Inner);                       //!< discarded

@@ -11,23 +11,48 @@ namespace Yttrium
 {
     namespace Field
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Layout (shared core layout)
+        //
+        //
+        //______________________________________________________________________
         template <typename COORD>
         class Layout : public ArcPtr< CoreLayout<COORD> >
         {
         public:
-            typedef CoreLayout<COORD>           LayoutType;
-            typedef ArcPtr< CoreLayout<COORD> > PointerType;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef CoreLayout<COORD>           LayoutType;  //!< alias
+            typedef ArcPtr< CoreLayout<COORD> > PointerType; //!< alias
 
-            inline   Layout(const COORD lo, const COORD up) :
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup \param lo lower coordinates \param up upper coordinates
+            inline Layout(const COORD lo, const COORD up) :
             PointerType( new LayoutType(lo,up) )
             {
             }
 
+            //! duplicate \param L antoher layout
             inline Layout(const Layout &L) noexcept : PointerType(L) {}
 
+            //! cleanup
             inline virtual ~Layout() noexcept {}
+
         private:
-            Y_Disable_Assign(Layout);
+            Y_Disable_Assign(Layout); //!< discarded
         };
     }
 

@@ -10,13 +10,49 @@ namespace Yttrium
 
     namespace Field
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! base class for layouts
+        //
+        //
+        //______________________________________________________________________
         class Sketch : public CountedObject
         {
         public:
-            static const void * const Zeroed;
-            explicit Sketch() noexcept;
-            virtual ~Sketch() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Definition
+            //
+            //__________________________________________________________________
+            static const void * const Zeroed; //!< holds zeroed V4D<size_t>
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Sketch() noexcept; //!< setup
+            virtual ~Sketch() noexcept; //!< cleanup
+
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! setup metrics
+            /**
+             \param width computed width per dimension
+             \param lower (fixed) lower coordinates
+             \param upper (fixed) upper coordinates
+             \param dims  dimensions
+             \return number of items
+             */
             static size_t Setup(size_t *       width,
                                 unit_t * const lower,
                                 unit_t * const upper,
@@ -24,7 +60,7 @@ namespace Yttrium
 
 
         private:
-            Y_Disable_Copy_And_Assign(Sketch);
+            Y_Disable_Copy_And_Assign(Sketch); //!< discarded
         };
     }
 

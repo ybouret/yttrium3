@@ -19,41 +19,75 @@ namespace Yttrium
         {
             class XNode;
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Manage lexer, source and building tree for rules
+            //
+            //
+            //__________________________________________________________________
             class Framework
             {
             public:
-                Framework(Lexer &,Source &)                      noexcept;
-                ~Framework()                                     noexcept;
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                Framework(Lexer &,Source &)                      noexcept; //!< setup with empty tree, depth=1
+                ~Framework()                                     noexcept; //!< cleanup
                 Framework(const Replicate_ &, const Framework &) noexcept; //!< replicate lexer,source,depth, NO xtree
 
-                Lexical::Unit * get();
-                void            put(Lexical::Unit *) noexcept;
-                void            grow(XNode * const)  noexcept;
-                void            join(Framework &)    noexcept;
-                void            dump()               noexcept;
-                XNode *         operator->()         noexcept;
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+                Lexical::Unit * get();                         //!< use lexer and source \return next lexeme
+                void            put(Lexical::Unit *) noexcept; //!< return unused lexeme
+                void            grow(XNode * const)  noexcept; //!< XNode::Grow(xtree,xnode)
+                void            join(Framework &)    noexcept; //!< XNode::Join(xtree,sub.xtree)
+                void            dump()               noexcept; //!< return tree to lexer
+                XNode *         operator->()         noexcept; //!< \return checked xtree content
                 XNode *         pop()                noexcept; //!< \return xtree.yield(), checked
-                XNode *         set(XNode * const)   noexcept;
-                
+                XNode *         set(XNode * const)   noexcept; //!< \return xnode as new xtree
+
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
             protected:
-                AutoPtr<XNode> xtree;
-                Lexer  &       lexer;
-                Source &       source;
+                AutoPtr<XNode> xtree;  //!< current tree
+                Lexer  &       lexer;  //!< lexer
+                Source &       source; //!< source for lexer
             public:
-                const unsigned depth;
+                const unsigned depth; //!< current depth
 
             private:
-                Y_Disable_Copy_And_Assign(Framework);
+                Y_Disable_Copy_And_Assign(Framework); //!< discarded
             };
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Automatic nesting helper
+            //
+            //
+            //__________________________________________________________________
             class Nesting
             {
             public:
-                Nesting(Framework &) noexcept;
-                ~Nesting() noexcept;
+                Nesting(Framework &) noexcept;      //!< increase framework depth
+                ~Nesting()           noexcept;      //!< decrease framework depth
             private:
-                Y_Disable_Copy_And_Assign(Nesting);
-                Framework &framework;
+                Y_Disable_Copy_And_Assign(Nesting); //!< discarded
+                Framework &framework;               //!< persistent host
             };
 
 

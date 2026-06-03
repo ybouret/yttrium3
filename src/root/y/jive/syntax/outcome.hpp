@@ -13,42 +13,78 @@ namespace Yttrium
 
         namespace Syntax
         {
+
+            //__________________________________________________________________
+            //
+            //
+            //! Outcome result
+            //
+            //__________________________________________________________________
             enum Result
             {
-                Accepted,
-                Rejected
+                Accepted, //!< accepted rule
+                Rejected  //!< rejected rule
             };
-            
+
+            //__________________________________________________________________
+            //
+            //
+            //! Outcome sanity
+            //
+            //__________________________________________________________________
             enum Sanity
             {
-                Fragile,
-                Healthy
+                Fragile, //!< accepted WITHOUT new node
+                Healthy  //!< accepted WITH    new node
             };
-            
+
+            //__________________________________________________________________
+            //
+            //
+            //! Outcome sanity
+            //
+            //__________________________________________________________________
             enum Status
             {
-                Running,
-                Blocked
+                Running, //!< no end of stream detected
+                Blocked  //!< end of stream was detected
             };
             
             
-            
-            
-            
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Outcome for accepts(...) in rules
+            //
+            //
+            //__________________________________________________________________
             class Outcome
             {
             public:
-                Outcome(const Result, const Sanity, const Status) noexcept;
-                Outcome(const Outcome &) noexcept;
-                ~Outcome() noexcept;
-                
-                Result  result;
-                Sanity  sanity;
-                Status  status;
-                
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                Outcome(const Result, const Sanity, const Status) noexcept; //!< setup
+                Outcome(const Outcome &)                          noexcept; //!< duplicate
+                ~Outcome()                                        noexcept; //!< cleanup
+
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                Result  result; //!< mutable result
+                Sanity  sanity; //!< mutable sanity
+                Status  status; //!< mutable status
+
             private:
-                Y_Disable_Assign(Outcome);
-                
+                Y_Disable_Assign(Outcome); //!< discarded
+
             };
             
         }

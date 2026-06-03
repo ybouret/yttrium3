@@ -111,6 +111,7 @@ namespace Yttrium
             void XNode:: Join(AutoPtr<XNode> &tree, AutoPtr<XNode> &sub) noexcept
             {
                 assert(sub.isValid());
+                
                 if(tree.isEmpty())
                 {
                     // bad design ?
