@@ -41,6 +41,14 @@ namespace Yttrium
                 XNode::Grow(xtree,xnode);
             }
 
+            Framework:: Framework(const Replicate_ &, const Framework &parent) noexcept :
+            xtree(0),
+            lexer(parent.lexer),
+            source(parent.source),
+            depth(parent.depth)
+            {
+
+            }
 
         }
 

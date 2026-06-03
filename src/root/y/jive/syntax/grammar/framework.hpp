@@ -5,6 +5,7 @@
 #define Y_Jive_Syntax_Framework_Included 1
 
 #include "y/pointer/auto.hpp"
+#include "y/type/replicate.hpp"
 
 namespace Yttrium
 {
@@ -23,7 +24,8 @@ namespace Yttrium
             public:
                 Framework(Lexer &,Source &) noexcept;
                 ~Framework() noexcept;
-
+                Framework(const Replicate_ &, const Framework &) noexcept;
+                
                 Lexical::Unit * get();
                 void            put(Lexical::Unit *) noexcept;
                 void            grow(XNode * const)  noexcept;
