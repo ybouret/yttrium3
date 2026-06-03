@@ -67,10 +67,8 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 const Nesting  nesting(framework);
                 Framework      workspace(Replicate,framework);
-                size_t         accepted = 0;
                 Outcome        outcome(Accepted,Healthy,Running);
-
-                workspace.xtree = XNode::Create(*this);
+                XList &        xlist = workspace.set( XNode::Create(*this) )->list();
 
                 //--------------------------------------------------------------
                 //
@@ -85,7 +83,6 @@ namespace Yttrium
                     if(rout.status==Blocked)  outcome.status = Blocked;
                     if(rout.result==Rejected) break;
                     if(rout.sanity==Fragile)  throw Specific::Exception(rule.name->c_str(),"infinite repeat detected!");
-                    ++accepted;
                 }
 
                 //--------------------------------------------------------------
@@ -95,7 +92,7 @@ namespace Yttrium
                 //
                 //
                 //--------------------------------------------------------------
-                if(accepted<atLeast)
+                if(xlist.size<atLeast)
                 {
                     //----------------------------------------------------------
                     //
@@ -107,7 +104,7 @@ namespace Yttrium
                     return outcome;
                 }
 
-                if(accepted>0)
+                if(xlist.size>0)
                 {
                     //----------------------------------------------------------
                     //

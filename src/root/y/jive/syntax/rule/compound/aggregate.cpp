@@ -32,9 +32,8 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 const Nesting nesting(framework);
                 Framework     workspace(Replicate,framework);
-                workspace.xtree = XNode::Create(*this);
-                XList &   xlist = workspace.xtree->list();
-                Outcome   outcome(Accepted,Healthy,Running);
+                XList &       xlist = workspace.set( XNode::Create(*this) )->list();
+                Outcome       outcome(Accepted,Healthy,Running);
 
                 //--------------------------------------------------------------
                 //
@@ -73,11 +72,11 @@ namespace Yttrium
                     case Accepted:
                         switch(duty)
                         {
-                            case Entitled: framework.grow( workspace.xtree.yield() ); break;
-                            case Grouping: framework.join( workspace ); break;
+                            case Entitled: framework.grow( workspace.pop() ); break;
+                            case Grouping: framework.join( workspace );       break;
                             case Yielding:
                                 if(1==xlist.size)
-                                    framework.grow( workspace.xtree.yield() );
+                                    framework.grow( workspace.pop() );
                                 else
                                     framework.join( workspace );
                                 break;

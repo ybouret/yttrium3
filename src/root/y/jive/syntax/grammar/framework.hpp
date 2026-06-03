@@ -32,10 +32,14 @@ namespace Yttrium
                 void            join(Framework &)    noexcept;
                 void            dump()               noexcept;
                 XNode *         operator->()         noexcept;
-
+                XNode *         pop()                noexcept; //!< \return xtree.yield(), checked
+                XNode *         set(XNode * const)   noexcept;
+                
+            protected:
                 AutoPtr<XNode> xtree;
                 Lexer  &       lexer;
                 Source &       source;
+            public:
                 const unsigned depth;
 
             private:

@@ -69,6 +69,19 @@ namespace Yttrium
                 xtree.free();
             }
 
+            XNode * Framework::pop() noexcept
+            {
+                assert(xtree.isValid());
+                return xtree.yield();
+            }
+
+            XNode * Framework:: set(XNode * const node)   noexcept
+            {
+                assert(xtree.isEmpty());
+                xtree = node;
+                return node;
+            }
+
         }
 
         namespace Syntax
