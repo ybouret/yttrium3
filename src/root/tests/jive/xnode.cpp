@@ -2,16 +2,14 @@
 #include "y/jive/syntax/xnode.hpp"
 #include "y/jive/syntax/rule/terminal.hpp"
 #include "y/jive/syntax/rule/inner.hpp"
+#include "y/format/hexadecimal.hpp"
 
 #include "y/utest/run.hpp"
 
 using namespace Yttrium;
 using namespace Jive;
 
-namespace
-{
-
-}
+#define PRINTH(FIELD) do { const unsigned f = (FIELD); std::cerr << #FIELD << " = " << Hexadecimal(f) << std::endl; } while(false)
 
 Y_UTEST(jive_xnode)
 {
@@ -28,7 +26,14 @@ Y_UTEST(jive_xnode)
     AutoPtr<Syntax::XNode> xinnr = Syntax::XNode::Create(rinnr);
     Y_PRINTV(xinnr->rule.name);
 
-    
+    PRINTH(Syntax::Outcome::Accepted);
+    PRINTH(Syntax::Outcome::Rejected);
+    PRINTH(Syntax::Outcome::Weakened);
+    PRINTH(Syntax::Outcome::Finished);
+    PRINTH(Syntax::Outcome::Modifier);
+    PRINTH(Syntax::Outcome::Answered);
+
+
 }
 Y_UDONE()
 

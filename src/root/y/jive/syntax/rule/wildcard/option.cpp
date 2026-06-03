@@ -30,7 +30,18 @@ namespace Yttrium
 
             Y_Jive_Syntax_Rule_Impl(Option)
             {
-
+#if 0
+                const unsigned outcome = rule.accepts(tree,lexer,source);
+                if( outcome & Outcome::Rejected )
+                {
+                    return (outcome & Outcome::Modifier) | (Outcome::Accepted|Outcome::Weakened);
+                }
+                else
+                {
+                    assert(outcome & Outcome::Accepted);
+                    return outcome;
+                }
+#endif
             }
         }
 
