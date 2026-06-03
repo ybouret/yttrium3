@@ -1,0 +1,26 @@
+
+//! \file
+
+#ifndef Y_System_Program_Included
+#define Y_System_Program_Included 1
+
+#include "y/exception.hpp"
+#include <iostream>
+#include <iomanip>
+
+//! prolog
+#define Y_PROGRAM() \
+/**/    int main(int argc, const char * argv[]) {\
+/**/        (void)argc; const char * const program = argv[0];\
+/**/        try
+
+//! epilog
+#define Y_EXECUTE() \
+/**/        catch(const Yttrium::Exception &excp) { excp.display(std::cerr);             return 1; } \
+/**/        catch(const std::exception &excp) { std::cerr << excp.what() << std::endl;   return 2; } \
+/**/        catch(...) { std::cerr << "unhandled exception in " << program << std::endl; return 3; } \
+/**/        return 0; \
+/**/    }
+
+#endif // !Y_System_Program_Included
+

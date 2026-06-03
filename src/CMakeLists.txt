@@ -33,5 +33,10 @@ if( NOT "" STREQUAL "${Y_UnitTests}")
     DEPENDS ${Y_UnitTests})
 endif()
 
+#add embedded foreign libraries
 add_subdirectory(y)
+
+#add CLI tools
+add_subdirectory(cli)
+
 
