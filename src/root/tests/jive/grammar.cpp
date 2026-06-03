@@ -39,8 +39,7 @@ namespace
             Alternate  & TOP = alt(lang);
             const Rule & ID  = trm("ID");
             const Rule & II  = ( agg("II") << trm("INT") );
-            const Rule & ITEM = (alt("ITEM") << ID << II);
-            TOP << zom(ITEM);
+            TOP << zom( pick(ID,II) );
         }
 
         virtual ~MyGrammar() noexcept

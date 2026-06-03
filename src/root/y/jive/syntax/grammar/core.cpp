@@ -60,6 +60,26 @@ namespace Yttrium
                 Vizible::Render(dotFile,*this);
             }
 
+            String * CoreGrammar:: MakeName(const Rule *arr[], const size_t num, const char sep)
+            {
+                assert(arr);
+                assert(num>1);
+                AutoPtr<String> pS = new String();
+                String         &s  = *pS;
+                s << '(';
+                assert(arr[0]);
+                s += *(arr[0]->name);
+                for(size_t i=1;i<num;++i) {
+                    s += sep;
+                    s += *(arr[i]->name);
+                }
+                s << ')';
+                return pS.yield();
+            }
+
+          
+
+
         }
 
     }

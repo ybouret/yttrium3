@@ -84,6 +84,9 @@ namespace Yttrium
                     return add( new Alternate(ruleName) );
                 }
 
+              
+
+
                 //! create entitled aggregate \param ruleName name \return added aggregate
                 template <typename ID> inline
                 Aggregate & agg(const ID & ruleName)
@@ -98,6 +101,10 @@ namespace Yttrium
                     return add( new Aggregate(ruleName,Grouping) );
                 }
 
+                const Rule & pick(const Rule &, const Rule &);
+                const Rule & pick(const Rule &, const Rule &, const Rule &);
+                const Rule & cat(const Rule &, const Rule &);
+                const Rule & cat(const Rule &, const Rule &, const Rule &);
 
                 //______________________________________________________________
                 //
