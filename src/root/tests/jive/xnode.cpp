@@ -26,13 +26,7 @@ Y_UTEST(jive_xnode)
     AutoPtr<Syntax::XNode> xinnr = Syntax::XNode::Create(rinnr);
     Y_PRINTV(xinnr->rule.name);
 
-    PRINTH(Syntax::Outcome::Accepted);
-    PRINTH(Syntax::Outcome::Rejected);
-    PRINTH(Syntax::Outcome::Weakened);
-    PRINTH(Syntax::Outcome::Finished);
-    PRINTH(Syntax::Outcome::Modifier);
-    PRINTH(Syntax::Outcome::Answered);
-
+   
 
 }
 Y_UDONE()

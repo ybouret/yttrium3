@@ -52,6 +52,7 @@ namespace Yttrium
 
             Y_Jive_Syntax_Rule_Impl(Terminal)
             {
+#if 0
                 // pull next lexeme
                 Lexeme * const lexeme = framework.get();
 
@@ -69,6 +70,7 @@ namespace Yttrium
                 // grow tree and return accepted
                 framework.grow( XNode::Create(*this,lexeme) );
                 return Outcome::Accepted;
+#endif
             }
 
         }

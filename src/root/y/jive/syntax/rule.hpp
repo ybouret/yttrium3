@@ -8,6 +8,7 @@
 #include "y/stream/identifier.hpp"
 #include "y/graphviz/vizible.hpp"
 #include "y/jive/syntax/grammar/framework.hpp"
+#include "y/jive/syntax/outcome.hpp"
 
 namespace Yttrium
 {
@@ -20,19 +21,13 @@ namespace Yttrium
         {
             class XNode;
 
-            struct Outcome
-            {
 
-                static const unsigned Accepted = 0x01;
-                static const unsigned Rejected = 0x02;
-                static const unsigned Weakened = 0x10;
-                static const unsigned Finished = 0x80;
-                
-                static const unsigned Answered = Accepted|Rejected;
-                static const unsigned Modifier = ~Answered;
-            };
 
-          
+
+           
+
+
+
 
 #define Y_Jive_Syntax_Rule_Decl() virtual unsigned       accepts(Framework &) const
 #define Y_Jive_Syntax_Rule_Impl(CLS)      unsigned CLS:: accepts(Framework &framework) const
