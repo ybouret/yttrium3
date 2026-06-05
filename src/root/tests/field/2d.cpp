@@ -43,8 +43,8 @@ Y_UTEST(field_2d)
 
     Core::Rand ran;
     const Field::Layout2D L( Field::Coord2D(-1,-2), Field::Coord2D(3,4) );
-    Field::In2D<int>      F2i("F2i",L); testField(F2i,ran);
-    Field::In2D<String>   F2s("F2s",L); testField(F2s,ran);
+    {Field::In2D<int>      F2i("F2i",L); testField(F2i,ran);}
+    {Field::In2D<String>   F2s("F2s",L); testField(F2s,ran);}
 
 }
 Y_UDONE()

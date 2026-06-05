@@ -7,6 +7,7 @@
 #include "y/field/layout/2d.hpp"
 #include "y/field/1d.hpp"
 #include "y/calculus/alignment.hpp"
+#include "y/memory/embed.hpp"
 
 namespace Yttrium
 {
@@ -130,17 +131,13 @@ namespace Yttrium
                 assert(!data);
                 assert(!entry);
                 assert(!bytes);
-                const size_t nrow       = (**this).width.y;
-                const size_t rowsOffset = 0;
-                const size_t rowsLength = nrow * sizeof(Row);
-                const size_t dataOffset = Alignment::SystemMemory::Ceil(rowsOffset+rowsLength);
-                const size_t dataLength = (**this).items * sizeof(T);
-                bytes = dataOffset + dataLength;
-                entry = AcquireMemory(bytes);
                 {
-                    char * p = static_cast<char *>(entry);
-                    rows     = Hide::Cast<Row>(p+rowsOffset);
-                    data     = Hide::Cast<MutableType>(p+dataOffset);
+                    Memory::Embed em[] = {
+                        Memory::Embed(rows,(**this).width.y),
+                        Memory::Embed(data,(**this).items)
+                    };
+                    entry = AcquireMemory( bytes = Y_Memory_Embed_Format(em) );
+                    Y_Memory_Embed_Assign(entry,em);
                 }
                 build();
             }

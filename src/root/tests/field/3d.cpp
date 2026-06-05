@@ -43,8 +43,8 @@ Y_UTEST(field_3d)
 
     Core::Rand ran;
     const Field::Layout3D L( Field::Coord3D(-1,-2,-3), Field::Coord3D(4,5,6) );
-    Field::In3D<int>      F3i("F3i",L); testField(F3i,ran);
-    Field::In3D<String>   F3s("F3s",L); testField(F3s,ran);
+    {Field::In3D<int>      F3i("F3i",L); testField(F3i,ran);}
+    {Field::In3D<String>   F3s("F3s",L); testField(F3s,ran);}
 
 }
 Y_UDONE()

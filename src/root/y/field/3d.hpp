@@ -36,6 +36,14 @@ namespace Yttrium
             typedef In1D<T> Row;    //!< alias
             typedef In2D<T> Slice;  //!< alias
 
+
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
             //! setup with own memory
             /**
              \param id     field name
@@ -55,13 +63,21 @@ namespace Yttrium
                 allocate();
             }
 
-
+            //! cleanup
             inline virtual ~In3D() noexcept
             {
                 slices += (**this).lower.z;
                 release( (**this).width.z );
             }
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! \param z coordinate \return z-th slice
             inline Slice & operator[](const unit_t z) noexcept
             {
                 assert(z>=(**this).lower.z);
@@ -69,6 +85,7 @@ namespace Yttrium
                 return slices[z];
             }
 
+            //! \param z coordinate \return z-th const slice
             inline const Slice & operator[](const unit_t z) const noexcept
             {
                 assert(z>=(**this).lower.z);
@@ -78,6 +95,8 @@ namespace Yttrium
 
 
         private:
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             Y_Disable_Copy_And_Assign(In3D);
             void *        entry;
             size_t        bytes;
@@ -93,24 +112,17 @@ namespace Yttrium
                 assert(!slices);
                 assert(!data);
 
-                const size_t nslices = (**this).width.z;
-                const size_t nrows   = (**this).width.y * nslices;
-
-                const size_t sOffset = 0;
-                const size_t sLength = nslices*sizeof(Slice);
-                const size_t rOffset = Alignment::SystemMemory::Ceil(sOffset+sLength);
-                const size_t rLength = nrows * sizeof(Row);
-                const size_t dOffset = Alignment::SystemMemory::Ceil(rOffset+rLength);
-                const size_t dLength = (**this).items * sizeof(T);
-                bytes = dOffset + dLength;
-                entry = AcquireMemory(bytes);
                 {
-                    char * p = static_cast<char *>(entry);
-                    slices   = Hide::Cast<Slice>(p+sOffset);
-                    rows     = Hide::Cast<Row>(p+rOffset);
-                    data     = Hide::Cast<MutableType>(p+dOffset);
+                    Memory::Embed em[] = {
+                        Memory::Embed(slices,(**this).width.z),
+                        Memory::Embed(rows,(**this).width.z*(**this).width.y),
+                        Memory::Embed(data,(**this).items)
+                    };
+                    entry = AcquireMemory( bytes = Y_Memory_Embed_Format(em) );
+                    Y_Memory_Embed_Assign(entry,em);
                 }
                 build();
+
             }
 
             inline void build()
@@ -122,8 +134,8 @@ namespace Yttrium
                 const size_t nslices      = (**this).width.z;
                 const size_t rowsPerSlice = (**this).width.y;
                 const size_t dataPerSlice = (**this).shift.y;
-                Row         * r = rows;
-                MutableType * d = data;
+                Row         * r     = rows;
+                MutableType * d     = data;
                 size_t        built = 0;
                 try
                 {
@@ -151,7 +163,7 @@ namespace Yttrium
                 rows   = 0;
                 data   = 0;
             }
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
         };
 
     }

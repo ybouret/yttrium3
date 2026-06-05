@@ -30,11 +30,12 @@ Y_UTEST(field_1d)
     Core::Rand ran;
     {
         const Field::Layout1D L(-5,6);
-        Field::In1D<int>    F1i("F1i",L); testField(F1i,ran);
-        Field::In1D<String> F1s("F1s",L); testField(F1s,ran);
+        {Field::In1D<int>    F1i("F1i",L); testField(F1i,ran);}
+        {Field::In1D<String> F1s("F1s",L); testField(F1s,ran);}
+
 
         char data[128];
-        Field::In1D<int>    F1c("F1c",L,data); testField(F1c,ran);
+        { Field::In1D<int>    F1c("F1c",L,data); testField(F1c,ran); }
 
     }
 

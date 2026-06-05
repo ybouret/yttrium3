@@ -13,13 +13,29 @@ namespace Yttrium
     namespace Memory
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! helper to embed different objects into memory
+        //
+        //
+        //______________________________________________________________________
         class Embed
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
 
-            static size_t Format(Embed [], const size_t)              noexcept;
-            static void   Assign(void * const, Embed[], const size_t) noexcept;
-
+            //! setup
+            /**
+             \param entry address of objects
+             \param count number of objects
+             */
             template <typename T> inline explicit
             Embed(T * & entry, const size_t count) noexcept :
             pblock( (void**) &entry ),
@@ -29,22 +45,43 @@ namespace Yttrium
 
             }
 
-            Embed(const Embed &) noexcept;
-            ~Embed() noexcept;
-            Y_OSTREAM_PROTO(Embed);
+            Embed(const Embed &) noexcept; //!< duplicate
+            ~Embed() noexcept;             //!< cleanup
+            Y_OSTREAM_PROTO(Embed);        //!< display
 
-            size_t nextOffset() const noexcept;
-            void   assignFrom(void * const) noexcept;
-            
-            void **      pblock;
-            const size_t length;
-            size_t       offset;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            static size_t Format(Embed [], const size_t)              noexcept; //!< format offsets \return bytes to hold embedded objects
+            static void   Assign(void * const, Embed[], const size_t) noexcept; //!< assign blocks to their offset
+
+            size_t nextOffset()             const noexcept; //!< \return next aligned offset
+            void   assignFrom(void * const)       noexcept; //!< set pblock to entry+offset
+
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            void **      pblock; //!< block pointer
+            const size_t length; //!< required bytes
+            size_t       offset; //!< current offset
 
         private:
-            Y_Disable_Assign(Embed);
+            Y_Disable_Assign(Embed); //!< discarded
         };
 
+        //! helper to compute bytes for objects
+#define Y_Memory_Embed_Format(EM)       (Yttrium::Memory::Embed::Format(EM,sizeof(EM)/sizeof(EM[0])))
 
+        //! helper to assign objects from memory
+#define Y_Memory_Embed_Assign(ENTRY,EM)  Yttrium::Memory::Embed::Assign(ENTRY,EM,sizeof(EM)/sizeof(EM[0]))
+
+        
 
     }
 
