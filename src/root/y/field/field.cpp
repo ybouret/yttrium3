@@ -33,6 +33,8 @@ namespace Yttrium
             return name + '[' + Decimal(u).c_str() + ']';
         }
 
+        const String & CoreField:: key() const noexcept { return name; }
+
     }
 
 }

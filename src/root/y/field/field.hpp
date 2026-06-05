@@ -18,7 +18,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class CoreField
+        class CoreField : public CountedObject
         {
         public:
             //__________________________________________________________________
@@ -30,7 +30,7 @@ namespace Yttrium
 
             //! setup \param id field name
             template <typename ID> inline
-            explicit CoreField(const ID &id) : name(id)
+            explicit CoreField(const ID &id) : CountedObject(), name(id)
             {
             }
 
@@ -43,10 +43,11 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            static void *AcquireMemory(size_t & );                     //!< \return memory for required bytes
-            static void  ReleaseMemory(void * & , size_t & ) noexcept; //!< release acquired memory
-            String       subFieldId(const unit_t) const;               //!< \return sub field name for given coordinate
-
+            static void *  AcquireMemory(size_t & );                     //!< \return memory for required bytes
+            static void    ReleaseMemory(void * & , size_t & ) noexcept; //!< release acquired memory
+            String         subFieldId(const unit_t)               const; //!< \return sub field name for given coordinate
+            const String & key()                         const noexcept; //!< \return name
+            
             //__________________________________________________________________
             //
             //
