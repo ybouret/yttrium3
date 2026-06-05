@@ -106,6 +106,7 @@ y/jive/lexical/scanner
 y/jive/lexical/plugin
 y/jive/syntax
 y/jive/syntax/rule
+y/jive/syntax/xnode
 y/jive/syntax/rule/wildcard
 y/jive/syntax/rule/compound
 y/jive/syntax/grammar
@@ -122,6 +123,7 @@ y/cameo/sum/3
 y/cameo/product
 y/information
 y/information/bwt
+y/information/stream
 y/field
 y/field/layout
 )

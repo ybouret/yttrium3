@@ -26,7 +26,10 @@ namespace Yttrium
             //
             //
             //__________________________________________________________________
-            class XNode : public XObject, public Vizible
+            class XNode :
+            public XObject,
+            public Vizible,
+            public Serializable
             {
             public:
                 //______________________________________________________________
@@ -60,21 +63,22 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
-                OutputStream & viz(OutputStream &) const; //!< emit graphviz code \return output stream
-
+                OutputStream & viz(OutputStream &)       const; //!< emit graphviz code \return output stream
+                size_t         serialize(OutputStream &) const; //!< emit binary node
+                
                 //______________________________________________________________
                 //
                 //
                 // Methods
                 //
                 //______________________________________________________________
-                Lexeme       & lexeme()                  noexcept; //!< \return lexeme for terminal node
-                const Lexeme & lexeme()            const noexcept; //!< \return lexeme for terminal node (const)
-                XList        & list()                    noexcept; //!< \return list   for internal node
-                const XList  & list()              const noexcept; //!< \return list   for internal node (const
-                void returnTo(Lexical::Stack &)          noexcept; //!< return to lexer using its stack
-                const Rule * operator->()          const noexcept; //!< \return rule address
-                const Rule & operator*()           const noexcept; //!< \return rule
+                Lexeme       & lexeme()                   noexcept; //!< \return lexeme for terminal node
+                const Lexeme & lexeme()             const noexcept; //!< \return lexeme for terminal node (const)
+                XList        & list()                     noexcept; //!< \return list   for internal node
+                const XList  & list()               const noexcept; //!< \return list   for internal node (const
+                void           returnTo(Lexical::Stack &) noexcept; //!< return to lexer using its stack
+                const Rule * operator->()           const noexcept; //!< \return rule address
+                const Rule & operator*()            const noexcept; //!< \return rule
 
 
                 //! grow tree with new node
