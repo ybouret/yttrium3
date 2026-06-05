@@ -111,6 +111,7 @@ Y_UTEST(memory:archon)
 Y_UTEST(memory:troop)
 Y_UTEST(memory:supply)
 Y_UTEST(memory:buffer)
+Y_UTEST(memory:embed)
 
 
 Y_UTEST(pointer:auto)
