@@ -6,7 +6,6 @@
 
 #include "y/field/layout/2d.hpp"
 #include "y/field/1d.hpp"
-#include "y/calculus/alignment.hpp"
 #include "y/memory/embed.hpp"
 
 namespace Yttrium

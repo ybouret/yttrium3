@@ -68,6 +68,9 @@ namespace Yttrium
             /**
              \param id     field name
              \param layout field layout
+             \param slicesAddr memory for slices
+             \param rowsAddr   memory for rows
+             \param dataAddr   memory for data
              */
             template <typename ID>
             inline explicit In3D(const ID       & id,
@@ -152,7 +155,6 @@ namespace Yttrium
 
             inline void build()
             {
-                assert(entry);
                 assert(rows);
                 assert(slices);
                 assert(data);
@@ -183,7 +185,14 @@ namespace Yttrium
                 while(built-- > 0 )
                     Pulverize( &slices[built] );
                 if(bytes)
+                {
+                    assert(entry);
                     ReleaseMemory(entry,bytes);
+                }
+                else
+                {
+                    assert(!entry);
+                }
                 slices = 0;
                 rows   = 0;
                 data   = 0;
