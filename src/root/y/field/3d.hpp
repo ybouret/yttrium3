@@ -56,12 +56,37 @@ namespace Yttrium
             Layout3D(layout),
             entry(0),
             bytes(0),
-            rows(0),
             slices(0),
+            rows(0),
             data(0)
             {
                 allocate();
             }
+
+
+            //! setup with borrowed memory
+            /**
+             \param id     field name
+             \param layout field layout
+             */
+            template <typename ID>
+            inline explicit In3D(const ID       & id,
+                                 const Layout3D & layout,
+                                 void * const     slicesAddr,
+                                 void * const     rowsAddr,
+                                 void * const     dataAddr
+                                 ) :
+            CoreField(id),
+            Layout3D(layout),
+            entry(0),
+            bytes(0),
+            slices( static_cast<Slice *>(slicesAddr)     ),
+            rows(   static_cast<Row   *>(rowsAddr)       ),
+            data(   static_cast<MutableType *>(dataAddr) )
+            {
+                build();
+            }
+
 
             //! cleanup
             inline virtual ~In3D() noexcept
@@ -100,8 +125,8 @@ namespace Yttrium
             Y_Disable_Copy_And_Assign(In3D);
             void *        entry;
             size_t        bytes;
-            Row  *        rows;
             Slice *       slices;
+            Row  *        rows;
             MutableType * data;
 
             inline void allocate() noexcept

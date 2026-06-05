@@ -57,9 +57,8 @@ namespace Yttrium
             //__________________________________________________________________
             static size_t Format(Embed [], const size_t)              noexcept; //!< format offsets \return bytes to hold embedded objects
             static void   Assign(void * const, Embed[], const size_t) noexcept; //!< assign blocks to their offset
-
-            size_t nextOffset()             const noexcept; //!< \return next aligned offset
-            void   assignFrom(void * const)       noexcept; //!< set pblock to entry+offset
+            size_t        nextOffset()                          const noexcept; //!< \return next aligned offset
+            void          assignFrom(void * const)                    noexcept; //!< set pblock to entry+offset
 
             //__________________________________________________________________
             //
