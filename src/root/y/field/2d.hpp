@@ -129,6 +129,7 @@ namespace Yttrium
                 assert(!rows);
                 assert(!data);
                 assert(!entry);
+                assert(!bytes);
                 const size_t nrow       = (**this).width.y;
                 const size_t rowsOffset = 0;
                 const size_t rowsLength = nrow * sizeof(Row);
@@ -146,7 +147,6 @@ namespace Yttrium
 
             inline void build()
             {
-                assert(entry);
                 assert(rows);
                 assert(data);
                 const size_t  nrow = (**this).width.y;
@@ -174,7 +174,7 @@ namespace Yttrium
                     Pulverize( &rows[built] );
                 rows=0;
                 data=0;
-                if(bytes) ReleaseMemory(entry,bytes);
+                if(bytes) { assert(entry); ReleaseMemory(entry,bytes); } else { assert(!entry); }
             }
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             

@@ -218,6 +218,8 @@ Y_UTEST_DECL(8)
     Y_UTEST(field_layouts);
     Y_UTEST(field_1d);
     Y_UTEST(field_2d);
+    Y_UTEST(field_3d);
+    Y_UTEST(field_4d);
 }
 Y_UTEST_EXEC()
 
