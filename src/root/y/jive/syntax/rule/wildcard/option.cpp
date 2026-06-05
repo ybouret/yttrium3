@@ -25,8 +25,20 @@ namespace Yttrium
             
             Y_Jive_Syntax_Rule_Impl(Option)
             {
+                Y_Jive_Syntax("?OPT  [" << name << "]");
                 const Nesting  nesting(framework);
+                //--------------------------------------------------------------
+                //
+                // try to accept rule
+                //
+                //--------------------------------------------------------------
                 Outcome        outcome = rule.accepts(framework);
+
+                //--------------------------------------------------------------
+                //
+                // modify if rejected to fragile/accepted
+                //
+                //--------------------------------------------------------------
                 if(Rejected==outcome.result)
                 {
                     outcome.result = Accepted;

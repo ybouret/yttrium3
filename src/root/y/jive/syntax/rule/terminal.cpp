@@ -55,24 +55,41 @@ namespace Yttrium
 
             Y_Jive_Syntax_Rule_Impl(Terminal)
             {
-                Y_Jive_Syntax("[" << name << "]");
+                Y_Jive_Syntax("?TERM: [" << name << "]");
+
+                //--------------------------------------------------------------
+                //
                 // pull next lexeme
+                //
+                //--------------------------------------------------------------
                 Lexeme * const lexeme = framework.get();
 
+                //--------------------------------------------------------------
+                //
                 // check if finished
+                //
+                //--------------------------------------------------------------
                 if(!lexeme)
                 {
                     return Outcome(Rejected,Healthy,Blocked);
                 }
 
+                //--------------------------------------------------------------
+                //
                 // check name
+                //
+                //--------------------------------------------------------------
                 if( *lexeme->name!= *name)
                 {
                     framework.put(lexeme);
                     return Outcome(Rejected,Healthy,Running);
                 }
 
+                //--------------------------------------------------------------
+                //
                 // grow tree and return accepted
+                //
+                //--------------------------------------------------------------
                 framework.grow( XNode::Create(*this,lexeme) );
                 return Outcome(Accepted,Healthy,Running);
             }

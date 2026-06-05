@@ -35,6 +35,7 @@ namespace Yttrium
                     if(Accepted==rout.result)
                     {
                         outcome.result = Accepted;
+                        outcome.status = rout.status;
                         if( Healthy == (outcome.sanity = rout.sanity) )
                         {
                             break;
