@@ -10,19 +10,25 @@ namespace Yttrium
 {
     namespace Field
     {
-        typedef V2D<unit_t> Coord2D;
+        typedef V2D<unit_t> Coord2D; //!< alias
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! 2D (shared) Layout
+        //
+        //
+        //______________________________________________________________________
         class Layout2D : public Layout<Coord2D>
         {
         public:
-            explicit Layout2D(const Coord2D, const Coord2D);
-            virtual ~Layout2D() noexcept;
-            Layout2D(const Layout2D &) noexcept;
-
-            const Layout1D sub;
-
+            explicit Layout2D(const Coord2D, const Coord2D); //!< setup
+            virtual ~Layout2D()        noexcept;             //!< cleanup
+            Layout2D(const Layout2D &) noexcept;             //!< duplicate
+            const Layout1D sub;                              //!< 1D projection
         private:
-            Y_Disable_Assign(Layout2D);
+            Y_Disable_Assign(Layout2D);                      //!< dicarded
         };
 
     }

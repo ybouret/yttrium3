@@ -7,11 +7,11 @@ namespace Yttrium
 {
     namespace Field
     {
-        Field:: ~Field() noexcept
+        CoreField:: ~CoreField() noexcept
         {
         }
 
-        void * Field:: AcquireMemory(size_t &bytes)
+        void * CoreField:: AcquireMemory(size_t &bytes)
         {
             static Memory::Allocator &mgr = Object::Factory::Instance();
             assert(bytes>0);
@@ -19,7 +19,7 @@ namespace Yttrium
             return mgr.acquire(bytes);
         }
 
-        void Field:: ReleaseMemory(void *&entry, size_t &bytes) noexcept
+        void CoreField:: ReleaseMemory(void *&entry, size_t &bytes) noexcept
         {
             static Memory::Allocator &mgr = Object::Factory::Instance();
             assert(bytes>0);
@@ -28,7 +28,7 @@ namespace Yttrium
             return mgr.release(entry,bytes);
         }
 
-        String Field:: subFieldId(const unit_t u) const
+        String CoreField:: subFieldId(const unit_t u) const
         {
             return name + '[' + Decimal(u).c_str() + ']';
         }

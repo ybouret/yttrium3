@@ -13,19 +13,45 @@ namespace Yttrium
     namespace Field
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! 2D fields
+        //
+        //
+        //______________________________________________________________________
         template <typename T>
         class In2D :
-        public Field,
+        public CoreField,
         public Layout2D
         {
         public:
-            Y_Args_Declare(T,Type);
-            typedef In1D<T> Row;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            Y_Args_Declare(T,Type); //!< aliases
+            typedef In1D<T> Row;    //!< alias
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup with own memory
+            /**
+             \param id     field name
+             \param layout field layout
+             */
             template <typename ID>
             inline explicit In2D(const ID       & id,
                                  const Layout2D & layout) :
-            Field(id),
+            CoreField(id),
             Layout2D(layout),
             entry(0),
             bytes(0),
@@ -36,14 +62,45 @@ namespace Yttrium
             }
 
 
+            //! setup with borrowed memory
+            /**
+             \param id       field name
+             \param layout   field layout
+             \param rowsAddr memory for rows
+             \param dataAddr memory for data
+             */
+            template <typename ID>
+            inline explicit In2D(const ID       & id,
+                                 const Layout2D & layout,
+                                 void * const     rowsAddr,
+                                 void * const     dataAddr) :
+            CoreField(id),
+            Layout2D(layout),
+            entry(0),
+            bytes(0),
+            rows( static_cast<Row  *>(rowsAddr) ),
+            data( static_cast<MutableType *>(dataAddr) )
+            {
+                build();
+            }
 
 
+
+            //! cleanup
             inline virtual ~In2D() noexcept
             {
                 rows += (**this).lower.y;
                 release( (**this).width.y );
             }
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! \param y coordinate \return y-th row
             inline Row & operator[](const unit_t y) noexcept
             {
                 assert(y>=(**this).lower.y);
@@ -51,6 +108,7 @@ namespace Yttrium
                 return rows[y];
             }
 
+            //! \param y coordinate \return y-th const row
             inline const Row & operator[](const unit_t y) const noexcept
             {
                 assert(y>=(**this).lower.y);
@@ -59,7 +117,8 @@ namespace Yttrium
             }
 
         private:
-            Y_Disable_Copy_And_Assign(In2D);
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            Y_Disable_Copy_And_Assign(In2D); //!< discarded
             void *        entry;
             size_t        bytes;
             Row *         rows;
@@ -67,6 +126,9 @@ namespace Yttrium
 
             inline void allocate()
             {
+                assert(!rows);
+                assert(!data);
+                assert(!entry);
                 const size_t nrow       = (**this).width.y;
                 const size_t rowsOffset = 0;
                 const size_t rowsLength = nrow * sizeof(Row);
@@ -114,7 +176,8 @@ namespace Yttrium
                 data=0;
                 if(bytes) ReleaseMemory(entry,bytes);
             }
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            
         };
 
 

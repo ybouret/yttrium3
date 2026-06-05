@@ -70,6 +70,7 @@ namespace Yttrium
                     return *rule;
                 }
 
+                //! \return rule name from rules and separator
                 String * MakeName(const Rule *[], const size_t, const char);
 
             public:

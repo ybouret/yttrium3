@@ -57,9 +57,14 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            inline const COORD &lower() const noexcept { return (**this).lower; }
-            inline const COORD &upper() const noexcept { return (**this).upper; }
+            inline const COORD &lower() const noexcept { return (**this).lower; } //!< \return lower
+            inline const COORD &upper() const noexcept { return (**this).upper; } //!< \return upper
 
+            //! helper to avoid 'this' in constructor
+            /**
+             \param bytesPerItem sizeof(item)
+             \return bytes for items
+             */
             inline size_t bytesFor(const size_t bytesPerItem) const noexcept
             {
                 return (**this).items * bytesPerItem;

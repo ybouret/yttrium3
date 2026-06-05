@@ -11,18 +11,26 @@ namespace Yttrium
 {
     namespace Field
     {
-        typedef unit_t Coord1D;
+        typedef unit_t Coord1D; //!< alias
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! 1D (shared) Layout
+        //
+        //
+        //______________________________________________________________________
         class Layout1D : public Layout<Coord1D>
         {
         public:
-            explicit Layout1D(const Coord1D, const Coord1D);
-            virtual ~Layout1D() noexcept;
-            Layout1D(const Layout1D &) noexcept;
+            explicit Layout1D(const Coord1D, const Coord1D); //!< setup
+            virtual ~Layout1D()        noexcept;             //!< cleanup
+            Layout1D(const Layout1D &) noexcept;             //!< duplicate
 
 
         private:
-            Y_Disable_Assign(Layout1D);
+            Y_Disable_Assign(Layout1D); //!< discared
         };
 
     }

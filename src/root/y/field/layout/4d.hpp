@@ -11,19 +11,25 @@ namespace Yttrium
 {
     namespace Field
     {
-        typedef V4D<unit_t> Coord4D;
+        typedef V4D<unit_t> Coord4D; //!< alias
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! 4D (shared) Layout
+        //
+        //
+        //______________________________________________________________________
         class Layout4D : public Layout<Coord4D>
         {
         public:
-            explicit Layout4D(const Coord4D, const Coord4D);
-            virtual ~Layout4D() noexcept;
-            Layout4D(const Layout4D &) noexcept;
-
-            const Layout3D sub;
-
+            explicit Layout4D(const Coord4D, const Coord4D); //!< setup
+            virtual ~Layout4D() noexcept;                    //!< cleanup
+            Layout4D(const Layout4D &) noexcept;             //!< duplicate
+            const Layout3D sub;                              //!< 3D projection
         private:
-            Y_Disable_Assign(Layout4D);
+            Y_Disable_Assign(Layout4D);                      //!< discarded
         };
 
     }

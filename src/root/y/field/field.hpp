@@ -10,26 +10,53 @@ namespace Yttrium
 {
     namespace Field
     {
-        class Field
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Base class for Fields
+        //
+        //
+        //______________________________________________________________________
+        class CoreField
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup \param id field name
             template <typename ID> inline
-            explicit Field(const ID &id) : name(id)
+            explicit CoreField(const ID &id) : name(id)
             {
             }
 
-            virtual ~Field() noexcept;
+            //! cleanup
+            virtual ~CoreField() noexcept;
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            static void *AcquireMemory(size_t & );                     //!< \return memory for required bytes
+            static void  ReleaseMemory(void * & , size_t & ) noexcept; //!< release acquired memory
+            String       subFieldId(const unit_t) const;               //!< \return sub field name for given coordinate
 
-
-            const String name;
-
-            static void *AcquireMemory(size_t &bytes);
-            static void  ReleaseMemory(void * &entry, size_t &bytes) noexcept;
-            String       subFieldId(const unit_t) const;
-
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const String name; //!< name
+            
         private:
-            Y_Disable_Copy_And_Assign(Field);
+            Y_Disable_Copy_And_Assign(CoreField); //!< discarded
         };
     }
 
