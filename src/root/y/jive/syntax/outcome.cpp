@@ -27,6 +27,14 @@ namespace Yttrium
             {
             }
 
+            Outcome & Outcome:: operator=(const Outcome &_) noexcept
+            {
+                result = _.result;
+                sanity = _.sanity;
+                status = _.status;
+                return *this;
+            }
+
         }
         
     }

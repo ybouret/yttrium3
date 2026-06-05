@@ -71,7 +71,8 @@ namespace Yttrium
                 Outcome(const Result, const Sanity, const Status) noexcept; //!< setup
                 Outcome(const Outcome &)                          noexcept; //!< duplicate
                 ~Outcome()                                        noexcept; //!< cleanup
-
+                Outcome & operator=(const Outcome &)              noexcept; //!< assign
+                
                 //______________________________________________________________
                 //
                 //
@@ -82,8 +83,6 @@ namespace Yttrium
                 Sanity  sanity; //!< mutable sanity
                 Status  status; //!< mutable status
 
-            private:
-                Y_Disable_Assign(Outcome); //!< discarded
 
             };
             

@@ -71,6 +71,7 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 if(!lexeme)
                 {
+                    Y_Jive_Syntax("   [" << name << "] <== EOS");
                     return Outcome(Rejected,Healthy,Blocked);
                 }
 
@@ -79,8 +80,9 @@ namespace Yttrium
                 // check name
                 //
                 //--------------------------------------------------------------
-                if( *lexeme->name!= *name)
+                if( *lexeme->name!= *name )
                 {
+                    Y_Jive_Syntax("[-][" << name << "] (was [" << lexeme->name << "])");
                     framework.put(lexeme);
                     return Outcome(Rejected,Healthy,Running);
                 }
@@ -90,6 +92,7 @@ namespace Yttrium
                 // grow tree and return accepted
                 //
                 //--------------------------------------------------------------
+                Y_Jive_Syntax("[+][" << name << "]='" << *(Token *)lexeme  << "'");
                 framework.grow( XNode::Create(*this,lexeme) );
                 return Outcome(Accepted,Healthy,Running);
             }
