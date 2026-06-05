@@ -2,21 +2,6 @@
 #include "y/utest/run.hpp"
 #include "y/mkl/v4d.hpp"
 
-namespace Yttrium
-{
-
-    namespace Field
-    {
-       
-
-
-       
-
-
-    }
-
-}
-
 using namespace Yttrium;
 
 

@@ -51,6 +51,20 @@ namespace Yttrium
             //! cleanup
             inline virtual ~Layout() noexcept {}
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            inline const COORD &lower() const noexcept { return (**this).lower; }
+            inline const COORD &upper() const noexcept { return (**this).upper; }
+
+            inline size_t bytesFor(const size_t bytesPerItem) const noexcept
+            {
+                return (**this).items * bytesPerItem;
+            }
+
         private:
             Y_Disable_Assign(Layout); //!< discarded
         };

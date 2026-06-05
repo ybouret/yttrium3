@@ -56,7 +56,7 @@ Y_UTEST(jive_grammar)
 {
     MyLexer   L;
     MyGrammar G;
-
+    
     Syntax::Rule::Verbose = true;
 
     G.render();
