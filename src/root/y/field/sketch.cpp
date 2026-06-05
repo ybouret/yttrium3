@@ -17,6 +17,7 @@ namespace Yttrium
         size_t Sketch:: Setup(size_t *       width,
                               unit_t * const lower,
                               unit_t * const upper,
+                              size_t * const shift,
                               const unsigned dims) noexcept
         {
             static const unit_t _1 = 1;
@@ -24,6 +25,7 @@ namespace Yttrium
             assert(width);
             assert(lower),
             assert(upper);
+            assert(shift);
             size_t prod = 1;
             for(size_t i=0;i<dims;++i)
             {
@@ -31,6 +33,7 @@ namespace Yttrium
                 unit_t &hi = upper[i];
                 if(hi<lo) Swap(lo,hi);
                 prod *= ( width[i] = (size_t)(_1+hi-lo) );
+                shift[i] = prod;
             }
             return prod;
         }

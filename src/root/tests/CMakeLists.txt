@@ -247,3 +247,5 @@ Y_UTEST(random:type_gen)
 
 Y_UTEST(field:layouts)
 Y_UTEST(field:1d)
+Y_UTEST(field:2d)
+

@@ -58,9 +58,11 @@ namespace Yttrium
             lower(lo),
             upper(up),
             width( *static_cast<const Width *>(Zeroed) ),
+            shift(width),
             items( Setup(Hide::Cast<size_t>( &Coerce(width) ),
                          Hide::Cast<unit_t>( &Coerce(lower) ),
                          Hide::Cast<unit_t>( &Coerce(upper) ),
+                         Hide::Cast<size_t>( &Coerce(shift) ),
                          Dimensions) )
             {
             }
@@ -70,7 +72,7 @@ namespace Yttrium
 
             //! display metrics
             inline friend std::ostream & operator<<(std::ostream &os, const CoreLayout &L) {
-                return os << "|" << L.lower << "->" << L.upper << "#" << L.width << "|=" << L.items;
+                return os << "|" << L.lower << "->" << L.upper << "#" << L.width << "|=" << L.items << ":" << L.shift;
             }
 
             //__________________________________________________________________
@@ -82,6 +84,7 @@ namespace Yttrium
             const COORD  lower; //!< (fixed) lower coordinates
             const COORD  upper; //!< (fixed) upper coordinates
             const Width  width; //!< width per dimension
+            const Width  shift; //!< partial products
             const size_t items; //!< total items
 
         private:

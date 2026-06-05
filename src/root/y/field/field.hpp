@@ -26,7 +26,8 @@ namespace Yttrium
 
             static void *AcquireMemory(size_t &bytes);
             static void  ReleaseMemory(void * &entry, size_t &bytes) noexcept;
-            
+            String       subFieldId(const unit_t) const;
+
         private:
             Y_Disable_Copy_And_Assign(Field);
         };

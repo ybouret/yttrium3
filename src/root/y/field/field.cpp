@@ -1,6 +1,7 @@
 
 #include "y/field/field.hpp"
 #include "y/object/factory.hpp"
+#include "y/format/decimal.hpp"
 
 namespace Yttrium
 {
@@ -25,6 +26,11 @@ namespace Yttrium
             assert(0!=entry);
             std::cerr << "release " << bytes << std::endl;
             return mgr.release(entry,bytes);
+        }
+
+        String Field:: subFieldId(const unit_t u) const
+        {
+            return name + '[' + Decimal(u).c_str() + ']';
         }
 
     }

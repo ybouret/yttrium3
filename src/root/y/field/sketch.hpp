@@ -50,12 +50,14 @@ namespace Yttrium
              \param width computed width per dimension
              \param lower (fixed) lower coordinates
              \param upper (fixed) upper coordinates
+             \param shift partial products
              \param dims  dimensions
              \return number of items
              */
             static size_t Setup(size_t *       width,
                                 unit_t * const lower,
                                 unit_t * const upper,
+                                size_t * const shift,
                                 const unsigned dims) noexcept;
 
 

@@ -32,6 +32,17 @@ namespace Yttrium
                 build();
             }
 
+            template <typename ID>
+            inline explicit In1D(const ID &id, const Layout1D &layout, void * const addr) :
+            Field(id),
+            Layout1D(layout),
+            bytes( 0    ),
+            entry(  static_cast<MutableType*>(addr) )
+            {
+                build();
+            }
+
+
 
             inline virtual ~In1D() noexcept {
                 entry += (**this).lower; release( (**this).items );
