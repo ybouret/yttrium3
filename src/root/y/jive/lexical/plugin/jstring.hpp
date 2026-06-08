@@ -27,12 +27,14 @@ namespace Yttrium
                                  Stack     & stk) :
                 String_(pid,stk,Mark,Mark)
                 {
+                    init();
                 }
 
                 //! cleanup
                 virtual ~JString() noexcept;
             private:
                 Y_Disable_Copy_And_Assign(JString);
+                void init(); //!< register quote, langle and rangle
             };
 
         }

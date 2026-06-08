@@ -50,7 +50,8 @@ namespace Yttrium
             //
             //__________________________________________________________________
             Leading & operator << (const uint8_t)   noexcept; //!< merge byte \return *this
-            Leading & operator << (const Leading &) noexcept; //!< merge another \return *this
+            Leading & operator << (const Leading &) noexcept; //!< merge another leading content \return *this
+            Leading & operator << (const Within)    noexcept; //!< merge a range \return *this
             Leading & operator-=(const uint8_t)     noexcept; //!< remove byte \return *this
             Leading & operator-=(const Leading &)   noexcept; //!< remove other conten \return *this
 
@@ -60,8 +61,7 @@ namespace Yttrium
             Leading & ldz()                    noexcept; //!< reset \return *this
             Leading & all()                    noexcept; //!< set all used \return *this
             Leading & set(const Within)        noexcept; //!< set a range \return *this
-
-            size_t size() const noexcept; //!< \return number of used bytes
+            size_t    size()             const noexcept; //!< \return number of used bytes
 
             //! callback for each detected Within
             /**

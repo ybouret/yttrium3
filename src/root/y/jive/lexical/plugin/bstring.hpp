@@ -34,6 +34,8 @@ namespace Yttrium
                 virtual ~BString() noexcept;
             private:
                 Y_Disable_Copy_And_Assign(BString);
+                void init(); //!< register quote and dquotes
+
             };
 
         }

@@ -8,6 +8,13 @@ namespace Yttrium
     {
         namespace Lexical
         {
+            void RString:: init()
+            {
+                doChar('\"');
+                doChar('<');
+                doChar('>');
+            }
+
             RString:: ~RString() noexcept
             {
             }

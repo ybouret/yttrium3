@@ -1,5 +1,6 @@
 #include "y/jive/lexical/plugin/string.hpp"
 #include "y/string/format.hpp"
+#include "y/jive/pattern/leading.hpp"
 
 namespace Yttrium
 {
@@ -7,20 +8,50 @@ namespace Yttrium
     {
         namespace Lexical
         {
+            String_:: ~String_() noexcept
+            {}
+
+            Leading String_:: GetCore() noexcept
+            {
+                Leading core;
+                core << ' ' << '!';
+                core << Within('#','&');
+                core << Within('(',';');
+                core << '=';
+                core << Within('?','[');
+                core << Within(']','~');
+                return core;
+            }
+
             void String_:: initialize(const char ini, const char end)
             {
+                // return on end char
                 backOn(end,NoEndOfLine);
-                drop("core", "[:core:]",this, & String_::onCore);
-                
+
+                // build core
+                {
+                    Leading core = GetCore();
+                    for(unsigned i=32;i<127;++i)
+                        if( core.get( (uint8_t)i ) )
+                            doChar( (char)i );
+                }
+
+                // escape ini/end
                 {              doEscMark(ini); }
                 { if(ini!=end) doEscMark(end); }
 
             }
 
+            void String_:: doChar(const char c)
+            {
+                drop(c,c,this, & String_::onChar);
+            }
+
+
             void String_:: doEscMark(const char c)
             {
                 const String rx = Formatted::Get("\\x%02x", (unsigned)c);
-                drop("mark",rx,this, &String_::onEscMark);
+                drop(c,rx,this, &String_::onEscMark);
             }
 
             void String_:: onEscMark(Token &token) noexcept
@@ -50,6 +81,14 @@ namespace Yttrium
                 spot.set(name);
                 stack.push(lx);
             }
+
+
+            void String_:: onChar(Token &token) noexcept
+            {
+                assert(1==token.size);
+                data.mergeTail(token);
+            }
+
         }
 
     }

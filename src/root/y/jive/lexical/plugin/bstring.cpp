@@ -6,6 +6,14 @@ namespace Yttrium
     {
         namespace Lexical
         {
+
+           
+            void BString:: init()
+            {
+                doChar('\"');
+                doChar('\'');
+            }
+
             BString:: ~BString() noexcept
             {
 

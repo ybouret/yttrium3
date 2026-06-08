@@ -56,6 +56,16 @@ namespace Yttrium
             return set(b);
         }
 
+        Leading & Leading:: operator << (const Within w) noexcept
+        {
+            const unsigned upper = w.upper;
+            for(unsigned i=w.lower;i<=upper;++i)
+            {
+                (void) set( (uint8_t)i );
+            }
+            return *this;
+        }
+
         Leading & Leading:: operator-=(const uint8_t b) noexcept
         {
             return clr(b);

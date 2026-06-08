@@ -33,16 +33,23 @@ namespace Yttrium
 
                 virtual ~String_() noexcept;
 
+                //! \return ASCCI but quote, dquotes, backslash, langle and rangle
+                static Leading GetCore() noexcept;
+
             protected:
                 Spot  spot;
                 Token data;
+
+                void doChar(const char);
 
             private:
                 Y_Disable_Copy_And_Assign(String_);
                 void initialize(const char ini, const char end);
                 void onCore(Token &) noexcept;
+                void onChar(Token &) noexcept;
                 void onEscMark(Token &) noexcept;
                 void doEscMark(const char);
+
 
 
                 //______________________________________________________________
