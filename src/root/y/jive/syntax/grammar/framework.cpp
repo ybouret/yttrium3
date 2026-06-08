@@ -76,7 +76,7 @@ namespace Yttrium
                 xtree.free();
             }
 
-            XNode * Framework::pop() noexcept
+            XNode * Framework:: yield() noexcept
             {
                 assert(xtree.isValid());
                 return xtree.yield();

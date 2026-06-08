@@ -90,6 +90,10 @@ namespace Yttrium
 {
     namespace Information
     {
+
+        const char * const MoveToFront:: Common:: CallSign = "MoveToFront";
+        const char *       MoveToFront:: Common:: callSign() const noexcept { return CallSign; }
+
         MoveToFront:: Common:: Common() :
         StreamCipher(),
         code(new Code())

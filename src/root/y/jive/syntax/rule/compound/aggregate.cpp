@@ -78,11 +78,11 @@ namespace Yttrium
                         Y_Jive_Syntax("[+][" << name << "]");
                         switch(duty)
                         {
-                            case Entitled: framework.grow( workspace.pop() ); break;
-                            case Grouping: framework.join( workspace );       break;
+                            case Entitled: framework.grow( workspace.yield() ); break;
+                            case Grouping: framework.join( workspace );         break;
                             case Yielding:
                                 if(1==xlist.size)
-                                    framework.grow( workspace.pop() );
+                                    framework.grow( workspace.yield() );
                                 else
                                     framework.join( workspace );
                                 break;

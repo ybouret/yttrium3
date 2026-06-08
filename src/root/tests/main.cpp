@@ -214,6 +214,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(cameo_sum3);
 
     Y_UTEST(info_bwt);
+    Y_UTEST(info_sc);
 
     Y_UTEST(random_type_gen);
 

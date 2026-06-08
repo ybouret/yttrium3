@@ -30,11 +30,14 @@ namespace Yttrium
             class Encoder : public StreamCipher
             {
             public:
+                static const char * const CallSign; //!< "Verbatim";
+
                 explicit Encoder() noexcept; //!< setup
                 virtual ~Encoder() noexcept; //!< cleanup
 
-                virtual size_t  serialize(OutputStream&)   const;
-                virtual void    restart()                  noexcept;
+                virtual void         restart()             noexcept;
+                virtual size_t       serialize(OutputStream&) const;
+                virtual const char * callSign()      const noexcept;
                 virtual uint8_t operator()(const uint8_t ) noexcept;
                 
             private:

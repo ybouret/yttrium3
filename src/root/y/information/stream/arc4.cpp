@@ -8,6 +8,9 @@ namespace Yttrium
 {
     namespace Information
     {
+        const char * const ARC4:: Encoder:: CallSign = "Verbatim";
+        const char *       ARC4:: Encoder:: callSign() const noexcept { return CallSign; }
+
 
         class ARC4:: Code : public Object
         {

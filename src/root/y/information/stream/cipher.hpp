@@ -4,6 +4,7 @@
 #define Y_Information_Stream_Cipher_Included 1
 
 #include "y/stream/serializable.hpp"
+#include "y/ability/identifiable.hpp"
 
 namespace Yttrium
 {
@@ -17,7 +18,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class StreamCipher : public Serializable
+        class StreamCipher : public Serializable, public Identifiable
         {
         public:
             //__________________________________________________________________

@@ -31,8 +31,10 @@ namespace Yttrium
             class Common : public StreamCipher
             {
             public:
-                virtual void   restart() noexcept;
-                virtual size_t serialize(OutputStream&) const;
+                static const char * const CallSign; //!< "MoveToFront";
+                virtual void         restart()             noexcept;
+                virtual size_t       serialize(OutputStream&) const;
+                virtual const char * callSign()      const noexcept;
 
                 virtual     ~Common()  noexcept; //!< cleanup
             protected:

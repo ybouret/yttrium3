@@ -23,7 +23,7 @@ namespace Yttrium
             //
             //
             //
-            //! Manage lexer, source and building tree for rules
+            //! Manage lexer, source and building tree from rules
             //
             //
             //__________________________________________________________________
@@ -52,10 +52,10 @@ namespace Yttrium
                 void            join(Framework &)    noexcept; //!< XNode::Join(xtree,sub.xtree)
                 void            dump()               noexcept; //!< return tree to lexer
                 XNode *         operator->()         noexcept; //!< \return checked xtree content
-                XNode *         pop()                noexcept; //!< \return xtree.yield(), checked
+                XNode *         yield()              noexcept; //!< \return xtree.yield(), checked
                 XNode *         set(XNode * const)   noexcept; //!< \return xnode as new xtree
                 bool            ok() const noexcept;           //!< \return xtree.isValid()
-                std::ostream & indent(std::ostream&) const;    //!< \return indented stream
+                std::ostream &  indent(std::ostream&)   const; //!< \return indented stream
 
                 //______________________________________________________________
                 //

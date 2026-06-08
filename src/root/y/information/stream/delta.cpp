@@ -8,6 +8,9 @@ namespace Yttrium
 {
     namespace Information
     {
+        const char * const Delta:: Common:: CallSign = "Delta";
+        const char *       Delta:: Common:: callSign() const noexcept { return CallSign; }
+
         Delta:: Common:: Common() :
         StreamCipher(),
         last(0)

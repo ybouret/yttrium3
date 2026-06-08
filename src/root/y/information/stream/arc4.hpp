@@ -32,6 +32,12 @@ namespace Yttrium
             public:
                 //______________________________________________________________
                 //
+                // Definitions
+                //______________________________________________________________
+                static const char * const CallSign; //!< "ARC4";
+
+                //______________________________________________________________
+                //
                 // C++
                 //______________________________________________________________
                 virtual ~Encoder() noexcept;                    //!< cleanup
@@ -42,10 +48,11 @@ namespace Yttrium
                 //
                 // Interface
                 //______________________________________________________________
-                virtual void    restart()                 noexcept; //!< rebuild state
-                virtual uint8_t operator()(const uint8_t) noexcept; //!< encode/decode \return byte-wise encoded
-                virtual size_t  serialize(OutputStream&)  const;    //!< save internal state \return saved bytes
-                
+                virtual void         restart()                 noexcept; //!< rebuild state
+                virtual uint8_t      operator()(const uint8_t) noexcept; //!< encode/decode \return byte-wise encoded
+                virtual size_t       serialize(OutputStream&)     const; //!< save internal state \return saved bytes
+                virtual const char * callSign()          const noexcept;
+
             private:
                 Y_Disable_Copy_And_Assign(Encoder); //!< discarding
                 Code * const code;                  //!< implementation

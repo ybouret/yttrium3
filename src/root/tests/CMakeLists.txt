@@ -243,6 +243,7 @@ Y_UTEST(cameo:addenda)
 Y_UTEST(cameo:sum3)
 
 Y_UTEST(info:bwt)
+Y_UTEST(info:sc)
 
 Y_UTEST(random:type_gen)
 

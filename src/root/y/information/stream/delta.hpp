@@ -35,8 +35,10 @@ namespace Yttrium
                 //
                 // Interface
                 //______________________________________________________________
-                virtual void   restart() noexcept;
-                virtual size_t serialize(OutputStream&) const;
+                static const char * const CallSign; //!< "Delta";
+                virtual void         restart()             noexcept;
+                virtual size_t       serialize(OutputStream&) const;
+                virtual const char * callSign()      const noexcept;
 
                 //______________________________________________________________
                 //

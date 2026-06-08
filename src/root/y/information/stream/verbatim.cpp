@@ -6,6 +6,10 @@ namespace Yttrium
     namespace Information
     {
 
+        const char * const Verbatim:: Encoder:: CallSign = "Verbatim";
+        const char *       Verbatim:: Encoder:: callSign() const noexcept { return CallSign; }
+
+
         Verbatim:: Encoder:: Encoder() noexcept
         {
 
