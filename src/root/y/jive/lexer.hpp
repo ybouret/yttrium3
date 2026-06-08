@@ -119,6 +119,7 @@ namespace Yttrium
                 return makeDial( record( new PLUGIN(pid,*this) ) );
             }
 
+            void reset() noexcept;
 
         private:
             Y_Disable_Copy_And_Assign(Lexer); //!< discarded

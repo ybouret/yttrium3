@@ -7,9 +7,7 @@ namespace Yttrium
 {
     namespace Jive
     {
-
         
-
         Lexer:: ~Lexer() noexcept
         {
             psdb.release();
@@ -67,6 +65,13 @@ namespace Yttrium
         }
 
 
+        void Lexer:: reset() noexcept
+        {
+            curr = this;
+            history.free();
+            lexemes.release();
+        }
+        
         Lexeme * Lexer:: pull(Source &source)
         {
             assert(0!=curr);
@@ -185,105 +190,8 @@ namespace Yttrium
 
         }
 
-#if 0
-        Lexeme * Lexer:: get(Source &source)
-        {
-            assert(curr);
-            //------------------------------------------------------------------
-            //
-            //
-            // GET: test existing lexeme of probe...
-            //
-            //
-            //------------------------------------------------------------------
-        GET:
-            if(lexemes.size)
-            {
-                return lexemes.popHead();
-            }
-            else
-            {
-                //--------------------------------------------------------------
-                //
-                //
-                // PROBE: new lexeme
-                //
-                //
-                //--------------------------------------------------------------
-            PROBE:
-                Lexical::Command cmd;
-                Lexeme * const   lxm = curr->probe(source,cmd);
-                if(lxm)
-                {
-                    //----------------------------------------------------------
-                    //
-                    // found a regular lexeme
-                    //
-                    //----------------------------------------------------------
-                    return lxm;
-                }
-                else
-                {
-                    //----------------------------------------------------------
-                    //
-                    // found a command lexeme
-                    //
-                    //----------------------------------------------------------
-                    const char * const here = curr->name->c_str();
-                    switch(cmd.kind)
-                    {
-                            
-                            //--------------------------------------------------
-                        case Lexical::Command::Quit:
-                            //--------------------------------------------------
-                            switch(curr->onEOS)
-                            {
-                                case Lexical::AcceptEOS: return 0; // EOS: normal return
-                                case Lexical::RejectEOS: {
-                                    // illegal stop
-                                    Specific::Exception excp(name->c_str(), "End Of Stream in <%s>", here);
-                                    throw source->stamp(excp);
-                                }
-                            }
-                            break;
-                            
-                            //--------------------------------------------------
-                        case Lexical::Command::Call:
-                        case Lexical::Command::Jump: {
-                            //--------------------------------------------------
-                            assert(0!=cmd.args);
-                            // search scanner to call
-                            const String     id = *cmd.args; std::cerr << "call  to  <" << id << ">" << std::endl;
-                            PScanner * const ps = psdb.search(id);
-                            if(!ps) {
-                                Specific::Exception excp(name->c_str(),"<%s> got no <%s> to call", here, id.c_str());
-                                throw source->stamp(excp);
-                            }
-                            
-                            // modify history and current scanner
-                            if(Lexical::Command::Call == cmd.kind) history << *curr;
-                            curr = & **ps;
-                        } goto PROBE; // still no lexeme
-                            
-                            //--------------------------------------------------
-                        case Lexical::Command::Back: {
-                            //--------------------------------------------------
-                            assert(0==cmd.args);  std::cerr << "back from <" << curr->name << ">" << std::endl;
-                            if(history->size<=0) {
-                                Specific::Exception excp(name->c_str(),"no possible coming back from <%s>", here);
-                                throw source->stamp(excp);
-                            }
-                            curr = & history.tail(); history.popTail();
-                        } goto GET; // may have created a lexeme
-                            
-                    }
-                    
-                    return 0;
-                }
-            }
-            
-        }
-#endif
+
+
         
     }
     
