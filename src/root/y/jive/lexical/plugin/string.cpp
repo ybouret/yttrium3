@@ -49,6 +49,16 @@ namespace Yttrium
                 // escape hexa
                 drop("escHexa","[\\\\]x[:xdigit:][:xdigit:]",this, & String_:: onEscHexa );
 
+                // escape exception
+                drop("escExcp","[\\\\][:any1:]",this, & String_:: onEscExcp );
+            }
+
+            void String_:: onEscExcp(Token &token)
+            {
+                //std::cerr << "escExcp @'" << token << "'" << std::endl;
+                assert(2==token.size);
+                const char bad = **token.tail;
+                throw Specific::Exception(name->c_str(),"invalid escape sequence starting with '\\%s'", ASCII::Printable::Text(bad) );
             }
 
             void String_:: onEscCntl(Token &token)  
@@ -73,7 +83,13 @@ namespace Yttrium
             void String_:: onEscHexa(Token &token) noexcept
             {
                 assert(4==token.size);
-                
+                Char * const ch = data.pushTail( token.popHead() );
+                delete token.popHead();
+                assert(2==token.size);
+                const int     up = Hexadecimal::ToDec(**token.head); assert(up>=0); assert(up<16);
+                const int     lo = Hexadecimal::ToDec(**token.tail); assert(lo>=0); assert(lo<16);
+                const uint8_t b  = (uint8_t)(up*16+lo);
+                **ch = b;
             }
 
 
