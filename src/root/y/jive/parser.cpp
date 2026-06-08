@@ -34,6 +34,32 @@ namespace Yttrium
 
         }
 
+        const Syntax::Rule & Parser:: eponymous(const String &ruleName)
+        {
+            const Syntax::Rule  * const xRule = querySyntaxRule(ruleName);
+            const Lexical::Rule * const lRule = queryLexicalRule(ruleName);
+            const Terminal      *       t     = 0;
+
+            // query or build terminal
+            if(xRule)
+            {
+                if(xRule->isInternal()) throw Specific::Exception(lang->c_str(),"[%s] is not a terminal!",          ruleName.c_str());
+                if(!lRule)                        throw Specific::Exception(lang->c_str(),"[%s] has not lexical definition!", ruleName.c_str());
+                t = dynamic_cast<const Terminal *>(xRule);
+            }
+            else
+            {
+                if(lRule) throw Specific::Exception(lang->c_str(),"[%s] has not syntax definition!",ruleName.c_str());
+                t =  &term(ruleName,ruleName);
+            }
+
+            assert(0!=t);
+            if(t->load != Syntax::Univocal) throw Specific::Exception(lang->c_str(),"[%s] is not univocal!", ruleName.c_str());
+            
+            return *t;
+        }
+
+
         const Syntax::Rule & Parser:: extra(const char separator, const Rule &rule)
         {
             return zom( cat( mark(separator), rule) );
@@ -44,9 +70,22 @@ namespace Yttrium
         {
             Compound & Compound:: operator<<(const char c)
             {
-                if(!parser) throw Specific::Exception(name->c_str(),"not linked to parser!!");
+                if(!parser) throw Specific::Exception(name->c_str(),"not linked to parser to create mark!!");
                 pushTail( parser->mark(c) );
                 return *this;
+            }
+
+            Compound & Compound:: operator<< (const String &ruleName)
+            {
+                if(!parser) throw Specific::Exception(name->c_str(),"not linked to parser to create eponymous terminal!!");
+                pushTail( parser->eponymous(ruleName) );
+                return *this;
+            }
+
+            Compound & Compound:: operator<<(const char * const ruleName)
+            {
+                const String _(ruleName);
+                return *this << _;
             }
         }
     }

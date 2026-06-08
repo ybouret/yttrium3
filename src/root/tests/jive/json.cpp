@@ -19,7 +19,19 @@ namespace
 
     JParser:: JParser() : Jive::Parser("JSON")
     {
-        Alternate &JSON = alt("JSON");
+        Alternate &JSON  = alt("JSON");
+        Alternate &VALUE = alt("VALUE");
+
+        {
+            const Rule &EMPTY_ARRAY = (agg("EMPTY_ARRAY") << '{' << '}');
+            const Rule &HEAVY_ARRAY = (agg("HEAVY_ARRAY") << '{' << VALUE << extra(',',VALUE) << '}');
+            const Rule &ARRAY       = (alt("ARRAY") << EMPTY_ARRAY << HEAVY_ARRAY);
+            VALUE << ARRAY;
+            JSON  << ARRAY;
+        }
+
+        VALUE << term("NUMBER","[:digit:]+") << "true" << "false" << "null";
+
         validate();
         render();
     }

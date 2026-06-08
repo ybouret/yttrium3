@@ -69,7 +69,7 @@ namespace Yttrium
                  \return created terminal rule
                  */
                 template <typename ID> inline
-                const Rule & trm(const ID & ruleName,
+                const Terminal & trm(const ID & ruleName,
                                  const Role ruleRole = Semantic,
                                  const Load ruleLoad = Standard)
                 {

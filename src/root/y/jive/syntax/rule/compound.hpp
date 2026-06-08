@@ -67,9 +67,10 @@ namespace Yttrium
                 // Methods
                 //
                 //______________________________________________________________
-                Compound & operator<<(const Rule &); //!< append a rule \return *this
-                Compound & operator<<(const char);   //!< append a marker \return *this
-
+                Compound & operator<<(const Rule &);       //!< append a rule \return *this
+                Compound & operator<<(const char);         //!< append a mark \return *this
+                Compound & operator<<(const String     &); //!< append an eponymous term \return *this
+                Compound & operator<<(const char * const); //!< append an eponymous term \return *this
 
                 Parser * const parser;
 
