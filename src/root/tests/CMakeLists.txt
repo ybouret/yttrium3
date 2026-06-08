@@ -215,6 +215,7 @@ Y_UTEST(jive:lexer)
 Y_UTEST(jive:vfs)
 Y_UTEST(jive:xnode)
 Y_UTEST(jive:grammar)
+Y_UTEST(jive:json)
 
 Y_UTEST(graphviz)
 

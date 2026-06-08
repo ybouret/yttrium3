@@ -43,6 +43,16 @@ namespace Yttrium
                 return this;
             }
 
+
+            const Rule * Scanner:: queryLexicalRule(const String &rid) const noexcept
+            {
+                for(const Rule *rule=code->rlist.head;rule;rule=rule->next)
+                {
+                    if(rid == *rule->name) return rule;
+                }
+                return 0;
+            }
+
         }
 
     }

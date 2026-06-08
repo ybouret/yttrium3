@@ -278,7 +278,7 @@ namespace Yttrium
 				}
 
 
-
+                const Rule * queryLexicalRule(const String &) const noexcept;
 
 				//______________________________________________________________
 				//

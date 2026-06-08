@@ -29,8 +29,8 @@ namespace Yttrium
                 return term_(id,rx,Syntax::Dividing);
             }
 
-            const Rule &mark(const char);
-
+            const Rule & mark(const char);
+            const Rule & extra(const char, const Rule &);
 
 
             virtual ~Parser() noexcept;
@@ -41,8 +41,9 @@ namespace Yttrium
             template <typename ID, typename RX> inline
             const Rule & term_(const ID &id, const RX &rx, const Syntax::Role ruleRole )
             {
-                const Lexical::Rule &lexicalRule  = emit(id,rx);
-                return trm(id,ruleRole,lexicalRule.form->univocal() ? Syntax::Univocal : Syntax::Standard);
+                const Lexical::Rule & lexicalRule = emit(id,rx);
+                const Syntax::Load    ruleLoad    = lexicalRule.form->univocal() ? Syntax::Univocal : Syntax::Standard;
+                return trm(id,ruleRole,ruleLoad);
             }
         };
     }

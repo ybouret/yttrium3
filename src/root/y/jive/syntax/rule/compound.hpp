@@ -68,6 +68,8 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 Compound & operator<<(const Rule &); //!< append a rule \return *this
+                Compound & operator<<(const char);   //!< append a marker \return *this
+
 
                 Parser * const parser;
 
