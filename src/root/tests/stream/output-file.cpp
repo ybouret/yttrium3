@@ -2,6 +2,7 @@
 #include "y/utest/run.hpp"
 using namespace Yttrium;
 
+#if 0
 namespace
 {
 
@@ -109,14 +110,17 @@ namespace
 
 
 }
+#endif
 
 Y_UTEST(stream_output_file)
 {
+#if 0
     if(false)
     {
         Both both("hello");
         std::cerr << "label=" << both.label << std::endl;
     }
+#endif
 
     if(argc>1)
     {
