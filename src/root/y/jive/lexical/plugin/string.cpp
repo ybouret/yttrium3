@@ -1,6 +1,9 @@
 #include "y/jive/lexical/plugin/string.hpp"
 #include "y/string/format.hpp"
 #include "y/jive/pattern/leading.hpp"
+#include "y/exception.hpp"
+#include "y/ascii/printable.hpp"
+#include "y/format/hexadecimal.hpp"
 
 namespace Yttrium
 {
@@ -40,7 +43,39 @@ namespace Yttrium
                 {              doEscMark(ini); }
                 { if(ini!=end) doEscMark(end); }
 
+                // escape control character
+                drop("escCntl","[\\\\][nrtvfab]",this, & String_::onEscCntl);
+
+                // escape hexa
+                drop("escHexa","[\\\\]x[:xdigit:][:xdigit:]",this, & String_:: onEscHexa );
+
             }
+
+            void String_:: onEscCntl(Token &token)  
+            {
+                assert(2==token.size);
+                const char c = **token.tail;
+                switch(c)
+                {
+                    case 'n': **token.head = '\n'; break;
+                    case 'r': **token.head = '\r'; break;
+                    case 't': **token.head = '\t'; break;
+                    case 'v': **token.head = '\v'; break;
+                    case 'f': **token.head = '\f'; break;
+                    case 'a': **token.head = '\a'; break;
+                    case 'b': **token.head = '\b'; break;
+                    default:
+                        throw Specific::Exception(name->c_str(),"corrupted control char '%s'", ASCII::Printable::Text(c) );
+                }
+                data.pushTail(token.popHead());
+            }
+
+            void String_:: onEscHexa(Token &token) noexcept
+            {
+                assert(4==token.size);
+                
+            }
+
 
             void String_:: doChar(const char c)
             {

@@ -49,7 +49,8 @@ namespace Yttrium
                 void onChar(Token &) noexcept;
                 void onEscMark(Token &) noexcept;
                 void doEscMark(const char);
-
+                void onEscCntl(Token &);
+                void onEscHexa(Token &) noexcept;
 
 
                 //______________________________________________________________
