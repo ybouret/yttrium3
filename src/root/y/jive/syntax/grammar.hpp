@@ -116,7 +116,8 @@ namespace Yttrium
                 //! validate rules and freeze
                 void validate();
 
-                
+                const Rule *queryRule(const String &) const noexcept;
+
 
 
             private:

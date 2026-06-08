@@ -14,7 +14,7 @@ namespace Yttrium
 
             std::ostream & Framework::indent(std::ostream &os) const
             {
-                return Core::Indent(os,depth<<1,' ');
+                return Core::Indent(os,depth<<1,'.');
             }
 
 

@@ -64,6 +64,15 @@ namespace Yttrium
             }
 
 
+            const Rule * Grammar:: queryRule(const String &ruleName) const noexcept
+            {
+                for(const Rule *rule=rules.head;rule;rule=rule->next)
+                {
+                    if(ruleName==*rule->name)
+                        return rule;
+                }
+                return 0;
+            }
 
         }
 

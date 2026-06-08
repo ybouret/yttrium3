@@ -94,6 +94,7 @@ namespace Yttrium
                 const char *   humanReadableKind() const noexcept; //!< \return human readable kind
                 bool           isInternal()        const noexcept; //!< \return true iff internal
                 bool           isTerminal()        const noexcept; //!< \return true iff terminal
+                
 
                 //______________________________________________________________
                 //
