@@ -53,7 +53,12 @@ namespace Yttrium
                 //
                 //______________________________________________________________
 
-                //! setup emtpy \param ruleName name \param ruleDuty duty
+                //! setup emtpy
+                /**
+                 \param ruleName name
+                 \param ruleDuty duty
+                 \param myParser parent parser if presenet
+                 */
                 template <typename ID> inline
                 explicit Aggregate(const ID &     ruleName,
                                    const Duty     ruleDuty,

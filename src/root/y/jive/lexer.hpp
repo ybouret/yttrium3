@@ -119,6 +119,7 @@ namespace Yttrium
                 return makeDial( record( new PLUGIN(pid,*this) ) );
             }
 
+            //! reset curr to this, clear cache and history
             void reset() noexcept;
             
         private:

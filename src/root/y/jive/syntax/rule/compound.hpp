@@ -40,6 +40,7 @@ namespace Yttrium
                 /**
                  \param ruleName name
                  \param ruleUUID uuid
+                 \param myParser optional parent parser
                  */
                 template <typename ID>
                 explicit Compound(const ID      & ruleName,
@@ -72,7 +73,13 @@ namespace Yttrium
                 Compound & operator<<(const String     &); //!< append an eponymous term \return *this
                 Compound & operator<<(const char * const); //!< append an eponymous term \return *this
 
-                Parser * const parser;
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                Parser * const parser; //!< optional parent parser
 
             private:
                 Y_Disable_Copy_And_Assign(Compound); //!< discarded

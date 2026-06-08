@@ -49,6 +49,7 @@ namespace Yttrium
             String         subFieldId(const unit_t)               const; //!< \return sub field name for given coordinate
             const String & key()                         const noexcept; //!< \return name
 
+            //! helper \param entry base address \param bytes allocated bytes
             template <typename T> static inline
             void ReleaseMemoryAs(T * &entry, size_t &bytes) noexcept
             {

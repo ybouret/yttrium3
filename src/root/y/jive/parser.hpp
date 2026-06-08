@@ -10,31 +10,82 @@ namespace Yttrium
 {
     namespace Jive
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Parser
+        //
+        //
+        //______________________________________________________________________
         class Parser : public Lexer, public Syntax::Grammar
         {
         public:
-            typedef Syntax::Terminal Terminal;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef Syntax::Terminal Terminal; //!< echo
 
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup \param id for lexer name and grammar language
             template <typename ID> inline
             explicit Parser(const ID &id) : Lexer(id), Syntax::Grammar(name,this)
             {
             }
 
+            //! cleanup
+            virtual ~Parser() noexcept;
+
+
+            //__________________________________________________________________
+            //
+            //
+            // API for terminals
+            //
+            //__________________________________________________________________
+
+            //! setup semantic terminal
+            /**
+             \param id terminal name
+             \param rx terminal regular expression
+             \return created terminal
+             */
             template <typename ID, typename RX> inline
             const Terminal &term(const ID &id, const RX &rx) {
                 return term_(id,rx,Syntax::Semantic);
             }
 
+            //! setup dividing terminal
+            /**
+             \param id terminal name
+             \param rx terminal regular expression
+             \return created terminal
+             */
             template <typename ID, typename RX> inline
             const Terminal &mark(const ID &id, const RX &rx) {
                 return term_(id,rx,Syntax::Dividing);
             }
 
-            const Rule & mark(const char);
-            const Rule & eponymous(const String &);
-            const Rule & extra(const char, const Rule &);
+            const Rule & mark(const char);                //!< \return on-the-fly mark
+            const Rule & eponymous(const String &);       //!< \return on the fly UNIVOCAL eponymous terminal
+            const Rule & extra(const char, const Rule &); //!< \return zom( cat(separator,rule) )
 
+            //! create a terminal from and advanced plugin
+            /**
+             \param hint plugin selector
+             \param pid  terminal name from pligin
+             \return created terminal
+             */
             template <typename ID, typename PLUGIN> inline
             const Terminal & use(const TypeToType<PLUGIN> hint, const ID &pid)
             {
@@ -42,14 +93,20 @@ namespace Yttrium
                 return trm(plg.info,Syntax::Semantic,Syntax::Standard);
             }
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
             XNode * getAST(Module * const);
 
 
-            virtual ~Parser() noexcept;
 
         private:
-            Y_Disable_Copy_And_Assign(Parser);
+            Y_Disable_Copy_And_Assign(Parser); //!< discarded
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             template <typename ID, typename RX> inline
             const Terminal & term_(const ID &id, const RX &rx, const Syntax::Role ruleRole )
             {
@@ -57,6 +114,8 @@ namespace Yttrium
                 const Syntax::Load    ruleLoad    = lexicalRule.form->univocal() ? Syntax::Univocal : Syntax::Standard;
                 return trm(lexicalRule.name,ruleRole,ruleLoad);
             }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
         };
     }
 }

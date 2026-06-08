@@ -47,7 +47,7 @@ namespace Yttrium
                 //
                 //______________________________________________________________
 
-                //! setup \param id lang
+                //! setup \param gid language name \param prs optional parent parser
                 template <typename ID> inline
                 explicit  Grammar(const ID &     gid,
                                   Parser * const prs) :
@@ -125,7 +125,7 @@ namespace Yttrium
                 //! validate rules and freeze
                 void validate();
 
-                const Rule *querySyntaxRule(const String &) const noexcept;
+                const Rule * querySyntaxRule(const String &) const noexcept; //!< \return found syntax rule
 
                 //______________________________________________________________
                 //
@@ -133,7 +133,7 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                Parser * const parser;
+                Parser * const parser; //!< optional parent parser
 
             private:
                 Y_Disable_Copy_And_Assign(Grammar); //!< discarded

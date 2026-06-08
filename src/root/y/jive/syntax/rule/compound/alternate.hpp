@@ -39,7 +39,11 @@ namespace Yttrium
                 //
                 //______________________________________________________________
 
-                //! setup emtpy \param ruleName name
+                //! setup emtpy
+                /**
+                 \param ruleName name
+                 \param myParser parent parser if present
+                 */
                 template <typename ID> inline
                 explicit Alternate(const ID &     ruleName,
                                    Parser * const myParser) :
