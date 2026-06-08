@@ -63,9 +63,8 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
-                OutputStream & viz(OutputStream &)       const; //!< emit graphviz code \return output stream
-                size_t         serialize(OutputStream &) const; //!< emit binary node
-                
+                virtual size_t         serialize(OutputStream &) const;
+
                 //______________________________________________________________
                 //
                 //
@@ -77,8 +76,9 @@ namespace Yttrium
                 XList        & list()                     noexcept; //!< \return list   for internal node
                 const XList  & list()               const noexcept; //!< \return list   for internal node (const
                 void           returnTo(Lexical::Stack &) noexcept; //!< return to lexer using its stack
-                const Rule * operator->()           const noexcept; //!< \return rule address
-                const Rule & operator*()            const noexcept; //!< \return rule
+                const Rule *   operator->()         const noexcept; //!< \return rule address
+                const Rule &   operator*()          const noexcept; //!< \return rule
+                OutputStream & viz(OutputStream &)           const; //!< emit graphviz code \return output stream
 
 
                 //! grow tree with new node

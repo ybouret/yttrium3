@@ -71,7 +71,7 @@ namespace Yttrium
                 Outcome(const Result, const Sanity, const Status) noexcept; //!< setup
                 Outcome(const Outcome &)                          noexcept; //!< duplicate
                 ~Outcome()                                        noexcept; //!< cleanup
-                Outcome & operator=(const Outcome &)              noexcept; //!< assign
+                Outcome & operator=(const Outcome &)              noexcept; //!< assign \return *this
                 
                 //______________________________________________________________
                 //
