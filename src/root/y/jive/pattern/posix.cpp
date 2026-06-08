@@ -63,7 +63,7 @@ namespace Yttrium
             return p.yield()->optimized();
         }
 
-         Pattern * posix:: blank()
+        Pattern * posix:: blank()
         {
             static const char data[] = " \t";
             return Pattern::Among(data);
@@ -78,7 +78,7 @@ namespace Yttrium
         {
             return Pattern::Among("][!\"#$%&'()*+,./:;<=>?@\\^_`{|}~-");
         }
-        
+
         Pattern * posix:: core()
         {
             AutoPtr<Logic> p = new Or();
@@ -135,6 +135,12 @@ namespace Yttrium
             return  p.yield()->optimized();
         }
 
+        Pattern * posix::any1()
+        {
+            return new Any1();
+        }
+
+
 #define Y_Jive_Posix(NAME) if(id == #NAME) return NAME()
 
         Pattern * posix:: named(const String &id) noexcept
@@ -154,6 +160,7 @@ namespace Yttrium
             Y_Jive_Posix(consonant);
             Y_Jive_Posix(endl);
             Y_Jive_Posix(dot);
+            Y_Jive_Posix(any1);
             return 0;
         }
 

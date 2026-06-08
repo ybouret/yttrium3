@@ -40,7 +40,7 @@ namespace Yttrium
             static Pattern *core();      //!< \return core 7-bits string content, minus quote, dquote  and backslash
             static Pattern *vowel();     //!< \return vowels
             static Pattern *consonant(); //!< \return consonants
-
+            static Pattern *any1();      //!< \return any one character
             static Pattern *named(const String &) noexcept; //!< \return look up pattern by name, NULL if not found
             static Pattern *named(const char * const);      //!< \return look up pattern by name
         };
