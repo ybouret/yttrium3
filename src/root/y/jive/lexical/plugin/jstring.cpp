@@ -7,12 +7,10 @@ namespace Yttrium
     {
         namespace Lexical
         {
-            void JString:: init()
-            {
-                doChar('\'');
-                doChar('<');
-                doChar('>');
-            }
+
+            const char * const JString:: XEsc = "\'<>";
+
+            
 
             JString:: ~JString() noexcept
             {

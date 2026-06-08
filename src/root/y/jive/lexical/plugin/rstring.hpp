@@ -14,7 +14,8 @@ namespace Yttrium
             class RString : public String_
             {
             public:
-                static const char Mark = '\'';
+                static const char         Mark = '\''; //!< alias
+                static const char * const XEsc;        //!< register dquotes, langle and rangle
 
                 //! setup
                 /**
@@ -24,16 +25,14 @@ namespace Yttrium
                 template <typename PID> inline
                 explicit RString(const PID & pid,
                                  Stack     & stk) :
-                String_(pid,stk,Mark,Mark)
+                String_(pid,stk,Mark,Mark,XEsc)
                 {
-                    init();
                 }
 
                 //! cleanup
                 virtual ~RString() noexcept;
             private:
                 Y_Disable_Copy_And_Assign(RString);
-                void init(); //!< register dquotes, langle and rangle
             };
 
         }

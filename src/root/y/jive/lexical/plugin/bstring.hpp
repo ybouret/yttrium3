@@ -17,6 +17,7 @@ namespace Yttrium
             public:
                 static const char Ini = '<';
                 static const char End = '>';
+                static const char * const XEsc; //!< register quote and dquotes
 
                 //! setup
                 /**
@@ -26,7 +27,7 @@ namespace Yttrium
                 template <typename PID> inline
                 explicit BString(const PID & pid,
                                  Stack     & stk) :
-                String_(pid,stk,Ini,End)
+                String_(pid,stk,Ini,End,XEsc)
                 {
                 }
 
@@ -34,8 +35,7 @@ namespace Yttrium
                 virtual ~BString() noexcept;
             private:
                 Y_Disable_Copy_And_Assign(BString);
-                void init(); //!< register quote and dquotes
-
+                
             };
 
         }

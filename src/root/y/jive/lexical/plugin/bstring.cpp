@@ -7,12 +7,8 @@ namespace Yttrium
         namespace Lexical
         {
 
-           
-            void BString:: init()
-            {
-                doChar('\"');
-                doChar('\'');
-            }
+            const char * const BString::  XEsc = "\"'";
+
 
             BString:: ~BString() noexcept
             {

@@ -21,14 +21,15 @@ namespace Yttrium
                  */
                 template <typename PID> inline
                 explicit String_(const PID & pid,
-                                Stack     & stk,
-                                const char  ini,
-                                const char  end) :
+                                 Stack     & stk,
+                                 const char  ini,
+                                 const char  end,
+                                 const char * const esc) :
                 AdvancedPlugin(pid,ini,stk,RejectEOS),
                 spot(name),
                 data()
                 {
-                    initialize(ini,end);
+                    initialize(ini,end,esc);
                 }
 
                 virtual ~String_() noexcept;
@@ -44,7 +45,7 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(String_);
-                void initialize(const char ini, const char end);
+                void initialize(const char ini, const char end, const char * const esc);
                 void onCore(Token &) noexcept;
                 void onChar(Token &) noexcept;
                 void onEscMark(Token &) noexcept;

@@ -15,7 +15,8 @@ namespace Yttrium
             class JString : public String_
             {
             public:
-                static const char Mark = '\"';
+                static const char         Mark = '\"';
+                static const char * const XEsc; //!< register quote, langle and rangle
 
                 //! setup
                 /**
@@ -25,16 +26,15 @@ namespace Yttrium
                 template <typename PID> inline
                 explicit JString(const PID & pid,
                                  Stack     & stk) :
-                String_(pid,stk,Mark,Mark)
+                String_(pid,stk,Mark,Mark,XEsc)
                 {
-                    init();
                 }
 
                 //! cleanup
                 virtual ~JString() noexcept;
             private:
                 Y_Disable_Copy_And_Assign(JString);
-                void init(); //!< register quote, langle and rangle
+                void init ();
             };
 
         }
