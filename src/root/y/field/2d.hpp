@@ -170,7 +170,7 @@ namespace Yttrium
                     Pulverize( &rows[built] );
                 rows=0;
                 data=0;
-                if(bytes) { assert(entry); ReleaseMemory(entry,bytes); } else { assert(!entry); }
+                if(bytes) { assert(entry); ReleaseMemory_(entry,bytes); } else { assert(!entry); }
             }
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             

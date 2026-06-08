@@ -19,7 +19,7 @@ namespace Yttrium
             return mgr.acquire(bytes);
         }
 
-        void CoreField:: ReleaseMemory(void *&entry, size_t &bytes) noexcept
+        void CoreField:: ReleaseMemory_(void *&entry, size_t &bytes) noexcept
         {
             static Memory::Allocator &mgr = Object::Factory::Instance();
             assert(bytes>0);

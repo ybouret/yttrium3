@@ -5,6 +5,7 @@
 #define Y_Field_Included 1
 
 #include "y/string.hpp"
+#include "y/hide.hpp"
 
 namespace Yttrium
 {
@@ -44,10 +45,18 @@ namespace Yttrium
             //
             //__________________________________________________________________
             static void *  AcquireMemory(size_t & );                     //!< \return memory for required bytes
-            static void    ReleaseMemory(void * & , size_t & ) noexcept; //!< release acquired memory
+            static void    ReleaseMemory_(void * &, size_t & ) noexcept; //!< release acquired memory
             String         subFieldId(const unit_t)               const; //!< \return sub field name for given coordinate
             const String & key()                         const noexcept; //!< \return name
-            
+
+            template <typename T> static inline
+            void ReleaseMemory(T * &entry, size_t &bytes) noexcept
+            {
+                void * addr = Hide::Address(entry);
+                ReleaseMemory_(addr,bytes);
+                entry = 0;
+            }
+
             //__________________________________________________________________
             //
             //

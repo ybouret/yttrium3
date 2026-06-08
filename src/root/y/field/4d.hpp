@@ -148,7 +148,7 @@ namespace Yttrium
                 assert(bytes);
                 while(built-- > 0)
                     Pulverize( &volumes[built] );
-                ReleaseMemory(entry,bytes);
+                ReleaseMemory_(entry,bytes);
                 volumes=0;
             }
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)

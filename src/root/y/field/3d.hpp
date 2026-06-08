@@ -187,7 +187,7 @@ namespace Yttrium
                 if(bytes)
                 {
                     assert(entry);
-                    ReleaseMemory(entry,bytes);
+                    ReleaseMemory_(entry,bytes);
                 }
                 else
                 {

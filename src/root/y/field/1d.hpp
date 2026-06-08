@@ -122,7 +122,7 @@ namespace Yttrium
             {
                 assert(entry);
                 while(built-- > 0 ) Pulverize( &entry[built] );
-                if(bytes) ReleaseMemory(*(void**)&entry,bytes);
+                if(bytes) ReleaseMemory(entry,bytes);
             }
 
             inline void build()
