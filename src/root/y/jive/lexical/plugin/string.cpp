@@ -39,6 +39,9 @@ namespace Yttrium
                             doChar( (char)i );
                 }
 
+                // backslash ini
+                doEscMark('\\');
+
                 // escape ini/end
                 {              doEscMark(ini); }
                 { if(ini!=end) doEscMark(end); }
@@ -101,7 +104,8 @@ namespace Yttrium
 
             void String_:: doEscMark(const char c)
             {
-                const String rx = Formatted::Get("\\x%02x", (unsigned)c);
+                const String rx = Formatted::Get("[\\\\]\\x%02x", (unsigned)c);
+                std::cerr << "-- doEscMark '" << rx << "'" << std::endl;
                 drop(c,rx,this, &String_::onEscMark);
             }
 
