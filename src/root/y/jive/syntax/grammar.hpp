@@ -35,6 +35,11 @@ namespace Yttrium
                 //______________________________________________________________
                 typedef Syntax::Aggregate     Aggregate; //!< echo
                 typedef Syntax::Alternate     Alternate; //!< echo
+                typedef Syntax::XNode         XNode; //!< echo
+                typedef Syntax::XList         XList; //!< echo
+
+
+
                 //______________________________________________________________
                 //
                 //

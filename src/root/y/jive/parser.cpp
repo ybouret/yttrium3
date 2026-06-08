@@ -88,6 +88,15 @@ namespace Yttrium
                 return *this << _;
             }
         }
+
+
+        Syntax::XNode * Parser:: getAST(Module * const m)
+        {
+            Source source(m);
+            reset();
+            return run(*this,source);
+        }
+
     }
 
 }

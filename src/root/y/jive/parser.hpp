@@ -15,6 +15,7 @@ namespace Yttrium
         public:
             typedef Syntax::Terminal Terminal;
 
+
             template <typename ID> inline
             explicit Parser(const ID &id) : Lexer(id), Syntax::Grammar(name,this)
             {
@@ -34,6 +35,15 @@ namespace Yttrium
             const Rule & eponymous(const String &);
             const Rule & extra(const char, const Rule &);
 
+            template <typename ID, typename PLUGIN> inline
+            const Terminal & use(const TypeToType<PLUGIN> hint, const ID &pid)
+            {
+                const Lexical::Rule & plg = dial(hint,pid);
+                return trm(plg.info,Syntax::Semantic,Syntax::Standard);
+            }
+
+            XNode * getAST(Module * const);
+
 
             virtual ~Parser() noexcept;
 
@@ -45,7 +55,7 @@ namespace Yttrium
             {
                 const Lexical::Rule & lexicalRule = emit(id,rx);
                 const Syntax::Load    ruleLoad    = lexicalRule.form->univocal() ? Syntax::Univocal : Syntax::Standard;
-                return trm(id,ruleRole,ruleLoad);
+                return trm(lexicalRule.name,ruleRole,ruleLoad);
             }
         };
     }
