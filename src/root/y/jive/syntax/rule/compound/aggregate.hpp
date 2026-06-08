@@ -55,8 +55,10 @@ namespace Yttrium
 
                 //! setup emtpy \param ruleName name \param ruleDuty duty
                 template <typename ID> inline
-                explicit Aggregate(const ID &ruleName, const Duty ruleDuty) :
-                Compound(ruleName,UUID),
+                explicit Aggregate(const ID &     ruleName,
+                                   const Duty     ruleDuty,
+                                   Parser * const myParser) :
+                Compound(ruleName,UUID,myParser),
                 duty(ruleDuty)
                 {
 
@@ -81,8 +83,7 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                const Duty duty; //!< duty
-
+                const Duty           duty; //!< duty
             private:
                 Y_Disable_Copy_And_Assign(Aggregate); //!< discarded
             };

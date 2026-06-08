@@ -34,7 +34,7 @@ namespace
     class MyGrammar : public Syntax::Grammar
     {
     public:
-        explicit MyGrammar() : Syntax:: Grammar("MyGrammar")
+        explicit MyGrammar() : Syntax:: Grammar("MyGrammar",0)
         {
             Alternate  & TOP = alt(lang);
             const Rule & ID  = trm("ID");

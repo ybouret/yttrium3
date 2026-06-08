@@ -11,6 +11,8 @@ namespace Yttrium
 {
     namespace Jive
     {
+        class Parser;
+        
         namespace Syntax
         {
             typedef Handy::BasicLightList<const Rule> RList; //!< alias
@@ -41,8 +43,10 @@ namespace Yttrium
                  */
                 template <typename ID>
                 explicit Compound(const ID      & ruleName,
-                                  const uint32_t  ruleUUID) :
-                Internal(ruleName,ruleUUID)
+                                  const uint32_t  ruleUUID,
+                                  Parser *  const myParser) :
+                Internal(ruleName,ruleUUID),
+                parser(myParser)
                 {
                 }
 
@@ -65,8 +69,7 @@ namespace Yttrium
                 //______________________________________________________________
                 Compound & operator<<(const Rule &); //!< append a rule \return *this
 
-
-
+                Parser * const parser;
 
             private:
                 Y_Disable_Copy_And_Assign(Compound); //!< discarded

@@ -11,8 +11,11 @@ namespace Yttrium
 {
     namespace Jive
     {
+        class Parser;
+
         namespace Syntax
         {
+            
             //__________________________________________________________________
             //
             //
@@ -30,9 +33,8 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
-                typedef Syntax::Aggregate Aggregate; //!< echo
-                typedef Syntax::Alternate Alternate; //!< echo
-
+                typedef Syntax::Aggregate     Aggregate; //!< echo
+                typedef Syntax::Alternate     Alternate; //!< echo
                 //______________________________________________________________
                 //
                 //
@@ -42,8 +44,10 @@ namespace Yttrium
 
                 //! setup \param id lang
                 template <typename ID> inline
-                explicit  Grammar(const ID &id) :
-                CoreGrammar(id)
+                explicit  Grammar(const ID &     gid,
+                                  Parser * const prs) :
+                CoreGrammar(gid),
+                parser(prs)
                 {
                 }
 
@@ -81,7 +85,7 @@ namespace Yttrium
                 template <typename ID> inline
                 Alternate & alt(const ID & ruleName)
                 {
-                    return add( new Alternate(ruleName) );
+                    return add( new Alternate(ruleName,parser) );
                 }
 
               
@@ -91,14 +95,14 @@ namespace Yttrium
                 template <typename ID> inline
                 Aggregate & agg(const ID & ruleName)
                 {
-                    return add( new Aggregate(ruleName,Entitled) );
+                    return add( new Aggregate(ruleName,Entitled,parser) );
                 }
 
                 //! create grouping aggregate \param ruleName name \return added aggregate
                 template <typename ID> inline
                 Aggregate & grp(const ID & ruleName)
                 {
-                    return add( new Aggregate(ruleName,Grouping) );
+                    return add( new Aggregate(ruleName,Grouping,parser) );
                 }
 
                 const Rule & pick(const Rule &, const Rule &);               //!< \return alternate of rules
@@ -118,7 +122,13 @@ namespace Yttrium
 
                 const Rule *queryRule(const String &) const noexcept;
 
-
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                Parser * const parser;
 
             private:
                 Y_Disable_Copy_And_Assign(Grammar); //!< discarded

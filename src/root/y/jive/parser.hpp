@@ -15,7 +15,7 @@ namespace Yttrium
         public:
 
             template <typename ID> inline
-            explicit Parser(const ID &id) : Lexer(id), Syntax::Grammar(name)
+            explicit Parser(const ID &id) : Lexer(id), Syntax::Grammar(name,this)
             {
             }
 

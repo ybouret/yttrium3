@@ -41,8 +41,9 @@ namespace Yttrium
 
                 //! setup emtpy \param ruleName name
                 template <typename ID> inline
-                explicit Alternate(const ID &ruleName) :
-                Compound(ruleName,UUID)
+                explicit Alternate(const ID &     ruleName,
+                                   Parser * const myParser) :
+                Compound(ruleName,UUID,myParser)
                 {
 
                 }
