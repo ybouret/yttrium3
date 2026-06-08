@@ -8,7 +8,7 @@ namespace Yttrium
 {
     namespace Information
     {
-        const char * const ARC4:: Encoder:: CallSign = "Verbatim";
+        const char * const ARC4:: Encoder:: CallSign = "ARC4";
         const char *       ARC4:: Encoder:: callSign() const noexcept { return CallSign; }
 
 
