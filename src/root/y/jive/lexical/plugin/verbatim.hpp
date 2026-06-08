@@ -73,7 +73,7 @@ namespace Yttrium
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
                 void         initialize();
-                void         onChar(Token &);
+                void         onChar(Token &) noexcept;
 #endif
 
                 //______________________________________________________________

@@ -19,7 +19,7 @@ namespace Yttrium
                 drop("char", "[\\x00-\\xff]",this, & Verbatim::onChar);
             }
 
-            void Verbatim:: onChar(Token &token)
+            void Verbatim:: onChar(Token &token) noexcept
             {
                 assert(1==token.size);
                 data.mergeTail(token);

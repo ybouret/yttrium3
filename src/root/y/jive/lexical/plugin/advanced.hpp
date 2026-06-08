@@ -82,7 +82,7 @@ namespace Yttrium
                 //______________________________________________________________
             protected:
                 Stack &stack; //!< from lexer
-
+                
             private:
                 Y_Disable_Copy_And_Assign(AdvancedPlugin); //!< discarded
 
