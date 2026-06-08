@@ -29,6 +29,9 @@ namespace Yttrium
                 return term_(id,rx,Syntax::Dividing);
             }
 
+            const Rule &mark(const char);
+
+
 
             virtual ~Parser() noexcept;
 

@@ -12,6 +12,12 @@ namespace Yttrium
             
         }
 
+        const Syntax::Rule & Parser:: mark(const char c)
+        {
+            return mark(c,c);
+        }
+
+
     }
 
 }
