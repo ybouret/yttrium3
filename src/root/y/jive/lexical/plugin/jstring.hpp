@@ -12,12 +12,27 @@ namespace Yttrium
     {
         namespace Lexical
         {
+
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! JSON string
+            //
+            //
+            //__________________________________________________________________
             class JString : public String_
             {
             public:
-                static const char         Mark = '\"';
-                static const char * const XEsc; //!< register quote, langle and rangle
+                static const char         Mark = '\"'; //!< alias
+                static const char * const XEsc;        //!< register quote, langle and rangle
 
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
                 //! setup
                 /**
                  \param pid plugin name
@@ -32,9 +47,9 @@ namespace Yttrium
 
                 //! cleanup
                 virtual ~JString() noexcept;
+
             private:
-                Y_Disable_Copy_And_Assign(JString);
-                void init ();
+                Y_Disable_Copy_And_Assign(JString); //!< discarded
             };
 
         }

@@ -11,12 +11,32 @@ namespace Yttrium
     {
         namespace Lexical
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Raw string
+            //
+            //
+            //__________________________________________________________________
             class RString : public String_
             {
             public:
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
                 static const char         Mark = '\''; //!< alias
                 static const char * const XEsc;        //!< register dquotes, langle and rangle
 
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
                 //! setup
                 /**
                  \param pid plugin name
@@ -31,8 +51,9 @@ namespace Yttrium
 
                 //! cleanup
                 virtual ~RString() noexcept;
+
             private:
-                Y_Disable_Copy_And_Assign(RString);
+                Y_Disable_Copy_And_Assign(RString); //!< discarded
             };
 
         }

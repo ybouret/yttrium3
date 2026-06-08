@@ -12,13 +12,33 @@ namespace Yttrium
     {
         namespace Lexical
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Bracket string
+            //
+            //
+            //__________________________________________________________________
             class BString : public String_
             {
             public:
-                static const char Ini = '<';
-                static const char End = '>';
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                static const char Ini = '<';    //!< alias
+                static const char End = '>';    //!< alias
                 static const char * const XEsc; //!< register quote and dquotes
 
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
                 //! setup
                 /**
                  \param pid plugin name
@@ -33,9 +53,10 @@ namespace Yttrium
 
                 //! cleanup
                 virtual ~BString() noexcept;
-            private:
-                Y_Disable_Copy_And_Assign(BString);
                 
+            private:
+                Y_Disable_Copy_And_Assign(BString); //!< dicarded
+
             };
 
         }
