@@ -31,16 +31,15 @@ namespace
         explicit Eval() : Jive::Parser("Eval")
         {
             Compound &EVAL  = agg("EVAL");
-            Compound &ADDOP = agg("ADDOP");
-            Compound &MULOP = agg("MULOP");
-            Compound &POW   = agg("POW");
+            Compound &ADDOP = yld("ADDOP");
+            Compound &MULOP = yld("MULOP");
+            Compound &POW   = yld("POW");
             Compound &ATOM  = alt("ATOM");
 
-            EVAL << zom(ADDOP);
-
+            EVAL  << zom(ADDOP);
             ADDOP << MULOP << zom(cat(pick( term('+'), term('-') ),MULOP));
             MULOP << POW   << zom(cat(pick( term('*'), term('/') ),POW));
-            POW   << ATOM  << opt( cat( term('^'), POW) );
+            POW   << ATOM  << opt( cat( mark('^'), POW) );
             ATOM  << term("ID","[:alpha:][:word:]*") << term("INT","[:digit:]+") << parens(ADDOP);
 
 

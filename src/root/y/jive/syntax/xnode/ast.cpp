@@ -48,6 +48,17 @@ namespace Yttrium
                                 }
                                 break;
 
+                            case Aggregate::UUID:
+                                switch(dynamic_cast<const Aggregate &>(child->rule).duty)
+                                {
+                                    case Entitled: break;
+                                    case Grouping: target.mergeTail(child->list()); continue;
+                                    case Yielding:
+                                        if(1==child->list().size) { target.mergeTail(child->list()); continue; }
+                                        break;
+                                }
+                                break;
+
                             default:
                                 break;
                         }

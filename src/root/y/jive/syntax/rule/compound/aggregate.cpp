@@ -78,14 +78,14 @@ namespace Yttrium
                         Y_Jive_Syntax("\\_[+]'" << name << "'");
                         switch(duty)
                         {
-                            case Entitled: framework.grow( workspace.yield() ); break;
+                            case Entitled:
+                            case Yielding: framework.grow( workspace.yield() ); break;
                             case Grouping: framework.join( workspace );         break;
-                            case Yielding:
-                                if(1==xlist.size)
-                                    framework.grow( workspace.yield() );
-                                else
-                                    framework.join( workspace );
-                                break;
+                                // if(1==xlist.size)
+                                //     framework.grow( workspace.yield() );
+                                // else
+                                //     framework.join( workspace );
+                                // break;
                         }
                         break;
                 }
