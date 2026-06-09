@@ -10,6 +10,9 @@
 #include "y/jive/syntax/grammar/framework.hpp"
 #include "y/jive/syntax/outcome.hpp"
 
+#include "y/jive/syntax/rule/expected.hpp"
+
+
 namespace Yttrium
 {
     namespace Jive
@@ -24,6 +27,8 @@ namespace Yttrium
 #define Y_Jive_Syntax_Rule_Decl() virtual Outcome       accepts(Framework &) const          //!< declaration   prolog
 #define Y_Jive_Syntax_Rule_Impl(CLS)      Outcome CLS:: accepts(Framework &framework) const //!< implementatin prolog
 
+
+            
 
             //__________________________________________________________________
             //

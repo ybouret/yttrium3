@@ -1,7 +1,5 @@
 #include "y/jive/syntax/grammar.hpp"
 #include "y/exception.hpp"
-#include "y/container/associative/book.hpp"
-#include "y/container/associative/hash/default-set.hpp"
 
 namespace Yttrium
 {
@@ -11,7 +9,7 @@ namespace Yttrium
         {
             namespace
             {
-                typedef BookOf<const Rule,DefaultHashSet> RDB;
+                typedef Expected RDB;
 
                 static inline
                 void GrammarVisit(RDB        & rdb,

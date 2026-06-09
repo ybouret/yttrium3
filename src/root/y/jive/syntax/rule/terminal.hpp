@@ -34,6 +34,8 @@ namespace Yttrium
                 Univocal  //!< single form
             };
 
+            
+
             //__________________________________________________________________
             //
             //
@@ -52,6 +54,7 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 static const uint32_t UUID = Y_FOURCC('T','E','R','M'); //!< alias
+                typedef AutoPtr<Expected> Expecting;
 
                 //______________________________________________________________
                 //
@@ -72,7 +75,8 @@ namespace Yttrium
                                   const Load ruleLoad = Standard) :
                 Rule(ruleName,IsTerminal,UUID),
                 role(ruleRole),
-                load(ruleLoad)
+                load(ruleLoad),
+                exdb( new Expected() )
                 {
 
                 }
@@ -90,8 +94,6 @@ namespace Yttrium
                 Y_Jive_Syntax_Rule_Decl(); //!< accepts
 
                 
-                
-
 
                 //______________________________________________________________
                 //
@@ -99,8 +101,9 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                const Role role; //!< role
-                const Load load; //!< load
+                const Role      role; //!< role
+                const Load      load; //!< load
+                const Expecting exdb; //!< expected database
 
             private:
                 Y_Disable_Copy_And_Assign(Terminal); //!< discarded

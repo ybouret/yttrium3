@@ -69,6 +69,10 @@ Y_UTEST(jive_grammar)
         AutoPtr<Syntax::XNode> ast = G.run(L,source);
     }
 
+    Y_SIZEOF(Syntax::Rule);
+    Y_SIZEOF(Syntax::Expected);
+    Y_SIZEOF(Syntax::Terminal);
+
 
 }
 Y_UDONE()
