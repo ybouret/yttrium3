@@ -121,7 +121,9 @@ namespace Yttrium
 
             //! reset curr to this, clear cache and history
             void reset() noexcept;
-            
+
+            const Core::ListOf<Lexeme> * operator->() const noexcept;
+
         private:
             Y_Disable_Copy_And_Assign(Lexer); //!< discarded
             Scanner * curr;                   //!< current scanner

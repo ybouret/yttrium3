@@ -24,9 +24,12 @@ namespace Yttrium
                         return accepted( framework.yield(), lexer, source);
 
                     case Rejected:
-                        std::cerr << "Rejected!" << std::endl;
                         break;
                 }
+
+                std::cerr << "Rejected!" << std::endl;
+                
+
 
 
                 return 0;

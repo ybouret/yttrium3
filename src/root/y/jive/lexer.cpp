@@ -191,6 +191,10 @@ namespace Yttrium
         }
 
 
+        const Core::ListOf<Lexeme> * Lexer:: operator->() const noexcept
+        {
+            return &lexemes;
+        }
 
         
     }

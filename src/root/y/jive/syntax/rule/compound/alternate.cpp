@@ -26,15 +26,17 @@ namespace Yttrium
 
             Y_Jive_Syntax_Rule_Impl(Alternate)
             {
-                Y_Jive_Syntax("?ALT  [" << name << "]");
+                Y_Jive_Syntax("[|]'" << name << "'");
                 const Nesting nest(framework);
                 Outcome       last(Rejected,Healthy,Running);
+                const Rule   *rule = 0;
                 for( const RNode * node = list.head;node;node=node->next)
                 {
                     const Outcome rout = (**node).accepts(framework);
                     if(Accepted==rout.result)
                     {
                         last = rout;
+                        rule = & (**node);
                         if(Healthy == rout.sanity)
                         {
                             break;
@@ -43,6 +45,12 @@ namespace Yttrium
                     }
                 }
 
+
+                switch(last.result)
+                {
+                    case Accepted: Y_Jive_Syntax("\\_[+]'" << name << "'=>'" << rule->name << "'"); break;
+                    case Rejected: Y_Jive_Syntax("\\_[-]'" << name << "'"); break;
+                }
 
                 return last;
             }

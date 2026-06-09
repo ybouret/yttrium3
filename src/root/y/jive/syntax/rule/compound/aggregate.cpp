@@ -26,7 +26,7 @@ namespace Yttrium
 
             Y_Jive_Syntax_Rule_Impl(Aggregate)
             {
-                Y_Jive_Syntax("?AGG : [" << name << "]");
+                Y_Jive_Syntax("[&]'" << name << "'");
                 //--------------------------------------------------------------
                 //
                 //
@@ -70,12 +70,12 @@ namespace Yttrium
                 switch(outcome.result)
                 {
                     case Rejected:
-                        Y_Jive_Syntax("[-][" << name << "]");
+                        Y_Jive_Syntax("\\_[-]'" << name << "'");
                         workspace.dump();
                         break;
                         
                     case Accepted:
-                        Y_Jive_Syntax("[+][" << name << "]");
+                        Y_Jive_Syntax("\\_[+]'" << name << "'");
                         switch(duty)
                         {
                             case Entitled: framework.grow( workspace.yield() ); break;

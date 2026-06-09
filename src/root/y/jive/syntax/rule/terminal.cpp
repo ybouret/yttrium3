@@ -56,7 +56,7 @@ namespace Yttrium
             Y_Jive_Syntax_Rule_Impl(Terminal)
             {
 
-                Y_Jive_Syntax("[?]'" << name << "'");
+                Y_Jive_Syntax("[*]'" << name << "'");
                 //--------------------------------------------------------------
                 //
                 // pull next lexeme
