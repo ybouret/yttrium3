@@ -28,6 +28,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             typedef Syntax::Terminal Terminal; //!< echo
+            typedef Syntax::Compound Compound; //!< echo
 
 
             //__________________________________________________________________
@@ -65,6 +66,8 @@ namespace Yttrium
                 return term_(id,rx,Syntax::Semantic);
             }
 
+            const Rule &term(const char);
+
             //! setup dividing terminal
             /**
              \param id terminal name
@@ -79,6 +82,7 @@ namespace Yttrium
             const Rule & mark(const char);                //!< \return on-the-fly mark
             const Rule & eponymous(const String &);       //!< \return on the fly UNIVOCAL eponymous terminal
             const Rule & extra(const char, const Rule &); //!< \return zom( cat(separator,rule) )
+            const Rule & parens(const Rule &);
 
             //! create a terminal from and advanced plugin
             /**

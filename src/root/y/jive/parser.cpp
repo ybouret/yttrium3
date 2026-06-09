@@ -31,8 +31,13 @@ namespace Yttrium
                 if(lRule) throw Specific::Exception(lang->c_str(),"[%s] has not syntax definition!",ruleName.c_str());
                 return mark(c,c);
             }
-
         }
+
+        const Syntax::Rule & Parser:: term(const char c)
+        {
+            return term(c,c);
+        }
+
 
         const Syntax::Rule & Parser:: eponymous(const String &ruleName)
         {
@@ -64,6 +69,12 @@ namespace Yttrium
         {
             return zom( cat( mark(separator), rule) );
         }
+
+        const Syntax::Rule & Parser:: parens(const Rule &rule)
+        {
+            return cat( mark('('), rule, mark(')'));
+        }
+
 
 
         namespace Syntax
