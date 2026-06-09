@@ -101,9 +101,9 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                const Role      role; //!< role
-                const Load      load; //!< load
-                const Expecting exdb; //!< expected database
+                const Role role; //!< role
+                const Load load; //!< load
+                Expecting  exdb; //!< expected database
 
             private:
                 Y_Disable_Copy_And_Assign(Terminal); //!< discarded

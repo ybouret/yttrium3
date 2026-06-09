@@ -81,7 +81,9 @@ namespace Yttrium
                 void           render() const;               //!< render
                 XNode *        run(Lexer &, Source &) const;
 
-                
+
+                void noExpectancy() noexcept;
+
 
                 //______________________________________________________________
                 //
