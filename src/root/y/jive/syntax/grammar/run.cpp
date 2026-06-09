@@ -25,20 +25,17 @@ namespace Yttrium
 
                     case Rejected:
                         std::cerr << "Rejected!" << std::endl;
-                        return 0;
+                        break;
                 }
 
 
-
-
-                AutoPtr<XNode> tree = framework.yield();
                 return 0;
             }
 
             
-            XNode * CoreGrammar:: accepted(XNode * const   xnode,
-                                           Lexer  &        lexer,
-                                           Source &        source) const
+            XNode * CoreGrammar:: accepted(XNode * const xnode,
+                                           Lexer  &      lexer,
+                                           Source &      source) const
             {
                 //--------------------------------------------------------------
                 //
