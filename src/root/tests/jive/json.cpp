@@ -63,7 +63,10 @@ Y_UTEST(jive_json)
     if(argc>1)
     {
         AutoPtr<Jive::Syntax::XNode> tree = json.getAST( Jive::Module::OpenFile(argv[1]) );
-
+        {
+            const String dotFile = *json.lang + "-ast-tree.dot";
+            Vizible::Render(dotFile,*tree,false);
+        }
     }
 
 }

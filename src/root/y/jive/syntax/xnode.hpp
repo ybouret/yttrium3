@@ -95,6 +95,8 @@ namespace Yttrium
                  */
                 static void Join(AutoPtr<XNode> &tree, AutoPtr<XNode> &sub) noexcept;
 
+                static XNode * AST( XNode * const ) noexcept;
+
                 //______________________________________________________________
                 //
                 //

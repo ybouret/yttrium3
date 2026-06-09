@@ -35,7 +35,7 @@ namespace Yttrium
 
                     const XList &xlist = list();
                     const bool   xshow = xlist.size>1;
-                    unsigned     count = 0;
+                    unsigned     count = 1;
                     for(const XNode *node=xlist.head;node;node=node->next,++count)
                     {
                         // emit child

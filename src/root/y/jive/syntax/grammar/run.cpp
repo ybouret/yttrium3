@@ -70,7 +70,12 @@ namespace Yttrium
                 // secure node into tree
                 //
                 //--------------------------------------------------------------
-                AutoPtr<XNode> tree(xnode); Vizible::Render("tree.dot",*tree,true);
+                AutoPtr<XNode> tree(xnode);
+
+                {
+                    const String dotFile = *lang + "-raw-tree.dot";
+                    Vizible::Render(dotFile,*tree,false);
+                }
 
                 //--------------------------------------------------------------
                 //
@@ -98,7 +103,7 @@ namespace Yttrium
                 // ok, success!
                 //
                 //--------------------------------------------------------------
-                return tree.yield();
+                return XNode::AST( tree.yield() );
             }
 
 
