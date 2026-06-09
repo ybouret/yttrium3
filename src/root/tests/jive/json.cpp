@@ -19,8 +19,8 @@ namespace
 
     JParser:: JParser() : Jive::Parser("JSON")
     {
-        Alternate  &JSON  = alt("JSON");
-        Alternate  &VALUE = alt("VALUE");
+        Alternate  &JSON   = alt("JSON");
+        Alternate  &VALUE  = alt("VALUE");
         const Rule &STRING = use( TypeToType<Jive::Lexical::JString>(), "STRING");
 
         {
@@ -29,6 +29,15 @@ namespace
             const Rule &ARRAY       = (alt("ARRAY") << EMPTY_ARRAY << HEAVY_ARRAY);
             VALUE << ARRAY;
             JSON  << ARRAY;
+        }
+
+        {
+            const Rule &PAIR         = (agg("PAIR") << STRING << ':' << VALUE);
+            const Rule &EMPTY_OBJECT = (agg("EMPTY_OBJECT") << '{' << '}');
+            const Rule &HEAVY_OBJECT = (agg("HEAVY_OBJECT") << '{' << PAIR << extra(',',PAIR) << '}');
+            const Rule &OBJECT       = (alt("OBJECT") << EMPTY_OBJECT << HEAVY_OBJECT);
+            VALUE << OBJECT;
+            JSON  << OBJECT;
         }
 
         VALUE << STRING << term("NUMBER","[:digit:]+") << "true" << "false" << "null";
