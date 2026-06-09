@@ -100,7 +100,9 @@ namespace Yttrium
                 Y_Disable_Copy_And_Assign(CoreGrammar);
                 Y_Proxy_Decl();
                 void append(Rule * const);
-#endif
+                XNode * accepted(XNode * const, Lexer &, Source &) const;
+
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             };
         }
 

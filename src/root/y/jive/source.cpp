@@ -150,8 +150,9 @@ namespace Yttrium
             {
                 const Char * const ch = peek();
                 if(!ch)            break;
-                if( IsStop(**ch) ) break;
+                const bool stop = IsStop(**ch);
                 token.pushTail( get() );
+                if(stop) break;
             }
             return token.str();
         }

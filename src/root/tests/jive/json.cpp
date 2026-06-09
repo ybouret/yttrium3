@@ -42,6 +42,9 @@ namespace
 
         VALUE << STRING << term("NUMBER","[:digit:]+") << "true" << "false" << "null";
 
+        drop("blank", "[:blank:]");
+        endl("endl",  "[:endl:]");
+
         validate();
         render();
     }
@@ -53,6 +56,8 @@ namespace
 Y_UTEST(jive_json)
 {
 
+    Jive::Lexical::Scanner::Verbose = true;
+    Jive::Syntax::Rule::Verbose     = true;
     JParser json;
 
     if(argc>1)

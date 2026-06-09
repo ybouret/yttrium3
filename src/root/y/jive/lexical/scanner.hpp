@@ -278,7 +278,9 @@ namespace Yttrium
 				}
 
 
-                const Rule * queryLexicalRule(const String &) const noexcept;
+                const Rule *    queryLexicalRule(const String &) const noexcept; //!< \return named rule iff exists
+                const Pattern & getPattern(const String &)       const noexcept; //!< \return pattern of an existing rule
+
 
 				//______________________________________________________________
 				//
@@ -303,7 +305,7 @@ namespace Yttrium
 			};
 
 			//! helper to trace algorithm
-#define Y_Jive_Lexical(MSG) do { if( Lexical::Scanner::Verbose ) { std::cerr << MSG << std::endl; } } while(false)
+#define Y_Jive_Lexical(MSG) do { if( Lexical::Scanner::Verbose ) { std::cerr << "-- " << MSG << std::endl; } } while(false)
 
 		}
 

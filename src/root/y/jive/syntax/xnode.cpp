@@ -147,6 +147,31 @@ namespace Yttrium
                 return new XNode(r);
             }
 
+            namespace
+            {
+                static inline void findLastLexeme(const Lexeme * &lx, const XNode *node) noexcept
+                {
+                    assert(node);
+                    if(node->rule.isTerminal())
+                    {
+                        lx = &node->lexeme();
+                    }
+                    else
+                    {
+                        for(const XNode *child=node->list().head;child;child=child->next)
+                            findLastLexeme(lx,child);
+                    }
+
+                }
+            }
+
+            const Lexeme * XNode:: last() const noexcept
+            {
+                const Lexeme * lx = 0;
+                findLastLexeme(lx,this);
+                return lx;
+            }
+
 
         }
     }

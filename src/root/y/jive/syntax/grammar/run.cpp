@@ -1,5 +1,7 @@
 
 #include "y/jive/syntax/grammar/core.hpp"
+#include "y/exception.hpp"
+#include "y/jive/lexer.hpp"
 
 namespace Yttrium
 {
@@ -17,24 +19,65 @@ namespace Yttrium
                 switch(outcome.result)
                 {
                     case Accepted:
-                        std::cerr << "Accepted!" << std::endl;
-                        break;
+                        if(!framework.ok())
+                            throw Specific::Exception(lang->c_str(),"'%s': empty AST", source->title->c_str());
+                        return accepted( framework.yield(), lexer, source);
 
                     case Rejected:
                         std::cerr << "Rejected!" << std::endl;
                         return 0;
                 }
 
-                if(!framework.ok())
-                {
-                    std::cerr << "produced empty tree!" << std::endl;
-                    return 0;
-                }
+
+
 
                 AutoPtr<XNode> tree = framework.yield();
-                Vizible::Render("tree.dot",*tree,true);
                 return 0;
             }
+
+            
+            XNode * CoreGrammar:: accepted(XNode * const   xnode,
+                                           Lexer  &        lexer,
+                                           Source &        source) const
+            {
+                //--------------------------------------------------------------
+                //
+                // secure node into tree
+                //
+                //--------------------------------------------------------------
+                AutoPtr<XNode> tree(xnode); Vizible::Render("tree.dot",*tree,true);
+
+                //--------------------------------------------------------------
+                //
+                // check EOS
+                //
+                //--------------------------------------------------------------
+                AutoPtr<Lexeme> curr = lexer.pull(source);
+                if(curr.isValid())
+                {
+                    Specific::Exception excp(lang->c_str(),"extraneous ");
+                    curr->addTo(excp,lexer.getPattern(*curr->name).multiple());
+                    {
+                        const Lexeme * const last = tree->last();
+                        if(last)
+                        {
+                            excp.cat(" after ");
+                            last->addTo(excp,lexer.getPattern(*last->name).multiple());
+                        }
+                    }
+                    throw curr->stamp(excp);
+                }
+
+                //--------------------------------------------------------------
+                //
+                // ok, success!
+                //
+                //--------------------------------------------------------------
+                return tree.yield();
+            }
+
+
+            
         }
 
     }

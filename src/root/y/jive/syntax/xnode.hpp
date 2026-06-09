@@ -79,7 +79,7 @@ namespace Yttrium
                 const Rule *   operator->()         const noexcept; //!< \return rule address
                 const Rule &   operator*()          const noexcept; //!< \return rule
                 OutputStream & viz(OutputStream &)           const; //!< emit graphviz code \return output stream
-
+                const Lexeme * last()               const noexcept; //!< \return last lexeme in tree
 
                 //! grow tree with new node
                 /**

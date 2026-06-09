@@ -32,6 +32,7 @@ namespace Yttrium
             Token & operator>>(Char * const) noexcept; //!< merge head \return *this
             String str()                        const; //!< \return human readable string
 
+            
         private:
             Y_Disable_Assign(Token); //!< discarded
         };

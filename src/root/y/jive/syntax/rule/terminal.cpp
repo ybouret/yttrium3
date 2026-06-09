@@ -55,8 +55,8 @@ namespace Yttrium
 
             Y_Jive_Syntax_Rule_Impl(Terminal)
             {
-                Y_Jive_Syntax("?TERM: [" << name << "]");
 
+                Y_Jive_Syntax("[?]'" << name << "'");
                 //--------------------------------------------------------------
                 //
                 // pull next lexeme
@@ -71,7 +71,7 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 if(!lexeme)
                 {
-                    Y_Jive_Syntax("   [" << name << "] <== EOS");
+                    Y_Jive_Syntax(" |_[!][EOS]");
                     return Outcome(Rejected,Healthy,Blocked);
                 }
 
@@ -82,7 +82,7 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 if( *lexeme->name!= *name )
                 {
-                    Y_Jive_Syntax("[-][" << name << "] (was [" << lexeme->name << "])");
+                    Y_Jive_Syntax(" |_[-] was '" << lexeme->name << "'");
                     framework.put(lexeme);
                     return Outcome(Rejected,Healthy,Running);
                 }
@@ -92,7 +92,7 @@ namespace Yttrium
                 // grow tree and return accepted
                 //
                 //--------------------------------------------------------------
-                Y_Jive_Syntax("[+][" << name << "]='" << *(Token *)lexeme  << "'");
+                Y_Jive_Syntax(" |_[+] '" << *(Token *)lexeme  << "'");
                 framework.grow( XNode::Create(*this,lexeme) );
                 return Outcome(Accepted,Healthy,Running);
             }

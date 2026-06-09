@@ -53,6 +53,12 @@ namespace Yttrium
                 return 0;
             }
 
+
+            const Pattern & Scanner:: getPattern(const String &rid) const noexcept
+            {
+                const Rule * const rule = queryLexicalRule(rid); assert(rule);
+                return *rule->form;
+            }
         }
 
     }
