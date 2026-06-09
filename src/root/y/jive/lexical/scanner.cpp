@@ -11,7 +11,7 @@ namespace Yttrium
 
             bool     Scanner:: Verbose = false;
             unsigned Scanner:: Aligned = 20;
-            
+
             Scanner:: ~Scanner() noexcept
             {
                 assert(code);
@@ -59,6 +59,12 @@ namespace Yttrium
                 const Rule * const rule = queryLexicalRule(rid); assert(rule);
                 return *rule->form;
             }
+
+            bool Scanner:: isMultiple(const String &rid) const noexcept
+            {
+                return getPattern(rid).multiple();
+            }
+
         }
 
     }

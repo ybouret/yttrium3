@@ -190,10 +190,10 @@ namespace Yttrium
 
         }
 
-
-        const Core::ListOf<Lexeme> * Lexer:: operator->() const noexcept
+        
+        void Lexer:: sendCacheTo(Lexemes &target) noexcept
         {
-            return &lexemes;
+            target.mergeTail(lexemes);
         }
 
         

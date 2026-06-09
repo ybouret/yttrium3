@@ -280,7 +280,7 @@ namespace Yttrium
 
                 const Rule *    queryLexicalRule(const String &) const noexcept; //!< \return named rule iff exists
                 const Pattern & getPattern(const String &)       const noexcept; //!< \return pattern of an existing rule
-
+                bool            isMultiple(const String &)       const noexcept; //!< \return multiple() of an existing rule pattern
 
 				//______________________________________________________________
 				//

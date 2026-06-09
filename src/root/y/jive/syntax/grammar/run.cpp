@@ -28,8 +28,33 @@ namespace Yttrium
                 }
 
                 std::cerr << "Rejected!" << std::endl;
-                
 
+                std::cerr << "Blocked : " << (outcome.status == Blocked) << std::endl;
+
+                Lexemes         cache; lexer.sendCacheTo(cache);
+                AutoPtr<Lexeme> next = lexer.pull(source);
+                std::cerr << "next=" << next << std::endl;
+
+                if( next.isEmpty() )
+                {
+                    // EOS while running : interrupted something ?
+                    if(cache.size)
+                    {
+                        // may be syntax error or not
+                        Specific::Exception excp(lang->c_str(),"end of stream after ");
+                        const Lexeme       &last = *cache.tail;
+                        last.addTo(excp,lexer.isMultiple(*last.name));
+                        throw last.stamp(excp);
+                    }
+                    else
+                    {
+                        throw Specific::Exception(lang->c_str(),"rejected empty stream");
+                    }
+                }
+                else
+                {
+
+                }
 
 
                 return 0;
@@ -56,13 +81,13 @@ namespace Yttrium
                 if(curr.isValid())
                 {
                     Specific::Exception excp(lang->c_str(),"extraneous ");
-                    curr->addTo(excp,lexer.getPattern(*curr->name).multiple());
+                    curr->addTo(excp,lexer.isMultiple(*curr->name));
                     {
                         const Lexeme * const last = tree->last();
                         if(last)
                         {
                             excp.cat(" after ");
-                            last->addTo(excp,lexer.getPattern(*last->name).multiple());
+                            last->addTo(excp,lexer.isMultiple(*last->name));
                         }
                     }
                     throw curr->stamp(excp);

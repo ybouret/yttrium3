@@ -119,10 +119,9 @@ namespace Yttrium
                 return makeDial( record( new PLUGIN(pid,*this) ) );
             }
 
-            //! reset curr to this, clear cache and history
-            void reset() noexcept;
 
-            const Core::ListOf<Lexeme> * operator->() const noexcept;
+            void reset()                noexcept; //!< reset curr to this, clear cache and history
+            void sendCacheTo(Lexemes &) noexcept; //!< send cache into target
 
         private:
             Y_Disable_Copy_And_Assign(Lexer); //!< discarded
