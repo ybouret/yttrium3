@@ -81,11 +81,6 @@ namespace Yttrium
                             case Entitled:
                             case Yielding: framework.grow( workspace.yield() ); break;
                             case Grouping: framework.join( workspace );         break;
-                                // if(1==xlist.size)
-                                //     framework.grow( workspace.yield() );
-                                // else
-                                //     framework.join( workspace );
-                                // break;
                         }
                         break;
                 }

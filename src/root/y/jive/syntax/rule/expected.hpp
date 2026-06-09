@@ -17,15 +17,23 @@ namespace Yttrium
         {
             class Rule;
 
-            typedef BookOf<const Rule,DefaultHashSet> BookOfRules;
+            typedef BookOf<const Rule,DefaultHashSet> BookOfRules; //!< alias
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Expected rules after a terminal
+            //
+            //
+            //__________________________________________________________________
             class Expected : public Object, public BookOfRules
             {
             public:
-                explicit Expected();
-                virtual ~Expected() noexcept;
+                explicit Expected();          //!< setup empty
+                virtual ~Expected() noexcept; //!< cleanup
             private:
-                Y_Disable_Copy_And_Assign(Expected);
+                Y_Disable_Copy_And_Assign(Expected); //!< discarded
             };
 
         }

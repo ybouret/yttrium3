@@ -36,6 +36,12 @@ namespace Yttrium
                 virtual ~Unit() noexcept; //!< cleanup
                 Y_OSTREAM_PROTO(Unit);    //!< display
 
+                //! add description to exception
+                /**
+                 \param excp exception
+                 \param full if true, append content
+                 \return modified excp
+                 */
                 Exception & addTo(Exception &excp, const bool full) const noexcept;
 
 
