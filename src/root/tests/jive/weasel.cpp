@@ -16,14 +16,24 @@ namespace {
         explicit WeaselParser() : Jive:: Parser("Weasel")
         {
 
+            // top level
             Aggregate  & WEASEL    = agg(lang);
+
+            // lexical markers
             const Rule & BLANK     = mark("blank","[:blank:]");
             const Rule & NEWLINE   = newline("endl","[:endl:]");
             const Rule & BLANKS    = (grp("BLANKS") << zom( pick(BLANK,NEWLINE)));
-            const Rule & FRAGMENT  = term("FRAGMENT","[:upper:][:alpha:]*");
             const Rule & END       = opt( mark(';') );
-            Alternate  & DECL      = alt("DECL");
-            DECL << FRAGMENT;
+
+
+            const Rule & FRAG = term("FRAG","[:upper:][:alpha:]*");
+            const Rule & COEF = term("COEF","[:digit:]+");
+
+
+            Alternate  & DECL = alt("DECL");
+
+            DECL << FRAG;
+
             Aggregate  & STATEMENT = yld("STATEMENT");
             STATEMENT << BLANKS << DECL << BLANKS << END;
 
