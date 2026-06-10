@@ -16,14 +16,24 @@ namespace {
         explicit WeaselParser() : Jive:: Parser("Weasel")
         {
 
-            Aggregate & WEASEL = agg(lang);
+            Aggregate  & WEASEL    = agg(lang);
+            const Rule & BLANK     = mark("blank","[:blank:]");
+            const Rule & NEWLINE   = newline("endl","[:endl:]");
+            const Rule & BLANKS    = (grp("BLANKS") << zom( pick(BLANK,NEWLINE)));
+            const Rule & FRAGMENT  = term("FRAGMENT","[:upper:][:alpha:]*");
+            const Rule & END       = opt( mark(';') );
+            Alternate  & DECL      = alt("DECL");
+            DECL << FRAGMENT;
+            Aggregate  & STATEMENT = yld("STATEMENT");
+            STATEMENT << BLANKS << DECL << BLANKS << END;
+
+            WEASEL << zom(STATEMENT) << BLANKS;
+
 
 
 
             load(TypeToType<Jive::Lexical::CxxComment>(),"CxxComment");
             load(TypeToType<Jive::Lexical::C_Comment>(),"C_Comment");
-            drop("blank", "[:blank:]");
-            endl("endl",  "[:endl:]");
 
             render();
         }
@@ -41,26 +51,23 @@ namespace {
 }
 
 
-Y_UTEST(jive_formula)
+Y_UTEST(jive_weasel)
 {
     WeaselParser weasel;
     
-#if 0
-    Eval eval;
-    Jive::Editor edit(eval.lang);
+    Jive::Editor edit(weasel.lang);
     edit.verbose = true;
 
     if(argc>1)
     {
-        AutoPtr<Jive::Syntax::XNode> tree = eval.getAST( Jive::Module::OpenFile(argv[1]) );
+        AutoPtr<Jive::Syntax::XNode> tree = weasel.getAST( Jive::Module::OpenFile(argv[1]) );
         {
-            const String dotFile = *eval.lang + "-ast-tree.dot";
+            const String dotFile = *weasel.lang + "-ast-tree.dot";
             Vizible::Render(dotFile,*tree,false);
         }
         std::cerr << std::endl;
         edit(tree,Jive::Tolerant);
     }
-#endif
 
 }
 Y_UDONE()

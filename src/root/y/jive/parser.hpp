@@ -67,7 +67,7 @@ namespace Yttrium
             }
 
 
-            const Rule &term(const char); //!< \return term as single char
+            const Terminal &term(const char); //!< \return term as single char
 
             //! setup dividing terminal
             /**
@@ -84,6 +84,20 @@ namespace Yttrium
             const Rule & eponymous(const String &);       //!< \return on the fly UNIVOCAL eponymous terminal
             const Rule & extra(const char, const Rule &); //!< \return zom( cat(separator,rule) )
             const Rule & parens(const Rule &);            //!< \return grp( '(', rule , ')' )
+
+            //! making a newline as dividing terminal
+            /**
+             \param id newline name
+             \param rx newline regular expression
+             \return created rule
+             */
+            template <typename ID, typename RX> inline
+            const Rule & newline(const ID &id, const RX &rx) {
+                const Lexical::Rule & lexicalRule = endl(id,rx);
+                const Syntax::Load    ruleLoad    = lexicalRule.form->univocal() ? Syntax::Univocal : Syntax::Standard;
+                return trm(lexicalRule.name,Syntax::Dividing,ruleLoad);
+            }
+
 
             //! create a terminal from and advanced plugin
             /**

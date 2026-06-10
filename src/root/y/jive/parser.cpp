@@ -33,7 +33,7 @@ namespace Yttrium
             }
         }
 
-        const Syntax::Rule & Parser:: term(const char c)
+        const Syntax::Terminal & Parser:: term(const char c)
         {
             return term(c,c);
         }

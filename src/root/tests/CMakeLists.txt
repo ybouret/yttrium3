@@ -217,7 +217,7 @@ Y_UTEST(jive:xnode)
 Y_UTEST(jive:grammar)
 Y_UTEST(jive:json)
 Y_UTEST(jive:eval)
-Y_UTEST(jive:formula)
+Y_UTEST(jive:weasel)
 
 Y_UTEST(graphviz)
 
