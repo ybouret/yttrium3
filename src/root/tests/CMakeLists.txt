@@ -228,6 +228,7 @@ Y_UTEST(hashing:scatter)
 
 Y_UTEST(mkl:numeric)
 Y_UTEST(mkl:api)
+Y_UTEST(mkl:stats)
 
 Y_UTEST(cameo:static_geqz_sum)
 Y_UTEST(cameo:sum:direct)
