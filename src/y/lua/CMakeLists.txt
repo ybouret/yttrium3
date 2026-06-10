@@ -17,5 +17,5 @@ endforeach()
 add_library(y-lua STATIC ${SRCS})
 
 add_executable(y_lua src/lua.c)
-target_link_libraries(y_lua y-lua)
+target_link_libraries(y_lua y-lua m)
 
