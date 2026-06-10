@@ -68,14 +68,14 @@ namespace Yttrium
             {
                 //std::cerr << "escExcp @'" << token << "'" << std::endl;
                 assert(2==token.size);
-                const char bad = **token.tail;
+                const char bad = (char) **token.tail;
                 throw Specific::Exception(name->c_str(),"invalid escape sequence starting with '\\%s'", ASCII::Printable::Text(bad) );
             }
 
             void String_:: onEscCntl(Token &token)  
             {
                 assert(2==token.size);
-                const char c = **token.tail;
+                const char c = (char) **token.tail;
                 switch(c)
                 {
                     case 'n': **token.head = '\n'; break;
@@ -97,8 +97,8 @@ namespace Yttrium
                 Char * const ch = data.pushTail( token.popHead() );
                 delete token.popHead();
                 assert(2==token.size);
-                const int     up = Hexadecimal::ToDec(**token.head); assert(up>=0); assert(up<16);
-                const int     lo = Hexadecimal::ToDec(**token.tail); assert(lo>=0); assert(lo<16);
+                const int     up = Hexadecimal::ToDec( (char) **token.head); assert(up>=0); assert(up<16);
+                const int     lo = Hexadecimal::ToDec( (char) **token.tail); assert(lo>=0); assert(lo<16);
                 const uint8_t b  = (uint8_t)(up*16+lo);
                 **ch = b;
             }

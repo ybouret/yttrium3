@@ -1,5 +1,9 @@
 project(y-lua C)
 
+if(Y_MSC)
+    string( APPEND CMAKE_C_FLAGS " -wd4310 -wd4709 -wd4820 -wd4668 -wd4710 -wd4711 -wd4701 -wd4702 -wd4324 -wd4774")
+endif()
+
 # set OBJS from src/Makefile
 set(OBJS
 lapi.o lcode.o lctype.o ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o lmem.o lobject.o lopcodes.o lparser.o lstate.o lstring.o ltable.o ltm.o lundump.o lvm.o lzio.o
@@ -19,6 +23,6 @@ add_library(y-lua STATIC ${SRCS})
 add_executable(y_lua src/lua.c)
 target_link_libraries(y_lua y-lua)
 
-if(Y_SunOS)
+if(Y_SunOS OR Y_Linux)
     target_link_libraries(y_lua m)
 endif()
