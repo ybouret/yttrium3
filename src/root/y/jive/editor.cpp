@@ -3,6 +3,7 @@
 #include "y/exception.hpp"
 #include "y/core/indent.hpp"
 #include "y/jive/syntax/rule.hpp"
+#include "y/pointer/keyed.hpp"
 
 namespace Yttrium
 {
@@ -16,11 +17,15 @@ namespace Yttrium
         {
         public:
             template <typename FUNCTOR>
-            class Article : public Identifier
+            class Article : public CountedObject
             {
             public:
-                inline explicit Article(const Identifier &itemName, const FUNCTOR &itemProc) :
-                Identifier(itemName), proc(itemProc)
+                typedef Keyed<String,ArcPtr<Article>> Pointer;
+
+                inline explicit Article(const String &itemName, const FUNCTOR &itemProc) :
+                CountedObject(),
+                name(itemName),
+                proc(itemProc)
                 {
                 }
 
@@ -28,23 +33,26 @@ namespace Yttrium
                 {
                 }
 
-                inline Article(const Article &_) : Identifier(_), proc(_.proc) {}
 
-                FUNCTOR proc;
+                inline const String & key() const noexcept { return name; }
+
+                const String    name;
+                mutable FUNCTOR proc;
             private:
-                Y_Disable_Assign(Article);
+                Y_Disable_Copy_And_Assign(Article);
             };
 
-            typedef Article<OnTerminal>             TerminalArticle;
-            typedef Article<OnInternal>             InternalArticle;
-            typedef HashSet<String,TerminalArticle> TDB;
-            typedef HashSet<String,InternalArticle> IDB;
+            typedef Article<OnTerminal>                      TerminalArticle;
+            typedef Article<OnInternal>                      InternalArticle;
+            typedef HashSet<String,TerminalArticle::Pointer> TDB;
+            typedef HashSet<String,InternalArticle::Pointer> IDB;
 
             inline explicit Code(const Identifier &userLang) :
             Object(),
             lang(userLang),
             tdb(),
             idb(),
+            policy(Rigorous),
             verbose(false)
             {
             }
@@ -53,12 +61,12 @@ namespace Yttrium
             {
             }
 
-            inline void on(const Identifier &name, const OnTerminal &proc)
+            inline void on(const String &name, const OnTerminal &proc)
             {
                 attach(name,proc,tdb);
             }
 
-            inline void on(const Identifier &name, const OnInternal &proc)
+            inline void on(const String &name, const OnInternal &proc)
             {
                 attach(name,proc,idb);
             }
@@ -73,18 +81,19 @@ namespace Yttrium
             const Identifier lang;
             TDB              tdb;
             IDB              idb;
+            EditPolicy       policy;
             bool             verbose;
 
         private:
             Y_Disable_Copy_And_Assign(Code);
             template <typename FUNCTOR, typename DATABASE>
-            void attach(const Identifier &name,
+            void attach(const String     &name,
                         const FUNCTOR    &proc,
                         DATABASE         &db)
             {
-                const Article<FUNCTOR> article(name,proc);
+                const typename Article<FUNCTOR>::Pointer article = new Article<FUNCTOR>(name,proc);
                 if(!db.insert(article))
-                    throw Specific::Exception(lang->c_str(),"multiple '%s'", name->c_str());
+                    throw Specific::Exception(lang->c_str(),"multiple '%s'", name.c_str());
             }
 
 
@@ -94,13 +103,19 @@ namespace Yttrium
                 static const char    ipfx[] = "[call]";
                 const Syntax::Rule & rule = node->rule;
                 const String       & name = *rule.name;
+
                 if(node->rule.isTerminal())
                 {
                     const Lexeme &lx = node->lexeme();
                     if(lx.size>0)
-                        Y_Jive_Editor(tpfx,lx.name << ": '" << lx.str() << "'");
+                        Y_Jive_Editor(tpfx,name << ": '" << lx.str() << "'");
                     else
-                        Y_Jive_Editor(tpfx,lx.name);
+                        Y_Jive_Editor(tpfx,name);
+                    const TerminalArticle::Pointer * const todo = tdb.search( name );
+                    if(todo)
+                        (**todo).proc(lx);
+                    else
+                        applyPolicyFor(name);
                 }
                 else
                 {
@@ -111,7 +126,20 @@ namespace Yttrium
                         walk(child,depth);
                     --depth;
                     Y_Jive_Editor(ipfx,name<<"/"<<nargs);
+                    const InternalArticle::Pointer * const todo = idb.search( name );
+                    if(todo)
+                        (**todo).proc(nargs);
+                    else
+                        applyPolicyFor(name);
+                }
+            }
 
+            inline void applyPolicyFor(const String &name) const
+            {
+                switch(policy)
+                {
+                    case Rigorous: throw Specific::Exception(lang->c_str(),"no processing of '%s'",name.c_str());
+                    case Tolerant: break;
                 }
             }
         };
@@ -127,23 +155,25 @@ namespace Yttrium
             Destroy(code);
         }
 
-        void Editor:: attach(const Identifier &name, const OnInternal &proc)
+        void Editor:: attach(const String &name, const OnInternal &proc)
         {
             assert(code);
             code->on(name,proc);
         }
 
-        void Editor:: attach(const Identifier &name, const OnTerminal &proc)
+        void Editor:: attach(const String &name, const OnTerminal &proc)
         {
             assert(code);
             code->on(name,proc);
         }
 
 
-        void Editor:: operator()(const AutoPtr<XNode> &tree) const
+        void Editor:: operator()(const AutoPtr<XNode> &tree,
+                                 const EditPolicy      policy) const
         {
             assert(tree.isValid());
             assert(code);
+            code->policy = policy;
             code->walk( & *tree );
         }
 

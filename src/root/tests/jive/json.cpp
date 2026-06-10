@@ -2,6 +2,7 @@
 #include "y/jive/parser.hpp"
 #include "y/utest/run.hpp"
 #include "y/jive/lexical/plugin/jstring.hpp"
+#include "y/container/sequence/vector.hpp"
 
 using namespace Yttrium;
 
@@ -50,6 +51,32 @@ namespace
         render();
     }
 
+    class JEdit : public Jive::Editor
+    {
+    public:
+        explicit JEdit(const JParser &jp) :
+        Jive::Editor(jp.lang), strings()
+        {
+            Y_Jive_OnTerminal(JEdit,STRING);
+        }
+
+
+
+        virtual ~JEdit() noexcept {}
+
+        Vector<String> strings;
+
+    private:
+        Y_Disable_Copy_And_Assign(JEdit);
+
+        void onSTRING(const Lexeme &lx)
+        {
+            strings << lx.str();
+            std::cerr << "strings=" << strings << std::endl;
+        }
+
+
+    };
 
 
 }
@@ -60,7 +87,7 @@ Y_UTEST(jive_json)
     Jive::Lexical::Scanner::Verbose = true;
     Jive::Syntax::Rule::Verbose     = true;
     JParser      json;
-    Jive::Editor edit(json.lang);
+    JEdit        edit(json);
     edit.verbose = true;
 
     if(argc>1)
@@ -71,7 +98,7 @@ Y_UTEST(jive_json)
             Vizible::Render(dotFile,*tree,false);
         }
         std::cerr << std::endl;
-        edit(tree);
+        edit(tree,Jive::Tolerant);
     }
 
 }

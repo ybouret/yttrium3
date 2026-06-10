@@ -72,7 +72,7 @@ Y_UTEST(jive_eval)
             Vizible::Render(dotFile,*tree,false);
         }
         std::cerr << std::endl;
-        edit(tree);
+        edit(tree,Jive::Tolerant);
     }
 
 }

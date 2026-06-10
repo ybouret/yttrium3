@@ -11,22 +11,54 @@ namespace Yttrium
 {
     namespace Jive
     {
+        enum EditPolicy
+        {
+            Rigorous,
+            Tolerant
+        };
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Editor to convert AST into data
+        //
+        //
+        //______________________________________________________________________
         class Editor
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
             class Code;
-            typedef Functor<void,TL1(Token &)> OnTerminal;
-            typedef Functor<void,TL1(size_t)>  OnInternal;
-            typedef Syntax::XNode              XNode; //!< echo
+            typedef Jive::Lexeme                      Lexeme;
+            typedef Functor<void,TL1(const Lexeme &)> OnTerminal; //!< alias
+            typedef Functor<void,TL1(size_t)>         OnInternal; //!< alias
+            typedef Syntax::XNode                     XNode;      //!< echo
 
-            explicit Editor(const Identifier &);
-            virtual ~Editor() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Editor(const Identifier &); //!< setup
+            virtual ~Editor() noexcept;         //!< cleanup
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
             template <typename ID, typename OBJECT_POINTER, typename METHOD_POINTER> inline
             void on(const ID &id, OBJECT_POINTER const host, METHOD_POINTER const meth)
             {
-                const Identifier name(id);
+                const String     name(id);
                 const OnTerminal proc(host,meth);
                 attach(name,proc);
             }
@@ -34,23 +66,29 @@ namespace Yttrium
             template <typename ID, typename OBJECT_POINTER, typename METHOD_POINTER> inline
             void cb(const ID &id, OBJECT_POINTER const host, METHOD_POINTER const meth)
             {
-                const Identifier name(id);
+                const String     name(id);
                 const OnInternal proc(host,meth);
                 attach(name,proc);
             }
 
-            void operator()(const AutoPtr<XNode> &) const;
+            void operator()(const AutoPtr<XNode> &, const EditPolicy = Rigorous) const;
 
 
-
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         private:
             Y_Disable_Copy_And_Assign(Editor);
             Code * const code;
-            void attach(const Identifier &, const OnInternal &);
-            void attach(const Identifier &, const OnTerminal &);
+            void attach(const String &, const OnInternal &);
+            void attach(const String &, const OnTerminal &);
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
         public:
-            bool & verbose;
+            bool & verbose; //!< inner verbosity
         };
+
+
+#define Y_Jive_OnTerminal(CLASS,NAME) on(#NAME,this, & CLASS:: on##NAME)
+#define Y_Jive_OnInternal(CLASS,NAME) cb(#NAME,this, & CLASS:: on##NAME)
 
     }
 
