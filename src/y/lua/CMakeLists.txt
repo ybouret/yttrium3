@@ -23,6 +23,6 @@ add_library(y-lua STATIC ${SRCS})
 add_executable(y_lua src/lua.c)
 target_link_libraries(y_lua y-lua)
 
-if(Y_SunOS OR Y_Linux)
+if(Y_SunOS OR Y_Linux OR Y_FreeBSD)
     target_link_libraries(y_lua m)
 endif()
