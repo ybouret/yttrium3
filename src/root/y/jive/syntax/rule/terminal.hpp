@@ -54,7 +54,7 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 static const uint32_t UUID = Y_FOURCC('T','E','R','M'); //!< alias
-                typedef AutoPtr<Expected> Expecting;
+                typedef AutoPtr<Expected> Expecting; //!< alias
 
                 //______________________________________________________________
                 //
