@@ -48,6 +48,8 @@ namespace Yttrium
             Code * const code;
             void attach(const Identifier &, const OnInternal &);
             void attach(const Identifier &, const OnTerminal &);
+        public:
+            bool & verbose;
         };
 
     }

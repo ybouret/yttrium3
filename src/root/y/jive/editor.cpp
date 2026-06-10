@@ -10,7 +10,7 @@ namespace Yttrium
     {
 
 
-#define Y_Jive_Editor(PFX,MSG) do { if(verbose) { Core::Indent(std::cerr << PFX ,depth << 1, '.') << MSG << std::endl; } } while(false)
+#define Y_Jive_Editor(PFX,MSG) do { if(verbose) { Core::Indent(std::cerr << PFX << ' ', (depth<<1), '.') << MSG << std::endl; } } while(false)
 
         class Editor:: Code : public Object
         {
@@ -90,26 +90,35 @@ namespace Yttrium
 
             inline void walk(const XNode * const node, size_t depth) const
             {
+                static const char    tpfx[] = "[push]";
+                static const char    ipfx[] = "[call]";
                 const Syntax::Rule & rule = node->rule;
                 const String       & name = *rule.name;
                 if(node->rule.isTerminal())
                 {
-                    Y_Jive_Editor("[push]",name);
+                    const Lexeme &lx = node->lexeme();
+                    if(lx.size>0)
+                        Y_Jive_Editor(tpfx,lx.name << ": '" << lx.str() << "'");
+                    else
+                        Y_Jive_Editor(tpfx,lx.name);
                 }
                 else
                 {
                     const Syntax::XList & xlist = node->list();
+                    const size_t          nargs = xlist.size;
                     ++depth;
                     for(const XNode *child=xlist.head;child;child=child->next)
                         walk(child,depth);
                     --depth;
-                    Y_Jive_Editor("[call]",name);
+                    Y_Jive_Editor(ipfx,name<<"/"<<nargs);
 
                 }
             }
         };
 
-        Editor:: Editor(const Identifier &userLang) : code( new Code(userLang) )
+        Editor:: Editor(const Identifier &userLang) :
+        code( new Code(userLang) ),
+        verbose( code->verbose )
         {
         }
 

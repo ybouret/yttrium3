@@ -61,6 +61,7 @@ Y_UTEST(jive_json)
     Jive::Syntax::Rule::Verbose     = true;
     JParser      json;
     Jive::Editor edit(json.lang);
+    edit.verbose = true;
 
     if(argc>1)
     {
@@ -69,6 +70,7 @@ Y_UTEST(jive_json)
             const String dotFile = *json.lang + "-ast-tree.dot";
             Vizible::Render(dotFile,*tree,false);
         }
+        std::cerr << std::endl;
         edit(tree);
     }
 
