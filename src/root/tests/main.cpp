@@ -188,6 +188,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(jive_grammar);
     Y_UTEST(jive_json);
     Y_UTEST(jive_eval);
+    Y_UTEST(jive_formula);
 
     Y_UTEST(graphviz);
 

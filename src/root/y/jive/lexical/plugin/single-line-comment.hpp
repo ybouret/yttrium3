@@ -59,7 +59,8 @@ namespace Yttrium
 
 
             Y_Jive_Single_Line_Comment(ShellComment,'#'); //!< shell comment
-            
+            Y_Jive_Single_Line_Comment(CxxComment, "//"); //!< C++ comment
+
         }
 
     }

@@ -28,8 +28,10 @@ namespace Yttrium
 
                         case Alternate::UUID:
                         case Aggregate::UUID:
+                            if(dynamic_cast<const Compound &>(rule)->size<=0)
+                                throw Specific::Exception(rule.name->c_str(), "empty compound!!");
                             for(const RNode *node=dynamic_cast<const Compound &>(rule)->head;node;node=node->next)
-                                                             GrammarVisit(rdb,**node);
+                                GrammarVisit(rdb,**node);
                             break;
 
                         default:

@@ -4,17 +4,7 @@
 #include "y/jive/lexical/plugin/single-line-comment.hpp"
 
 using namespace Yttrium;
-
-namespace Yttrium
-{
-    namespace Jive
-    {
-        namespace Lexical
-        {
-            Y_Jive_Single_Line_Comment(CxxComment, "//");
-        }
-    }
-}
+ 
 
 namespace
 {
