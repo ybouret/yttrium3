@@ -1,4 +1,4 @@
-
+#include "y/jive/editor.hpp"
 #include "y/jive/parser.hpp"
 #include "y/utest/run.hpp"
 #include "y/jive/lexical/plugin/single-line-comment.hpp"
@@ -61,7 +61,9 @@ namespace
 Y_UTEST(jive_eval)
 {
     Eval eval;
-    
+    Jive::Editor edit(eval.lang);
+    edit.verbose = true;
+
     if(argc>1)
     {
         AutoPtr<Jive::Syntax::XNode> tree = eval.getAST( Jive::Module::OpenFile(argv[1]) );
@@ -69,6 +71,8 @@ Y_UTEST(jive_eval)
             const String dotFile = *eval.lang + "-ast-tree.dot";
             Vizible::Render(dotFile,*tree,false);
         }
+        std::cerr << std::endl;
+        edit(tree);
     }
 
 }
