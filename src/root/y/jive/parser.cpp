@@ -108,6 +108,9 @@ namespace Yttrium
             return run(*this,source);
         }
 
+        Parser * Parser:: myself() noexcept { return this; }
+
+
     }
 
 }

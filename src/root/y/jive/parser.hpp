@@ -40,7 +40,7 @@ namespace Yttrium
 
             //! setup \param id for lexer name and grammar language
             template <typename ID> inline
-            explicit Parser(const ID &id) : Lexer(id), Syntax::Grammar(name,this)
+            explicit Parser(const ID &id) : Lexer(id), Syntax::Grammar(name,myself())
             {
             }
 
@@ -119,6 +119,7 @@ namespace Yttrium
                 const Syntax::Load    ruleLoad    = lexicalRule.form->univocal() ? Syntax::Univocal : Syntax::Standard;
                 return trm(lexicalRule.name,ruleRole,ruleLoad);
             }
+            Parser * myself() noexcept;
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         };
