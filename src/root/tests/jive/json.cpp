@@ -1,3 +1,4 @@
+#include "y/jive/editor.hpp"
 #include "y/jive/parser.hpp"
 #include "y/utest/run.hpp"
 #include "y/jive/lexical/plugin/jstring.hpp"
@@ -58,7 +59,8 @@ Y_UTEST(jive_json)
 
     Jive::Lexical::Scanner::Verbose = true;
     Jive::Syntax::Rule::Verbose     = true;
-    JParser json;
+    JParser      json;
+    Jive::Editor edit(json.lang);
 
     if(argc>1)
     {
@@ -67,6 +69,7 @@ Y_UTEST(jive_json)
             const String dotFile = *json.lang + "-ast-tree.dot";
             Vizible::Render(dotFile,*tree,false);
         }
+        edit(tree);
     }
 
 }

@@ -59,7 +59,7 @@ namespace Yttrium
 
 
             Exception & stamp(Exception &) const noexcept; //!< \return stamped exception
-            String      str()                       const; //!< \return stamped string
+            String      stamp()                     const; //!< \return stamped string
             void        set(const Identifier &)  noexcept; //!< reset
 
             //__________________________________________________________________

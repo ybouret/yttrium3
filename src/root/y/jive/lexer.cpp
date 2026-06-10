@@ -134,7 +134,7 @@ namespace Yttrium
                             //--------------------------------------------------
                         case Lexical::Command::Quit:
                             //--------------------------------------------------
-                            Y_Jive_Lexical("[EOS]@" << source->str() );
+                            Y_Jive_Lexical("[EOS]@" << source->stamp() );
                             switch(curr->onEOS)
                             {
                                 case Lexical::AcceptEOS: break; // EOS: normal return
@@ -153,7 +153,7 @@ namespace Yttrium
                             const bool       jmp = (Lexical::Command::Jump == cmd.kind);
                             const String     id  = *cmd.args; 
                             PScanner * const ps  = psdb.search(id);
-                            Y_Jive_Lexical(source->str() << (jmp? "jump" : "call") << ' ' << id);
+                            Y_Jive_Lexical(source->stamp() << (jmp? "jump" : "call") << ' ' << id);
                             if(!ps) {
                                 Specific::Exception excp(name->c_str(),"<%s> got no <%s> to call", here, id.c_str());
                                 throw source->stamp(excp);
@@ -167,7 +167,7 @@ namespace Yttrium
                             //--------------------------------------------------
                         case Lexical::Command::Back: { assert(0==cmd.args);
                             //--------------------------------------------------
-                            Y_Jive_Lexical(source->str() << "done " << curr->name);
+                            Y_Jive_Lexical(source->stamp() << "done " << curr->name);
                             if(history->size<=0) {
                                 Specific::Exception excp(name->c_str(),"no possible coming back from <%s>", here);
                                 throw source->stamp(excp);

@@ -17,15 +17,20 @@ namespace Yttrium
         {
         }
 
+        namespace
+        {
+            static const char * const SpotFmt = "%s:%u:%u: ";
+        }
+
         Exception & Spot:: stamp(Exception &excp) const noexcept
         {
-            return excp.pre("%s:%u:%u: ", title->c_str(),line,column);
+            return excp.pre(SpotFmt, title->c_str(),line,column);
         }
 
 
-        String Spot:: str() const
+        String Spot:: stamp() const
         {
-            return Formatted::Get("%s:%u:%u: ",title->c_str(),line,column);
+            return Formatted::Get(SpotFmt,title->c_str(),line,column);
         }
 
         Spot & Spot:: operator=(const Spot &spot) noexcept
