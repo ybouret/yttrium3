@@ -1,0 +1,53 @@
+\documentclass[aps,12pt]{revtex4}
+\usepackage[a4paper]{geometry}
+\usepackage{graphicx}
+\usepackage{amssymb,amsfonts,amsmath,amsthm}
+\usepackage{bm}
+\usepackage{pslatex}
+\usepackage{chemarr}
+\usepackage{mathptmx}
+%\usepackage{bookman}
+
+
+\begin{document}
+
+\section{Michaelis Menten pour un échange 1:1 interne/externe de l'espèce $A$}
+
+\begin{equation}
+	A_i + E \xrightleftharpoons[k_d]{k_f} EA_i \xrightarrow[]{k_2} E + A_e
+\end{equation}
+
+\begin{equation}
+\left\lbrace
+\begin{array}{rcl}
+\partial_t [A_e]  & = & k_2 [EA_i] \\
+\partial_t [EA_i] & = & -k_2 [EA_i] - k_d [EA_i] + k_f[A_i][E]\\
+E_0 & = & [EA_i] + [E]\\
+\end{array}
+\right.
+\end{equation}
+
+\begin{equation}
+	\mathrm{AEQS} \implies [EA_i] \simeq \dfrac{k_f[A_i]}{k_2 + k_d} [E]
+\end{equation}
+
+\begin{equation}
+	\mathrm{Conservation} \implies [E] = \dfrac{E_0}{1+\dfrac{k_f[A_i]}{k_d+k_2}}
+\end{equation}
+
+\begin{equation}
+	\partial_t [A_e] = k_2 [EA_i] 
+	= \simeq k_2 \dfrac{k_f[A_i]}{k_2 + k_d} \dfrac{E_0}{1+\dfrac{k_f[A_i]}{k_d+k_2}}
+	 = k_2 E_0 \;\; \dfrac{[A_i]}{ \underbrace{\dfrac{k_d+k_2}{k_f}}_{K_M} + [A_i]}
+\end{equation}
+
+
+\section{Modulation Michaelis Menten pour un échange 1:1 interne/externe des espèces $A_i$ et $B_e$}
+
+On suppose que l'échange se fait avec formation de $EB_e$, qui séquestre une partie de l'échangeur
+
+\begin{equation}
+	A_i + E   \xrightleftharpoons[k_d]{k_f} EA_i   \xrightarrow[]{k_2} EB_e   \xrightleftharpoons[k_d]{k_f} E + B_e  
+\end{equation}
+
+\end{document}
