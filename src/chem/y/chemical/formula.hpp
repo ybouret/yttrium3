@@ -28,6 +28,8 @@ namespace Yttrium
         {
         public:
             static const char * const CallSign;
+            class Translator;
+            
             explicit Formula(XNode * const);
             explicit Formula(const Formula &) noexcept;
             virtual ~Formula() noexcept;
