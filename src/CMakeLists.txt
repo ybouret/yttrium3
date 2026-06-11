@@ -25,6 +25,7 @@ set(Y_UnitTests "")
 # add components
 add_subdirectory(root)
 add_subdirectory(mkl)
+add_subdirectory(chem)
 
 # regression with all unit tests
 cmake_print_variables(Y_UnitTests)

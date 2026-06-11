@@ -45,6 +45,29 @@ namespace Yttrium
             return os << token.str();
         }
 
+
+        bool Token:: AreEqual(const Token &lhs, const Token &rhs) noexcept
+        {
+            if(lhs.size!=rhs.size) return false;
+            for(const Char *l=lhs.head, *r=rhs.head;l;l=l->next,r=r->next)
+            {
+                assert(l);
+                assert(r);
+                if(**l != **r) return false;
+            }
+            return true;
+        }
+
+        bool operator==(const Token &lhs, const Token &rhs) noexcept
+        {
+            return Token::AreEqual(lhs,rhs);
+        }
+
+        bool operator!=(const Token &lhs, const Token &rhs) noexcept
+        {
+            return !Token::AreEqual(lhs,rhs);
+        }
+
     }
 
 }

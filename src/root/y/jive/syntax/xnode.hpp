@@ -102,6 +102,10 @@ namespace Yttrium
                  */
                 static XNode * AST( XNode * const  xnode) noexcept;
 
+                static bool AreEqual(const XNode&, const XNode &)    noexcept;
+                friend bool operator==(const XNode &, const XNode &) noexcept;
+                friend bool operator!=(const XNode &, const XNode &) noexcept;
+
                 //______________________________________________________________
                 //
                 //

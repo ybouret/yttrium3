@@ -32,7 +32,11 @@ namespace Yttrium
             Token & operator>>(Char * const) noexcept; //!< merge head \return *this
             String str()                        const; //!< \return human readable string
 
-            
+            static bool AreEqual(const Token &, const Token &) noexcept;
+            friend bool operator==(const Token &, const Token &) noexcept;
+            friend bool operator!=(const Token &, const Token &) noexcept;
+
+
         private:
             Y_Disable_Assign(Token); //!< discarded
         };
