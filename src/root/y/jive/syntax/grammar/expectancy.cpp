@@ -17,6 +17,14 @@ namespace Yttrium
                 }
             }
 
+            namespace
+            {
+                static inline
+                void appendToExpected(Expected &expected, const Rule &after)
+                {
+                }
+            }
+
             void CoreGrammar:: buildExpectancy()
             {
                 noExpectancy();
@@ -44,11 +52,12 @@ namespace Yttrium
                     const Aggregate &parent = *dynamic_cast<const Aggregate *>(rule);
                     for(const RNode *rn=parent->head;rn;rn=rn->next)
                     {
-                        const RNode * const  rnxt = rn->next; if(!rnxt) break;                // no next rule
-                        const Rule         & chld = **rn;     if(chld.isInternal()) continue; // this rule is not a terminal
-                        const Terminal     & term = dynamic_cast<const Terminal &>(chld);
-                        const Rule         & next = **rnxt;
-                        std::cerr << "   |_'" << term.name << "' => '" << next.name << "'" << std::endl;
+                        const RNode * const  rnext = rn->next; if(!rnext) break;                // no next rule
+                        const Rule         & child = **rn;     if(child.isInternal()) continue; // this rule is not a terminal
+                        const Terminal     & term  = dynamic_cast<const Terminal &>(child);
+                        const Rule         & after = **rnext;
+                        std::cerr << "   |_'" << term.name << "' => '" << after.name << "'" << std::endl;
+                        appendToExpected(Coerce(*term.exdb),after);
                     }
                 }
             }
