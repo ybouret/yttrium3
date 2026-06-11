@@ -9,7 +9,7 @@ namespace Yttrium
         {
 
             Expected:: ~Expected() noexcept {}
-            Expected:: Expected() {}
+            Expected::  Expected() {}
 
         }
     }

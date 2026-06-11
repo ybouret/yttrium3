@@ -17,6 +17,17 @@ namespace Yttrium
                 }
             }
 
+            void CoreGrammar:: expectancy()
+            {
+                // scan for top level aggregate
+                for(Rule *rule=rules.head;rule;rule=rule->next)
+                {
+                    if(rule->uuid!=Aggregate::UUID) continue;
+                    
+                }
+            }
+
+
         }
     }
 }

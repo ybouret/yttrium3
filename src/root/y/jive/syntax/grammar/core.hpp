@@ -82,7 +82,7 @@ namespace Yttrium
 
 
                 void noExpectancy() noexcept;
-
+                void expectancy();
 
                 //______________________________________________________________
                 //
