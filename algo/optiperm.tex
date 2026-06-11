@@ -13,13 +13,13 @@
 
 We have the "absolute" equation:
 \begin{equation}
-	0 \approx \dfrac{3}{2} \lambda_K + \lambda_{Na} - \lambda_{Cl}
+	\Delta \lambda = \dfrac{3}{2} \lambda_K + \lambda_{Na} - \lambda_{Cl}
 \end{equation}
 
 We will multiply each value by a coefficient so that:
 \begin{equation}
 	\label{zero}
-	0 \equiv \dfrac{3}{2} \alpha \lambda_K + \beta \lambda_{Na} - \gamma \lambda_{Cl}
+		0 = \Delta \lambda + \dfrac{3}{2} \alpha \lambda_K + \beta \lambda_{Na} - \gamma \lambda_{Cl} 
 \end{equation}
 
 We want to minimize $\alpha^2+\beta^2+\gamma^2$ (a.k.a smallest perturbation)
@@ -27,7 +27,7 @@ under the constraint \eqref{zero}.
 
 We define the Lagrange multiplier $\mu$ and we want to minimize:
 \begin{equation}
-	\mathcal L (\alpha,\beta,\gamma,\mu) = \dfrac{1}{2} \left[ \alpha^2+\beta^2+\gamma^2 \right]  - \mu\left( \dfrac{3}{2} \alpha \lambda_K + \beta \lambda_{Na} - \gamma \lambda_{Cl}\right)
+	\mathcal L (\alpha,\beta,\gamma,\mu) = \dfrac{1}{2} \left[ \alpha^2+\beta^2+\gamma^2 \right]  - \mu\left( \Delta \lambda + \dfrac{3}{2} \alpha \lambda_K + \beta \lambda_{Na} - \gamma \lambda_{Cl}\right)
 \end{equation}
 
 \begin{equation}
@@ -43,7 +43,7 @@ We define the Lagrange multiplier $\mu$ and we want to minimize:
 
 We replace the coefficients by there value in \eqref{zero}:
 \begin{equation}
-\mu = 
+\mu = - \dfrac{\Delta \lambda}{ \dfrac{9}{4}\lambda_K^2 + \lambda_{Na}^2 + \lambda_{Cl}^2}
 \end{equation}
 
 \end{document}
