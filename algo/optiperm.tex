@@ -1,0 +1,49 @@
+\documentclass[aps,12pt]{revtex4}
+\usepackage[a4paper]{geometry}
+\usepackage{graphicx}
+\usepackage{amssymb,amsfonts,amsmath,amsthm}
+\usepackage{bm}
+\usepackage{pslatex}
+\usepackage{chemarr}
+\usepackage{mathptmx}
+%\usepackage{bookman}
+
+
+\begin{document}
+
+We have the "absolute" equation:
+\begin{equation}
+	0 \approx \dfrac{3}{2} \lambda_K + \lambda_{Na} - \lambda_{Cl}
+\end{equation}
+
+We will multiply each value by a coefficient so that:
+\begin{equation}
+	\label{zero}
+	0 \equiv \dfrac{3}{2} \alpha \lambda_K + \beta \lambda_{Na} - \gamma \lambda_{Cl}
+\end{equation}
+
+We want to minimize $\alpha^2+\beta^2+\gamma^2$ (a.k.a smallest perturbation)
+under the constraint \eqref{zero}.
+
+We define the Lagrange multiplier $\mu$ and we want to minimize:
+\begin{equation}
+	\mathcal L (\alpha,\beta,\gamma,\mu) = \dfrac{1}{2} \left[ \alpha^2+\beta^2+\gamma^2 \right]  - \mu\left( \dfrac{3}{2} \alpha \lambda_K + \beta \lambda_{Na} - \gamma \lambda_{Cl}\right)
+\end{equation}
+
+\begin{equation}
+\left\lbrace
+\begin{array}{rcl}
+0 = \partial_\mu \mathcal L & \implies & \text{\eqref{zero}}\\
+0 = \partial_\alpha \mathcal L & \implies & \alpha = \mu \dfrac{3}{2} \lambda_K \\
+0 = \partial_\beta \mathcal L & \implies & \beta   = \mu   \lambda_{Na} \\
+0 = \partial_\gamma \mathcal L & \implies & \gamma = -\mu  \lambda_{Cl} \\
+\end{array}
+\right.
+\end{equation}
+
+We replace the coefficients by there value in \eqref{zero}:
+\begin{equation}
+\mu = 
+\end{equation}
+
+\end{document}

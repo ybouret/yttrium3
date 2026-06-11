@@ -27,6 +27,7 @@ namespace Yttrium
                     assert(visited.query(agg));
                     for(const RNode *rn=agg->head;rn;rn=agg->head)
                     {
+                        const Rule &rule = **rn;
                     }
 
 
