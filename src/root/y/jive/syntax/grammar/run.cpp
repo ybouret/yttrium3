@@ -10,6 +10,45 @@ namespace Yttrium
         namespace Syntax
         {
 
+            namespace
+            {
+                static inline
+                void rejectedWithNoCache(const Lexer           &lexer,
+                                         const AutoPtr<Lexeme> &next)
+                {
+                    const char * const name = lexer.name->c_str();
+                    if(next.isEmpty())
+                    {
+                        throw Specific::Exception(name,"rejected an empty stream");
+                    }
+                    else
+                    {
+                        Specific::Exception excp(name,"rejected before ");
+                        next->addTo(excp,lexer.isMultiple(*next->name));
+                        throw next->stamp(excp);
+                    }
+                }
+
+                static inline
+                void rejectedWithOnlyOne(const Lexer          &lexer,
+                                         const AutoPtr<Lexeme> &next,
+                                         const Lexeme          &last)
+                {
+                    const char * const  name = lexer.name->c_str();
+                    Specific::Exception excp(name,"rejected after single ");
+                    (void)last.stamp(last.addTo(excp,lexer.isMultiple(*last.name)));
+                    if(next.isEmpty())
+                    {
+                        throw excp.cat(" and end of stream");
+                    }
+                    else
+                    {
+                        excp.cat(", followed by ");
+                        throw next->addTo(excp, lexer.isMultiple(*next->name) );
+                    }
+                }
+            }
+
             XNode * CoreGrammar:: run(Lexer &lexer, Source &source) const
             {
                 assert(rules.size>0);
@@ -27,40 +66,36 @@ namespace Yttrium
                         break;
                 }
 
-                std::cerr << "Rejected!" << std::endl;
-
-                std::cerr << "Blocked : " << (outcome.status == Blocked) << std::endl;
-
                 Lexemes         cache; lexer.sendCacheTo(cache);
                 AutoPtr<Lexeme> next = lexer.pull(source);
-                std::cerr << "next=" << next << std::endl;
+                switch(cache.size)
+                {
+                    case 0: rejectedWithNoCache(lexer,next); break;
+                    case 1: rejectedWithOnlyOne(lexer,next,*cache.tail); break;
+
+                    default:
+                        break;
+                }
+                Specific::Exception excp(lang->c_str(),"rejected ");
+                assert(cache.size>=2);            assert(cache.tail);
+                const Lexeme &last = *cache.tail; assert(last.prev);
+                const Lexeme &prev = *last.prev;
+                prev.addTo(excp, lexer.isMultiple(*prev.name) );
+                last.stamp(excp).cat(" followed by ");
+                last.addTo(excp, lexer.isMultiple(*last.name) );
 
                 if( next.isEmpty() )
                 {
-                    // EOS while running : interrupted something ?
-                    if(cache.size)
-                    {
-                        // may be syntax error or not
-                        Specific::Exception excp(lang->c_str(),"end of stream after ");
-                        const Lexeme       &last = *cache.tail;
-                        last.addTo(excp,lexer.isMultiple(*last.name));
-                        throw last.stamp(excp);
-                    }
-                    else
-                    {
-                        throw Specific::Exception(lang->c_str(),"rejected empty stream");
-                    }
+                    throw excp.cat(" and end of stream");
                 }
                 else
                 {
-
+                    throw next->addTo(excp.cat(" and awaiting "), lexer.isMultiple(*next->name) );
                 }
 
-
-                return 0;
             }
 
-            
+
             XNode * CoreGrammar:: accepted(XNode * const xnode,
                                            Lexer  &      lexer,
                                            Source &      source) const
@@ -107,7 +142,7 @@ namespace Yttrium
             }
 
 
-            
+
         }
 
     }

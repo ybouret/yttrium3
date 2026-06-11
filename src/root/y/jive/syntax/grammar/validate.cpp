@@ -9,7 +9,7 @@ namespace Yttrium
         {
             namespace
             {
-                typedef Expected RDB;
+                typedef BookOfRules RDB;
 
                 static inline
                 void GrammarVisit(RDB        & rdb,
@@ -73,7 +73,6 @@ namespace Yttrium
                 if(rules.size<=0)
                     throw Specific::Exception(lang->c_str(), "empty grammar");
                 checkTopology();
-                buildExpectancy();
                 freeze();
             }
         }

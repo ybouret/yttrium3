@@ -10,7 +10,7 @@
 #include "y/jive/syntax/grammar/framework.hpp"
 #include "y/jive/syntax/outcome.hpp"
 
-#include "y/jive/syntax/rule/expected.hpp"
+#include "y/jive/syntax/rule/book.hpp"
 
 
 namespace Yttrium

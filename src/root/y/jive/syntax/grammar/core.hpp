@@ -80,10 +80,6 @@ namespace Yttrium
                 void           render()                  const; //!< render
                 XNode *        run(Lexer &, Source &)    const; //!< \return parsed tree from lexer/source
 
-
-                void noExpectancy() noexcept;
-                void buildExpectancy();
-
                 //______________________________________________________________
                 //
                 //

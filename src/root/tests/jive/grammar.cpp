@@ -70,7 +70,6 @@ Y_UTEST(jive_grammar)
     }
 
     Y_SIZEOF(Syntax::Rule);
-    Y_SIZEOF(Syntax::Expected);
     Y_SIZEOF(Syntax::Terminal);
 
 

@@ -54,7 +54,6 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 static const uint32_t UUID = Y_FOURCC('T','E','R','M'); //!< alias
-                typedef AutoPtr<Expected> Expecting; //!< alias
 
                 //______________________________________________________________
                 //
@@ -75,8 +74,7 @@ namespace Yttrium
                                   const Load ruleLoad = Standard) :
                 Rule(ruleName,IsTerminal,UUID),
                 role(ruleRole),
-                load(ruleLoad),
-                exdb( new Expected() )
+                load(ruleLoad)
                 {
 
                 }
@@ -103,8 +101,7 @@ namespace Yttrium
                 //______________________________________________________________
                 const Role role; //!< role
                 const Load load; //!< load
-                Expecting  exdb; //!< expected database
-
+                
             private:
                 Y_Disable_Copy_And_Assign(Terminal); //!< discarded
             };
