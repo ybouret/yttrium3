@@ -25,14 +25,26 @@ namespace {
             const Rule & BLANKS    = (grp("BLANKS") << zom( pick(BLANK,NEWLINE)));
             const Rule & END       = opt( mark(';') );
 
+            const Rule & FRAG  = term("FRAG","[:upper:][:lower:]*");
+            const Rule & COEF  = term("COEF","[:digit:]+");
+            const Rule & OCOF  = opt(COEF);
 
-            const Rule & FRAG = term("FRAG","[:upper:][:alpha:]*");
-            //const Rule & COEF = term("COEF","[:digit:]+");
+            Aggregate & GRP  = yld("GRP");
+            Aggregate & STO  = yld("STO");
+            Alternate & NUB  = alt("NUB");
+            GRP  << oom(STO);
+            STO  << NUB << OCOF;
+            NUB << FRAG << parens(GRP);
 
+            const Rule & PLUS  = term('+');
+            const Rule & MINUS = term('-');
+            const Rule & SIGN  = alt("SIGN") << PLUS << MINUS;
+            const Rule & Z     = agg("Z") << '^' << OCOF << SIGN;
+            Compound   & SP    = (agg("SP") << GRP << opt(Z) );
 
             Alternate  & DECL = alt("DECL");
 
-            DECL << FRAG;
+            DECL << SP;
 
             Aggregate  & STATEMENT = yld("STATEMENT");
             STATEMENT << BLANKS << DECL << BLANKS << END;
