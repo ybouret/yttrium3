@@ -10,7 +10,7 @@ namespace Yttrium
         {
 
             bool Rule::Verbose = false;
-            
+
             const char * Rule:: humanReadableKind() const noexcept
             {
                 return HumanReadableKind(kind);
@@ -40,6 +40,13 @@ namespace Yttrium
             {
                 return fp << ",shape=\"" << vizShape() << "\",style=\"" << vizStyle() << "\"";
             }
+
+            std::ostream & operator<<(std::ostream &os, const Rule &rule)
+            {
+                return os << rule.name;
+            }
+
+
 
         }
 

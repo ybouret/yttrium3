@@ -27,7 +27,7 @@ namespace {
 
 
             const Rule & FRAG = term("FRAG","[:upper:][:alpha:]*");
-            const Rule & COEF = term("COEF","[:digit:]+");
+            //const Rule & COEF = term("COEF","[:digit:]+");
 
 
             Alternate  & DECL = alt("DECL");
