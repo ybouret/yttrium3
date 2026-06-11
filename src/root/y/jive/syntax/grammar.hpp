@@ -146,7 +146,7 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(Grammar); //!< discarded
-
+                void checkTopology() const; //!< check rules are visited
             };
         }
 

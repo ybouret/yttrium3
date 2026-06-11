@@ -40,37 +40,40 @@ namespace Yttrium
                 }
             }
 
+
+            void Grammar:: checkTopology() const
+            {
+                const RDB  visited;
+                GrammarVisit(Coerce(visited),*rules.head);
+
+                {
+                    String missing;
+                    for(const Rule *rule=rules.head;rule;rule=rule->next)
+                    {
+                        if(!visited.query(*rule)) missing += ' ' + *rule->name;
+                    }
+                    if(missing.size())
+                        throw Specific::Exception(lang->c_str(), "orphaned '%s'", missing.c_str());
+                }
+
+                {
+                    String unknown;
+                    for(RDB::ConstIterator it=visited.begin();it!=visited.end();++it)
+                    {
+                        const Rule &rule = **it;
+                        if(!rules.owns(&rule)) unknown += ' ' + *rule.name;
+                    }
+                    if(unknown.size())
+                        throw Specific::Exception(lang->c_str(), "unknown '%s'", unknown.c_str());
+                }
+            }
+            
             void Grammar:: validate()
             {
                 if(rules.size<=0)
                     throw Specific::Exception(lang->c_str(), "empty grammar");
-
-                {
-                    const RDB  visited;
-                    GrammarVisit(Coerce(visited),*rules.head);
-
-                    {
-                        String missing;
-                        for(const Rule *rule=rules.head;rule;rule=rule->next)
-                        {
-                            if(!visited.query(*rule)) missing += ' ' + *rule->name;
-                        }
-                        if(missing.size())
-                            throw Specific::Exception(lang->c_str(), "orphaned '%s'", missing.c_str());
-                    }
-
-                    {
-                        String unknown;
-                        for(RDB::ConstIterator it=visited.begin();it!=visited.end();++it)
-                        {
-                            const Rule &rule = **it;
-                            if(!rules.owns(&rule)) unknown += ' ' + *rule.name;
-                        }
-                        if(unknown.size())
-                            throw Specific::Exception(lang->c_str(), "unknown '%s'", unknown.c_str());
-                    }
-                }
-
+                checkTopology();
+                buildExpectancy();
                 freeze();
             }
         }

@@ -82,7 +82,7 @@ namespace Yttrium
 
 
                 void noExpectancy() noexcept;
-                void expectancy();
+                void buildExpectancy();
 
                 //______________________________________________________________
                 //
@@ -102,7 +102,7 @@ namespace Yttrium
                 Y_Proxy_Decl();
                 void append(Rule * const);
                 XNode * accepted(XNode * const, Lexer &, Source &) const;
-
+                
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
             };
         }
