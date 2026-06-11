@@ -39,7 +39,7 @@ namespace Yttrium
                                         BookOfRules &visited)
                 {
                     if( !visited.write(after) ) return; // already visited
-                   // std::cerr << "\t\tgot " << after << std::endl;
+
                     switch(after.uuid)
                     {
                         case Terminal::UUID:(void)expected.write(after); return;
