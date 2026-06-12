@@ -15,10 +15,17 @@ namespace Yttrium
         {
         public:
             class Parser;
+            class Code;
             static const char * const CallSign; //!< "Weasel";
-
+            static const Longevity    LifeTime = 0;
+            
         private:
             Y_Disable_Copy_And_Assign(Weasel);
+            friend class Singleton<Weasel,ClassLockPolicy>;
+            
+            explicit Weasel();
+            virtual ~Weasel() noexcept;
+            Code * const code;
         };
 
     }
