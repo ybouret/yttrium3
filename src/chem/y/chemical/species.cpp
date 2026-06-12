@@ -11,14 +11,18 @@ namespace Yttrium
         {
         }
 
-        Species:: Species(const Formula &f) :
+        Species:: Species(const Formula &f, const size_t i) :
         CountedObject(),
         Formula(f),
-        z(0),
-        name( makeName( &Coerce(z) ) )
+        Indexed(i),
+        z(0)
         {
+            String _ = makeName(& Coerce(z) );
+            Coerce(name).xch(_);
         }
-        
+
+
+
     }
 
 }

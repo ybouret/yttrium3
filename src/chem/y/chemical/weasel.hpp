@@ -20,8 +20,8 @@ namespace Yttrium
             static const char * const CallSign; //!< "Weasel";
             static const Longevity    LifeTime = 0;
 
-            XNode *               parse(Jive::Module * const);
-
+            XNode * parse(Jive::Module * const);
+            
 
 
         private:
