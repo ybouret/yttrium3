@@ -36,6 +36,9 @@ namespace Yttrium
             explicit Formula(const Formula &) noexcept;
             virtual ~Formula() noexcept;
 
+            String makeName(int * const = 0) const;
+            String makeHTML() const;
+            
         private:
             Y_Disable_Assign(Formula);
         };

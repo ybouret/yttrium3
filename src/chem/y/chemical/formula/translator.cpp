@@ -155,6 +155,28 @@ namespace Yttrium
             }
         }
 
+        String Formula:: Translator:: makeName(const Formula &formula, int  * const pz)
+        {
+            Jive::Editor &self = *this;
+            output = FormulaToName;
+            self(formula->code);
+            if(pz) *pz = z;
+            String name = frag.tail();
+            initialize();
+            return name;
+        }
+
+        String Formula:: Translator::makeHTML(const Formula &formula)
+        {
+            Jive::Editor &self = *this;
+            output = FormulaToHTML;
+            self(formula->code);
+            String html = frag.tail();
+            initialize();
+            return html;
+        }
+
+
 
     }
 }

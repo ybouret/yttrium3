@@ -27,6 +27,8 @@ namespace Yttrium
             virtual ~Translator() noexcept;
 
             virtual void initialize() noexcept;
+            String        makeName(const Formula &, int * const = 0);
+            String        makeHTML(const Formula &);
 
             FormulaOutput output;
 

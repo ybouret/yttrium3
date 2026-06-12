@@ -57,3 +57,26 @@ namespace Yttrium
     }
 
 }
+
+#include "y/chemical/weasel.hpp"
+#include "y/chemical/formula/translator.hpp"
+
+namespace Yttrium
+{
+    namespace Chemical
+    {
+        String Formula:: makeName(int * const pz) const
+        {
+            static Formula::Translator &ft = Weasel::Instance().formulaTranslator;
+            return ft.makeName(*this,pz);
+        }
+
+        String  Formula:: makeHTML() const
+        {
+            static Formula::Translator &ft = Weasel::Instance().formulaTranslator;
+            return ft.makeHTML(*this);
+        }
+
+    }
+
+}

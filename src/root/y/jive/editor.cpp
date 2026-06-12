@@ -49,6 +49,7 @@ namespace Yttrium
 
             inline explicit Code(const Identifier &userLang) :
             Object(),
+            depth(0),
             lang(userLang),
             tdb(),
             idb(),
