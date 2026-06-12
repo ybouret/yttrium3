@@ -2,6 +2,7 @@
 #include "y/jive/syntax/rule/compound.hpp"
 #include "y/string/format.hpp"
 #include "y/stream/output.hpp"
+#include "y/exception.hpp"
 
 namespace Yttrium
 {
@@ -9,6 +10,9 @@ namespace Yttrium
     {
         namespace Syntax
         {
+
+            Y_Proxy_Impl(Compound,rlist)
+            
             Compound:: ~Compound() noexcept
             {
             }
@@ -16,9 +20,9 @@ namespace Yttrium
 
             OutputStream & Compound:: vizLink(OutputStream &fp) const
             {
-                const bool show = list.size>1;
+                const bool show = rlist->size>1;
                 unsigned   indx = 1;
-                for(const RNode *node=list.head;node;node=node->next,++indx)
+                for(const RNode *node=rlist->head;node;node=node->next,++indx)
                 {
                     to(& **node,fp);
                     if(show)
@@ -33,7 +37,8 @@ namespace Yttrium
 
             Compound & Compound:: operator<<(const Rule &r)
             {
-                pushTail(r);
+                if(frozen) throw Specific::Exception(name->c_str(), "frozen! cannot append '%s'", r.name->c_str());
+                rlist.pushTail(r);
                 return *this;
             }
 

@@ -46,7 +46,7 @@ namespace Yttrium
                 //
                 //
                 //--------------------------------------------------------------
-                for(const RNode *node=list.head;node;node=node->next)
+                for(const RNode *node=(**this)->head;node;node=node->next)
                 {
                     const Rule    & rule = **node;
                     const Outcome   rout = rule.accepts(workspace);

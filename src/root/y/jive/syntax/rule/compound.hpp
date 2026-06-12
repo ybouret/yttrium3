@@ -6,6 +6,7 @@
 
 #include "y/jive/syntax/rule/internal.hpp"
 #include "y/handy/basic/light/list.hpp"
+#include "y/ability/freezable.hpp"
 
 namespace Yttrium
 {
@@ -26,7 +27,10 @@ namespace Yttrium
             //
             //
             //__________________________________________________________________
-            class Compound : public Internal, public RList
+            class Compound :
+            public Internal,
+            public Proxy<const RList>,
+            public Freezable
             {
             public:
                 //______________________________________________________________
@@ -47,6 +51,7 @@ namespace Yttrium
                                   const uint32_t  ruleUUID,
                                   Parser *  const myParser) :
                 Internal(ruleName,ruleUUID),
+                rlist(),
                 parser(myParser)
                 {
                 }
@@ -79,11 +84,15 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                Parser * const parser; //!< optional parent parser
 
             private:
                 Y_Disable_Copy_And_Assign(Compound); //!< discarded
+                Y_Proxy_Decl();
+            protected:
+                RList rlist;
 
+            public:
+                Parser * const parser; //!< optional parent parser
             };
 
         }

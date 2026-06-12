@@ -30,7 +30,7 @@ namespace Yttrium
                 const Nesting nest(framework);
                 Outcome       last(Rejected,Healthy,Running);
                 const Rule   *rule = 0;
-                for( const RNode * node = list.head;node;node=node->next)
+                for( const RNode * node = rlist->head;node;node=node->next)
                 {
                     const Outcome rout = (**node).accepts(framework);
                     if(Accepted==rout.result)

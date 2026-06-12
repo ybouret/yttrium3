@@ -28,9 +28,9 @@ namespace Yttrium
 
                         case Alternate::UUID:
                         case Aggregate::UUID:
-                            if(dynamic_cast<const Compound &>(rule)->size<=0)
+                            if((*dynamic_cast<const Compound &>(rule))->size<=0)
                                 throw Specific::Exception(rule.name->c_str(), "empty compound!!");
-                            for(const RNode *node=dynamic_cast<const Compound &>(rule)->head;node;node=node->next)
+                            for(const RNode *node=(*dynamic_cast<const Compound &>(rule))->head;node;node=node->next)
                                 GrammarVisit(rdb,**node);
                             break;
 
@@ -74,6 +74,11 @@ namespace Yttrium
                     throw Specific::Exception(lang->c_str(), "empty grammar");
                 checkTopology();
                 freeze();
+                for(Rule *rule=rules.head;rule;rule=rule->next)
+                {
+                    Compound * const p = dynamic_cast<Compound *>(rule);
+                    if(p) p->freeze();
+                }
             }
         }
 

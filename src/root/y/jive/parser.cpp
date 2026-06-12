@@ -82,14 +82,14 @@ namespace Yttrium
             Compound & Compound:: operator<<(const char c)
             {
                 if(!parser) throw Specific::Exception(name->c_str(),"not linked to parser to create mark!!");
-                pushTail( parser->mark(c) );
+                (*this) << parser->mark(c);
                 return *this;
             }
 
             Compound & Compound:: operator<< (const String &ruleName)
             {
                 if(!parser) throw Specific::Exception(name->c_str(),"not linked to parser to create eponymous terminal!!");
-                pushTail( parser->eponymous(ruleName) );
+                (*this) << parser->eponymous(ruleName);
                 return *this;
             }
 
