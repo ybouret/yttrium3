@@ -57,6 +57,26 @@ namespace Yttrium
             return code->parser.getAST(m);
         }
 
+        void Weasel:: operator()(Jive::Module * const m, Library &lib)
+        {
+            AutoPtr<XNode> tree = parse(m); assert(*lang == *tree->rule.name);
+            XList &top = tree->list();
+            while(top.size)
+            {
+                AutoPtr<XNode> node = top.popHead();
+                const String & name = *node->rule.name;
+
+                std::cerr << "-- " << name << std::endl;
+                if(name==*formula)
+                {
+                    const Formula f( node.yield() );
+                    (void) lib[f];
+                    continue;
+                }
+            }
+
+        }
+
 
     }
 

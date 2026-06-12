@@ -4,7 +4,7 @@
 #define Y_Chemical_Weasel_Included 1
 
 #include "y/singleton.hpp"
-#include "y/chemical/formula.hpp"
+#include "y/chemical/library.hpp"
 #include "y/jive/module.hpp"
 
 namespace Yttrium
@@ -21,7 +21,10 @@ namespace Yttrium
             static const Longevity    LifeTime = 0;
 
             XNode * parse(Jive::Module * const);
-            
+
+
+            void operator()(Jive::Module * const, Library &);
+
 
 
         private:

@@ -20,26 +20,24 @@ namespace Yttrium
 
         Species & Library:: operator[](const Formula &f)
         {
-            int           z    = 0;
-            const String  name = f.makeName(&z);
-            SpPtr * const ppS  = db.search(name);
-            if(ppS)
+            SpPtr pS( new Species(f,db.size()+1) );
+            const String &name = pS->name;
             {
-                Species &sp = **ppS; assert(sp.z == z);
-                return sp;
+                SpPtr *ppS = db.search(name);
+                if(ppS)
+                {
+                    assert(pS->z==(**ppS).z);
+                    return **ppS;
+                }
             }
-            else
-            {
-                if(frozen)
-                    throw Specific::Exception(CallSign,"canot append '%s' to frozen library", name.c_str());
 
-                SpPtr pS( new Species(f,db.size()+1) );
+            if(frozen)
+                throw Specific::Exception(CallSign,"canot append '%s' to frozen library", name.c_str());
 
-                if(!db.insert(pS))
-                    throw Specific::Exception(CallSign,"unable to insert new species '%s'", name.c_str());
+            if(!db.insert(pS))
+                throw Specific::Exception(CallSign,"unable to insert new species '%s'", name.c_str());
 
-                return *pS;
-            }
+            return *pS;
         }
 
 
