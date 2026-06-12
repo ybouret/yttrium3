@@ -20,8 +20,9 @@ namespace Yttrium
 
         Species & Library:: operator[](const Formula &f)
         {
-            SpPtr pS( new Species(f,db.size()+1) );
+            SpPtr         pS( new Species(f,db.size()+1) );
             const String &name = pS->name;
+
             {
                 SpPtr *ppS = db.search(name);
                 if(ppS)
@@ -37,7 +38,19 @@ namespace Yttrium
             if(!db.insert(pS))
                 throw Specific::Exception(CallSign,"unable to insert new species '%s'", name.c_str());
 
+            enroll(*pS);
             return *pS;
+        }
+
+        std::ostream & operator<<(std::ostream &os, const Library &lib)
+        {
+            os << '{' << std::endl;
+            for(Library::ConstIterator it=lib->begin();it!=lib->end();++it)
+            {
+                const Species &sp = **it;
+                lib.print(std::cerr << "\t",sp) << " | z = " << sp.z << std::endl;
+            }
+            return os << '}';
         }
 
 

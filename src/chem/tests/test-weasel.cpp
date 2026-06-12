@@ -1,6 +1,5 @@
 #include "y/chemical/weasel.hpp"
 #include "y/utest/run.hpp"
-#include "y/jive/syntax/rule.hpp"
 #include "y/chemical/formula/translator.hpp"
 
 using namespace Yttrium;
@@ -8,13 +7,15 @@ using namespace Chemical;
 
 Y_UTEST(weasel)
 {
-    Weasel &              weasel            = Weasel::Instance();
-    Formula::Translator & formulaTranlator = weasel.formulaTranslator;
-    formulaTranlator.verbose = true;
-
+    Weasel & weasel            = Weasel::Instance();
+    weasel.formulaTranslator.verbose = true;
+    Library  lib;
 
     if(argc>1)
     {
+        weasel(Jive::Module::OpenFile(argv[1]),lib);
+
+#if 0
         AutoPtr<XNode> tree = weasel.parse( Jive::Module::OpenFile(argv[1]) );
         {
             const String dotFile = *weasel.lang + "-ast-tree.dot";
@@ -38,8 +39,11 @@ Y_UTEST(weasel)
                 continue;
             }
         }
+#endif
 
     }
+
+    std::cerr << "lib=" << lib << std::endl;
 
 }
 Y_UDONE()

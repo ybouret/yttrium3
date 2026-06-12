@@ -10,6 +10,7 @@
 #include "y/pointer/keyed.hpp"
 #include "y/type/proxy.hpp"
 #include "y/ability/freezable.hpp"
+#include "y/chemical/type/assembly.hpp"
 
 namespace Yttrium
 {
@@ -21,13 +22,16 @@ namespace Yttrium
 
         class Library :
         public Proxy<const SpSet>,
-        public Freezable
+        public Freezable,
+        public Assembly
         {
         public:
-            static const char * const CallSign;
-            
+            static const char * const    CallSign;
+            typedef SpSet::ConstIterator ConstIterator;
+
             explicit Library();
             virtual ~Library() noexcept;
+            Y_OSTREAM_PROTO(Library);
 
             Species & operator[](const Formula &);
             
