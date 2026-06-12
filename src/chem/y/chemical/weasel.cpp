@@ -36,8 +36,13 @@ namespace Yttrium
             static void * WeaselCode[ Alignment::WordsFor<Weasel::Code>::Count ];
         }
 
-        Weasel:: Weasel() : code( new( Y_BZero(WeaselCode) ) Code() )
+        Weasel:: Weasel() :
+        code( new( Y_BZero(WeaselCode) ) Code() ),
+        lang(code->parser.lang),
+        formula(code->ftrans.lang),
+        formulaTranslator(code->ftrans)
         {
+            std::cerr << "sizeof(WeaselCode) = " << sizeof(WeaselCode) << std::endl;
         }
 
         Weasel:: ~Weasel() noexcept
@@ -45,6 +50,13 @@ namespace Yttrium
             assert(code);
             Pulverize(code);
         }
+
+        XNode * Weasel:: parse(Jive::Module * const m)
+        {
+            assert(code);
+            return code->parser.getAST(m);
+        }
+
 
     }
 

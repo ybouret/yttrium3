@@ -1,5 +1,9 @@
 #include "y/chemical/formula.hpp"
 
+#if !defined(NDEBUG)
+#include "y/jive/syntax/rule.hpp"
+#endif
+
 namespace Yttrium
 {
     namespace Chemical
@@ -21,8 +25,17 @@ namespace Yttrium
         Formula_ * Formula_:: Create(XNode * const xnode)
         {
             assert(xnode);
-            try { return new Formula_(xnode); }
-            catch(...) { delete xnode; throw; }
+            assert(Formula::CallSign == *xnode->rule.name);
+            try
+            {
+
+                return new Formula_(xnode);
+            }
+            catch(...)
+            {
+                delete xnode;
+                throw;
+            }
         }
 
         const char * const Formula::CallSign = "Formula";

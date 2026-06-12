@@ -11,6 +11,7 @@ namespace Yttrium
     {
 
         typedef Jive::Syntax::XNode XNode;
+        typedef Jive::Syntax::XList XList;
 
         class Formula_ : public CountedObject
         {

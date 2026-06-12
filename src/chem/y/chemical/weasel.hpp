@@ -5,6 +5,7 @@
 
 #include "y/singleton.hpp"
 #include "y/chemical/formula.hpp"
+#include "y/jive/module.hpp"
 
 namespace Yttrium
 {
@@ -18,7 +19,11 @@ namespace Yttrium
             class Code;
             static const char * const CallSign; //!< "Weasel";
             static const Longevity    LifeTime = 0;
-            
+
+            XNode *               parse(Jive::Module * const);
+
+
+
         private:
             Y_Disable_Copy_And_Assign(Weasel);
             friend class Singleton<Weasel,ClassLockPolicy>;
@@ -26,6 +31,10 @@ namespace Yttrium
             explicit Weasel();
             virtual ~Weasel() noexcept;
             Code * const code;
+        public:
+            const Identifier lang;
+            const Identifier formula;
+            Formula::Translator & formulaTranslator;
         };
 
     }

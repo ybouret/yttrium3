@@ -71,13 +71,15 @@ namespace Yttrium
                 attach(name,proc,idb);
             }
 
-            inline void walk(const XNode * const root) const
+            inline void run(const XNode * const root)
             {
                 assert(root);
-                walk(root,0);
+                depth = 0;
+                walk(root);
             }
 
 
+            size_t           depth;
             const Identifier lang;
             TDB              tdb;
             IDB              idb;
@@ -97,7 +99,7 @@ namespace Yttrium
             }
 
 
-            inline void walk(const XNode * const node, size_t depth) const
+            inline void walk(const XNode * const node)
             {
                 static const char    tpfx[] = "[push]";
                 static const char    ipfx[] = "[call]";
@@ -123,7 +125,7 @@ namespace Yttrium
                     const size_t          nargs = xlist.size;
                     ++depth;
                     for(const XNode *child=xlist.head;child;child=child->next)
-                        walk(child,depth);
+                        walk(child);
                     --depth;
                     Y_Jive_Editor(ipfx,name<<"/"<<nargs);
                     const InternalArticle::Pointer * const todo = idb.search( name );
@@ -146,6 +148,8 @@ namespace Yttrium
 
         Editor:: Editor(const Identifier &userLang) :
         code( new Code(userLang) ),
+        depth( code->depth ),
+        lang( code->lang ),
         verbose( code->verbose )
         {
         }
@@ -169,13 +173,27 @@ namespace Yttrium
 
 
         void Editor:: operator()(const AutoPtr<XNode> &tree,
-                                 const EditPolicy      policy) const
+                                 const EditPolicy      policy)
         {
             assert(tree.isValid());
-            assert(code);
-            code->policy = policy;
-            code->walk( & *tree );
+            (*this)( & *tree, policy);
         }
+
+        void Editor:: operator()(const XNode * const   tree,
+                                 const EditPolicy      policy)
+        {
+            assert(tree);
+            assert(code);
+            initialize();
+            code->policy = policy;
+            code->run( tree );
+        }
+
+        void Editor:: initialize()
+        {
+            if(verbose) std::cerr << "[init] " << lang << std::endl;
+        }
+
 
 
     }

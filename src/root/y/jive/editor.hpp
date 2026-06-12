@@ -52,6 +52,14 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
+            // Interface
+            //
+            //__________________________________________________________________
+            virtual void initialize();
+
+            //__________________________________________________________________
+            //
+            //
             // Methods
             //
             //__________________________________________________________________
@@ -71,7 +79,8 @@ namespace Yttrium
                 attach(name,proc);
             }
 
-            void operator()(const AutoPtr<XNode> &, const EditPolicy = Rigorous) const;
+            void operator()(const AutoPtr<XNode> &, const EditPolicy = Rigorous);
+            void operator()(const XNode * const, const EditPolicy = Rigorous);
 
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
@@ -83,7 +92,9 @@ namespace Yttrium
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         public:
-            bool & verbose; //!< inner verbosity
+            const size_t     &depth;   //!< inner depth
+            const Identifier  lang;    //!< processed grammar
+            bool &            verbose; //!< inner verbosity
         };
 
 
