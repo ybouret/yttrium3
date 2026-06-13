@@ -65,6 +65,12 @@ namespace Yttrium
         }
 
 
+        const Syntax::Rule & Parser:: mark(const char * const id)
+        {
+            assert(id);
+            return mark(id,id);
+        }
+
         const Syntax::Rule & Parser:: extra(const char separator, const Rule &rule)
         {
             return zom( cat( mark(separator), rule) );

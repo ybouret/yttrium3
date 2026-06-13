@@ -81,6 +81,7 @@ namespace Yttrium
             }
 
             const Rule & mark(const char);                //!< \return on-the-fly mark
+            const Rule & mark(const char * const);        //!< \return mark(id,id)
             const Rule & eponymous(const String &);       //!< \return on the fly UNIVOCAL eponymous terminal
             const Rule & extra(const char, const Rule &); //!< \return zom( cat(separator,rule) )
             const Rule & parens(const Rule &);            //!< \return grp( '(', rule , ')' )

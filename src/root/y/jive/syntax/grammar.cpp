@@ -63,6 +63,14 @@ namespace Yttrium
                 return grp(uid) << a << b << c;
             }
 
+            const Rule &  Grammar:: cat(const Rule &a, const Rule &b, const Rule &c, const Rule &d)
+            {
+                const Rule *       arr[4] = { &a, &b, &c, &d };
+                const Identifier   uid( MakeName(arr,4,'&') );
+                return grp(uid) << a << b << c << d;
+            }
+
+
 
             const Rule * Grammar:: querySyntaxRule(const String &ruleName) const noexcept
             {

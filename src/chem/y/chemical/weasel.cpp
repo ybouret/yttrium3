@@ -26,7 +26,7 @@ namespace Yttrium
 
             Parser              parser;
             Formula::Translator ftrans;
-            
+
         private:
             Y_Disable_Copy_And_Assign(Code);
         };
@@ -59,7 +59,13 @@ namespace Yttrium
 
         void Weasel:: operator()(Jive::Module * const m, Library &lib)
         {
-            AutoPtr<XNode> tree = parse(m); assert(*lang == *tree->rule.name);
+            AutoPtr<XNode> tree = parse(m);
+            assert( tree.isValid() );
+            assert(*lang == *tree->rule.name);
+            {
+                const String dotFile = *lang + "-ast-tree.dot";
+                Vizible::Render(dotFile,*tree,false);
+            }
             XList &top = tree->list();
             while(top.size)
             {

@@ -119,10 +119,11 @@ namespace Yttrium
 
 
 
-                const Rule & pick(const Rule &, const Rule &);               //!< \return alternate of rules
-                const Rule & pick(const Rule &, const Rule &, const Rule &); //!< \return alternate of rules
-                const Rule & cat(const Rule &, const Rule &);                //!< \return grouping of rules
-                const Rule & cat(const Rule &, const Rule &, const Rule &);  //!< \return grouping of rules
+                const Rule & pick(const Rule &, const Rule &);                            //!< \return alternate of rules
+                const Rule & pick(const Rule &, const Rule &, const Rule &);              //!< \return alternate of rules
+                const Rule & cat(const Rule &, const Rule &);                             //!< \return grouping of rules
+                const Rule & cat(const Rule &, const Rule &, const Rule &);               //!< \return grouping of rules
+                const Rule & cat(const Rule &, const Rule &, const Rule &, const Rule &); //!< \return grouping of rules
 
                 //______________________________________________________________
                 //

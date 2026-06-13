@@ -50,10 +50,13 @@ namespace Yttrium
                     String missing;
                     for(const Rule *rule=rules.head;rule;rule=rule->next)
                     {
-                        if(!visited.query(*rule)) missing += ' ' + *rule->name;
+                        if(!visited.query(*rule)) missing +=  *rule->name + ',';
                     }
                     if(missing.size())
+                    {
+                        missing[missing.size()] = 0;
                         throw Specific::Exception(lang->c_str(), "orphaned '%s'", missing.c_str());
+                    }
                 }
 
                 {

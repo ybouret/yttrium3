@@ -72,8 +72,25 @@ namespace Yttrium
 
             WEASEL << zom(STATEMENT) << BLANKS;
 
+            //------------------------------------------------------------------
+            //
+            //
+            // Equilibrium
+            //
+            //
+            //------------------------------------------------------------------
+            Aggregate & EQ = agg("EQ");
+            EQ << term("EID","@[:word:]+") << BLANKS << ':' << BLANKS;
+            const Rule &ACTOR  = (agg("ACTOR") << BLANKS << OCOF << BLANKS << formula << BLANKS);
+            const Rule &ACTORS = grp("ACTORS") << ACTOR << zom( cat(PLUS,ACTOR) );
+            const Rule &OACTRS = opt(ACTORS);
+            const Rule &REAC   = agg("REAC") << OACTRS;
+            const Rule &PROD   = agg("PROD") << OACTRS;
+
+            EQ << REAC << BLANKS << mark("<=>") << BLANKS << PROD << BLANKS << ':';
 
 
+            DECL << EQ;
 
             //------------------------------------------------------------------
             //

@@ -76,6 +76,7 @@ namespace Yttrium
                         
                     case Accepted:
                         Y_Jive_Syntax("\\_[+]'" << name << "'");
+                        //framework.grow( workspace.yield() );
                         switch(duty)
                         {
                             case Entitled:
