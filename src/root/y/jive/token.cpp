@@ -30,11 +30,15 @@ namespace Yttrium
             return *this;
         }
 
-        String Token:: str() const
+        String Token:: str(const size_t skip, const size_t trim) const
         {
+            const size_t drop = skip+trim; assert(drop<=size);
             String res;
-            for(const Char *ch=head;ch;ch=ch->next)
+            const Char * ch=head;
+            for(size_t i=skip;i>0;--i) { assert(ch); ch=ch->next; }
+            for(size_t i=size-drop;i>0;--i,ch=ch->next)
             {
+                assert(ch);
                 res += ASCII::Printable::Char[ **ch ];
             }
             return res;

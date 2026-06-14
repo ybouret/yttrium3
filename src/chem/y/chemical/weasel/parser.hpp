@@ -17,7 +17,8 @@ namespace Yttrium
             virtual ~Parser() noexcept;
 
             const Compound & formula;
-
+            const Compound & equilibrium;
+            
         private:
             Y_Disable_Copy_And_Assign(Parser);
         };

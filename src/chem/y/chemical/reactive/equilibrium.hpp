@@ -14,6 +14,8 @@ namespace Yttrium
         class Equilibrium : public CountedObject, public Components
         {
         public:
+            static const char * const CallSign;
+            class Translator;
             explicit Equilibrium(const String &, const size_t);
             virtual ~Equilibrium() noexcept;
 

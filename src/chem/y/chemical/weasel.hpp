@@ -5,6 +5,7 @@
 
 #include "y/singleton.hpp"
 #include "y/chemical/library.hpp"
+#include "y/chemical/reactive/equilibria.hpp"
 #include "y/jive/module.hpp"
 
 namespace Yttrium
@@ -23,7 +24,9 @@ namespace Yttrium
             XNode * parse(Jive::Module * const);
 
 
-            void operator()(Jive::Module * const, Library &);
+            void operator()(Jive::Module * const,
+                            Library    &,
+                            Equilibria &);
 
 
 
@@ -35,8 +38,9 @@ namespace Yttrium
             virtual ~Weasel() noexcept;
             Code * const code;
         public:
-            const Identifier lang;
-            const Identifier formula;
+            const Identifier      lang;
+            const Identifier      formula;
+            const Identifier      equilibrium;
             Formula::Translator & formulaTranslator;
         };
 

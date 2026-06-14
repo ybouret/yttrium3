@@ -106,6 +106,14 @@ namespace Yttrium
                 friend bool operator==(const XNode &, const XNode &) noexcept;
                 friend bool operator!=(const XNode &, const XNode &) noexcept;
 
+                const String &name() const noexcept; //!< \return rule name
+
+                template <typename ID> inline
+                bool is(const ID &id) const noexcept
+                {
+                    return name() == id;
+                }
+
                 //______________________________________________________________
                 //
                 //
@@ -118,8 +126,8 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(XNode);  //!< discarded
-                void * const  addr;             //!< inner address
-                void *        wksp[ NumWords ]; //!< inner workspace
+                void * const  addr;                //!< inner address
+                void *        wksp[ NumWords ];    //!< inner workspace
 
             };
         }

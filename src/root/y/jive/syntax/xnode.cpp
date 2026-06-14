@@ -172,6 +172,11 @@ namespace Yttrium
                 return lx;
             }
 
+            const String & XNode:: name() const noexcept
+            {
+                return *rule.name;
+            }
+
 
         }
     }

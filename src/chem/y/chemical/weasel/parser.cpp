@@ -16,7 +16,8 @@ namespace Yttrium
 
         Weasel:: Parser:: Parser() :
         Jive::Parser(CallSign),
-        formula( agg(Formula::CallSign) )
+        formula( agg(Formula::CallSign) ),
+        equilibrium( agg(Equilibrium::CallSign) )
         {
             //------------------------------------------------------------------
             //
@@ -80,18 +81,18 @@ namespace Yttrium
             //
             //
             //------------------------------------------------------------------
-            Aggregate & EQ = agg("EQ");
-            EQ << term("EID","@[:word:]+") << BLANKS << ':' << BLANKS;
+            //Aggregate & EQ = agg("EQ");
+            Coerce(equilibrium) << term("EID","@[:word:]+") << BLANKS << ':' << BLANKS;
             const Rule &ACTOR  = (agg("ACTOR") << BLANKS << OCOF << BLANKS << formula << BLANKS);
             const Rule &ACTORS = grp("ACTORS") << ACTOR << zom( cat(PLUS,ACTOR) );
             const Rule &OACTRS = opt(ACTORS);
             const Rule &REAC   = agg("REAC") << OACTRS;
             const Rule &PROD   = agg("PROD") << OACTRS;
             const Rule &KSTR   = use( TypeToType<Jive::Lexical::RString>(), "KSTR");
-            EQ << REAC << BLANKS << mark("<=>") << BLANKS << PROD << BLANKS << ':' << BLANKS << KSTR;
+            Coerce(equilibrium) << REAC << BLANKS << mark("<=>") << BLANKS << PROD << BLANKS << ':' << BLANKS << KSTR;
 
 
-            DECL << EQ;
+            DECL << equilibrium;
 
             //------------------------------------------------------------------
             //

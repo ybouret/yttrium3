@@ -8,3 +8,4 @@ y/mkl/derivatives
 )
 
 add_subdirectory(tests)
+Y_Regression(mkl)

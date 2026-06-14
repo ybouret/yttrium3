@@ -30,7 +30,14 @@ namespace Yttrium
 
             Token & operator<<(Char * const) noexcept; //!< merge tail \return *this
             Token & operator>>(Char * const) noexcept; //!< merge head \return *this
-            String str()                        const; //!< \return human readable string
+
+            //! convert token to string
+            /**
+             \param skip character(s) to skip
+             \param trim character(s) to trim
+             \return human readable string
+             */
+            String str(const size_t skip=0,const size_t trim=0) const;
 
             static bool AreEqual(const Token &, const Token &) noexcept;
             friend bool operator==(const Token &, const Token &) noexcept;

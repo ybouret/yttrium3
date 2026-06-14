@@ -25,6 +25,7 @@ set(Y_UnitTests "")
 # add components
 add_subdirectory(root)
 add_subdirectory(mkl)
+add_subdirectory(lua++)
 add_subdirectory(chem)
 
 # regression with all unit tests
