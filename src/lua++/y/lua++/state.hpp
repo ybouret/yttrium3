@@ -111,5 +111,5 @@ namespace Yttrium
     }
 }
 
-#endif
+#endif // !Y_LUAXX_STATE_INCLUDED
 

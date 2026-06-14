@@ -29,7 +29,7 @@ namespace Yttrium
                             Equilibria &);
 
 
-
+            
         private:
             Y_Disable_Copy_And_Assign(Weasel);
             friend class Singleton<Weasel,ClassLockPolicy>;

@@ -18,18 +18,25 @@ namespace Yttrium
         class Equilibria : public Proxy<const EqSet>
         {
         public:
+            static const char * const    CallSign;
             typedef EqSet::ConstIterator ConstIterator;
 
             explicit Equilibria();
             virtual ~Equilibria() noexcept;
             Equilibria(const Equilibria &);
-            
-            //Y_OSTREAM_PROTO(Library);
+
+            void add(const EqPtr &);
+
+
+            const Assembly rfmt;
+            const Assembly pfmt;
 
         private:
             Y_Disable_Assign(Equilibria);
             Y_Proxy_Decl();
             EqSet db;
+        public:
+            xreal_t t_print;
         };
     }
 

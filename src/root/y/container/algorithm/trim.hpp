@@ -17,7 +17,7 @@ namespace Yttrium
          \return trimmed sequence
          */
         template <typename SEQUENCE, typename IS_BAD> inline
-        SEQUENCE Trim(SEQUENCE &seq, IS_BAD &isBad) noexcept
+        SEQUENCE & Trim(SEQUENCE &seq, IS_BAD &isBad) noexcept
         {
             while(seq.size() && isBad( seq.tail() ) )
                 seq.popTail();

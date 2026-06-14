@@ -18,7 +18,7 @@ namespace Yttrium
          \return skipped sequence
          */
         template <typename SEQUENCE, typename IS_BAD> inline
-        SEQUENCE Skip(SEQUENCE &seq, IS_BAD &isBad) noexcept
+        SEQUENCE & Skip(SEQUENCE &seq, IS_BAD &isBad) noexcept
         {
             while(seq.size() && isBad( seq.head() ) )
                 seq.popHead();

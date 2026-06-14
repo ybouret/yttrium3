@@ -6,7 +6,8 @@ namespace Yttrium
 {
     namespace Chemical
     {
-        const char * const Equilibrium::CallSign = "Equilibrium";
+        const char * const Equilibrium:: CallSign = "Equilibrium";
+        const char * const Equilibrium:: Symbol = "<=>";
 
         Equilibrium:: ~Equilibrium() noexcept
         {

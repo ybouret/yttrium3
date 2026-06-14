@@ -8,6 +8,7 @@
 #include "y/chemical/library.hpp"
 #include "y/container/sequence/vector.hpp"
 #include "y/chemical/formula/translator.hpp"
+#include "y/lua++/state.hpp"
 
 namespace Yttrium
 {
@@ -16,26 +17,25 @@ namespace Yttrium
         class Equilibrium::Translator
         {
         public:
-            explicit Translator(const Identifier &);
+            explicit Translator(const Identifier &,
+                                const Lua::VM    &);
             virtual ~Translator() noexcept;
 
 
             void operator()(AutoPtr<XNode>       & tree,
                             Library              & lib,
-                            Equilibria           & eqs,
-                            Formula::Translator  & ftr);
+                            Equilibria           & eqs);
 
             const Identifier lang;
-
+            Lua::VM          lvm;
+            
         private:
             Y_Disable_Copy_And_Assign(Translator);
-            Actor::List reac;
-            Actor::List prod;
+            
 
             void fill(Actor::List          &,
                       XNode * const         ,
                       Library              &,
-                      Formula::Translator  &,
                       const char * const);
         };
     }

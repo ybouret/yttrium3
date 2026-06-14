@@ -17,7 +17,8 @@ namespace Yttrium
         public:
             explicit Assembly() noexcept;
             virtual ~Assembly() noexcept;
-
+            Assembly(const Assembly &) noexcept;
+            
             void enroll(const Entity &) noexcept;
 
             std::ostream & print(std::ostream &os, const Entity &, const Justify::Type = Justify::Left) const;
@@ -25,7 +26,7 @@ namespace Yttrium
 
             const size_t width;
         private:
-            Y_Disable_Copy_And_Assign(Assembly);
+            Y_Disable_Assign(Assembly);
 
         };
     }

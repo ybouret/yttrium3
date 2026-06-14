@@ -19,9 +19,9 @@ namespace Yttrium
          \return trimmed and skipped sequence
          */
         template <typename SEQUENCE, typename IS_BAD> inline
-        SEQUENCE Crop(SEQUENCE &seq, IS_BAD &isBad) noexcept
+        SEQUENCE &Crop(SEQUENCE &seq, IS_BAD &isBad) noexcept
         {
-            return Trim(seq,isBad).Skip(seq.isBad);
+            return Skip( Trim(seq,isBad), isBad );
         }
     }
 }

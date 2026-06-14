@@ -3,6 +3,7 @@
 #include "y/chemical/formula/translator.hpp"
 #include "y/chemical/reactive/equilibrium/translator.hpp"
 #include "y/type/pulverize.hpp"
+#include "y/lua++/state.hpp"
 
 namespace Yttrium
 {
@@ -15,9 +16,10 @@ namespace Yttrium
         {
         public:
             inline explicit Code() :
+            lvm( new Lua::State() ),
             parser(),
             ftrans(parser.formula.name),
-            etrans(parser.equilibrium.name)
+            etrans(parser.equilibrium.name,lvm)
             {
             }
 
@@ -26,6 +28,7 @@ namespace Yttrium
             {
             }
 
+            Lua::VM                 lvm;
             Parser                  parser;
             Formula::Translator     ftrans;
             Equilibrium::Translator etrans;
@@ -88,7 +91,7 @@ namespace Yttrium
 
                 if(name==*equilibrium)
                 {
-                    code->etrans(node,lib,eqs,code->ftrans);
+                    code->etrans(node,lib,eqs);
                     continue;
                 }
 
@@ -96,6 +99,13 @@ namespace Yttrium
             }
 
         }
+
+        //xreal_t Weasel:: eval(const String &expr)
+        //{
+        //    assert(code);
+        //    return code->lvm->eval<lua_Number>(expr);
+        //}
+
 
 
     }

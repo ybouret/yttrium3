@@ -89,7 +89,7 @@ namespace Yttrium
             const Rule &REAC   = agg("REAC") << OACTRS;
             const Rule &PROD   = agg("PROD") << OACTRS;
             const Rule &KSTR   = use( TypeToType<Jive::Lexical::RString>(), "KSTR");
-            Coerce(equilibrium) << REAC << BLANKS << mark("<=>") << BLANKS << PROD << BLANKS << ':' << BLANKS << KSTR;
+            Coerce(equilibrium) << REAC << BLANKS << mark(Equilibrium::Symbol) << BLANKS << PROD << BLANKS << ':' << BLANKS << KSTR;
 
 
             DECL << equilibrium;

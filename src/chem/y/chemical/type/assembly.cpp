@@ -25,6 +25,12 @@ namespace Yttrium
             return os << Justify(en.name,width,J);
         }
 
+        Assembly:: Assembly(const Assembly &_) noexcept :
+        width(_.width)
+        {
+        }
+
+
 
     }
 }

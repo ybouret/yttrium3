@@ -27,7 +27,7 @@ namespace Yttrium
             void massAction(XMul &X, const XReadable &C, const Level L) const;
             void massAction(XMul &X, const XReadable &C, const Level L, const xreal_t xi) const; //!< safe
 
-
+            apz  charge() const;
 
         private:
             Y_Disable_Copy_And_Assign(Actors);

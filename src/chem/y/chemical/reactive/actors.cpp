@@ -66,6 +66,19 @@ namespace Yttrium
             }
         }
 
+        apz  Actors:: charge() const
+        {
+            apz sumZ = 0;
+            for(const Actor * a=list.head;a;a=a->next)
+            {
+                apz       z = a->sp.z;
+                const apn n = a->nu;
+                z *= n;
+                sumZ += z;
+            }
+
+            return sumZ;
+        }
 
     }
 

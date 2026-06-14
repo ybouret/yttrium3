@@ -21,6 +21,9 @@ namespace Yttrium
             void addReac(const unsigned nu, const Species &sp);
             void addProd(const unsigned nu, const Species &sp);
 
+            bool  electroneutral() const;
+            bool  atLeastOneItem() const;
+            
             const Actors   reac;
             const Actors   prod;
             

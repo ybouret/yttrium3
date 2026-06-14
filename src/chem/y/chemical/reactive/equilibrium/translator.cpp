@@ -1,14 +1,18 @@
 #include "y/chemical/reactive/equilibrium/translator.hpp"
+#include "y/chemical/reactive/equilibrium/constant.hpp"
 #include "y/jive/syntax/rule.hpp"
 #include "y/ascii/convert.hpp"
+#include "y/container/algorithm/crop.hpp"
 
 namespace Yttrium
 {
     namespace Chemical
     {
 
-        Equilibrium:: Translator:: Translator(const Identifier &id) :
-        lang(id)
+        Equilibrium:: Translator:: Translator(const Identifier &id,
+                                              const Lua::VM    &vm) :
+        lang(id),
+        lvm(vm)
         {
         }
 
@@ -16,15 +20,27 @@ namespace Yttrium
         {
         }
 
+        static inline bool isBlank(const char c) noexcept
+        {
+            switch(c)
+            {
+                case ' ':
+                case '\t':
+                    return true;
+                    
+                default:
+                    break;
+            }
+            return false;
+        }
+
         void Equilibrium:: Translator:: operator()(AutoPtr<XNode> &tree,
                                                    Library              &lib,
-                                                   Equilibria           &eqs,
-                                                   Formula::Translator  &ftr)
+                                                   Equilibria           &eqs)
         {
             assert(tree.isValid());
             assert(tree->is(CallSign));
-            reac.release();
-            prod.release();
+            Actor::List reac,prod;
             const XList &xlist = tree->list(); assert(4==xlist.size);
 
             // extracting name
@@ -41,23 +57,38 @@ namespace Yttrium
             xnode=xnode->next;
             assert(xnode);
             assert(xnode->is("REAC"));
-            fill(reac,xnode,lib,ftr,eid);
+            fill(reac,xnode,lib,eid);
 
             // extracting prod
             xnode=xnode->next;
             assert(xnode);
             assert(xnode->is("PROD"));
-            fill(prod,xnode,lib,ftr,eid);
+            fill(prod,xnode,lib,eid);
+
+            if(reac.size<=0 && prod.size<=0) throw Specific::Exception(CallSign, "empty '%s'",eid);
 
             // extracting KSTR
             xnode=xnode->next;
             assert(xnode);
             assert(xnode->is("KSTR"));
             const Jive::Token &ktkn = xnode->lexeme();
-            const String       kstr = ktkn.str();
+            String             kstr = ktkn.str();
+            Algorithm::Crop(kstr,isBlank);
             std::cerr << "KSTR=\"" << kstr << "\"" << std::endl;
 
             // compiling equilibrium
+            const xreal_t k  = lvm->eval<lua_Number>(kstr);
+            EqPtr         eq(new ConstantEquilibrium(eqName,eqs->size()+1,k));
+
+            for(const Actor *ac=reac.head;ac;ac=ac->next)
+            {
+                eq->addReac(ac->nu,ac->sp);
+            }
+
+            for(const Actor *ac=prod.head;ac;ac=ac->next)
+            {
+                eq->addProd(ac->nu,ac->sp);
+            }
             
 
 
@@ -67,7 +98,6 @@ namespace Yttrium
         void Equilibrium:: Translator:: fill(Actor::List          & acl,
                                              XNode * const          xnode,
                                              Library              & lib,
-                                             Formula::Translator  & ftr,
                                              const char * const     eid)
         {
             assert(xnode);
@@ -84,7 +114,6 @@ namespace Yttrium
 
                 XList &al =  sub->list(); assert(1==al.size||2==al.size);
                 assert(al.tail);
-                assert(al.tail->is(*ftr.lang));
                 const Formula   f(al.popTail());
                 const Species & sp = lib[f]; std::cerr << "using " << sp.name << std::endl;
                 unsigned        nu = 1;

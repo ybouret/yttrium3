@@ -39,6 +39,16 @@ namespace Yttrium
             Coerce(prod).hire(nu,sp);
         }
 
+        bool Components:: electroneutral() const
+        {
+            return reac.charge() == prod.charge();
+        }
+
+        bool  Components:: atLeastOneItem() const
+        {
+            return reac->size>0 || prod->size>0;
+        }
+
 
     }
 

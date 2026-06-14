@@ -15,7 +15,9 @@ namespace Yttrium
         {
         public:
             static const char * const CallSign;
+            static const char * const Symbol; //!< "<=>"
             class Translator;
+
             explicit Equilibrium(const String &, const size_t);
             virtual ~Equilibrium() noexcept;
 
