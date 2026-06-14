@@ -2,6 +2,7 @@
 #include "y/chemical/weasel/parser.hpp"
 #include "y/jive/lexical/plugin/single-line-comment.hpp"
 #include "y/jive/lexical/plugin/multi-lines-comment.hpp"
+#include "y/jive/lexical/plugin/rstring.hpp"
 
 namespace Yttrium
 {
@@ -75,7 +76,7 @@ namespace Yttrium
             //------------------------------------------------------------------
             //
             //
-            // Equilibrium
+            // Equilibrium grammar
             //
             //
             //------------------------------------------------------------------
@@ -86,8 +87,8 @@ namespace Yttrium
             const Rule &OACTRS = opt(ACTORS);
             const Rule &REAC   = agg("REAC") << OACTRS;
             const Rule &PROD   = agg("PROD") << OACTRS;
-
-            EQ << REAC << BLANKS << mark("<=>") << BLANKS << PROD << BLANKS << ':';
+            const Rule &KSTR   = use( TypeToType<Jive::Lexical::RString>(), "KSTR");
+            EQ << REAC << BLANKS << mark("<=>") << BLANKS << PROD << BLANKS << ':' << BLANKS << KSTR;
 
 
             DECL << EQ;

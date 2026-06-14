@@ -74,6 +74,11 @@ namespace Yttrium
                 ld1(); mul(data);
             }
 
+            inline void power(ParamType data, size_t n)
+            {
+                while(n-- > 0) mul(data);
+            }
+
         private:
             Y_Disable_Copy_And_Assign(Multiplier); //!< discarded
         };

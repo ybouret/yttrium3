@@ -27,6 +27,22 @@ namespace Yttrium
             explicit Indexed(const String &,const size_t);
             virtual ~Indexed() noexcept;
 
+            template <typename ARRAY> inline
+            typename ARRAY::Type & operator()(ARRAY &arr, const Level L) const noexcept
+            {
+                assert(indx[L]>0); assert(indx[L]<=arr.size());
+                return arr[ indx[L] ];
+            }
+
+            template <typename ARRAY> inline
+            typename ARRAY::ConstType & operator()(const ARRAY &arr, const Level L) const noexcept
+            {
+                assert(indx[L]>0); assert(indx[L]<=arr.size());
+                return arr[ indx[L] ];
+            }
+
+
+
             const size_t indx[Levels];
             
         private:

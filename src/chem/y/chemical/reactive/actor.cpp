@@ -1,6 +1,7 @@
 
 #include "y/chemical/reactive/actor.hpp"
 #include "y/string/format.hpp"
+#include "y/core/max.hpp"
 
 namespace Yttrium
 {
@@ -17,6 +18,8 @@ namespace Yttrium
         Entity(),
         nu(_nu),
         sp(_sp),
+        xn(nu),
+        zero(),
         next(0),
         prev(0)
         {
@@ -35,6 +38,23 @@ namespace Yttrium
 
             alias.xch( Coerce(name) );
         }
+
+
+        void Actor:: massAction(XMul &X, const XReadable &C, const Level L) const
+        {
+            const xreal_t c = sp(C,L); assert(c>=zero);
+            X.power(c,nu);
+        }
+
+        void Actor:: massAction(XMul &X, const XReadable &C, const Level L, const xreal_t xi) const
+        {
+            xreal_t c = sp(C,L); assert(c>=zero);
+            InSituMax(c += xn * xi,zero);
+            X.power(c,nu);
+        }
+
+
+
     }
 
 }
