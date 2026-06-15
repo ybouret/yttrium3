@@ -55,6 +55,9 @@ namespace Yttrium
             //! \return partial reaction charge
             apz  charge() const;
 
+            xreal_t extent(const XReadable &, const Level) const noexcept;
+            
+
         private:
             Y_Disable_Copy_And_Assign(Actors); //!< discarded
             Y_Proxy_Decl();                    //!< helper

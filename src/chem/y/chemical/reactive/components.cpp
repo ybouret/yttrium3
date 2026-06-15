@@ -12,10 +12,38 @@ namespace Yttrium
 
         Components:: Components(const String &eqName, const size_t eqIndx) :
         Indexed(eqName,eqIndx),
+        kind(Outlawed),
         reac(AsSpec),
         prod(AsSpec),
         one(1)
         {
+
+        }
+
+        EqKind Components:: computeKind() const noexcept
+        {
+            if(reac->size)
+            {
+                if(prod->size)
+                {
+                    return BothWays;
+                }
+                else
+                {
+                    return ReacOnly;
+                }
+            }
+            else
+            {
+                if(prod->size)
+                {
+                    return ProdOnly;
+                }
+                else
+                {
+                    return Outlawed;
+                }
+            }
 
         }
 
@@ -31,6 +59,7 @@ namespace Yttrium
             static const char  fn[] = "Components::addReac";
             checkUnused(fn,sp);
             Coerce(reac).hire(nu,sp);
+            Coerce(kind) = computeKind();
         }
 
         void Components:: addProd(const unsigned nu, const Species &sp)
@@ -38,6 +67,7 @@ namespace Yttrium
             static const char  fn[] = "Components::addProd";
             checkUnused(fn,sp);
             Coerce(prod).hire(nu,sp);
+            Coerce(kind) = computeKind();
         }
 
         bool Components:: electroneutral() const
@@ -47,7 +77,15 @@ namespace Yttrium
 
         bool  Components:: atLeastOneItem() const
         {
-            return reac->size>0 || prod->size>0;
+            if(Outlawed!=kind)
+            {
+                assert(reac->size>0 || prod->size>0);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         xreal_t Components:: massAction(const xreal_t     K,

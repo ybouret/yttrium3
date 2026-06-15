@@ -1,5 +1,6 @@
 #include "y/chemical/reactive/actors.hpp"
 #include "y/exception.hpp"
+#include "y/core/min.hpp"
 
 namespace Yttrium
 {
@@ -79,6 +80,17 @@ namespace Yttrium
 
             return sumZ;
         }
+
+        xreal_t Actors:: extent(const XReadable &C, const Level L) const noexcept
+        {
+            assert(list.size>0);
+            const Actor *ac=list.head;
+            xreal_t xi = ac->extent(C,L);
+            for(ac=ac->next;ac;ac=ac->next)
+                InSituMin(xi,ac->extent(C,L));
+            return xi;
+        }
+
 
     }
 

@@ -12,6 +12,14 @@ namespace Yttrium
     namespace Chemical
     {
 
+        enum EqKind
+        {
+            Outlawed,
+            ProdOnly,
+            ReacOnly,
+            BothWays
+        };
+
         //______________________________________________________________________
         //
         //
@@ -52,13 +60,15 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
+            const EqKind   kind; //!< updated
             const Actors   reac; //!< reactant(s)
             const Actors   prod; //!< product(s)
             const xreal_t  one;  //!< numeric 1
 
         private:
             Y_Disable_Copy_And_Assign(Components);  //!< discarded
-            void checkUnused(const char * const, const Species &) const; //!< helper
+            void   checkUnused(const char * const, const Species &) const; //!< helper
+            EqKind computeKind() const noexcept; //!< helper
         };
 
     }

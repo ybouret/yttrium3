@@ -53,6 +53,11 @@ namespace Yttrium
             X.power(c,nu);
         }
 
+        xreal_t Actor:: extent(const XReadable &C, const Level L) const noexcept
+        {
+            assert(sp(C,L)>=zero);
+            return sp(C,L)/xn;
+        }
 
 
     }
