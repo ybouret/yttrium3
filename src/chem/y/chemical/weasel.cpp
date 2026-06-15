@@ -72,6 +72,7 @@ namespace Yttrium
             AutoPtr<XNode> tree = parse(m);
             assert( tree.isValid() );
             assert(*lang == *tree->rule.name);
+            if(false)
             {
                 const String dotFile = *lang + "-ast-tree.dot";
                 Vizible::Render(dotFile,*tree,false);

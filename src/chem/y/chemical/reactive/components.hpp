@@ -29,7 +29,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Components : public Indexed, public Freezable
+        class Components : public Indexed, public Freezable, public Vizible
         {
         public:
             //__________________________________________________________________
@@ -54,9 +54,19 @@ namespace Yttrium
 
             xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level) const; //!< \return mass action
             xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level, const xreal_t) const; //!< \return shifted mass action
-            void    saveMove(XWritable &, const Level, const xreal_t) const noexcept;
-            xreal_t extent(const XReadable &Cold, const XReadable &Cnew, const Level, XAdd &xadd) const;
+            void    saveMove(XWritable &, const Level, const xreal_t) const noexcept; //!< safely move concentration using extent
+            xreal_t extent(const XReadable &Cold, const XReadable &Cnew, const Level, XAdd &xadd) const; //!< \return average extent
 
+            bool    hired(const Species &)       const noexcept;
+            bool    linkedTo(const Components &) const noexcept;
+
+            OutputStream & vizSelf(OutputStream &fp,
+                                   const char * const color,
+                                   const char * const style) const;
+
+            OutputStream & vizLink(OutputStream &fp,
+                                   const char * const color) const;
+            
             //__________________________________________________________________
             //
             //

@@ -23,10 +23,10 @@ namespace Yttrium
         class Species :
         public CountedObject,
         public Formula,
-        public Indexed
+        public Indexed,
+        public Vizible
         {
         public:
-           
             //__________________________________________________________________
             //
             //
@@ -39,10 +39,21 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
+            // Methods
+            //
+            //__________________________________________________________________
+            OutputStream & viz(OutputStream &     fp,
+                               const char * const color,
+                               const char * const style) const;
+
+
+            //__________________________________________________________________
+            //
+            //
             // Members
             //
             //__________________________________________________________________
-            const int    z; //!< algebraic charge
+            const int z; //!< algebraic charge
 
         private:
             Y_Disable_Copy_And_Assign(Species); //!< discarded

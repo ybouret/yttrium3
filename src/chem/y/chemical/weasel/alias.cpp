@@ -16,7 +16,7 @@ namespace Yttrium
                               Library      & lib,
                               Equilibria   & eqs)
         {
-            std::cerr << "process \"" << expr << "\"" << std::endl;
+            std::cerr << "process regular expression \"" << expr << "\"" << std::endl;
             Jive::Matching match = expr;
             Vector<size_t> found;
             for(unsigned i=0;i<EDB::Count;++i)
@@ -26,17 +26,16 @@ namespace Yttrium
                 const char * const end  = strchr(ini++,':'); if(!end) throw Specific::Exception(CallSign,"missing ':' for EDB[%u]",i);
                 String             eid(ini,(size_t)(end-ini));
                 Algorithm::Crop(eid,isspace);
-                //std::cerr << "'" << eid << "'" << std::endl;
                 if( match.found(Jive::Matching::Somehow, eid, eid) )
-                {
                     found << i;
-                }
             }
+            
             if( found.size() <= 0)
                 throw Specific::Exception(CallSign,"no matching '%s' in database", expr.c_str());
 
             for(size_t i=1;i<=found.size();++i)
             {
+                
                 (*this)( Jive::Module::OpenData(expr,EDB::Table[ found[i]]), lib, eqs);
             }
 

@@ -18,7 +18,7 @@ namespace Yttrium
         Jive::Parser(CallSign),
         formula( agg(Formula::CallSign) ),
         equilibrium( agg(Equilibrium::CallSign) ),
-        alias( term("ALIAS","%[\\x21-\\x7E]+") )
+        alias( term("ALIAS","%[\\x21-\\x7E]+" ) )
         {
             //------------------------------------------------------------------
             //
@@ -78,12 +78,12 @@ namespace Yttrium
             //------------------------------------------------------------------
             //
             //
-            // Equilibrium grammar
+            // Equilibrium Grammar
             //
             //
             //------------------------------------------------------------------
             //Aggregate & EQ = agg("EQ");
-            Coerce(equilibrium) << term("EID","@[:word:]+") << BLANKS << ':' << BLANKS;
+            Coerce(equilibrium) << term("EID", "@[[:word:]_()]+") << BLANKS << ':' << BLANKS;
             const Rule &ACTOR  = (agg("ACTOR") << BLANKS << OCOF << BLANKS << formula << BLANKS);
             const Rule &ACTORS = grp("ACTORS") << ACTOR << zom( cat(PLUS,ACTOR) );
             const Rule &OACTRS = opt(ACTORS);
@@ -115,7 +115,7 @@ namespace Yttrium
             load(TypeToType<Jive::Lexical::CxxComment>(),"CxxComment");
             load(TypeToType<Jive::Lexical::C_Comment>(),"C_Comment");
 
-            render();
+            //render();
             validate();
         }
 

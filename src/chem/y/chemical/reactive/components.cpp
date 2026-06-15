@@ -1,6 +1,7 @@
 
 #include "y/chemical/reactive/components.hpp"
 #include "y/exception.hpp"
+#include "y/stream/output.hpp"
 
 namespace Yttrium
 {
@@ -149,6 +150,70 @@ namespace Yttrium
             const xreal_t den = (real_t) size;
 
             return xadd()/den;
+        }
+
+
+        bool Components:: hired(const Species &sp) const noexcept
+        {
+            return reac.hired(sp) || prod.hired(sp);
+        }
+
+
+        bool Components:: linkedTo(const Components &other) const noexcept
+        {
+            for(const Actor *ac=reac->head;ac;ac=ac->next)
+                if(other.hired(ac->sp)) return true;
+
+            for(const Actor *ac=prod->head;ac;ac=ac->next)
+                if(other.hired(ac->sp)) return true;
+
+            return false;
+
+        }
+
+        OutputStream & Components:: vizSelf(OutputStream &fp,
+                                            const char * const color,
+                                            const char * const style) const
+        {
+            nodeName(fp) << '[';
+            Label(fp,name);
+            fp << ",shape=cylinder";
+            if(color) fp << ",color=" << color << ",fontcolor=" << color;
+            if(style) fp << ",style=\"" << style << "\"";
+            return Endl(fp << ']');
+        }
+
+
+        static inline void arrowLegend(OutputStream &     fp,
+                                       const unsigned     nu,
+                                       const char * const color)
+        {
+            fp << "arrowhead=normal";
+            if(nu>1)
+            {
+                fp(",label=\"%u\"",nu);
+            }
+            if(color) fp << ",color=" << color << ",fontcolor=" << color;
+        }
+
+        OutputStream & Components:: vizLink(OutputStream &fp,
+                                            const char * const color) const
+        {
+            for(const Actor *ac=reac->head;ac;ac=ac->next)
+            {
+                ac->sp.to(this,fp) << '[';
+                arrowLegend(fp,ac->nu,color);
+                Endl(fp<<']');
+            }
+
+            for(const Actor *ac=prod->head;ac;ac=ac->next)
+            {
+                to(& ac->sp,fp) << '[';
+                arrowLegend(fp,ac->nu,color);
+                Endl(fp<<']');
+            }
+            
+            return fp;
         }
 
 
