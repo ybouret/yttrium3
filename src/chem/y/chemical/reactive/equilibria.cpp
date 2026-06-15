@@ -51,7 +51,7 @@ namespace Yttrium
             for(ConstIterator it=db.begin();it!=db.end();++it)
             {
                 const Equilibrium &eq = **it;
-                (void) EqFormat::print(os,eq,wK);
+                (void) EqFormat::print(os,eq,wK,t_print);
             }
             return os << '}';
         }

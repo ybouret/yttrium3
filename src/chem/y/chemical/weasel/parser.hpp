@@ -18,6 +18,7 @@ namespace Yttrium
 
             const Compound & formula;
             const Compound & equilibrium;
+            const Rule     & alias;
             
         private:
             Y_Disable_Copy_And_Assign(Parser);

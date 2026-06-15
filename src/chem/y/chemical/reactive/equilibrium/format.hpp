@@ -22,7 +22,8 @@ namespace Yttrium
 
             std::ostream & print(std::ostream      &os,
                                  const Equilibrium &eq,
-                                 const bool         wK) const;
+                                 const bool         wK,
+                                 const xreal_t      tK) const;
 
             const Assembly efmt;
             const Assembly rfmt;

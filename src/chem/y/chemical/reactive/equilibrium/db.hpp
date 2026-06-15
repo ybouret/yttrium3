@@ -21,5 +21,5 @@ namespace Yttrium
 
 }
 
-#endif
+#endif // !Y_Chemical_Equilibrium_Database_Included
 

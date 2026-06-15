@@ -47,6 +47,7 @@ namespace Yttrium
         lang(code->parser.lang),
         formula(code->ftrans.lang),
         equilibrium(code->etrans.lang),
+        alias(code->parser.alias.name),
         formulaTranslator(code->ftrans)
         {
             std::cerr << "sizeof(WeaselCode) = " << sizeof(WeaselCode) << std::endl;
@@ -95,7 +96,13 @@ namespace Yttrium
                     continue;
                 }
 
+                if(name==*alias)
+                {
+                    const String expr = node->lexeme().str(1);
+                    onAlias(expr,lib,eqs);
+                }
 
+                
             }
 
         }

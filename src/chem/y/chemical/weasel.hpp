@@ -41,7 +41,12 @@ namespace Yttrium
             const Identifier      lang;
             const Identifier      formula;
             const Identifier      equilibrium;
+            const Identifier      alias;
             Formula::Translator & formulaTranslator;
+
+        private:
+            void onAlias(const String &, Library &lib, Equilibria &eqs);
+            
         };
 
     }

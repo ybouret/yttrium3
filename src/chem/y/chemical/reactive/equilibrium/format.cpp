@@ -33,10 +33,21 @@ namespace Yttrium
 
         std::ostream & EqFormat:: print(std::ostream      &os,
                                         const Equilibrium &eq,
-                                        const bool         wK) const
+                                        const bool         wK,
+                                        const xreal_t      tK) const
         {
-
-            efmt.print(os,eq,Justify::Left) << " : ";
+            static const char Sep[] = " : ";
+            efmt.print(os,eq,Justify::Left) << Sep;
+            rfmt.print(os,eq.reac,Justify::Right);
+            os << ' ' << Equilibrium::Symbol << ' ';
+            pfmt.print(os,eq.prod,Justify::Left);
+            os << Sep;
+            if(wK)
+            {
+                const xreal_t K  = Coerce(eq).K(tK);
+                const real_t  p  = K.log10();
+                os << "'10^('" << p << ")'";
+            }
             return os << std::endl;
         }
     }

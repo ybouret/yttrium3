@@ -17,7 +17,8 @@ namespace Yttrium
         Weasel:: Parser:: Parser() :
         Jive::Parser(CallSign),
         formula( agg(Formula::CallSign) ),
-        equilibrium( agg(Equilibrium::CallSign) )
+        equilibrium( agg(Equilibrium::CallSign) ),
+        alias( term("ALIAS","%[\\x21-\\x7E]+") )
         {
             //------------------------------------------------------------------
             //
@@ -93,6 +94,16 @@ namespace Yttrium
 
 
             DECL << equilibrium;
+
+            //------------------------------------------------------------------
+            //
+            //
+            // alias for internal db
+            //
+            //
+            //------------------------------------------------------------------
+            DECL << alias;
+
 
             //------------------------------------------------------------------
             //
