@@ -63,7 +63,7 @@ namespace Yttrium
                 }
             }
 
-            //! \return uniform in ]0:1[, 16-bits resolution
+            //! \return (slow) uniform in ]0:1[, 16-bits resolution
             template <typename T> inline T uniform()
             {
                 static const T denom = 65536;

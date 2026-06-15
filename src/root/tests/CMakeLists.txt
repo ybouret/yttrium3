@@ -251,6 +251,8 @@ Y_UTEST(info:xbwt)
 Y_UTEST(info:sc)
 
 Y_UTEST(random:type_gen)
+Y_UTEST(random:seed64)
+Y_UTEST(random:uniform32)
 
 Y_UTEST(field:layouts)
 Y_UTEST(field:1d)

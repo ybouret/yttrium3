@@ -20,7 +20,7 @@ namespace Yttrium
         }
 
         static inline
-        long randSeed()
+        long randSeed() noexcept
         {
             uint32_t crc = 0x00;
             {
