@@ -39,9 +39,9 @@ namespace Yttrium
              */
             String str(const size_t skip=0,const size_t trim=0) const;
 
-            static bool AreEqual(const Token &, const Token &) noexcept;
-            friend bool operator==(const Token &, const Token &) noexcept;
-            friend bool operator!=(const Token &, const Token &) noexcept;
+            static bool AreEqual(const Token &, const Token &)   noexcept; //!< \return equality test
+            friend bool operator==(const Token &, const Token &) noexcept; //!< \return true iff equal
+            friend bool operator!=(const Token &, const Token &) noexcept; //!< \return true iff different
 
 
         private:

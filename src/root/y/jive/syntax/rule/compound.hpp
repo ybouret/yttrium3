@@ -87,9 +87,9 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(Compound); //!< discarded
-                Y_Proxy_Decl();
+                Y_Proxy_Decl();                      //!< helper
             protected:
-                RList rlist;
+                RList rlist;           //!< inner rules
 
             public:
                 Parser * const parser; //!< optional parent parser

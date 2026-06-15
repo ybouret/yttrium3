@@ -23,10 +23,14 @@ namespace Yttrium
 
             bool  electroneutral() const;
             bool  atLeastOneItem() const;
-            
+
+            xreal_t massAction(const xreal_t K, XMul &X, const XReadable &C, const Level L) const;
+            xreal_t massAction(const xreal_t K, XMul &X, const XReadable &C, const Level L, const xreal_t xi) const;
+
+
             const Actors   reac;
             const Actors   prod;
-            
+            const xreal_t  one;
 
         private:
             Y_Disable_Copy_And_Assign(Components);

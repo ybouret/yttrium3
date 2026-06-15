@@ -13,8 +13,23 @@ namespace Yttrium
         namespace Statistics
         {
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! compute Average with Cameo
+            //
+            //
+            //__________________________________________________________________
             struct Average
             {
+                //! generic range computation
+                /**
+                 \param curr initial iterator
+                 \param size number of items
+                 \param xadd cameo addition
+                 \return average of the range
+                 */
                 template <typename T, typename ITERATOR> static inline
                 T OfRange(ITERATOR curr, size_t size, Cameo::Addition<T> &xadd)
                 {
@@ -27,12 +42,25 @@ namespace Yttrium
                     return xadd()/denom;
                 }
 
+                //! legacy array average
+                /**
+                 \param data first item
+                 \param size number of items
+                 \param xadd cameo addition
+                 \return average of array
+                 */
                 template <typename T> static inline
                 T Of(const T data[], const size_t size, Cameo::Addition<T> &xadd)
                 {
                     return OfRange(data,size,xadd);
                 }
 
+                //! sequence average
+                /**
+                 \param seq  sequence with begin() and size()
+                 \param xadd cameo addition
+                 \return average of sequence
+                 */
                 template <typename SEQUENCE> static inline
                 typename SEQUENCE::Type Of(SEQUENCE &seq, Cameo::Addition<typename SEQUENCE::MutableType> &xadd)
                 {

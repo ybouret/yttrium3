@@ -13,7 +13,8 @@ namespace Yttrium
         Components:: Components(const String &eqName, const size_t eqIndx) :
         Indexed(eqName,eqIndx),
         reac(AsSpec),
-        prod(AsSpec)
+        prod(AsSpec),
+        one(1)
         {
 
         }
@@ -48,6 +49,32 @@ namespace Yttrium
         {
             return reac->size>0 || prod->size>0;
         }
+
+        xreal_t Components:: massAction(const xreal_t     K,
+                                        XMul &            X,
+                                        const XReadable & C,
+                                        const Level       L) const
+        {
+            X.set(K); prod.massAction(X,C,L);
+            const xreal_t lhs = X();
+
+            X.set(one); reac.massAction(X,C,L);
+            const xreal_t rhs = X();
+
+            return lhs-rhs;
+        }
+
+        xreal_t Components:: massAction(const xreal_t K, XMul &X, const XReadable &C, const Level L, const xreal_t xi) const
+        {
+            X.set(K); prod.massAction(X,C,L,xi);
+            const xreal_t lhs = X();
+
+            X.set(one); reac.massAction(X,C,L,xi);
+            const xreal_t rhs = X();
+
+            return lhs-rhs;
+        }
+
 
 
     }

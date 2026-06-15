@@ -77,7 +77,7 @@ namespace Yttrium
                 //! cleanup
                 virtual ~Rule() noexcept;
 
-                Y_OSTREAM_PROTO(Rule);
+                Y_OSTREAM_PROTO(Rule); //!< display
 
                 //______________________________________________________________
                 //

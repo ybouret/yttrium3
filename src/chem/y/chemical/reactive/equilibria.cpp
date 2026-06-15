@@ -31,10 +31,13 @@ namespace Yttrium
 
         void Equilibria:: add(const EqPtr &eq)
         {
+            const char * const eid = eq->name.c_str();
             if(eq->indx[TopLevel] != db.size()+1 )
-                throw Specific::Exception(CallSign,"invalid '%s' top-level index", eq->name.c_str() );
+                throw Specific::Exception(CallSign,"invalid '%s' top-level index", eid );
 
             // check
+            if( !eq->atLeastOneItem() ) throw Specific::Exception(CallSign,"'%s' is degenerate!",eid);
+            if( !eq->electroneutral() ) throw Specific::Exception(CallSign,"'%s' is not electroneutral!",eid);
             
 
             // try insert

@@ -119,7 +119,7 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            XNode * getAST(Module * const);
+            XNode * getAST(Module * const); //!< \return AST of given module
 
 
 

@@ -74,6 +74,7 @@ namespace Yttrium
                 ld1(); mul(data);
             }
 
+            //! push data^n \param data value \param n power
             inline void power(ParamType data, size_t n)
             {
                 while(n-- > 0) mul(data);

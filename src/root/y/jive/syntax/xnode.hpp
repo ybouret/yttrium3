@@ -102,12 +102,13 @@ namespace Yttrium
                  */
                 static XNode * AST( XNode * const  xnode) noexcept;
 
-                static bool AreEqual(const XNode&, const XNode &)    noexcept;
-                friend bool operator==(const XNode &, const XNode &) noexcept;
-                friend bool operator!=(const XNode &, const XNode &) noexcept;
+                static bool AreEqual(const XNode&, const XNode &)    noexcept; //!< \return test equality
+                friend bool operator==(const XNode &, const XNode &) noexcept; //!< \return true iff equal
+                friend bool operator!=(const XNode &, const XNode &) noexcept; //!< \return true iff different
 
                 const String &name() const noexcept; //!< \return rule name
 
+                //! \param id guess id \return true iff name is id
                 template <typename ID> inline
                 bool is(const ID &id) const noexcept
                 {
