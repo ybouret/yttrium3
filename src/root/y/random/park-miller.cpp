@@ -1,5 +1,6 @@
 #include "y/random/park-miller.hpp"
 #include "y/random/seed64.hpp"
+#include <cassert>
 
 namespace Yttrium
 {
@@ -24,15 +25,15 @@ namespace Yttrium
             static inline
             long ParkMillerSeed() noexcept
             {
-                static const uint64_t LMAX = (uint64_t) IntegerFor<long>::Maximum;
+                static const uint64_t LMAX = IM; //(uint64_t) IntegerFor<long>::Maximum;
                 const        uint64_t seed = Seed64::Get64();
                 return (long) (seed%LMAX);
             }
 
         }
-        
+
         ParkMiller:: ParkMiller()  :
-        Uniform32(IM),
+        Uniform32(IM-1),
         seed( ParkMillerSeed() )
         {
         }
@@ -44,6 +45,8 @@ namespace Yttrium
             const long k=(seed)/IQ;
             seed=IA*(seed-k*IQ)-IR*k;
             if (seed < 0) seed += IM;
+            assert(seed>=0);
+            assert(seed<IM);
             seed ^= MASK;
 
             return (uint32_t) seed;

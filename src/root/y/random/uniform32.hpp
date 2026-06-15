@@ -21,6 +21,10 @@ namespace Yttrium
 
             double operator()() noexcept;
 
+            
+            template <typename T> T to() noexcept;
+
+
             const uint32_t max32;
             const double   denom;
         private:

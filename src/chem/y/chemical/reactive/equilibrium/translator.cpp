@@ -93,6 +93,8 @@ namespace Yttrium
             // adding to eqs
             eqs.add(eq);
 
+            // freeze equilibrium
+            eq->freeze();
 
         }
 

@@ -64,7 +64,15 @@ namespace Yttrium
             return eqs.print(os,true);
         }
 
+        Equilibria::Iterator Equilibria:: begin() noexcept
+        {
+            return db.begin();
+        }
 
+        Equilibria::Iterator Equilibria:: end() noexcept
+        {
+            return db.end();
+        }
     }
 
 }

@@ -6,6 +6,7 @@
 
 #include "y/chemical/reactive/actors.hpp"
 #include "y/chemical/type/assembly.hpp"
+#include "y/ability/freezable.hpp"
 
 namespace Yttrium
 {
@@ -28,7 +29,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Components : public Indexed
+        class Components : public Indexed, public Freezable
         {
         public:
             //__________________________________________________________________

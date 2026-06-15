@@ -57,6 +57,7 @@ namespace Yttrium
         void Components:: addReac(const unsigned nu, const Species &sp)
         {
             static const char  fn[] = "Components::addReac";
+            if(frozen) throw Specific::Exception(fn,"frozen for '%s'", sp.name.c_str());
             checkUnused(fn,sp);
             Coerce(reac).hire(nu,sp);
             Coerce(kind) = computeKind();
@@ -65,6 +66,7 @@ namespace Yttrium
         void Components:: addProd(const unsigned nu, const Species &sp)
         {
             static const char  fn[] = "Components::addProd";
+            if(frozen) throw Specific::Exception(fn,"frozen for '%s'", sp.name.c_str());
             checkUnused(fn,sp);
             Coerce(prod).hire(nu,sp);
             Coerce(kind) = computeKind();
