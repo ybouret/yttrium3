@@ -56,7 +56,7 @@ namespace Yttrium
             apz  charge() const;
 
             xreal_t extent(const XReadable &, const Level) const noexcept;
-            
+            bool    active(const XReadable &, const Level) const noexcept; //!< false if one concentration is <= 0 
 
         private:
             Y_Disable_Copy_And_Assign(Actors); //!< discarded

@@ -92,6 +92,17 @@ namespace Yttrium
         }
 
 
+        bool Actors:: active(const XReadable &C, const Level L) const noexcept
+        {
+
+            for(const Actor * ac=list.head;ac;ac=ac->next)
+            {
+                if( ac->sp(C,L) <= ac->zero ) return false;
+            }
+            return true;
+        }
+
+
     }
 
 }
