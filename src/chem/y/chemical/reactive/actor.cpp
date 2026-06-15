@@ -59,6 +59,12 @@ namespace Yttrium
             return sp(C,L)/xn;
         }
 
+        void Actor:: safeMove(XWritable &C, const Level L, const xreal_t xi) const noexcept
+        {
+            xreal_t &c = sp(C,L); assert(c>=zero);
+            InSituMax(c += xn * xi,zero);
+        }
+
 
     }
 

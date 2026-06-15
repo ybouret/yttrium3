@@ -57,6 +57,7 @@ namespace Yttrium
 
             xreal_t extent(const XReadable &, const Level) const noexcept;
             bool    active(const XReadable &, const Level) const noexcept; //!< false if one concentration is <= 0 
+            void    safeMove(XWritable &, const Level, const xreal_t) const noexcept;
 
         private:
             Y_Disable_Copy_And_Assign(Actors); //!< discarded

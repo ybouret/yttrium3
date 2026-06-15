@@ -54,6 +54,8 @@ namespace Yttrium
 
             xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level) const; //!< \return mass action
             xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level, const xreal_t) const; //!< \return shifted mass action
+            void    saveMove(XWritable &, const Level, const xreal_t) const noexcept;
+            xreal_t extent(const XReadable &Cold, const XReadable &Cnew, const Level, XAdd &xadd) const;
 
             //__________________________________________________________________
             //
@@ -62,6 +64,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             const EqKind   kind; //!< updated
+            const size_t   size; //!< count of actors
             const Actors   reac; //!< reactant(s)
             const Actors   prod; //!< product(s)
             const xreal_t  one;  //!< numeric 1

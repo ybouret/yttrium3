@@ -102,6 +102,14 @@ namespace Yttrium
             return true;
         }
 
+        void Actors:: safeMove(XWritable &C, const Level L, const xreal_t xi) const noexcept
+        {
+            for(const Actor * ac=list.head;ac;ac=ac->next)
+            {
+                ac->safeMove(C,L,xi);
+            }
+        }
+
 
     }
 

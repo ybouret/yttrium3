@@ -22,6 +22,7 @@ namespace Yttrium
         {
         public:
             static const char * const CallSign;
+            class                     Engine;
 
             Aftermath(const EqStatus, const xreal_t) noexcept;
             Aftermath(const Aftermath &) noexcept;
@@ -31,7 +32,9 @@ namespace Yttrium
                                      const XReadable  &Cinp,
                                      const Components &eq,
                                      const xreal_t     eK,
-                                     XMul &            xmul);
+                                     const Level       L,
+                                     XMul &            xmul,
+                                     XAdd &            xadd);
 
             const EqStatus st;
             const xreal_t  xi;

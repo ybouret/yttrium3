@@ -13,6 +13,7 @@ namespace Yttrium
         Components:: Components(const String &eqName, const size_t eqIndx) :
         Indexed(eqName,eqIndx),
         kind(Outlawed),
+        size(0),
         reac(AsSpec),
         prod(AsSpec),
         one(1)
@@ -26,10 +27,12 @@ namespace Yttrium
             {
                 if(prod->size)
                 {
+                    assert(size==prod->size+reac->size);
                     return BothWays;
                 }
                 else
                 {
+                    assert(size==reac->size);
                     return ReacOnly;
                 }
             }
@@ -37,10 +40,12 @@ namespace Yttrium
             {
                 if(prod->size)
                 {
+                    assert(size==prod->size);
                     return ProdOnly;
                 }
                 else
                 {
+                    assert(0==size);
                     return Outlawed;
                 }
             }
@@ -60,6 +65,7 @@ namespace Yttrium
             if(frozen) throw Specific::Exception(fn,"frozen for '%s'", sp.name.c_str());
             checkUnused(fn,sp);
             Coerce(reac).hire(nu,sp);
+            ++Coerce(size);
             Coerce(kind) = computeKind();
         }
 
@@ -69,7 +75,9 @@ namespace Yttrium
             if(frozen) throw Specific::Exception(fn,"frozen for '%s'", sp.name.c_str());
             checkUnused(fn,sp);
             Coerce(prod).hire(nu,sp);
+            ++Coerce(size);
             Coerce(kind) = computeKind();
+
         }
 
         bool Components:: electroneutral() const
@@ -95,10 +103,10 @@ namespace Yttrium
                                         const XReadable & C,
                                         const Level       L) const
         {
-            X.set(K); prod.massAction(X,C,L);
+            X.set(K); reac.massAction(X,C,L);
             const xreal_t lhs = X();
 
-            X.set(one); reac.massAction(X,C,L);
+            X.set(one); prod.massAction(X,C,L);
             const xreal_t rhs = X();
 
             return lhs-rhs;
@@ -106,15 +114,42 @@ namespace Yttrium
 
         xreal_t Components:: massAction(const xreal_t K, XMul &X, const XReadable &C, const Level L, const xreal_t xi) const
         {
-            X.set(K); prod.massAction(X,C,L,xi);
+            X.set(K); reac.massAction(X,C,L,-xi);
             const xreal_t lhs = X();
 
-            X.set(one); reac.massAction(X,C,L,-xi);
+            X.set(one); prod.massAction(X,C,L,xi);
             const xreal_t rhs = X();
 
             return lhs-rhs;
         }
 
+        void Components::  saveMove(XWritable &C, const Level L, const xreal_t xi) const noexcept
+        {
+            reac.safeMove(C,L,-xi);
+            prod.safeMove(C,L,xi);
+        }
+
+        xreal_t Components:: extent(const XReadable &Cold, const XReadable &Cnew, const Level L, XAdd &xadd) const
+        {
+            xadd.ldz();
+            for(const Actor *ac=prod->head;ac;ac=ac->next)
+            {
+                const size_t  i  = ac->sp.indx[L];
+                const xreal_t xi = (Cnew[i]-Cold[i])/ac->xn;
+                xadd += xi;
+            }
+
+            for(const Actor *ac=reac->head;ac;ac=ac->next)
+            {
+                const size_t  i  = ac->sp.indx[L];
+                const xreal_t xi = (Cold[i]-Cnew[i])/ac->xn;
+                xadd += xi;
+            }
+
+            const xreal_t den = (real_t) size;
+
+            return xadd()/den;
+        }
 
 
     }

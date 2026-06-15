@@ -46,7 +46,7 @@ namespace Yttrium
             {
                 const xreal_t K  = Coerce(eq).K(tK);
                 const real_t  p  = K.log10();
-                os << "'10^('" << p << ")'";
+                os << "'10^(" << p << ")'";
             }
             return os << std::endl;
         }

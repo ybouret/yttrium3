@@ -25,6 +25,7 @@ Y_UTEST(aftermath)
         weasel(Jive::Module::OpenData(data,data),lib,eqs);
     }
 
+    std::cerr << "-- aftermath for:" << std::endl;
     std::cerr << "lib=" << lib << std::endl;
     std::cerr << "eqs=" << eqs << std::endl;
 
@@ -32,6 +33,7 @@ Y_UTEST(aftermath)
     CxxArray<xreal_t> C0(M,0.0);
     CxxArray<xreal_t> Ceq(M,0.0);
     XMul              xmul;
+    XAdd              xadd;
 
     Concentration::Fill(ran,C0,M);
 
@@ -41,7 +43,7 @@ Y_UTEST(aftermath)
     {
         Equilibrium &eq = **it;
         const xreal_t eK = eq.K(0);
-        Aftermath     am = Aftermath::Compute(Ceq,C0,eq,eK,xmul);
+        Aftermath     am = Aftermath::Compute(Ceq,C0,eq,eK,TopLevel,xmul,xadd);
     }
 
 }

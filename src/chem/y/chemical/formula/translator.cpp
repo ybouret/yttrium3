@@ -84,7 +84,6 @@ namespace Yttrium
             if(paren) group << ')';
             for(size_t i=n;i>0;--i) frag.popTail();
             frag << group;
-            std::cerr << frag << std::endl;
         }
 
 

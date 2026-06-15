@@ -1,4 +1,4 @@
-include_directories(. ../root ../lua++ ../y/lua/src)
+include_directories(. ../root ../mkl ../lua++ ../y/lua/src)
 
 Y_CreateLibrary(y-chem
 y/chemical

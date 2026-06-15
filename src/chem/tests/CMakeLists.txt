@@ -1,6 +1,6 @@
 Y_CreateTest(chem)
 
-Y_LinkLibraries(test-chem y-chem y-lua++ y-lua)
+Y_LinkLibraries(test-chem y-chem y-mkl y-lua++ y-lua)
 
 enable_testing()
 

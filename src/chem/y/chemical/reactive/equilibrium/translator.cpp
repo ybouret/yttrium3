@@ -51,7 +51,6 @@ namespace Yttrium
 
             const String       eqName = xnode->lexeme().str(1);
             const char * const eid    = eqName.c_str();
-            std::cerr << "eqName='" << eqName << "'" << std::endl;
 
             // extracting reac
             xnode=xnode->next;
@@ -74,21 +73,17 @@ namespace Yttrium
             const Jive::Token &ktkn = xnode->lexeme();
             String             kstr = ktkn.str();
             Algorithm::Crop(kstr,isBlank);
-            std::cerr << "KSTR=\"" << kstr << "\"" << std::endl;
 
             // compiling equilibrium
             const xreal_t k  = lvm->eval<lua_Number>(kstr);
             EqPtr         eq(new ConstantEquilibrium(eqName,eqs->size()+1,k));
 
             for(const Actor *ac=reac.head;ac;ac=ac->next)
-            {
                 eq->addReac(ac->nu,ac->sp);
-            }
+
 
             for(const Actor *ac=prod.head;ac;ac=ac->next)
-            {
                 eq->addProd(ac->nu,ac->sp);
-            }
 
             // adding to eqs
             eqs.add(eq);
@@ -109,23 +104,21 @@ namespace Yttrium
             assert(eid);
 
             XList       &xl = xnode->list();
-            std::cerr << "-- parsing " << ((xl.size + 1)>>1) << " " << xnode->name() << std::endl;
+            //std::cerr << "-- parsing " << ((xl.size + 1)>>1) << " " << xnode->name() << std::endl;
 
             for(XNode *sub=xl.head;sub;)
             {
-                std::cerr << "\t" << sub->name() << std::endl;
                 assert(sub->is("ACTOR"));
 
-                XList &al =  sub->list(); assert(1==al.size||2==al.size);
-                assert(al.tail);
+                XList &         al =  sub->list(); assert(1==al.size||2==al.size); assert(al.tail);
                 const Formula   f(al.popTail());
-                const Species & sp = lib[f]; std::cerr << "using " << sp.name << std::endl;
+                const Species & sp = lib[f];
                 unsigned        nu = 1;
+
                 if(al.head)
                 {
                     assert(al.head->is("COEF"));
                     const String nuStr = al.head->lexeme().str();
-                    std::cerr << "nu='" << nuStr << "'" << std::endl;
                     nu = ASCII::Convert::To<unsigned>(nuStr,sp.name.c_str(),"nu");
                     if(nu<=0) throw Specific::Exception(CallSign, "zero coefficient for '%s' in '%s'", sp.name.c_str(),eid);
                 }
