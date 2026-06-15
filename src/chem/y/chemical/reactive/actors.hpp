@@ -12,28 +12,54 @@ namespace Yttrium
 {
     namespace Chemical
     {
-
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! List of univocal actors
+        //
+        //
+        //______________________________________________________________________
         class Actors : public Proxy<const Actor::List>, public Entity
         {
         public:
-            static const char * const CallSign;
-            
-            explicit Actors(const Acting);
-            virtual ~Actors() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const char * const CallSign; //!< "Actors"
 
-            void hire(const unsigned nu, const Species &sp);
-            bool hired(const Species &) const noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C+++
+            //
+            //__________________________________________________________________
+            explicit Actors(const Acting); //!< setup
+            virtual ~Actors() noexcept;    //!< cleanup
 
-            void massAction(XMul &X, const XReadable &C, const Level L) const;
-            void massAction(XMul &X, const XReadable &C, const Level L, const xreal_t xi) const; //!< safe
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            void hire(const unsigned, const Species &); //!< hire new actor
+            bool hired(const Species &) const noexcept; //!< \return true iff species was hired
 
+            void massAction(XMul &, const XReadable &, const Level) const; //!< update mass action
+            void massAction(XMul &, const XReadable &, const Level, const xreal_t) const; //!< updated shifted mass action
+
+            //! \return partial reaction charge
             apz  charge() const;
 
         private:
-            Y_Disable_Copy_And_Assign(Actors);
-            Y_Proxy_Decl();
-            Actor::List  list;
-            const Acting acting;
+            Y_Disable_Copy_And_Assign(Actors); //!< discarded
+            Y_Proxy_Decl();                    //!< helper
+            Actor::List  list;                 //!< innner actors
+            const Acting acting;               //!< usage
         };
 
     }

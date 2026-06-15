@@ -10,19 +10,41 @@ namespace Yttrium
 {
     namespace Chemical
     {
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Weasel parser
+        //
+        //
+        //______________________________________________________________________
         class Weasel :: Parser : public Jive::Parser
         {
         public:
-            explicit Parser();
-            virtual ~Parser() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Parser();          //!< setup
+            virtual ~Parser() noexcept; //!< cleanup
 
-            const Compound & formula;
-            const Compound & equilibrium;
-            const Rule     & alias;
-            
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const Compound & formula;      //!< inner formula compound
+            const Compound & equilibrium;  //!< inner equilibrium compound
+            const Rule     & alias;        //!< inner alias terminal
+
         private:
-            Y_Disable_Copy_And_Assign(Parser);
+            Y_Disable_Copy_And_Assign(Parser); //!< discarded
         };
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
     }
 }
 

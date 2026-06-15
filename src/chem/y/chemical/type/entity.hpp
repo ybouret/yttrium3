@@ -11,19 +11,45 @@ namespace Yttrium
     namespace Chemical
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Basic named entity
+        //
+        //
+        //______________________________________________________________________
         class Entity
         {
         public:
-            explicit Entity();
-            explicit Entity(const String &);
-            virtual ~Entity() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit       Entity();               //!< setup without name
+            explicit       Entity(const String &); //!< setup with name
+            virtual       ~Entity()    noexcept;   //!< cleanup
 
-            const String & key() const noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            const String & key() const noexcept;   //!< \return key
 
-            const String name;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const String name;                     //!< name
 
         private:
-            Y_Disable_Copy_And_Assign(Entity);
+            Y_Disable_Copy_And_Assign(Entity); //!< discarded
         };
     }
 

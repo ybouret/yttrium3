@@ -11,22 +11,58 @@ namespace Yttrium
     namespace Chemical
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Index level
+        //
+        //
+        //______________________________________________________________________
         enum Level
         {
-            TopLevel,
-            SubLevel,
-            AuxLevel
+            TopLevel, //!< top-level for Library and Equilibriau
+            SubLevel, //!< sub-level for Clusters
+            AuxLevel  //!< aux-level
         };
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Indexed entities
+        //
+        //
+        //______________________________________________________________________
         class Indexed : public Entity
         {
         public:
-            static const unsigned Levels = AuxLevel;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const unsigned Levels = AuxLevel; //!< alias
 
-            explicit Indexed(const size_t);
-            explicit Indexed(const String &,const size_t);
-            virtual ~Indexed() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Indexed(const size_t);                //!< setup without name
+            explicit Indexed(const String &,const size_t); //!< setup with name
+            virtual ~Indexed() noexcept;                   //!< cleanup
 
+            //__________________________________________________________________
+            //
+            //
+            // methods
+            //
+            //__________________________________________________________________
+
+            //! \param arr array \param L level \return arr[ indx[L] ]
             template <typename ARRAY> inline
             typename ARRAY::Type & operator()(ARRAY &arr, const Level L) const noexcept
             {
@@ -34,6 +70,7 @@ namespace Yttrium
                 return arr[ indx[L] ];
             }
 
+            //! \param arr array \param L level \return arr[ indx[L] ]
             template <typename ARRAY> inline
             typename ARRAY::ConstType & operator()(const ARRAY &arr, const Level L) const noexcept
             {
@@ -41,13 +78,17 @@ namespace Yttrium
                 return arr[ indx[L] ];
             }
 
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const size_t indx[Levels]; //!< current indices
 
-
-            const size_t indx[Levels];
-            
         private:
-            Y_Disable_Copy_And_Assign(Indexed);
-            void setup(const size_t) noexcept;
+            Y_Disable_Copy_And_Assign(Indexed); //!< discarded
+            void setup(const size_t) noexcept;  //!< setup helper
         };
 
     }

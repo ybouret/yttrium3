@@ -14,25 +14,51 @@ namespace Yttrium
 {
     namespace Chemical
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Compile equilibrium
+        //
+        //
+        //______________________________________________________________________
         class Equilibrium::Translator
         {
         public:
-            explicit Translator(const Identifier &,
-                                const Lua::VM    &);
-            virtual ~Translator() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Translator(const Identifier &,const Lua::VM &); //!< setup
+            virtual ~Translator() noexcept;                          //!< cleanup
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
 
-            void operator()(AutoPtr<XNode>       & tree,
-                            Library              & lib,
-                            Equilibria           & eqs);
+            //! compile node
+            void operator()(AutoPtr<XNode> &,
+                            Library        &,
+                            Equilibria     &);
 
-            const Identifier lang;
-            Lua::VM          lvm;
-            
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const Identifier lang; //!< identifier
+            Lua::VM          lvm;  //!< lua if needed
+
         private:
-            Y_Disable_Copy_And_Assign(Translator);
-            
+            Y_Disable_Copy_And_Assign(Translator); //!< discarded
 
+            //! helper
             void fill(Actor::List          &,
                       XNode * const         ,
                       Library              &,

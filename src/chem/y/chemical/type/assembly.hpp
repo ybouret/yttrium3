@@ -12,21 +12,49 @@ namespace Yttrium
     namespace Chemical
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Helper to format entities
+        //
+        //
+        //______________________________________________________________________
         class Assembly
         {
         public:
-            explicit Assembly() noexcept;
-            virtual ~Assembly() noexcept;
-            Assembly(const Assembly &) noexcept;
-            
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Assembly()        noexcept; //!< setup
+            virtual ~Assembly()        noexcept; //!< cleanup
+            Assembly(const Assembly &) noexcept; //!< duplicate
+
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! update with
             void enroll(const Entity &) noexcept;
 
-            std::ostream & print(std::ostream &os, const Entity &, const Justify::Type = Justify::Left) const;
+            //! pretty justified print \return output stream
+            std::ostream & print(std::ostream &, const Entity &, const Justify::Type = Justify::Left) const;
 
-
-            const size_t width;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const size_t width; //!< max name length
         private:
-            Y_Disable_Assign(Assembly);
+            Y_Disable_Assign(Assembly); //!< discarded
 
         };
     }

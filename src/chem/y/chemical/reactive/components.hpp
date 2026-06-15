@@ -12,29 +12,53 @@ namespace Yttrium
     namespace Chemical
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Components (without constant)
+        //
+        //
+        //______________________________________________________________________
         class Components : public Indexed
         {
         public:
-            explicit Components(const String &, const size_t);
-            virtual ~Components() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Components(const String &, const size_t); //!< setup
+            virtual ~Components() noexcept;                    //!< cleanup
 
-            void addReac(const unsigned nu, const Species &sp);
-            void addProd(const unsigned nu, const Species &sp);
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            void  addReac(const unsigned, const Species &); //!< add new reactant
+            void  addProd(const unsigned, const Species &); //!< add new product
+            bool  electroneutral() const; //!< \return true iff electroneutral
+            bool  atLeastOneItem() const; //!< \return true iff at least one item
 
-            bool  electroneutral() const;
-            bool  atLeastOneItem() const;
+            xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level) const; //!< \return mass action
+            xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level, const xreal_t) const; //!< \return shifted mass action
 
-            xreal_t massAction(const xreal_t K, XMul &X, const XReadable &C, const Level L) const;
-            xreal_t massAction(const xreal_t K, XMul &X, const XReadable &C, const Level L, const xreal_t xi) const;
-
-
-            const Actors   reac;
-            const Actors   prod;
-            const xreal_t  one;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const Actors   reac; //!< reactant(s)
+            const Actors   prod; //!< product(s)
+            const xreal_t  one;  //!< numeric 1
 
         private:
-            Y_Disable_Copy_And_Assign(Components);
-            void checkUnused(const char * const, const Species &) const;
+            Y_Disable_Copy_And_Assign(Components);  //!< discarded
+            void checkUnused(const char * const, const Species &) const; //!< helper
         };
 
     }

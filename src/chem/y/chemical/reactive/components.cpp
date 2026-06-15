@@ -69,7 +69,7 @@ namespace Yttrium
             X.set(K); prod.massAction(X,C,L,xi);
             const xreal_t lhs = X();
 
-            X.set(one); reac.massAction(X,C,L,xi);
+            X.set(one); reac.massAction(X,C,L,-xi);
             const xreal_t rhs = X();
 
             return lhs-rhs;

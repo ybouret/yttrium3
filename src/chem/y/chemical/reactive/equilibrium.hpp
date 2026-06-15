@@ -11,21 +11,47 @@ namespace Yttrium
     namespace Chemical
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Equilibrium interface
+        //
+        //
+        //______________________________________________________________________
         class Equilibrium : public CountedObject, public Components
         {
         public:
-            static const char * const CallSign;
-            static const char * const Symbol; //!< "<=>"
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const char * const CallSign; //!< "Equilibrium"
+            static const char * const Symbol;   //!< "<=>"
             class Translator;
 
-            explicit Equilibrium(const String &, const size_t);
-            virtual ~Equilibrium() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Equilibrium(const String &, const size_t); //!< setup
+            virtual ~Equilibrium() noexcept;                    //!< cleanup
 
-            xreal_t K(xreal_t);
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            xreal_t K(xreal_t); //!< \return checked getK(t)
 
         private:
-            Y_Disable_Copy_And_Assign(Equilibrium);
-            virtual xreal_t getK(xreal_t) = 0;
+            Y_Disable_Copy_And_Assign(Equilibrium); //!< discaeded
+            virtual xreal_t getK(xreal_t) = 0;      //!< \return constant at given time
         };
 
     }

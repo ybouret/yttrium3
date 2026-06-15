@@ -10,37 +10,83 @@ namespace Yttrium
     namespace Chemical
     {
 
-        typedef Jive::Syntax::XNode XNode;
-        typedef Jive::Syntax::XList XList;
+        typedef Jive::Syntax::XNode XNode; //!< alias
+        typedef Jive::Syntax::XList XList; //!< alias
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Formula base class, wrapping a XNode
+        //
+        //
+        //______________________________________________________________________
         class Formula_ : public CountedObject
         {
         public:
-            static Formula_ * Create(XNode * const);
-            virtual          ~Formula_() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            static Formula_ * Create(XNode * const); //!< \return safe new Formula_
+            virtual          ~Formula_() noexcept;   //!< cleanup
 
-            XNode * const code;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            XNode * const code; //!< inner code
 
         private:
-            Y_Disable_Copy_And_Assign(Formula_);
-            explicit Formula_(XNode * const) noexcept;
+            Y_Disable_Copy_And_Assign(Formula_);       //!< discared
+            explicit Formula_(XNode * const) noexcept; //!< setup
         };
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! (shared) Formula
+        //
+        //
+        //______________________________________________________________________
         class Formula : public ArcPtr<Formula_>
         {
         public:
-            static const char * const CallSign;
+            //__________________________________________________________________
+            //
+            //
+            // Definition
+            //
+            //__________________________________________________________________
+            static const char * const CallSign; //!< "Formula"
             class Translator;
 
-            explicit Formula(XNode * const);
-            explicit Formula(const Formula &) noexcept;
-            virtual ~Formula() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Formula(XNode * const); //!< setup
+            explicit Formula(const Formula &) noexcept; //!< duplicate
+            virtual ~Formula() noexcept; //!< cleanup
 
-            String makeName(int * const = 0) const;
-            String makeHTML() const;
-            
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            String makeName(int * const = 0) const; //!< \return name, optional charge loading
+            String makeHTML() const;                //!< \return html tag
+
         private:
-            Y_Disable_Assign(Formula);
+            Y_Disable_Assign(Formula); //!< discarded
         };
 
     }

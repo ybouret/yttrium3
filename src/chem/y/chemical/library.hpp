@@ -17,29 +17,57 @@ namespace Yttrium
     namespace Chemical
     {
 
-        typedef Keyed<String, ArcPtr<Species>> SpPtr;
-        typedef HashSet<String,SpPtr>          SpSet;
+        typedef Keyed<String, ArcPtr<Species>> SpPtr; //!< alias
+        typedef HashSet<String,SpPtr>          SpSet; //!< alias
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Database of species
+        //
+        //
+        //______________________________________________________________________
         class Library :
         public Proxy<const SpSet>,
         public Freezable,
         public Assembly
         {
         public:
-            static const char * const    CallSign;
-            typedef SpSet::ConstIterator ConstIterator;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const char * const    CallSign;      //!< "Library"
+            typedef SpSet::ConstIterator ConstIterator; //!< alias
 
-            explicit Library();
-            virtual ~Library() noexcept;
-            Y_OSTREAM_PROTO(Library);
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Library();          //!< setup
+            virtual ~Library() noexcept; //!< cleanup
+            Y_OSTREAM_PROTO(Library);    //!< display
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! \return on-the-fly or existing species matching formula
             Species & operator[](const Formula &);
             
 
         private:
-            Y_Disable_Copy_And_Assign(Library);
-            Y_Proxy_Decl();
-            SpSet db;
+            Y_Disable_Copy_And_Assign(Library); //!< discarded
+            Y_Proxy_Decl();                     //!< helper
+            SpSet db;                           //!< inner database
         };
     }
 

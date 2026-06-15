@@ -11,26 +11,62 @@ namespace Yttrium
     namespace Chemical
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Helper to format equilibria
+        //
+        //
+        //______________________________________________________________________
         class EqFormat
         {
         public:
-            explicit EqFormat()        noexcept;
-            virtual ~EqFormat()        noexcept;
-            EqFormat(const EqFormat &) noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit EqFormat()        noexcept; //!< setup
+            virtual ~EqFormat()        noexcept; //!< cleanup
+            EqFormat(const EqFormat &) noexcept; //!< duplicate
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! enroll all parts
             void enroll(const Equilibrium &) noexcept;
 
+            //! pretty print
+            /**
+             \param os output stream
+             \param eq equilibrium
+             \param wK with K flag
+             \param tK time to evaluate if necessary
+             \return os
+             */
             std::ostream & print(std::ostream      &os,
                                  const Equilibrium &eq,
                                  const bool         wK,
                                  const xreal_t      tK) const;
 
-            const Assembly efmt;
-            const Assembly rfmt;
-            const Assembly pfmt;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const Assembly efmt; //!< for name
+            const Assembly rfmt; //!< for reac
+            const Assembly pfmt; //!< for prod
 
         private:
-            Y_Disable_Assign(EqFormat);
+            Y_Disable_Assign(EqFormat); //!< discarded
         };
     }
 
