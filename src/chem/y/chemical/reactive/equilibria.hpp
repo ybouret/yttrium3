@@ -24,19 +24,21 @@ namespace Yttrium
             explicit Equilibria();
             virtual ~Equilibria() noexcept;
             Equilibria(const Equilibria &);
+            Y_OSTREAM_PROTO(Equilibria);
 
-            void add(const EqPtr &);
+            void add(const EqPtr &); //!< add a precompiled equilibria
 
 
-            const Assembly rfmt;
-            const Assembly pfmt;
+            const Assembly efmt; //!< for equilibrium name
+            const Assembly rfmt; //!< for reactants
+            const Assembly pfmt; //!< for products
 
         private:
             Y_Disable_Assign(Equilibria);
             Y_Proxy_Decl();
             EqSet db;
         public:
-            xreal_t t_print;
+            xreal_t t_print; //!< time to print constants
         };
     }
 

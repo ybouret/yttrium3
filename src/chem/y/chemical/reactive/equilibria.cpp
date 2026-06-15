@@ -17,6 +17,7 @@ namespace Yttrium
         
         Equilibria:: Equilibria() :
         Proxy<const EqSet>(),
+        efmt(),
         rfmt(),
         pfmt(),
         db(),
@@ -25,6 +26,7 @@ namespace Yttrium
 
         Equilibria:: Equilibria(const Equilibria &eqs) :
         Proxy<const EqSet>(),
+        efmt(eqs.efmt),
         rfmt(eqs.rfmt),
         pfmt(eqs.pfmt),
         db(eqs.db),
@@ -37,12 +39,14 @@ namespace Yttrium
                 throw Specific::Exception(CallSign,"invalid '%s' top-level index", eq->name.c_str() );
 
             // check
+            
 
             // try insert
             if(!db.insert(eq))
                 throw Specific::Exception(CallSign,"multiple '%s'", eq->name.c_str() );
 
             // update
+            Coerce(efmt).enroll(*eq);
             Coerce(rfmt).enroll(eq->reac);
             Coerce(pfmt).enroll(eq->prod);
 

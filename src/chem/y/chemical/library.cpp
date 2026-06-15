@@ -1,5 +1,7 @@
 #include "y/chemical/library.hpp"
 #include "y/exception.hpp"
+#include <iomanip>
+#include "y/core/display.hpp"
 
 namespace Yttrium
 {
@@ -48,7 +50,8 @@ namespace Yttrium
             for(Library::ConstIterator it=lib->begin();it!=lib->end();++it)
             {
                 const Species &sp = **it;
-                lib.print(std::cerr << "\t",sp) << " | z = " << sp.z << std::endl;
+                lib.print(std::cerr << "\t",sp) << " | z = " << std::setw(3) << sp.z;
+                Core::Display(std::cerr << " | ",sp.indx,sp.Levels) << std::endl;
             }
             return os << '}';
         }

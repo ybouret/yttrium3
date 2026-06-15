@@ -65,7 +65,7 @@ namespace Yttrium
             assert(xnode->is("PROD"));
             fill(prod,xnode,lib,eid);
 
-            if(reac.size<=0 && prod.size<=0) throw Specific::Exception(CallSign, "empty '%s'",eid);
+            //if(reac.size<=0 && prod.size<=0) throw Specific::Exception(CallSign, "empty '%s'",eid);
 
             // extracting KSTR
             xnode=xnode->next;
@@ -89,7 +89,9 @@ namespace Yttrium
             {
                 eq->addProd(ac->nu,ac->sp);
             }
-            
+
+            // adding to eqs
+            eqs.add(eq);
 
 
         }
