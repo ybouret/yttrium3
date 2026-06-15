@@ -29,7 +29,7 @@ namespace Yttrium
             explicit Function_(const Function_ &);  //!< copy
             template <typename NAME> inline
             explicit Function_(const VM &vm, const NAME &id) :
-            VM(vm), name(id) {}                     //!< setup
+            VM(vm), name(id) {}                     //!< setup \param vm shared VM \param id function name
 
             //__________________________________________________________________
             //
@@ -39,14 +39,14 @@ namespace Yttrium
             //! settop(0) and getglobal(name)
             void fetch();
 
-            //! push a value, cast to lua_Number
+            //! \param value pushed, cast to lua_Number
             template <typename T> inline
             void push(const T &value)
             {
                 lua_pushnumber(***this,static_cast<lua_Number>(value));
             }
 
-            //! return the top value, cast from lua_Number
+            //! \return the top value, cast from lua_Number
             template <typename T> inline
             T ret()
             {
@@ -56,12 +56,12 @@ namespace Yttrium
                 return f;
             }
 
-            //! protected call with nargs
+            //! protected call \param nargs number of arguments
             void call(int nargs);
 
 
         private:
-            Y_Disable_Assign(Function_);
+            Y_Disable_Assign(Function_); //!< discarded
 
         public:
             //__________________________________________________________________
@@ -87,11 +87,15 @@ namespace Yttrium
             // C++
             //__________________________________________________________________
             template <typename NAME>
-            inline explicit Function(const VM &vm, const NAME &id) : Function_(vm,id) {} //!< setu
-            inline          Function(const Function &F) : Function_(F) {}                //!< copy
-            inline virtual ~Function() noexcept {}                                        //!< cleanup
+            inline explicit Function(const VM &vm, const NAME &id) : Function_(vm,id) {} //!< setup \param vm shared vm \param id function name
+            inline          Function(const Function &F) : Function_(F) {}                //!< copy \param F another function
+            inline virtual ~Function() noexcept {}                                       //!< cleanup
 
             //! call operator, nargs=1
+            /**
+             \param x numeric value
+             \return evaluated function
+             */
             inline T operator()(const T x)
             {
                 fetch();
@@ -101,6 +105,11 @@ namespace Yttrium
             }
 
             //! call operator, nargs=2
+            /**
+             \param x numeric value
+             \param y numeric value
+             \return evaluated function
+             */
             inline T operator()(const T x, const T y)
             {
                 fetch();
@@ -111,7 +120,7 @@ namespace Yttrium
             }
 
         private:
-            Y_Disable_Assign(Function);
+            Y_Disable_Assign(Function); //!< discareded
         };
 
 
@@ -119,4 +128,4 @@ namespace Yttrium
 
 }
 
-#endif
+#endif // !Y_LUAXX_FUNCTION_INCLUDED

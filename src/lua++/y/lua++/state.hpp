@@ -53,6 +53,10 @@ namespace Yttrium
             void dostring(const char   *); //!< dostring
 
             //! conversion to lua_Integer/lua_Number/string
+            /**
+             \param idx stack index
+             \return converted data
+             */
             template <typename T>
             T to(const int idx)
             {
@@ -60,19 +64,19 @@ namespace Yttrium
                 return to(which,idx);
             }
 
-            //! return type at idx
+            //! \param idx stack index \return type at idx
             int type(const int idx) noexcept;
 
 
-            //! getglobal and convert
+            //! getglobal and convert \param name data name \return converted data
             template <typename T> inline
             T get(const String &name) { getglobal(name); return to<T>(-1); }
 
-            //! getglobal and convert
+            //! getglobal and convert \param name data name \return converted data
             template <typename T> inline
             T get(const char   *name) { getglobal(name); return to<T>(-1); }
 
-            //! evaluate expression
+            //! evaluate expression \param expr expression \return result
             template <typename T> inline
             T eval(const String &expr)
             {
@@ -80,7 +84,7 @@ namespace Yttrium
                 return get<T>(dummy_name);
             }
 
-            //! evaluate expression
+            //! evaluate expression \param expr expression \return result
             template <typename T> inline
             T eval(const char *expr)
             {
@@ -88,10 +92,12 @@ namespace Yttrium
                 return get<T>(dummy_name);
             }
 
-            //! access operator
+            //! access operator \return internal state
             lua_State * operator*() noexcept;
 
+
         private:
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             Y_Disable_Copy_And_Assign(State);
             lua_State  *L;
             lua_Integer to(const TypeToType<lua_Integer> &, const int);
@@ -99,6 +105,7 @@ namespace Yttrium
             String      to(const TypeToType<String>      &, const int);
             void        set_dummy_name(const String &);
             void        set_dummy_name(const char   *);
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
         };
 
         //______________________________________________________________________
