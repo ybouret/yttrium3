@@ -164,6 +164,7 @@ namespace Yttrium
                 else
                 {
                     es = Blocked;
+                    std::cerr << "Blocked!" << std::endl;
                     return Aftermath(es,0);
                 }
             }

@@ -8,6 +8,7 @@
 #include "y/chemical/type/concentration.hpp"
 #include "y/random/park-miller.hpp"
 #include "y/core/display.hpp"
+#include "y/string/env/convert.hpp"
 
 using namespace Yttrium;
 using namespace Chemical;
@@ -35,7 +36,8 @@ Y_UTEST(aftermath)
     XMul              xmul;
     XAdd              xadd;
 
-    Concentration::Fill(ran,C0,M);
+    const double probaZ = EnvironmentConvert::To<double>("probaZ",0);
+    Concentration::Fill(ran,C0,M,probaZ);
 
     Core::Display(std::cerr << "C0=", C0.begin(), C0.size(), xreal_t::ToString) << std::endl;
 
