@@ -45,13 +45,11 @@ namespace Yttrium
         void Formula::Translator:: onFRAG(const Lexeme &lexeme)
         {
             frag << lexeme.str();
-            std::cerr << "frag=" << frag << std::endl;
         }
 
         void Formula::Translator:: onCOEF(const Lexeme &lexeme)
         {
             coef << lexeme.str();
-            std::cerr << "coef=" << coef << std::endl;
         }
 
         void Formula::Translator:: onPLUS(const Lexeme &)
@@ -70,12 +68,10 @@ namespace Yttrium
         void Formula::Translator:: onFormula(const size_t) noexcept
         {
             assert(frag.size()>0);
-            std::cerr << "Formula='" << frag.tail() << "'/z=" << z << std::endl;
         }
 
         void Formula::Translator:: onGRP(const size_t n)
         {
-            std::cerr << "grouping/" << n << " @depth=" << depth << std::endl;
             assert(n>=1);
             assert(frag.size()>=n);
             const size_t nfrag = frag.size();
@@ -143,8 +139,7 @@ namespace Yttrium
             }
 
             zstr += c;
-            std::cerr << "zstr=" << zstr << std::endl;
-
+            
             assert(frag.size()>0);
 
             switch(output)

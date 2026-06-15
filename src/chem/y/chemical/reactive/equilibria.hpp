@@ -4,7 +4,7 @@
 #ifndef Y_Chemical_Equilibria_Included
 #define Y_Chemical_Equilibria_Included 1
 
-#include "y/chemical/reactive/equilibrium.hpp"
+#include "y/chemical/reactive/equilibrium/format.hpp"
 #include "y/container/associative/hash/set.hpp"
 #include "y/pointer/keyed.hpp"
 
@@ -15,7 +15,9 @@ namespace Yttrium
         typedef Keyed<String, ArcPtr<Equilibrium>> EqPtr;
         typedef HashSet<String,EqPtr>              EqSet;
 
-        class Equilibria : public Proxy<const EqSet>
+        class Equilibria :
+        public Proxy<const EqSet>,
+        public EqFormat
         {
         public:
             static const char * const    CallSign;
@@ -26,12 +28,10 @@ namespace Yttrium
             Equilibria(const Equilibria &);
             Y_OSTREAM_PROTO(Equilibria);
 
-            void add(const EqPtr &); //!< add a precompiled equilibria
 
+            void           add(const EqPtr &); //!< add a precompiled equilibria
+            std::ostream & print(std::ostream &os, const bool wK) const;
 
-            const Assembly efmt; //!< for equilibrium name
-            const Assembly rfmt; //!< for reactants
-            const Assembly pfmt; //!< for products
 
         private:
             Y_Disable_Assign(Equilibria);

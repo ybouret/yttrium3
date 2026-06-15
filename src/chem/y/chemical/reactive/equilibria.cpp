@@ -17,18 +17,14 @@ namespace Yttrium
         
         Equilibria:: Equilibria() :
         Proxy<const EqSet>(),
-        efmt(),
-        rfmt(),
-        pfmt(),
+        EqFormat(),
         db(),
         t_print(0)
         {}
 
         Equilibria:: Equilibria(const Equilibria &eqs) :
         Proxy<const EqSet>(),
-        efmt(eqs.efmt),
-        rfmt(eqs.rfmt),
-        pfmt(eqs.pfmt),
+        EqFormat(eqs),
         db(eqs.db),
         t_print(eqs.t_print)
         {}
@@ -46,11 +42,25 @@ namespace Yttrium
                 throw Specific::Exception(CallSign,"multiple '%s'", eq->name.c_str() );
 
             // update
-            Coerce(efmt).enroll(*eq);
-            Coerce(rfmt).enroll(eq->reac);
-            Coerce(pfmt).enroll(eq->prod);
-
+            enroll(*eq);
         }
+
+        std::ostream & Equilibria:: print(std::ostream &os, const bool wK) const
+        {
+            os << '{' << std::endl;
+            for(ConstIterator it=db.begin();it!=db.end();++it)
+            {
+                const Equilibrium &eq = **it;
+                (void) EqFormat::print(os,eq,wK);
+            }
+            return os << '}';
+        }
+
+        std::ostream & operator<<(std::ostream &os, const Equilibria &eqs)
+        {
+            return eqs.print(os,true);
+        }
+
 
     }
 
