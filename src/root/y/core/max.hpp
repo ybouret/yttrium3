@@ -21,6 +21,25 @@ namespace Yttrium
         return a < b ? b : a;
     }
 
+
+    //__________________________________________________________________________
+    //
+    //! inline maximum of three values
+    /**
+     \param a first value
+     \param b second value
+     \param c second value
+     \return Max( Max(a,b), c)
+     */
+    //__________________________________________________________________________
+    template <typename T> inline
+    T Max(const T a, const T b, const T c)
+    {
+        return Max( Max(a,b), c );
+    }
+
+
+
     //__________________________________________________________________________
     //
     //! in-situ maximum update

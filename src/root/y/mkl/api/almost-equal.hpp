@@ -7,9 +7,7 @@
 
 #include "y/mkl/api/fabs.hpp"
 #include "y/mkl/numeric.hpp"
-#include "y/core/utils.hpp"
-#include "y/memory/stealth.hpp"
-#include "y/mkl/api/scalar.hpp"
+#include "y/mkl/api/scalar-for.hpp"
 
 namespace Yttrium
 {
@@ -29,10 +27,10 @@ namespace Yttrium
             inline bool  ScalAreAlmostEqual(const T &x,
                                             const T &y)
             {
-                const T ax  = MKL::Fabs<T>::Of(x);
-                const T ay  = MKL::Fabs<T>::Of(y);
+                const T ax  = MKL::Fabs<T>(x);
+                const T ay  = MKL::Fabs<T>(y);
                 const T del = x-y;
-                const T lhs = MKL::Fabs<T>::Of(del);
+                const T lhs = MKL::Fabs<T>(del);
                 const T ma  = Min(ax,ay);
                 const T rhs = Max(ma,Numeric<T>::THETA);
                 return lhs <= Numeric<T>::FTOL * rhs;

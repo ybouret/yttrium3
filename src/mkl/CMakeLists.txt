@@ -5,6 +5,7 @@ y/mkl
 y/mkl/algebra
 y/mkl/interpolation
 y/mkl/derivatives
+y/mkl/root
 )
 
 add_subdirectory(tests)
