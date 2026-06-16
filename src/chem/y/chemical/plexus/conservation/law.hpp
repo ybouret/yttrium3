@@ -37,9 +37,9 @@ namespace Yttrium
                 // C++
                 //
                 //______________________________________________________________
-                explicit Law() noexcept; //!< setup empty
-                virtual ~Law() noexcept; //!< cleanup
-                Y_OSTREAM_PROTO(Law);    //!< display
+                explicit Law(const size_t) noexcept; //!< setup empty
+                virtual ~Law()             noexcept; //!< cleanup
+                Y_OSTREAM_PROTO(Law);                //!< display
 
                 //______________________________________________________________
                 //
@@ -55,8 +55,10 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                Law * next; //!< for liast
-                Law * prev; //!< for liast
+                const size_t irow; //!< index
+                Law *        next; //!< for list
+                Law *        prev; //!< for list
+
             private:
                 Y_Disable_Copy_And_Assign(Law); //!< discarde
             };

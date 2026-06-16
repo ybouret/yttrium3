@@ -8,8 +8,9 @@ namespace Yttrium
 
         namespace Conservation
         {
-            Law:: Law() noexcept :
+            Law:: Law(const size_t i) noexcept :
             Actors(AsConc),
+            irow(i),
             next(0),
             prev(0)
             {
