@@ -16,6 +16,7 @@ namespace Yttrium
         Y_Args_Expose(T,Type);
 
         inline LightArray(Type * const entry, const size_t count) noexcept :
+        Container(),
         ContiguousWritable<T>(),
         cxx( (MutableType *)entry ),
         num( count )
@@ -25,12 +26,13 @@ namespace Yttrium
         }
 
         inline LightArray(const LightArray &other) noexcept :
+        Container(),
         ContiguousWritable<T>(),
         cxx(other.cxx),
         num(other.num)
         {
         }
-        
+
         inline virtual ~LightArray() noexcept {}
 
 
