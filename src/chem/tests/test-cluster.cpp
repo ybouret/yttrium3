@@ -4,7 +4,7 @@
 
 #include "y/stream/libc/output.hpp"
 #include "y/chemical/reactive/equilibrium/partition.hpp"
-#include "y/chemical/plexus/canon.hpp"
+#include "y/chemical/plexus/warden.hpp"
 
 
 
@@ -34,6 +34,7 @@ Y_UTEST(cluster)
     {
         Topology topo(xml,*g);
         Canon    canon(xml,topo);
+        Warden   warden(xml,canon);
     }
 
 

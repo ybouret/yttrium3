@@ -11,6 +11,7 @@
 #include "y/ability/releasable.hpp"
 #include "y/hide.hpp"
 #include "y/cameo/addition.hpp"
+#include "y/container/cxx/light-array.hpp"
 
 namespace Yttrium
 {
@@ -126,7 +127,7 @@ namespace Yttrium
         //______________________________________________________________________
         //
         //
-        // Methods
+        // Methods to assign
         //
         //______________________________________________________________________
 
@@ -368,6 +369,10 @@ namespace Yttrium
         }
 
 
+        LightArray<Type> asArray() noexcept {
+            if(items<=0) return LightArray<Type>(0,0);
+            else         return LightArray<Type>(&row[1][1],items);
+        }
 
 
 

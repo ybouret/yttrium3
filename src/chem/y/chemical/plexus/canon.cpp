@@ -68,7 +68,6 @@ namespace Yttrium
                     Y_XMLog(xml, "nu = " << topo.nu);
                     Y_XMLog(xml, "Nc = " << Nc);
                     Y_XMLog(xml, "rg = " << rg);
-                    prepare(xml);
                 }
             }
         }
@@ -76,44 +75,3 @@ namespace Yttrium
 
 }
 
-#include "y/counting/combination.hpp"
-
-namespace Yttrium
-{
-    namespace Chemical
-    {
-        void Canon:: prepare(XML::Log &xml)
-        {
-            Y_XML_Element_Attr(xml,PrepareCanon,Y_XML_Attr(rg));
-            size_t count = 0;
-            const size_t M = Qm.cols;
-            for(size_t k=1;k<=rg;++k)
-            {
-                Combination comb(Nc,k);
-                Matrix<apz> alpha(k,M);
-                do
-                {
-                    for(size_t i=1;i<=k;++i)
-                    {
-                        alpha[i].load( Qm[comb[i]] );
-                    }
-                    if(k!=MKL::Rank::Of(alpha))
-                    {
-                        Y_XMLog(xml, "[-]" << comb);
-                        continue;
-                    }
-                    else
-                    {
-                        Y_XMLog(xml, "[+]" << comb);
-                        ++count;
-                    }
-                } while( comb.next() );
-
-            }
-
-            Y_XMLog(xml, "possible cases: " << count);
-
-        }
-    }
-
-}

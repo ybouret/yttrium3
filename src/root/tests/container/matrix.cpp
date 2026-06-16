@@ -31,6 +31,8 @@ namespace
 
                 std::cerr << m << std::endl;
 
+                std::cerr << m.asArray() << std::endl;
+
                 {
                     const Matrix<T> mm(m);
                     std::cerr << mm << std::endl;

@@ -77,6 +77,7 @@ y/apex/k
 y/apex/n
 y/apex/z
 y/apex/q
+y/apex/api
 y/coven
 y/coven/univocal
 y/coven/survey

@@ -54,7 +54,6 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(Canon); //!< discarded
-            void prepare(XML::Log &);
         };
 
     }
