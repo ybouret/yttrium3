@@ -39,7 +39,8 @@ namespace Yttrium
                 size_t       count = 0;
                 MKL::LU<apq> lu(rg);
 
-                for(size_t k=1;k<=rg;++k)
+                //for(size_t k=1;k<=rg;++k)
+                for(size_t k=1;k<=1;++k)
                 {
                     Cell::List & clst = cells[k];
                     Combination  comb(Nc,k);
