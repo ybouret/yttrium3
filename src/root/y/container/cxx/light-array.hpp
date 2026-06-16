@@ -31,7 +31,6 @@ namespace Yttrium
         {
         }
         
-
         inline virtual ~LightArray() noexcept {}
 
 
