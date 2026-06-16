@@ -39,8 +39,7 @@ namespace Yttrium
                 size_t       count = 0;
                 MKL::LU<apq> lu(rg);
 
-                //for(size_t k=1;k<=rg;++k)
-                for(size_t k=1;k<=1;++k)
+                for(size_t k=1;k<=rg;++k)
                 {
                     Cell::List & clst = cells[k];
                     Combination  comb(Nc,k);
@@ -89,7 +88,7 @@ namespace Yttrium
                             //std::cerr << "proj   = " << alpha4 << " #/" << detM << std::endl;
                             //std::cerr << "comb=" << comb << "=> proj   = " << alpha4 << " #/" << detM << std::endl;
                             Apex::Simplify::Matrix(alpha4,detM);
-                            std::cerr << "comb=" << comb << "=> proj   = " << alpha4 << " #/" << detM << std::endl;
+                            std::cerr << "comb=" << comb << "=> proj   = " << alpha4 << "/" << detM << std::endl;
                             
                         }
                     } while( comb.next() );
