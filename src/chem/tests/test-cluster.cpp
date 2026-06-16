@@ -2,65 +2,14 @@
 #include "y/chemical/weasel.hpp"
 #include "y/utest/run.hpp"
 
-#include "y/jive/syntax/grammar.hpp"
 #include "y/stream/libc/output.hpp"
-#include "y/handy/basic/light/list.hpp"
+#include "y/chemical/reactive/equilibrium/group.hpp"
 #include "y/xml/element.hpp"
 
 namespace Yttrium
 {
     namespace Chemical
     {
-
-        typedef Handy::BasicLightList<Equilibrium> EList;
-        typedef EList::NodeType                    ENode;
-
-        class EGroup : public Object, public EList
-        {
-        public:
-            typedef CxxListOf<EGroup> List;
-
-            explicit EGroup(Equilibrium &first);
-            virtual ~EGroup() noexcept;
-            Y_OSTREAM_PROTO(EGroup);
-
-            bool     accepts(const Equilibrium &another) const noexcept
-            {
-                for(const ENode *en=(**this).head;en;en=en->next)
-                {
-                    if( (**en).linkedTo(another) ) return true;
-                }
-                return false;
-            }
-
-            EGroup * next;
-            EGroup * prev;
-        private:
-            Y_Disable_Copy_And_Assign(EGroup);
-        };
-
-        EGroup:: EGroup( Equilibrium &first ) : Object(), EList()
-        {
-            (*this) << first;
-        }
-
-
-        EGroup:: ~EGroup() noexcept
-        {
-        }
-
-        std::ostream & operator<<(std::ostream &os, const EGroup &g)
-        {
-            os << '[';
-            const ENode *en = g->head;
-            if(en)
-            {
-                os << (**en).name;
-                for(en=en->next;en;en=en->next) os << ',' << (**en).name;
-            }
-            return os << ']';
-        }
-
 
 
         class Partition
@@ -131,8 +80,7 @@ namespace Yttrium
             Y_XML_Element_Attr(xml,FinalizeParty,Y_XML_Attr(party.size));
             for(EGroup *g=party.head;g;g=g->next)
             {
-                (**g).sortBy( Indexed::TopLevelCompare );
-                Indexed::SubLabel(*g);
+                g->finalize();
                 Y_XMLog(xml, *g);
             }
             if(xml.verbose)
