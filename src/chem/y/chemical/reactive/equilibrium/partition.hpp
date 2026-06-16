@@ -38,7 +38,7 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            EGroup::List party; //!< prepared equilibria
+            const EGroup::List party; //!< prepared equilibria
 
         private:
             Y_Disable_Copy_And_Assign(Partition); //!< discarded

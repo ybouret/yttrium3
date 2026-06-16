@@ -51,7 +51,7 @@ namespace Yttrium
                         //
                         // new group
                         //______________________________________________________
-                        party.pushTail( new EGroup(eq) );
+                        Coerce(party).pushTail( new EGroup(eq) );
                         if(xml.verbose) *xml << *party.tail << std::endl;
                         continue;
 
@@ -81,7 +81,7 @@ namespace Yttrium
                 {
                     EGroup &source = **accepting->head; accepting.popHead();
                     target->mergeTail( *source );
-                    delete party.pop( &source );
+                    delete Coerce(party).pop( &source );
                 }
                 if(xml.verbose) *xml << target << std::endl;
             }
