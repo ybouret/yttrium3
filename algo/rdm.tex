@@ -40,23 +40,24 @@ We want to minimize using $\vec \mu \in \mathbb{R}^L$ Lagrange multipliers:
 
 We obtain:
 \begin{equation}
-	\delta \vec A = \bm\alpha^T \; \vec \mu \implies (\bm\alpha\bm\alpha^T) \vec \mu = \vec x
+	\delta \vec A = \bm\alpha^T \; \vec \mu \implies (\bm\alpha\bm\alpha^T) \vec \mu = \vec x \implies \mu = (\bm\alpha\bm\alpha^T)^{-1} \vec x
 \end{equation}
-
-\end{document}
-
-The increase in concentrations is:
+	
 \begin{equation}
-	d \vec A^2 = \dfrac{x_s^2}{\vec \alpha^2} = \left( \dfrac{x_s}{\vert\vec\alpha\vert}\right) ^2
-\end{equation}
-The new concentrations are:
-\begin{equation}
-	\vec A ' = \vec A + d \vec A = \vec{A} - \dfrac{1}{\vec \alpha^2} \langle \vec \alpha \vert \vec A \rangle \vec \alpha 
-	= \dfrac{1}{\vec \alpha^2} \left[ \vec \alpha^2 \bm I - \vert \vec \alpha \rangle \langle \vec \alpha \vert \right] \vec A
+	\delta \vec A = \bm\alpha^T  (\bm\alpha\bm\alpha^T)^{-1} \vec x = -\bm\alpha^T  (\bm\alpha\bm\alpha^T)^{-1} \bm{\alpha} \vec{A}
 \end{equation}
 
 \section{Selection of rules}
 
+\section{New concentrations}
+\begin{equation}
+\vec A' = \vec A + \delta \vec A = \left[\bm I_L -  \bm\alpha^T  (\bm\alpha\bm\alpha^T)^{-1} \bm{\alpha} \right] \vec{A}
+\end{equation}
+
+\begin{equation}
+\vec A' = \dfrac{1}{\det(\bm\alpha\bm\alpha^T)} \left[\det(\bm\alpha\bm\alpha^T)\bm I_L -  \bm\alpha^T  (\bm\alpha\bm\alpha^T)^{*} \bm{\alpha} \right] \vec{A}
+\end{equation}
 
 \end{document}
+ 
 
