@@ -5,6 +5,7 @@
 #include "y/jive/syntax/grammar.hpp"
 #include "y/stream/libc/output.hpp"
 #include "y/handy/basic/light/list.hpp"
+#include "y/xml/element.hpp"
 
 namespace Yttrium
 {
@@ -21,6 +22,7 @@ namespace Yttrium
 
             explicit EGroup(Equilibrium &first);
             virtual ~EGroup() noexcept;
+            Y_OSTREAM_PROTO(EGroup);
 
             bool     accepts(const Equilibrium &another) const noexcept
             {
@@ -47,13 +49,25 @@ namespace Yttrium
         {
         }
 
+        std::ostream & operator<<(std::ostream &os, const EGroup &g)
+        {
+            os << '[';
+            const ENode *en = g->head;
+            if(en)
+            {
+                os << (**en).name;
+                for(en=en->next;en;en=en->next) os << ',' << (**en).name;
+            }
+            return os << ']';
+        }
+
 
 
         class Partition
         {
         public:
 
-            explicit Partition(Equilibria &eqs);
+            explicit Partition(XML::Log &xml, Equilibria &eqs);
             virtual ~Partition() noexcept;
 
         protected:
@@ -68,34 +82,48 @@ namespace Yttrium
         }
 
 
-        Partition:: Partition(Equilibria &eqs) :
+        Partition:: Partition(XML::Log &xml, Equilibria &eqs) :
         party()
         {
             typedef Handy::BasicLightList<EGroup> GList;
             typedef GList::NodeType               GNode;
 
+            const size_t input = eqs->size();
+            Y_XML_Element_Attr(xml,BuildPartition, Y_XML_Attr(input) );
+
             for(Equilibria::Iterator it=eqs.begin();it!=eqs.end();++it)
             {
                 GList         accepting;
                 Equilibrium & eq = **it;
-
                 for(EGroup *g=party.head;g;g=g->next)
                 {
                     if(g->accepts(eq)) accepting << *g;
                 }
-                std::cerr << "#accepting: " << accepting->size << std::endl;
+                if(xml.verbose)
+                {
+                    eqs.efmt.print(xml(), eq) << " : #accepting=" << std::setw(3) << accepting->size << " => ";
+                }
                 switch(accepting->size)
                 {
                     case 0:
                         // new group
                         party.pushTail( new EGroup(eq) );
+                        if(xml.verbose) *xml << *party.tail << std::endl;
                         continue;
 
                     case 1:
-                        // insert into group
+                        // insert into sole group
                         accepting.head() << eq;
+                        if(xml.verbose) *xml << accepting.head() << std::endl;
                         continue;
+
+                    default:
+                        if(xml.verbose) *xml << std::endl;
+                        break;
                 }
+                assert(accepting->size>=2);
+
+
             }
 
 
@@ -124,7 +152,9 @@ Y_UTEST(cluster)
     std::cerr << "lib=" << lib << std::endl;
     std::cerr << "eqs=" << eqs << std::endl;
 
-    Partition part(eqs);
+    bool      verbose = true;
+    XML::Log  xml(std::cerr,verbose);
+    Partition part(xml,eqs);
 
 }
 Y_UDONE()
