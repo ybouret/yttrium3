@@ -44,6 +44,20 @@ namespace Yttrium
             return res;
         }
 
+        String Token:: raw(const size_t skip, const size_t trim) const
+        {
+            const size_t drop = skip+trim; assert(drop<=size);
+            String res;
+            const Char * ch=head;
+            for(size_t i=skip;i>0;--i) { assert(ch); ch=ch->next; }
+            for(size_t i=size-drop;i>0;--i,ch=ch->next)
+            {
+                assert(ch);
+                res += (char) **ch;
+            }
+            return res;
+        }
+
         std::ostream & operator<<(std::ostream &os, const Token &token)
         {
             return os << token.str();

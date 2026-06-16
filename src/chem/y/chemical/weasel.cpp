@@ -99,7 +99,7 @@ namespace Yttrium
 
                 if(name==*alias)
                 {
-                    const String expr = node->lexeme().str(1);
+                    const String expr = node->lexeme().raw(1);
                     onAlias(expr,lib,eqs);
                 }
 
