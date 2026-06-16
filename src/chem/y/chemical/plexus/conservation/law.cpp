@@ -8,7 +8,10 @@ namespace Yttrium
 
         namespace Conservation
         {
-            Law:: Law() noexcept : Actors(AsConc)
+            Law:: Law() noexcept :
+            Actors(AsConc),
+            next(0),
+            prev(0)
             {
             }
 

@@ -39,7 +39,9 @@ namespace Yttrium
         slist(),
         nu(),
         N(nu.rows),
-        M(nu.cols)
+        M(nu.cols),
+        efmt(),
+        sfmt()
         {
             Y_XML_Element_Attr(xml,BuildTopology,Y_XML_Attr(group->size));
             for(const ENode *en=elist->head;en;en=en->next)

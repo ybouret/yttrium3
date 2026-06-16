@@ -62,7 +62,6 @@ namespace Yttrium
                     }
                     Y_XMLog(xml, "Qm=" << Qm);
                     Y_XMLog(xml, "nu=" << topo.nu);
-
                 }
             }
         }
