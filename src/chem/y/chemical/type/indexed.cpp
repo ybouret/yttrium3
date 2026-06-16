@@ -33,6 +33,11 @@ namespace Yttrium
             for(unsigned j=0;j<Levels;++j) arr[j] = i;
         }
 
+        SignType Indexed:: TopLevelCompare(const Indexed &lhs, const Indexed &rhs) noexcept
+        {
+            return Sign::Of(lhs.indx[TopLevel],rhs.indx[TopLevel]);
+        }
+
     }
 
 }

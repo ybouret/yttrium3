@@ -78,6 +78,16 @@ namespace Yttrium
                 return arr[ indx[L] ];
             }
 
+            static SignType TopLevelCompare(const Indexed &lhs, const Indexed &rhs) noexcept;
+
+            template <typename HLIST> static inline
+            void SubLabel(HLIST &hlist) noexcept
+            {
+                size_t i = 1;
+                for(typename HLIST::NodeType *node=hlist->head;node;node=node->next,++i)
+                    Coerce((**node).indx[SubLevel]) = i;
+            }
+
             //__________________________________________________________________
             //
             //

@@ -86,23 +86,20 @@ namespace Yttrium
         party()
         {
             typedef Handy::BasicLightList<EGroup> GList;
-            typedef GList::NodeType               GNode;
 
-            const size_t input = eqs->size();
-            Y_XML_Element_Attr(xml,BuildPartition, Y_XML_Attr(input) );
-
+            Y_XML_Element_Attr(xml,BuildPartition, Y_XML_Attr(eqs->size()) );
             for(Equilibria::Iterator it=eqs.begin();it!=eqs.end();++it)
             {
                 GList         accepting;
                 Equilibrium & eq = **it;
                 for(EGroup *g=party.head;g;g=g->next)
-                {
-                    if(g->accepts(eq)) accepting << *g;
-                }
+                    if(g->accepts(eq))
+                        accepting << *g;
+
+
                 if(xml.verbose)
-                {
                     eqs.efmt.print(xml(), eq) << " : #accepting=" << std::setw(3) << accepting->size << " => ";
-                }
+
                 switch(accepting->size)
                 {
                     case 0:
@@ -118,14 +115,35 @@ namespace Yttrium
                         continue;
 
                     default:
-                        if(xml.verbose) *xml << std::endl;
                         break;
                 }
                 assert(accepting->size>=2);
-
-
+                EGroup &target = **accepting->head; accepting.popHead();
+                target << eq;
+                while(accepting->size)
+                {
+                    EGroup &source = **accepting->head; accepting.popHead();
+                    target->mergeTail( *source );
+                    delete party.pop( &source );
+                }
+                if(xml.verbose) *xml << target << std::endl;
             }
-
+            Y_XML_Element_Attr(xml,FinalizeParty,Y_XML_Attr(party.size));
+            for(EGroup *g=party.head;g;g=g->next)
+            {
+                (**g).sortBy( Indexed::TopLevelCompare );
+                Indexed::SubLabel(*g);
+                Y_XMLog(xml, *g);
+            }
+            if(xml.verbose)
+            {
+                for(Equilibria::Iterator it=eqs.begin();it!=eqs.end();++it)
+                {
+                    Equilibrium &eq = **it;
+                    eqs.efmt.print(xml(), eq);
+                    Core::Display(*xml << " : ", eq.indx, eq.Levels) << std::endl;
+                }
+            }
 
 
         }

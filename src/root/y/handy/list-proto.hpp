@@ -121,7 +121,7 @@ namespace Yttrium
             inline void popHead() noexcept
             {
                 Y_Lock(*cache);
-                cache->banish( list.popTail() );
+                cache->banish( list.popHead() );
             }
 
             //! push new value \param args compatible value

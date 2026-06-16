@@ -107,6 +107,7 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 AutoPtr<XNode> tree(xnode);
 
+                if(false)
                 {
                     const String dotFile = *lang + "-raw-tree.dot";
                     Vizible::Render(dotFile,*tree,false);
