@@ -42,9 +42,8 @@ namespace Yttrium
 
     private:
         Y_Disable_Assign(LightArray);
-        MutableType * const cxx;
-        const size_t        num;
-
+        MutableType * const        cxx;
+        const size_t               num;
         inline virtual ConstType & ask(const size_t i) const noexcept { return cxx[i]; }
     };
 

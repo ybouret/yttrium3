@@ -22,23 +22,23 @@ namespace Yttrium
                 const size_t   l = array.size();
                 const Natural &D = GetN(denom); if(D.bits()<=1) return;
                 Natural        G = 0;
+
                 for(size_t i=l;i>0;--i)
                 {
                     const Natural &N = GetN(array[i]);
                     if(N.is0()) continue;
                     Natural g = Natural::GCD(N,D);
-                    if(g>1)
+                    if(g.bits()>0)
                     {
                         if(G.is0())
                             G.xch(g);
                         else
                         {
-                            if(G<g) G.xch(g);
+                            if(g<G) G.xch(g);
                         }
                     }
                 }
 
-                //std::cerr << "G=" << G << std::endl;
                 
                 if(G>1)
                 {

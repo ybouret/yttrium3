@@ -77,7 +77,7 @@ namespace Yttrium
                             alpha3.mmul(adjM,alpha);
                             //std::cerr << "alpha3 = " << alpha3 << std::endl;
                             alpha4.mmul(TransposeOf,alpha,alpha3);
-                            //std::cerr << "alpha4 = " << alpha4 << std::endl;
+                            //std::cerr << "alpha4 = " << alpha4 << " , detM=" << detM << std::endl;
 
                             for(size_t i=1;i<=M;++i)
                             {
@@ -86,6 +86,7 @@ namespace Yttrium
                                 alpha4[i][i] = detM - alpha4[i][i];
                             }
                             //std::cerr << "proj   = " << alpha4 << " #/" << detM << std::endl;
+                            //std::cerr << "comb=" << comb << "=> proj   = " << alpha4 << " #/" << detM << std::endl;
                             Apex::Simplify::Matrix(alpha4,detM);
                             std::cerr << "comb=" << comb << "=> proj   = " << alpha4 << " #/" << detM << std::endl;
                             
@@ -93,7 +94,7 @@ namespace Yttrium
                     } while( comb.next() );
                     Y_XMLog(xml, "rank = " << std::setw(3) << k << " => " << std::setw(5) << numOK << " cells");
                 }
-                
+
                 Y_XMLog(xml, "possible cells: " << count);
             }
 
