@@ -44,7 +44,14 @@ namespace Yttrium
             const Actor * const ac = list.pushTail( new Actor(nu,sp,acting) );
             try {
                 String newName = name;
-                if(list.size>1) newName += " + ";
+                if(list.size>1)
+                {
+                    switch(acting)
+                    {
+                        case AsSpec: newName += " + "; break;
+                        case AsConc: newName += '+';   break;
+                    }
+                }
                 newName += ac->name;
                 Coerce(name).xch(newName);
             }

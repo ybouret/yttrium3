@@ -32,6 +32,11 @@ namespace Yttrium
             if(style) fp << ",style=\"" << style << "\"";
             return Endl(fp << ']');
         }
+
+        std::ostream & operator<<(std::ostream &os, const Species &sp)
+        {
+            return os << sp.name;
+        }
     }
 
 }

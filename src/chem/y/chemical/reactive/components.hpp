@@ -95,6 +95,17 @@ namespace Yttrium
             OutputStream & vizLink(OutputStream &     fp,
                                    const char * const color) const;
 
+
+            template <typename ARRAY> inline
+            void topology(ARRAY &array, const Level L) const
+            {
+                for(const Actor *ac=prod->head;ac;ac=ac->next)
+                    ac->sp(array,L) = (int)(ac->nu);
+
+                for(const Actor *ac=reac->head;ac;ac=ac->next)
+                    ac->sp(array,L) = -(int)(ac->nu);
+            }
+
             //__________________________________________________________________
             //
             //

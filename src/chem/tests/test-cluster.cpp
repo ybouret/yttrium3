@@ -4,22 +4,9 @@
 
 #include "y/stream/libc/output.hpp"
 #include "y/chemical/reactive/equilibrium/partition.hpp"
-
-namespace Yttrium
-{
-    namespace Chemical
-    {
+#include "y/chemical/plexus/canon.hpp"
 
 
-      
-
-       
-
-       
-
-
-    }
-}
 
 using namespace Yttrium;
 using namespace Chemical;
@@ -42,6 +29,14 @@ Y_UTEST(cluster)
     bool      verbose = true;
     XML::Log  xml(std::cerr,verbose);
     Partition part(xml,eqs);
+
+    for(const EGroup *g=part.party.head;g;g=g->next)
+    {
+        Topology topo(xml,*g);
+        Canon    canon(xml,topo);
+    }
+
+
 
 }
 Y_UDONE()
