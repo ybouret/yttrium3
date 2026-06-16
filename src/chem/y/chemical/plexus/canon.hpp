@@ -10,22 +10,48 @@ namespace Yttrium
     namespace Chemical
     {
 
-        typedef Matrix<unsigned> UMatrix;
+        typedef Matrix<unsigned> UMatrix; //!< alias
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Canon of conservation laws
+        //
+        //
+        //______________________________________________________________________
         class Canon
         {
         public:
-            typedef Conservation::Law Law;
-            typedef Law::List         Laws;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            typedef Conservation::Law Law;  //!< alias
+            typedef Law::List         Laws; //!< alias
 
-            explicit Canon(XML::Log &, const Topology &);
-            virtual ~Canon() noexcept;
-            
-            const UMatrix Qm;
-            const Laws    laws;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Canon(XML::Log &, const Topology &); //!< setup
+            virtual ~Canon() noexcept;                    //!< cleanup
+
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const UMatrix Qm;   //!< conservation matrix
+            const Laws    laws; //!< conservation law(s)
 
         private:
-            Y_Disable_Copy_And_Assign(Canon);
+            Y_Disable_Copy_And_Assign(Canon); //!< discarded
         };
 
     }

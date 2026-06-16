@@ -12,21 +12,53 @@ namespace Yttrium
         namespace Conservation
         {
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Single conservation law
+            //
+            //
+            //__________________________________________________________________
             class Law : public Actors
             {
             public:
-                typedef CxxListOf<Law> List;
-                
-                explicit Law() noexcept;
-                virtual ~Law() noexcept;
-                Y_OSTREAM_PROTO(Law);
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                typedef CxxListOf<Law> List; //!< alias
 
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                explicit Law() noexcept; //!< setup empty
+                virtual ~Law() noexcept; //!< cleanup
+                Y_OSTREAM_PROTO(Law);    //!< display
+
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
                 xreal_t excess(const XReadable &, const Level, XAdd &) const;
 
-                Law * next;
-                Law * prev;
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                Law * next; //!< for liast
+                Law * prev; //!< for liast
             private:
-                Y_Disable_Copy_And_Assign(Law);
+                Y_Disable_Copy_And_Assign(Law); //!< discarde
             };
 
         }
