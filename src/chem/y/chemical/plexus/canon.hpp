@@ -48,6 +48,8 @@ namespace Yttrium
             //
             //__________________________________________________________________
             const UMatrix Qm;   //!< conservation matrix
+            const size_t &Nc;   //!< Qm.rows
+            const size_t  rg;   //!< rank of Qm
             const Laws    laws; //!< conservation law(s)
 
         private:

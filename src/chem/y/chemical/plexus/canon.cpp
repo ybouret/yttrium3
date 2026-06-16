@@ -1,5 +1,6 @@
 #include "y/chemical/plexus/canon.hpp"
 #include "y/mkl/algebra/ortho-space.hpp"
+#include "y/mkl/algebra/rank.hpp"
 #include "y/exception.hpp"
 
 #include "y/coven/survey/positive.hpp"
@@ -16,6 +17,8 @@ namespace Yttrium
 
         Canon:: Canon(XML::Log &xml, const Topology &topo) :
         Qm(),
+        Nc(Qm.rows),
+        rg(0),
         laws()
         {
             Y_XML_Element(xml,BuildCanon);
@@ -35,7 +38,7 @@ namespace Yttrium
                 }
                 else
                 {
-                    Y_XMLog(xml,"|_found " << nc << " conservation" << ASCII::Plural::s(nc) );
+                    Y_XMLog(xml,"|_[ -- found " << nc << " conservation" << ASCII::Plural::s(nc) << " --]" );
                     {
                         const size_t M   = topo.M;
                         UMatrix &    A   = Coerce(Qm).make(nc,M);
@@ -60,8 +63,12 @@ namespace Yttrium
                             assert((*law)->size>=2);
                         }
                     }
-                    Y_XMLog(xml, "Qm=" << Qm);
-                    Y_XMLog(xml, "nu=" << topo.nu);
+                    Coerce(rg) = MKL::Rank::Of(Qm);
+                    Y_XMLog(xml, "Qm = " << Qm);
+                    Y_XMLog(xml, "nu = " << topo.nu);
+                    Y_XMLog(xml, "Nc = " << Nc);
+                    Y_XMLog(xml, "rg = " << rg);
+
                 }
             }
         }

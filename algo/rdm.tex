@@ -13,15 +13,38 @@
 
 \section{Conservation}
 
-\subsection{Positive Increase of Broken Law}
-Let $\vec \alpha$ be the representation of a broken law:
+\subsection{Increase of Broken Laws}
+Let $\vec \alpha_i$ be the representation of $L$ broken laws:
 \begin{equation}
-	\langle \vec \alpha \vert \vec A \rangle = - x_s < 0
+	\forall i, \langle \vec \alpha_i \vert \vec A \rangle = - x_i < 0
 \end{equation}
 We want to find the minimal $d \vec A$ such that:
 \begin{equation}
-	\langle \vec \alpha \vert \vec A + d\vec A \rangle = 0 \implies \langle \vec \alpha \vert d \vec A \rangle = x_s \implies d \vec A = \dfrac{x_s}{\vec\alpha^2} \vec \alpha
+	\forall i, \langle \vec \alpha_i \vert \vec A + d\vec A \rangle = 0 \implies \langle \vec \alpha_i \vert d \vec A \rangle = x_i > 0 
 \end{equation}
+
+We form:
+\begin{equation}
+	\bm{\alpha} =
+	\begin{bmatrix}
+	\vec \alpha_1\\
+	\vdots\\
+	\vec \alpha_L\\
+	\end{bmatrix}
+\end{equation}
+
+We want to minimize using $\vec \mu \in \mathbb{R}^L$ Lagrange multipliers:
+\begin{equation}
+	\mathcal L = \dfrac{1}{2} \delta \vec A - \langle \vec \mu \vert \bm\alpha\;\delta \vec A - \vec x \rangle
+\end{equation}
+
+We obtain:
+\begin{equation}
+	\delta \vec A = \bm\alpha^T \; \vec \mu \implies (\bm\alpha\bm\alpha^T) \vec \mu = \vec x
+\end{equation}
+
+\end{document}
+
 The increase in concentrations is:
 \begin{equation}
 	d \vec A^2 = \dfrac{x_s^2}{\vec \alpha^2} = \left( \dfrac{x_s}{\vert\vec\alpha\vert}\right) ^2
@@ -32,5 +55,8 @@ The new concentrations are:
 	= \dfrac{1}{\vec \alpha^2} \left[ \vec \alpha^2 \bm I - \vert \vec \alpha \rangle \langle \vec \alpha \vert \right] \vec A
 \end{equation}
 
+\section{Selection of rules}
+
 
 \end{document}
+
