@@ -23,7 +23,9 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Equilibria : public Proxy<const EqSet>, public EqFormat
+        class Equilibria :
+        public Proxy<const EqSet>,
+        public EqFormat
         {
         public:
             //__________________________________________________________________

@@ -6,4 +6,5 @@ enable_testing()
 
 Y_UTEST(weasel)
 Y_UTEST(aftermath)
+Y_UTEST(cluster)
 
