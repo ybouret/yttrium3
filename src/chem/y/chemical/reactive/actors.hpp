@@ -48,16 +48,16 @@ namespace Yttrium
             //__________________________________________________________________
             void hire(const unsigned, const Species &); //!< hire new actor
             bool hired(const Species &) const noexcept; //!< \return true iff species was hired
+            apz  charge()                        const; //!< \return partial reaction charge
 
             void massAction(XMul &, const XReadable &, const Level) const; //!< update mass action
             void massAction(XMul &, const XReadable &, const Level, const xreal_t) const; //!< updated shifted mass action
 
-            //! \return partial reaction charge
-            apz  charge() const;
 
-            xreal_t extent(const XReadable &, const Level) const noexcept;
-            bool    active(const XReadable &, const Level) const noexcept; //!< false if one concentration is <= 0 
-            void    safeMove(XWritable &, const Level, const xreal_t) const noexcept;
+
+            xreal_t extent(const XReadable &, const Level)            const noexcept; //!< \return limiting extent
+            bool    active(const XReadable &, const Level)            const noexcept; //!< \return false if one concentration is <= 0
+            void    safeMove(XWritable &, const Level, const xreal_t) const noexcept; //!< move all concentrations using extent
 
         private:
             Y_Disable_Copy_And_Assign(Actors); //!< discarded

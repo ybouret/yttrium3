@@ -13,12 +13,18 @@ namespace Yttrium
     namespace Chemical
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //! Components classification
+        //
+        //______________________________________________________________________
         enum EqKind
         {
-            Outlawed,
-            ProdOnly,
-            ReacOnly,
-            BothWays
+            Outlawed, //!< forbidden
+            ProdOnly, //!< only product(s)
+            ReacOnly, //!< only reactant(s)
+            BothWays  //!< reactant(s) and product(s)
         };
 
         //______________________________________________________________________
@@ -52,21 +58,43 @@ namespace Yttrium
             bool  electroneutral() const; //!< \return true iff electroneutral
             bool  atLeastOneItem() const; //!< \return true iff at least one item
 
-            xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level) const; //!< \return mass action
+            xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level)                const; //!< \return mass action
             xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level, const xreal_t) const; //!< \return shifted mass action
-            void    saveMove(XWritable &, const Level, const xreal_t) const noexcept; //!< safely move concentration using extent
-            xreal_t extent(const XReadable &Cold, const XReadable &Cnew, const Level, XAdd &xadd) const; //!< \return average extent
+            void    saveMove(XWritable &, const Level, const xreal_t)                       const noexcept; //!< safely move concentration using extent
 
-            bool    hired(const Species &)       const noexcept;
-            bool    linkedTo(const Components &) const noexcept;
+            //! compute extent from a transformation
+            /**
+             \param Cold old C
+             \param Cnew new C
+             \param L    computation level
+             \param xadd helper
+             \return average extent
+            */
+            xreal_t extent(const XReadable &Cold, const XReadable &Cnew, const Level L, XAdd &xadd)    const;
 
-            OutputStream & vizSelf(OutputStream &fp,
+            bool    hired(const Species &)       const noexcept; //!< \return true iff species in reac or prod
+            bool    linkedTo(const Components &) const noexcept; //!< \return true iff common species
+
+            //! emit graphViz code
+            /**
+             \param fp output stream
+             \param color optional color
+             \param style optional style
+             \return fp
+             */
+            OutputStream & vizSelf(OutputStream &     fp,
                                    const char * const color,
                                    const char * const style) const;
 
-            OutputStream & vizLink(OutputStream &fp,
+            //! emit topology code
+            /**
+             \param fp output stream
+             \param color optional color
+             \return fp
+             */
+            OutputStream & vizLink(OutputStream &     fp,
                                    const char * const color) const;
-            
+
             //__________________________________________________________________
             //
             //
@@ -80,9 +108,11 @@ namespace Yttrium
             const xreal_t  one;  //!< numeric 1
 
         private:
-            Y_Disable_Copy_And_Assign(Components);  //!< discarded
-            void   checkUnused(const char * const, const Species &) const; //!< helper
-            EqKind computeKind() const noexcept; //!< helper
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            Y_Disable_Copy_And_Assign(Components);
+            void   checkUnused(const char * const, const Species &) const;
+            EqKind computeKind() const noexcept;
+#endif
         };
 
     }

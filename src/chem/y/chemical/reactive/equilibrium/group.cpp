@@ -6,7 +6,11 @@ namespace Yttrium
     namespace Chemical
     {
 
-        EGroup:: EGroup( Equilibrium &first ) : Object(), EList()
+        EGroup:: EGroup( Equilibrium &first ) :
+        Object(),
+        EList(),
+        next(0),
+        prev(0)
         {
             (*this) << first;
         }
@@ -34,6 +38,15 @@ namespace Yttrium
             Indexed::SubLabel(*this);
         }
 
+
+        bool EGroup:: accepts(const Equilibrium &another) const noexcept
+        {
+            for(const ENode *en=(**this).head;en;en=en->next)
+            {
+                if( (**en).linkedTo(another) ) return true;
+            }
+            return false;
+        }
     }
 
 }

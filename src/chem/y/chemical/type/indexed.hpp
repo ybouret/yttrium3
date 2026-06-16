@@ -78,8 +78,10 @@ namespace Yttrium
                 return arr[ indx[L] ];
             }
 
-            static SignType TopLevelCompare(const Indexed &lhs, const Indexed &rhs) noexcept;
+            //! \return top level indices comparison
+            static SignType TopLevelCompare(const Indexed &, const Indexed &) noexcept;
 
+            //! \param hlist handy list to relabel
             template <typename HLIST> static inline
             void SubLabel(HLIST &hlist) noexcept
             {

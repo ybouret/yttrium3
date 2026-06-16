@@ -20,7 +20,7 @@ namespace Yttrium
         typedef Writable<xreal_t>              XWritable; //!< alias
         typedef Cameo::Multiplication<xreal_t> XMul;      //!< alias
         typedef Cameo::Addition<xreal_t>       XAdd;      //!< alias
-        typedef MKL::Triplet<xreal_t>          XTriplet;
+        typedef MKL::Triplet<xreal_t>          XTriplet;  //!< alias
     }
 
 }

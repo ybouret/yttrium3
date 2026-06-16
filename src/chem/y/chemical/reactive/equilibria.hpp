@@ -36,7 +36,7 @@ namespace Yttrium
             //__________________________________________________________________
             static const char * const    CallSign;      //!< "Equilibria"
             typedef EqSet::ConstIterator ConstIterator; //!< alias
-            typedef EqSet::Iterator      Iterator;
+            typedef EqSet::Iterator      Iterator;      //!< alias
 
             //__________________________________________________________________
             //
@@ -50,9 +50,8 @@ namespace Yttrium
             Y_OSTREAM_PROTO(Equilibria);    //!< display with constants
 
 
-            Iterator begin() noexcept;
-            Iterator end()   noexcept;
-
+            Iterator       begin()                        noexcept; //!< \return begin
+            Iterator       end()                          noexcept; //!< \return end
             void           add(const EqPtr &);                      //!< add a precompiled equilibria
             std::ostream & print(std::ostream &, const bool) const; //!< print with optional constants \return output stream
 

@@ -3,8 +3,7 @@
 #include "y/utest/run.hpp"
 
 #include "y/stream/libc/output.hpp"
-#include "y/chemical/reactive/equilibrium/group.hpp"
-#include "y/xml/element.hpp"
+#include "y/chemical/reactive/equilibrium/partition.hpp"
 
 namespace Yttrium
 {
@@ -12,89 +11,11 @@ namespace Yttrium
     {
 
 
-        class Partition
-        {
-        public:
+      
 
-            explicit Partition(XML::Log &xml, Equilibria &eqs);
-            virtual ~Partition() noexcept;
+       
 
-        protected:
-            EGroup::List party;
-
-        private:
-            Y_Disable_Copy_And_Assign(Partition);
-        };
-
-        Partition:: ~Partition() noexcept
-        {
-        }
-
-
-        Partition:: Partition(XML::Log &xml, Equilibria &eqs) :
-        party()
-        {
-            typedef Handy::BasicLightList<EGroup> GList;
-
-            Y_XML_Element_Attr(xml,BuildPartition, Y_XML_Attr(eqs->size()) );
-            for(Equilibria::Iterator it=eqs.begin();it!=eqs.end();++it)
-            {
-                GList         accepting;
-                Equilibrium & eq = **it;
-                for(EGroup *g=party.head;g;g=g->next)
-                    if(g->accepts(eq))
-                        accepting << *g;
-
-
-                if(xml.verbose)
-                    eqs.efmt.print(xml(), eq) << " : #accepting=" << std::setw(3) << accepting->size << " => ";
-
-                switch(accepting->size)
-                {
-                    case 0:
-                        // new group
-                        party.pushTail( new EGroup(eq) );
-                        if(xml.verbose) *xml << *party.tail << std::endl;
-                        continue;
-
-                    case 1:
-                        // insert into sole group
-                        accepting.head() << eq;
-                        if(xml.verbose) *xml << accepting.head() << std::endl;
-                        continue;
-
-                    default:
-                        break;
-                }
-                assert(accepting->size>=2);
-                EGroup &target = **accepting->head; accepting.popHead();
-                target << eq;
-                while(accepting->size)
-                {
-                    EGroup &source = **accepting->head; accepting.popHead();
-                    target->mergeTail( *source );
-                    delete party.pop( &source );
-                }
-                if(xml.verbose) *xml << target << std::endl;
-            }
-            Y_XML_Element_Attr(xml,FinalizeParty,Y_XML_Attr(party.size));
-            for(EGroup *g=party.head;g;g=g->next)
-            {
-                g->finalize();
-                Y_XMLog(xml, *g);
-            }
-            if(xml.verbose)
-            {
-                for(Equilibria::Iterator it=eqs.begin();it!=eqs.end();++it)
-                {
-                    Equilibrium &eq = **it;
-                    eqs.efmt.print(xml(), eq);
-                    Core::Display(*xml << " : ", eq.indx, eq.Levels) << std::endl;
-                }
-            }
-
-
-        }
+       
 
 
     }

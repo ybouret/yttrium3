@@ -12,33 +12,58 @@ namespace Yttrium
 {
     namespace Chemical
     {
-        typedef Handy::BasicLightList<Equilibrium> EList;
-        typedef EList::NodeType                    ENode;
+        typedef Handy::BasicLightList<Equilibrium> EList; //!< alias
+        typedef EList::NodeType                    ENode; //!< alias
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Group of connected equilibria
+        //
+        //
+        //______________________________________________________________________
         class EGroup : public Object, public EList
         {
         public:
-            typedef CxxListOf<EGroup> List;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef CxxListOf<EGroup> List; //!< alias
 
-            explicit EGroup(Equilibrium &first);
-            virtual ~EGroup() noexcept;
-            Y_OSTREAM_PROTO(EGroup);
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit EGroup(Equilibrium &); //!< setup with first equilibrium
+            virtual ~EGroup()     noexcept; //!< cleanup
+            Y_OSTREAM_PROTO(EGroup);       //!< display
 
-            bool     accepts(const Equilibrium &another) const noexcept
-            {
-                for(const ENode *en=(**this).head;en;en=en->next)
-                {
-                    if( (**en).linkedTo(another) ) return true;
-                }
-                return false;
-            }
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            bool accepts(const Equilibrium &) const noexcept; //!< \return true iff connected
+            void finalize() noexcept; //!< sort and relabel
 
-            void finalize() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            EGroup * next; //!< for list
+            EGroup * prev; //!< for list
 
-            EGroup * next;
-            EGroup * prev;
         private:
-            Y_Disable_Copy_And_Assign(EGroup);
+            Y_Disable_Copy_And_Assign(EGroup); //!< discarded
         };
     }
 

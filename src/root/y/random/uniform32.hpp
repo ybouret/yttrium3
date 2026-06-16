@@ -10,25 +10,55 @@ namespace Yttrium
 {
     namespace Random
     {
-
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! 32-bits uniform generator
+        //
+        //
+        //______________________________________________________________________
         class Uniform32
         {
         public:
-            explicit Uniform32(const uint32_t umax) noexcept;
-            virtual ~Uniform32() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Uniform32(const uint32_t) noexcept; //!< setup with max32
+            virtual ~Uniform32()               noexcept; //!< cleanup
 
-            virtual uint32_t next32() noexcept = 0;
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
+            virtual uint32_t next32() noexcept = 0; //!< \return next 32 bits word in [0:max32]
 
-            double operator()() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            double operator()() noexcept; //!< \return uniform ]0:1[
 
-            
-            template <typename T> T to() noexcept;
 
+            template <typename T> T to() noexcept; //!< \return value for ...
 
-            const uint32_t max32;
-            const double   denom;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const uint32_t max32; //!< 32 bits in [0:max32]
+            const double   denom; //!< max32 + 1
         private:
-            Y_Disable_Copy_And_Assign(Uniform32);
+            Y_Disable_Copy_And_Assign(Uniform32); //!< discarded
         };
 
     }

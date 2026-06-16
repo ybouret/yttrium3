@@ -62,8 +62,8 @@ namespace Yttrium
             void massAction(XMul &, const XReadable &, const Level) const;                //!< mass action at given concentration/level
             void massAction(XMul &, const XReadable &, const Level, const xreal_t) const; //!< safe mass action at shifted concentration/level
 
-            xreal_t extent(const XReadable &, const Level) const noexcept;
-            void    safeMove(XWritable &, const Level, const xreal_t) const noexcept;
+            xreal_t extent(const XReadable &, const Level) const noexcept;            //!< \return extent from concentration
+            void    safeMove(XWritable &, const Level, const xreal_t) const noexcept; //!< move concentration using extent
 
             //__________________________________________________________________
             //
