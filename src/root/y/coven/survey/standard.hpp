@@ -25,6 +25,7 @@ namespace Yttrium
         public:
             explicit StandardSurvey(const size_t) noexcept; //!< setup
             virtual ~StandardSurvey() noexcept; //!< cleanup
+            
 
         private:
             Y_Disable_Copy_And_Assign(StandardSurvey); //!< discarded

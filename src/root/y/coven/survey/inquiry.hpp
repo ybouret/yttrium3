@@ -136,6 +136,18 @@ namespace Yttrium
             inline virtual ~Inquiry() noexcept {}
 
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            inline void sendTo(SURVEY &primary) noexcept
+            {
+                primary.fusion(survey);
+            }
+
         private:
             //__________________________________________________________________
             //

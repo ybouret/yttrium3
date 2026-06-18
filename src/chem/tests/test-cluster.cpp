@@ -39,6 +39,7 @@ Y_UTEST(cluster)
         Combinatorics combinatorics(xml,topo,eqs);
     }
 
+    std::cerr << std::endl;
     Y_SIZEOF(Topology);
     Y_SIZEOF(Conservations);
     Y_SIZEOF(Warden);

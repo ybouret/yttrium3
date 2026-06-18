@@ -2,6 +2,14 @@
 #include "y/chemical/plexus/combinatorics.hpp"
 #include "y/container/cxx/series.hpp"
 
+
+#include "y/coven/compress.hpp"
+#include "y/mkl/algebra/ortho-space.hpp"
+#include "y/counting/combination.hpp"
+#include "y/coven/survey/standard.hpp"
+#include "y/coven/survey/inquiry.hpp"
+
+
 namespace Yttrium
 {
     namespace Chemical
@@ -29,36 +37,66 @@ namespace Yttrium
                                       Equilibria & eqs)
         {
             Y_XML_Element(xml,BuildCombinatorics);
-            const SList   & slist = topo.slist;
-            const IMatrix & nuT   =  topo.nuT;
-            Y_XMLog(xml, "species = " << slist);
-            Y_XMLog(xml, "nuT     = " << nuT);
+            static const size_t MinCof = 2;
+            Matrix<apz> mu;
 
-            SList              msp;
-            CxxSeries<size_t>  mid(slist->size);
-
-            for(const SNode *sn=slist->head;sn;sn=sn->next)
+            Y_XMLog(xml,"nuT = " << topo.nuT);
+            if( !Coven::Compress::Build(mu,topo.nuT,Coven::Compress::Duplicate,MinCof) )
             {
-                const Species       & sp = **sn;
-                const size_t          sj = sp.indx[SubLevel];
-                const Readable<int> & cf = nuT[sj]; if(CountNonZeroIn(cf)<=1) continue;
-                msp << sp;
-                mid << sj;
+                Y_XMLog(xml,"No multiple used species");
+                return;
+            }
+            const size_t R    = mu.rows;    // Repeated
+            const size_t N    = topo.N;     // max equilibria
+            const size_t kmax = Min(R,N-1); // max simultaneous to probe
+            Y_XMLog(xml, "mu  = " << mu);
+            Y_XMLog(xml, "mutiple species : " << R);
+            Y_XMLog(xml, "Hyperplane      : " << N-1);
+            Y_XMLog(xml, "probing up to   : " << kmax);
+
+            Coven::StandardSurvey primary(MinCof);
+            size_t                replicae = 0;
+            {
+                Matrix<apz> Q;
+                for(size_t k=1;k<=kmax;++k)
+                {
+                    Y_XML_Element_Attr(xml,Probing,Y_XML_Attr(k));
+                    Matrix<apz> P(k,N);
+                    Combination comb(R,k);
+                    do
+                    {
+                        for(size_t i=k;i>0;--i)
+                            P[i].load( mu[ comb[i] ] );
+                        Y_XMLog(xml,"P = " << P );
+                        if( !MKL::OrthoSpace::Eval(Q,P))
+                        {
+                            Y_XMLog(xml, "|_no orthogonal space!");
+                            continue;
+                        }
+                        //Y_XMLog(xml,"Q = " << Q);
+
+                        Coven::Inquiry<Coven::StandardSurvey> replica(Q,2,Coven::Tribes::Optimizing);
+                        replicae += (*replica)->size;
+                        replica.sendTo(primary);
+
+                    } while( comb.next() );
+                }
             }
 
-            if(msp->size<=0)
+            Y_XMLog(xml, "Sampling : " << std::setw(6) << primary.sampling);
+            Y_XMLog(xml, "Replicae : " << std::setw(6) << replicae);
+            Y_XMLog(xml, "To Build : " << std::setw(6) << primary->size);
+
+            for(const Coven::Vector *v=primary->head;v;v=v->next)
             {
-                Y_XMLog(xml, "no species in multiple equilbria");
+                Y_XMLog(xml,*v);
             }
-            else
-            {
-                Y_XMLog(xml, "species = " << slist);
-                Y_XMLog(xml, "multi   = " << msp << " @" << mid);
-            }
+
 
 
         }
-        
+
+
     }
 
 }
