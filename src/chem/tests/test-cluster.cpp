@@ -5,6 +5,7 @@
 #include "y/stream/libc/output.hpp"
 #include "y/chemical/reactive/equilibrium/partition.hpp"
 #include "y/chemical/plexus/warden.hpp"
+#include "y/chemical/plexus/combinatorics.hpp"
 
 
 
@@ -35,6 +36,7 @@ Y_UTEST(cluster)
         Topology      topo(xml,*g);
         Conservations conservations(xml,topo);
         Warden        warden(xml,conservations);
+        Combinatorics combinatorics(xml,topo,eqs);
     }
 
     Y_SIZEOF(Topology);
