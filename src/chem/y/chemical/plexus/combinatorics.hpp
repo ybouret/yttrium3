@@ -8,20 +8,26 @@
 
 namespace Yttrium
 {
+    namespace Coven { class StandardSurvey; }
+
     namespace Chemical
     {
 
         class Combinatorics
         {
         public:
+
             explicit Combinatorics(XML::Log  &,
                                    Topology   &,
                                    Equilibria &);
-            
+
             virtual ~Combinatorics() noexcept;
 
         private:
             Y_Disable_Copy_And_Assign(Combinatorics);
+            void buildPrimary(Coven::StandardSurvey &,
+                              XML::Log              &,
+                              Topology              &) const;
         };
     }
 
