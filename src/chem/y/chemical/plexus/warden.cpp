@@ -18,7 +18,7 @@ namespace Yttrium
         {
         }
 
-        Warden:: Warden(XML::Log &xml, const Canon &canon)
+        Warden:: Warden(XML::Log &xml, const Conservations &canon)
         {
             const size_t Nc = canon.Nc;
             if(Nc>0)

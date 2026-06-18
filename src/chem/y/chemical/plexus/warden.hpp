@@ -3,13 +3,15 @@
 #ifndef Y_Chemical_Plexus_Warden_Included
 #define Y_Chemical_Plexus_Warden_Included 1
 
-#include "y/chemical/plexus/canon.hpp"
+#include "y/chemical/plexus/conservations.hpp"
 #include "y/container/cxx/array.hpp"
 
 namespace Yttrium
 {
     namespace Chemical
     {
+
+        
 
         template <typename T>
         class CountedMatrix : public CountedObject, public Matrix<T>
@@ -49,7 +51,7 @@ namespace Yttrium
         {
         public:
 
-            explicit Warden(XML::Log &,const Canon &);
+            explicit Warden(XML::Log &, const Conservations &);
             virtual ~Warden() noexcept;
 
             

@@ -1,4 +1,4 @@
-#include "y/chemical/plexus/canon.hpp"
+#include "y/chemical/plexus/conservations.hpp"
 #include "y/mkl/algebra/ortho-space.hpp"
 #include "y/mkl/algebra/rank.hpp"
 #include "y/exception.hpp"
@@ -11,12 +11,12 @@ namespace Yttrium
 {
     namespace Chemical
     {
-        Canon:: ~Canon() noexcept
+        Conservations:: ~Conservations() noexcept
         {
         }
 
-        Canon:: Canon(XML::Log       &xml,
-                      const Topology &topo) :
+        Conservations:: Conservations(XML::Log       &xml,
+                                      const Topology &topo) :
         Qm(),
         Nc(Qm.rows),
         rg(0),
@@ -24,7 +24,7 @@ namespace Yttrium
         conserved( new SpRoll() ),
         unbounded( new SpRoll() )
         {
-            Y_XML_Element(xml,BuildCanon);
+            Y_XML_Element(xml,BuildConservations);
             Matrix<apz> Q;
             if( ! MKL::OrthoSpace::Get(Q,topo.nu) )
             {
@@ -85,7 +85,7 @@ namespace Yttrium
             }
         }
 
-        void Canon:: collectSpecies(XML::Log &xml, const SList &slist)
+        void Conservations:: collectSpecies(XML::Log &xml, const SList &slist)
         {
             // collect conserved species
             for(const Law *law=laws.head;law;law=law->next)

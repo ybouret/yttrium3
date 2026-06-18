@@ -32,13 +32,13 @@ Y_UTEST(cluster)
 
     for(const EGroup *g=part.party.head;g;g=g->next)
     {
-        Topology topo(xml,*g);
-        Canon    canon(xml,topo);
-        Warden   warden(xml,canon);
+        Topology      topo(xml,*g);
+        Conservations conservations(xml,topo);
+        Warden        warden(xml,conservations);
     }
 
     Y_SIZEOF(Topology);
-    Y_SIZEOF(Canon);
+    Y_SIZEOF(Conservations);
     Y_SIZEOF(Warden);
 
     Y_SIZEOF(Roll<Species>);

@@ -1,6 +1,6 @@
 
-#ifndef Y_Chemical_Plexus_Canon_Included
-#define Y_Chemical_Plexus_Canon_Included 1
+#ifndef Y_Chemical_Plexus_Conservations_Included
+#define Y_Chemical_Plexus_Conservations_Included 1
 
 #include "y/chemical/plexus/topology.hpp"
 #include "y/chemical/plexus/conservation/law.hpp"
@@ -79,11 +79,11 @@ namespace Yttrium
         //
         //
         //
-        //! Canon of conservation laws
+        //! Conservation laws/dispatch species
         //
         //
         //______________________________________________________________________
-        class Canon
+        class Conservations
         {
         public:
             //__________________________________________________________________
@@ -103,8 +103,8 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Canon(XML::Log &, const Topology &); //!< setup
-            virtual ~Canon() noexcept;                    //!< cleanup
+            explicit Conservations(XML::Log &, const Topology &); //!< setup
+            virtual ~Conservations() noexcept;                    //!< cleanup
 
             //__________________________________________________________________
             //
@@ -120,7 +120,7 @@ namespace Yttrium
             const SpDB     unbounded; //!< unbounded species
 
         private:
-            Y_Disable_Copy_And_Assign(Canon);              //!< discarded
+            Y_Disable_Copy_And_Assign(Conservations);      //!< discarded
             void collectSpecies(XML::Log &,const SList &); //!< populate conserved/unbounded
         };
 
@@ -128,5 +128,5 @@ namespace Yttrium
 
 }
 
-#endif // !Y_Chemical_Plexus_Canon_Included
+#endif // !Y_Chemical_Plexus_Conservations_Included
 
