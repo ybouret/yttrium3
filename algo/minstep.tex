@@ -18,19 +18,26 @@ We assume that we have a local minimum bracketing such that $a\leq b \leq c$ and
 \item  We transform $f_a-f_b$ into $\alpha \leq 0$ and $f_c-f_b$ into $\gamma \leq 0$.
 \item  We define:
 \begin{equation}
-	g(u) = \alpha + (\gamma-\alpha) u + \kappa u(1-u)
+	g(u) = \alpha + (\gamma-\alpha) u - \kappa u(1-u)
 \end{equation}
 with:
 \begin{equation}
-	\kappa = \dfrac{\beta(\alpha-\gamma) - \alpha}{\beta(1-\beta)}
+	\kappa = \dfrac{(1-\beta)\alpha + \beta\gamma}{\beta(1-\beta)}
 \end{equation}
 and
 \begin{equation}
-	g'(u) = \underbrace{(\gamma-\alpha)}_{\sigma} + (1-2u) \kappa
+	g'(u) = \underbrace{(\gamma-\alpha)}_{\sigma} + (2u-1) \kappa
 \end{equation}
 $$
-g'(0) = \sigma + \kappa, \;\; g'(1) = \sigma - \kappa, \;\; g'(1/2) = \sigma
+g'(0) = \sigma - \kappa, \;\; g'(1) = \sigma - \kappa, \;\; g'(1/2) = \sigma
 $$
+
+\item
+\begin{equation}
+	u_m = \dfrac{1}{2}\left[1 -\dfrac{\gamma-\alpha}{\kappa} \right] = \dfrac{1}{2}\left[1 - \beta(1-\beta) \dfrac{\gamma-\alpha}{\beta \gamma + (1-\beta) \alpha}\right]
+\end{equation}
+
+If $\gamma\approx\alpha$ or $\beta\approx0$ or $\beta\approx1$, then $u_m \approx \frac{1}{2}$.
 
 \end{enumerate}
 
