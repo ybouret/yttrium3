@@ -25,6 +25,10 @@ namespace Yttrium
             return k;
         }
 
+        std::ostream & operator<<(std::ostream &os, const Equilibrium &eq)
+        {
+            return os << eq.name;
+        }
     }
 
 }

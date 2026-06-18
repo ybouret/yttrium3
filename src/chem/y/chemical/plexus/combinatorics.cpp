@@ -133,7 +133,12 @@ namespace Yttrium
 
             };
 
+
+            typedef Handy::BasicHeavyList<int> IList;
+
         }
+
+
 
         Combinatorics:: Combinatorics(XML::Log   & xml,
                                       Topology   & topo,
@@ -143,15 +148,20 @@ namespace Yttrium
             Coven::StandardSurvey  primary(MinCoeff);
             buildPrimary(primary,xml,topo);
 
-
-
             typedef Handy::JointSet<size_t> iSet;
             typedef iSet::CacheType         iCache;
+
 
             const size_t  N  = topo.N;  // eqs
             const size_t  M  = topo.M; // species
 
-
+            //--------------------------------------------------------------
+            //
+            //
+            // Convert primary into mixed equilibria
+            //
+            //
+            //--------------------------------------------------------------
             StoDB  stoDB;
             iCache cache;
             iSet   input(cache);
@@ -236,6 +246,35 @@ namespace Yttrium
                 const bool use = stoDB.mayUse(sto);
                 Y_XMLog(xml, (use ? "[+]" : "[-]") << " " << w << " : \\" << input << " : " << sto);
                 if(!use) continue;
+
+                EList emx;
+                IList ecf;
+                for(ENode *en=topo.group->head;en;en=en->next)
+                {
+                    Equilibrium &eq = **en;
+                    const size_t ei = eq.indx[SubLevel];
+                    const int    cf = w[ei];
+                    if(!cf) continue;
+                    emx << eq;
+                    ecf << cf;
+                }
+                std::cerr << "|_emx=" << emx << std::endl;
+                std::cerr << "|_ecf=" << ecf << std::endl;
+
+                SList smx;
+                IList scf;
+                for(SNode *sn=topo.slist->head;sn;sn=sn->next)
+                {
+                    const Species &sp = **sn;
+                    const size_t   sj = sp.indx[SubLevel];
+                    const int      cf = sto[sj];
+                    if(!cf) continue;
+                    smx << sp;;
+                    scf << cf;
+                }
+
+
+
 
             }
 
