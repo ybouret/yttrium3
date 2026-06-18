@@ -1,0 +1,35 @@
+\documentclass[aps,11pt]{revtex4}
+\usepackage[a4paper]{geometry}
+\usepackage{graphicx}
+\usepackage{amssymb,amsfonts,amsmath,amsthm}
+\usepackage{bm}
+\usepackage{pslatex}
+\usepackage{chemarr}
+\usepackage{mathptmx}
+\usepackage{bookman}
+
+
+\begin{document}
+
+We assume that we have a local minimum bracketing such that $a\leq b \leq c$ and $f_b \leq f_a$ and $f_b \leq f_c$.
+
+\begin{enumerate}
+\item  We transform $a$ into $0$, $c$ into $1$ and $b$ into $\beta$
+\item  We transform $f_a-f_b$ into $\alpha \leq 0$ and $f_c-f_b$ into $\gamma \leq 0$.
+\item  We define:
+\begin{equation}
+	g(u) = \alpha + (\gamma-\alpha) u + \kappa u(1-u)
+\end{equation}
+with:
+\begin{equation}
+	\kappa = \dfrac{\beta(\alpha-\gamma) - \alpha}{\beta(1-\beta)}
+\end{equation}
+and
+\begin{equation}
+	g'(u) = (\gamma-\alpha) + (1-2u) \kappa
+\end{equation}
+
+\end{enumerate}
+
+
+\end{document}
