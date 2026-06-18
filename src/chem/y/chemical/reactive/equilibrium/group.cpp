@@ -34,7 +34,7 @@ namespace Yttrium
 
         void EGroup:: finalize() noexcept
         {
-            (**this).sortBy( Indexed::TopLevelCompare );
+            Indexed::TopHSort(*this);
             Indexed::SubLabel(*this);
         }
 

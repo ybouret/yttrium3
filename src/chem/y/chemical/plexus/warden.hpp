@@ -11,32 +11,48 @@ namespace Yttrium
     namespace Chemical
     {
 
+        template <typename T>
+        class CountedMatrix : public CountedObject, public Matrix<T>
+        {
+        public:
+            typedef ArcPtr<CountedMatrix> Pointer;
+            
+            inline explicit CountedMatrix(const Matrix<T> &mm,
+                                          const T         &dd) :
+            CountedObject(),
+            Matrix<T>(mm),
+            denom(dd)
+            {
+            }
+
+            inline explicit CountedMatrix(const size_t nr,
+                                          const size_t nc,
+                                          const T     &dd) :
+            CountedObject(),
+            Matrix<T>(nr,nc),
+            denom(dd)
+            {
+            }
+
+
+            inline virtual ~CountedMatrix() noexcept
+            {
+            }
+
+            const T denom;
+
+        private:
+            Y_Disable_Copy_And_Assign(CountedMatrix);
+        };
 
         class Warden
         {
         public:
-            class Cell : public Object
-            {
-            public:
-                typedef CxxListOf<Cell> List;
-                explicit Cell(const Readable<size_t> &,
-                              const Matrix<apz>      &);
-                virtual ~Cell() noexcept;
-
-                CxxArray<size_t> key;
-
-                Cell * next;
-                Cell * prev;
-
-            private:
-                Y_Disable_Copy_And_Assign(Cell);
-            };
 
             explicit Warden(XML::Log &,const Canon &);
             virtual ~Warden() noexcept;
 
-            CxxArray<Cell::List> cells;
-
+            
         private:
             Y_Disable_Copy_And_Assign(Warden);
         };

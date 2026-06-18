@@ -374,6 +374,19 @@ namespace Yttrium
             else         return LightArray<Type>(&row[1][1],items);
         }
 
+        template <typename U> inline
+        bool isEqualTo(const Matrix<U> &rhs) const
+        {
+            if(!gotSameMetricsThan(rhs)) return false;
+
+            for(size_t i=rows;i>0;--i)
+            {
+                const MatrixRow<T> &l = (*this)[i];
+                const MatrixRow<U> &r =     rhs[i];
+                for(size_t j=cols;j>0;--i) if(l[j]!=r[i]) return false;
+            }
+            return true;
+        }
 
 
     private:

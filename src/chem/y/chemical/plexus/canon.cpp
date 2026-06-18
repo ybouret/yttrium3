@@ -15,17 +15,21 @@ namespace Yttrium
         {
         }
 
-        Canon:: Canon(XML::Log &xml, const Topology &topo) :
+        Canon:: Canon(XML::Log       &xml,
+                      const Topology &topo) :
         Qm(),
         Nc(Qm.rows),
         rg(0),
-        laws()
+        laws(),
+        conserved( new SpRoll() ),
+        unbounded( new SpRoll() )
         {
             Y_XML_Element(xml,BuildCanon);
             Matrix<apz> Q;
             if( ! MKL::OrthoSpace::Get(Q,topo.nu) )
             {
                 Y_XMLog(xml, "no orthogonal space");
+                collectSpecies(xml,topo.slist);
             }
             else
             {
@@ -35,6 +39,7 @@ namespace Yttrium
                 if(!nc)
                 {
                     Y_XMLog(xml, "|_no conservation");
+                    collectSpecies(xml,topo.slist);
                 }
                 else
                 {
@@ -63,14 +68,48 @@ namespace Yttrium
                             assert((*law)->size>=2);
                         }
                     }
+
+                    // compute Rank
                     Coerce(rg) = MKL::Rank::Of(Qm);
                     Y_XMLog(xml, "Qm = " << Qm);
                     Y_XMLog(xml, "nu = " << topo.nu);
                     Y_XMLog(xml, "Nc = " << Nc);
                     Y_XMLog(xml, "rg = " << rg);
+
+                    // collect species
+                    collectSpecies(xml,topo.slist);
+
+
+
                 }
             }
         }
+
+        void Canon:: collectSpecies(XML::Log &xml, const SList &slist)
+        {
+            // collect conserved species
+            for(const Law *law=laws.head;law;law=law->next)
+            {
+                for(const Actor *ac=(*law)->head;ac;ac=ac->next)
+                {
+                    Coerce(*conserved).inscribe(ac->sp);
+                }
+            }
+
+            // deduce unbounded species
+            for(const SNode *sn=slist->head;sn;sn=sn->next)
+            {
+                const Species &sp = **sn;
+                if(conserved->book.query(sp)) continue;
+                Coerce(*unbounded).inscribe(sp);
+            }
+
+            Y_XMLog(xml, "conserved = " << conserved->list);
+            Y_XMLog(xml, "unbounded = " << unbounded->list);
+        }
+
+
+
     }
 
 }

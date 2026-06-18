@@ -5,34 +5,29 @@
 #include "y/mkl/algebra/lu.hpp"
 #include "y/apex/api/simplify.hpp"
 
+#include "y/container/sequence/vector.hpp"
+
 namespace Yttrium
 {
     namespace Chemical
     {
 
-        Warden:: Cell:: Cell(const Readable<size_t> & _key,
-                             const Matrix<apz>      & _mat) :
-        key(CopyOf,_key),
-        next(0),
-        prev(0)
-        {
-        }
-
-        Warden:: Cell:: ~Cell() noexcept
-        {
-        }
 
 
         Warden:: ~Warden() noexcept
         {
         }
 
-        Warden:: Warden(XML::Log &xml, const Canon &canon) :
-        cells(canon.rg)
+        Warden:: Warden(XML::Log &xml, const Canon &canon)
         {
             const size_t Nc = canon.Nc;
             if(Nc>0)
             {
+                typedef CountedMatrix<apz>     IPMatrix;
+                typedef CountedMatrix<xreal_t> XPMatrix;
+                Vector<IPMatrix::Pointer> ipm;
+                Vector<XPMatrix::Pointer> xpm;
+
                 const size_t rg = canon.rg;
                 Y_XML_Element_Attr(xml,BuildWarden,Y_XML_Attr(rg));
                 const size_t M    = canon.Qm.cols;
@@ -41,13 +36,12 @@ namespace Yttrium
 
                 for(size_t k=1;k<=rg;++k)
                 {
-                    Cell::List & clst = cells[k];
                     Combination  comb(Nc,k);
                     Matrix<apz>  alpha(k,M);
                     Matrix<apz>  alpha2(k,k);
                     Matrix<apz>  adjM(k,k);
                     Matrix<apz>  alpha3(k,M);
-                    Matrix<apz>  alpha4(M,M);
+                    Matrix<apz>  proj(M,M);
                     size_t       numOK = 0;
                     do
                     {
@@ -68,28 +62,51 @@ namespace Yttrium
                             ++count;
 
                             alpha2.gram(alpha); assert(k==MKL::Rank::Of(alpha2));
-                            //std::cerr << "alpha =" << alpha << std::endl;
-                            //std::cerr << "alpha2=" << alpha2 << std::endl;
                             const apz detM = lu.determinant(alpha2);
                             lu.adjoint(adjM,alpha2);
-                            //std::cerr << "adjM = " << adjM << std::endl;
-                            //std::cerr << "detM = " << detM << std::endl;
                             alpha3.mmul(adjM,alpha);
-                            //std::cerr << "alpha3 = " << alpha3 << std::endl;
-                            alpha4.mmul(TransposeOf,alpha,alpha3);
-                            //std::cerr << "alpha4 = " << alpha4 << " , detM=" << detM << std::endl;
+                            proj.mmul(TransposeOf,alpha,alpha3);
 
                             for(size_t i=1;i<=M;++i)
                             {
-                                for(size_t j=1;j<i;++j)    Sign::MakeOpposite( Coerce(alpha4[i][j].s) );
-                                for(size_t j=i+1;j<=M;++j) Sign::MakeOpposite( Coerce(alpha4[i][j].s) );
-                                alpha4[i][i] = detM - alpha4[i][i];
+                                for(size_t j=1;j<i;++j)    Sign::MakeOpposite( Coerce(proj[i][j].s) );
+                                for(size_t j=i+1;j<=M;++j) Sign::MakeOpposite( Coerce(proj[i][j].s) );
+                                proj[i][i] = detM - proj[i][i];
                             }
-                            //std::cerr << "proj   = " << alpha4 << " #/" << detM << std::endl;
-                            //std::cerr << "comb=" << comb << "=> proj   = " << alpha4 << " #/" << detM << std::endl;
-                            Apex::Simplify::Matrix(alpha4,detM);
-                            std::cerr << "comb=" << comb << "=> proj   = " << alpha4 << "/" << detM << std::endl;
-                            
+                            Apex::Simplify::Matrix(proj,detM);
+                            std::cerr << "comb=" << comb << "=> proj   = " << proj << "/" << detM << std::endl;
+
+                            assert(ipm.size()==xpm.size());
+
+                            size_t I = 0;
+                            for(size_t i=ipm.size();i>0;--i)
+                            {
+                                const IPMatrix &ip = *ipm[i];
+                                if(ip.denom == detM && ip.isEqualTo(proj) )
+                                {
+                                    I = i;
+                                    break;
+                                }
+                            }
+
+                            if(I<=0)
+                            {
+                                // create new
+                                const IPMatrix::Pointer itemp( new IPMatrix(proj,detM) );
+                                const xreal_t           denom = detM.cast<int>("projection","denominator");
+                                XPMatrix::Pointer       xtemp( new XPMatrix(M,M,denom) );
+                                for(size_t i=M;i>0;--i)
+                                {
+                                    for(size_t j=M;j>0;--j)
+                                    {
+                                        (*xtemp)[i][j] = (xreal_t) (*itemp)[i][j].cast<int>("projection","coefficient");
+                                    }
+                                }
+                            }
+
+
+
+
                         }
                     } while( comb.next() );
                     Y_XMLog(xml, "rank = " << std::setw(3) << k << " => " << std::setw(5) << numOK << " cells");

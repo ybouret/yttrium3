@@ -81,6 +81,12 @@ namespace Yttrium
             //! \return top level indices comparison
             static SignType TopLevelCompare(const Indexed &, const Indexed &) noexcept;
 
+            template <typename HLIST> static inline
+            void TopHSort(HLIST &hlist) noexcept
+            {
+                hlist->sortBy( TopLevelCompare );
+            }
+
             //! \param hlist handy list to relabel
             template <typename HLIST> static inline
             void SubLabel(HLIST &hlist) noexcept

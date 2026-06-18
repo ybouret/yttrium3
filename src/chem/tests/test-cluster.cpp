@@ -37,6 +37,13 @@ Y_UTEST(cluster)
         Warden   warden(xml,canon);
     }
 
+    Y_SIZEOF(Topology);
+    Y_SIZEOF(Canon);
+    Y_SIZEOF(Warden);
+
+    Y_SIZEOF(Roll<Species>);
+    Y_SIZEOF(Roll<Equilibrium>);
+
 
 
 }

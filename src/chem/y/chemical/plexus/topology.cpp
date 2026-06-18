@@ -29,7 +29,7 @@ namespace Yttrium
             fillSList(slist,eq.reac);
             fillSList(slist,eq.prod);
 
-            slist->sortBy( Indexed::TopLevelCompare );
+            Indexed::TopHSort(slist);
             Indexed::SubLabel(slist);
         }
 
