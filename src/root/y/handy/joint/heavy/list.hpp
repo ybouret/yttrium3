@@ -8,6 +8,7 @@
 #include "y/handy/list-proto.hpp"
 #include "y/handy/node/heavy.hpp"
 #include "y/handy/cache/shared.hpp"
+#include "y/threading/single-threaded-class.hpp"
 
 
 namespace Yttrium
@@ -24,7 +25,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        template <typename T, typename THREADING_POLICY>
+        template <typename T, typename THREADING_POLICY = SingleThreadedClass>
         class JointHeavyList : public ListProto< HeavyNode<T>, SharedCache, THREADING_POLICY>
         {
         public:

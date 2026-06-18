@@ -8,6 +8,7 @@
 
 #include "y/handy/plain/list.hpp"
 #include "y/handy/node/heavy.hpp"
+#include "y/threading/single-threaded-class.hpp"
 
 
 namespace Yttrium
@@ -22,7 +23,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        template <typename T, typename THREADING_POLICY>
+        template <typename T, typename THREADING_POLICY = SingleThreadedClass>
         class PlainHeavyList : public PlainList<HeavyNode<T>,THREADING_POLICY>
         {
         public:

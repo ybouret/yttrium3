@@ -22,8 +22,8 @@ namespace Yttrium
         //______________________________________________________________________
         template <
         typename T,
-        typename THREAD_POLICY,
-        typename COMPARATOR = Sign::Comparator<T> >
+        typename THREAD_POLICY = SingleThreadedClass,
+        typename COMPARATOR    = Sign::Comparator<T> >
         class  JointSet :
         public Proxy<const JointHeavyList<T,THREAD_POLICY> >,
         public Recyclable
