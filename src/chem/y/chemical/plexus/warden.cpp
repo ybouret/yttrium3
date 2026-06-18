@@ -74,7 +74,7 @@ namespace Yttrium
                                 proj[i][i] = detM - proj[i][i];
                             }
                             Apex::Simplify::Matrix(proj,detM);
-                            std::cerr << "comb=" << comb << "=> proj   = " << proj << "/" << detM << std::endl;
+                            //std::cerr << "comb=" << comb << "=> proj   = " << proj << "/" << detM << std::endl;
 
                             assert(ipm.size()==xpm.size());
 

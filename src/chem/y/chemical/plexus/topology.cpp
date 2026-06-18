@@ -38,6 +38,7 @@ namespace Yttrium
         elist(group),
         slist(),
         nu(),
+        nuT(),
         N(nu.rows),
         M(nu.cols),
         efmt(),
@@ -70,9 +71,9 @@ namespace Yttrium
 
             const size_t rank = MKL::Rank::Of(nu);
             if(N!=rank) throw Specific::Exception("Topology","dependent equilibria detected!");
-
+            Coerce(nuT).make(M,N).assignTranspose(nu);
         }
-        
+
 
 
     }

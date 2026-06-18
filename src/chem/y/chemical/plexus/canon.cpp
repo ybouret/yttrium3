@@ -71,10 +71,10 @@ namespace Yttrium
 
                     // compute Rank
                     Coerce(rg) = MKL::Rank::Of(Qm);
-                    Y_XMLog(xml, "Qm = " << Qm);
-                    Y_XMLog(xml, "nu = " << topo.nu);
-                    Y_XMLog(xml, "Nc = " << Nc);
-                    Y_XMLog(xml, "rg = " << rg);
+                    Y_XMLog(xml, "Qm  = " << Qm);
+                    Y_XMLog(xml, "nuT = " << topo.nuT);
+                    Y_XMLog(xml, "Nc  = " << Nc);
+                    Y_XMLog(xml, "rg  = " << rg);
 
                     // collect species
                     collectSpecies(xml,topo.slist);
