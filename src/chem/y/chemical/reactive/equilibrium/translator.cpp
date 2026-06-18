@@ -3,6 +3,7 @@
 #include "y/jive/syntax/rule.hpp"
 #include "y/ascii/convert.hpp"
 #include "y/container/algorithm/crop.hpp"
+#include "y/lua++/function.hpp"
 
 namespace Yttrium
 {
@@ -20,27 +21,62 @@ namespace Yttrium
         {
         }
 
-        static inline bool isBlank(const char c) noexcept
+        namespace
         {
-            switch(c)
+            static inline bool isBlank(const char c) noexcept
             {
-                case ' ':
-                case '\t':
-                    return true;
-                    
-                default:
-                    break;
+                switch(c)
+                {
+                    case ' ':
+                    case '\t':
+                        return true;
+
+                    default:
+                        break;
+                }
+                return false;
             }
-            return false;
         }
 
-        void Equilibrium:: Translator:: operator()(AutoPtr<XNode> &tree,
-                                                   Library              &lib,
-                                                   Equilibria           &eqs)
+        namespace
+        {
+            class LuaEquilibrium : public Equilibrium
+            {
+            public:
+                inline explicit
+                LuaEquilibrium(const String &eqName,
+                               const size_t  eqIndx,
+                               Lua::VM       &lvm,
+                               const String  &kid) :
+                Equilibrium(eqName,eqIndx),
+                F(lvm,kid)
+                {
+
+                }
+
+                inline virtual ~LuaEquilibrium() noexcept
+                {
+                }
+
+            private:
+                Y_Disable_Copy_And_Assign(LuaEquilibrium);
+                Lua::Function<xreal_t> F;
+                inline virtual xreal_t getK(const xreal_t t)
+                {
+                    const real_t tt  = (real_t)t;
+                    return F(tt);
+                }
+            };
+        }
+
+
+        void Equilibrium:: Translator:: operator()(AutoPtr<XNode> & tree,
+                                                   Library        & lib,
+                                                   Equilibria     & eqs)
         {
             assert(tree.isValid());
             assert(tree->is(CallSign));
-            Actor::List reac,prod;
+            Actor::List  reac,prod;
             const XList &xlist = tree->list(); assert(4==xlist.size);
 
             // extracting name
@@ -74,22 +110,46 @@ namespace Yttrium
             String             kstr = ktkn.str();
             Algorithm::Crop(kstr,isBlank);
 
-            // compiling equilibrium
-            const xreal_t k  = lvm->eval<lua_Number>(kstr);
-            EqPtr         eq(new ConstantEquilibrium(eqName,eqs->size()+1,k));
+            if(kstr.size()<=0) throw Specific::Exception(CallSign, "'%s' has empty constant string",eid);
 
-            for(const Actor *ac=reac.head;ac;ac=ac->next)
-                eq->addReac(ac->nu,ac->sp);
+            Equilibrium * pEq    = 0;
+            const char    kch    = kstr[1];
+            const size_t  eqIndx =eqs->size()+1;
+
+            if( isdigit(kch) ) {
+                const xreal_t k  = lvm->eval<lua_Number>(kstr);
+                pEq =  new ConstantEquilibrium(eqName,eqIndx,k);
+                goto COMPILE;
+            }
+
+            if( isalpha(kch) ) {
+                pEq = new LuaEquilibrium(eqName,eqIndx,lvm,kstr);
+                goto COMPILE;
+            }
 
 
-            for(const Actor *ac=prod.head;ac;ac=ac->next)
-                eq->addProd(ac->nu,ac->sp);
+            throw Specific::Exception(CallSign, "invalid constrant string '%s' for '%s'",kstr.c_str(),eid);
 
-            // adding to eqs
-            eqs.add(eq);
+        COMPILE:
+            {
+                assert(pEq);
 
-            // freeze equilibrium
-            eq->freeze();
+                // compiling equilibrium
+                EqPtr eq(pEq);
+
+                for(const Actor *ac=reac.head;ac;ac=ac->next)
+                    eq->addReac(ac->nu,ac->sp);
+
+
+                for(const Actor *ac=prod.head;ac;ac=ac->next)
+                    eq->addProd(ac->nu,ac->sp);
+
+                // adding to eqs
+                eqs.add(eq);
+
+                // freeze equilibrium
+                eq->freeze();
+            }
 
         }
 
