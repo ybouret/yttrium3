@@ -10,12 +10,19 @@ namespace Yttrium
 {
     namespace Apex
     {
-        inline const Natural &GetN(const Natural &n) noexcept { return   n; }
-        inline const Natural &GetN(const Integer &z) noexcept { return z.n; }
+        inline const Natural &GetN(const Natural &n) noexcept { return   n; } //!< \return natural part \param n natural
+        inline const Natural &GetN(const Integer &z) noexcept { return z.n; } //!< \return natural part \param z integer
 
 
+        //______________________________________________________________________
+        //
+        //
+        //! Simplification of data over denominator
+        //
+        //______________________________________________________________________
         struct Simplify
         {
+            //! \param array array of apn or apz \param denom apn or apz
             template <typename ARRAY, typename T> static
             inline void Array( ARRAY &array, T & denom )
             {
@@ -39,7 +46,6 @@ namespace Yttrium
                     }
                 }
 
-                
                 if(G>1)
                 {
                     Coerce(D) /= G;
@@ -52,6 +58,7 @@ namespace Yttrium
                 }
             }
 
+            //! \param M matrix of apn or apz \param denom apn or apz
             template <typename MATRIX, typename T> static
             inline void Matrix( MATRIX &M, T & denom)
             {

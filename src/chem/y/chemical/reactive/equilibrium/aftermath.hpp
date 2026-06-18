@@ -11,11 +11,12 @@ namespace Yttrium
     namespace Chemical
     {
 
+        //! Equilibrium Status
         enum EqStatus
         {
-            Blocked,
-            Running,
-            Crucial
+            Blocked, //!< a zero concentration on both sides
+            Running, //!< all positive concentrations
+            Crucial  //!< a zero concentration on one side only
         };
 
         class Aftermath

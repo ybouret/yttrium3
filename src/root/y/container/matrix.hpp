@@ -369,11 +369,13 @@ namespace Yttrium
         }
 
 
+        //! \return light array of data
         LightArray<Type> asArray() noexcept {
             if(items<=0) return LightArray<Type>(0,0);
             else         return LightArray<Type>(&row[1][1],items);
         }
 
+        //! \param rhs another matrix \return metrics-wise then element wise comparison
         template <typename U> inline
         bool isEqualTo(const Matrix<U> &rhs) const
         {

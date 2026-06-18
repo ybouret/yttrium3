@@ -96,6 +96,7 @@ namespace Yttrium
                                    const char * const color) const;
 
 
+            //! fill topology \param array compatible destination \param L level
             template <typename ARRAY> inline
             void topology(ARRAY &array, const Level L) const
             {

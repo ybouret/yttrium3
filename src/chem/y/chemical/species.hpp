@@ -35,7 +35,7 @@ namespace Yttrium
             //__________________________________________________________________
             explicit Species(const Formula &, const size_t); //!< setup
             virtual ~Species() noexcept;                     //!< cleanup
-            Y_OSTREAM_PROTO(Species);
+            Y_OSTREAM_PROTO(Species);                        //!< display
             
             //__________________________________________________________________
             //

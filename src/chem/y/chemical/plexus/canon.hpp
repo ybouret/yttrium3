@@ -13,19 +13,41 @@ namespace Yttrium
     namespace Chemical
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! book+list of references
+        //
+        //
+        //______________________________________________________________________
         template <typename T> class Roll : public Object
         {
         public:
-            typedef BookOf<const T,DefaultHashSet> BookType;
-            typedef Handy::BasicLightList<const T> ListType;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef BookOf<const T,DefaultHashSet> BookType; //!< alias
+            typedef Handy::BasicLightList<const T> ListType; //!< alias
 
-            inline explicit Roll() : Object(), book(), list()
-            {
-            }
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            inline explicit Roll() : Object(), book(), list() {} //!< setup
+            inline virtual ~Roll() noexcept {}                   //!< cleanup
 
-            inline virtual ~Roll() noexcept
-            {
-            }
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
 
             //! inscribe species and kept list ordered \param sp species to inscribe
             inline void inscribe(const Species &sp)
@@ -38,12 +60,17 @@ namespace Yttrium
                 }
             }
 
-
-            const BookType book;
-            const ListType list;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const BookType book; //!< database
+            const ListType list; //!< ordered content
 
         private:
-            Y_Disable_Copy_And_Assign(Roll);
+            Y_Disable_Copy_And_Assign(Roll); //!< discarded
         };
 
         typedef Matrix<unsigned> UMatrix; //!< alias
@@ -68,7 +95,7 @@ namespace Yttrium
             typedef Conservation::Law Law;    //!< alias
             typedef Law::List         Laws;   //!< alias
             typedef Roll<Species>     SpRoll; //!< alias
-            typedef AutoPtr<SpRoll>   SpDB;
+            typedef AutoPtr<SpRoll>   SpDB;   //!< alias
 
             //__________________________________________________________________
             //
@@ -85,15 +112,16 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            const UMatrix  Qm;   //!< conservation matrix
-            const size_t & Nc;   //!< Qm.rows
-            const size_t   rg;   //!< rank of Qm
-            const Laws     laws; //!< conservation law(s)
-            const SpDB     conserved;
-            const SpDB     unbounded;
+            const UMatrix  Qm;        //!< conservation matrix
+            const size_t & Nc;        //!< Qm.rows
+            const size_t   rg;        //!< rank of Qm
+            const Laws     laws;      //!< conservation law(s)
+            const SpDB     conserved; //!< conserved species
+            const SpDB     unbounded; //!< unbounded species
+
         private:
-            Y_Disable_Copy_And_Assign(Canon); //!< discarded
-            void collectSpecies(XML::Log &,const SList &);
+            Y_Disable_Copy_And_Assign(Canon);              //!< discarded
+            void collectSpecies(XML::Log &,const SList &); //!< populate conserved/unbounded
         };
 
     }
