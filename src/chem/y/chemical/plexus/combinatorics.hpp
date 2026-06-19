@@ -16,7 +16,9 @@ namespace Yttrium
         class Combinatorics
         {
         public:
-
+            static const char * const CallSign;
+            static const size_t       MinCoeff = 2;
+            
             explicit Combinatorics(XML::Log  &,
                                    Topology   &,
                                    Equilibria &);

@@ -1,15 +1,9 @@
 
 #include "y/chemical/plexus/combinatorics.hpp"
-#include "y/container/cxx/series.hpp"
-
-
-#include "y/coven/compress.hpp"
-#include "y/mkl/algebra/ortho-space.hpp"
-#include "y/counting/combination.hpp"
+#include "y/chemical/plexus/combinatorics/stoichio.hpp"
 #include "y/coven/survey/standard.hpp"
-#include "y/coven/survey/inquiry.hpp"
-
 #include "y/handy/joint/set.hpp"
+#include "y/handy/basic/heavy/list.hpp"
 
 namespace Yttrium
 {
@@ -19,123 +13,19 @@ namespace Yttrium
         {
         }
 
+        const char * const Combinatorics::CallSign = "Combinatorics";
+
+
+       
         namespace
         {
-            static const char   CallSign[] = "Combinatorics";
-            static const size_t MinCoeff = 2;
-
-        }
-
-        void Combinatorics :: buildPrimary(Coven::StandardSurvey &primary,
-                                           XML::Log              &xml,
-                                           Topology              &topo) const
-        {
-            Y_XML_Element(xml,BuildPrimary);
-
-            Matrix<apz>            mu;
-            const size_t           N  = topo.N;     // max equilibria
-            const IMatrix &        nuT = topo.nuT;
-            Y_XMLog(xml,"nuT = " << nuT);
-            if( !Coven::Compress::Build(mu,topo.nuT,Coven::Compress::Duplicate,MinCoeff) )
-            {
-                Y_XMLog(xml,"No multiple used species");
-                return;
-            }
-            const size_t R    = mu.rows;    // Repeated
-            const size_t kmax = Min(R,N-1); // max simultaneous to probe
-            Y_XMLog(xml, "mu  = " << mu);
-            Y_XMLog(xml, "mutiple species : " << R);
-            Y_XMLog(xml, "Hyperplane      : " << N-1);
-            Y_XMLog(xml, "probing up to   : " << kmax);
-
-            size_t replicae = 0;
-            {
-                Matrix<apz> Q;
-                for(size_t k=1;k<=kmax;++k)
-                {
-                    Y_XML_Element_Attr(xml,Probing,Y_XML_Attr(k));
-                    Matrix<apz> P(k,N);
-                    Combination comb(R,k);
-                    do
-                    {
-                        for(size_t i=k;i>0;--i)
-                            P[i].load( mu[ comb[i] ] );
-                        Y_XMLog(xml,"P = " << P );
-                        if( !MKL::OrthoSpace::Eval(Q,P))
-                        {
-                            Y_XMLog(xml, "|_no orthogonal space!");
-                            continue;
-                        }
-
-                        Coven::Inquiry<Coven::StandardSurvey> replica(Q,2,Coven::Tribes::Optimizing);
-                        replicae += (*replica)->size;
-                        replica.sendTo(primary);
-
-                    } while( comb.next() );
-                }
-            }
-
-            Y_XMLog(xml, "Sampling : " << std::setw(6) << primary.sampling);
-            Y_XMLog(xml, "Replicae : " << std::setw(6) << replicae);
-            Y_XMLog(xml, "To Build : " << std::setw(6) << primary->size);
-        }
+           
+           
 
 
-        namespace
-        {
-            typedef CxxArray<int> iArray;
-
-            class Stoichio : public Object, public iArray
-            {
-            public:
-                typedef CxxListOf<Stoichio> List;
-
-                explicit Stoichio(const iArray &arr) :
-                Object(),
-                iArray(CopyOf,arr),
-                next(0),
-                prev(0)
-                {
-                }
-
-                Stoichio *next;
-                Stoichio *prev;
-
-            private:
-                Y_Disable_Copy_And_Assign(Stoichio);
-            };
-
-            class StoDB : public Proxy<const Stoichio::List>
-            {
-            public:
-                inline explicit StoDB() noexcept  : list() {}
-                inline virtual ~StoDB() noexcept {}
-
-                bool mayUse(const iArray &rhs)
-                {
-                    for(const Stoichio *node=list.head;node;node=node->next)
-                    {
-                        const Stoichio &lhs = *node;
-                        if( lhs == rhs )
-                            return false;
-                    }
-
-                    list.pushTail(new Stoichio(rhs));
-                    return true;
-                }
-
-
-            private:
-                Y_Disable_Copy_And_Assign(StoDB);
-                Y_Proxy_Decl() { return list; }
-
-                CxxListOf<Stoichio> list;
-
-            };
-
-
-            typedef Handy::BasicHeavyList<int> IList;
-
+            typedef Handy::BasicHeavyList<int> iList;
+            typedef Handy::JointSet<size_t>    iSet;
+            typedef iSet::CacheType            iCache;
         }
 
 
@@ -148,8 +38,7 @@ namespace Yttrium
             Coven::StandardSurvey  primary(MinCoeff);
             buildPrimary(primary,xml,topo);
 
-            typedef Handy::JointSet<size_t> iSet;
-            typedef iSet::CacheType         iCache;
+
 
 
             const size_t  N  = topo.N;  // eqs
@@ -162,8 +51,8 @@ namespace Yttrium
             //
             //
             //--------------------------------------------------------------
-            StoDB  stoDB;
-            iCache cache;
+            StoichioDB  stoDB;
+            iCache      cache;
             iSet   input(cache);
             iSet   output(cache);
             iArray sto(M);
@@ -248,7 +137,7 @@ namespace Yttrium
                 if(!use) continue;
 
                 EList emx;
-                IList ecf;
+                iList ecf;
                 for(ENode *en=topo.group->head;en;en=en->next)
                 {
                     Equilibrium &eq = **en;
@@ -262,17 +151,18 @@ namespace Yttrium
                 std::cerr << "|_ecf=" << ecf << std::endl;
 
                 SList smx;
-                IList scf;
+                iList scf;
                 for(SNode *sn=topo.slist->head;sn;sn=sn->next)
                 {
                     const Species &sp = **sn;
                     const size_t   sj = sp.indx[SubLevel];
                     const int      cf = sto[sj];
                     if(!cf) continue;
-                    smx << sp;;
+                    smx << sp;
                     scf << cf;
                 }
-
+                std::cerr << "|_smx=" << smx << std::endl;
+                std::cerr << "|_scf=" << scf << std::endl;
 
 
 
