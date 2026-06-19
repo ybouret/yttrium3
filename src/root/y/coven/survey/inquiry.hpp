@@ -143,6 +143,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
+            //! send content to primary survey \param primary target survey
             inline void sendTo(SURVEY &primary) noexcept
             {
                 primary.fusion(survey);

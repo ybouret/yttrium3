@@ -73,7 +73,7 @@ namespace Yttrium
                                             const XReadable & Karray) :
         Equilibrium(eqName,eqIndx),
         itop(elist->size),
-        coef(ilist),
+        coef(ilist->size),
         numer(),
         denom(),
         topK( Karray )
@@ -81,11 +81,14 @@ namespace Yttrium
             assert(elist->size==ilist->size);
             {
                 size_t ei = 1;
-                for(const ENode *en=elist->head;en;en=en->next,++ei)
+                const INode     *in=ilist->head;
+                for(const ENode *en=elist->head;en;en=en->next,++ei,in=in->next)
                 {
                     Coerce(itop[ei]) = (**en).indx[TopLevel];
+                    Coerce(coef[ei]) = **in;
                 }
             }
+
 
         }
 
@@ -125,7 +128,19 @@ namespace Yttrium
 
         xreal_t MixedEquilibrium:: getK(const xreal_t)
         {
-
+            numer.ld1();
+            denom.ld1();
+            for(size_t i=itop.size();i>0;--i)
+            {
+                const size_t  II  = itop[i];
+                const xreal_t KI = topK[II];
+                const int     cf = coef[i]; assert(cf);
+                if(cf>0)
+                    numer.power(KI, (size_t)  cf);
+                else
+                    denom.power(KI, (size_t) -cf);
+            }
+            return numer()/denom();
         }
 
 

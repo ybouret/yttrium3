@@ -40,7 +40,7 @@ namespace Yttrium
             //__________________________________________________________________
             explicit Equilibrium(const String &, const size_t); //!< setup
             virtual ~Equilibrium() noexcept;                    //!< cleanup
-            Y_OSTREAM_PROTO(Equilibrium);
+            Y_OSTREAM_PROTO(Equilibrium);                       //!< display name
 
             //__________________________________________________________________
             //
