@@ -28,9 +28,7 @@ namespace Yttrium
         {
             fillSList(slist,eq.reac);
             fillSList(slist,eq.prod);
-
-            Indexed::TopHSort(slist);
-            Indexed::SubLabel(slist);
+            Indexed::SubLabel(Indexed::TopHSort(slist));
         }
 
         Topology:: Topology(XML::Log &xml,const EList &g) :

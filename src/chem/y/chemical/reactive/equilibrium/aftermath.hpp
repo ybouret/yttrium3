@@ -2,7 +2,7 @@
 //! \file
 
 #ifndef Y_Chemical_Aftermath_Included
-#define Y_Chemical_Equilibrium_Format_Included 1
+#define Y_Chemical_Aftermath_Included 1
 
 #include "y/chemical/reactive/components.hpp"
 
@@ -11,7 +11,14 @@ namespace Yttrium
     namespace Chemical
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
         //! Equilibrium Status
+        //
+        //
+        //______________________________________________________________________
         enum EqStatus
         {
             Blocked, //!< a zero concentration on both sides
@@ -19,16 +26,37 @@ namespace Yttrium
             Crucial  //!< a zero concentration on one side only
         };
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! 1D equilibrium solver
+        //
+        //
+        //______________________________________________________________________
         class Aftermath
         {
         public:
-            static const char * const CallSign;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const char * const CallSign; //!< "Aftermath"
             class                     Engine;
 
-            Aftermath(const EqStatus, const xreal_t) noexcept;
-            Aftermath(const Aftermath &) noexcept;
-            ~Aftermath() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            Aftermath(const EqStatus, const xreal_t) noexcept; //!< setup
+            Aftermath(const Aftermath &)             noexcept; //!< duplicate
+            ~Aftermath()                             noexcept; //!< cleanup
 
+            
             static Aftermath Compute(XWritable        &Cout,
                                      const XReadable  &Cinp,
                                      const Components &eq,
@@ -37,12 +65,21 @@ namespace Yttrium
                                      XMul &            xmul,
                                      XAdd &            xadd);
 
-            const EqStatus st;
-            const xreal_t  xi;
-            
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const EqStatus st; //!< status
+            const xreal_t  xi; //!< required xi
+
         private:
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             Y_Disable_Assign(Aftermath);
             Aftermath OnProdOnly(XWritable &, Components &, const xreal_t, XMul &);
+#endif
+            
         };
 
     }

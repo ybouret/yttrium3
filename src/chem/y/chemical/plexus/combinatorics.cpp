@@ -73,6 +73,7 @@ namespace Yttrium
                 input.free();
                 output.free();
                 sto.ld(0);
+                w.ld(0);
 
                 //--------------------------------------------------------------
                 //
@@ -180,15 +181,20 @@ namespace Yttrium
                 //std::cerr << "|_smx=" << smx << std::endl;
                 //std::cerr << "|_scf=" << scf << std::endl;
 
-                const EqPtr eq( MixedEquilibrium::Create(eqs->size()+1,emx,ecf, smx, scf, K) );
+                EqPtr eq( MixedEquilibrium::Create(eqs->size()+1,emx,ecf, smx, scf, K) );
                 eqs.add(eq);
                 if(xml.verbose)
                     eqs.EqFormat::print(xml() << "[+] ",*eq,false,0.0);
+                Coerce(topo.elist) << *eq;
             }
+
+            Indexed::SubLabel( Indexed::TopHSort( Coerce(topo.elist) ) );
+
 
             Y_XML_Element(xml,Summary);
             Y_XMLog(xml,"initial equilibria: " << topo.group->size);
             Y_XMLog(xml,"created equilibria: " << stoDB->size);
+            Y_XMLog(xml,"all     equilibria: " << topo.elist->size);
 
 
 
