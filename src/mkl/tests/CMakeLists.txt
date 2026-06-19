@@ -1,7 +1,9 @@
 
 Y_CreateTest(mkl
 algebra
-root)
+root
+minimize
+)
 
 Y_LinkLibraries(test-mkl y-mkl)
 #target_link_libraries(test-root)
@@ -20,3 +22,5 @@ Y_UTEST(algebra:svd)
 Y_UTEST(chem)
 
 Y_UTEST(zroot)
+
+Y_UTEST(min:parabolic)

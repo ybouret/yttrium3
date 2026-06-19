@@ -1,5 +1,7 @@
 
 #include "y/chemical/plexus/conservation/law.hpp"
+#include "y/string/format.hpp"
+#include "y/stream/output.hpp"
 
 namespace Yttrium
 {
@@ -35,6 +37,57 @@ namespace Yttrium
                 }
                 return xadd();
             }
+
+            namespace
+            {
+                static inline String actorHTML(const Actor &a)
+                {
+                    if(a.nu>1)
+                    {
+                        return Formatted::Get("%u",a.nu) + a.sp.makeHTML();
+                    }
+                    else
+                    {
+                        return a.sp.makeHTML();
+                    }
+                }
+            }
+
+
+            String Law:: html() const
+            {
+                assert( (**this).size >= 2);
+                const Actor * ac=(**this).head; assert(ac);
+                String        res = actorHTML(*ac);
+                for(ac=ac->next;ac;ac=ac->next)
+                {
+                    res += '+' + actorHTML(*ac);
+                }
+                return res;
+            }
+
+
+            OutputStream & Law:: viz(OutputStream &     fp,
+                                     const char * const color) const
+            {
+                nodeName(fp) << '[';
+                {
+                    const String label = html();
+                    Label(fp,label);
+                }
+                if(color) fp << ",color=\"" << color << "\"";
+                Endl(fp << ']');
+
+                for(const Actor *ac=(**this).head;ac;ac=ac->next)
+                {
+                    to(&ac->sp,fp) << '[';
+                    fp << "arrowhead=oinv";
+                    if(color) fp << ",color=\"" << color << "\"";
+                    Endl(fp << ']');
+                }
+                return fp;
+            }
+
 
 
         }

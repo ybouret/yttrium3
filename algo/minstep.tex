@@ -39,6 +39,21 @@ $$
 
 If $\gamma\approx\alpha$ or $\beta\approx0$ or $\beta\approx1$, then $u_m \approx \frac{1}{2}$.
 
+\item Parabolic fit:
+\begin{equation}
+	D^2 = \dfrac{1}{2} \sum_{i=1}^{N} \left[F_i - (A+Bx_i+Cx_i^2)\right]^2
+\end{equation}
+
+\begin{equation}
+\left\lbrace
+\begin{array}{lclcl}
+	\partial_A D^2 & = & - \sum_i  \left[F_i - (A+Bx_i+Cx_i^2)\right]      & \implies & \sum_i     F_i = N\,A + (\sum_i x_i)\, B + (\sum_i x_i^2)\, C \\
+	\partial_B D^2 & = & - \sum_i  x_i\left[F_i - (A+Bx_i+Cx_i^2)\right]   & \implies & \sum_i x_i F_i = (\sum_i x_i)\,A + (\sum_i x_i^2)\, B + (\sum_i x_i^3)\, C \\
+	\partial_C D^2 & = & - \sum_i  x_i^2\left[F_i - (A+Bx_i+Cx_i^2)\right] & \implies & \sum_i x_i^2 F_i = (\sum_i x_i^2)\,A + (\sum_i x_i^3)\, B + (\sum_i x_i^4)\, C \\
+\end{array}
+\right.
+\end{equation}
+
 \end{enumerate}
 
 

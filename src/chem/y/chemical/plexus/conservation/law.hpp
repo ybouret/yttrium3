@@ -20,7 +20,7 @@ namespace Yttrium
             //
             //
             //__________________________________________________________________
-            class Law : public Actors
+            class Law : public Actors, public Vizible
             {
             public:
                 //______________________________________________________________
@@ -44,10 +44,14 @@ namespace Yttrium
                 //______________________________________________________________
                 //
                 //
-                // C++
+                // Methods
                 //
                 //______________________________________________________________
                 xreal_t excess(const XReadable &, const Level, XAdd &) const;
+
+                String         html() const;
+                OutputStream & viz(OutputStream &fp, const char * const color) const;
+
 
                 //______________________________________________________________
                 //
