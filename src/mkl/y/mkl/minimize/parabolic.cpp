@@ -70,6 +70,11 @@ namespace Yttrium
                     }
                 }
                 const T bomb = beta * omba;
+
+                Y_BZero(uu);
+                Y_BZero(ff);
+
+
                 if(verbose) {
                     std::cerr << "-- Parabolic::Step(" << x << "," << f << ")" << std::endl;
                     std::cerr << "-- alpha = " << alpha << " | gamma = " << gamma << std::endl;
