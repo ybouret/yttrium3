@@ -6,7 +6,7 @@
 #include "y/chemical/reactive/equilibrium/partition.hpp"
 #include "y/chemical/plexus/warden.hpp"
 #include "y/chemical/plexus/combinatorics.hpp"
-
+#include "y/container/sequence/vector.hpp"
 
 
 using namespace Yttrium;
@@ -31,12 +31,14 @@ Y_UTEST(cluster)
     XML::Log  xml(std::cerr,verbose);
     Partition part(xml,eqs);
 
+    Vector<xreal_t> K;
+
     for(const EGroup *g=part.party.head;g;g=g->next)
     {
         Topology      topo(xml,*g);
         Conservations conservations(xml,topo);
         Warden        warden(xml,conservations);
-        Combinatorics combinatorics(xml,topo,eqs);
+        Combinatorics combinatorics(xml,topo,eqs,K);
     }
 
     std::cerr << std::endl;

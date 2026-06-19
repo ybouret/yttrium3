@@ -5,16 +5,13 @@
 #ifndef Y_Chemical_Equilibrium_Group_Included
 #define Y_Chemical_Equilibrium_Group_Included 1
 
-#include "y/chemical/reactive/equilibrium.hpp"
-#include "y/handy/basic/light/list.hpp"
+#include "y/chemical/reactive/elist.hpp"
 
 namespace Yttrium
 {
     namespace Chemical
     {
-        typedef Handy::BasicLightList<Equilibrium> EList; //!< alias
-        typedef EList::NodeType                    ENode; //!< alias
-
+        
         //______________________________________________________________________
         //
         //

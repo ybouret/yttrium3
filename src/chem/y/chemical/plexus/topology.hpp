@@ -3,6 +3,8 @@
 
 #include "y/chemical/reactive/equilibrium/group.hpp"
 #include "y/chemical/reactive/equilibrium/format.hpp"
+#include "y/chemical/slist.hpp"
+
 #include "y/container/matrix.hpp"
 #include "y/xml/element.hpp"
 
@@ -11,8 +13,8 @@ namespace Yttrium
     namespace Chemical
     {
         typedef Matrix<int> IMatrix;
-        typedef Handy::BasicLightList<const Species> SList;
-        typedef SList::NodeType                      SNode;
+
+        
 
         //______________________________________________________________________
         //
