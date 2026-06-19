@@ -103,7 +103,22 @@ namespace Yttrium
 
             // populate
             assert(smx->size==scf->size);
-            
+            assert(smx->size>0);
+
+            {
+                const SNode * sn = smx->head;
+                const INode * in = scf->head;
+                for(;sn;sn=sn->next,in=in->next)
+                {
+                    assert(sn);
+                    assert(in);
+                    const int cf = **in; assert(cf);
+                    if(cf>0) mx->addProd( (unsigned) +cf, **sn);
+                    else     mx->addReac( (unsigned) -cf, **sn);
+                }
+            }
+
+            // done!
             mx->freeze();
             return mx;
         }

@@ -135,7 +135,7 @@ namespace Yttrium
                 if(! input.contains(output) )        throw Specific:: Exception(CallSign,"corrupted weights!!");
                 if( (input -= output)->size() <= 0 ) throw Specific:: Exception(CallSign,"no missing species detected!!");
                 const bool use = stoDB.mayUse(sto);
-                Y_XMLog(xml, (use ? "[+]" : "[-]") << " " << w << " : \\" << input << " : " << sto);
+                //Y_XMLog(xml, (use ? "[+]" : "[-]") << " " << w << " : \\" << input << " : " << sto);
                 if(!use) continue;
 
                 //--------------------------------------------------------------
@@ -156,8 +156,8 @@ namespace Yttrium
                     emx << eq;
                     ecf << cf;
                 }
-                std::cerr << "|_emx=" << emx << std::endl;
-                std::cerr << "|_ecf=" << ecf << std::endl;
+                //std::cerr << "|_emx=" << emx << std::endl;
+                //std::cerr << "|_ecf=" << ecf << std::endl;
 
                 //--------------------------------------------------------------
                 //
@@ -177,12 +177,13 @@ namespace Yttrium
                     smx << sp;
                     scf << cf;
                 }
-                std::cerr << "|_smx=" << smx << std::endl;
-                std::cerr << "|_scf=" << scf << std::endl;
+                //std::cerr << "|_smx=" << smx << std::endl;
+                //std::cerr << "|_scf=" << scf << std::endl;
 
-                const String mxName = MixedEquilibrium::MakeName(emx,ecf);
-                Y_XMLog(xml, mxName);
-
+                const EqPtr eq( MixedEquilibrium::Create(eqs->size()+1,emx,ecf, smx, scf, K) );
+                eqs.add(eq);
+                if(xml.verbose)
+                    eqs.EqFormat::print(xml() << "[+] ",*eq,false,0.0);
             }
 
             Y_XML_Element(xml,Summary);
