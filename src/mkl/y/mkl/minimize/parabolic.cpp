@@ -30,9 +30,14 @@ namespace Yttrium
             _1_4(0.25f),
             _3_4(0.75f),
             uu(),
+            xx(),
             ff(),
             verbose(false)
             {
+                Y_BZero(uu);
+                Y_BZero(xx);
+                Y_BZero(ff);
+
             }
 
             virtual ~Code() noexcept
@@ -43,6 +48,14 @@ namespace Yttrium
                           Triplet<T>    &f,
                           Function<T,T> &F)
             {
+                //--------------------------------------------------------------
+                //
+                //
+                // initializing metrics
+                //
+                //
+                //--------------------------------------------------------------
+
                 /*      */ assert(x.isOrdered());    assert(f.isLocalMinimum());
                 x.sort(f); assert(x.isIncreasing()); assert(f.isLocalMinimum());
                 const T alpha = Max(f.a-f.b,zero);
@@ -51,8 +64,8 @@ namespace Yttrium
                 T       omba  = one;
                 if(x.b<=x.a)
                 {
-                    beta = zero;
-                    omba = one;
+                    // beta = zero;
+                    // omba = one;
                 }
                 else
                 {
@@ -71,8 +84,6 @@ namespace Yttrium
                 }
                 const T bomb = beta * omba;
 
-                Y_BZero(uu);
-                Y_BZero(ff);
 
 
                 if(verbose) {
@@ -81,74 +92,68 @@ namespace Yttrium
                     std::cerr << "-- beta  = " << beta << " @" << x.b << std::endl;
                 }
 
-                // initialize
+                //--------------------------------------------------------------
+                //
+                //
+                // initialize sampling
+                //
+                //
+                //--------------------------------------------------------------
                 uu[0] = zero; uu[1] = beta; uu[2] = one;
+                xx[0] = x.a;  xx[1] = x.b;  xx[2] = x.c;
                 ff[0] = f.a;  ff[1] = f.b;  ff[2] = f.c;
                 nn    = 3;
 
 
+                //--------------------------------------------------------------
+                //
+                //
+                // build guess, with failsafe
+                //
+                //
+                //--------------------------------------------------------------
                 switch( Sign::Of(alpha,gamma) )
                 {
-                    case __Zero__:
-                        goto FAILSAFE;
-
+                    case __Zero__: return failsafe(x,f,F);
                     case Negative:
                         assert(alpha<gamma);
                         if(AlmostEqual<T>::Are(bomb,zero))
-                            goto FAILSAFE;
+                            return failsafe(x,f,F);
                         else
                         {
                             const T eta = alpha/gamma;
                             const T um  = Clamp(zero,half*(one - bomb*(one-eta)/(beta+omba*eta)),half);
-                            sample(F,um,x); // towards 0
-                            //findShrinkage(beta,um,F,x);
-                            goto EXTRACT;
-                        }
+                            const T fm = sample(F,um,x); // towards 0
+                            if(fm<=f.b)
+                            {
+                                (void) sample(F,half*um,x); // towards 0
+                            }
+                            else
+                            {
+                                (void) sample(F,half*(beta+one),x); // backwards
+                            }
+                        } break;
 
                     case Positive:
                         assert(alpha>gamma);
                         if(AlmostEqual<T>::Are(bomb,zero))
-                            goto FAILSAFE;
+                            return failsafe(x,f,F);
                         else
                         {
                             const T eta = gamma/alpha;
                             const T um  = Clamp(half,half*(one - bomb*(eta-one)/(eta*beta+omba)),one);
-                            sample(F,um,x); // towards 1
-                            //findShrinkage(beta,um,F,x);
-                            goto EXTRACT;
-                        }
-
+                            const T fm = sample(F,um,x); // towards 1
+                            if( fm <= f.b )
+                            {
+                                (void) sample(F,half*(um+one),x); // towards 1
+                            }
+                            else
+                            {
+                                (void) sample(F,half*beta,x);    // backwards
+                            }
+                        } break;
                 }
 
-
-
-
-            FAILSAFE:
-                if(verbose) std::cerr << "-- FAILSAFE!" << std::endl;
-                sample(F,half,x);
-                sample(F,_1_4,x);
-                sample(F,_3_4,x);
-
-            EXTRACT:
-                Core::HSort::Make(uu,nn,Sign::Increasing<T>,ff);
-                if(verbose)
-                {
-                    std::cerr << "-- Extracting from " << nn << " points" << std::endl;
-                    for(size_t i=0;i<nn;++i)
-                    {
-                        const T xx  = u2x(uu[i],x);
-                        std::cerr << std::setw(10) << uu[i] << " => " << std::setw(10) << xx << " => " << ff[i] << std::endl;
-                    }
-                }
-
-                {
-                    OutputFile fp("para-step.data");
-                    for(size_t i=0;i<nn;++i)
-                    {
-                        const T xx  = u2x(uu[i],x);
-                        fp("%g %g\n", (double)xx, (double) ff[i]);
-                    }
-                }
                 return extract(x,f);
             }
 
@@ -162,6 +167,7 @@ namespace Yttrium
             const T _3_4;
 
             T      uu[NMAX];
+            T      xx[NMAX];
             T      ff[NMAX];
             bool   verbose;
 
@@ -170,33 +176,15 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(Code);
 
-            void findShrinkage(const T            beta,
-                               const T            um,
-                               Function<T,T>    & F,
-                               const Triplet<T> & x)
-
+            inline T failsafe(Triplet<T>    &x,
+                              Triplet<T>    &f,
+                              Function<T,T> &F)
             {
-
-                switch( Sign::Of(beta,um) )
-                {
-                    case __Zero__:
-                        sample(F,half*um,x);
-                        sample(F,half*(one+um),x);
-                        break;
-
-                    case Negative: assert(beta<um);
-                        sample(F,half*(beta+um),x);
-                        sample(F,half*(one+um),x);
-                        break;
-
-                    case Positive: assert(um<beta);
-                        sample(F,half*um,x);
-                        sample(F,half*(beta+um),x);
-                        break;
-
-
-                }
-
+                if(verbose) std::cerr << "-- failsafe!" << std::endl;
+                sample(F,half,x);
+                sample(F,_1_4,x);
+                sample(F,_3_4,x);
+                return extract(x,f);
             }
 
             inline T u2x(const T u, const Triplet<T> &x) const noexcept
@@ -204,48 +192,82 @@ namespace Yttrium
                 return Clamp(x.a,(one-u) * x.a + u * x.c,x.c);
             }
 
-            inline void sample(Function<T,T>    & F,
+            inline T sample(Function<T,T>    & F,
                                const T            u,
                                const Triplet<T> & x)
             {
                 assert(nn<NMAX);
-                const T xx  = u2x(u,x);
-                uu[nn] = u;
-                ff[nn] = F(xx);
-                if(verbose) std::cerr << "-- sample " << xx << " => " << ff[nn] << std::endl;
+                const T res = ( ff[nn] = F(xx[nn] = u2x(uu[nn]=u,x)) );
+                if(verbose) std::cerr << "-- sample " << xx[nn] << " => " << ff[nn] << std::endl;
                 ++nn;
+                return res;
             }
 
+
+
             inline T extract(Triplet<T> &x,
-                             Triplet<T> &f) const
+                             Triplet<T> &f)
             {
                 assert(nn>=3);
-                const size_t top = nn-1;
-                size_t       ib  = 1;
-                T            fb  = ff[1];
-                for(size_t i=2;i<top;++i)
+                Core::HSort::Make(xx,nn,Sign::Increasing<T>,ff);
+
                 {
-                    const T ft = ff[i];
-                    if(ft<fb)
+                    OutputFile fp("para-step.data");
+                    for(size_t i=0;i<nn;++i)
                     {
-                        fb = ft;
-                        ib = i;
+                        fp("%.15g %.15g\n", (double) xx[i], (double) ff[i]);
                     }
                 }
 
-                const size_t ia = ib-1;
-                const size_t ic = ib+1;
-                const T xa = u2x(uu[ia],x);
-                const T xb = u2x(uu[ib],x);
-                const T xc = u2x(uu[ic],x);
+                // locate minimum
+                size_t im = 0;
+                T      fm = ff[0];
+                const size_t nm = nn-1;
+                for(size_t it=1;it<=nm;++it)
+                {
+                    const T ft = ff[it];
+                    if(ft<fm)
+                    {
+                        fm = ft;
+                        im = it;
+                    }
+                }
 
-                x.a = xa; f.a = ff[ia];
-                x.b = xb; f.b = ff[ib];
-                x.c = xc; f.c = ff[ic];
+                if(0==im)
+                {
+                    // on the left
+                    x.a = x.b = xx[0];
+                    x.c = xx[1];
+                    f.a = f.b = ff[0];
+                    f.c = ff[1];
+                    assert(x.isIncreasing());
+                    assert(f.isLocalMinimum());
+                }
+                else
+                {
+                    if(nm==im)
+                    {
+                        // on the right
+                        x.b = x.c = xx[im];
+                        f.b = f.c = ff[im];
+                        --im;
+                        x.a = xx[im];
+                        f.a = xx[im];
+                        assert(x.isIncreasing());
+                        assert(f.isLocalMinimum());
+                    }
+                    else
+                    {
+                        // generic
+                        assert(im>0); assert(im<nn-1);
+                        const size_t ia=im-1;
+                        x.load(&xx[ia]); assert(x.isIncreasing());
+                        f.load(&ff[ia]); assert(f.isLocalMinimum());
+                    }
+                }
+                if(verbose) std::cerr << "-- " << x << " => " << f << std::endl;
+                return x.c-x.a;
 
-                assert(x.isIncreasing());
-                assert(f.isLocalMinimum());
-                return x.c - x.a;
             }
 
         };

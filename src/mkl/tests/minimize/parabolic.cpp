@@ -28,11 +28,10 @@ namespace
         Triplet<T> f = { F<T>(x.a), F<T>(x.b), F<T>(x.c) };
         Parabolic<T> parabolic;
         parabolic.verbose = true;
-        for(size_t i=1;i<=10;++i)
+        for(size_t i=1;i<=3;++i)
         {
             const T w = parabolic.step(F<T>,x,f);
             std::cerr << "w=" << w << std::endl;
-            break;
         }
 
     }
