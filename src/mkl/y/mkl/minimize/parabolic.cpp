@@ -89,7 +89,7 @@ namespace Yttrium
                 if(verbose) {
                     std::cerr << "-- Parabolic::Step(" << x << "," << f << ")" << std::endl;
                     std::cerr << "-- alpha = " << alpha << " | gamma = " << gamma << std::endl;
-                    std::cerr << "-- beta  = " << beta << " @" << x.b << std::endl;
+                    std::cerr << "-- beta  = " << beta << std::endl;
                 }
 
                 //--------------------------------------------------------------
@@ -122,14 +122,19 @@ namespace Yttrium
                         else
                         {
                             const T eta = alpha/gamma;
-                            const T um  = Clamp(zero,half*(one - bomb*(one-eta)/(beta+omba*eta)),half);
+                            const T um  = Clamp(zero,half*(one - bomb*(one-eta)/(beta+omba*eta)),half); // <1/2
                             const T fm = sample(F,um,x); // towards 0
+                            if(verbose)  std::cerr << "-- um=" << um << ", fm=" << fm << " @" << u2x(um,x) << " / " << f.b << std::endl;
                             if(fm<=f.b)
                             {
+                                // new minimum
+                                if(verbose) std::cerr << "-- new minimum towards 0" << std::endl;
                                 (void) sample(F,half*um,x); // towards 0
                             }
                             else
                             {
+                                // beta is still maximum
+                                if(verbose) std::cerr << "-- beta is still minimum" << std::endl;
                                 (void) sample(F,half*(beta+one),x); // backwards
                             }
                         } break;
@@ -141,14 +146,17 @@ namespace Yttrium
                         else
                         {
                             const T eta = gamma/alpha;
-                            const T um  = Clamp(half,half*(one - bomb*(eta-one)/(eta*beta+omba)),one);
-                            const T fm = sample(F,um,x); // towards 1
+                            const T um  = Clamp(half,half*(one + bomb*(one-eta)/(eta*beta+omba)),one); // > 1/2
+                            const T fm  = sample(F,um,x); // towards 1
+                            if(verbose)  std::cerr << "-- um=" << um << ", fm=" << fm << " @" << u2x(um,x) << " / " << f.b << std::endl;
                             if( fm <= f.b )
                             {
+                                if(verbose) std::cerr << "-- new minimum towards 1" << std::endl;
                                 (void) sample(F,half*(um+one),x); // towards 1
                             }
                             else
                             {
+                                if(verbose) std::cerr << "-- beta is still minimum" << std::endl;
                                 (void) sample(F,half*beta,x);    // backwards
                             }
                         } break;
@@ -212,11 +220,16 @@ namespace Yttrium
                 Core::HSort::Make(xx,nn,Sign::Increasing<T>,ff);
 
                 {
+                    
+                }
+
+                {
                     OutputFile fp("para-step.data");
                     for(size_t i=0;i<nn;++i)
                     {
                         fp("%.15g %.15g\n", (double) xx[i], (double) ff[i]);
                     }
+                    fp("%.15g %.15g\n", (double) xx[0], (double) ff[0]);
                 }
 
                 // locate minimum
