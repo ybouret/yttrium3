@@ -2,6 +2,7 @@
 #include "y/core/clamp.hpp"
 #include "y/mkl/xreal.hpp"
 #include "y/mkl/api/almost-equal.hpp"
+#include "y/mkl/api/half.hpp"
 #include "y/object.hpp"
 #include "y/type/destroy.hpp"
 #include "y/cameo/addition.hpp"
@@ -95,74 +96,101 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 //
                 //
-                // initialize sampling
+                // initialize sampling with endpoints
                 //
                 //
                 //--------------------------------------------------------------
-                uu[0] = zero; uu[1] = beta; uu[2] = one;
-                xx[0] = x.a;  xx[1] = x.b;  xx[2] = x.c;
-                ff[0] = f.a;  ff[1] = f.b;  ff[2] = f.c;
-                nn    = 3;
+                uu[0] = zero;  uu[1] = one;
+                xx[0] = x.a;   xx[1] = x.c;
+                ff[0] = f.a;   ff[1] = f.c;
+                nn    = 2;
 
-
-                //--------------------------------------------------------------
-                //
-                //
-                // build guess, with failsafe
-                //
-                //
-                //--------------------------------------------------------------
-                switch( Sign::Of(alpha,gamma) )
+                if( AlmostEqual<T>::Are(bomb,zero))
                 {
-                    case __Zero__: return failsafe(x,f,F);
-                    case Negative:
-                        assert(alpha<gamma);
-                        if(AlmostEqual<T>::Are(bomb,zero))
-                            return failsafe(x,f,F);
-                        else
-                        {
+                    //----------------------------------------------------------
+                    //
+                    // beta is not significant => resampling
+                    //
+                    //----------------------------------------------------------
+                    if(verbose) std::cerr << "-- resampling" << std::endl;
+                    sample(F,half,x);
+                    sample(F,_1_4,x);
+                    sample(F,_3_4,x);
+                }
+                else
+                {
+                    //----------------------------------------------------------
+                    //
+                    // beta if significant : populate with :
+                    // - beta
+                    // - half the largest segment
+                    //
+                    //----------------------------------------------------------
+                    uu[2] = beta;
+                    xx[2] = x.b;
+                    ff[2] = f.b;
+                    nn    = 3;
+
+#if 0
+                    switch( Sign::Of(beta,half) )
+                    {
+                        case Negative: // sample (beta+1)/2
+                            std::cerr << "-- between " << beta << " and " << one << std::endl;
+                            assert(beta<half);
+                            sample(F,Half<T>::Of(one,beta),x);
+                            break;
+
+                        case __Zero__: // beta==1/2
+                            sample(F,_1_4,x);
+                            sample(F,_3_4,x);
+                            break;
+
+                        case Positive: // sample beta/2
+                            std::cerr << "-- between " << zero << " and " << beta << std::endl;
+                            assert(beta>half);
+                            sample(F,Half<T>::Of(beta),x);
+                            break;
+
+                    }
+
+                    switch( Sign::Of(alpha,gamma) )
+                    {
+                        case __Zero__:
+                            std::cerr << "-- symetric => sample 1/2" << std::endl;
+                            sample(F,half,x); break;
+
+                        case Negative: assert(alpha<gamma); {
+                            std::cerr << "-- towards 0" << std::endl;
                             const T eta = alpha/gamma;
                             const T um  = Clamp(zero,half*(one - bomb*(one-eta)/(beta+omba*eta)),half); // <1/2
                             const T fm = sample(F,um,x); // towards 0
                             if(verbose)  std::cerr << "-- um=" << um << ", fm=" << fm << " @" << u2x(um,x) << " / " << f.b << std::endl;
                             if(fm<=f.b)
                             {
-                                // new minimum
-                                if(verbose) std::cerr << "-- new minimum towards 0" << std::endl;
-                                (void) sample(F,half*um,x); // towards 0
-                            }
-                            else
-                            {
-                                // beta is still maximum
-                                if(verbose) std::cerr << "-- beta is still minimum" << std::endl;
-                                (void) sample(F,half*(beta+one),x); // backwards
+                                if(verbose) std::cerr << "-- new minimum!" << std::endl;
                             }
                         } break;
-
-                    case Positive:
-                        assert(alpha>gamma);
-                        if(AlmostEqual<T>::Are(bomb,zero))
-                            return failsafe(x,f,F);
-                        else
-                        {
+                        case Positive: {
+                            std::cerr << "-- towards 1" << std::endl;
                             const T eta = gamma/alpha;
                             const T um  = Clamp(half,half*(one + bomb*(one-eta)/(eta*beta+omba)),one); // > 1/2
                             const T fm  = sample(F,um,x); // towards 1
                             if(verbose)  std::cerr << "-- um=" << um << ", fm=" << fm << " @" << u2x(um,x) << " / " << f.b << std::endl;
-                            if( fm <= f.b )
+                            if(fm<=f.b)
                             {
-                                if(verbose) std::cerr << "-- new minimum towards 1" << std::endl;
-                                (void) sample(F,half*(um+one),x); // towards 1
-                            }
-                            else
-                            {
-                                if(verbose) std::cerr << "-- beta is still minimum" << std::endl;
-                                (void) sample(F,half*beta,x);    // backwards
+                                if(verbose) std::cerr << "-- new minimum!" << std::endl;
                             }
                         } break;
+
+                    }
+#endif
+
                 }
 
+
                 return extract(x,f);
+
+
             }
 
 
@@ -184,16 +212,6 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(Code);
 
-            inline T failsafe(Triplet<T>    &x,
-                              Triplet<T>    &f,
-                              Function<T,T> &F)
-            {
-                if(verbose) std::cerr << "-- failsafe!" << std::endl;
-                sample(F,half,x);
-                sample(F,_1_4,x);
-                sample(F,_3_4,x);
-                return extract(x,f);
-            }
 
             inline T u2x(const T u, const Triplet<T> &x) const noexcept
             {
@@ -201,12 +219,12 @@ namespace Yttrium
             }
 
             inline T sample(Function<T,T>    & F,
-                               const T            u,
-                               const Triplet<T> & x)
+                            const T            u,
+                            const Triplet<T> & x)
             {
                 assert(nn<NMAX);
                 const T res = ( ff[nn] = F(xx[nn] = u2x(uu[nn]=u,x)) );
-                if(verbose) std::cerr << "-- sample " << xx[nn] << " => " << ff[nn] << std::endl;
+                if(verbose) std::cerr << "-- sample u=" << u << " => x=" << xx[nn] << " => " << ff[nn] << std::endl;
                 ++nn;
                 return res;
             }
@@ -220,7 +238,7 @@ namespace Yttrium
                 Core::HSort::Make(xx,nn,Sign::Increasing<T>,ff);
 
                 {
-                    
+
                 }
 
                 {
