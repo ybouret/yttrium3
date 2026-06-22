@@ -36,6 +36,11 @@ if( NOT "" STREQUAL "${Y_UnitTests}")
 endif()
 
 #add embedded foreign libraries
+set(ThirdParty "")
+macro(MakeThirdParty target)
+	list( APPEND ThirdParty ${target} PARENT_SCOPE )
+endmacro()
+
 add_subdirectory(y)
 
 #add CLI tools

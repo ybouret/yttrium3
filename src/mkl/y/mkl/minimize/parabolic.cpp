@@ -28,6 +28,8 @@ namespace Yttrium
             one(1),
             zero(0),
             half(0.5f),
+            //C( (3.0f - sqrtf(5.0f))/2.0f ),
+            //R(one-C),
             _1_4(0.25f),
             _3_4(0.75f),
             uu(),
@@ -100,49 +102,35 @@ namespace Yttrium
                 //
                 //
                 //--------------------------------------------------------------
-                uu[0] = zero;  uu[1] = one;
-                xx[0] = x.a;   xx[1] = x.c;
-                ff[0] = f.a;   ff[1] = f.c;
-                nn    = 2;
+                uu[0] = zero;
+                xx[0] = x.a;
+                ff[0] = f.a;
 
-                if( AlmostEqual<T>::Are(bomb,zero))
-                {
-                    //----------------------------------------------------------
-                    //
-                    // beta is not significant => resampling
-                    //
-                    //----------------------------------------------------------
-                    if(verbose) std::cerr << "-- resampling" << std::endl;
-                    sample(F,half,x);
-                    sample(F,_1_4,x);
-                    sample(F,_3_4,x);
-                }
-                else
-                {
-                    //----------------------------------------------------------
-                    //
-                    // beta if significant : populate with :
-                    // - beta
-                    // - half the largest segment
-                    //
-                    //----------------------------------------------------------
-                    uu[2] = beta;
-                    xx[2] = x.b;
-                    ff[2] = f.b;
-                    nn    = 3;
+                uu[1] = beta;
+                xx[1] = x.b;
+                ff[1] = f.b;
 
-#if 0
+
+                uu[2] = one;
+                xx[2] = x.c;
+                ff[2] = f.c;
+
+                nn    = 3;
+
+                if( AlmostEqual<T>::Are(alpha,gamma) )
+                {
+                    std::cerr << "-- symetric => sample 1/2" << std::endl;
                     switch( Sign::Of(beta,half) )
                     {
+                        case __Zero__: // beta==1/2
+                            sample(F,_1_4,x);
+                            sample(F,_3_4,x);
+                            break;
+
                         case Negative: // sample (beta+1)/2
                             std::cerr << "-- between " << beta << " and " << one << std::endl;
                             assert(beta<half);
                             sample(F,Half<T>::Of(one,beta),x);
-                            break;
-
-                        case __Zero__: // beta==1/2
-                            sample(F,_1_4,x);
-                            sample(F,_3_4,x);
                             break;
 
                         case Positive: // sample beta/2
@@ -150,47 +138,33 @@ namespace Yttrium
                             assert(beta>half);
                             sample(F,Half<T>::Of(beta),x);
                             break;
-
                     }
 
-                    switch( Sign::Of(alpha,gamma) )
+                }
+                else
+                {
+                    if(alpha<gamma)
                     {
-                        case __Zero__:
-                            std::cerr << "-- symetric => sample 1/2" << std::endl;
-                            sample(F,half,x); break;
-
-                        case Negative: assert(alpha<gamma); {
-                            std::cerr << "-- towards 0" << std::endl;
-                            const T eta = alpha/gamma;
-                            const T um  = Clamp(zero,half*(one - bomb*(one-eta)/(beta+omba*eta)),half); // <1/2
-                            const T fm = sample(F,um,x); // towards 0
-                            if(verbose)  std::cerr << "-- um=" << um << ", fm=" << fm << " @" << u2x(um,x) << " / " << f.b << std::endl;
-                            if(fm<=f.b)
-                            {
-                                if(verbose) std::cerr << "-- new minimum!" << std::endl;
-                            }
-                        } break;
-                        case Positive: {
-                            std::cerr << "-- towards 1" << std::endl;
-                            const T eta = gamma/alpha;
-                            const T um  = Clamp(half,half*(one + bomb*(one-eta)/(eta*beta+omba)),one); // > 1/2
-                            const T fm  = sample(F,um,x); // towards 1
-                            if(verbose)  std::cerr << "-- um=" << um << ", fm=" << fm << " @" << u2x(um,x) << " / " << f.b << std::endl;
-                            if(fm<=f.b)
-                            {
-                                if(verbose) std::cerr << "-- new minimum!" << std::endl;
-                            }
-                        } break;
-
+                        std::cerr << "-- towards 0" << std::endl;
+                        const T eta = alpha/gamma;
+                        const T um  = Clamp(zero,half*(one - bomb*(one-eta)/(beta+omba*eta)),half); // <1/2
+                        sample(F,um,x); // towards 0
                     }
-#endif
+                    else
+                    {
+                        assert(gamma<alpha);
+                        std::cerr << "-- towards 1" << std::endl;
+                        const T eta = gamma/alpha;
+                        const T um  = Clamp(half,half*(one + bomb*(one-eta)/(eta*beta+omba)),one); // > 1/2
+                        sample(F,um,x); // towards 1
+                    }
+                    postProcess(F,beta,f.b);
 
                 }
 
 
+
                 return extract(x,f);
-
-
             }
 
 
@@ -212,21 +186,38 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(Code);
 
+            inline void postProcess(Function<T,T> & F,
+                                    const T         beta,
+                                    const T         fmin)
+
+            {
+                const size_t top = nn-1;
+                const T      um  = uu[top];
+                const T      fm  = ff[top];
+                if(fm<fmin)
+                {
+                    if(verbose) std::cerr << "-- new minimum" << std::endl;
+                }
+                else
+                {
+                    if(verbose) std::cerr << "-- overshoot" << std::endl;
+                }
+
+            }
 
             inline T u2x(const T u, const Triplet<T> &x) const noexcept
             {
                 return Clamp(x.a,(one-u) * x.a + u * x.c,x.c);
             }
 
-            inline T sample(Function<T,T>    & F,
-                            const T            u,
-                            const Triplet<T> & x)
+            inline void sample(Function<T,T>    & F,
+                               const T            u,
+                               const Triplet<T> & x)
             {
                 assert(nn<NMAX);
                 const T res = ( ff[nn] = F(xx[nn] = u2x(uu[nn]=u,x)) );
                 if(verbose) std::cerr << "-- sample u=" << u << " => x=" << xx[nn] << " => " << ff[nn] << std::endl;
                 ++nn;
-                return res;
             }
 
 
@@ -237,18 +228,8 @@ namespace Yttrium
                 assert(nn>=3);
                 Core::HSort::Make(xx,nn,Sign::Increasing<T>,ff);
 
-                {
 
-                }
 
-                {
-                    OutputFile fp("para-step.data");
-                    for(size_t i=0;i<nn;++i)
-                    {
-                        fp("%.15g %.15g\n", (double) xx[i], (double) ff[i]);
-                    }
-                    fp("%.15g %.15g\n", (double) xx[0], (double) ff[0]);
-                }
 
                 // locate minimum
                 size_t im = 0;
@@ -297,8 +278,26 @@ namespace Yttrium
                     }
                 }
                 if(verbose) std::cerr << "-- " << x << " => " << f << std::endl;
-                return x.c-x.a;
 
+
+
+                {
+                    OutputFile fp("para-step.data");
+                    for(size_t i=0;i<nn;++i)
+                    {
+                        fp("%.15g %.15g\n", (double) xx[i], (double) ff[i]);
+                    }
+                    fp("%.15g %.15g\n", (double) xx[0], (double) ff[0]);
+                    fp << "\n";
+                    for(size_t i=1;i<=3;++i)
+                    {
+                        fp("%.15g %.15g\n", (double) x[i], (double) f[i]);
+                    }
+                    fp("%.15g %.15g\n", (double) x[1], (double) f[1]);
+
+                }
+
+                return x.c-x.a;
             }
 
         };

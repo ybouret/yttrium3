@@ -49,9 +49,16 @@ Y_UTEST(min_parabolic)
 
 
     testPara<float>();
+
+    //const double C = (3.0 - sqrt(5.0))/2;
+    //const double R = 1.0 - C;
+    //std::cerr << C << " / " << R << std::endl;
+
     return 0;
     
     testPara< XReal<long double> >();
+
+
 
 }
 Y_UDONE()
