@@ -38,8 +38,10 @@ endif()
 #add embedded foreign libraries
 set(ThirdParty "")
 macro(MakeThirdParty target)
-	list( APPEND ThirdParty ${target} PARENT_SCOPE )
+	#list( APPEND ThirdParty ${target} PARENT_SCOPE )
 endmacro()
+
+cmake_print_variables(ThirdParty)
 
 add_subdirectory(y)
 

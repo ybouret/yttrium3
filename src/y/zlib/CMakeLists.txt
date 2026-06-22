@@ -314,6 +314,6 @@ if(ZLIB_BUILD_TESTING)
     add_subdirectory(test)
 endif(ZLIB_BUILD_TESTING)
 
-ThirdParty(staticzlib)
+MakeThirdParty(staticzlib)
 
 add_subdirectory(contrib)
