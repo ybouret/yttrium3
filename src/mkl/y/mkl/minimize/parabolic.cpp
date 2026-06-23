@@ -303,56 +303,67 @@ namespace Yttrium
 
             }
 
+
+
             inline void balance(Triplet<T>    & x,
                                 Triplet<T>    & f,
                                 Function<T,T> & F)
             {
                 assert(x.isOrdered());
                 assert(f.isLocalMinimum());
-                const T lw = Max(x.b-x.a,zero);
-                const T rw = Max(x.c-x.b,zero);
-                switch( Sign::Of(lw,rw) )
+                while(true)
                 {
-                    case __Zero__: return;
-                    case Negative: assert(lw<rw); {
-                        if(verbose) std::cerr << "-- balance right" << std::endl;
-                        const T xn = Half<T>::Of(x.b,x.c);
-                        const T fn = F(xn);
-                        show(xn,fn);
-                        if(fn<=f.b)
-                        {
-                            x.a = x.b; f.a = f.b;
-                            x.b = xn;  f.b = fn;
-                            assert(x.isOrdered());
-                            assert(f.isLocalMinimum());
-                        }
-                        else
-                        {
-                            x.c = xn; f.c = fn;
-                            assert(x.isOrdered());
-                            assert(f.isLocalMinimum());
-                        }
+                    const T lw = Max(x.b-x.a,zero);
+                    const T rw = Max(x.c-x.b,zero);
+                    T wmin = lw;
+                    T wmax = rw;
+                    if(wmin>wmax) Swap(wmin,wmax);
+                    if(wmax<=wmin+wmin) break;
+                    
+                    switch( Sign::Of(lw,rw) )
+                    {
+                        case __Zero__: return;
+                        case Negative: assert(lw<rw); {
+                            if(verbose) std::cerr << "-- balance right" << std::endl;
+                            const T xn = Half<T>::Of(x.b,x.c);
+                            const T fn = F(xn);
+                            show(xn,fn);
+                            if(fn<=f.b)
+                            {
+                                x.a = x.b; f.a = f.b;
+                                x.b = xn;  f.b = fn;
+                                assert(x.isOrdered());
+                                assert(f.isLocalMinimum());
+                            }
+                            else
+                            {
+                                x.c = xn; f.c = fn;
+                                assert(x.isOrdered());
+                                assert(f.isLocalMinimum());
+                            }
 
-                    } break;
-                    case Positive: assert(rw<lw); {
-                        if(verbose) std::cerr << "-- balance left" << std::endl;
-                        const T xn = Half<T>::Of(x.a,x.b);
-                        const T fn = F(xn);
-                        show(xn,fn);
-                        if(fn<=f.b)
-                        {
-                            x.c = x.b; f.c = f.b;
-                            x.b = xn;  f.b = fn;
-                            assert(x.isOrdered());
-                            assert(f.isLocalMinimum());
-                        }
-                        else
-                        {
-                            x.a = xn; f.a = fn;
-                            assert(x.isOrdered());
-                            assert(f.isLocalMinimum());
-                        }
-                    } break;
+                        } break;
+                        case Positive: assert(rw<lw); {
+                            if(verbose) std::cerr << "-- balance left" << std::endl;
+                            const T xn = Half<T>::Of(x.a,x.b);
+                            const T fn = F(xn);
+                            show(xn,fn);
+                            if(fn<=f.b)
+                            {
+                                x.c = x.b; f.c = f.b;
+                                x.b = xn;  f.b = fn;
+                                assert(x.isOrdered());
+                                assert(f.isLocalMinimum());
+                            }
+                            else
+                            {
+                                x.a = xn; f.a = fn;
+                                assert(x.isOrdered());
+                                assert(f.isLocalMinimum());
+                            }
+                        } break;
+                    }
+
                 }
 
                 {
@@ -363,6 +374,7 @@ namespace Yttrium
                     fp("%.15g %.15g 4\n", (double) x[1], (double) f[1]);
                     fp << "\n";
                 }
+
             }
 
         };
