@@ -20,7 +20,9 @@ namespace Yttrium
         class Parabolic<T> :: Code  : public Object
         {
         public:
-            static const size_t        NMAX = 8;
+            static const size_t   NMAX = 8;
+            static const unsigned W = 12;
+
             typedef Cameo::Addition<T> XAdd;
 
             explicit Code() :
@@ -28,18 +30,12 @@ namespace Yttrium
             one(1),
             zero(0),
             half(0.5f),
-            //C( (3.0f - sqrtf(5.0f))/2.0f ),
-            //R(one-C),
             _1_4(0.25f),
             _3_4(0.75f),
-            uu(),
             xx(),
             ff(),
             verbose(false)
             {
-                Y_BZero(uu);
-                Y_BZero(xx);
-                Y_BZero(ff);
 
             }
 
@@ -51,24 +47,34 @@ namespace Yttrium
                           Triplet<T>    &f,
                           Function<T,T> &F)
             {
-                //--------------------------------------------------------------
-                //
-                //
-                // initializing metrics
-                //
-                //
-                //--------------------------------------------------------------
 
+                //--------------------------------------------------------------
+                //
+                //
+                // initialize metrics
+                //
+                //
+                //--------------------------------------------------------------
                 /*      */ assert(x.isOrdered());    assert(f.isLocalMinimum());
                 x.sort(f); assert(x.isIncreasing()); assert(f.isLocalMinimum());
-                const T alpha = Max(f.a-f.b,zero);
-                const T gamma = Max(f.c-f.b,zero);
-                T       beta  = zero;
-                T       omba  = one;
+                const T alpha  = Max(f.a-f.b,zero);
+                const T gamma  = Max(f.c-f.b,zero);
+                T       beta   = zero;
+                T       omba   = one;
+                bool    middle = false;
+
+                x.save(xx);
+                f.save(ff);
+                nn=3;
+
+
                 if(x.b<=x.a)
                 {
                     // beta = zero;
                     // omba = one;
+                    assert(alpha<=zero);
+                    ff[1] = F(xx[1] = Half<T>::Of(x.a,x.c) );
+                    middle = true;
                 }
                 else
                 {
@@ -76,6 +82,8 @@ namespace Yttrium
                     {
                         beta = one;
                         omba = zero;
+                        assert(gamma<=zero);
+                        ff[1] = F(xx[1] = Half<T>::Of(x.a,x.c) );
                     }
                     else
                     {
@@ -85,86 +93,91 @@ namespace Yttrium
                         omba = one-beta;
                     }
                 }
-                const T bomb = beta * omba;
+               // const T bomb = beta * omba;
 
 
-
-                if(verbose) {
-                    std::cerr << "-- Parabolic::Step(" << x << "," << f << ")" << std::endl;
-                    std::cerr << "-- alpha = " << alpha << " | gamma = " << gamma << std::endl;
-                    std::cerr << "-- beta  = " << beta << std::endl;
+                {
+                    OutputFile fp("parabolic.data");
+                    const unsigned np = 1000;
+                    for(unsigned i=0;i<=np;++i)
+                    {
+                        const T  w = ( (double)i )/np;
+                        const T  X = x.a * (one-w) + x.c * w;
+                        fp("%.15g %.15g\n", (double) X, (double) F(X));
+                    }
                 }
 
-                //--------------------------------------------------------------
-                //
-                //
-                // initialize sampling with endpoints
-                //
-                //
-                //--------------------------------------------------------------
-                uu[0] = zero;
-                xx[0] = x.a;
-                ff[0] = f.a;
+                if(verbose) {
+                    std::cerr << "-- Parabolic step" << std::endl;
+                    std::cerr << "-- f(" << std::setw(W) << x.a << ")=" << std::setw(W) << f.a << " => alpha = " << alpha << std::endl;
+                    std::cerr << "-- f(" << std::setw(W) << x.b << ")=" << std::setw(W) << f.b << " => beta  = " << beta << std::endl;
+                    std::cerr << "-- f(" << std::setw(W) << x.c << ")=" << std::setw(W) << f.c << " => gamma = " << gamma << std::endl;
+                }
 
-                uu[1] = beta;
-                xx[1] = x.b;
-                ff[1] = f.b;
-
-
-                uu[2] = one;
-                xx[2] = x.c;
-                ff[2] = f.c;
-
-                nn    = 3;
-
-                if( AlmostEqual<T>::Are(alpha,gamma) )
+                if(middle)
                 {
-                    std::cerr << "-- symetric => sample 1/2" << std::endl;
-                    switch( Sign::Of(beta,half) )
-                    {
-                        case __Zero__: // beta==1/2
-                            sample(F,_1_4,x);
-                            sample(F,_3_4,x);
-                            break;
-
-                        case Negative: // sample (beta+1)/2
-                            std::cerr << "-- between " << beta << " and " << one << std::endl;
-                            assert(beta<half);
-                            sample(F,Half<T>::Of(one,beta),x);
-                            break;
-
-                        case Positive: // sample beta/2
-                            std::cerr << "-- between " << zero << " and " << beta << std::endl;
-                            assert(beta>half);
-                            sample(F,Half<T>::Of(beta),x);
-                            break;
-                    }
-
+                    // beta <=0 || beta >= 1
+                    std::cerr << "-- middle was append" << std::endl;
+                    std::cerr << "-- f(" << std::setw(W) << xx[1] << ")=" << std::setw(W) << ff[1]  << std::endl;
+                    sample(_1_4, x, F);
+                    sample(_3_4, x, F);
                 }
                 else
                 {
-                    if(alpha<gamma)
+                    if( AlmostEqual<T>::Are(alpha,gamma) )
                     {
-                        std::cerr << "-- towards 0" << std::endl;
-                        const T eta = alpha/gamma;
-                        const T um  = Clamp(zero,half*(one - bomb*(one-eta)/(beta+omba*eta)),half); // <1/2
-                        sample(F,um,x); // towards 0
+                        //------------------------------------------------------
+                        //
+                        // symmetric guess
+                        //
+                        //------------------------------------------------------
+                        sample(half,x,F);
+                        switch( Sign::Of(beta,half) )
+                        {
+                            case Negative:
+                                assert(beta<half);
+                                sample(Half<T>::Of(x.b,x.c),F);
+                                break;
+
+                            case Positive:
+                                assert(half<beta);
+                                sample(Half<T>::Of(x.a,x.b),F);
+                                break;
+
+                            case __Zero__:
+                                sample(Half<T>::Of(x.a,x.b),F);
+                                sample(Half<T>::Of(x.b,x.c),F);
+                                break;
+                        }
                     }
                     else
                     {
-                        assert(gamma<alpha);
-                        std::cerr << "-- towards 1" << std::endl;
-                        const T eta = gamma/alpha;
-                        const T um  = Clamp(half,half*(one + bomb*(one-eta)/(eta*beta+omba)),one); // > 1/2
-                        sample(F,um,x); // towards 1
+                        //----------------------------------------------------------
+                        //
+                        // parabolic guess
+                        //
+                        //----------------------------------------------------------
+                        if(alpha<gamma)
+                        {
+                            if(verbose) std::cerr << "-- towards x.a=" <<  x.a << std::endl;
+                            const T eta = alpha/gamma;
+                            const T um  = Clamp(zero,half*(one - beta*omba*(one-eta)/(beta+omba*eta)),half); // <1/2
+                            sample(um,x,F); // towards 0
+                        }
+                        else
+                        {
+                            assert(gamma<alpha);
+                            if(verbose) std::cerr << "-- towards x.c=" << x.c << std::endl;
+                            const T eta = gamma/alpha;
+                            const T um  = Clamp(half,half*(one + beta*omba*(one-eta)/(eta*beta+omba)),one); // > 1/2
+                            sample(um,x,F); // towards 1
+                        }
                     }
-                    postProcess(F,beta,f.b,x);
-
                 }
 
 
 
-                return extract(x,f);
+                return one;
             }
 
 
@@ -176,7 +189,6 @@ namespace Yttrium
             const T _1_4;
             const T _3_4;
 
-            T      uu[NMAX];
             T      xx[NMAX];
             T      ff[NMAX];
             bool   verbose;
@@ -186,70 +198,24 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(Code);
 
-            inline void postProcess(Function<T,T>    & F,
-                                    const T            beta,
-                                    const T            fmin,
-                                    const Triplet<T> & x)
 
+            void sample(const T xt, Function<T,T> &F)
             {
-                const size_t top   = nn-1;
-                const T      unew  = uu[top];
-                const T      fnew  = ff[top];
-                if(fnew<fmin)
-                {
-                    if(verbose) std::cerr << "-- new minimum" << std::endl;
-                    switch( Sign::Of(unew,beta) )
-                    {
-                        case __Zero__:
-                            sample(F, Half<T>::Of(beta),     x);
-                            sample(F, Half<T>::Of(beta,one), x);
-                            break;
-
-                        case Negative:
-                            assert(unew<beta);
-                            if(verbose) std::cerr << "-- before beta" << std::endl;
-                            probe(Half<T>::Of(unew),unew,F,fmin,x);
-                            break;
-                            break;
-
-                        case Positive:
-                            assert(unew>beta);
-                            if(verbose) std::cerr << "-- after beta" << std::endl;
-                            probe(Half<T>::Of(unew,one),unew,F,fmin,x);
-                            break;
-                    }
-                }
-                else
-                {
-                    if(verbose) std::cerr << "-- overshoot" << std::endl;
-                    exit(1);
-                }
+                ff[nn] = F(xx[nn] = xt);
+                if(verbose) std::cerr << "-- f(" << std::setw(W) << xx[nn] << ")=" << std::setw(W) << ff[nn]  << std::endl;
+                ++nn;
             }
 
-            inline void probe(T                  ut,
-                              const T            unew,
-                              Function<T,T>    & F,
-                              const T            fmin,
-                              const Triplet<T> & x)
+            void sample(const T wc, const Triplet<T> &x, Function<T,T> &F)
             {
-                for(;;)
-                {
-                    const T xt = u2x(ut,x);
-                    const T ft = F(xt);
-                    std::cerr << "-- probe: " << ft << " @" << xt << " / " << fmin << " @" << x.b << std::endl;
-                    if(ft<=fmin)
-                    {
-                        xx[nn] = xt;
-                        uu[nn] = ut;
-                        ff[nn] = ft;
-                        ++nn;
-                        break;
-                    }
-                    ut = Half<T>::Of(unew,ut);
-                }
+                assert(nn<NMAX);
+                const T wa = one-wc;
+                sample(Clamp(x.a,x.a*wa+x.c*wc,x.c),F);
             }
 
 
+
+#if 0
             inline T u2x(const T u, const Triplet<T> &x) const noexcept
             {
                 return Clamp(x.a,(one-u) * x.a + u * x.c,x.c);
@@ -332,16 +298,18 @@ namespace Yttrium
                     }
                     fp("%.15g %.15g\n", (double) xx[0], (double) ff[0]);
                     fp << "\n";
-                    for(size_t i=1;i<=3;++i)
-                    {
-                        fp("%.15g %.15g\n", (double) x[i], (double) f[i]);
-                    }
-                    fp("%.15g %.15g\n", (double) x[1], (double) f[1]);
+
+                    //for(size_t i=1;i<=3;++i)
+                    //{
+                    //    fp("%.15g %.15g\n", (double) x[i], (double) f[i]);
+                    //}
+                    //fp("%.15g %.15g\n", (double) x[1], (double) f[1]);
 
                 }
 
                 return x.c-x.a;
             }
+#endif
 
         };
 

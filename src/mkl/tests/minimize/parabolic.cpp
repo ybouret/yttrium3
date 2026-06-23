@@ -1,8 +1,10 @@
 
 #include "y/mkl/minimize/parabolic.hpp"
+#include "y/mkl/minimize/track.hpp"
 #include "y/utest/run.hpp"
 #include "y/mkl/xreal.hpp"
 #include "y/mkl/api/sqrt.hpp"
+#include "y/mkl/api/half.hpp"
 #include "y/stream/libc/output.hpp"
 
 using namespace Yttrium;
@@ -28,31 +30,40 @@ namespace
         Triplet<T> f = { F<T>(x.a), F<T>(x.b), F<T>(x.c) };
         Parabolic<T> parabolic;
         parabolic.verbose = true;
-        for(size_t i=1;i<=3;++i)
+        for(size_t i=1;i<=1;++i)
         {
             const T w = parabolic.step(F<T>,x,f);
             std::cerr << "w=" << w << std::endl << std::endl;
         }
-
     }
 
-}
-Y_UTEST(min_parabolic)
-{
+
+
+
+   
+   
+
+    template <typename T> static inline
+    void testMinTrack()
     {
-        OutputFile fp("parabolic.data");
-        for(double x=-1;x<=1;x+=0.001)
+        Triplet<T> x = { -0.8f, 0 , 0.7f };
+        Triplet<T> f = { F<T>(x.a), F<T>(x.b), F<T>(x.c) };
+        MinTrack<T> mt;
+        for(size_t i=1;i<=5;++i)
         {
-            fp("%g %g\n",x,F<double>(x));
+            const T w = mt.step(F<T>,x,f);
+            std::cerr << "w=" << w << std::endl << std::endl;
         }
     }
 
 
-    testPara<float>();
 
-    //const double C = (3.0 - sqrt(5.0))/2;
-    //const double R = 1.0 - C;
-    //std::cerr << C << " / " << R << std::endl;
+}
+Y_UTEST(min_parabolic)
+{
+
+
+    testPara<float>();
 
     return 0;
     
