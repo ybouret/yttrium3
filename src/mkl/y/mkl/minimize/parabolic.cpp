@@ -93,7 +93,7 @@ namespace Yttrium
                         omba = one-beta;
                     }
                 }
-               // const T bomb = beta * omba;
+                // const T bomb = beta * omba;
 
 
                 {
@@ -105,22 +105,24 @@ namespace Yttrium
                         const T  X = x.a * (one-w) + x.c * w;
                         fp("%.15g %.15g\n", (double) X, (double) F(X));
                     }
+                    OutputFile::Overwrite("para-step.data");
                 }
 
                 if(verbose) {
                     std::cerr << "-- Parabolic step" << std::endl;
-                    std::cerr << "-- f(" << std::setw(W) << x.a << ")=" << std::setw(W) << f.a << " => alpha = " << alpha << std::endl;
-                    std::cerr << "-- f(" << std::setw(W) << x.b << ")=" << std::setw(W) << f.b << " => beta  = " << beta << std::endl;
-                    std::cerr << "-- f(" << std::setw(W) << x.c << ")=" << std::setw(W) << f.c << " => gamma = " << gamma << std::endl;
+                    show(x.a,f.a);
+                    show(x.b,f.b);
+                    show(x.c,f.c);
                 }
 
                 if(middle)
                 {
                     // beta <=0 || beta >= 1
                     std::cerr << "-- middle was append" << std::endl;
-                    std::cerr << "-- f(" << std::setw(W) << xx[1] << ")=" << std::setw(W) << ff[1]  << std::endl;
+                    show(xx[1],ff[1]);
                     sample(_1_4, x, F);
                     sample(_3_4, x, F);
+                    extract(x,f);
                 }
                 else
                 {
@@ -149,6 +151,7 @@ namespace Yttrium
                                 sample(Half<T>::Of(x.b,x.c),F);
                                 break;
                         }
+                        extract(x,f);
                     }
                     else
                     {
@@ -163,6 +166,7 @@ namespace Yttrium
                             const T eta = alpha/gamma;
                             const T um  = Clamp(zero,half*(one - beta*omba*(one-eta)/(beta+omba*eta)),half); // <1/2
                             sample(um,x,F); // towards 0
+
                         }
                         else
                         {
@@ -172,12 +176,14 @@ namespace Yttrium
                             const T um  = Clamp(half,half*(one + beta*omba*(one-eta)/(eta*beta+omba)),one); // > 1/2
                             sample(um,x,F); // towards 1
                         }
+                        extract(x,f);
+                        balance(x,f,F);
                     }
                 }
 
 
 
-                return one;
+                return x.c - x.a;
             }
 
 
@@ -198,46 +204,33 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(Code);
 
+            static inline void show(const T X, const T FX)
+            {
+                std::cerr << "-- f(" << std::setw(W) << X << ")=" << std::setw(W) << FX  << std::endl;
+            }
 
-            void sample(const T xt, Function<T,T> &F)
+            inline void sample(const T xt, Function<T,T> &F)
             {
                 ff[nn] = F(xx[nn] = xt);
-                if(verbose) std::cerr << "-- f(" << std::setw(W) << xx[nn] << ")=" << std::setw(W) << ff[nn]  << std::endl;
+                if(verbose) show(xx[nn],ff[nn]);
                 ++nn;
             }
 
-            void sample(const T wc, const Triplet<T> &x, Function<T,T> &F)
+            inline void sample(const T wc, const Triplet<T> &x, Function<T,T> &F)
             {
                 assert(nn<NMAX);
                 const T wa = one-wc;
-                sample(Clamp(x.a,x.a*wa+x.c*wc,x.c),F);
+                return sample(Clamp(x.a,x.a*wa+x.c*wc,x.c),F);
             }
 
 
 
-#if 0
-            inline T u2x(const T u, const Triplet<T> &x) const noexcept
-            {
-                return Clamp(x.a,(one-u) * x.a + u * x.c,x.c);
-            }
 
-            inline void sample(Function<T,T>    & F,
-                               const T            u,
-                               const Triplet<T> & x)
-            {
-                assert(nn<NMAX);
-                ff[nn] = F(xx[nn] = u2x(uu[nn]=u,x));
-                if(verbose) std::cerr << "-- sample u=" << u << " => x=" << xx[nn] << " => " << ff[nn] << std::endl;
-                ++nn;
-            }
-
-            inline T extract(Triplet<T> &x,
-                             Triplet<T> &f)
+            inline void extract(Triplet<T> &x,
+                                Triplet<T> &f)
             {
                 assert(nn>=3);
                 Core::HSort::Make(xx,nn,Sign::Increasing<T>,ff);
-
-
 
 
                 // locate minimum
@@ -291,25 +284,86 @@ namespace Yttrium
 
 
                 {
-                    OutputFile fp("para-step.data");
+                    OutputFile fp("para-step.data",true);
                     for(size_t i=0;i<nn;++i)
                     {
-                        fp("%.15g %.15g\n", (double) xx[i], (double) ff[i]);
+                        fp("%.15g %.15g 2\n", (double) xx[i], (double) ff[i]);
                     }
-                    fp("%.15g %.15g\n", (double) xx[0], (double) ff[0]);
+                    fp("%.15g %.15g 2\n", (double) xx[0], (double) ff[0]);
                     fp << "\n";
 
-                    //for(size_t i=1;i<=3;++i)
-                    //{
-                    //    fp("%.15g %.15g\n", (double) x[i], (double) f[i]);
-                    //}
-                    //fp("%.15g %.15g\n", (double) x[1], (double) f[1]);
+
+                    fp("%.15g %.15g 3\n", (double) x[1], (double) f[1]);
+                    fp("%.15g %.15g 3\n", (double) x[2], (double) f[2]);
+                    fp("%.15g %.15g 3\n", (double) x[3], (double) f[3]);
+                    fp("%.15g %.15g 3\n", (double) x[1], (double) f[1]);
+                    fp << "\n";
 
                 }
 
-                return x.c-x.a;
             }
-#endif
+
+            inline void balance(Triplet<T>    & x,
+                                Triplet<T>    & f,
+                                Function<T,T> & F)
+            {
+                assert(x.isOrdered());
+                assert(f.isLocalMinimum());
+                const T lw = Max(x.b-x.a,zero);
+                const T rw = Max(x.c-x.b,zero);
+                switch( Sign::Of(lw,rw) )
+                {
+                    case __Zero__: return;
+                    case Negative: assert(lw<rw); {
+                        if(verbose) std::cerr << "-- balance right" << std::endl;
+                        const T xn = Half<T>::Of(x.b,x.c);
+                        const T fn = F(xn);
+                        show(xn,fn);
+                        if(fn<=f.b)
+                        {
+                            x.a = x.b; f.a = f.b;
+                            x.b = xn;  f.b = fn;
+                            assert(x.isOrdered());
+                            assert(f.isLocalMinimum());
+                        }
+                        else
+                        {
+                            x.c = xn; f.c = fn;
+                            assert(x.isOrdered());
+                            assert(f.isLocalMinimum());
+                        }
+
+                    } break;
+                    case Positive: assert(rw<lw); {
+                        if(verbose) std::cerr << "-- balance left" << std::endl;
+                        const T xn = Half<T>::Of(x.a,x.b);
+                        const T fn = F(xn);
+                        show(xn,fn);
+                        if(fn<=f.b)
+                        {
+                            x.c = x.b; f.c = f.b;
+                            x.b = xn;  f.b = fn;
+                            assert(x.isOrdered());
+                            assert(f.isLocalMinimum());
+                        }
+                        else
+                        {
+                            x.a = xn; f.a = fn;
+                            assert(x.isOrdered());
+                            assert(f.isLocalMinimum());
+                        }
+                    } break;
+                }
+
+                {
+                    OutputFile fp("para-step.data",true);
+                    fp("%.15g %.15g 4\n", (double) x[1], (double) f[1]);
+                    fp("%.15g %.15g 4\n", (double) x[2], (double) f[2]);
+                    fp("%.15g %.15g 4\n", (double) x[3], (double) f[3]);
+                    fp("%.15g %.15g 4\n", (double) x[1], (double) f[1]);
+                    fp << "\n";
+                }
+            }
 
         };
 
