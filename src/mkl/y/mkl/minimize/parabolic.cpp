@@ -158,7 +158,7 @@ namespace Yttrium
                         const T um  = Clamp(half,half*(one + bomb*(one-eta)/(eta*beta+omba)),one); // > 1/2
                         sample(F,um,x); // towards 1
                     }
-                    postProcess(F,beta,f.b);
+                    postProcess(F,beta,f.b,x);
 
                 }
 
@@ -186,21 +186,40 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(Code);
 
-            inline void postProcess(Function<T,T> & F,
-                                    const T         beta,
-                                    const T         fmin)
+            inline void postProcess(Function<T,T>    & F,
+                                    const T            beta,
+                                    const T            fmin,
+                                    const Triplet<T> & x)
 
             {
-                const size_t top = nn-1;
-                const T      um  = uu[top];
-                const T      fm  = ff[top];
-                if(fm<fmin)
+                const size_t top   = nn-1;
+                const T      unew  = uu[top];
+                const T      fnew  = ff[top];
+                if(fnew<fmin)
                 {
                     if(verbose) std::cerr << "-- new minimum" << std::endl;
+                    switch( Sign::Of(unew,beta) )
+                    {
+                        case __Zero__:
+                            sample(F, Half<T>::Of(beta),     x);
+                            sample(F, Half<T>::Of(beta,one), x);
+                            break;
+
+                        case Negative:
+                            assert(unew<beta);
+                            sample(F, Half<T>::Of(unew), x);
+                            break;
+
+                        case Positive:
+                            assert(unew>beta);
+                            sample(F, Half<T>::Of(unew,one), x);
+                            break;
+                    }
                 }
                 else
                 {
                     if(verbose) std::cerr << "-- overshoot" << std::endl;
+                    exit(1);
                 }
 
             }
@@ -215,13 +234,11 @@ namespace Yttrium
                                const Triplet<T> & x)
             {
                 assert(nn<NMAX);
-                const T res = ( ff[nn] = F(xx[nn] = u2x(uu[nn]=u,x)) );
+                ff[nn] = F(xx[nn] = u2x(uu[nn]=u,x));
                 if(verbose) std::cerr << "-- sample u=" << u << " => x=" << xx[nn] << " => " << ff[nn] << std::endl;
                 ++nn;
             }
-
-
-
+            
             inline T extract(Triplet<T> &x,
                              Triplet<T> &f)
             {

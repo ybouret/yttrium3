@@ -35,14 +35,7 @@ if( NOT "" STREQUAL "${Y_UnitTests}")
     DEPENDS ${Y_UnitTests})
 endif()
 
-#add embedded foreign libraries
-set(ThirdParty "")
-macro(MakeThirdParty target)
-	#list( APPEND ThirdParty ${target} PARENT_SCOPE )
-endmacro()
-
-cmake_print_variables(ThirdParty)
-
+#add third party
 add_subdirectory(y)
 
 #add CLI tools
