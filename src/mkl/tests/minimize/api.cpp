@@ -5,6 +5,7 @@
 #include "y/mkl/api/sqrt.hpp"
 #include "y/mkl/api/half.hpp"
 #include "y/stream/libc/output.hpp"
+#include "y/random/park-miller.hpp"
 
 using namespace Yttrium;
 using namespace MKL;
@@ -22,15 +23,24 @@ namespace
         return Sqrt<T>(arg);
     }
 
+    template <typename T> static
+    inline T getX(Random::Uniform32 &ran)
+    {
+        return (1.0f - 2.0f * ran.to<float>());
+    }
+
     template <typename T> static inline
-    void testMin()
+    void testMin(Random::Uniform32 &ran)
     {
         Minimizer<T> minimize;
         minimize.verbose = true;
-        while(true)
+        for(size_t i=1;i<=1;++i)
         {
-            Triplet<T> x = { -0.8f, 0 , 0.7f };
+        TRY:
+            Triplet<T> x = { getX<T>(ran), getX<T>(ran), getX<T>(ran) };
             Triplet<T> f = { F<T>(x.a), F<T>(x.b), F<T>(x.c) };
+            x.sort(f);
+            if(!f.isLocalMinimum()) goto TRY;
             const T x_opt = minimize.find(F<T>,x,f);
             std::cerr << "x_opt=" << x_opt << std::endl;
             break;
@@ -40,10 +50,11 @@ namespace
 
 Y_UTEST(min_api)
 {
+    Random::ParkMiller ran;
 
-    testMin<float>();
-    testMin< XReal<long double> >();
-    testMin<double>();
+    testMin<float>(ran);
+    testMin< XReal<long double> >(ran);
+    testMin<double>(ran);
 
 }
 Y_UDONE()
