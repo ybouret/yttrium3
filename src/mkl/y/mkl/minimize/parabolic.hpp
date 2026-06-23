@@ -19,12 +19,12 @@ namespace Yttrium
             explicit Parabolic();
             virtual ~Parabolic() noexcept;
 
-            T step(Triplet<T>    &x,
-                   Triplet<T>    &f,
-                   Function<T,T> &F);
-            
+            void step(Triplet<T>    &x,
+                      Triplet<T>    &f,
+                      Function<T,T> &F);
+
             template <typename FUNCTION>   inline
-            T step(FUNCTION &F, Triplet<T> &x, Triplet<T> &f )
+            void step(FUNCTION &F, Triplet<T> &x, Triplet<T> &f )
             {
                 Wrapper1D<T,T,FUNCTION> FW(F);
                 return step(x,f,FW);

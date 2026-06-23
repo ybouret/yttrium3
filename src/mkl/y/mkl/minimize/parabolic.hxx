@@ -16,7 +16,7 @@ Parabolic<real_t>:: ~Parabolic() noexcept
 
 
 template <>
-real_t Parabolic<real_t>:: step(Triplet<real_t>         &x,
+void Parabolic<real_t>:: step(Triplet<real_t>         &x,
                               Triplet<real_t>         &f,
                               Function<real_t,real_t> &F)
 {

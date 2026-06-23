@@ -43,9 +43,9 @@ namespace Yttrium
             {
             }
 
-            inline T step(Triplet<T>    &x,
-                          Triplet<T>    &f,
-                          Function<T,T> &F)
+            inline void step(Triplet<T>    &x,
+                             Triplet<T>    &f,
+                             Function<T,T> &F)
             {
 
                 //--------------------------------------------------------------
@@ -180,10 +180,7 @@ namespace Yttrium
                         balance(x,f,F);
                     }
                 }
-
-
-
-                return x.c - x.a;
+                
             }
 
 
@@ -319,7 +316,7 @@ namespace Yttrium
                     T wmax = rw;
                     if(wmin>wmax) Swap(wmin,wmax);
                     if(wmax<=wmin+wmin) break;
-                    
+
                     switch( Sign::Of(lw,rw) )
                     {
                         case __Zero__: return;
