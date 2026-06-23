@@ -207,12 +207,15 @@ namespace Yttrium
 
                         case Negative:
                             assert(unew<beta);
-                            sample(F, Half<T>::Of(unew), x);
+                            if(verbose) std::cerr << "-- before beta" << std::endl;
+                            probe(Half<T>::Of(unew),unew,F,fmin,x);
+                            break;
                             break;
 
                         case Positive:
                             assert(unew>beta);
-                            sample(F, Half<T>::Of(unew,one), x);
+                            if(verbose) std::cerr << "-- after beta" << std::endl;
+                            probe(Half<T>::Of(unew,one),unew,F,fmin,x);
                             break;
                     }
                 }
@@ -221,8 +224,31 @@ namespace Yttrium
                     if(verbose) std::cerr << "-- overshoot" << std::endl;
                     exit(1);
                 }
-
             }
+
+            inline void probe(T                  ut,
+                              const T            unew,
+                              Function<T,T>    & F,
+                              const T            fmin,
+                              const Triplet<T> & x)
+            {
+                for(;;)
+                {
+                    const T xt = u2x(ut,x);
+                    const T ft = F(xt);
+                    std::cerr << "-- probe: " << ft << " @" << xt << " / " << fmin << " @" << x.b << std::endl;
+                    if(ft<=fmin)
+                    {
+                        xx[nn] = xt;
+                        uu[nn] = ut;
+                        ff[nn] = ft;
+                        ++nn;
+                        break;
+                    }
+                    ut = Half<T>::Of(unew,ut);
+                }
+            }
+
 
             inline T u2x(const T u, const Triplet<T> &x) const noexcept
             {
@@ -238,7 +264,7 @@ namespace Yttrium
                 if(verbose) std::cerr << "-- sample u=" << u << " => x=" << xx[nn] << " => " << ff[nn] << std::endl;
                 ++nn;
             }
-            
+
             inline T extract(Triplet<T> &x,
                              Triplet<T> &f)
             {
