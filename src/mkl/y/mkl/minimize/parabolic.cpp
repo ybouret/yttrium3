@@ -91,25 +91,28 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 bool xsym = false;
                 {
-                    const T lw = Max(x.b-x.a,zero); // left  segment
-                    const T rw = Max(x.c-x.b,zero); // right segment
-                    switch( Sign::Of(lw,rw) )
+                    Y_XML_Element(xml,Linear);
                     {
-                        case Negative:
-                            assert(lw<rw); // reduce rw
-                            sample(xml, Half<T>::Of(x.b,x.c), F);
-                            break;
+                        const T lw = Max(x.b-x.a,zero); // left  segment
+                        const T rw = Max(x.c-x.b,zero); // right segment
+                        switch( Sign::Of(lw,rw) )
+                        {
+                            case Negative:
+                                assert(lw<rw); // reduce rw
+                                sample(xml, Half<T>::Of(x.b,x.c), F);
+                                break;
 
-                        case Positive:
-                            assert(rw<lw); // reduce lw
-                            sample(xml, Half<T>::Of(x.a,x.b), F);
-                            break;
+                            case Positive:
+                                assert(rw<lw); // reduce lw
+                                sample(xml, Half<T>::Of(x.a,x.b), F);
+                                break;
 
-                        case __Zero__: // symmetric
-                            xsym = true;
-                            sample(xml, Half<T>::Of(x.a,x.b), F);
-                            sample(xml, Half<T>::Of(x.b,x.c), F);
-                            break;
+                            case __Zero__: // symmetric
+                                xsym = true;
+                                sample(xml, Half<T>::Of(x.a,x.b), F);
+                                sample(xml, Half<T>::Of(x.b,x.c), F);
+                                break;
+                        }
                     }
                 }
 
@@ -122,49 +125,52 @@ namespace Yttrium
                 //
                 //--------------------------------------------------------------
 
-                if(x.b <= x.a )
                 {
-                    // beta = 0 => predicts 1/2
-                    Y_XMLog(xml, "-- beta=0");
-                    sample(xml, Half<T>::Of(x.b,x.c), F);
-                }
-                else
-                {
-                    if(x.b>=x.c)
+                    Y_XML_Element(xml,Quadratic);
+                    if(x.b <= x.a )
                     {
-                        // beta = 1 => predicts 1/2
-                        Y_XMLog(xml, "-- beta=1");
-                        sample(xml, Half<T>::Of(x.a,x.b), F);
+                        // beta = 0 => predicts 1/2
+                        Y_XMLog(xml, "-- beta=0");
+                        sample(xml, Half<T>::Of(x.b,x.c), F);
                     }
                     else
                     {
-                        const T beta  = Clamp(zero,(x.b-x.a)/(x.c-x.a),one);
-                        const T omba  = Clamp(zero,one-beta,one);
-                        const T alpha = Max(f.a-f.b,zero);
-                        const T gamma = Max(f.c-f.b,zero);
-                        switch( Sign::Of(alpha,gamma) )
+                        if(x.b>=x.c)
                         {
-                            case Negative: {
-                                Y_XMLog(xml, "-- towards x.a=" << x.a);
-                                const T eta = alpha/gamma;
-                                const T um  = Clamp(zero,half*(one - beta*omba*(one-eta)/(beta+omba*eta)),half); // <1/2
-                                sample(xml,um,x,F); // towards 0
-                            } break;
+                            // beta = 1 => predicts 1/2
+                            Y_XMLog(xml, "-- beta=1");
+                            sample(xml, Half<T>::Of(x.a,x.b), F);
+                        }
+                        else
+                        {
+                            const T beta  = Clamp(zero,(x.b-x.a)/(x.c-x.a),one);
+                            const T omba  = Clamp(zero,one-beta,one);
+                            const T alpha = Max(f.a-f.b,zero);
+                            const T gamma = Max(f.c-f.b,zero);
+                            switch( Sign::Of(alpha,gamma) )
+                            {
+                                case Negative: {
+                                    Y_XMLog(xml, "-- towards x.a=" << x.a);
+                                    const T eta = alpha/gamma;
+                                    const T um  = Clamp(zero,half*(one - beta*omba*(one-eta)/(beta+omba*eta)),half); // <1/2
+                                    sample(xml,um,x,F); // towards 0
+                                } break;
 
-                            case __Zero__: {
-                                Y_XMLog(xml, "-- take middle point (xsym=" << xsym << ")" );
-                                if(!xsym)
-                                    sample(xml, Half<T>::Of(x.a,x.b),F);
-                            } break;
+                                case __Zero__: {
+                                    Y_XMLog(xml, "-- take middle point (xsym=" << xsym << ")" );
+                                    if(!xsym)
+                                        sample(xml, Half<T>::Of(x.a,x.b),F);
+                                } break;
 
 
-                            case Positive: {
-                                assert(gamma<alpha);
-                                Y_XMLog(xml, "-- towards x.c=" << x.c);
-                                const T eta = gamma/alpha;
-                                const T um  = Clamp(half,half*(one + beta*omba*(one-eta)/(eta*beta+omba)),one); // > 1/2
-                                sample(xml,um,x,F); // towards 1
-                            } break;
+                                case Positive: {
+                                    assert(gamma<alpha);
+                                    Y_XMLog(xml, "-- towards x.c=" << x.c);
+                                    const T eta = gamma/alpha;
+                                    const T um  = Clamp(half,half*(one + beta*omba*(one-eta)/(eta*beta+omba)),one); // > 1/2
+                                    sample(xml,um,x,F); // towards 1
+                                } break;
+                            }
                         }
                     }
                 }
@@ -190,7 +196,7 @@ namespace Yttrium
 
             static inline void show(XML::Log &xml, const T X, const T FX)
             {
-                Y_XMLog(xml, "f(" << std::setw(W) << X << ") = " << std::setw(W) << FX );
+                Y_XMLog(xml, "-- f(" << std::setw(W) << X << ") = " << std::setw(W) << FX );
             }
 
             inline void sample(XML::Log &xml, const T xt, Function<T,T> &F)
@@ -211,6 +217,7 @@ namespace Yttrium
                                 Triplet<T> &x,
                                 Triplet<T> &f)
             {
+                Y_XML_Element_Attr(xml, Extract, Y_XML_Attr(nn) );
                 assert(nn>=3);
                 Core::HSort::Make(xx,nn,Sign::Increasing<T>,ff);
 
@@ -261,7 +268,7 @@ namespace Yttrium
                         f.load(&ff[ia]); assert(f.isLocalMinimum());
                     }
                 }
-                Y_XMLog(xml, "extract : x=" << x << "; f=" << f);
+                Y_XMLog(xml, "x=" << x << "; f=" << f);
 
 
 
@@ -292,6 +299,7 @@ namespace Yttrium
                                 Triplet<T>    & f,
                                 Function<T,T> & F)
             {
+                Y_XML_Element(xml,Balance);
                 assert(x.isOrdered());
                 assert(f.isLocalMinimum());
                 while(true)
@@ -302,25 +310,30 @@ namespace Yttrium
                     T wmax = rw;
                     if(wmin>wmax) Swap(wmin,wmax);
                     if(wmax<=wmin+wmin)
-                        break;
+                        goto DONE;
 
                     switch( Sign::Of(lw,rw) )
                     {
                         case __Zero__: return;
                         case Negative: assert(lw<rw); {
-                            Y_XMLog(xml, "-- balance right");
+                            Y_XMLog(xml, "[<] balance right");
                             const T xn = Half<T>::Of(x.b,x.c);
                             const T fn = F(xn);
                             show(xml,xn,fn);
                             if(fn<=f.b)
                             {
+                                // new min
+                                Y_XMLog(xml, "[<] new minimum");
                                 x.a = x.b; f.a = f.b;
                                 x.b = xn;  f.b = fn;
                                 assert(x.isOrdered());
                                 assert(f.isLocalMinimum());
+                                goto DONE;
                             }
                             else
                             {
+                                // shrink interval
+                                Y_XMLog(xml, "[<] shrunk");
                                 x.c = xn; f.c = fn;
                                 assert(x.isOrdered());
                                 assert(f.isLocalMinimum());
@@ -328,27 +341,34 @@ namespace Yttrium
 
                         } break;
                         case Positive: assert(rw<lw); {
-                            Y_XMLog(xml, "-- balance left");
+                            Y_XMLog(xml, "[>] balance left");
                             const T xn = Half<T>::Of(x.a,x.b);
                             const T fn = F(xn);
                             show(xml,xn,fn);
                             if(fn<=f.b)
                             {
+                                // new min
+                                Y_XMLog(xml, "[>] new minimum");
                                 x.c = x.b; f.c = f.b;
                                 x.b = xn;  f.b = fn;
                                 assert(x.isOrdered());
                                 assert(f.isLocalMinimum());
+                                goto DONE;
                             }
                             else
                             {
+                                // shrink interval
+                                Y_XMLog(xml, "[>] shrunk");
                                 x.a = xn; f.a = fn;
                                 assert(x.isOrdered());
                                 assert(f.isLocalMinimum());
                             }
                         } break;
                     }
-
                 }
+
+            DONE:
+                Y_XMLog(xml, "x=" << x << "; f=" << f);
 
                 {
                     OutputFile fp("para-step.data",true);

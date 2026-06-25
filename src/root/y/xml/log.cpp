@@ -22,9 +22,7 @@ namespace Yttrium
 
         std::ostream & Log:: Indent(std::ostream &out, const size_t n)
         {
-            return Core::Indent(out,n<<1,' ');
-            //for(size_t i=n<<1;i>0;--i) out << ' ';
-            //return out;
+            return Core::Indent(out,n<<2,' ');
         }
 
         std::ostream & Log:: operator()(void) noexcept
