@@ -2,8 +2,7 @@
 
 template <>
 Minimizer<real_t>:: Minimizer() :
-code( new Code() ),
-verbose(code->verbose)
+code( new Code() ) 
 {
 }
 
@@ -14,9 +13,9 @@ Minimizer<real_t>:: ~Minimizer() noexcept
 }
 
 template <>
-real_t Minimizer<real_t>:: find(Triplet<real_t> &x, Triplet<real_t> &f, Function<real_t,real_t> &F)
+real_t Minimizer<real_t>:: find(XML::Log &xml, Triplet<real_t> &x, Triplet<real_t> &f, Function<real_t,real_t> &F)
 {
     assert(code);
-    return code->find(x,f,F);
+    return code->find(xml,x,f,F);
 }
 

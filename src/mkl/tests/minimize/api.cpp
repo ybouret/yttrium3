@@ -32,8 +32,10 @@ namespace
     template <typename T> static inline
     void testMin(Random::Uniform32 &ran)
     {
+        bool verbose = true;
+        XML::Log xml(std::cerr,verbose);
         Minimizer<T> minimize;
-        minimize.verbose = true;
+        //minimize.verbose = true;
         for(size_t i=1;i<=1;++i)
         {
         TRY:
@@ -41,7 +43,7 @@ namespace
             Triplet<T> f = { F<T>(x.a), F<T>(x.b), F<T>(x.c) };
             x.sort(f);
             if(!f.isLocalMinimum()) goto TRY;
-            const T x_opt = minimize.find(F<T>,x,f);
+            const T x_opt = minimize.find(xml,F<T>,x,f);
             std::cerr << "x_opt=" << x_opt << std::endl;
             break;
         }

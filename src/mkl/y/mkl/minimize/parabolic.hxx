@@ -16,10 +16,11 @@ Parabolic<real_t>:: ~Parabolic() noexcept
 
 
 template <>
-void Parabolic<real_t>:: step(Triplet<real_t>         &x,
-                              Triplet<real_t>         &f,
-                              Function<real_t,real_t> &F)
+void Parabolic<real_t>:: step(XML::Log                & xml,
+                              Triplet<real_t>         & x,
+                              Triplet<real_t>         & f,
+                              Function<real_t,real_t> & F)
 {
     assert(code);
-    return code->step(x,f,F);
+    return code->step(xml,x,f,F);
 }

@@ -6,6 +6,7 @@
 
 #include "y/mkl/function-wrapper-1d.hpp"
 #include "y/mkl/triplet.hpp"
+#include "y/xml/log.hpp"
 
 namespace Yttrium
 {
@@ -20,20 +21,19 @@ namespace Yttrium
             explicit Minimizer();
             virtual ~Minimizer() noexcept;
 
-            T find(Triplet<T> &x, Triplet<T> &f, Function<T,T> &F);
+            T find(XML::Log &xml, Triplet<T> &x, Triplet<T> &f, Function<T,T> &F);
 
             template <typename FUNCTION>   inline
-            T find(FUNCTION &F, Triplet<T> &x, Triplet<T> &f )
+            T find(XML::Log &xml, FUNCTION &F, Triplet<T> &x, Triplet<T> &f )
             {
                 Wrapper1D<T,T,FUNCTION> FW(F);
-                return find(x,f,FW);
+                return find(xml,x,f,FW);
             }
 
         private:
             Y_Disable_Copy_And_Assign(Minimizer);
             Code * const code;
-        public:
-            bool & verbose;
+            
         };
 
     }

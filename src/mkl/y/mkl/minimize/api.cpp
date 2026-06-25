@@ -27,14 +27,14 @@ namespace Yttrium
             {
             }
 
-            inline T find(Triplet<T> &x, Triplet<T> &f, Function<T,T> &F)
+            inline T find(XML::Log &xml, Triplet<T> &x, Triplet<T> &f, Function<T,T> &F)
             {
                 // initialize
-                step(x,f,F);
+                step(xml,x,f,F);
                 T x_opt = x.b;
                 while(true)
                 {
-                    step(x,f,F);
+                    step(xml,x,f,F);
                     const T    x_new = x.b;
                     const bool f_cvg = AlmostEqual<T>::Are(f.a,f.b) && AlmostEqual<T>::Are(f.b,f.c);
                     const bool x_cvg = AlmostEqual<T>::Are(x_opt,x_new);

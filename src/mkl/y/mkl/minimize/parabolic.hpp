@@ -5,6 +5,7 @@
 
 #include "y/mkl/function-wrapper-1d.hpp"
 #include "y/mkl/triplet.hpp"
+#include "y/xml/log.hpp"
 
 namespace Yttrium
 {
@@ -19,15 +20,19 @@ namespace Yttrium
             explicit Parabolic();
             virtual ~Parabolic() noexcept;
 
-            void step(Triplet<T>    &x,
+            void step(XML::Log      &xml,
+                      Triplet<T>    &x,
                       Triplet<T>    &f,
                       Function<T,T> &F);
 
             template <typename FUNCTION>   inline
-            void step(FUNCTION &F, Triplet<T> &x, Triplet<T> &f )
+            void step(XML::Log   & xml,
+                      FUNCTION   & F,
+                      Triplet<T> & x,
+                      Triplet<T> & f)
             {
                 Wrapper1D<T,T,FUNCTION> FW(F);
-                return step(x,f,FW);
+                return step(xml,x,f,FW);
             }
 
         private:

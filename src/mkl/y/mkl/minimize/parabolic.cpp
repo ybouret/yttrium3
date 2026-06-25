@@ -43,9 +43,10 @@ namespace Yttrium
             {
             }
 
-            inline void step(Triplet<T>    &x,
-                             Triplet<T>    &f,
-                             Function<T,T> &F)
+            inline void step(XML::Log      & xml,
+                             Triplet<T>    & x,
+                             Triplet<T>    & f,
+                             Function<T,T> & F)
             {
 
                 //--------------------------------------------------------------

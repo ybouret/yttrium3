@@ -26,14 +26,16 @@ namespace
     template <typename T> static inline
     void testPara()
     {
+        bool     verbose = true;
+        XML::Log xml(std::cerr,verbose);
+
         Triplet<T> x = { -0.8f, 0 , 0.7f };
         Triplet<T> f = { F<T>(x.a), F<T>(x.b), F<T>(x.c) };
         Parabolic<T> parabolic;
-        parabolic.verbose = true;
         for(size_t i=1;i<=20;++i)
         {
             std::cerr << "[cycle = " << i << "]" << std::endl;
-            parabolic.step(F<T>,x,f);
+            parabolic.step(xml,F<T>,x,f);
             const T w = x.c-x.a;
             std::cerr << "w=" << w <<  " / " << x << " => " << f << std::endl;
 
