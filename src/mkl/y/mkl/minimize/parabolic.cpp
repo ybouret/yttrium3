@@ -31,8 +31,6 @@ namespace Yttrium
             one(1),
             zero(0),
             half(0.5f),
-            _1_4(0.25f),
-            _3_4(0.75f),
             xx(),
             ff()
             {
@@ -115,145 +113,64 @@ namespace Yttrium
                     }
                 }
 
-                extract(xml,x,f);
-
-
-
-
-#if 0
                 //--------------------------------------------------------------
                 //
                 //
-                // initialize metrics
+                // Parabolic inverse : we already processed the
+                // x-symmetric case
                 //
                 //
                 //--------------------------------------------------------------
-                /*      */ assert(x.isOrdered());    assert(f.isLocalMinimum());
-                x.sort(f); assert(x.isIncreasing()); assert(f.isLocalMinimum());
-                const T alpha  = Max(f.a-f.b,zero);
-                const T gamma  = Max(f.c-f.b,zero);
-                T       beta   = zero;
-                T       omba   = one;
-                bool    middle = false;
 
-                x.save(xx);
-                f.save(ff);
-                nn=3;
-
-
-                if(x.b<=x.a)
+                if(x.b <= x.a )
                 {
-                    // beta = zero;
-                    // omba = one;
-                    assert(alpha<=zero);
-                    ff[1] = F(xx[1] = Half<T>::Of(x.a,x.c) );
-                    middle = true;
+                    // beta = 0 => predicts 1/2
+                    Y_XMLog(xml, "-- beta=0");
+                    sample(xml, Half<T>::Of(x.b,x.c), F);
                 }
                 else
                 {
                     if(x.b>=x.c)
                     {
-                        beta = one;
-                        omba = zero;
-                        assert(gamma<=zero);
-                        ff[1] = F(xx[1] = Half<T>::Of(x.a,x.c) );
+                        // beta = 1 => predicts 1/2
+                        Y_XMLog(xml, "-- beta=1");
+                        sample(xml, Half<T>::Of(x.a,x.b), F);
                     }
                     else
                     {
-                        assert(x.a < x.b);
-                        assert(x.b < x.c);
-                        beta = Clamp(zero,(x.b-x.a)/(x.c-x.a),one);
-                        omba = one-beta;
-                    }
-                }
-                // const T bomb = beta * omba;
-
-
-                {
-                    OutputFile fp("parabolic.data");
-                    const unsigned np = 1000;
-                    for(unsigned i=0;i<=np;++i)
-                    {
-                        const T  w = ( (double)i )/np;
-                        const T  X = x.a * (one-w) + x.c * w;
-                        fp("%.15g %.15g\n", (double) X, (double) F(X));
-                    }
-                    OutputFile::Overwrite("para-step.data");
-                }
-
-                if(verbose) {
-                    std::cerr << "-- Parabolic step" << std::endl;
-                    show(x.a,f.a);
-                    show(x.b,f.b);
-                    show(x.c,f.c);
-                }
-
-                if(middle)
-                {
-                    // beta <=0 || beta >= 1
-                    std::cerr << "-- middle was append" << std::endl;
-                    show(xx[1],ff[1]);
-                    sample(_1_4, x, F);
-                    sample(_3_4, x, F);
-                    extract(x,f);
-                }
-                else
-                {
-                    if( AlmostEqual<T>::Are(alpha,gamma) )
-                    {
-                        //------------------------------------------------------
-                        //
-                        // symmetric guess
-                        //
-                        //------------------------------------------------------
-                        sample(half,x,F);
-                        switch( Sign::Of(beta,half) )
+                        const T beta  = Clamp(zero,(x.b-x.a)/(x.c-x.a),one);
+                        const T omba  = Clamp(zero,one-beta,one);
+                        const T alpha = Max(f.a-f.b,zero);
+                        const T gamma = Max(f.c-f.b,zero);
+                        switch( Sign::Of(alpha,gamma) )
                         {
-                            case Negative:
-                                assert(beta<half);
-                                sample(Half<T>::Of(x.b,x.c),F);
-                                break;
+                            case Negative: {
+                                Y_XMLog(xml, "-- towards x.a=" << x.a);
+                                const T eta = alpha/gamma;
+                                const T um  = Clamp(zero,half*(one - beta*omba*(one-eta)/(beta+omba*eta)),half); // <1/2
+                                sample(xml,um,x,F); // towards 0
+                            } break;
 
-                            case Positive:
-                                assert(half<beta);
-                                sample(Half<T>::Of(x.a,x.b),F);
-                                break;
+                            case __Zero__: {
+                                Y_XMLog(xml, "-- take middle point (xsym=" << xsym << ")" );
+                                if(!xsym)
+                                    sample(xml, Half<T>::Of(x.a,x.b),F);
+                            } break;
 
-                            case __Zero__:
-                                sample(Half<T>::Of(x.a,x.b),F);
-                                sample(Half<T>::Of(x.b,x.c),F);
-                                break;
-                        }
-                        extract(x,f);
-                    }
-                    else
-                    {
-                        //----------------------------------------------------------
-                        //
-                        // parabolic guess
-                        //
-                        //----------------------------------------------------------
-                        if(alpha<gamma)
-                        {
-                            if(verbose) std::cerr << "-- towards x.a=" <<  x.a << std::endl;
-                            const T eta = alpha/gamma;
-                            const T um  = Clamp(zero,half*(one - beta*omba*(one-eta)/(beta+omba*eta)),half); // <1/2
-                            sample(um,x,F); // towards 0
 
+                            case Positive: {
+                                assert(gamma<alpha);
+                                Y_XMLog(xml, "-- towards x.c=" << x.c);
+                                const T eta = gamma/alpha;
+                                const T um  = Clamp(half,half*(one + beta*omba*(one-eta)/(eta*beta+omba)),one); // > 1/2
+                                sample(xml,um,x,F); // towards 1
+                            } break;
                         }
-                        else
-                        {
-                            assert(gamma<alpha);
-                            if(verbose) std::cerr << "-- towards x.c=" << x.c << std::endl;
-                            const T eta = gamma/alpha;
-                            const T um  = Clamp(half,half*(one + beta*omba*(one-eta)/(eta*beta+omba)),one); // > 1/2
-                            sample(um,x,F); // towards 1
-                        }
-                        extract(x,f);
-                        balance(x,f,F);
                     }
                 }
-#endif
+
+                extract(xml,x,f);
+
 
             }
 
@@ -263,8 +180,6 @@ namespace Yttrium
             const T one;
             const T zero;
             const T half;
-            const T _1_4;
-            const T _3_4;
             T       xx[NMAX];
             T       ff[NMAX];
 
@@ -285,11 +200,11 @@ namespace Yttrium
                 ++nn;
             }
 
-            inline void sample(const T wc, const Triplet<T> &x, Function<T,T> &F)
+            inline void sample(XML::Log &xml, const T wc, const Triplet<T> &x, Function<T,T> &F)
             {
                 assert(nn<NMAX);
                 const T wa = one-wc;
-                return sample(Clamp(x.a,x.a*wa+x.c*wc,x.c),F);
+                return  sample(xml,Clamp(x.a,x.a*wa+x.c*wc,x.c),F);
             }
 
 

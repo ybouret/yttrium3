@@ -6,6 +6,7 @@
 #include "y/mkl/api/half.hpp"
 #include "y/stream/libc/output.hpp"
 #include "y/mkl/api/almost-equal.hpp"
+#include "y/string/env/convert.hpp"
 
 using namespace Yttrium;
 using namespace MKL;
@@ -26,13 +27,14 @@ namespace
     template <typename T> static inline
     void testPara()
     {
-        bool     verbose = true;
-        XML::Log xml(std::cerr,verbose);
+        bool         verbose = true;
+        XML::Log     xml(std::cerr,verbose);
+        const size_t cycles = EnvironmentConvert::To<size_t>("CYCLES",1);
 
-        Triplet<T> x = { -0.8f, 0 , 0.7f };
-        Triplet<T> f = { F<T>(x.a), F<T>(x.b), F<T>(x.c) };
+        Triplet<T>   x = { -0.8f, 0 , 0.7f };
+        Triplet<T>   f = { F<T>(x.a), F<T>(x.b), F<T>(x.c) };
         Parabolic<T> parabolic;
-        for(size_t i=1;i<=3;++i)
+        for(size_t i=1;i<=cycles;++i)
         {
             std::cerr << "[cycle = " << i << "]" << std::endl;
             parabolic.step(xml,F<T>,x,f);
