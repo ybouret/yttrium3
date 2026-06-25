@@ -4,6 +4,7 @@
 #include "y/object.hpp"
 #include "y/type/destroy.hpp"
 #include "y/mkl/api/almost-equal.hpp"
+#include "y/xml/element.hpp"
 
 namespace Yttrium
 {
@@ -28,24 +29,26 @@ namespace Yttrium
 
             inline T find(XML::Log &xml, Triplet<T> &x, Triplet<T> &f, Function<T,T> &F)
             {
+                Y_XML_Element_Attr(xml,Minimize,Y_XML_Attr(x) << Y_XML_Attr(f));
+                unsigned cycle = 1;
                 // initialize
+                Y_XMLog(xml, "[cycle=" << cycle << "]");
                 step(xml,x,f,F);
                 T x_opt = x.b;
                 while(true)
                 {
+                    ++cycle;
+                    Y_XMLog(xml, "[cycle=" << cycle << "]");
                     step(xml,x,f,F);
                     const T    x_new = x.b;
                     const bool f_cvg = AlmostEqual<T>::Are(f.a,f.b) && AlmostEqual<T>::Are(f.b,f.c);
                     const bool x_cvg = AlmostEqual<T>::Are(x_opt,x_new);
+                    Y_XMLog(xml, "[f-convergence: " << f_cvg << "]");
+                    Y_XMLog(xml, "[x-convergence: " << x_cvg << "]");
                     
-                    //if(verbose) {
-                    //    std::cerr << "-- f-convergence : " << f_cvg << std::endl;
-                    //    std::cerr << "-- x-convergence : " << x_cvg << std::endl;
-                    //}
-
                     if(x_cvg && f_cvg)
                     {
-                        f.b = F(x.b);
+                        f.b = F(x.b); // re-evaluate optimal
                         return x.b;
                     }
 

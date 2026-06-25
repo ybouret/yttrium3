@@ -64,9 +64,9 @@ namespace
 Y_UTEST(min_parabolic)
 {
 
+    testPara< XReal<long double> >();
     testPara<float>();
-    //testPara< XReal<long double> >();
-    
+
 }
 Y_UDONE()
 

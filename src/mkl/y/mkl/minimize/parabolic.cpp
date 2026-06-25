@@ -170,7 +170,7 @@ namespace Yttrium
                 }
 
                 extract(xml,x,f);
-
+                balance(xml,x,f,F);
 
             }
 
@@ -206,9 +206,6 @@ namespace Yttrium
                 const T wa = one-wc;
                 return  sample(xml,Clamp(x.a,x.a*wa+x.c*wc,x.c),F);
             }
-
-
-
 
             inline void extract(XML::Log   &xml,
                                 Triplet<T> &x,
@@ -290,7 +287,8 @@ namespace Yttrium
 
 
 
-            inline void balance(Triplet<T>    & x,
+            inline void balance(XML::Log      & xml,
+                                Triplet<T>    & x,
                                 Triplet<T>    & f,
                                 Function<T,T> & F)
             {
@@ -303,16 +301,17 @@ namespace Yttrium
                     T wmin = lw;
                     T wmax = rw;
                     if(wmin>wmax) Swap(wmin,wmax);
-                    if(wmax<=wmin+wmin) break;
+                    if(wmax<=wmin+wmin)
+                        break;
 
                     switch( Sign::Of(lw,rw) )
                     {
                         case __Zero__: return;
                         case Negative: assert(lw<rw); {
-                            //if(verbose) std::cerr << "-- balance right" << std::endl;
+                            Y_XMLog(xml, "-- balance right");
                             const T xn = Half<T>::Of(x.b,x.c);
                             const T fn = F(xn);
-                            show(xn,fn);
+                            show(xml,xn,fn);
                             if(fn<=f.b)
                             {
                                 x.a = x.b; f.a = f.b;
@@ -329,10 +328,10 @@ namespace Yttrium
 
                         } break;
                         case Positive: assert(rw<lw); {
-                            //if(verbose) std::cerr << "-- balance left" << std::endl;
+                            Y_XMLog(xml, "-- balance left");
                             const T xn = Half<T>::Of(x.a,x.b);
                             const T fn = F(xn);
-                            show(xn,fn);
+                            show(xml,xn,fn);
                             if(fn<=f.b)
                             {
                                 x.c = x.b; f.c = f.b;
