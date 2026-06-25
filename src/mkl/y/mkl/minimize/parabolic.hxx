@@ -1,7 +1,6 @@
 template <>
 Parabolic<real_t>:: Parabolic() :
-code( new Code() ),
-verbose(code->verbose)
+code( new Code() ) 
 {
 }
 

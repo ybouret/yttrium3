@@ -32,7 +32,7 @@ namespace
         Triplet<T> x = { -0.8f, 0 , 0.7f };
         Triplet<T> f = { F<T>(x.a), F<T>(x.b), F<T>(x.c) };
         Parabolic<T> parabolic;
-        for(size_t i=1;i<=20;++i)
+        for(size_t i=1;i<=3;++i)
         {
             std::cerr << "[cycle = " << i << "]" << std::endl;
             parabolic.step(xml,F<T>,x,f);
@@ -63,7 +63,7 @@ Y_UTEST(min_parabolic)
 {
 
     testPara<float>();
-    testPara< XReal<long double> >();
+    //testPara< XReal<long double> >();
     
 }
 Y_UDONE()

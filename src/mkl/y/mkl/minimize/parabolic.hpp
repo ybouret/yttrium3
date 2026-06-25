@@ -38,8 +38,7 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(Parabolic);
             Code * const code;
-        public:
-            bool & verbose;
+            
         };
 
     }

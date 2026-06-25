@@ -16,7 +16,6 @@ namespace Yttrium
         {
         public:
             using Parabolic<T>::step;
-            using Parabolic<T>::verbose;
 
             inline explicit Code() : Object(), Parabolic<T>()
             {
@@ -39,10 +38,10 @@ namespace Yttrium
                     const bool f_cvg = AlmostEqual<T>::Are(f.a,f.b) && AlmostEqual<T>::Are(f.b,f.c);
                     const bool x_cvg = AlmostEqual<T>::Are(x_opt,x_new);
                     
-                    if(verbose) {
-                        std::cerr << "-- f-convergence : " << f_cvg << std::endl;
-                        std::cerr << "-- x-convergence : " << x_cvg << std::endl;
-                    }
+                    //if(verbose) {
+                    //    std::cerr << "-- f-convergence : " << f_cvg << std::endl;
+                    //    std::cerr << "-- x-convergence : " << x_cvg << std::endl;
+                    //}
 
                     if(x_cvg && f_cvg)
                     {

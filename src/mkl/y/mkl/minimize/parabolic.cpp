@@ -8,6 +8,7 @@
 #include "y/cameo/addition.hpp"
 #include "y/core/hsort.hpp"
 #include "y/stream/libc/output.hpp"
+#include "y/xml/element.hpp"
 
 #include <iomanip>
 
@@ -21,7 +22,7 @@ namespace Yttrium
         {
         public:
             static const size_t   NMAX = 8;
-            static const unsigned W = 12;
+            static const unsigned W    = 8;
 
             typedef Cameo::Addition<T> XAdd;
 
@@ -33,8 +34,7 @@ namespace Yttrium
             _1_4(0.25f),
             _3_4(0.75f),
             xx(),
-            ff(),
-            verbose(false)
+            ff()
             {
 
             }
@@ -49,6 +49,78 @@ namespace Yttrium
                              Function<T,T> & F)
             {
 
+                //--------------------------------------------------------------
+                //
+                //
+                // initialize triplet
+                //
+                //
+                //--------------------------------------------------------------
+                /*      */ assert(x.isOrdered());    assert(f.isLocalMinimum());
+                x.sort(f); assert(x.isIncreasing()); assert(f.isLocalMinimum());
+
+                Y_XML_Element_Attr(xml,ParabolicStep, Y_XML_Attr(x) << Y_XML_Attr(f) );
+
+                {
+                    OutputFile fp("parabolic.data");
+                    const unsigned np = 1000;
+                    for(unsigned i=0;i<=np;++i)
+                    {
+                        const T  w = ( (double)i )/np;
+                        const T  X = x.a * (one-w) + x.c * w;
+                        fp("%.15g %.15g\n", (double) X, (double) F(X));
+                    }
+                    OutputFile::Overwrite("para-step.data");
+                }
+
+                //--------------------------------------------------------------
+                //
+                //
+                // Load triplet
+                //
+                //
+                //--------------------------------------------------------------
+                x.save(xx);
+                f.save(ff);
+                nn=3;
+
+                //--------------------------------------------------------------
+                //
+                //
+                // Reduction
+                //
+                //
+                //--------------------------------------------------------------
+                bool xsym = false;
+                {
+                    const T lw = Max(x.b-x.a,zero); // left  segment
+                    const T rw = Max(x.c-x.b,zero); // right segment
+                    switch( Sign::Of(lw,rw) )
+                    {
+                        case Negative:
+                            assert(lw<rw); // reduce rw
+                            sample(xml, Half<T>::Of(x.b,x.c), F);
+                            break;
+
+                        case Positive:
+                            assert(rw<lw); // reduce lw
+                            sample(xml, Half<T>::Of(x.a,x.b), F);
+                            break;
+
+                        case __Zero__: // symmetric
+                            xsym = true;
+                            sample(xml, Half<T>::Of(x.a,x.b), F);
+                            sample(xml, Half<T>::Of(x.b,x.c), F);
+                            break;
+                    }
+                }
+
+                extract(xml,x,f);
+
+
+
+
+#if 0
                 //--------------------------------------------------------------
                 //
                 //
@@ -181,7 +253,8 @@ namespace Yttrium
                         balance(x,f,F);
                     }
                 }
-                
+#endif
+
             }
 
 
@@ -192,25 +265,23 @@ namespace Yttrium
             const T half;
             const T _1_4;
             const T _3_4;
-
-            T      xx[NMAX];
-            T      ff[NMAX];
-            bool   verbose;
+            T       xx[NMAX];
+            T       ff[NMAX];
 
 
 
         private:
             Y_Disable_Copy_And_Assign(Code);
 
-            static inline void show(const T X, const T FX)
+            static inline void show(XML::Log &xml, const T X, const T FX)
             {
-                std::cerr << "-- f(" << std::setw(W) << X << ")=" << std::setw(W) << FX  << std::endl;
+                Y_XMLog(xml, "f(" << std::setw(W) << X << ") = " << std::setw(W) << FX );
             }
 
-            inline void sample(const T xt, Function<T,T> &F)
+            inline void sample(XML::Log &xml, const T xt, Function<T,T> &F)
             {
                 ff[nn] = F(xx[nn] = xt);
-                if(verbose) show(xx[nn],ff[nn]);
+                show(xml,xx[nn],ff[nn]);
                 ++nn;
             }
 
@@ -224,7 +295,8 @@ namespace Yttrium
 
 
 
-            inline void extract(Triplet<T> &x,
+            inline void extract(XML::Log   &xml,
+                                Triplet<T> &x,
                                 Triplet<T> &f)
             {
                 assert(nn>=3);
@@ -277,7 +349,7 @@ namespace Yttrium
                         f.load(&ff[ia]); assert(f.isLocalMinimum());
                     }
                 }
-                if(verbose) std::cerr << "-- " << x << " => " << f << std::endl;
+                Y_XMLog(xml, "extract : x=" << x << "; f=" << f);
 
 
 
@@ -322,7 +394,7 @@ namespace Yttrium
                     {
                         case __Zero__: return;
                         case Negative: assert(lw<rw); {
-                            if(verbose) std::cerr << "-- balance right" << std::endl;
+                            //if(verbose) std::cerr << "-- balance right" << std::endl;
                             const T xn = Half<T>::Of(x.b,x.c);
                             const T fn = F(xn);
                             show(xn,fn);
@@ -342,7 +414,7 @@ namespace Yttrium
 
                         } break;
                         case Positive: assert(rw<lw); {
-                            if(verbose) std::cerr << "-- balance left" << std::endl;
+                            //if(verbose) std::cerr << "-- balance left" << std::endl;
                             const T xn = Half<T>::Of(x.a,x.b);
                             const T fn = F(xn);
                             show(xn,fn);
