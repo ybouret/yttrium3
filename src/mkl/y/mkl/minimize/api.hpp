@@ -48,72 +48,64 @@ namespace Yttrium
                 Pedantic  //!< standard and converged successive estimations
             };
 
-            
+            template <typename T>
+            class Engine
+            {
+            public:
+                class Code;
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                explicit Engine();
+                virtual ~Engine() noexcept;
 
-        };
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
 
-        //______________________________________________________________________
-        //
-        //
-        //
-        //! Findind local minimum location
-        //
-        //
-        //______________________________________________________________________
-        template <typename T>
-        class Minimizer
-        {
-        public:
-            class Code;
-
-            //__________________________________________________________________
-            //
-            //
-            // C++
-            //
-            //__________________________________________________________________
-            explicit Minimizer();
-            virtual ~Minimizer() noexcept;
-
-            //__________________________________________________________________
-            //
-            //
-            // Methods
-            //
-            //__________________________________________________________________
-
-            //! find local minimum from a given configuration
-            /**
-             \param xml output
-             \param how how to process input
-             \param x   initial coordinates
-             \param f   initial values
-             \param F   primary function
-             \return minimum x
-             */
-            T find(XML::Log    &           xml,
-                   const Minimize::Process how,
-                   Triplet<T>    &         x,
-                   Triplet<T>    &         f,
-                   Function<T,T> &         F);
+                //! find local minimum from a given configuration
+                /**
+                 \param xml output
+                 \param how how to process input
+                 \param x   initial coordinates
+                 \param f   initial values
+                 \param F   primary function
+                 \return minimum x
+                 */
+                T find(XML::Log    &   xml,
+                       const Process   how,
+                       Triplet<T>    & x,
+                       Triplet<T>    & f,
+                       Function<T,T> & F,
+                       const Criterion win);
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            template <typename FUNCTION>   inline
-            T find(XML::Log        & xml,
-                   FUNCTION        & F,
-                   Minimize::Process how,
-                   Triplet<T>      & x,
-                   Triplet<T>      & f )
-            {
-                Wrapper1D<T,T,FUNCTION> FW(F);
-                return find(xml,how,x,f,FW);
-            }
+                template <typename FUNCTION>   inline
+                T find(XML::Log        & xml,
+                       FUNCTION        & F,
+                       const Process     how,
+                       Triplet<T>      & x,
+                       Triplet<T>      & f,
+                       const Criterion   win)
+                {
+                    Wrapper1D<T,T,FUNCTION> FW(F);
+                    return find(xml,how,x,f,FW,win);
+                }
 
-        private:
-            Y_Disable_Copy_And_Assign(Minimizer);
-            Code * const code;
+            private:
+                Y_Disable_Copy_And_Assign(Engine);
+                Code * const code;
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            };
+
         };
+
 
     }
 

@@ -13,7 +13,7 @@ namespace Yttrium
     {
 
         template <typename T>
-        class Minimizer<T> :: Code :
+        class Minimize:: Engine<T> :: Code :
         public Object, public Parabolic<T>
         {
         public:
@@ -29,10 +29,11 @@ namespace Yttrium
             }
 
             inline T find(XML::Log          & xml,
-                          Minimize::Process & how,
+                          const Process       how,
                           Triplet<T>        & x,
                           Triplet<T>        & f,
-                          Function<T,T>     & F)
+                          Function<T,T>     & F,
+                          const Criterion     win)
             {
                 Y_XML_Element_Attr(xml,Minimize,Y_XML_Attr(x) << Y_XML_Attr(f));
 
@@ -60,9 +61,11 @@ namespace Yttrium
 
                 unsigned cycle = 1;
                 // initialize
-                Y_XMLog(xml, "[cycle=" << cycle << "]");
+                Y_XMLog(xml, "[cycle=" << cycle << "] [initialize]");
                 step(xml,x,f,F);
                 T x_opt = x.b;
+
+                // llop
                 while(true)
                 {
                     ++cycle;
@@ -73,15 +76,23 @@ namespace Yttrium
                     const bool x_cvg = AlmostEqual<T>::Are(x_opt,x_new);
                     Y_XMLog(xml, "[f-convergence: " << f_cvg << "]");
                     Y_XMLog(xml, "[x-convergence: " << x_cvg << "]");
-                    
-                    if(x_cvg && f_cvg)
+
+                    switch(win)
                     {
-                        f.b = F(x.b); // re-evaluate optimal
-                        return x.b;
+                        case Standard: if(f_cvg) goto WIN;
+                            break;
+
+                        case Pedantic: if(x_cvg && f_cvg) goto WIN;
+                            break;
                     }
 
                     x_opt = x_new;
                 }
+
+            WIN:
+                Y_XMLog(xml,"converged: f(" << x.b << ")=" << f.b);
+                f.b=F(x.b);
+                return x.b;
             }
 
 

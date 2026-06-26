@@ -1,25 +1,26 @@
- 
+
 
 template <>
-Minimizer<real_t>:: Minimizer() :
-code( new Code() ) 
+Minimize:: Engine<real_t>:: Engine() :
+code( new Code() )
 {
 }
 
 template <>
-Minimizer<real_t>:: ~Minimizer() noexcept
+Minimize:: Engine<real_t>:: ~Engine() noexcept
 {
     Destroy(code);
 }
 
 template <>
-real_t Minimizer<real_t>:: find(XML::Log                & xml,
-                                Minimize::Process         proc,
-                                Triplet<real_t>         & x,
-                                Triplet<real_t>         & f,
-                                Function<real_t,real_t> & F)
+real_t Minimize:: Engine<real_t>:: find(XML::Log                & xml,
+                                        const Process             proc,
+                                        Triplet<real_t>         & x,
+                                        Triplet<real_t>         & f,
+                                        Function<real_t,real_t> & F,
+                                        const Criterion           win)
 {
     assert(code);
-    return code->find(xml,proc,x,f,F);
+    return code->find(xml,proc,x,f,F,win);
 }
 

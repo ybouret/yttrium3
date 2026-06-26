@@ -34,7 +34,7 @@ namespace
     {
         bool verbose = true;
         XML::Log xml(std::cerr,verbose);
-        Minimizer<T> minimize;
+        Minimize::Engine<T> minimize;
         //minimize.verbose = true;
         for(size_t i=1;i<=1;++i)
         {
@@ -43,7 +43,7 @@ namespace
             Triplet<T> f = { F<T>(x.a), F<T>(x.b), F<T>(x.c) };
             x.sort(f);
             if(!f.isLocalMinimum()) goto TRY;
-            const T x_opt = minimize.find(xml,F<T>,Minimize::Direct,x,f);
+            const T x_opt = minimize.find(xml,F<T>,Minimize::Direct,x,f,Minimize::Pedantic);
             std::cerr << "x_opt=" << x_opt << std::endl;
             break;
         }
