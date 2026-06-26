@@ -48,6 +48,12 @@ namespace Yttrium
                 Pedantic  //!< standard and converged successive estimations
             };
 
+            //__________________________________________________________________
+            //
+            //
+            //! engine to run minimization
+            //
+            //__________________________________________________________________
             template <typename T>
             class Engine
             {
