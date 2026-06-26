@@ -1,6 +1,7 @@
 
 #include "y/mkl/minimize/api.hpp"
 #include "y/mkl/minimize/parabolic.hpp"
+#include "y/mkl/minimize/bracket.hpp"
 #include "y/object.hpp"
 #include "y/type/destroy.hpp"
 #include "y/mkl/api/almost-equal.hpp"
@@ -27,9 +28,36 @@ namespace Yttrium
             {
             }
 
-            inline T find(XML::Log &xml, Triplet<T> &x, Triplet<T> &f, Function<T,T> &F)
+            inline T find(XML::Log          & xml,
+                          Minimize::Process & how,
+                          Triplet<T>        & x,
+                          Triplet<T>        & f,
+                          Function<T,T>     & F)
             {
                 Y_XML_Element_Attr(xml,Minimize,Y_XML_Attr(x) << Y_XML_Attr(f));
+
+                switch(how)
+                {
+                    case Minimize::Direct:
+                        assert(f.isLocalMinimum());
+                        break;
+
+                    case Minimize::Inside:
+                        if(!Bracket::Inside(xml,x,f,F))
+                        {
+                            (void) F(x.a);
+                            return x.a;
+                        }
+                        assert(f.isLocalMinimum());
+                        break;
+
+                    case Minimize::Expand:
+                        std::cerr << "Not Implemented" << std::endl;
+                        exit(1);
+                        break;
+                }
+
+
                 unsigned cycle = 1;
                 // initialize
                 Y_XMLog(xml, "[cycle=" << cycle << "]");

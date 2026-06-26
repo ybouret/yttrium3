@@ -13,27 +13,106 @@ namespace Yttrium
     namespace MKL
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Control of algorithm
+        //
+        //
+        //______________________________________________________________________
+        struct Minimize
+        {
+            //__________________________________________________________________
+            //
+            //
+            //! How to process input data
+            //
+            //__________________________________________________________________
+            enum Process
+            {
+                Direct, //!< already at local minimum
+                Inside, //!< bracket in [a:c]
+                Expand, //!< exprand from [a:b]
+            };
+
+            //__________________________________________________________________
+            //
+            //
+            //! convergence criterion
+            //
+            //__________________________________________________________________
+            enum Criterion
+            {
+                Standard, //!< converged function values
+                Pedantic  //!< standard and converged successive estimations
+            };
+
+            
+
+        };
+
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Findind local minimum location
+        //
+        //
+        //______________________________________________________________________
         template <typename T>
         class Minimizer
         {
         public:
             class Code;
+
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
             explicit Minimizer();
             virtual ~Minimizer() noexcept;
 
-            T find(XML::Log &xml, Triplet<T> &x, Triplet<T> &f, Function<T,T> &F);
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
 
+            //! find local minimum from a given configuration
+            /**
+             \param xml output
+             \param how how to process input
+             \param x   initial coordinates
+             \param f   initial values
+             \param F   primary function
+             \return minimum x
+             */
+            T find(XML::Log    &           xml,
+                   const Minimize::Process how,
+                   Triplet<T>    &         x,
+                   Triplet<T>    &         f,
+                   Function<T,T> &         F);
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             template <typename FUNCTION>   inline
-            T find(XML::Log &xml, FUNCTION &F, Triplet<T> &x, Triplet<T> &f )
+            T find(XML::Log        & xml,
+                   FUNCTION        & F,
+                   Minimize::Process how,
+                   Triplet<T>      & x,
+                   Triplet<T>      & f )
             {
                 Wrapper1D<T,T,FUNCTION> FW(F);
-                return find(xml,x,f,FW);
+                return find(xml,how,x,f,FW);
             }
 
         private:
             Y_Disable_Copy_And_Assign(Minimizer);
             Code * const code;
-            
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
         };
 
     }

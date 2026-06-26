@@ -13,9 +13,13 @@ Minimizer<real_t>:: ~Minimizer() noexcept
 }
 
 template <>
-real_t Minimizer<real_t>:: find(XML::Log &xml, Triplet<real_t> &x, Triplet<real_t> &f, Function<real_t,real_t> &F)
+real_t Minimizer<real_t>:: find(XML::Log                & xml,
+                                Minimize::Process         proc,
+                                Triplet<real_t>         & x,
+                                Triplet<real_t>         & f,
+                                Function<real_t,real_t> & F)
 {
     assert(code);
-    return code->find(xml,x,f,F);
+    return code->find(xml,proc,x,f,F);
 }
 

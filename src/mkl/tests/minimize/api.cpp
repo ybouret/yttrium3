@@ -43,7 +43,7 @@ namespace
             Triplet<T> f = { F<T>(x.a), F<T>(x.b), F<T>(x.c) };
             x.sort(f);
             if(!f.isLocalMinimum()) goto TRY;
-            const T x_opt = minimize.find(xml,F<T>,x,f);
+            const T x_opt = minimize.find(xml,F<T>,Minimize::Direct,x,f);
             std::cerr << "x_opt=" << x_opt << std::endl;
             break;
         }

@@ -58,6 +58,8 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
+
+        //! open and overwrite \param name file name
         template <typename NAME> static inline
         void Overwrite(const NAME &name)
         {
