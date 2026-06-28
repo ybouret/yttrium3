@@ -32,7 +32,7 @@ namespace Yttrium
 
             switch(_id)
             {
-                case AsSpec: alias += sp.name; break;
+                case AsSpec: alias += ' ' + sp.name; break;
                 case AsConc: alias += '[' + sp.name + ']'; break;
             }
 
