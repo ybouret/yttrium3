@@ -36,11 +36,39 @@ They appear in the {\bf CoVen} algorithm of $\bm{\nu}^\perp$. If a law is found,
 \subsection{Algebraic Form}
 Each contraint is a row vector $\vec \Gamma_i$ of:
 \begin{equation}
-\bm{\Gamma} \in \mathcal{M}_{Nc,M},\;\;\mathrm{rank}(\bm \Gamma) = r_g \leq 
+\bm{\Gamma} \in \mathcal{M}^+_{Nc,M},\;\;\mathrm{rank}(\bm \Gamma) = r_g \leq N_c
 \end{equation}
 Any modification orthogonal to $\bm \nu$ from $\vec C_0$ is:
 \begin{equation}
+\label{eq:gamma}
 \vec{C} = \vec C_0 + \bm{\Gamma}^T \vec\varphi,\;\; \vec \varphi \in \mathbb{R}^{N_c}
+\end{equation}
+
+\subsection{Legality}
+A concentration set $\vec C_0$ is legal iff:
+\begin{equation}
+\forall i, \langle \vec \Gamma _i \vert \vec C_0 \rangle \geq 0
+\end{equation}
+
+Let us assume that:
+\begin{equation}
+	\langle \vec \Gamma _i \vert \vec C_0 \rangle  = - x_i,\; x_i>0
+\end{equation}
+We could use \eqref{eq:gamma} but we would want to minimise the injected quantity, which is tricky.
+
+
+We form a sub-matrix $\bm \gamma$ of $\bm \Gamma$ by selecting $n\in[1:r_g]$ {\sl independent} broken laws:
+\begin{equation}
+	\bm \gamma = \begin{bmatrix}
+	\langle \Gamma_{i_1} \vert \\
+	\langle \Gamma_{i_n} \vert \\
+	\end{bmatrix} \in \mathcal{M}^+_{n,M}
+\end{equation}
+We look for $\vec \lambda \in \mathbb{R}^n$ such that:
+\begin{equation}
+	\forall i \in [1:n], \langle \vec\gamma_i \vert \vec C_0 + \bm{\gamma}^T \vec \lambda \rangle = 0
+	\implies
+	\left(\bm{\gamma} \bm{\gamma}^T \right) \vec \lambda = \vec x
 \end{equation}
 
 \end{document}
