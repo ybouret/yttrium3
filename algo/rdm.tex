@@ -11,6 +11,22 @@
 
 \begin{document}
 
+\section{Description}
+
+Let's assume we have a cluster of $M$ active species and $N$ equilibria:
+\begin{equation}
+\forall i, E_i : \sum_j \nu_{ij} A_j = 0 : K_i=\prod_j C_j^{\nu_{ij}}
+\end{equation}
+We define the topology matrix:
+\begin{equation}
+\bm{\nu} = \begin{bmatrix} \nu_{ij} \end{bmatrix} \in \mathcal{M}_{N,M}
+\end{equation}
+Starting from $\vec C_0\in \mathbb{R}^M$, the reachable state by the extent vector $\vec \xi \in \mathbb{R}^N$ is:
+\begin{equation}
+	\vec C = \vec C_0 + \bm{\nu}^T \vec \xi 
+\end{equation}
+
+
 \section{Conservation}
 
 \subsection{Increase of Broken Laws}
