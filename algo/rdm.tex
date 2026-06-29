@@ -27,57 +27,13 @@ Starting from $\vec C_0\in \mathbb{R}^M$, the reachable state by the extent vect
 \end{equation}
 
 
-\section{Conservation}
+\section{Conservation Laws}
 
-\subsection{Increase of Broken Laws}
-Let $\vec \alpha_i$ be the representation of $L$ broken laws:
-\begin{equation}
-	\forall i, \langle \vec \alpha_i \vert \vec A \rangle = - x_i < 0
-\end{equation}
-We want to find the minimal $d \vec A$ such that:
-\begin{equation}
-	\forall i, \langle \vec \alpha_i \vert \vec A + d\vec A \rangle = 0 \implies \langle \vec \alpha_i \vert d \vec A \rangle = x_i > 0 
-\end{equation}
-
-We form:
-\begin{equation}
-	\bm{\alpha} =
-	\begin{bmatrix}
-	\vec \alpha_1\\
-	\vdots\\
-	\vec \alpha_L\\
-	\end{bmatrix}
-\end{equation}
-
-We want to minimize using $\vec \mu \in \mathbb{R}^L$ Lagrange multipliers:
-\begin{equation}
-	\mathcal L = \dfrac{1}{2} \delta \vec A - \langle \vec \mu \vert \bm\alpha\;\delta \vec A - \vec x \rangle
-\end{equation}
-
-We obtain:
-\begin{equation}
-	\delta \vec A = \bm\alpha^T \; \vec \mu \implies (\bm\alpha\bm\alpha^T) \vec \mu = \vec x \implies \mu = (\bm\alpha\bm\alpha^T)^{-1} \vec x
-\end{equation}
-	
-\begin{equation}
-	\delta \vec A = \bm\alpha^T  (\bm\alpha\bm\alpha^T)^{-1} \vec x = -\bm\alpha^T  (\bm\alpha\bm\alpha^T)^{-1} \bm{\alpha} \vec{A}
-\end{equation}
-
-\section{Selection of rules}
-\begin{equation}
-\langle \vec \alpha_i \vert \vec A \rangle = - x_i \implies \delta \vec A \simeq \dfrac{x_i}{\vec \alpha_i^2} \vec \alpha \implies \delta \vec A^2 \simeq x_i^2
-\end{equation}
-
-We order the broken rules by increasing excess and we take the largest set of independent rules.
-
-\section{New concentrations}
-\begin{equation}
-\vec A' = \vec A + \delta \vec A = \left[\bm I_L -  \bm\alpha^T  (\bm\alpha\bm\alpha^T)^{-1} \bm{\alpha} \right] \vec{A}
-\end{equation}
-
-\begin{equation}
-\vec A' = \dfrac{1}{\det(\bm\alpha\bm\alpha^T)} \left[\det(\bm\alpha\bm\alpha^T)\bm I_L -  \bm\alpha^T  (\bm\alpha\bm\alpha^T)^{*} \bm{\alpha} \right] \vec{A}
-\end{equation}
+\subsection{Computation}
+A conservation law is non-trivial, positive linear combination of species that is not affected by an extent.
+They appear in the {\bf CoVen} algorithm of $\bm{\nu}^\perp$. If a law is found, then the involved species are conserved.
+ 
+\subsection{Algebraic Form}
 
 \end{document}
  
