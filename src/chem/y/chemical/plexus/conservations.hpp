@@ -1,77 +1,19 @@
+//! \file
 
 #ifndef Y_Chemical_Plexus_Conservations_Included
 #define Y_Chemical_Plexus_Conservations_Included 1
 
+#include "y/chemical/type/roll.hpp"
 #include "y/chemical/plexus/topology.hpp"
 #include "y/chemical/plexus/conservation/law.hpp"
 
-#include "y/container/associative/book.hpp"
-#include "y/container/associative/hash/default-set.hpp"
 
 namespace Yttrium
 {
     namespace Chemical
     {
 
-        //______________________________________________________________________
-        //
-        //
-        //
-        //! book+list of references
-        //
-        //
-        //______________________________________________________________________
-        template <typename T> class Roll : public Object
-        {
-        public:
-            //__________________________________________________________________
-            //
-            //
-            // Definitions
-            //
-            //__________________________________________________________________
-            typedef BookOf<const T,DefaultHashSet> BookType; //!< alias
-            typedef Handy::BasicLightList<const T> ListType; //!< alias
-
-            //__________________________________________________________________
-            //
-            //
-            // C++
-            //
-            //__________________________________________________________________
-            inline explicit Roll() : Object(), book(), list() {} //!< setup
-            inline virtual ~Roll() noexcept {}                   //!< cleanup
-
-            //__________________________________________________________________
-            //
-            //
-            // Methods
-            //
-            //__________________________________________________________________
-
-            //! inscribe species and kept list ordered \param sp species to inscribe
-            inline void inscribe(const Species &sp)
-            {
-                if( Coerce(book).write(sp) ) {
-                    try { Indexed::TopHSort( (Coerce(list) << sp) ); }
-                    catch(...) { Coerce(book).clear(sp); throw; }
-                } else {
-                    assert(list.found(sp));
-                }
-            }
-
-            //__________________________________________________________________
-            //
-            //
-            // Members
-            //
-            //__________________________________________________________________
-            const BookType book; //!< database
-            const ListType list; //!< ordered content
-
-        private:
-            Y_Disable_Copy_And_Assign(Roll); //!< discarded
-        };
+      
 
         typedef Matrix<unsigned> UMatrix; //!< alias
 
@@ -118,11 +60,12 @@ namespace Yttrium
             const Laws     laws;      //!< conservation law(s)
             const SpDB     conserved; //!< conserved species
             const SpDB     unbounded; //!< unbounded species
-
+            const Assembly lfmt;      //!< assembly to format laws
+            
         private:
-            Y_Disable_Copy_And_Assign(Conservations);      //!< discarded
-            void computeVectors(XML::Log &, const Topology &);               
-            void collectSpecies(XML::Log &,const SList &); //!< populate conserved/unbounded
+            Y_Disable_Copy_And_Assign(Conservations);          //!< discarded
+            void computeVectors(XML::Log &, const Topology &); //!< compute row vectors of Gamma
+            void collectSpecies(XML::Log &,const SList &);     //!< populate conserved/unbounded
         };
 
     }

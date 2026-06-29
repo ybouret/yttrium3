@@ -43,7 +43,7 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            static const unsigned Levels = AuxLevel; //!< alias
+            static const unsigned Levels = AuxLevel+1; //!< alias
 
             //__________________________________________________________________
             //
@@ -96,6 +96,15 @@ namespace Yttrium
                 size_t i = 1;
                 for(typename HLIST::NodeType *node=hlist->head;node;node=node->next,++i)
                     Coerce((**node).indx[SubLevel]) = i;
+            }
+
+            //! \param hlist handy list to relabel
+            template <typename HLIST> static inline
+            void AuxLabel(HLIST &hlist) noexcept
+            {
+                size_t i = 1;
+                for(typename HLIST::NodeType *node=hlist->head;node;node=node->next,++i)
+                    Coerce((**node).indx[AuxLevel]) = i;
             }
 
             //__________________________________________________________________

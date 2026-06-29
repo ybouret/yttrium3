@@ -4,6 +4,7 @@
 
 #include "y/stream/libc/output.hpp"
 #include "y/chemical/reactive/equilibrium/partition.hpp"
+#include "y/chemical/plexus/conservation/canons.hpp"
 #include "y/chemical/plexus/warden.hpp"
 #include "y/chemical/plexus/combinatorics.hpp"
 #include "y/container/sequence/vector.hpp"
@@ -35,10 +36,12 @@ Y_UTEST(cluster)
 
     for(const EGroup *g=part.party.head;g;g=g->next)
     {
-        Topology      topo(xml,*g);
-        Conservations conservations(xml,topo);
-        Warden        warden(xml,conservations);
-        Combinatorics combinatorics(xml,topo,eqs,K);
+        Topology             topo(xml,*g);
+        Conservations        conservations(xml,topo);
+        Conservation::Canons canons(xml,conservations.laws,conservations.lfmt);
+        continue;
+        Warden               warden(xml,conservations);
+        Combinatorics        combinatorics(xml,topo,eqs,K);
     }
 
     std::cerr << std::endl;

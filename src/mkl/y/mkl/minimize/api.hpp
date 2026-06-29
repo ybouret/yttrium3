@@ -82,6 +82,7 @@ namespace Yttrium
                  \param x   initial coordinates
                  \param f   initial values
                  \param F   primary function
+                 \param win criterion
                  \return minimum x
                  */
                 T find(XML::Log    &   xml,

@@ -22,7 +22,8 @@ namespace Yttrium
         rg(0),
         laws(),
         conserved( new SpRoll() ),
-        unbounded( new SpRoll() )
+        unbounded( new SpRoll() ),
+        lfmt()
         {
             Y_XML_Element(xml,BuildConservations);
             computeVectors(xml,topo);
@@ -71,6 +72,7 @@ namespace Yttrium
                             }
                             Y_XMLog(xml, "|_0=" << *law );
                             assert((*law)->size>=2);
+                            Coerce(lfmt).enroll(*law);
                         }
                     }
 
