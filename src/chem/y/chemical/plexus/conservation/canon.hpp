@@ -1,4 +1,4 @@
-
+//! \file
 
 #ifndef Y_Chemical_Conservation_Canon_Included
 #define Y_Chemical_Conservation_Canon_Included 1
@@ -16,27 +16,59 @@ namespace Yttrium
         namespace Conservation
         {
 
-            typedef Handy::BasicLightList<const Law> LList;
-            typedef LList::NodeType                  LNode;
+            typedef Handy::BasicLightList<const Law> LList; //!< alias
+            typedef LList::NodeType                  LNode; //!< alias
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! list of interwoven laws and their species
+            //
+            //
+            //__________________________________________________________________
             class Canon : public Roll<Species>
             {
             public:
-                typedef CxxListOf<Canon> List;
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                typedef CxxListOf<Canon> List; //!< alias
 
-                explicit Canon(const Law &first);
-                virtual ~Canon() noexcept;
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                explicit Canon(const Law &); //!< setup with first law
+                virtual ~Canon() noexcept;   //!< cleanup
 
-                bool accepts(const Law &) const noexcept;
-                void compile();
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+                bool accepts(const Law &) const noexcept; //!< \return true iff shared species
+                void compile(); //!< inscribe and AuxLabel species, update format
 
-                LList    laws;
-                Canon *  next;
-                Canon *  prev;
-                Assembly lfmt;
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                LList    laws; //!< list of laws
+                Canon *  next; //!< for list
+                Canon *  prev; //!< for list
+                Assembly lfmt; //!< to format
 
             private:
-                Y_Disable_Copy_And_Assign(Canon);
+                Y_Disable_Copy_And_Assign(Canon); //!< discarded
             };
         }
 

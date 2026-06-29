@@ -13,18 +13,42 @@ namespace Yttrium
 
         namespace Conservation
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! independent lists of dependent laws
+            //
+            //
+            //__________________________________________________________________
             class Canons : public Proxy<const Canon::List>
             {
             public:
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+
+                //! setup for list of laws
                 explicit Canons(XML::Log                &,
                                 const Core::ListOf<Law> &,
                                 const Assembly          &);
+
+                //! cleanup
                 virtual ~Canons() noexcept;
 
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
             private:
-                Y_Disable_Copy_And_Assign(Canons);
-                Y_Proxy_Decl();
-                Canon::List list;
+                Y_Disable_Copy_And_Assign(Canons); //!< discarded
+                Y_Proxy_Decl();                    //!< helper
+                Canon::List list;                  //!< inner list
             };
         }
 
