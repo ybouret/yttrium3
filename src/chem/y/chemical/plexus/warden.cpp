@@ -30,7 +30,7 @@ namespace Yttrium
 
                 const size_t rg = canon.rg;
                 Y_XML_Element_Attr(xml,BuildWarden,Y_XML_Attr(rg));
-                const size_t M    = canon.Qm.cols;
+                const size_t M    = canon.Gamma.cols;
                 size_t       count = 0;
                 MKL::LU<apq> lu(rg);
 
@@ -47,7 +47,7 @@ namespace Yttrium
                     {
                         for(size_t i=1;i<=k;++i)
                         {
-                            alpha[i].load( canon.Qm[comb[i]] );
+                            alpha[i].load( canon.Gamma[comb[i]] );
                         }
                         
                         if(k!=MKL::Rank::Of(alpha))

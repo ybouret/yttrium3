@@ -34,6 +34,14 @@ A conservation law is non-trivial, positive linear combination of species that i
 They appear in the {\bf CoVen} algorithm of $\bm{\nu}^\perp$. If a law is found, then the involved species are conserved.
  
 \subsection{Algebraic Form}
+Each contraint is a row vector $\vec \Gamma_i$ of:
+\begin{equation}
+\bm{\Gamma} \in \mathcal{M}_{Nc,M},\;\;\mathrm{rank}(\bm \Gamma) = r_g \leq 
+\end{equation}
+Any modification orthogonal to $\bm \nu$ from $\vec C_0$ is:
+\begin{equation}
+\vec{C} = \vec C_0 + \bm{\Gamma}^T \vec\varphi,\;\; \vec \varphi \in \mathbb{R}^{N_c}
+\end{equation}
 
 \end{document}
  

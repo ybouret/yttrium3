@@ -17,8 +17,8 @@ namespace Yttrium
 
         Conservations:: Conservations(XML::Log       &xml,
                                       const Topology &topo) :
-        Qm(),
-        Nc(Qm.rows),
+        Gamma(),
+        Nc(Gamma.rows),
         rg(0),
         laws(),
         conserved( new SpRoll() ),
@@ -46,7 +46,7 @@ namespace Yttrium
                     Y_XMLog(xml,"|_[ -- found " << nc << " conservation" << ASCII::Plural::s(nc) << " --]" );
                     {
                         const size_t M   = topo.M;
-                        UMatrix &    A   = Coerce(Qm).make(nc,M);
+                        UMatrix &    A   = Coerce(Gamma).make(nc,M);
                         size_t       i   = 1;
                         for(const Coven::Vector *v=(**survey).head;v;v=v->next,++i)
                         {
@@ -70,11 +70,11 @@ namespace Yttrium
                     }
 
                     // compute Rank
-                    Coerce(rg) = MKL::Rank::Of(Qm);
-                    Y_XMLog(xml, "Qm  = " << Qm);
-                    Y_XMLog(xml, "nuT = " << topo.nuT);
-                    Y_XMLog(xml, "Nc  = " << Nc);
-                    Y_XMLog(xml, "rg  = " << rg);
+                    Coerce(rg) = MKL::Rank::Of(Gamma);
+                    Y_XMLog(xml, "Gamma = " << Gamma);
+                    Y_XMLog(xml, "nuT   = " << topo.nuT);
+                    Y_XMLog(xml, "Nc    = " << Nc);
+                    Y_XMLog(xml, "rg    = " << rg);
 
                     // collect species
                     collectSpecies(xml,topo.slist);
