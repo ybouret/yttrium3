@@ -38,12 +38,24 @@ namespace Yttrium
                         switch(n)
                         {
                             case 0: list.pushTail( new Canon(law) ); continue;
-                            case 1: (**(clist->head) ).laws << law; continue;
+                            case 1: (**(clist->head) ).laws << law;  continue;
                             default:
-                                throw Exception("not yet implemented");
+                                break;
                         }
-
+                        assert(n>=2);
+                        CList::NodeType * cnode  = clist->head;
+                        Canon           & target = **cnode;
+                        LList           & tgt    = target.laws;
+                        for(cnode=cnode->next;cnode;cnode=cnode->next)
+                        {
+                            Canon &source = **cnode;
+                            LList &src    = source.laws;
+                            tgt->mergeTail(*src);
+                            delete list.pop( &source );
+                        }
                     }
+
+                    // compile each canon
                     assert(list.size>0);
                     const size_t count=list.size;
                     Y_XML_Element_Attr(xml,Compilation, Y_XML_Attr(count) );
