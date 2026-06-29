@@ -88,6 +88,14 @@ namespace Yttrium
                 return fp;
             }
 
+            bool Law:: linkedTo( const Law &law ) const noexcept
+            {
+                for(const Actor *ac=law->head;ac;ac=ac->next)
+                {
+                    if( hired(ac->sp) ) return true;
+                }
+                return false;
+            }
 
 
         }

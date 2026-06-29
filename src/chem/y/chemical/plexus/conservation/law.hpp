@@ -49,8 +49,6 @@ namespace Yttrium
                 //______________________________________________________________
                 xreal_t excess(const XReadable &, const Level, XAdd &) const;
 
-                String         html() const; //!< \return html label
-
                 //! emit GraphViz code
                 /**
                  \param fp output stream
@@ -58,7 +56,10 @@ namespace Yttrium
                  \return fp
                  */
                 OutputStream & viz(OutputStream &fp, const char * const color) const;
+                String         html() const; //!< \return html label
 
+                bool linkedTo( const Law & ) const noexcept;
+                
 
                 //______________________________________________________________
                 //
@@ -71,8 +72,9 @@ namespace Yttrium
                 Law *        prev; //!< for list
 
             private:
-                Y_Disable_Copy_And_Assign(Law); //!< discarde
+                Y_Disable_Copy_And_Assign(Law); //!< discarded
             };
+
 
         }
     }
