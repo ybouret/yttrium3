@@ -121,6 +121,7 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(Conservations);      //!< discarded
+            void computeVectors(XML::Log &, const Topology &);               
             void collectSpecies(XML::Log &,const SList &); //!< populate conserved/unbounded
         };
 

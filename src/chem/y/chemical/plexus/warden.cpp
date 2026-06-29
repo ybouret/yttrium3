@@ -18,9 +18,9 @@ namespace Yttrium
         {
         }
 
-        Warden:: Warden(XML::Log &xml, const Conservations &canon)
+        Warden:: Warden(XML::Log &xml, const Conservations &conservations)
         {
-            const size_t Nc = canon.Nc;
+            const size_t Nc = conservations.Nc;
             if(Nc>0)
             {
                 typedef CountedMatrix<apz>     IPMatrix;
@@ -28,9 +28,9 @@ namespace Yttrium
                 Vector<IPMatrix::Pointer> ipm;
                 Vector<XPMatrix::Pointer> xpm;
 
-                const size_t rg = canon.rg;
+                const size_t rg = conservations.rg;
                 Y_XML_Element_Attr(xml,BuildWarden,Y_XML_Attr(rg));
-                const size_t M    = canon.Gamma.cols;
+                const size_t M    = conservations.Gamma.cols;
                 size_t       count = 0;
                 MKL::LU<apq> lu(rg);
 
@@ -47,7 +47,7 @@ namespace Yttrium
                     {
                         for(size_t i=1;i<=k;++i)
                         {
-                            alpha[i].load( canon.Gamma[comb[i]] );
+                            alpha[i].load( conservations.Gamma[comb[i]] );
                         }
                         
                         if(k!=MKL::Rank::Of(alpha))

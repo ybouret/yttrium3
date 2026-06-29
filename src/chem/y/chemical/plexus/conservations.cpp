@@ -25,11 +25,17 @@ namespace Yttrium
         unbounded( new SpRoll() )
         {
             Y_XML_Element(xml,BuildConservations);
+            computeVectors(xml,topo);
+            collectSpecies(xml,topo.slist);
+        }
+
+
+        void Conservations:: computeVectors(XML::Log &xml, const Topology &topo)
+        {
             Matrix<apz> Q;
             if( ! MKL::OrthoSpace::Get(Q,topo.nu) )
             {
                 Y_XMLog(xml, "no orthogonal space");
-                collectSpecies(xml,topo.slist);
             }
             else
             {
@@ -39,7 +45,6 @@ namespace Yttrium
                 if(!nc)
                 {
                     Y_XMLog(xml, "|_no conservation");
-                    collectSpecies(xml,topo.slist);
                 }
                 else
                 {
@@ -59,7 +64,7 @@ namespace Yttrium
                                 {
                                     unsigned &nu = Ai[j];
                                     if(!V[j].tryCast(nu))
-                                        throw Specific::Exception("Canon","invalid coefficient[%u][%u]",(unsigned)i,(unsigned)j);
+                                        throw Specific::Exception("Conservations","invalid coefficient[%u][%u]",(unsigned)i,(unsigned)j);
                                     if(nu>0)
                                         law->hire(nu,**sn);
                                 }
@@ -75,19 +80,20 @@ namespace Yttrium
                     Y_XMLog(xml, "nuT   = " << topo.nuT);
                     Y_XMLog(xml, "Nc    = " << Nc);
                     Y_XMLog(xml, "rg    = " << rg);
-
-                    // collect species
-                    collectSpecies(xml,topo.slist);
-
-
-
+                    
                 }
             }
         }
 
         void Conservations:: collectSpecies(XML::Log &xml, const SList &slist)
         {
+            //------------------------------------------------------------------
+            //
+            //
             // collect conserved species
+            //
+            //
+            //------------------------------------------------------------------
             for(const Law *law=laws.head;law;law=law->next)
             {
                 for(const Actor *ac=(*law)->head;ac;ac=ac->next)
@@ -96,7 +102,13 @@ namespace Yttrium
                 }
             }
 
+            //------------------------------------------------------------------
+            //
+            //
             // deduce unbounded species
+            //
+            //
+            //------------------------------------------------------------------
             for(const SNode *sn=slist->head;sn;sn=sn->next)
             {
                 const Species &sp = **sn;
