@@ -24,6 +24,7 @@ namespace Yttrium
                 explicit Canon(const Law &first);
                 virtual ~Canon() noexcept;
 
+                
                 Canon * next;
                 Canon * prev;
                 
