@@ -30,6 +30,11 @@ namespace Yttrium
         {
         }
 
+        void Assembly:: reset() noexcept
+        {
+            Coerce(width) = 0;
+        }
+
 
 
     }

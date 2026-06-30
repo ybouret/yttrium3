@@ -25,7 +25,13 @@ namespace Yttrium
                 {
                     Y_XML_Element_Attr(xml,BuildCanons,Y_XML_Attr(laws.size) );
 
+                    //----------------------------------------------------------
+                    //
+                    //
                     // loop over given laws and dispatch
+                    //
+                    //
+                    //----------------------------------------------------------
                     for(const Law *node=laws.head;node;node=node->next)
                     {
                         CList      clist;
@@ -33,8 +39,8 @@ namespace Yttrium
                         for(Canon *canon=list.head;canon;canon=canon->next)
                             if(canon->accepts(law)) clist << *canon;
 
-                        const size_t n = clist->size; if(xml.verbose) lfmt.print(xml() << "[*] ",law,Justify::Center) <<" accepted by #" << n << std::endl;
-
+                        const size_t n = clist->size;
+                        if(xml.verbose) lfmt.print(xml() << "[*] ",law,Justify::Center) <<" accepted by #" << n << std::endl;
                         switch(n)
                         {
                             case 0: list.pushTail( new Canon(law) ); continue;
@@ -73,7 +79,9 @@ namespace Yttrium
                                 canon.lfmt.print(xml() << "[+] d_( ",law,Justify::Center) << " )=0" << std::endl;
                             }
                         }
-                        Y_XMLog(xml, "[@] " << canon.list);
+                        Y_XMLog(xml, "[@] " << canon.species->list);
+                        Y_XMLog(xml, "    Gamma = " << canon.Gamma);
+                        Y_XMLog(xml, "    rg    = " << canon.rg);
                     }
                 }
             }

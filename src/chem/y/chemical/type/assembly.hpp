@@ -40,8 +40,11 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            //! update with
+            //! update with an entity
             void enroll(const Entity &) noexcept;
+
+            //! reset width
+            void reset() noexcept;
 
             //! pretty justified print \return output stream
             std::ostream & print(std::ostream &, const Entity &, const Justify::Type = Justify::Left) const;

@@ -1,6 +1,7 @@
 
 
 #include "y/chemical/plexus/conservation/canon.hpp"
+#include "y/mkl/algebra/rank.hpp"
 
 namespace Yttrium
 {
@@ -14,10 +15,13 @@ namespace Yttrium
             }
 
             Canon:: Canon(const Law &first) :
-            Roll<Species>(),
+            Object(),
+            species( new SpRoll() ),
             laws(),
             next(0),
             prev(0),
+            Gamma(),
+            rg(0),
             lfmt()
             {
                 laws.pushTail(first);
@@ -34,18 +38,35 @@ namespace Yttrium
 
             void Canon:: compile()
             {
-                free();
-                Coerce(lfmt.width) = 0;
+                // initialize
+                species->free();
+                lfmt.reset();
+
+                // build
                 for(const LNode *ln=laws->head;ln;ln=ln->next)
                 {
                     const Law &law = **ln;
                     lfmt.enroll(law);
                     for(const Actor *ac=law->head;ac;ac=ac->next)
                     {
-                        inscribe(ac->sp);
+                        species->inscribe(ac->sp);
                     }
                 }
-                Indexed::AuxLabel( Indexed::TopHSort( Coerce(list) ) );
+                Indexed::AuxLabel( Indexed::TopHSort( Coerce(species->list) ) );
+
+                const size_t Nc = laws->size; assert(Nc>0);
+                const size_t M  = species->list->size;
+                Gamma.make(Nc,M);
+                size_t i = 1;
+                for(const LNode *ln=laws->head;ln;ln=ln->next,++i)
+                {
+                    const Law &law = **ln;
+                    for(const Actor *ac=law->head;ac;ac=ac->next)
+                    {
+                        ac->sp(Gamma[i],AuxLevel) = ac->nu;
+                    }
+                }
+                rg = MKL::Rank::Of(Gamma);
             }
 
         }

@@ -52,6 +52,7 @@ Y_UTEST(cluster)
     Y_SIZEOF(Roll<Species>);
     Y_SIZEOF(Roll<Equilibrium>);
 
+    std::cerr << "lib=" << lib << std::endl;
 
 
 }

@@ -3,9 +3,10 @@
 #ifndef Y_Chemical_Plexus_Conservations_Included
 #define Y_Chemical_Plexus_Conservations_Included 1
 
-#include "y/chemical/type/roll.hpp"
+#include "y/chemical/type/sp-roll.hpp"
 #include "y/chemical/plexus/topology.hpp"
 #include "y/chemical/plexus/conservation/law.hpp"
+#include "y/chemical/type/matrix.hpp"
 
 
 namespace Yttrium
@@ -14,8 +15,7 @@ namespace Yttrium
     {
 
       
-
-        typedef Matrix<unsigned> UMatrix; //!< alias
+        
 
         //______________________________________________________________________
         //
@@ -36,8 +36,7 @@ namespace Yttrium
             //__________________________________________________________________
             typedef Conservation::Law Law;    //!< alias
             typedef Law::List         Laws;   //!< alias
-            typedef Roll<Species>     SpRoll; //!< alias
-            typedef AutoPtr<SpRoll>   SpDB;   //!< alias
+            
 
             //__________________________________________________________________
             //

@@ -4,8 +4,9 @@
 #define Y_Chemical_Conservation_Canon_Included 1
 
 #include "y/chemical/plexus/conservation/law.hpp"
-#include "y/chemical/type/roll.hpp"
+#include "y/chemical/type/sp-roll.hpp"
 #include "y/chemical/type/assembly.hpp"
+#include "y/chemical/type/matrix.hpp"
 
 
 namespace Yttrium
@@ -27,7 +28,7 @@ namespace Yttrium
             //
             //
             //__________________________________________________________________
-            class Canon : public Roll<Species>
+            class Canon : public Object
             {
             public:
                 //______________________________________________________________
@@ -54,7 +55,7 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 bool accepts(const Law &) const noexcept; //!< \return true iff shared species
-                void compile(); //!< inscribe and AuxLabel species, update format
+                void compile();                           //!< inscribe and AuxLabel species, update format
 
                 //______________________________________________________________
                 //
@@ -62,10 +63,13 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                LList    laws; //!< list of laws
-                Canon *  next; //!< for list
-                Canon *  prev; //!< for list
-                Assembly lfmt; //!< to format
+                SpDB     species; //!< database of involved species
+                LList    laws;    //!< list of laws
+                Canon *  next;    //!< for list
+                Canon *  prev;    //!< for list
+                UMatrix  Gamma;   //!< compact conservation matrix
+                size_t   rg;      //!< rank(Gamma)
+                Assembly lfmt;    //!< to format
 
             private:
                 Y_Disable_Copy_And_Assign(Canon); //!< discarded

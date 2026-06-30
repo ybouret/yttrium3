@@ -5,16 +5,13 @@
 #include "y/chemical/reactive/equilibrium/format.hpp"
 #include "y/chemical/slist.hpp"
 
-#include "y/container/matrix.hpp"
 #include "y/xml/element.hpp"
+#include "y/chemical/type/matrix.hpp"
 
 namespace Yttrium
 {
     namespace Chemical
     {
-        typedef Matrix<int> IMatrix;
-
-        
 
         //______________________________________________________________________
         //

@@ -21,6 +21,8 @@ namespace Yttrium
         typedef Cameo::Multiplication<xreal_t> XMul;      //!< alias
         typedef Cameo::Addition<xreal_t>       XAdd;      //!< alias
         typedef MKL::Triplet<xreal_t>          XTriplet;  //!< alias
+
+        
     }
 
 }
