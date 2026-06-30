@@ -1,7 +1,7 @@
 
 
 #include "y/chemical/plexus/conservation/canon.hpp"
-#include "y/mkl/algebra/rank.hpp"
+//#include "y/mkl/algebra/rank.hpp"
 
 namespace Yttrium
 {
@@ -20,8 +20,8 @@ namespace Yttrium
             laws(),
             next(0),
             prev(0),
-            Gamma(),
-            rg(0),
+            //Gamma(),
+            //rg(0),
             lfmt()
             {
                 laws.pushTail(first);
@@ -42,7 +42,7 @@ namespace Yttrium
                 species->free();
                 lfmt.reset();
 
-                // build
+                // build species
                 for(const LNode *ln=laws->head;ln;ln=ln->next)
                 {
                     const Law &law = **ln;
@@ -54,6 +54,11 @@ namespace Yttrium
                 }
                 Indexed::AuxLabel( Indexed::TopHSort( Coerce(species->list) ) );
 
+                for(const LNode *ln=laws->head;ln;ln=ln->next)
+                    Coerce( (**ln) ).compile(species->list);
+
+
+#if 0
                 const size_t Nc = laws->size; assert(Nc>0);
                 const size_t M  = species->list->size;
                 Gamma.make(Nc,M);
@@ -67,6 +72,7 @@ namespace Yttrium
                     }
                 }
                 rg = MKL::Rank::Of(Gamma);
+#endif
             }
 
         }

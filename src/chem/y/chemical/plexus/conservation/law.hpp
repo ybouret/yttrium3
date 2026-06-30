@@ -3,6 +3,8 @@
 #define Y_Chemical_Conservation_Law_Included 1
 
 #include "y/chemical/reactive/actors.hpp"
+#include "y/chemical/slist.hpp"
+#include "y/container/matrix.hpp"
 
 namespace Yttrium
 {
@@ -37,9 +39,9 @@ namespace Yttrium
                 // C++
                 //
                 //______________________________________________________________
-                explicit Law(const size_t) noexcept; //!< setup empty
-                virtual ~Law()             noexcept; //!< cleanup
-                Y_OSTREAM_PROTO(Law);                //!< display
+                explicit Law() noexcept; //!< setup empty
+                virtual ~Law() noexcept; //!< cleanup
+                Y_OSTREAM_PROTO(Law);   //!< display
 
                 //______________________________________________________________
                 //
@@ -60,6 +62,8 @@ namespace Yttrium
 
                 bool linkedTo( const Law & ) const noexcept; //!< \return true iff common species
 
+                //! \param slist from canon
+                void compile(const SList &slist);
 
                 //______________________________________________________________
                 //
@@ -67,9 +71,10 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                const size_t irow; //!< index
-                Law *        next; //!< for list
-                Law *        prev; //!< for list
+                const xreal_t gamma2; //!< sum |coef|^2
+                const xreal_t gamma;  //!< sqrt(gamma)
+                Law *         next;   //!< for list
+                Law *         prev;   //!< for list
 
             private:
                 Y_Disable_Copy_And_Assign(Law); //!< discarded

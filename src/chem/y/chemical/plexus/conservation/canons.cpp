@@ -80,8 +80,8 @@ namespace Yttrium
                             }
                         }
                         Y_XMLog(xml, "[@] " << canon.species->list);
-                        Y_XMLog(xml, "    Gamma = " << canon.Gamma);
-                        Y_XMLog(xml, "    rg    = " << canon.rg);
+                        //Y_XMLog(xml, "    Gamma = " << canon.Gamma);
+                        //Y_XMLog(xml, "    rg    = " << canon.rg);
                     }
                 }
             }

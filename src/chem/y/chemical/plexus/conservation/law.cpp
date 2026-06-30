@@ -2,6 +2,7 @@
 #include "y/chemical/plexus/conservation/law.hpp"
 #include "y/string/format.hpp"
 #include "y/stream/output.hpp"
+#include "y/container/cxx/array.hpp"
 
 namespace Yttrium
 {
@@ -10,9 +11,10 @@ namespace Yttrium
 
         namespace Conservation
         {
-            Law:: Law(const size_t i) noexcept :
+            Law:: Law() noexcept :
             Actors(AsConc),
-            irow(i),
+            gamma2(0),
+            gamma(0),
             next(0),
             prev(0)
             {
@@ -97,6 +99,45 @@ namespace Yttrium
                 return false;
             }
 
+            namespace
+            {
+                static const char * const fn = "Conservation::Law";
+            }
+
+            void Law:: compile(const SList &slist)
+            {
+                apn           g2 = 0;
+                const size_t  m  = slist->size;
+                CxxArray<apn> gv(m);
+
+                for(const Actor *ac=(**this).head;ac;ac=ac->next)
+                {
+
+                    const Species &sp = ac->sp; assert(slist.found(sp));
+                    const apn      nu =  sp(gv,AuxLevel) = ac->nu;
+                    g2 += nu * nu;
+                }
+
+                {
+                    unsigned ug2 = 0;
+                    if(g2.is0())         throw Specific::Exception(fn,"invalid coefficients");
+                    if(!g2.tryCast(ug2)) throw Specific::Exception(fn,"coefficients overflow");
+                    Coerce(gamma2) = xreal_t(ug2);
+                    Coerce(gamma)  = gamma2.sqrt();
+                }
+
+                Matrix<apz> p(m,m);
+                const apn   d = g2;
+                for(size_t i=1;i<=m;++i)
+                {
+                    for(size_t j=1;j<=m;++j)
+                    {
+                        Sign::MakeOpposite( Coerce( (p[i][j] = gv[i] * gv[j]).s ) );
+                    }
+                    p[i][i] += d;
+                }
+                std::cerr << "p=" << p << "/" << g2 << std::endl;
+            }
 
         }
 

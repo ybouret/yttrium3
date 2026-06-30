@@ -56,7 +56,7 @@ namespace Yttrium
                         size_t       i   = 1;
                         for(const Coven::Vector *v=(**survey).head;v;v=v->next,++i)
                         {
-                            Law * const       law =  Coerce(laws).pushTail( new Law(i) );
+                            Law * const       law =  Coerce(laws).pushTail( new Law() );
                             UMatrix::RowType &Ai  = A[i];
                             {
                                 const Coven::Vector &V  = *v;
