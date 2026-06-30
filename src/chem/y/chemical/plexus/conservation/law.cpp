@@ -131,6 +131,8 @@ namespace Yttrium
                     Coerce(gamma)  = gamma2.sqrt();
                 }
 
+                //return ;
+
                 // compute projection matrix
                 Matrix<apz> p(m,m);
                 for(size_t i=1;i<=m;++i)
