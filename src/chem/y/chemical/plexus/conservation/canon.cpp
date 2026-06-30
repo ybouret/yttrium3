@@ -55,7 +55,7 @@ namespace Yttrium
                 Indexed::AuxLabel( Indexed::TopHSort( Coerce(species->list) ) );
 
                 for(const LNode *ln=laws->head;ln;ln=ln->next)
-                    Coerce( (**ln) ).compile(species->list);
+                    Coerce( **ln ).compile(species->list);
 
 
 #if 0

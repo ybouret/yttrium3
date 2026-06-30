@@ -6,7 +6,6 @@
 #include "y/chemical/plexus/conservation/law.hpp"
 #include "y/chemical/type/sp-roll.hpp"
 #include "y/chemical/type/assembly.hpp"
-//#include "y/chemical/type/matrix.hpp"
 
 
 namespace Yttrium

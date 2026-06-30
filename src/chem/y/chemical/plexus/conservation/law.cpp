@@ -3,6 +3,7 @@
 #include "y/string/format.hpp"
 #include "y/stream/output.hpp"
 #include "y/container/cxx/array.hpp"
+#include "y/apex/api/simplify.hpp"
 
 namespace Yttrium
 {
@@ -106,10 +107,13 @@ namespace Yttrium
 
             void Law:: compile(const SList &slist)
             {
+                std::cerr << "law: " << *this << std::endl;
                 apn           g2 = 0;
                 const size_t  m  = slist->size;
                 CxxArray<apn> gv(m);
 
+
+                // accumulate gamma vector and its squared norm
                 for(const Actor *ac=(**this).head;ac;ac=ac->next)
                 {
 
@@ -118,6 +122,7 @@ namespace Yttrium
                     g2 += nu * nu;
                 }
 
+                // compute factors
                 {
                     unsigned ug2 = 0;
                     if(g2.is0())         throw Specific::Exception(fn,"invalid coefficients");
@@ -126,8 +131,8 @@ namespace Yttrium
                     Coerce(gamma)  = gamma2.sqrt();
                 }
 
+                // compute projection matrix
                 Matrix<apz> p(m,m);
-                const apn   d = g2;
                 for(size_t i=1;i<=m;++i)
                 {
                     Writable<apz> &p_i = p[i];
@@ -135,9 +140,17 @@ namespace Yttrium
                     {
                         Sign::MakeOpposite( Coerce( (p_i[j] = gv[i] * gv[j]).s ) );
                     }
-                    p_i[i] += d;
+                    p_i[i] += g2;
                 }
-                std::cerr << "p=" << p << "/" << g2 << std::endl;
+
+                std::cerr << "\tp=" << p << "/" << g2 << std::endl;
+                for(size_t i=1;i<=m;++i)
+                {
+                    Writable<apz> &numer = p[i];
+                    apn            denom = g2;
+                    Apex::Simplify::Array(numer,denom);
+                    std::cerr << "\t\t" << numer << "/" << denom << std::endl;
+                }
             }
 
         }
