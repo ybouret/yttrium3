@@ -130,11 +130,12 @@ namespace Yttrium
                 const apn   d = g2;
                 for(size_t i=1;i<=m;++i)
                 {
+                    Writable<apz> &p_i = p[i];
                     for(size_t j=1;j<=m;++j)
                     {
-                        Sign::MakeOpposite( Coerce( (p[i][j] = gv[i] * gv[j]).s ) );
+                        Sign::MakeOpposite( Coerce( (p_i[j] = gv[i] * gv[j]).s ) );
                     }
-                    p[i][i] += d;
+                    p_i[i] += d;
                 }
                 std::cerr << "p=" << p << "/" << g2 << std::endl;
             }
