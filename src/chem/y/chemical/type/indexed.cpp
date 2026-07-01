@@ -1,6 +1,7 @@
 
 
 #include "y/chemical/type/indexed.hpp"
+#include <cstring>
 
 namespace Yttrium
 {
