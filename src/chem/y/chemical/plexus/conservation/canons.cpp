@@ -59,6 +59,7 @@ namespace Yttrium
                             tgt->mergeTail(*src);
                             delete list.pop( &source );
                         }
+                        tgt << law;
                     }
 
                     // compile each canon
