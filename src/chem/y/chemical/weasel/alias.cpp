@@ -26,7 +26,7 @@ namespace Yttrium
                 const char * const end  = strchr(ini++,':'); if(!end) throw Specific::Exception(CallSign,"missing ':' for EDB[%u]",i);
                 String             eid(ini,(size_t)(end-ini));
                 Algorithm::Crop(eid,isspace);
-                if( match.found(Jive::Matching::Somehow, eid, eid) )
+                if( match.found(Jive::Matching::Exactly, eid, eid) )
                     found << i;
             }
             

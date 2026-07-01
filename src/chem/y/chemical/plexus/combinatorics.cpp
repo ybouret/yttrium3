@@ -195,8 +195,13 @@ namespace Yttrium
             Y_XMLog(xml,"initial equilibria: " << topo.group->size);
             Y_XMLog(xml,"created equilibria: " << stoDB->size);
             Y_XMLog(xml,"all     equilibria: " << topo.elist->size);
-
-
+            if(xml.verbose)
+            {
+                for(const ENode *en=topo.elist->head;en;en=en->next)
+                {
+                    eqs.EqFormat::print(xml() << "@ ",**en,false,0.0);
+                }
+            }
 
         }
 

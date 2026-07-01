@@ -30,7 +30,9 @@ namespace Yttrium
         {
             assert(i>0);
             size_t * const arr = Coerce(indx);
-            for(unsigned j=0;j<Levels;++j) arr[j] = i;
+            memset(arr,0,sizeof(indx));
+            //for(unsigned j=0;j<Levels;++j) arr[j] = i;
+            arr[0] = i;
         }
 
         SignType Indexed:: TopLevelCompare(const Indexed &lhs, const Indexed &rhs) noexcept

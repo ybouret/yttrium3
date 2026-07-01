@@ -39,8 +39,8 @@ Y_UTEST(cluster)
         Topology             topo(xml,*g);
         Conservations        conservations(xml,topo);
         Conservation::Canons canons(xml,conservations.laws,conservations.lfmt);
-        continue;
-        Warden               warden(xml,conservations);
+        //continue;
+        //Warden               warden(xml,conservations);
         Combinatorics        combinatorics(xml,topo,eqs,K);
     }
 
