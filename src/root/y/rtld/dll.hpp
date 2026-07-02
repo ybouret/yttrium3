@@ -13,12 +13,17 @@ namespace Yttrium
     {
     public:
         class Code;
-        
-        virtual ~DLL() noexcept;
-        
+
+        DLL(const String &);
+        DLL(const char * const);
+        DLL(const DLL &) noexcept;
+        virtual ~DLL()   noexcept;
+
     private:
         Y_Disable_Assign(DLL);
         Code * const code;
+    public:
+        const String &name;
     };
 
 }
