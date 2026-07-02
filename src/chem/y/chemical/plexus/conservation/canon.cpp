@@ -127,23 +127,37 @@ namespace Yttrium
             {
                 const size_t Nc = Gamma.rows;
                 const size_t M  = Gamma.cols;
-                Y_XML_Element_Attr(xml,CompileSolvers, Y_XML_Attr(Nc)  << Y_XML_Attr(M) );
+                Y_XML_Element_Attr(xml,CompileSolvers, Y_XML_Attr(Nc)  << Y_XML_Attr(rg) );
+                apn          nmax = 0;
+                apn          nslv = 0;
                 for(size_t rank=1;rank<=rg;++rank)
                 {
-                    Matrix<apz> gamma(rank,M);
-
+                    Matrix<apz>  gamma(rank,M);
                     Combination  comb(Nc,rank);
                     Y_XML_Element_Attr(xml,Study,Y_XML_Attr(rank) << Y_XML_Attr(comb.total) );
+                    nmax += comb.total;
                     do
                     {
+                        // create sub matrix
                         for(size_t i=1;i<=rank;++i)
                         {
                             gamma[i].load( Gamma[ comb[i] ] );
                         }
-                        std::cerr << "\t" << comb << " => " << gamma << std::endl;
+                        if( MKL::Rank::Of(gamma) < rank )
+                        {
+                            Y_XMLog(xml, "[-] " << comb);
+                            continue;
+                        }
+                        else
+                        {
+                            //std::cerr << "[+] " << comb << " => " << gamma << std::endl;
+                            ++nslv;
+                        }
                     }
                     while(comb.next());
                 }
+                Y_XMLog(xml, "-- Kept " << nslv << " / " << nmax);
+
 
             }
 
