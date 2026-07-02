@@ -128,6 +128,7 @@ y/information/bwt
 y/information/stream
 y/field
 y/field/layout
+y/rtld
 )
 
 add_subdirectory(tests)
