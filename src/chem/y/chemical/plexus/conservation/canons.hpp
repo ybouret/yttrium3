@@ -49,6 +49,11 @@ namespace Yttrium
                 Y_Disable_Copy_And_Assign(Canons); //!< discarded
                 Y_Proxy_Decl();                    //!< helper
                 Canon::List list;                  //!< inner list
+
+                void makeContent(XML::Log                &,
+                                 const Core::ListOf<Law> &,
+                                 const Assembly          &);
+                void postProcess(XML::Log &);
             };
         }
 

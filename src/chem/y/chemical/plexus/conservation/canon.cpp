@@ -1,7 +1,8 @@
 
 
 #include "y/chemical/plexus/conservation/canon.hpp"
-//#include "y/mkl/algebra/rank.hpp"
+#include "y/mkl/algebra/rank.hpp"
+#include "y/xml/element.hpp"
 
 namespace Yttrium
 {
@@ -20,8 +21,8 @@ namespace Yttrium
             laws(),
             next(0),
             prev(0),
-            //Gamma(),
-            //rg(0),
+            Gamma(),
+            rg(0),
             lfmt()
             {
                 laws.pushTail(first);
@@ -36,13 +37,11 @@ namespace Yttrium
                 return false;
             }
 
-            void Canon:: compile()
+
+            void Canon:: compileSpecies()
             {
-                // initialize
                 species->free();
                 lfmt.reset();
-
-                // build species
                 for(const LNode *ln=laws->head;ln;ln=ln->next)
                 {
                     const Law &law = **ln;
@@ -53,12 +52,10 @@ namespace Yttrium
                     }
                 }
                 Indexed::AuxLabel( Indexed::TopHSort( Coerce(species->list) ) );
+            }
 
-                for(const LNode *ln=laws->head;ln;ln=ln->next)
-                    Coerce( **ln ).compile(species->list);
-
-
-#if 0
+            void Canon:: compileMetrics()
+            {
                 const size_t Nc = laws->size; assert(Nc>0);
                 const size_t M  = species->list->size;
                 Gamma.make(Nc,M);
@@ -72,7 +69,36 @@ namespace Yttrium
                     }
                 }
                 rg = MKL::Rank::Of(Gamma);
+            }
+
+
+            void Canon:: compile(XML::Log &xml)
+            {
+                const size_t cardinal = laws->size;
+                Y_XML_Element_Attr(xml,CompileCanon, Y_XML_Attr(cardinal) );
+                if(xml.verbose)
+                {
+                    for(const LNode *ln=laws->head;ln;ln=ln->next)
+                    {
+                        const Law &law = **ln;
+                        lfmt.print(xml() << "[+] d_( ",law,Justify::Center) << " )=0" << std::endl;
+                    }
+                }
+
+                compileSpecies();
+                Y_XMLog(xml, "[@] " << species->list);
+
+                compileMetrics();
+                Y_XMLog(xml, "    Gamma = " << Gamma);
+                Y_XMLog(xml, "    rg    = " << rg);
+                
+
+
+#if 0
+                for(const LNode *ln=laws->head;ln;ln=ln->next)
+                    Coerce( **ln ).compile(species->list);
 #endif
+
             }
 
         }

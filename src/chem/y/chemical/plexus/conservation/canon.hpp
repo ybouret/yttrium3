@@ -6,7 +6,8 @@
 #include "y/chemical/plexus/conservation/law.hpp"
 #include "y/chemical/type/sp-roll.hpp"
 #include "y/chemical/type/assembly.hpp"
-
+#include "y/chemical/type/matrix.hpp"
+#include "y/xml/log.hpp"
 
 namespace Yttrium
 {
@@ -54,7 +55,7 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 bool accepts(const Law &) const noexcept; //!< \return true iff shared species
-                void compile();                           //!< inscribe and AuxLabel species, update format
+                void compile(XML::Log &);                 //!< inscribe and AuxLabel species, update format
 
                 //______________________________________________________________
                 //
@@ -66,12 +67,14 @@ namespace Yttrium
                 LList    laws;    //!< list of laws
                 Canon *  next;    //!< for list
                 Canon *  prev;    //!< for list
-                //UMatrix  Gamma;   //!< compact conservation matrix
-                //size_t   rg;      //!< rank(Gamma)
+                UMatrix  Gamma;   //!< compact conservation matrix
+                size_t   rg;      //!< rank(Gamma)
                 Assembly lfmt;    //!< to format
 
             private:
                 Y_Disable_Copy_And_Assign(Canon); //!< discarded
+                void compileSpecies();
+                void compileMetrics();
             };
         }
 
