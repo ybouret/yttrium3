@@ -74,6 +74,7 @@ namespace Yttrium
 
             void Canon:: compile(XML::Log &xml)
             {
+                // finalize
                 const size_t cardinal = laws->size;
                 Y_XML_Element_Attr(xml,CompileCanon, Y_XML_Attr(cardinal) );
                 if(xml.verbose)
@@ -85,19 +86,64 @@ namespace Yttrium
                     }
                 }
 
+                // create dedicated species list
                 compileSpecies();
                 Y_XMLog(xml, "[@] " << species->list);
 
+                // create local metrics
                 compileMetrics();
                 Y_XMLog(xml, "    Gamma = " << Gamma);
                 Y_XMLog(xml, "    rg    = " << rg);
-                
+
+                // and solvers
+                compileSolvers(xml);
+
 
 
 #if 0
                 for(const LNode *ln=laws->head;ln;ln=ln->next)
                     Coerce( **ln ).compile(species->list);
 #endif
+
+            }
+
+
+        }
+
+    }
+
+}
+
+#include "y/counting/combination.hpp"
+
+namespace Yttrium
+{
+    namespace Chemical
+    {
+
+        namespace Conservation
+        {
+            void Canon:: compileSolvers(XML::Log &xml)
+            {
+                const size_t Nc = Gamma.rows;
+                const size_t M  = Gamma.cols;
+                Y_XML_Element_Attr(xml,CompileSolvers, Y_XML_Attr(Nc)  << Y_XML_Attr(M) );
+                for(size_t rank=1;rank<=rg;++rank)
+                {
+                    Matrix<apz> gamma(rank,M);
+
+                    Combination  comb(Nc,rank);
+                    Y_XML_Element_Attr(xml,Study,Y_XML_Attr(rank) << Y_XML_Attr(comb.total) );
+                    do
+                    {
+                        for(size_t i=1;i<=rank;++i)
+                        {
+                            gamma[i].load( Gamma[ comb[i] ] );
+                        }
+                        std::cerr << "\t" << comb << " => " << gamma << std::endl;
+                    }
+                    while(comb.next());
+                }
 
             }
 

@@ -75,6 +75,7 @@ namespace Yttrium
                 Y_Disable_Copy_And_Assign(Canon); //!< discarded
                 void compileSpecies();
                 void compileMetrics();
+                void compileSolvers(XML::Log &);
             };
         }
 
