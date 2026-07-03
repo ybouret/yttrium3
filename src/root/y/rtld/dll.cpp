@@ -91,4 +91,26 @@ namespace Yttrium
     }
 
 
+    void * DLL:: query(const String &symbol) noexcept
+    {
+        assert(code);
+        Y_Giant_Lock();
+#if defined(Y_BSD)
+        return dlsym(code->handle,symbol.c_str());
+#endif
+
+#if defined(Y_WIN)
+        return (void*) ::GetProcAddress(code->handle,symbol.c_str());
+#endif
+
+    }
+
+
+    void * DLL:: query(const char * const symbol)
+    {
+        const String _(symbol);
+        return query(_);
+    }
+
+
 }

@@ -33,6 +33,10 @@ field
 Y_LinkLibraries(test-root)
 target_link_libraries(test-root zlibstatic)
 
+add_library(cmodule MODULE cmodule.c)
+add_library(cxxmod  MODULE cxxmod.cpp)
+
+
 enable_testing()
 
 Y_UTEST(exception)
