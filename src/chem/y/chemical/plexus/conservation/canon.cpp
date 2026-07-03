@@ -260,19 +260,15 @@ namespace Yttrium
                 apn          nslv = 0;
                 apn          nmat = 0;
                 MKL::LU<apq> lu(rg);
-                GSupply      gdb;
+                //GSupply      gdb;
                 for(size_t rank=1;rank<=rg;++rank)
                 {
                     Matrix<apz>  gamma(rank,M);
-                    Matrix<apz>  ggt(rank,rank);
-                    Matrix<apz>  adj(rank,rank);
-                    Matrix<apz>  ag(rank,M);
-                    Matrix<apz>  numer(M,M);
-                    apz          denom = 0;
+                    Matrix<apq>  ggt(rank,rank);
                     Combination  comb(Nc,rank);
                     const apn    ntry = comb.total;
                     Y_XML_Element_Attr(xml,Study,Y_XML_Attr(rank) << Y_XML_Attr(ntry) );
-                    nmax += comb.total;
+                    nmax += ntry;
                     do
                     {
                         // create sub matrix
@@ -280,6 +276,12 @@ namespace Yttrium
                         {
                             gamma[i].load( Gamma[ comb[i] ] );
                         }
+
+                        ggt.gram(gamma);
+                        std::cerr << "ggt=" << ggt << std::endl;
+
+                        continue;
+
                         if( MKL::Rank::Of(gamma) < rank )
                         {
                             Y_XMLog(xml, "[-] " << comb);
@@ -288,8 +290,10 @@ namespace Yttrium
                         else
                         {
                             ++nslv;
+                            std::cerr << "[+] " << comb << std::endl;
                         }
 
+#if 0
                         ggt.gram(gamma);
                         denom = lu.determinant(ggt);  assert(!denom.is0());
                         lu.adjoint(adj,ggt);
@@ -304,7 +308,9 @@ namespace Yttrium
                             numer[i][i] += denom;
                         }
                         Apex::Simplify::Matrix(numer,denom);
+#endif
 
+#if 0
                         const PMatrix::Ptr * const pppm = gdb.query(numer,denom);
                         if(pppm)
                         {
@@ -316,7 +322,7 @@ namespace Yttrium
                             ++nmat;
                             Y_XMLog(xml,"proj=" << numer << "/" << denom);
                         }
-
+#endif
 
 
                     }
