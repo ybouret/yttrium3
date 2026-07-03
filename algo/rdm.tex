@@ -79,30 +79,22 @@ We look for $\vec \lambda \in \mathbb{R}^n$ such that:
 	 \vec \lambda = \left(\bm{\gamma} \bm{\gamma}^T \right)^{-1} \vec x
 \end{equation}
 
-\item Collect / Inject / Deflate.
-\begin{itemize}
-\item Let us take the "smallest excess" of the broken law $\vec \gamma_i$:
 \begin{equation}
-	\langle \vec\gamma_i \vert \vec C_0 \rangle = -x_i
-\end{equation}
-
-\item We inject $\lambda \vec \gamma_i$:
-\begin{equation}
-	\langle \vec\gamma_i \vert \vec C_0 + \lambda \vec \gamma_i \rangle = 0 \implies \lambda = \dfrac{x_i}{\gamma_i^2}
-	\implies \delta \vec C =  \dfrac{x_i}{\gamma_i^2} \vec \gamma_i = -\dfrac{\langle \vec\gamma_i \vert \vec C_0 \rangle}{\gamma_i^2} \vec \gamma_i
+\begin{array}{rcl}
+	\delta \vec C & = &  \bm{\gamma}^T \left(\bm{\gamma} \bm{\gamma}^T \right)^{-1} \vec x \\
+	              & = & - \bm{\gamma}^T \left(\bm{\gamma} \bm{\gamma}^T \right)^{-1} \bm{\gamma} \vec C_0 \\
+	              & = & - \dfrac{1}{\det \left(\bm{\gamma} \bm{\gamma}^T \right)}\bm{\gamma}^T \left(\bm{\gamma} \bm{\gamma}^T \right)^\ast \bm{\gamma} \;\;\vec C_0 \\
+\end{array}
 \end{equation}
 
 \begin{equation}
-	\delta \vec C ^2 = \dfrac{x_i^2}{\gamma_i^2} \implies \text{score = } \left\vert \dfrac{x_i}{\gamma_i}\right\vert
+\vec {C} = \dfrac{1}{\det \left(\bm{\gamma} \bm{\gamma}^T \right)} 
+\left[
+\det \left(\bm{\gamma} \bm{\gamma}^T \right) \bm{I}_M  - \bm{\gamma}^T \left(\bm{\gamma} \bm{\gamma}^T \right)^\ast \bm{\gamma} 
+\right] \vec C_0
 \end{equation}
 
-\begin{equation}
-	\vec C = \dfrac{1}{\gamma_i^2} \left[\gamma_i^2\bm{I}_M  - \vert \vec \gamma_i \rangle \langle \gamma_i \vert \right] \vec C_0
-\end{equation}
 
-\item If we inject the quantity
-
-\end{itemize}
 
 \end{itemize}
 

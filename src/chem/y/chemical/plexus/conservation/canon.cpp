@@ -74,7 +74,13 @@ namespace Yttrium
 
             void Canon:: compile(XML::Log &xml)
             {
-                // finalize
+                //--------------------------------------------------------------
+                //
+                //
+                // finalize state
+                //
+                //
+                //--------------------------------------------------------------
                 const size_t cardinal = laws->size;
                 Y_XML_Element_Attr(xml,CompileCanon, Y_XML_Attr(cardinal) );
                 if(xml.verbose)
@@ -86,16 +92,34 @@ namespace Yttrium
                     }
                 }
 
+                //--------------------------------------------------------------
+                //
+                //
                 // create dedicated species list
+                //
+                //
+                //--------------------------------------------------------------
                 compileSpecies();
                 Y_XMLog(xml, "[@] " << species->list);
 
+                //--------------------------------------------------------------
+                //
+                //
                 // create local metrics
+                //
+                //
+                //--------------------------------------------------------------
                 compileMetrics();
                 Y_XMLog(xml, "    Gamma = " << Gamma);
                 Y_XMLog(xml, "    rg    = " << rg);
 
+                //--------------------------------------------------------------
+                //
+                //
                 // and solvers
+                //
+                //
+                //--------------------------------------------------------------
                 compileSolvers(xml);
 
 
@@ -115,6 +139,10 @@ namespace Yttrium
 }
 
 #include "y/counting/combination.hpp"
+#include "y/mkl/algebra/lu.hpp"
+#include "y/apex/api/simplify.hpp"
+#include "y/chemical/type/ikey.hpp"
+#include "y/pointer/keyed.hpp"
 
 namespace Yttrium
 {
@@ -123,18 +151,127 @@ namespace Yttrium
 
         namespace Conservation
         {
+
+            class PMatrix : public CountedObject
+            {
+            public:
+                typedef ArcPtr<PMatrix> Ptr;
+
+                explicit PMatrix(const Matrix<apz> &Num,
+                                 const apz         &Den) :
+                CountedObject(),
+                numer(Num),
+                denom(Den)
+                {
+                }
+
+                virtual ~PMatrix() noexcept
+                {
+                }
+
+                const Matrix<apz> numer;
+                const apz         denom;
+
+            private:
+                Y_Disable_Copy_And_Assign(PMatrix);
+            };
+
+            class GMatrix : public CountedObject
+            {
+            public:
+                typedef Keyed<IKey, ArcPtr<GMatrix> > Ptr;
+                typedef HashSet<IKey,Ptr>             Set;
+
+                explicit GMatrix(const Readable<size_t> &k,
+                                 const PMatrix::Ptr     &p) :
+                comb(k),
+                pmat(p)
+                {
+                }
+
+                virtual ~GMatrix() noexcept {}
+
+                const IKey & key() const noexcept { return comb; }
+
+                const IKey          comb;
+                const PMatrix::Ptr  pmat;
+
+
+            private:
+                Y_Disable_Copy_And_Assign(GMatrix);
+            };
+
+            class GSupply : public GMatrix::Set
+            {
+            public:
+                explicit GSupply()  : GMatrix::Set()
+                {
+
+                }
+
+                virtual ~GSupply() noexcept
+                {
+                }
+
+                void push(const Readable<size_t> &k,
+                          const PMatrix::Ptr     &p)
+                {
+                    const GMatrix::Ptr pgm = new GMatrix(k,p);
+                    if(!insert(pgm))
+                        throw Specific::Exception("Canon::Compile", "unexpected multiple combination detected!");
+                }
+
+                void push(const Readable<size_t> &k,
+                          const Matrix<apz>      &numer,
+                          const apz              &denom)
+                {
+                    const PMatrix::Ptr p = new PMatrix(numer,denom);
+                    push(k,p);
+                }
+
+
+                const PMatrix::Ptr * query(const Matrix<apz> &numer,
+                                           const apz         &denom) const noexcept
+                {
+                    for(ConstIterator it=begin();it!=end();++it)
+                    {
+                        const GMatrix      &gm = **it;
+                        const PMatrix::Ptr &ppm = gm.pmat;
+                        const PMatrix      &pm  = *ppm;
+                        if(denom==pm.denom && pm.numer.isEqualTo(numer) )
+                            return &ppm;
+                    }
+                    return 0;
+                }
+
+            private:
+                Y_Disable_Copy_And_Assign(GSupply);
+
+            };
+
+
             void Canon:: compileSolvers(XML::Log &xml)
             {
+
                 const size_t Nc = Gamma.rows;
                 const size_t M  = Gamma.cols;
                 Y_XML_Element_Attr(xml,CompileSolvers, Y_XML_Attr(Nc)  << Y_XML_Attr(rg) );
                 apn          nmax = 0;
                 apn          nslv = 0;
+                apn          nmat = 0;
+                MKL::LU<apq> lu(rg);
+                GSupply      gdb;
                 for(size_t rank=1;rank<=rg;++rank)
                 {
                     Matrix<apz>  gamma(rank,M);
+                    Matrix<apz>  ggt(rank,rank);
+                    Matrix<apz>  adj(rank,rank);
+                    Matrix<apz>  ag(rank,M);
+                    Matrix<apz>  numer(M,M);
+                    apz          denom = 0;
                     Combination  comb(Nc,rank);
-                    Y_XML_Element_Attr(xml,Study,Y_XML_Attr(rank) << Y_XML_Attr(comb.total) );
+                    const apn    ntry = comb.total;
+                    Y_XML_Element_Attr(xml,Study,Y_XML_Attr(rank) << Y_XML_Attr(ntry) );
                     nmax += comb.total;
                     do
                     {
@@ -150,13 +287,44 @@ namespace Yttrium
                         }
                         else
                         {
-                            //std::cerr << "[+] " << comb << " => " << gamma << std::endl;
                             ++nslv;
                         }
+
+                        ggt.gram(gamma);
+                        denom = lu.determinant(ggt);  assert(!denom.is0());
+                        lu.adjoint(adj,ggt);
+                        ag.mmul(adj,gamma);
+                        numer.mmul(TransposeOf,gamma,ag);
+                        for(size_t i=1;i<=M;++i)
+                        {
+                            for(size_t j=1;j<=M;++j)
+                            {
+                                Sign::MakeOpposite( Coerce(numer[i][j].s) );
+                            }
+                            numer[i][i] += denom;
+                        }
+                        Apex::Simplify::Matrix(numer,denom);
+
+                        const PMatrix::Ptr * const pppm = gdb.query(numer,denom);
+                        if(pppm)
+                        {
+                            gdb.push(comb,*pppm);
+                        }
+                        else
+                        {
+                            gdb.push(comb,numer,denom);
+                            ++nmat;
+                            Y_XMLog(xml,"proj=" << numer << "/" << denom);
+                        }
+
+
+
                     }
                     while(comb.next());
                 }
-                Y_XMLog(xml, "-- Kept " << nslv << " / " << nmax);
+                Y_XMLog(xml, "-- Solvers::Maxi = " << nmax);
+                Y_XMLog(xml, "-- Solvers::Kept = " << nslv);
+                Y_XMLog(xml, "-- Solvers::Proj = " << nmat);
 
 
             }

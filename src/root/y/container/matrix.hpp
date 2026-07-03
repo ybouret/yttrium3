@@ -385,7 +385,7 @@ namespace Yttrium
             {
                 const MatrixRow<T> &l = (*this)[i];
                 const MatrixRow<U> &r =     rhs[i];
-                for(size_t j=cols;j>0;--i) if(l[j]!=r[i]) return false;
+                for(size_t j=cols;j>0;--j) if(l[j]!=r[j]) return false;
             }
             return true;
         }
