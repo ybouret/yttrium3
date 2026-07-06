@@ -107,6 +107,21 @@ namespace Yttrium
                     Coerce((**node).indx[AuxLevel]) = i;
             }
 
+            template <typename TARGET, typename SOURCE, typename HLIST> static inline
+            void Transfer(TARGET &target, const Level tgt,
+                          SOURCE &source, const Level src,
+                          HLIST &hlist)
+            {
+                for(typename HLIST::NodeType *node=hlist->head;node;node=node->next)
+                {
+                    const Indexed &id = **node;
+                    id(target,tgt) = id(source,src);
+                }
+            }
+
+
+
+
             //__________________________________________________________________
             //
             //

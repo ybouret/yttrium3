@@ -13,6 +13,7 @@ namespace Yttrium
     {
         typedef Matrix<unsigned> UMatrix;
         typedef Matrix<int>      IMatrix;
+        typedef Matrix<xreal_t>  XMatrix;
     }
 
 }

@@ -37,7 +37,7 @@ Y_UTEST(aftermath)
     XAdd              xadd;
 
     const double probaZ = EnvironmentConvert::To<double>("probaZ",0);
-    Concentration::Fill(ran,C0,M,probaZ);
+    Concentration::Fill(ran,C0,M,probaZ,0);
 
     Core::Display(std::cerr << "C0=", C0.begin(), C0.size(), xreal_t::ToString) << std::endl;
 

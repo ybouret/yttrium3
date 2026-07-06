@@ -117,6 +117,15 @@ namespace Yttrium
             }
         }
 
+        void Actors:: transfer(XWritable       &target, const Level tgt,
+                               const XReadable &source, const Level src) const
+        {
+            for(const Actor * ac=list.head;ac;ac=ac->next)
+            {
+                const Species &sp = ac->sp;
+                sp(target,tgt) = sp(source,src);
+            }
+        }
 
     }
 

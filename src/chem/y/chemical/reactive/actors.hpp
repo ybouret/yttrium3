@@ -59,6 +59,10 @@ namespace Yttrium
             bool    active(const XReadable &, const Level)            const noexcept; //!< \return false if one concentration is <= 0
             void    safeMove(XWritable &, const Level, const xreal_t) const noexcept; //!< move all concentrations using extent
 
+            void    transfer(XWritable       &target, const Level tgt,
+                             const XReadable &source, const Level src) const;
+
+
         private:
             Y_Disable_Copy_And_Assign(Actors); //!< discarded
             Y_Proxy_Decl();                    //!< helper

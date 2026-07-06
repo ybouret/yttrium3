@@ -20,8 +20,17 @@ namespace Yttrium
                 virtual ~Proj()                noexcept;
                 Y_OSTREAM_PROTO(Proj);
 
+                //! build coefficients
+                /**
+                 \param species list of species
+                 \param weights array of weights
+                 */
                 void     build(const SList         &species,
                                const Readable<apz> &weights);
+
+                void     apply(XWritable       &target, const Level tgt,
+                               const XReadable &source, const Level src,
+                               XAdd & xadd) const;
 
                 const Species &sp;   //!< target species
                 const xreal_t  scal; //!< scaling

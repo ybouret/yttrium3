@@ -67,6 +67,11 @@ namespace Yttrium
                 //! \param slist from canon
                 void compile(XML::Log &xml, const SList &slist);
 
+
+                XWritable & project(XWritable       &target, const Level tgt,
+                                    const XReadable &source, const Level src,
+                                    XAdd &xadd) const;
+                
                 //______________________________________________________________
                 //
                 //
@@ -76,6 +81,7 @@ namespace Yttrium
                 const xreal_t    gamma2; //!< sum |coef|^2
                 const xreal_t    gamma;  //!< sqrt(gamma)
                 const Proj::List lproj;  //!< list of projections
+                const SList      ident;  //!< list of identity
                 Law *            next;   //!< for list
                 Law *            prev;   //!< for list
 

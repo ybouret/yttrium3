@@ -18,6 +18,7 @@ namespace Yttrium
             gamma2(0),
             gamma(0),
             lproj(),
+            ident(),
             next(0),
             prev(0)
             {
@@ -40,7 +41,15 @@ namespace Yttrium
                     const xreal_t acc = ac->xn * ac->sp(C,L);
                     xadd << acc;
                 }
-                return xadd();
+                const xreal_t xs = xadd();
+                if(xs.mantissa<0)
+                {
+                    return -xs/gamma;
+                }
+                else
+                {
+                    return 0;
+                }
             }
 
             namespace
@@ -105,7 +114,8 @@ namespace Yttrium
 
             const char * const Law::Name = "Conservation::Law";
 
-            void Law:: compile(XML::Log &xml, const SList &slist)
+            void Law:: compile(XML::Log    & xml,
+                               const SList & slist)
             {
                 const Law &law = *this;
                 Y_XML_Element_Attr(xml,Compile,Y_XML_Attr(law));
@@ -128,6 +138,8 @@ namespace Yttrium
                     g2 += nu * nu;
                 }
                 Y_XMLog(xml, "gamma2=" << g2);
+
+
 
                 //--------------------------------------------------------------
                 //
@@ -165,7 +177,7 @@ namespace Yttrium
                     const SNode *sn = slist->head;
                     for(size_t i=1;i<=m;++i,sn=sn->next)
                     {
-                        const Species &sp    = **sn; if(!law.hired(sp)) continue;
+                        const Species &sp    = **sn; if(!law.hired(sp)) { Coerce(ident) << sp; continue; }
                         Writable<apz> &numer = p[i];
                         apn            denom = g2;
                         Apex::Simplify::Array(numer,denom);
@@ -176,7 +188,26 @@ namespace Yttrium
 
                     }
                 }
+                Y_XMLog(xml,"ident=" << ident);
             }
+
+            XWritable & Law:: project(XWritable       &target, const Level tgt,
+                                      const XReadable &source, const Level src,
+                                      XAdd &xadd) const
+            {
+                // copy identity species
+                Indexed::Transfer(target,tgt,source,src,ident);
+
+                // compute projection
+                for(const Proj *proj=lproj.head;proj;proj=proj->next)
+                {
+                    proj->apply(target,tgt,source,src,xadd);
+                }
+
+                return target;
+            }
+
+            
 
         }
 
