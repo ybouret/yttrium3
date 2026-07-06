@@ -62,7 +62,7 @@ Let us assume that:
  
 \item We need to inject $\lambda \vec \Gamma _i$ such that:
 \begin{equation}
-	\vec C = \vec C_0 + \lambda \vec \Gamma _i \implies \langle \vec \Gamma _i \vert \vec C \rangle = 0 \implies \lambda = \dfrac{x_i}{\vec \Gamma_i^2}
+	\vec C' = \vec C_0 + \lambda \vec \Gamma _i \implies \langle \vec \Gamma _i \vert \vec C \rangle = 0 \implies \lambda = \dfrac{x_i}{\vec \Gamma_i^2}
 \end{equation}
 
 \item The injected concentration is:
@@ -72,7 +72,7 @@ Let us assume that:
 
 The projected state is directly:
 \begin{equation}
-	\vec C = \dfrac{1}{\vec \Gamma_i^2}\left[ \vec \Gamma_i^2 \bm{I} -  \vert \vec \Gamma _i \rangle \langle \vec \Gamma _i \vert\right] \vec C_0
+	\vec C' = \dfrac{1}{\vec \Gamma_i^2}\left[ \vec \Gamma_i^2 \bm{I} -  \vert \vec \Gamma _i \rangle \langle \vec \Gamma _i \vert\right] \vec C_0
 \end{equation}
 
 \item We note that:
@@ -80,7 +80,26 @@ The projected state is directly:
 	\delta \vec C ^2 = \dfrac{x_i^2}{\vec \Gamma_i^2} \implies  \vert \delta \vec C  \vert = \dfrac{x_i}{ \vert \vec \Gamma_i \vert}
 \end{equation}
 This allows to select the smallest injected concentration.
+
+%\item Once $\vec C'$, we have a positive linear combination of species that is zero. There exists an extent such that all the involved species got a null concentration.
+%
+% 
+%\begin{equation}
+%	\vec{C}'' = \overrightarrow {
+%	\begin{bmatrix}
+%		1-\delta_{\Gamma_{ij}}\\
+%	\end{bmatrix}
+%	}
+%	\otimes \vec{C}' = \vec{C}' + \bm{\nu}^T \vec\xi
+%\end{equation}
+%
+%\begin{equation}
+%\bm{\nu}\bm{\nu}^T \vec\xi = \bm{\nu}\left( \vec{C}'' - \vec{C}' \right)
+%\end{equation}
+
 \end{itemize}
+
+
 
 \end{document}
  

@@ -102,63 +102,8 @@ namespace Yttrium
                 return false;
             }
 
-            namespace
-            {
-                static const char * const fn = "Conservation::Law";
-            }
 
-
-            PCoef:: PCoef(const xreal_t cf_, const Species &sp_) noexcept :
-            cf(cf_),
-            sp(sp_),
-            next(0),
-            prev(0)
-            {
-            }
-
-            PCoef:: ~PCoef() noexcept
-            {
-            }
-
-            std::ostream & operator<<(std::ostream &os, const PCoef &self)
-            {
-                os << (double)self.cf << '*' <<  '[' << self.sp.name << ']';
-                return os;
-            }
-
-            Proj:: ~Proj() noexcept
-            {
-            }
-
-            Proj:: Proj(const Species &sp_, const xreal_t sc_) noexcept :
-            Object(), PCoef::List(),
-            sp(sp_),
-            scal(sc_),
-            next(0),
-            prev(0)
-            {
-            }
-
-            std::ostream & operator<<(std::ostream &os, const Proj &proj)
-            {
-                const PCoef::List &self = proj;
-                os << '[' << proj.sp << ']' << " : " << self << "/" << (double)proj.scal;
-                return os;
-            }
-
-            void Proj:: build(const SList         &species,
-                              const Readable<apz> &weights)
-            {
-                const size_t m = species->size; assert(species->size==weights.size());
-                const SNode *sn = species->head;
-                for(size_t i=1;i<=m;++i,sn=sn->next)
-                {
-                    const apz &   W  = weights[i]; if(W.is0()) continue;
-                    int           w  = 0;          if(!W.tryCast(w)) throw Specific::Exception(fn,"projection weight overflow!!");
-                    pushTail( new PCoef(w,**sn) );
-                }
-            }
-
+            const char * const Law::Name = "Conservation::Law";
 
             void Law:: compile(XML::Log &xml, const SList &slist)
             {
@@ -193,8 +138,8 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 {
                     unsigned ug2 = 0;
-                    if(g2.is0())         throw Specific::Exception(fn,"invalid coefficients");
-                    if(!g2.tryCast(ug2)) throw Specific::Exception(fn,"coefficients overflow");
+                    if(g2.is0())         throw Specific::Exception(Name,"invalid coefficients");
+                    if(!g2.tryCast(ug2)) throw Specific::Exception(Name,"coefficients overflow");
                     Coerce(gamma2) = xreal_t(ug2);
                     Coerce(gamma)  = gamma2.sqrt();
                 }
@@ -224,7 +169,7 @@ namespace Yttrium
                         Writable<apz> &numer = p[i];
                         apn            denom = g2;
                         Apex::Simplify::Array(numer,denom);
-                        int          scal = 0; if(!denom.tryCast(scal)) throw Specific::Exception(fn,"scaling overflow");
+                        int          scal = 0; if(!denom.tryCast(scal)) throw Specific::Exception(Name,"scaling overflow");
                         Proj * const proj = Coerce(lproj).pushTail( new Proj(sp,scal) );
                         proj->build(slist,numer);
                         Y_XMLog(xml,*proj);

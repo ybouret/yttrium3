@@ -9,6 +9,7 @@ y/chemical/reactive
 y/chemical/reactive/equilibrium
 y/chemical/plexus
 y/chemical/plexus/conservation
+y/chemical/plexus/conservation/law
 y/chemical/plexus/combinatorics
 )
 
