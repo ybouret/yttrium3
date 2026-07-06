@@ -162,12 +162,17 @@ namespace Yttrium
                 }
                 Y_XMLog(xml, "p=" << p << " / " << g2);
 
-                for(size_t i=1;i<=m;++i)
                 {
-                    Writable<apz> &numer = p[i];
-                    apn            denom = g2;
-                    Apex::Simplify::Array(numer,denom);
-                    std::cerr << "\t\t" << numer << "/" << denom << std::endl;
+                    const SNode *sn = slist->head;
+                    for(size_t i=1;i<=m;++i,sn=sn->next)
+                    {
+                        const Species &sp    = **sn;
+                        Writable<apz> &numer = p[i];
+                        apn            denom = g2;
+                        Apex::Simplify::Array(numer,denom);
+                        const bool modified = law.hired(sp);
+                        Y_XMLog(xml,(modified ? "[+]" : "[*]") << " " << sp << " : " << numer << "/" << denom);
+                    }
                 }
             }
 
