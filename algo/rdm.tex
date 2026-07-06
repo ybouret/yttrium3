@@ -52,19 +52,34 @@ A concentration set $\vec C_0$ is legal iff:
 \begin{equation}
 \forall i, \langle \vec \Gamma _i \vert \vec C_0 \rangle \geq 0
 \end{equation}
+with $\vec \Gamma _i \in \mathbb{R}_+^M$ with at least two coefficients.
 
 \item
 Let us assume that:
 \begin{equation}
 	\langle \vec \Gamma _i \vert \vec C_0 \rangle  = - x_i,\; x_i>0
 \end{equation}
-We could use \eqref{eq:gamma} but we would want to minimise the injected quantity, which is tricky.
-
-\item Collect/Inject/Deflate
-
  
+\item We need to inject $\lambda \vec \Gamma _i$ such that:
+\begin{equation}
+	\vec C = \vec C_0 + \lambda \vec \Gamma _i \implies \langle \vec \Gamma _i \vert \vec C \rangle = 0 \implies \lambda = \dfrac{x_i}{\vec \Gamma_i^2}
+\end{equation}
 
+\item The injected concentration is:
+\begin{equation}
+	\delta \vec C = \dfrac{x_i}{\vec \Gamma_i^2} \vec \Gamma_i = - \dfrac{\langle \vec \Gamma _i \vert \vec C_0 \rangle}{\vec \Gamma_i^2}\vec \Gamma_i 
+\end{equation} 
 
+The projected state is directly:
+\begin{equation}
+	\vec C = \dfrac{1}{\vec \Gamma_i^2}\left[ \vec \Gamma_i^2 \bm{I} -  \vert \vec \Gamma _i \rangle \langle \vec \Gamma _i \vert\right] \vec C_0
+\end{equation}
+
+\item We note that:
+\begin{equation}
+	\delta \vec C ^2 = \dfrac{x_i^2}{\vec \Gamma_i^2} \implies  \vert \delta \vec C  \vert = \dfrac{x_i}{ \vert \vec \Gamma_i \vert}
+\end{equation}
+This allows to select the smallest injected concentration.
 \end{itemize}
 
 \end{document}
