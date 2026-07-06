@@ -105,9 +105,9 @@ namespace Yttrium
                 static const char * const fn = "Conservation::Law";
             }
 
-            void Law:: compile(const SList &slist)
+            void Law:: compile(XML::Log &xml, const SList &slist)
             {
-                std::cerr << "law: " << *this << std::endl;
+                Y_XMLog(xml,*this);
                 apn           g2 = 0;
                 const size_t  m  = slist->size;
                 CxxArray<apn> gv(m);
@@ -122,6 +122,7 @@ namespace Yttrium
                     g2 += nu * nu;
                 }
 
+                Y_XMLog(xml, "gamma2=" << g2);
                 // compute factors
                 {
                     unsigned ug2 = 0;
@@ -131,8 +132,7 @@ namespace Yttrium
                     Coerce(gamma)  = gamma2.sqrt();
                 }
 
-                //return;
-
+                
                 // compute projection matrix
                 Matrix<apz> p(m,m);
                 for(size_t i=1;i<=m;++i)

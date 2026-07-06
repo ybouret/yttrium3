@@ -5,6 +5,7 @@
 #include "y/chemical/reactive/actors.hpp"
 #include "y/chemical/slist.hpp"
 #include "y/container/matrix.hpp"
+#include "y/xml/log.hpp"
 
 namespace Yttrium
 {
@@ -63,7 +64,7 @@ namespace Yttrium
                 bool linkedTo( const Law & ) const noexcept; //!< \return true iff common species
 
                 //! \param slist from canon
-                void compile(const SList &slist);
+                void compile(XML::Log &xml, const SList &slist);
 
                 //______________________________________________________________
                 //

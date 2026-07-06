@@ -21,8 +21,6 @@ namespace Yttrium
             laws(),
             next(0),
             prev(0),
-            Gamma(),
-            rg(0),
             lfmt()
             {
                 laws.pushTail(first);
@@ -54,6 +52,13 @@ namespace Yttrium
                 Indexed::AuxLabel( Indexed::TopHSort( Coerce(species->list) ) );
             }
 
+            void Canon:: compileContent(XML::Log &xml)
+            {
+                for(const LNode *ln=laws->head;ln;ln=ln->next)
+                    Coerce( **ln ).compile(xml,species->list);
+            }
+
+#if 0
             void Canon:: compileMetrics()
             {
                 const size_t Nc = laws->size; assert(Nc>0);
@@ -70,7 +75,7 @@ namespace Yttrium
                 }
                 rg = MKL::Rank::Of(Gamma);
             }
-
+#endif
 
             void Canon:: compile(XML::Log &xml)
             {
@@ -102,32 +107,15 @@ namespace Yttrium
                 compileSpecies();
                 Y_XMLog(xml, "[@] " << species->list);
 
-                //--------------------------------------------------------------
-                //
-                //
-                // create local metrics
-                //
-                //
-                //--------------------------------------------------------------
-                compileMetrics();
-                Y_XMLog(xml, "    Gamma = " << Gamma);
-                Y_XMLog(xml, "    rg    = " << rg);
 
                 //--------------------------------------------------------------
                 //
                 //
-                // and solvers
+                // compile each law
                 //
                 //
                 //--------------------------------------------------------------
-                compileSolvers(xml);
-
-
-
-#if 0
-                for(const LNode *ln=laws->head;ln;ln=ln->next)
-                    Coerce( **ln ).compile(species->list);
-#endif
+                compileContent(xml);
 
             }
 
@@ -138,6 +126,7 @@ namespace Yttrium
 
 }
 
+#if 0
 #include "y/counting/combination.hpp"
 #include "y/mkl/algebra/lu.hpp"
 #include "y/apex/api/simplify.hpp"
@@ -340,3 +329,6 @@ namespace Yttrium
     }
 
 }
+
+#endif
+
