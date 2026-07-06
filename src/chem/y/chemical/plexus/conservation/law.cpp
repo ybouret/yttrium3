@@ -4,6 +4,7 @@
 #include "y/stream/output.hpp"
 #include "y/container/cxx/array.hpp"
 #include "y/apex/api/simplify.hpp"
+#include "y/xml/element.hpp"
 
 namespace Yttrium
 {
@@ -107,13 +108,19 @@ namespace Yttrium
 
             void Law:: compile(XML::Log &xml, const SList &slist)
             {
-                Y_XMLog(xml,*this);
-                apn           g2 = 0;
+                const Law &law = *this;
+                Y_XML_Element_Attr(xml,Compile,Y_XML_Attr(law));
                 const size_t  m  = slist->size;
+                apn           g2 = 0;
                 CxxArray<apn> gv(m);
 
-
+                //--------------------------------------------------------------
+                //
+                //
                 // accumulate gamma vector and its squared norm
+                //
+                //
+                //--------------------------------------------------------------
                 for(const Actor *ac=(**this).head;ac;ac=ac->next)
                 {
 
@@ -121,9 +128,15 @@ namespace Yttrium
                     const apn      nu =  sp(gv,AuxLevel) = ac->nu;
                     g2 += nu * nu;
                 }
-
                 Y_XMLog(xml, "gamma2=" << g2);
+
+                //--------------------------------------------------------------
+                //
+                //
                 // compute factors
+                //
+                //
+                //--------------------------------------------------------------
                 {
                     unsigned ug2 = 0;
                     if(g2.is0())         throw Specific::Exception(fn,"invalid coefficients");
@@ -132,20 +145,23 @@ namespace Yttrium
                     Coerce(gamma)  = gamma2.sqrt();
                 }
 
-                
+                //--------------------------------------------------------------
+                //
+                //
                 // compute projection matrix
+                //
+                //
+                //--------------------------------------------------------------
                 Matrix<apz> p(m,m);
                 for(size_t i=1;i<=m;++i)
                 {
                     Writable<apz> &p_i = p[i];
                     for(size_t j=1;j<=m;++j)
-                    {
                         Sign::MakeOpposite( Coerce( (p_i[j] = gv[i] * gv[j]).s ) );
-                    }
                     p_i[i] += g2;
                 }
+                Y_XMLog(xml, "p=" << p << " / " << g2);
 
-                std::cerr << "\tp=" << p << "/" << g2 << std::endl;
                 for(size_t i=1;i<=m;++i)
                 {
                     Writable<apz> &numer = p[i];
