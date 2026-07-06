@@ -31,7 +31,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             explicit Topology(XML::Log &, const EList &); //!< setup
-            virtual ~Topology() noexcept; //!< cleanup
+            virtual ~Topology() noexcept;                 //!< cleanup
 
             //__________________________________________________________________
             //
