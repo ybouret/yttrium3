@@ -17,6 +17,7 @@ namespace Yttrium
             Actors(AsConc),
             gamma2(0),
             gamma(0),
+            lproj(),
             next(0),
             prev(0)
             {
@@ -106,6 +107,59 @@ namespace Yttrium
                 static const char * const fn = "Conservation::Law";
             }
 
+
+            PCoef:: PCoef(const xreal_t cf_, const Species &sp_) noexcept :
+            cf(cf_),
+            sp(sp_),
+            next(0),
+            prev(0)
+            {
+            }
+
+            PCoef:: ~PCoef() noexcept
+            {
+            }
+
+            std::ostream & operator<<(std::ostream &os, const PCoef &self)
+            {
+                os << (double)self.cf << '*' <<  '[' << self.sp.name << ']';
+                return os;
+            }
+
+            Proj:: ~Proj() noexcept
+            {
+            }
+
+            Proj:: Proj(const Species &sp_, const xreal_t sc_) noexcept :
+            Object(), PCoef::List(),
+            sp(sp_),
+            scal(sc_),
+            next(0),
+            prev(0)
+            {
+            }
+
+            std::ostream & operator<<(std::ostream &os, const Proj &proj)
+            {
+                const PCoef::List &self = proj;
+                os << '[' << proj.sp << ']' << " : " << self << "/" << (double)proj.scal;
+                return os;
+            }
+
+            void Proj:: build(const SList         &species,
+                              const Readable<apz> &weights)
+            {
+                const size_t m = species->size; assert(species->size==weights.size());
+                const SNode *sn = species->head;
+                for(size_t i=1;i<=m;++i,sn=sn->next)
+                {
+                    const apz &   W  = weights[i]; if(W.is0()) continue;
+                    int           w  = 0;          if(!W.tryCast(w)) throw Specific::Exception(fn,"projection weight overflow!!");
+                    pushTail( new PCoef(w,**sn) );
+                }
+            }
+
+
             void Law:: compile(XML::Log &xml, const SList &slist)
             {
                 const Law &law = *this;
@@ -166,12 +220,15 @@ namespace Yttrium
                     const SNode *sn = slist->head;
                     for(size_t i=1;i<=m;++i,sn=sn->next)
                     {
-                        const Species &sp    = **sn;
+                        const Species &sp    = **sn; if(!law.hired(sp)) continue;
                         Writable<apz> &numer = p[i];
                         apn            denom = g2;
                         Apex::Simplify::Array(numer,denom);
-                        const bool modified = law.hired(sp);
-                        Y_XMLog(xml,(modified ? "[+]" : "[*]") << " " << sp << " : " << numer << "/" << denom);
+                        int          scal = 0; if(!denom.tryCast(scal)) throw Specific::Exception(fn,"scaling overflow");
+                        Proj * const proj = Coerce(lproj).pushTail( new Proj(sp,scal) );
+                        proj->build(slist,numer);
+                        Y_XMLog(xml,*proj);
+
                     }
                 }
             }

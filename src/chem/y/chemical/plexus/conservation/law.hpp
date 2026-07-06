@@ -15,6 +15,50 @@ namespace Yttrium
         namespace Conservation
         {
 
+
+            class PCoef : public Object
+            {
+            public:
+                typedef CxxListOf<PCoef> List;
+                explicit PCoef(const xreal_t, const Species &) noexcept;
+                virtual ~PCoef() noexcept;
+                Y_OSTREAM_PROTO(PCoef);
+
+                const PCoef & operator*() const noexcept { return *this; }
+
+                
+
+                const xreal_t  cf;
+                const Species &sp;
+                PCoef         *next;
+                PCoef         *prev;
+
+            private:
+                Y_Disable_Copy_And_Assign(PCoef);
+            };
+
+            class Proj : public Object, public PCoef::List
+            {
+            public:
+                typedef CxxListOf<Proj> List;
+                explicit Proj(const Species &, const xreal_t) noexcept;
+                virtual ~Proj()                noexcept;
+                Y_OSTREAM_PROTO(Proj);
+                
+                void     build(const SList         &species,
+                               const Readable<apz> &weights);
+
+                const Species &sp;   //!< target species
+                const xreal_t  scal; //!< scaling
+                Proj *         next;
+                Proj *         prev;
+
+            private:
+                Y_Disable_Copy_And_Assign(Proj);
+
+            };
+
+
             //__________________________________________________________________
             //
             //
@@ -72,10 +116,11 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                const xreal_t gamma2; //!< sum |coef|^2
-                const xreal_t gamma;  //!< sqrt(gamma)
-                Law *         next;   //!< for list
-                Law *         prev;   //!< for list
+                const xreal_t    gamma2; //!< sum |coef|^2
+                const xreal_t    gamma;  //!< sqrt(gamma)
+                const Proj::List lproj;  //!< list of projections
+                Law *            next;   //!< for list
+                Law *            prev;   //!< for list
 
             private:
                 Y_Disable_Copy_And_Assign(Law); //!< discarded
