@@ -4,8 +4,8 @@
 
 #include "y/stream/libc/output.hpp"
 #include "y/chemical/reactive/equilibrium/partition.hpp"
+#include "y/chemical/plexus/conservations.hpp"
 #include "y/chemical/plexus/conservation/canons.hpp"
-#include "y/chemical/plexus/warden.hpp"
 #include "y/chemical/plexus/combinatorics.hpp"
 #include "y/container/sequence/vector.hpp"
 
@@ -39,19 +39,10 @@ Y_UTEST(cluster)
         Topology             topo(xml,*g);
         Conservations        conservations(xml,topo);
         Conservation::Canons canons(xml,conservations.laws,conservations.lfmt);
-        //continue;
-        //Warden               warden(xml,conservations);
-        Combinatorics        combinatorics(xml,topo,eqs,K);
+        //Combinatorics        combinatorics(xml,topo,eqs,K);
     }
 
     std::cerr << std::endl;
-    Y_SIZEOF(Topology);
-    Y_SIZEOF(Conservations);
-    Y_SIZEOF(Warden);
-
-    Y_SIZEOF(Roll<Species>);
-    Y_SIZEOF(Roll<Equilibrium>);
-
     std::cerr << "lib=" << lib << std::endl;
 
 

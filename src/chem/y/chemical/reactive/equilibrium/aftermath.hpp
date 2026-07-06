@@ -56,7 +56,16 @@ namespace Yttrium
             Aftermath(const Aftermath &)             noexcept; //!< duplicate
             ~Aftermath()                             noexcept; //!< cleanup
 
-            
+            //! solve 1D equilibrium
+            /**
+             \param Cout solved state
+             \param Cinp input state
+             \param eq   components
+             \param eK   constant
+             \param xmul multiplication
+             \param xadd addition
+             \return detailed status
+             */
             static Aftermath Compute(XWritable        &Cout,
                                      const XReadable  &Cinp,
                                      const Components &eq,
