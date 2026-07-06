@@ -60,40 +60,9 @@ Let us assume that:
 \end{equation}
 We could use \eqref{eq:gamma} but we would want to minimise the injected quantity, which is tricky.
 
-\item
-We form a sub-matrix $\bm \gamma$ of $\bm \Gamma$ by selecting $n\in[1:r_g]$ {\sl independent} broken laws:
-\begin{equation}
-	\bm \gamma = \begin{bmatrix}
-	\langle \Gamma_{i_1} \vert \\
-	\langle \Gamma_{i_n} \vert \\
-	\end{bmatrix} \in \mathcal{M}^+_{n,M}
-\end{equation}
-We look for $\vec \lambda \in \mathbb{R}^n$ such that:
-\begin{equation}
-	\forall i \in [1:n], \langle \vec\gamma_i \vert \vec C_0 + \bm{\gamma}^T \vec \lambda \rangle = 0
-	\implies
-	\left(\bm{\gamma} \bm{\gamma}^T \right) \vec \lambda = \vec x
-\end{equation}
+\item Collect/Inject/Deflate
 
-\begin{equation}
-	 \vec \lambda = \left(\bm{\gamma} \bm{\gamma}^T \right)^{-1} \vec x
-\end{equation}
-
-\begin{equation}
-\begin{array}{rcl}
-	\delta \vec C & = &  \bm{\gamma}^T \left(\bm{\gamma} \bm{\gamma}^T \right)^{-1} \vec x \\
-	              & = & - \bm{\gamma}^T \left(\bm{\gamma} \bm{\gamma}^T \right)^{-1} \bm{\gamma} \vec C_0 \\
-	              & = & - \dfrac{1}{\det \left(\bm{\gamma} \bm{\gamma}^T \right)}\bm{\gamma}^T \left(\bm{\gamma} \bm{\gamma}^T \right)^\ast \bm{\gamma} \;\;\vec C_0 \\
-\end{array}
-\end{equation}
-
-\begin{equation}
-\vec {C} = \dfrac{1}{\det \left(\bm{\gamma} \bm{\gamma}^T \right)} 
-\left[
-\det \left(\bm{\gamma} \bm{\gamma}^T \right) \bm{I}_M  - \bm{\gamma}^T \left(\bm{\gamma} \bm{\gamma}^T \right)^\ast \bm{\gamma} 
-\right] \vec C_0
-\end{equation}
-
+ 
 
 
 \end{itemize}
