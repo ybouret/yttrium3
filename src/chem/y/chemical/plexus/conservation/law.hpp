@@ -83,8 +83,8 @@ namespace Yttrium
                 //______________________________________________________________
                 const xreal_t    gamma2; //!< sum |coef|^2
                 const xreal_t    gamma;  //!< sqrt(gamma)
-                const Proj::List lproj;  //!< list of projections
-                const SList      ident;  //!< list of identity
+                const Proj::List projected;  //!< list of projected species
+                const SList      untouched;  //!< list of untouched species
                 Law *            next;   //!< for list
                 Law *            prev;   //!< for list
 

@@ -11,9 +11,9 @@ namespace Yttrium
 {
     namespace Chemical
     {
-        typedef Matrix<unsigned> UMatrix;
-        typedef Matrix<int>      IMatrix;
-        typedef Matrix<xreal_t>  XMatrix;
+        typedef Matrix<unsigned> UMatrix; //!< alias
+        typedef Matrix<int>      IMatrix; //!< alias
+        typedef Matrix<xreal_t>  XMatrix; //!< alias
     }
 
 }

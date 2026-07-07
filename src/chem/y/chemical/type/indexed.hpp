@@ -107,6 +107,14 @@ namespace Yttrium
                     Coerce((**node).indx[AuxLevel]) = i;
             }
 
+            //! transfer states according to hlist content
+            /**
+             \param target target state
+             \param tgt    target level
+             \param source source state
+             \param src    source level
+             \param hlist  handy list of indexed objects
+             */
             template <typename TARGET, typename SOURCE, typename HLIST> static inline
             void Transfer(TARGET &target, const Level tgt,
                           SOURCE &source, const Level src,

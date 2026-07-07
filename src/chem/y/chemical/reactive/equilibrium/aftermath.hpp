@@ -59,8 +59,11 @@ namespace Yttrium
 
             //! solve 1D equilibrium
             /**
+             \param xml  output
              \param Cout solved state
+             \param Lout solved level
              \param Cinp input state
+             \param Linp input level
              \param eq   components
              \param eK   constant
              \param xmul multiplication

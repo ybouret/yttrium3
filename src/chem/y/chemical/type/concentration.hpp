@@ -27,14 +27,19 @@ namespace Yttrium
             //! get a random concentration
             /**
              \param ran prng
-             \param probaZ add probability of zero concentration
-             \return random concentration on 10^MinLog10:10^MaxLog10, 0 with probaZ
+             \param probaZ probability of zero concentration
+             \param probaN probability of negative concentration
+             \return random concentration on 10^MinLog10:10^MaxLog10, 0 with probaZ and probaN
              */
             static xreal_t   Get(Random::Uniform32 &ran,
                                  const real_t       probaZ = 0,
                                  const real_t       probaN = 0) noexcept;
 
-            //! (partially) fill an array of concentration \param probaZ probability of zero concentration
+            //! (partially) fill an array of concentrations
+            /**
+             \param probaZ probability of zero concentration
+             \param probaN probability of negative concentration
+             */
             static void Fill(Random::Uniform32 &, XWritable &, const size_t, const real_t probaZ=0, const real_t probaN=0) noexcept;
 
         };

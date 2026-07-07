@@ -64,12 +64,13 @@ namespace Yttrium
 
             //! compute extent from a transformation
             /**
-             \param Cold old C
-             \param Cnew new C
-             \param L    computation level
+             \param Cold old state
+             \param Lold old level
+             \param Cnew new state
+             \param Lnew new level
              \param xadd helper
              \return average extent
-            */
+             */
             xreal_t extent(const XReadable & Cold,
                            const Level       Lold,
                            const XReadable & Cnew,
@@ -111,8 +112,15 @@ namespace Yttrium
                     ac->sp(array,L) = -(int)(ac->nu);
             }
 
-            void    transfer(XWritable       &target, const Level tgt,
-                             const XReadable &source, const Level src) const;
+            //! transfer hired concentration by reac and prod
+            /**
+             \param target target state
+             \param tgt    target level
+             \param source source state
+             \param src    source level
+             */
+            void transfer(XWritable       &target, const Level tgt,
+                          const XReadable &source, const Level src) const;
 
             //__________________________________________________________________
             //
@@ -124,7 +132,7 @@ namespace Yttrium
             const size_t   size; //!< count of actors
             const Actors   reac; //!< reactant(s)
             const Actors   prod; //!< product(s)
-            const int      d_nu;
+            const int      d_nu; //!< reaction nu
             const xreal_t  one;  //!< numeric 1
 
         private:

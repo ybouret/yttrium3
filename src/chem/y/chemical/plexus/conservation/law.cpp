@@ -17,8 +17,8 @@ namespace Yttrium
             Actors(AsConc),
             gamma2(0),
             gamma(0),
-            lproj(),
-            ident(),
+            projected(),
+            untouched(),
             next(0),
             prev(0)
             {
@@ -188,20 +188,20 @@ namespace Yttrium
                             nuT[i].load(topNuT[si]);
                         }
 
-                        if(!law.hired(sp)) { Coerce(ident) << sp; continue; }
+                        if(!law.hired(sp)) { Coerce(untouched) << sp; continue; }
                         Writable<apz> &numer = p[i];
                         apn            denom = g2;
                         Apex::Simplify::Array(numer,denom);
                         int          scal = 0; if(!denom.tryCast(scal)) throw Specific::Exception(Name,"scaling overflow");
-                        Proj * const proj = Coerce(lproj).pushTail( new Proj(sp,scal) );
+                        Proj * const proj = Coerce(projected).pushTail( new Proj(sp,scal) );
                         proj->build(slist,numer);
                         Y_XMLog(xml,*proj);
 
                     }
                 }
-                Y_XMLog(xml,"ident = " << ident);
-                Y_XMLog(xml,"nuT1  = " << nuT);
-                Y_XMLog(xml,"nu1   = " << nuT << "'");
+                Y_XMLog(xml,"untouched = " << untouched);
+                Y_XMLog(xml,"nuT1      = " << nuT);
+                Y_XMLog(xml,"nu1       = " << nuT << "'");
 
             }
 
@@ -210,10 +210,10 @@ namespace Yttrium
                                       XAdd &xadd) const
             {
                 // copy identity species
-                Indexed::Transfer(target,tgt,source,src,ident);
+                Indexed::Transfer(target,tgt,source,src,untouched);
 
                 // compute projection
-                for(const Proj *proj=lproj.head;proj;proj=proj->next)
+                for(const Proj *proj=projected.head;proj;proj=proj->next)
                 {
                     proj->apply(target,tgt,source,src,xadd);
                 }
