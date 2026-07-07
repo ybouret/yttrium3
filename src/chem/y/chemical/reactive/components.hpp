@@ -60,7 +60,7 @@ namespace Yttrium
 
             xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level)                const; //!< \return mass action
             xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level, const xreal_t) const; //!< \return shifted mass action
-            void    saveMove(XWritable &, const Level, const xreal_t)                       const noexcept; //!< safely move concentration using extent
+            void    safeMove(XWritable &, const Level, const xreal_t)                       const noexcept; //!< safely move concentration using extent
 
             //! compute extent from a transformation
             /**
@@ -124,6 +124,7 @@ namespace Yttrium
             const size_t   size; //!< count of actors
             const Actors   reac; //!< reactant(s)
             const Actors   prod; //!< product(s)
+            const int      d_nu;
             const xreal_t  one;  //!< numeric 1
 
         private:

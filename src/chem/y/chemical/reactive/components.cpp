@@ -17,6 +17,7 @@ namespace Yttrium
         size(0),
         reac(AsSpec),
         prod(AsSpec),
+        d_nu(0),
         one(1)
         {
 
@@ -67,7 +68,9 @@ namespace Yttrium
             checkUnused(fn,sp);
             Coerce(reac).hire(nu,sp);
             ++Coerce(size);
-            Coerce(kind) = computeKind();
+            Coerce(kind)  = computeKind();
+            Coerce(d_nu) -= nu;
+
         }
 
         void Components:: addProd(const unsigned nu, const Species &sp)
@@ -78,6 +81,7 @@ namespace Yttrium
             Coerce(prod).hire(nu,sp);
             ++Coerce(size);
             Coerce(kind) = computeKind();
+            Coerce(d_nu) += nu;
 
         }
 
@@ -124,7 +128,7 @@ namespace Yttrium
             return lhs-rhs;
         }
 
-        void Components::  saveMove(XWritable &C, const Level L, const xreal_t xi) const noexcept
+        void Components::  safeMove(XWritable &C, const Level L, const xreal_t xi) const noexcept
         {
             reac.safeMove(C,L,-xi);
             prod.safeMove(C,L,xi);

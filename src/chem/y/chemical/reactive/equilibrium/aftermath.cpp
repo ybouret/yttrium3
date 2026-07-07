@@ -36,13 +36,15 @@ namespace Yttrium
         public:
             inline Engine(XWritable        & usrC,
                           const Components & usrE,
-                          const real_t       usrK,
+                          const xreal_t      usrK,
+                          const xreal_t      usrS,
                           const Level        usrL,
                           XMul             & usrX) noexcept :
             solve(),
             C(usrC),
             E(usrE),
             K(usrK),
+            S(usrS),
             X(usrX),
             L(usrL)
             {
@@ -63,13 +65,14 @@ namespace Yttrium
                 return E.massAction(K,X,C,L,xi);
             }
 
-            xreal_t cycle();
+            xreal_t cycle(XML::Log &);
 
 
             MKL::ZRid<xreal_t> solve;
             XWritable        & C;
             const Components & E;
             const xreal_t      K;
+            const xreal_t      S;
             XMul             & X;
             const Level        L;
 
@@ -77,18 +80,18 @@ namespace Yttrium
             Y_Disable_Copy_And_Assign(Engine);
         };
 
-        xreal_t Aftermath::Engine:: cycle()
+        xreal_t Aftermath::Engine:: cycle(XML::Log &xml)
         {
 
-
+            //Y_XML_Element(xml,Cycle);
             // initializing
             const xreal_t  zero(0);
             Engine        &F  = *this;
             XTriplet       xi = {  zero, zero, zero };
             XTriplet       ma = {  F(),  zero, zero };
             const SignType ms = Sign::Of(ma.a.mantissa);
-            std::cerr << "ma=" << (double)ma.a << std::endl;
-
+            Y_XMLog(xml,"ma = " << ma.a.str());
+            
             // need to find xi.c
             switch(E.kind)
             {
@@ -96,7 +99,22 @@ namespace Yttrium
                     throw Specific::Exception(CallSign,"empty '%s'", E.name.c_str());
 
                 case ProdOnly:
-                    throw Specific::Exception(CallSign,"todo ProdOnly");
+                    switch(ms)
+                    {
+                        case __Zero__:
+                            return zero;
+
+                        case Positive:
+                            xi.c = S;
+                            ma.c = F(xi.c); assert(ma.c<=zero);
+                            break;
+                            //throw Specific::Exception(CallSign,"todo ProdOnly>0");
+
+                        case Negative:
+                            xi.c = -E.prod.extent(C,L);
+                            ma.c = F(xi.c); assert(ma.c>=zero);
+                            break;
+                    }
                     break;
 
                 case ReacOnly:
@@ -107,7 +125,7 @@ namespace Yttrium
                     switch(ms)
                     {
                         case __Zero__:
-                            return 0;
+                            return zero;
 
                         case Positive:
                             xi.c = E.reac.extent(C,L);
@@ -123,8 +141,8 @@ namespace Yttrium
             }
 
             const xreal_t ex = solve(F,xi,ma);
-            std::cerr << "\tex=" << (double)ex << std::endl;
-            E.saveMove(C,L,ex);
+            Y_XMLog(xml,"ex = " << ex.str());
+            E.safeMove(C,L,ex);
             Core::Display(std::cerr << "C=", &C[1], C.size(), xreal_t::ToString) << std::endl;
 
             return ex;
@@ -192,14 +210,34 @@ namespace Yttrium
 
 
             {
-                Engine  F(Cout,eq,eK,Lout,xmul);
-                xreal_t xi = F.cycle();
+                xreal_t S; // scaling factor
+                switch(eq.kind)
+                {
+                    case Outlawed:
+                    case BothWays:
+                        break;
+
+                    case ProdOnly:
+                        std::cerr << "d_nu=" << eq.d_nu << std::endl;
+                        assert(eq.d_nu>0);
+
+                        S = (eK+eK);
+                        S = S.pow( 1.0/eq.d_nu );
+                        std::cerr << "K = " << eK.str() << " => S=" << S.str() << std::endl;
+                        break;
+
+                    case ReacOnly:
+                        throw Exception("Need to compute scaling for ReacOnly");
+                }
+
+                Engine  F(Cout,eq,eK,S,Lout,xmul);
+                xreal_t xi = F.cycle(xml);
                 xreal_t ax = MKL::Fabs<xreal_t>(xi);
                 while(true)
                 {
                     if( Sign::Of(xi.mantissa) == __Zero__ )
                         break;
-                    const xreal_t newXi = F.cycle();
+                    const xreal_t newXi = F.cycle(xml);
                     const xreal_t absXi = MKL::Fabs<xreal_t>(newXi);
                     if(absXi>=ax) break;
                     xi = newXi;
