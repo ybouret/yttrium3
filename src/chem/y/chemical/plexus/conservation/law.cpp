@@ -200,7 +200,9 @@ namespace Yttrium
                     }
                 }
                 Y_XMLog(xml,"ident=" << ident);
-                Y_XMLog(xml,"nuT  =" << nuT);
+                Y_XMLog(xml,"nuT1  =" << nuT);
+                Y_XMLog(xml,"nu1   =" << nuT << "'");
+
             }
 
             XWritable & Law:: project(XWritable       &target, const Level tgt,
