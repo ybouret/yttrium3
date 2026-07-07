@@ -59,12 +59,12 @@ namespace Yttrium
 #endif // defined(Y_BSD)
 
 
-#if defined(Y_WIN32)
+#if defined(Y_WIN)
             HMODULE h = ::LoadLibrary(name);
             if(!h)
                 throw Windows::Exception( ::GetLastError(), "LoadLibrary(%s)",name);
             return h;
-#endif // defined(Y_WIN32)
+#endif // defined(Y_WIN)
 
 
         }
