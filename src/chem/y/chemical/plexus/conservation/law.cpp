@@ -199,9 +199,9 @@ namespace Yttrium
 
                     }
                 }
-                Y_XMLog(xml,"ident=" << ident);
-                Y_XMLog(xml,"nuT1  =" << nuT);
-                Y_XMLog(xml,"nu1   =" << nuT << "'");
+                Y_XMLog(xml,"ident = " << ident);
+                Y_XMLog(xml,"nuT1  = " << nuT);
+                Y_XMLog(xml,"nu1   = " << nuT << "'");
 
             }
 
@@ -218,6 +218,7 @@ namespace Yttrium
                     proj->apply(target,tgt,source,src,xadd);
                 }
 
+                // return projected target reference
                 return target;
             }
 
