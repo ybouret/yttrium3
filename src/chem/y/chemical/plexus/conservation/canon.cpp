@@ -52,32 +52,11 @@ namespace Yttrium
                 Indexed::AuxLabel( Indexed::TopHSort( Coerce(species->list) ) );
             }
 
-            void Canon:: compileContent(XML::Log &xml)
-            {
-                for(const LNode *ln=laws->head;ln;ln=ln->next)
-                    Coerce( **ln ).compile(xml,species->list);
-            }
+             
 
-#if 0
-            void Canon:: compileMetrics()
-            {
-                const size_t Nc = laws->size; assert(Nc>0);
-                const size_t M  = species->list->size;
-                Gamma.make(Nc,M);
-                size_t i = 1;
-                for(const LNode *ln=laws->head;ln;ln=ln->next,++i)
-                {
-                    const Law &law = **ln;
-                    for(const Actor *ac=law->head;ac;ac=ac->next)
-                    {
-                        ac->sp(Gamma[i],AuxLevel) = ac->nu;
-                    }
-                }
-                rg = MKL::Rank::Of(Gamma);
-            }
-#endif
+            
 
-            void Canon:: compile(XML::Log &xml)
+            void Canon:: compile(XML::Log &xml, const IMatrix &topNuT)
             {
                 //--------------------------------------------------------------
                 //
@@ -115,8 +94,8 @@ namespace Yttrium
                 //
                 //
                 //--------------------------------------------------------------
-                compileContent(xml);
-
+                for(const LNode *ln=laws->head;ln;ln=ln->next)
+                    Coerce( **ln ).compile(xml,species->list,topNuT);
             }
 
 

@@ -4,6 +4,7 @@
 
 #include "y/chemical/reactive/actors.hpp"
 #include "y/chemical/slist.hpp"
+#include "y/chemical/type/matrix.hpp"
 #include "y/chemical/plexus/conservation/law/proj.hpp"
 #include "y/container/matrix.hpp"
 #include "y/xml/log.hpp"
@@ -65,7 +66,9 @@ namespace Yttrium
                 bool linkedTo( const Law & ) const noexcept; //!< \return true iff common species
 
                 //! \param slist from canon
-                void compile(XML::Log &xml, const SList &slist);
+                void compile(XML::Log      &xml,
+                             const SList   &slist,
+                             const IMatrix &topNuT);
 
 
                 XWritable & project(XWritable       &target, const Level tgt,

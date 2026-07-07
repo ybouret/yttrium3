@@ -114,8 +114,9 @@ namespace Yttrium
 
             const char * const Law::Name = "Conservation::Law";
 
-            void Law:: compile(XML::Log    & xml,
-                               const SList & slist)
+            void Law:: compile(XML::Log      & xml,
+                               const SList   & slist,
+                               const IMatrix & topNuT)
             {
                 const Law &law = *this;
                 Y_XML_Element_Attr(xml,Compile,Y_XML_Attr(law));
@@ -163,6 +164,7 @@ namespace Yttrium
                 //
                 //
                 //--------------------------------------------------------------
+
                 Matrix<apz> p(m,m);
                 for(size_t i=1;i<=m;++i)
                 {
@@ -173,11 +175,20 @@ namespace Yttrium
                 }
                 Y_XMLog(xml, "p=" << p << " / " << g2);
 
+                //const size_t M = topNu.cols;
+                const size_t N = topNuT.cols;
+                Matrix<apz>  nuT(m,N);
                 {
                     const SNode *sn = slist->head;
                     for(size_t i=1;i<=m;++i,sn=sn->next)
                     {
-                        const Species &sp    = **sn; if(!law.hired(sp)) { Coerce(ident) << sp; continue; }
+                        const Species &sp    = **sn;
+                        {
+                            const size_t si = sp.indx[TopLevel];
+                            nuT[i].load(topNuT[si]);
+                        }
+
+                        if(!law.hired(sp)) { Coerce(ident) << sp; continue; }
                         Writable<apz> &numer = p[i];
                         apn            denom = g2;
                         Apex::Simplify::Array(numer,denom);
@@ -189,6 +200,7 @@ namespace Yttrium
                     }
                 }
                 Y_XMLog(xml,"ident=" << ident);
+                Y_XMLog(xml,"nuT  =" << nuT);
             }
 
             XWritable & Law:: project(XWritable       &target, const Level tgt,

@@ -53,8 +53,8 @@ namespace Yttrium
                 // Methods
                 //
                 //______________________________________________________________
-                bool accepts(const Law &) const noexcept; //!< \return true iff shared species
-                void compile(XML::Log &);                 //!< inscribe and AuxLabel species, update format
+                bool accepts(const Law &) const noexcept;       //!< \return true iff shared species
+                void compile(XML::Log &xml, const IMatrix &topNuT);  
 
                 //______________________________________________________________
                 //
@@ -71,7 +71,6 @@ namespace Yttrium
             private:
                 Y_Disable_Copy_And_Assign(Canon); //!< discarded
                 void compileSpecies();
-                void compileContent(XML::Log &x);
             };
         }
 
