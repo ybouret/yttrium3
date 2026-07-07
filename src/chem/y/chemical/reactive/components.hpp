@@ -70,7 +70,11 @@ namespace Yttrium
              \param xadd helper
              \return average extent
             */
-            xreal_t extent(const XReadable &Cold, const XReadable &Cnew, const Level L, XAdd &xadd)    const;
+            xreal_t extent(const XReadable & Cold,
+                           const Level       Lold,
+                           const XReadable & Cnew,
+                           const Level       Lnew,
+                           XAdd &            xadd)    const;
 
             bool    hired(const Species &)       const noexcept; //!< \return true iff species in reac or prod
             bool    linkedTo(const Components &) const noexcept; //!< \return true iff common species
@@ -106,6 +110,9 @@ namespace Yttrium
                 for(const Actor *ac=reac->head;ac;ac=ac->next)
                     ac->sp(array,L) = -(int)(ac->nu);
             }
+
+            void    transfer(XWritable       &target, const Level tgt,
+                             const XReadable &source, const Level src) const;
 
             //__________________________________________________________________
             //

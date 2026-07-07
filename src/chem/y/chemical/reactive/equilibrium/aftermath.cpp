@@ -3,6 +3,7 @@
 #include "y/exception.hpp"
 #include "y/mkl/root/zrid.hpp"
 #include "y/core/display.hpp"
+#include "y/xml/element.hpp"
 
 namespace Yttrium
 {
@@ -78,14 +79,17 @@ namespace Yttrium
 
         xreal_t Aftermath::Engine:: cycle()
         {
-            static const xreal_t zero(0);
 
+
+            // initializing
+            const xreal_t  zero(0);
             Engine        &F  = *this;
-            XTriplet       xi = {  0,  0, 0 };
-            XTriplet       ma = { F(), 0, 0 };
+            XTriplet       xi = {  zero, zero, zero };
+            XTriplet       ma = {  F(),  zero, zero };
             const SignType ms = Sign::Of(ma.a.mantissa);
             std::cerr << "ma=" << (double)ma.a << std::endl;
 
+            // need to find xi.c
             switch(E.kind)
             {
                 case Outlawed:
@@ -127,22 +131,31 @@ namespace Yttrium
         }
 
 
-        Aftermath Aftermath:: Compute(XWritable        &Cout,
+        Aftermath Aftermath:: Compute(XML::Log         &xml,
+                                      XWritable        &Cout,
+                                      const Level       Lout,
                                       const XReadable  &Cinp,
+                                      const Level       Linp,
                                       const Components &eq,
                                       const xreal_t     eK,
-                                      const Level       L,
                                       XMul &            xmul,
                                       XAdd &            xadd)
         {
+            const String &eid = eq.name;
+            Y_XML_Element_Attr(xml,AftermathCompute,Y_XML_Attr(eid));
+
+            //------------------------------------------------------------------
+            //
             // setup
-            Cout.load(Cinp);
+            //
+            //------------------------------------------------------------------
+            Cout.load(Cinp); // check
             EqStatus es = Running;
 
-            if(eq.reac.active(Cinp,L) )
+            if(eq.reac.active(Cinp,Linp) )
             {
                 // active reactants
-                if(eq.prod.active(Cinp,L))
+                if(eq.prod.active(Cinp,Linp))
                 {
                     // active products
                     assert(Running==es);
@@ -156,7 +169,7 @@ namespace Yttrium
             else
             {
                 // inactive reactants
-                if(eq.prod.active(Cinp,L))
+                if(eq.prod.active(Cinp,Linp))
                 {
                     // active products
                     es = Crucial;
@@ -164,18 +177,22 @@ namespace Yttrium
                 else
                 {
                     es = Blocked;
-                    std::cerr << "Blocked!" << std::endl;
+                    Y_XMLog(xml, "[Blocked]");
                     return Aftermath(es,0);
                 }
             }
 
 
             assert(Running==es||Crucial==es);
-            Core::Display(std::cerr << "C=", &Cout[1], Cout.size(), xreal_t::ToString) << std::endl;
-            if(Crucial==es) std::cerr << "Crucial!" << std::endl;
+            if(xml.verbose)
+            {
+                Core::Display( xml() << "C=", &Cout[1], Cout.size(), xreal_t::ToString) << std::endl;
+                if(Crucial==es) xml() << "[Crucial]" << std::endl;
+            }
+
 
             {
-                Engine F(Cout,eq,eK,L,xmul);
+                Engine  F(Cout,eq,eK,Lout,xmul);
                 xreal_t xi = F.cycle();
                 xreal_t ax = MKL::Fabs<xreal_t>(xi);
                 while(true)
@@ -191,8 +208,8 @@ namespace Yttrium
             }
 
             // need to recompute full extent
-            const xreal_t xi = eq.extent(Cinp, Cout, L, xadd);
-            std::cerr << "xi=" << (real_t)xi << std::endl;
+            const xreal_t xi = eq.extent(Cinp, Linp, Cout, Lout, xadd);
+            Y_XMLog(xml, "xi = " << xi.str());
             return Aftermath(es,xi);
         }
 

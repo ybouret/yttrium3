@@ -37,6 +37,9 @@ Y_UTEST(aftermath)
     XAdd              xadd;
 
     const double probaZ = EnvironmentConvert::To<double>("probaZ",0);
+    bool verbose = true;
+    XML::Log xml(std::cerr,verbose);
+
     Concentration::Fill(ran,C0,M,probaZ,0);
 
     Core::Display(std::cerr << "C0=", C0.begin(), C0.size(), xreal_t::ToString) << std::endl;
@@ -45,7 +48,7 @@ Y_UTEST(aftermath)
     {
         Equilibrium &eq = **it;
         const xreal_t eK = eq.K(0);
-        Aftermath     am = Aftermath::Compute(Ceq,C0,eq,eK,TopLevel,xmul,xadd);
+        Aftermath     am = Aftermath::Compute(xml,Ceq,TopLevel,C0,TopLevel,eq,eK,xmul,xadd);
     }
 
 }

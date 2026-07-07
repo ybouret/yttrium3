@@ -130,24 +130,28 @@ namespace Yttrium
             prod.safeMove(C,L,xi);
         }
 
-        xreal_t Components:: extent(const XReadable &Cold, const XReadable &Cnew, const Level L, XAdd &xadd) const
+        xreal_t Components:: extent(const XReadable & Cold,
+                                    const Level       Lold,
+                                    const XReadable & Cnew,
+                                    const Level       Lnew,
+                                    XAdd &            xadd) const
         {
             xadd.ldz();
             for(const Actor *ac=prod->head;ac;ac=ac->next)
             {
-                const size_t  i  = ac->sp.indx[L];
-                const xreal_t xi = (Cnew[i]-Cold[i])/ac->xn;
+                const Species & sp = ac->sp;
+                const xreal_t   xi = (sp(Cnew,Lnew)-sp(Cold,Lold))/ac->xn;
                 xadd += xi;
             }
 
             for(const Actor *ac=reac->head;ac;ac=ac->next)
             {
-                const size_t  i  = ac->sp.indx[L];
-                const xreal_t xi = (Cold[i]-Cnew[i])/ac->xn;
+                const Species & sp = ac->sp;
+                const xreal_t   xi = (sp(Cold,Lold)-sp(Cnew,Lnew))/ac->xn;
                 xadd += xi;
             }
 
-            const xreal_t den = (real_t) size;
+            const xreal_t den = (real_t) size; // TODO: precompute ?
 
             return xadd()/den;
         }
@@ -216,7 +220,12 @@ namespace Yttrium
             return fp;
         }
 
-
+        void Components:: transfer(XWritable       &target, const Level tgt,
+                                   const XReadable &source, const Level src) const
+        {
+            reac.transfer(target,tgt,source,src);
+            prod.transfer(target,tgt,source,src);
+        }
     }
 
 }

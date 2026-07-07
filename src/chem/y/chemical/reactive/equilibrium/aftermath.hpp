@@ -5,6 +5,7 @@
 #define Y_Chemical_Aftermath_Included 1
 
 #include "y/chemical/reactive/components.hpp"
+#include "y/xml/log.hpp"
 
 namespace Yttrium
 {
@@ -66,11 +67,13 @@ namespace Yttrium
              \param xadd addition
              \return detailed status
              */
-            static Aftermath Compute(XWritable        &Cout,
+            static Aftermath Compute(XML::Log         &xml,
+                                     XWritable        &Cout,
+                                     const Level       Lout,
                                      const XReadable  &Cinp,
+                                     const Level       Linp,
                                      const Components &eq,
                                      const xreal_t     eK,
-                                     const Level       L,
                                      XMul &            xmul,
                                      XAdd &            xadd);
 
