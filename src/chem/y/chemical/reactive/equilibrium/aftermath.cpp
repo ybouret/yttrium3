@@ -108,7 +108,6 @@ namespace Yttrium
                             xi.c = S;
                             ma.c = F(xi.c); assert(ma.c<=zero);
                             break;
-                            //throw Specific::Exception(CallSign,"todo ProdOnly>0");
 
                         case Negative:
                             xi.c = -E.prod.extent(C,L);
@@ -118,7 +117,22 @@ namespace Yttrium
                     break;
 
                 case ReacOnly:
-                    throw Specific::Exception(CallSign,"todo ReacOnly");
+                    switch(ms)
+                    {
+                        case __Zero__:
+                            return zero;
+
+                        case Positive:
+                            xi.c = E.reac.extent(C,L);
+                            ma.c = F(xi.c); assert(ma.c<=zero);
+                            break;
+
+                        case Negative:
+                            xi.c = -S;
+                            ma.c = F(xi.c); assert(ma.c>=zero);
+                            break;
+                            //throw Specific::Exception(CallSign,"todo Negative ReacOnly");
+                    }
                     break;
 
                 case BothWays:
@@ -218,16 +232,20 @@ namespace Yttrium
                         break;
 
                     case ProdOnly:
-                        std::cerr << "d_nu=" << eq.d_nu << std::endl;
+                        //std::cerr << "d_nu=" << eq.d_nu << std::endl;
                         assert(eq.d_nu>0);
-
                         S = (eK+eK);
                         S = S.pow( 1.0/eq.d_nu );
-                        std::cerr << "K = " << eK.str() << " => S=" << S.str() << std::endl;
+                        //std::cerr << "K = " << eK.str() << " => S=" << S.str() << std::endl;
                         break;
 
                     case ReacOnly:
-                        throw Exception("Need to compute scaling for ReacOnly");
+                        //std::cerr << "d_nu=" << eq.d_nu << std::endl;
+                        assert(eq.d_nu<0);
+                        S = 2.0/eK;
+                        S = S.pow( -1.0/eq.d_nu);
+                        //std::cerr << "K = " << eK.str() << " => S=" << S.str() << std::endl;
+                        break;
                 }
 
                 Engine  F(Cout,eq,eK,S,Lout,xmul);
