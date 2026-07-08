@@ -19,9 +19,13 @@ namespace Yttrium
         class Input:: Code : public Object
         {
         public:
+            enum Status
+            {
+                Live,
+                Done
+            };
 
-            inline virtual ~Code()
-            noexcept
+            inline virtual ~Code() noexcept
             {
                 int bzerror = 0;
                 BZ2_bzReadClose(&bzerror,bzf);
@@ -43,11 +47,13 @@ namespace Yttrium
                 }
                 else
                 {
+                    if(done) return false;
                     int       bzerror = 0;
                     const int res     = BZ2_bzRead(&bzerror,bzf, &C, 1);
+                    std::cerr << "res=" << res << " @" << Error::Get(bzerror) << std::endl;
                     if(res!=1)
                     {
-                        if(BZ_STREAM_END==bzerror) return false;
+                        if(BZ_STREAM_END==bzerror) { done=true; return false; }
                         throw Specific::Exception("BZ2_bzRead","'%s'", Error::Get(bzerror) );
                     }
                     return true;
@@ -60,14 +66,16 @@ namespace Yttrium
             BZFILE * const bzf;
         public:
             IO::Chars      buf;
-
         private:
+            bool           done;
+
             inline Code(const SharedInput &usr,
                         const int          small) :
             Object(),
             ptr(usr),
             bzf(0),
-            buf()
+            buf(),
+            done(false)
             {
                 Y_Giant_Lock();
                 int bzerror = 0;
