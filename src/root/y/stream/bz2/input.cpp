@@ -47,13 +47,23 @@ namespace Yttrium
                 }
                 else
                 {
-                    if(done) return false;
+                    switch(st)
+                    {
+                        case Done: return false;
+                        case Live:
+                            break;
+                    }
                     int       bzerror = 0;
                     const int res     = BZ2_bzRead(&bzerror,bzf, &C, 1);
-                    std::cerr << "res=" << res << " @" << Error::Get(bzerror) << std::endl;
+                    switch(bzerror)
+                    {
+                        case BZ_STREAM_END: st=Done; break;
+                        default:
+                            break;
+                    }
                     if(res!=1)
                     {
-                        if(BZ_STREAM_END==bzerror) { done=true; return false; }
+                        if(BZ_STREAM_END==bzerror) {  return false; }
                         throw Specific::Exception("BZ2_bzRead","'%s'", Error::Get(bzerror) );
                     }
                     return true;
@@ -67,7 +77,7 @@ namespace Yttrium
         public:
             IO::Chars      buf;
         private:
-            bool           done;
+            Status         st;
 
             inline Code(const SharedInput &usr,
                         const int          small) :
@@ -75,7 +85,7 @@ namespace Yttrium
             ptr(usr),
             bzf(0),
             buf(),
-            done(false)
+            st(Live)
             {
                 Y_Giant_Lock();
                 int bzerror = 0;
