@@ -65,6 +65,7 @@ y/stream/libc
 y/stream/memory
 y/stream/proc
 y/stream/gz
+y/stream/bz2
 y/object
 y/object/light
 y/string
