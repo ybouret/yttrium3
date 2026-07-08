@@ -30,8 +30,7 @@ namespace Yttrium
 
             if(buff.size)
             {
-                c = **buff.head;
-                delete buff.popHead();
+                c = buff.pullHead();
                 return true;
             }
             else

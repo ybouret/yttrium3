@@ -31,7 +31,7 @@ field
 )
 
 Y_LinkLibraries(test-root)
-target_link_libraries(test-root zlibstatic)
+target_link_libraries(test-root zlibstatic y-bz2)
 
 add_library(cmodule MODULE cmodule.c)
 add_library(cxxmod  MODULE cxxmod.cpp)
@@ -183,6 +183,7 @@ Y_UTEST(stream:gz:in)
 Y_UTEST(stream:gz:out)
 Y_UTEST(stream:identifiers)
 Y_UTEST(stream:input:proc)
+Y_UTEST(stream:bz2:in)
 
 Y_UTEST(coven:univocal)
 Y_UTEST(coven:vector)
