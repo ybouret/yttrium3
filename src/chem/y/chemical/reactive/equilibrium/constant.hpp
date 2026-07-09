@@ -35,7 +35,7 @@ namespace Yttrium
         private:
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             Y_Disable_Copy_And_Assign(ConstantEquilibrium);
-            virtual xreal_t getK(xreal_t);
+            virtual xreal_t getK(const xreal_t);
             const xreal_t K_;
 #endif
         };

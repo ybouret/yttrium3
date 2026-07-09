@@ -76,7 +76,7 @@ namespace Yttrium
         {
             assert(tree.isValid());
             assert(tree->is(CallSign));
-            Actor::List  reac,prod;
+            Actor::List  xreac,xprod;
             const XList &xlist = tree->list(); assert(4==xlist.size);
 
             // extracting name
@@ -92,13 +92,13 @@ namespace Yttrium
             xnode=xnode->next;
             assert(xnode);
             assert(xnode->is("REAC"));
-            fill(reac,xnode,lib,eid);
+            fill(xreac,xnode,lib,eid);
 
             // extracting prod
             xnode=xnode->next;
             assert(xnode);
             assert(xnode->is("PROD"));
-            fill(prod,xnode,lib,eid);
+            fill(xprod,xnode,lib,eid);
 
             //if(reac.size<=0 && prod.size<=0) throw Specific::Exception(CallSign, "empty '%s'",eid);
 
@@ -137,11 +137,11 @@ namespace Yttrium
                 // compiling equilibrium
                 EqPtr eq(pEq);
 
-                for(const Actor *ac=reac.head;ac;ac=ac->next)
+                for(const Actor *ac=xreac.head;ac;ac=ac->next)
                     eq->addReac(ac->nu,ac->sp);
 
 
-                for(const Actor *ac=prod.head;ac;ac=ac->next)
+                for(const Actor *ac=xprod.head;ac;ac=ac->next)
                     eq->addProd(ac->nu,ac->sp);
 
                 // adding to eqs

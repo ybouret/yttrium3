@@ -87,12 +87,12 @@ namespace Yttrium
             // initializing
             const xreal_t  zero(0);
             Engine        &F  = *this;
-            XTriplet       xi = {  zero, zero, zero };
+            XTriplet       x = {  zero, zero, zero };
             XTriplet       ma = {  F(),  zero, zero };
             const SignType ms = Sign::Of(ma.a.mantissa);
             Y_XMLog(xml,"ma = " << ma.a.str());
             
-            // need to find xi.c
+            // need to find x.c
             switch(E.kind)
             {
                 case Outlawed:
@@ -105,13 +105,13 @@ namespace Yttrium
                             return zero;
 
                         case Positive:
-                            xi.c = S;
-                            ma.c = F(xi.c); assert(ma.c<=zero);
+                            x.c = S;
+                            ma.c = F(x.c); assert(ma.c<=zero);
                             break;
 
                         case Negative:
-                            xi.c = -E.prod.extent(C,L);
-                            ma.c = F(xi.c); assert(ma.c>=zero);
+                            x.c = -E.prod.extent(C,L);
+                            ma.c = F(x.c); assert(ma.c>=zero);
                             break;
                     }
                     break;
@@ -123,13 +123,13 @@ namespace Yttrium
                             return zero;
 
                         case Positive:
-                            xi.c = E.reac.extent(C,L);
-                            ma.c = F(xi.c); assert(ma.c<=zero);
+                            x.c = E.reac.extent(C,L);
+                            ma.c = F(x.c); assert(ma.c<=zero);
                             break;
 
                         case Negative:
-                            xi.c = -S;
-                            ma.c = F(xi.c); assert(ma.c>=zero);
+                            x.c = -S;
+                            ma.c = F(x.c); assert(ma.c>=zero);
                             break;
                             //throw Specific::Exception(CallSign,"todo Negative ReacOnly");
                     }
@@ -142,19 +142,19 @@ namespace Yttrium
                             return zero;
 
                         case Positive:
-                            xi.c = E.reac.extent(C,L);
-                            ma.c = F(xi.c); assert(ma.c<=zero);
+                            x.c = E.reac.extent(C,L);
+                            ma.c = F(x.c); assert(ma.c<=zero);
                             break;
 
                         case Negative:
-                            xi.c = - E.prod.extent(C,L);
-                            ma.c = F(xi.c); assert(ma.c>=zero);
+                            x.c = - E.prod.extent(C,L);
+                            ma.c = F(x.c); assert(ma.c>=zero);
                             break;
                     }
                     break;
             }
 
-            const xreal_t ex = solve(F,xi,ma);
+            const xreal_t ex = solve(F,x,ma);
             Y_XMLog(xml,"ex = " << ex.str());
             E.safeMove(C,L,ex);
             Core::Display(std::cerr << "C=", &C[1], C.size(), xreal_t::ToString) << std::endl;

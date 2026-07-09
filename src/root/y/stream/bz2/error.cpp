@@ -1,5 +1,10 @@
 
 #include "y/stream/bz2/error.hpp"
+
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4668 )
+#endif
+
 #include "y/bzip2/bzlib.h"
 
 namespace Yttrium

@@ -3,9 +3,15 @@
 #include "y/type/destroy.hpp"
 #include "y/libc/file/input.hpp"
 #include "y/ability/lockable.hpp"
-#include "y/bzip2/bzlib.h"
 #include "y/exception.hpp"
 #include "y/stream/io/chars.hpp"
+
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4668 )
+#endif
+
+#include "y/bzip2/bzlib.h"
+
 
 namespace Yttrium
 {

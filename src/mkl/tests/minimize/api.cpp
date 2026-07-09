@@ -45,7 +45,7 @@ namespace
             if(!f.isLocalMinimum()) goto TRY;
             const T x_opt = minimize.find(xml,F<T>,Minimize::Direct,x,f,Minimize::Pedantic);
             std::cerr << "x_opt=" << x_opt << std::endl;
-            break;
+            //break;
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(Equilibrium); //!< discaeded
-            virtual xreal_t getK(xreal_t) = 0;      //!< \return constant at given time
+            virtual xreal_t getK(const xreal_t) = 0;      //!< \return constant at given time
         };
 
     }

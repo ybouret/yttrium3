@@ -64,7 +64,7 @@ namespace Yttrium
                     const unsigned np = 1000;
                     for(unsigned i=0;i<=np;++i)
                     {
-                        const T  w = ( (double)i )/np;
+                        const T  w = ( (float)i )/np;
                         const T  X = x.a * (one-w) + x.c * w;
                         fp("%.15g %.15g\n", (double) X, (double) F(X));
                     }
