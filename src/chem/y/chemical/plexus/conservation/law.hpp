@@ -5,7 +5,7 @@
 #include "y/chemical/plexus/topology.hpp"
 #include "y/chemical/slist.hpp"
 #include "y/chemical/type/matrix.hpp"
-#include "y/chemical/type/eq-roll.hpp"
+#include "y/chemical/type/roll/eq.hpp"
 #include "y/chemical/plexus/conservation/law/proj.hpp"
 #include "y/container/matrix.hpp"
 #include "y/xml/log.hpp"

@@ -31,8 +31,8 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            typedef BookOf<const T,DefaultHashSet> BookType; //!< alias
-            typedef Handy::BasicLightList<const T> ListType; //!< alias
+            typedef BookOf<T,DefaultHashSet> BookType; //!< alias
+            typedef Handy::BasicLightList<T> ListType; //!< alias
 
             //__________________________________________________________________
             //
@@ -57,7 +57,7 @@ namespace Yttrium
             }
 
             //! inscribe Indexed type and kept list ordered \param t type to inscribe
-            inline void inscribe(const T &t)
+            inline void inscribe(T &t)
             {
                 if( Coerce(book).write(t) ) {
                     try { Indexed::TopHSort( (Coerce(list) << t) ); }

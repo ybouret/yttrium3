@@ -174,7 +174,6 @@ namespace Yttrium
                 //
                 //
                 //--------------------------------------------------------------
-
                 Matrix<apz> p(m,m);
                 for(size_t i=1;i<=m;++i)
                 {
@@ -204,13 +203,36 @@ namespace Yttrium
                 }
                 Y_XMLog(xml,"untouched = " << untouched);
 
-                for(const ENode *en = topo.group->head;en;en=en->next)
+                for(ENode *en = topo.group->head;en;en=en->next)
                 {
-                    const Equilibrium &eq = **en;
+                    Equilibrium &eq = **en;
                     if(linkedTo(eq)) Coerce(eqdb)->inscribe(eq);
                 }
 
+                //--------------------------------------------------------------
+                //
+                //
+                // collect dependencies
+                //
+                //
+                //--------------------------------------------------------------
                 Y_XMLog(xml,"database  = " << eqdb->list);
+
+                const size_t n = eqdb->list->size; assert(n>0);
+                const size_t M = topo.M;           assert(M>0);
+                Matrix<apz>  nu(n,M);
+                {
+                    size_t i=1;
+                    for(const ENode *en=eqdb->list->head;en;en=en->next,++i)
+                    {
+                        const Components &eq = **en;
+                        const size_t      ei = eq.indx[SubLevel];
+                        nu[i].load(topo.nu[ei]);
+                    }
+                }
+
+                Y_XMLog(xml,"nu=" << nu);
+
 
 
             }

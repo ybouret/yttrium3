@@ -3,7 +3,7 @@
 #ifndef Y_Chemical_Plexus_Conservations_Included
 #define Y_Chemical_Plexus_Conservations_Included 1
 
-#include "y/chemical/type/sp-roll.hpp"
+#include "y/chemical/type/roll/sp.hpp"
 #include "y/chemical/plexus/topology.hpp"
 #include "y/chemical/plexus/conservation/law.hpp"
 #include "y/chemical/type/matrix.hpp"

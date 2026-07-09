@@ -3,6 +3,7 @@ include_directories(. ../root ../mkl ../lua++ ../y/lua/src)
 Y_CreateLibrary(y-chem
 y/chemical
 y/chemical/type
+y/chemical/type/roll
 y/chemical/weasel
 y/chemical/formula
 y/chemical/reactive

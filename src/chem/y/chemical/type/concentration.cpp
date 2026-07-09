@@ -25,7 +25,7 @@ namespace Yttrium
                                   const real_t probaZ,
                                   const real_t probaN) noexcept
         {
-            for(size_t i = M;i>0;--i) C[i] = Get(ran,probaZ,probaN);
+            for(size_t i=M;i>0;--i) C[i] = Get(ran,probaZ,probaN);
         }
 
 

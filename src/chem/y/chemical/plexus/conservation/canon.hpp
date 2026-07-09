@@ -4,7 +4,7 @@
 #define Y_Chemical_Conservation_Canon_Included 1
 
 #include "y/chemical/plexus/conservation/law.hpp"
-#include "y/chemical/type/sp-roll.hpp"
+#include "y/chemical/type/roll/sp.hpp"
 #include "y/chemical/type/assembly.hpp"
 #include "y/chemical/type/matrix.hpp"
 

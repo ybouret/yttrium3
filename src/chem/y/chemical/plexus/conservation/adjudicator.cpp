@@ -1,6 +1,7 @@
 
 #include "y/chemical/plexus/conservation/adjudicator.hpp"
 #include "y/xml/element.hpp"
+#include "y/container/cxx/array.hpp"
 
 namespace Yttrium
 {
@@ -59,10 +60,19 @@ namespace Yttrium
                     Y_XMLog(xml,"-- Inflate");
                     // sorting
                     blist->sortBy(IncreasinglyBroken);
-                    Broken &broken = **blist->head;
+                    Broken     & broken = **blist->head;
+                    const Law &  law    = broken.law;
                     Y_XMLog(xml, "[*] " << broken);
-                    broken.law.transfer(C,L,broken.prj,AuxLevel);
-                    Core::Display(std::cerr << "C=",&C[1], C.size(), xreal_t::ToString) << std::endl;
+                    law.transfer(C,L,broken.prj,AuxLevel);
+                    Core::Display(std::cerr << "Cproj=",&C[1], C.size(), xreal_t::ToString) << std::endl;
+
+                    CxxArray<xreal_t> delta(C.size());
+                    for(const Actor *ac=law->head;ac;ac=ac->next)
+                    {
+                        const Species &sp = ac->sp;
+                        sp(delta,L) = -sp(C,L);
+                    }
+                    Core::Display(std::cerr << "delta=",&delta[1], delta.size(), xreal_t::ToString) << std::endl;
 
                     break;
                 }

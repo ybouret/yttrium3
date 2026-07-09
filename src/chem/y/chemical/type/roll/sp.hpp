@@ -12,7 +12,7 @@ namespace Yttrium
     namespace Chemical
     {
 
-        typedef Roll<Species>   SpRoll; //!< alias
+        typedef Roll<const Species>   SpRoll; //!< alias
         typedef AutoPtr<SpRoll> SpDB;   //!< alias
     }
 
