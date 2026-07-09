@@ -51,7 +51,7 @@ Y_UTEST(cluster)
     {
         Topology             topo(xml,*g);
         Conservations        conservations(xml,topo);
-        Conservation::Canons canons(xml,conservations.laws,topo.nuT,conservations.lfmt);
+        Conservation::Canons canons(xml,conservations.laws,topo,conservations.lfmt);
 
         for(const Conservation::Canon *canon=canons->head;canon;canon=canon->next)
         {

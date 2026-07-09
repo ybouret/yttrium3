@@ -54,7 +54,7 @@ namespace Yttrium
             }
 
 
-            void Canons:: postProcess(XML::Log &xml, const IMatrix &topNu)
+            void Canons:: postProcess(XML::Log &xml, const Topology &topo)
             {
                 assert(list.size>0);
                 const size_t count=list.size;
@@ -62,13 +62,13 @@ namespace Yttrium
                 for(Canon *node=list.head;node;node=node->next)
                 {
                     Canon &canon    = *node;
-                    canon.compile(xml,topNu);
+                    canon.compile(xml,topo);
                 }
             }
 
             Canons:: Canons(XML::Log                & xml,
                             const Core::ListOf<Law> & laws,
-                            const IMatrix           & topNuT,
+                            const Topology          & topo,
                             const Assembly          & lfmt) :
             list()
             {
@@ -76,7 +76,7 @@ namespace Yttrium
                 {
                     Y_XML_Element_Attr(xml,BuildCanons,Y_XML_Attr(laws.size) );
                     makeContent(xml,laws,lfmt);
-                    postProcess(xml,topNuT);
+                    postProcess(xml,topo);
                 }
             }
         }

@@ -19,6 +19,7 @@ namespace Yttrium
             gamma(0),
             projected(),
             untouched(),
+            eqdb( new EqRoll() ),
             next(0),
             prev(0)
             {
@@ -112,11 +113,20 @@ namespace Yttrium
             }
 
 
+            bool Law:: linkedTo( const Components &eq ) const noexcept
+            {
+                for(const Actor *ac=(**this).head;ac;ac=ac->next)
+                {
+                    if( eq.hired(ac->sp) ) return true;
+                }
+                return false;
+            }
+
             const char * const Law::Name = "Conservation::Law";
 
-            void Law:: compile(XML::Log      & xml,
-                               const SList   & slist,
-                               const IMatrix & topNuT)
+            void Law:: compile(XML::Log       & xml,
+                               const SList    & slist,
+                               const Topology & topo)
             {
                 const Law &law = *this;
                 Y_XML_Element_Attr(xml,Compile,Y_XML_Attr(law));
@@ -175,19 +185,12 @@ namespace Yttrium
                 }
                 Y_XMLog(xml, "p=" << p << " / " << g2);
 
-                //const size_t M = topNu.cols;
-                const size_t N = topNuT.cols;
-                Matrix<apz>  nuT(m,N);
+
                 {
                     const SNode *sn = slist->head;
                     for(size_t i=1;i<=m;++i,sn=sn->next)
                     {
                         const Species &sp    = **sn;
-                        {
-                            const size_t si = sp.indx[TopLevel];
-                            nuT[i].load(topNuT[si]);
-                        }
-
                         if(!law.hired(sp)) { Coerce(untouched) << sp; continue; }
                         Writable<apz> &numer = p[i];
                         apn            denom = g2;
@@ -200,8 +203,15 @@ namespace Yttrium
                     }
                 }
                 Y_XMLog(xml,"untouched = " << untouched);
-                Y_XMLog(xml,"nuT1      = " << nuT);
-                Y_XMLog(xml,"nu1       = " << nuT << "'");
+
+                for(const ENode *en = topo.group->head;en;en=en->next)
+                {
+                    const Equilibrium &eq = **en;
+                    if(linkedTo(eq)) Coerce(eqdb)->inscribe(eq);
+                }
+
+                Y_XMLog(xml,"database  = " << eqdb->list);
+
 
             }
 

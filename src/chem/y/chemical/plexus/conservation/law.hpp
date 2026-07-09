@@ -2,9 +2,10 @@
 #ifndef Y_Chemical_Conservation_Law_Included
 #define Y_Chemical_Conservation_Law_Included 1
 
-#include "y/chemical/reactive/actors.hpp"
+#include "y/chemical/plexus/topology.hpp"
 #include "y/chemical/slist.hpp"
 #include "y/chemical/type/matrix.hpp"
+#include "y/chemical/type/eq-roll.hpp"
 #include "y/chemical/plexus/conservation/law/proj.hpp"
 #include "y/container/matrix.hpp"
 #include "y/xml/log.hpp"
@@ -63,12 +64,13 @@ namespace Yttrium
                 OutputStream & viz(OutputStream &fp, const char * const color) const;
                 String         html() const; //!< \return html label
 
-                bool linkedTo( const Law & ) const noexcept; //!< \return true iff common species
+                bool linkedTo( const Law & )      const noexcept; //!< \return true iff common species
+                bool linkedTo(const Components &) const noexcept;
 
                 //! \param slist from canon
-                void compile(XML::Log      &xml,
-                             const SList   &slist,
-                             const IMatrix &topNuT);
+                void compile(XML::Log       &xml,
+                             const SList    &slist,
+                             const Topology &topo);
 
 
                 XWritable & project(XWritable       &target, const Level tgt,
@@ -81,12 +83,13 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                const xreal_t    gamma2; //!< sum |coef|^2
-                const xreal_t    gamma;  //!< sqrt(gamma)
+                const xreal_t    gamma2;     //!< sum |coef|^2
+                const xreal_t    gamma;      //!< sqrt(gamma)
                 const Proj::List projected;  //!< list of projected species
                 const SList      untouched;  //!< list of untouched species
-                Law *            next;   //!< for list
-                Law *            prev;   //!< for list
+                const EqDB       eqdb;       //!< linked equilibria
+                Law *            next;       //!< for list
+                Law *            prev;       //!< for list
 
             private:
                 Y_Disable_Copy_And_Assign(Law); //!< discarded

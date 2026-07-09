@@ -56,7 +56,7 @@ namespace Yttrium
 
             
 
-            void Canon:: compile(XML::Log &xml, const IMatrix &topNuT)
+            void Canon:: compile(XML::Log &xml, const Topology &topo)
             {
                 //--------------------------------------------------------------
                 //
@@ -95,7 +95,7 @@ namespace Yttrium
                 //
                 //--------------------------------------------------------------
                 for(const LNode *ln=laws->head;ln;ln=ln->next)
-                    Coerce( **ln ).compile(xml,species->list,topNuT);
+                    Coerce( **ln ).compile(xml,species->list,topo);
             }
 
 

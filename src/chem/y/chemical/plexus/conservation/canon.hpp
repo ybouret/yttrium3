@@ -54,7 +54,7 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 bool accepts(const Law &) const noexcept;       //!< \return true iff shared species
-                void compile(XML::Log &xml, const IMatrix &topNuT);  
+                void compile(XML::Log &xml, const Topology &topo);  
 
                 //______________________________________________________________
                 //

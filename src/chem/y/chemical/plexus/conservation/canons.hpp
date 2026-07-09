@@ -34,7 +34,7 @@ namespace Yttrium
                 //! setup for list of laws
                 explicit Canons(XML::Log                &xml,
                                 const Core::ListOf<Law> &laws,
-                                const IMatrix           &topNuT,
+                                const Topology          &topo,
                                 const Assembly          &lfmt);
 
                 //! cleanup
@@ -54,7 +54,7 @@ namespace Yttrium
                 void makeContent(XML::Log                &,
                                  const Core::ListOf<Law> &,
                                  const Assembly          &);
-                void postProcess(XML::Log &, const IMatrix &);
+                void postProcess(XML::Log &, const Topology &);
             };
         }
 
