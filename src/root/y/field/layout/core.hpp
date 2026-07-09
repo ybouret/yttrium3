@@ -88,7 +88,7 @@ namespace Yttrium
             const size_t items; //!< total items
 
         private:
-            Y_Disable_Assign(CoreLayout); //!< discarde
+            Y_Disable_Copy_And_Assign(CoreLayout); //!< discarde
         };
     }
 }
