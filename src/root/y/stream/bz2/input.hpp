@@ -15,7 +15,7 @@ namespace Yttrium
         //
         //
         //
-        //! Input gzFile
+        //! Input bzFile
         //
         //
         //______________________________________________________________________
@@ -24,23 +24,30 @@ namespace Yttrium
         public:
             class Code;
 
-            explicit Input(const String &,     const int small=0);
-            explicit Input(const char * const, const int small=0);
-            explicit Input(const StdIn_ &,     const int small=0);
-            virtual ~Input() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Input(const String &,     const int small=0); //!< open file \param small 0 or 1
+            explicit Input(const char * const, const int small=0); //!< open file \param small 0 or 1
+            explicit Input(const StdIn_ &,     const int small=0); //!< open stdin \param small 0 or 1
+            virtual ~Input() noexcept;                             //!< cleanup
 
-
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
             virtual bool   query(char &);
             virtual size_t query(void * const, const size_t);
             virtual void   store(const char);
 
         private:
-            Y_Disable_Copy_And_Assign(Input);
-            
-            Code * const code;
-
-            
-
+            Y_Disable_Copy_And_Assign(Input); //!< discarded
+            Code * const code;                //!< inner code
         };
     }
 }

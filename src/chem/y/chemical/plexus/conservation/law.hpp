@@ -53,6 +53,8 @@ namespace Yttrium
                 // Methods
                 //
                 //______________________________________________________________
+
+                //! \return excess score, the lower the better, zero means no excess
                 xreal_t excess(const XReadable &, const Level, XAdd &) const;
 
                 //! emit GraphViz code
@@ -65,9 +67,14 @@ namespace Yttrium
                 String         html() const; //!< \return html label
 
                 bool linkedTo( const Law & )      const noexcept; //!< \return true iff common species
-                bool linkedTo(const Components &) const noexcept;
+                bool linkedTo(const Components &) const noexcept; //!< \return true iff common species
 
-                //! \param slist from canon
+                //! post-compile law
+                /**
+                 \param xml   for output
+                 \param slist from canon
+                 \param topo  cluster topology
+                 */
                 void compile(XML::Log       &xml,
                              const SList    &slist,
                              const Topology &topo);

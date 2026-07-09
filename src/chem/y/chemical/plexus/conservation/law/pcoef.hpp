@@ -12,24 +12,56 @@ namespace Yttrium
 
         namespace Conservation
         {
-
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Projection coefficient
+            //
+            //
+            //__________________________________________________________________
             class PCoef : public Object
             {
             public:
-                typedef CxxListOf<PCoef> List;
-                explicit PCoef(const xreal_t, const Species &) noexcept;
-                virtual ~PCoef() noexcept;
-                Y_OSTREAM_PROTO(PCoef);
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                typedef CxxListOf<PCoef> List; //!< alias
 
-                const PCoef & operator*() const noexcept;
-                
-                const xreal_t  cf;
-                const Species &sp;
-                PCoef         *next;
-                PCoef         *prev;
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                explicit PCoef(const xreal_t, const Species &) noexcept; //!< setup
+                virtual ~PCoef() noexcept;                               //!< cleanup
+                Y_OSTREAM_PROTO(PCoef);                                  //!< display
+
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+                const PCoef & operator*() const noexcept; //!< helper to display list \return *this
+
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                const xreal_t  cf;   //!< coefficient
+                const Species &sp;   //!< species
+                PCoef         *next; //!< for list
+                PCoef         *prev; //!< for list
 
             private:
-                Y_Disable_Copy_And_Assign(PCoef);
+                Y_Disable_Copy_And_Assign(PCoef); //!< discarded
             };
         }
 

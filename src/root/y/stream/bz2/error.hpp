@@ -11,8 +11,10 @@ namespace Yttrium
 {
     namespace BZ2
     {
+        //! helper to get named error
         struct Error
         {
+            //! \param bzerror error code \return named text
             static const char * Get(const int bzerror) noexcept;
 
         };

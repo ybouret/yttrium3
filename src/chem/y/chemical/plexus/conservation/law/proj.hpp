@@ -12,13 +12,34 @@ namespace Yttrium
 
         namespace Conservation
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Projection code
+            //
+            //
+            //__________________________________________________________________
             class Proj : public Object, public PCoef::List
             {
             public:
-                typedef CxxListOf<Proj> List;
-                explicit Proj(const Species &, const xreal_t) noexcept;
-                virtual ~Proj()                noexcept;
-                Y_OSTREAM_PROTO(Proj);
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                typedef CxxListOf<Proj> List; //!< alias
+
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+                explicit Proj(const Species &, const xreal_t) noexcept; //!< setup with species and scaling
+                virtual ~Proj()                               noexcept; //!< cleanup
+                Y_OSTREAM_PROTO(Proj);                                  //!< discarded
 
                 //! build coefficients
                 /**
@@ -28,17 +49,31 @@ namespace Yttrium
                 void     build(const SList         &species,
                                const Readable<apz> &weights);
 
+                //! compute projection
+                /**
+                 \param target write at sp(target,tgt)
+                 \param tgt    target level
+                 \param source source array
+                 \param src    source level
+                 \param xadd   addition
+                 */
                 void     apply(XWritable       &target, const Level tgt,
                                const XReadable &source, const Level src,
                                XAdd & xadd) const;
 
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
                 const Species &sp;   //!< target species
-                const xreal_t  scal; //!< scaling
-                Proj *         next;
-                Proj *         prev;
+                const xreal_t  scal; //!< scaling factor
+                Proj *         next; //!< for list
+                Proj *         prev; //!< for list
 
             private:
-                Y_Disable_Copy_And_Assign(Proj);
+                Y_Disable_Copy_And_Assign(Proj); //!< discarded
 
             };
         }
