@@ -15,3 +15,4 @@ y/chemical/plexus/combinatorics
 )
 
 add_subdirectory(tests)
+Y_Regression(chem)
