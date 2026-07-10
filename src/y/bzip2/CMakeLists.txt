@@ -17,3 +17,4 @@ decompress.c
 bzlib.c)
 
 add_library(y-bz2 STATIC ${bz2SRCS})
+Y_ThirdParty(y-bz2)

@@ -75,3 +75,5 @@ add_custom_command(TARGET y_jpegtran POST_BUILD
     VERBATIM
 )
 
+Y_ThirdParty(y_djpeg y_cjpeg y_jpegtran)
+

@@ -26,3 +26,6 @@ target_link_libraries(y_lua y-lua)
 if(Y_SunOS OR Y_Linux OR Y_FreeBSD)
     target_link_libraries(y_lua m)
 endif()
+
+Y_ThirdParty(y_lua)
+

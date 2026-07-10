@@ -6,8 +6,7 @@ endif()
 add_library(y-jbig STATIC jbig.c jbig_ar.c)
 add_library(y-jbig85 STATIC jbig85.c jbig_ar.c)
 
-#Y_ThirdParty(y-jbig)
-#Y_ThirdParty(y-jbig85)
+Y_ThirdParty(y-jbig y-jbig85)
 
 
 add_executable(y_test_jbig tstcodec.c)

@@ -316,3 +316,6 @@ endif(ZLIB_BUILD_TESTING)
 
 
 add_subdirectory(contrib)
+
+Y_ThirdParty(zlibstatic)
+
