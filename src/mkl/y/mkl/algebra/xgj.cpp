@@ -1,5 +1,6 @@
 
 #include "y/mkl/algebra/xgj.hpp"
+#include "y/core/min.hpp"
 
 namespace Yttrium
 {
@@ -36,8 +37,9 @@ namespace Yttrium
             const size_t n = a.rows; if(n<=0) return 0;
             const size_t c = a.cols; assert(c>0);
             const size_t l = b.cols; assert(l>0);
+            const size_t m = Min(n,c);
 
-            for(size_t i=1;i<=n;++i)
+            for(size_t i=1;i<=m;++i)
             {
                 size_t    ip = 0;
                 const apq pv = FindPivot(ip,a,i);
@@ -45,6 +47,7 @@ namespace Yttrium
 
                 if(ip!=i)
                 {
+                    std::cerr << "swap(" << i << "," << ip << ")" << std::endl;
                     a.swapRows(i,ip);
                     b.swapRows(i,ip);
                 }
@@ -62,7 +65,7 @@ namespace Yttrium
                 }
             }
 
-            return n;
+            return m;
         }
 
     }

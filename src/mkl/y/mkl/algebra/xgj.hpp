@@ -35,7 +35,7 @@ namespace Yttrium
                                  const Matrix<apq> &a,
                                  const size_t       i);
 #endif
-            
+
 
 
         };

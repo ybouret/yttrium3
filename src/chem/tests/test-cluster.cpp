@@ -16,6 +16,9 @@
 #include "y/string/env/convert.hpp"
 #include "y/random/park-miller.hpp"
 
+#include "y/mkl/algebra/xgj.hpp"
+
+
 using namespace Yttrium;
 using namespace Chemical;
 
@@ -65,6 +68,21 @@ Y_UTEST(cluster)
     std::cerr << std::endl;
     std::cerr << "lib=" << lib << std::endl;
 
+
+    {
+        Matrix<apq> nuT(2,1);
+        nuT[1][1] = -1;
+        nuT[2][1] =  1;
+        std::cerr << "nuT=" << nuT << std::endl;
+        Matrix<apq> p(2,2);
+        p[1][1] = 1;  p[1][2] = -1;
+        p[2][1] = -1; p[2][2] =  1;
+        std::cerr << "p=" << p << std::endl;
+        const size_t r = MKL::XGJ::Build(nuT,p);
+        std::cerr << "r=" << r << std::endl;
+        std::cerr << "a=" << nuT << std::endl;
+        std::cerr << "b=" << p   << std::endl;
+    }
 
 }
 Y_UDONE()
