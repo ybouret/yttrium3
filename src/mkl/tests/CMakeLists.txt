@@ -18,6 +18,7 @@ Y_UTEST(algebra:ortho:space)
 Y_UTEST(algebra:tridiag)
 Y_UTEST(algebra:cyclic)
 Y_UTEST(algebra:svd)
+Y_UTEST(algebra:xgj)
 
 Y_UTEST(chem)
 

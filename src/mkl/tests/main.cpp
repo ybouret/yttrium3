@@ -11,6 +11,7 @@ Y_UTEST_DECL(4)
     Y_UTEST(algebra_tridiag);
     Y_UTEST(algebra_cyclic);
     Y_UTEST(algebra_svd);
+    Y_UTEST(algebra_xgj);
 
     Y_UTEST(chem);
 
