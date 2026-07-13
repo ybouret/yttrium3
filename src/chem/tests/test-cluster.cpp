@@ -84,6 +84,9 @@ Y_UTEST(cluster)
         std::cerr << "b=" << p   << std::endl;
     }
 
+
+    
+
 }
 Y_UDONE()
 

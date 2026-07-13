@@ -5,6 +5,7 @@
 #include "y/container/cxx/array.hpp"
 #include "y/apex/api/simplify.hpp"
 #include "y/xml/element.hpp"
+#include "y/mkl/algebra/xgj.hpp"
 
 namespace Yttrium
 {
@@ -203,12 +204,6 @@ namespace Yttrium
                 }
                 Y_XMLog(xml,"untouched = " << untouched);
 
-                for(ENode *en = topo.group->head;en;en=en->next)
-                {
-                    Equilibrium &eq = **en;
-                    if(linkedTo(eq)) Coerce(eqdb)->inscribe(eq);
-                }
-
                 //--------------------------------------------------------------
                 //
                 //
@@ -216,22 +211,40 @@ namespace Yttrium
                 //
                 //
                 //--------------------------------------------------------------
+                for(ENode *en = topo.group->head;en;en=en->next)
+                {
+                    Equilibrium &eq = **en;
+                    if(linkedTo(eq)) Coerce(eqdb)->inscribe(eq);
+                }
+
                 Y_XMLog(xml,"database  = " << eqdb->list);
 
+                //--------------------------------------------------------------
+                //
+                //
+                // Build local nuT
+                //
+                //
+                //--------------------------------------------------------------
+
                 const size_t n = eqdb->list->size; assert(n>0);
-                const size_t M = topo.M;           assert(M>0);
-                Matrix<apz>  nu(n,M);
+                Matrix<apq>  nuT(m,n);
                 {
                     size_t i=1;
                     for(const ENode *en=eqdb->list->head;en;en=en->next,++i)
                     {
                         const Components &eq = **en;
                         const size_t      ei = eq.indx[SubLevel];
-                        nu[i].load(topo.nu[ei]);
+                        for(const Actor *ac=(**this).head;ac;ac=ac->next)
+                        {
+                            const Species & sp = ac->sp;
+                            const size_t    sj = sp.indx[AuxLevel];
+                            nuT[sj][i] = topo.nuT[sp.indx[SubLevel]][ei];
+                        }
                     }
                 }
 
-                Y_XMLog(xml,"nu=" << nu);
+                Y_XMLog(xml,"nuT=" << nuT);
 
 
 
