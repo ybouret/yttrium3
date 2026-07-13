@@ -12,14 +12,29 @@ namespace Yttrium
     namespace MKL
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! eXtended Gauss Jordan algorithm
+        //
+        //
+        //______________________________________________________________________
         struct XGJ
         {
-            static size_t Build(Matrix<apq> &a);
+            //! apply Gauss-Jordan with row pivoting
+            /**
+             \param a primary matrix to apply algorithm
+             \param b replica matrix (a.k.a "unknown")
+             \return number of valid rows
+             */
+            static size_t Build(Matrix<apq> &a, Matrix<apq> &b);
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             static apq FindPivot(size_t            &ip,
                                  const Matrix<apq> &a,
                                  const size_t       i);
-
+#endif
             
 
 
