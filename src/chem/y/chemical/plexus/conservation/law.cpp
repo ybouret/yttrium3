@@ -184,6 +184,7 @@ namespace Yttrium
                     p_i[i] += g2;
                 }
                 Y_XMLog(xml, "p=" << p << " / " << g2);
+                p.asArray().to_c(std::cerr << "p_c={") << "}" << std::endl;
 
 
                 {
@@ -244,8 +245,8 @@ namespace Yttrium
                     }
                 }
 
-                Y_XMLog(xml,"nuT=" << nuT);
-
+                Y_XMLog(xml, "nuT=" << nuT);
+                nuT.asArray().to_c(std::cerr << "nuT_c={") << "}" << std::endl;
 
 
             }

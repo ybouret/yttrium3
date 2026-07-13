@@ -70,6 +70,7 @@ Y_UTEST(cluster)
 
 
     {
+        std::cerr << std::endl;
         Matrix<apq> nuT(2,1);
         nuT[1][1] = -1;
         nuT[2][1] =  1;
@@ -84,8 +85,36 @@ Y_UTEST(cluster)
         std::cerr << "b=" << p   << std::endl;
     }
 
+    {
+        std::cerr << std::endl;
+        const int arr[] = {-1,0,1,-1,0,1};
+        Matrix<apq> nuT(3,2,arr);
+        std::cerr << "nuT=" << nuT << std::endl;
+        const int brr[] = {2,-1,-1,-1,2,-1,-1,-1,2};
+        Matrix<apq> p(3,3,brr);
+        std::cerr << "p=" << p << std::endl;
+        const size_t r = MKL::XGJ::Build(nuT,p);
+        std::cerr << "r=" << r << std::endl;
+        std::cerr << "a=" << nuT << std::endl;
+        std::cerr << "b=" << p   << std::endl;
+    }
 
-    
+    {
+        std::cerr << std::endl;
+        const int arr[] = {-1,0,1,1};
+        Matrix<apq> nuT(4,1,arr);
+        std::cerr << "nuT=" << nuT << std::endl;
+        const int brr[] = {2,0,-2,-2,0,6,0,0,-2,0,5,-1,-2,0,-1,5};
+        Matrix<apq> p(4,4,brr);
+        std::cerr << "p=" << p << std::endl;
+        const size_t r = MKL::XGJ::Build(nuT,p);
+        std::cerr << "r=" << r << std::endl;
+        std::cerr << "a=" << nuT << std::endl;
+        std::cerr << "b=" << p   << std::endl;
+    }
+
+
+
 
 }
 Y_UDONE()

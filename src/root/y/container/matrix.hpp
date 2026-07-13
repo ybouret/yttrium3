@@ -63,6 +63,31 @@ namespace Yttrium
             allocate();
         }
 
+
+        //! setup matrix with linear data
+        /**
+         \param nr rows
+         \param nc columns
+         */
+        template <typename U>
+        inline explicit Matrix(const size_t nr,
+                               const size_t nc,
+                               const U *    arr) :
+        MatrixMetrics(nr,nc),
+        length(0),
+        row(0)
+        {
+            allocate();
+            try
+            {
+                assert(!(0==items&&0==arr));
+                Matrix & self = *this;
+                for(size_t i=1;i<=rows;++i)
+                    for(size_t j=1;j<=cols;++j)
+                        self[i][j] = *(arr++);
+            } catch (...) { deallocate(); throw; }
+        }
+
         //! duplicate \param m source matrix
         inline Matrix(const Matrix &m) :
         MatrixMetrics(m),
@@ -388,6 +413,24 @@ namespace Yttrium
                 for(size_t j=cols;j>0;--j) if(l[j]!=r[j]) return false;
             }
             return true;
+        }
+
+        template <typename U> inline
+        Matrix & operator*=(U &u)
+        {
+            for(size_t i=rows;i>0;--i)
+                for(size_t j=cols;j>0;--j)
+                    (*this)[i][j] *= u;
+            return *this;
+        }
+
+        template <typename U> inline
+        Matrix & operator/=(U &u)
+        {
+            for(size_t i=rows;i>0;--i)
+                for(size_t j=cols;j>0;--j)
+                    (*this)[i][j] /= u;
+            return *this;
         }
 
 

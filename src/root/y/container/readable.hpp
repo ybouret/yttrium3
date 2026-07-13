@@ -72,7 +72,17 @@ namespace Yttrium
             return os << ']';
         }
 
-       
+        inline std::ostream & to_c(std::ostream &os) const
+        {
+            const size_t n = size();
+            if(n>0)
+            {
+                os << ask(1);
+                for(size_t i=2;i<=n;++i) os << ',' << ask(i);
+            }
+            return os;
+        }
+
 
 
 
