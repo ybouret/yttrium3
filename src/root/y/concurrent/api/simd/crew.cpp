@@ -236,6 +236,10 @@ namespace Yttrium
         }
 
 
+        SIMD * SIMD:: NewParallel(const Venue venue)
+        {
+            return new Crew(venue);
+        }
     }
 
 }

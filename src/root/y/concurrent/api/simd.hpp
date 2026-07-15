@@ -7,6 +7,7 @@
 #include "y/type/copy-of.hpp"
 #include "y/type/temporary.hpp"
 #include "y/container/writable.hpp"
+#include "y/object/counted.hpp"
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4371 ) // layout of class may have changed
@@ -17,6 +18,8 @@ namespace Yttrium
     namespace Concurrent
     {
 
+        class Venue;
+
         //______________________________________________________________________
         //
         //
@@ -25,7 +28,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class SIMD : public Writable<Context>
+        class SIMD : public CountedObject, public Writable<Context>
         {
         public:
             //__________________________________________________________________
@@ -165,6 +168,15 @@ namespace Yttrium
             //__________________________________________________________________
             explicit SIMD() noexcept; //!< setup
             virtual ~SIMD() noexcept; //!< cleanup
+
+            //__________________________________________________________________
+            //
+            //
+            // Helper to create dynamic SIMD
+            //
+            //__________________________________________________________________
+            static SIMD * NewSequential();
+            static SIMD * NewParallel(const Venue);
 
             //__________________________________________________________________
             //
