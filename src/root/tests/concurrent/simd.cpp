@@ -2,7 +2,7 @@
 #include "y/concurrent/api/simd/crew.hpp"
 #include "y/type/temporary.hpp"
 #include "y/utest/run.hpp"
-#include "y/string/env/convert.hpp"
+//#include "y/string/env/convert.hpp"
 
 
 using namespace Yttrium;
@@ -72,7 +72,7 @@ Y_UTEST(concurrent_simd)
     
 
     Concurrent::Solo solo;
-    Concurrent::Crew crew( EnvironmentConvert::To<size_t>("NUM_THREADS",4) );
+    Concurrent::Crew crew(0);
 
 
 

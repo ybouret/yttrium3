@@ -5,7 +5,7 @@
 #define Y_Concurrent_Thread_Venue_Included 1
 
 #include "y/handy/basic/heavy/list.hpp"
-#include "y/object/counted.hpp"
+#include "y/string.hpp"
 #include "y/pointer/arc.hpp"
 
 namespace Yttrium
@@ -30,12 +30,20 @@ namespace Yttrium
         class Venue : public SharedVList
         {
         public:
+            static const char * const CallSign;    //!< "Y_NUM_THREADS"
+            static const char         COLON = ':'; //!< alias
+            static const char         COMA  = ';'; //!< alias
+
             Venue(const size_t ncpu=0);
             Venue(const Venue &) noexcept;
             virtual ~Venue() noexcept;
             
         private:
             Y_Disable_Assign(Venue);
+            void parse(String &);
+            void linear(const size_t);
+            void parseCode(const String&);
+            void parseList(const String&);
         };
 
 
