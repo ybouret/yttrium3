@@ -232,7 +232,7 @@ namespace Yttrium
 {
     namespace Concurrent
     {
-        
+
         bool SystemThread::assign(const size_t j) noexcept
         {
             thread_affinity_policy_data_t policy_data = { int(j) };
@@ -281,7 +281,7 @@ namespace Yttrium
             if (err != 0)
             {
                 const Libc::Exception excp(err, "pthread_setaffinity_np");
-                DisplayThreadWarning(excp);
+                excp.diplay(std::cerr);
                 return false;
             }
             else
