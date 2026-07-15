@@ -324,4 +324,23 @@ namespace Yttrium
 
     }
 
+
+    void LocalFS:: moveFile(const String &oldPath, const String &newPath)
+    {
+        Y_Giant_Lock();
+        const char * const src = oldPath.c_str();
+        const char * const tgt = newPath.c_str();
+
+#if defined(Y_BSD)
+        if( rename(src,tgt) < 0)
+            throw Libc::Exception(errno,"rename(%s,%s)",src,tgt);
+#endif
+
+#if defined(Y_WIN)
+        if( ! ::MoveFile(src,tgt) )
+            throw Windows::Exception( ::GetLastErrpr(), "MoveFile(%s,%s)", src, tgt);
+#endif
+
+    }
+
 }

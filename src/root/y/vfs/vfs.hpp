@@ -277,6 +277,7 @@ namespace Yttrium
         virtual bool      tryEraseEmpty(const String &dirName)                      = 0; //!< \param dirName name \return true if empty directory was erased
         virtual String    getCWD()                                                  = 0; //!< \return current working directory
         virtual void      setCWD(const String &)                                    = 0; //!< set current working directory
+        virtual void      moveFile(const String &oldPath, const String &newPath)    = 0; //!< rename file \param oldPath old path \param newPath newPath
 
         //______________________________________________________________________
         //

@@ -31,14 +31,6 @@ namespace Yttrium
         //______________________________________________________________________
         static const char * const      CallSign;                         //!< "LocalFS"
         static const Longevity         LifeTime = LifeTimeFor::LocalFS;  //!< lifetime
-
-        //______________________________________________________________________
-        //
-        //
-        // Interface
-        //
-        //______________________________________________________________________
-        //virtual void display(std::ostream &, size_t) const;
         
         //______________________________________________________________________
         //
@@ -53,7 +45,14 @@ namespace Yttrium
         virtual bool      tryEraseEmpty(const String &dirName);
         virtual String    getCWD();
         virtual void      setCWD(const String &dirName);
+        virtual void      moveFile(const String &oldPath, const String &newPath);
 
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
         //! \param dirName directory to search \return searchable directory pattern
         static  String    MakeWin32Path(const String &dirName);
 
