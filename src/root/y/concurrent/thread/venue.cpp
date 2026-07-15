@@ -8,7 +8,9 @@
 #include "y/container/algorithm/crop.hpp"
 #include "y/string/format.hpp"
 #include "y/format/decimal.hpp"
+
 #include <cctype>
+#include <cstring>
 
 namespace Yttrium
 {
@@ -101,11 +103,56 @@ namespace Yttrium
 
         }
 
+        namespace
+        {
+            static inline
+            size_t parseField(String &field, const char * const name)
+            {
+                assert(0!=name);
+                Algorithm::Crop(field,isspace);
+                return ASCII::Convert::To<size_t>(field,Venue::CallSign,name);
+            }
+        }
+
+
         void Venue:: parseCode(const String &info)
         {
 
-            std::cerr << "no parseCode" << std::endl;
-            exit(1);
+            size_t       ncpu   = 0;
+            size_t       offset = 0;
+            size_t       step   = 1;
+            {
+                Vector<String> indx;
+                Tokenizer::AppendTo(indx,info,COLON); assert(indx.size()>0);
+                const size_t f = indx.size();
+                switch(f)
+                {
+                    case 3: step   = parseField(indx[3],"step");   // FALLTHRU
+                    case 2: offset = parseField(indx[2],"offset"); // FALLTHRU
+                    case 1: ncpu   = parseField(indx[1],"#cpu");
+                        break;
+
+                    default:
+                        throw Specific::Exception(CallSign,"invalid %s fields", Decimal(f).c_str());
+                }
+            }
+
+            // std::cerr << "ncpu   = " << ncpu   << std::endl;
+            // std::cerr << "offset = " << offset << std::endl;
+            // std::cerr << "step   = " << step   << std::endl;
+
+            if(ncpu<=0) throw Specific::Exception(CallSign,"zero core");
+            if(step<=0) throw Specific::Exception(CallSign,"null step");
+
+            const size_t nmax = Hardware::NumProcs();
+            size_t       icpu = offset;
+            for(size_t i=ncpu;i>0;--i,icpu+=step)
+            {
+                (**this) << (icpu%nmax);
+            }
+
+
+
         }
 
         void Venue:: parseList(const String &info)
@@ -119,7 +166,6 @@ namespace Yttrium
                 String      & id    = Algorithm::Crop(indx[i],isspace);
                 (**this) << ASCII::Convert::To<size_t>(id,CallSign,label.c_str());
             }
-
         }
 
 

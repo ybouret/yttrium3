@@ -133,5 +133,5 @@ namespace Yttrium
 
 }
 
-#endif
+#endif // !Y_String_Tokenizer_Included
 
