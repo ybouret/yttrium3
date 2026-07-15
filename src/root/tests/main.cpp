@@ -27,6 +27,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(libc_strfmt);
     Y_UTEST(libc_ifile);
     Y_UTEST(libc_ofile);
+    Y_UTEST(libc_file_copy);
 
     Y_UTEST(system_error);	
     Y_UTEST(system_exception);
