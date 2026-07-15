@@ -1,5 +1,4 @@
 #include "y/concurrent/api/engine.hpp"
-#include "y/concurrent/thread/venue.hpp"
 
 namespace Yttrium
 {

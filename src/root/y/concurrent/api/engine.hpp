@@ -5,6 +5,7 @@
 
 
 #include "y/concurrent/api/simd.hpp"
+#include "y/concurrent/thread/venue.hpp"
 #include "y/type/proxy.hpp"
 
 namespace Yttrium
