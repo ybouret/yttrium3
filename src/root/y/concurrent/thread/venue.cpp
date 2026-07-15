@@ -23,6 +23,10 @@ namespace Yttrium
         Venue:: Venue(const Venue &v) noexcept : SharedVList(v)
         {
         }
+
+        Venue:: ~Venue() noexcept
+        {
+        }
         
 
     }

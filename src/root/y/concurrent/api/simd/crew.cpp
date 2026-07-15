@@ -23,11 +23,11 @@ namespace Yttrium
         public:
             typedef Memory::Classified<Thread,Memory::Archon> Threads;
 
-            inline explicit Code(const size_t numThreads,
+            inline explicit Code(const Venue &venue,
                                  Procedure   &theProc,
                                  Arguments * &theArgs) :
             Object(),
-            level( Max<size_t>(numThreads,1) ),
+            level( Max<size_t>(venue->size(),1) ),
             ready(0),
             inuse(0),
             proc(theProc),
@@ -39,6 +39,8 @@ namespace Yttrium
             metactx( level )
             {
                 init();
+                assert(level==threads.space);
+
             }
 
             inline virtual ~Code() noexcept {
@@ -79,19 +81,30 @@ namespace Yttrium
             assert(!args);
             assert(!inuse);
 
+            //------------------------------------------------------------------
+            //
             // wake up all (remaining)
+            //
+            //------------------------------------------------------------------
             cycle.broadcast();
 
+            //------------------------------------------------------------------
+            //
             // wait for all threads to return
+            //
+            //------------------------------------------------------------------
             {
                 Y_Lock(mutex);
                 if(ready>0) comms.wait(mutex);
-                std::cerr << "all done" << std::endl;
+                //std::cerr << "all done" << std::endl;
             }
 
 
-
+            //------------------------------------------------------------------
+            //
             // cleanup
+            //
+            //------------------------------------------------------------------
             for(size_t i=0;i<level;++i)
                 Destruct( threads(i) );
             
@@ -110,7 +123,7 @@ namespace Yttrium
                         Y_Lock(mutex); if(ready<=i) comms.wait(mutex);
                     }
                 }
-                (std::cerr << "synchronized" << std::endl);
+                //(std::cerr << "synchronized" << std::endl);
 
             }
             catch(...)
@@ -131,7 +144,7 @@ namespace Yttrium
             mutex.lock(); assert(ready<level);
             Context context(level,ready,mutex);
             metactx[context.indx] = &context;
-            (std::cerr << context << " is ready" << std::endl).flush();
+            //(std::cerr << context << " is ready" << std::endl).flush();
             ++ready;
             comms.signal();
         CYCLE:
@@ -145,7 +158,7 @@ namespace Yttrium
 
             if(!proc)
             {
-                (std::cerr << context << " is leaving" << std::endl).flush();
+                //(std::cerr << context << " is leaving" << std::endl).flush();
                 assert(ready>0);
                 if(--ready<=0) comms.signal();
                 mutex.unlock();
@@ -182,10 +195,10 @@ namespace Yttrium
 
 
 
-        Crew:: Crew(const size_t n) :
-        code( new Code(n,procedure,arguments) )
+        Crew:: Crew(const Venue venue) :
+        code( new Code(venue,procedure,arguments) )
         {
-            std::cerr << "sizeof(Crew::Code) = " << sizeof(Code) << std::endl;
+            //std::cerr << "sizeof(Crew::Code) = " << sizeof(Code) << std::endl;
         }
 
         Crew:: ~Crew() noexcept

@@ -6,6 +6,7 @@
 #define Y_Concurrent_Crew_Included 1
 
 #include "y/concurrent/api/simd.hpp"
+#include "y/concurrent/thread/venue.hpp"
 
 namespace Yttrium
 {
@@ -29,8 +30,8 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Crew(const size_t n); //!< setup \param n number of threads
-            virtual ~Crew() noexcept;      //!< cleanup
+            explicit Crew(const Venue); //!< setup \param n number of threads
+            virtual ~Crew() noexcept;   //!< cleanup
 
             //__________________________________________________________________
             //
