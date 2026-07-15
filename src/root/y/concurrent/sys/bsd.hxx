@@ -232,9 +232,7 @@ namespace Yttrium
 {
     namespace Concurrent
     {
-
-
-
+        
         bool SystemThread::assign(const size_t j) noexcept
         {
             thread_affinity_policy_data_t policy_data = { int(j) };
