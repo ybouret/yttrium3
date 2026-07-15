@@ -3,11 +3,6 @@
 
 namespace Yttrium
 {
-    namespace Concurrent
-    {
-        Y_Shallow_Impl(Sequential);
-        Y_Shallow_Impl(Parallel);
-
-    }
-
+    Y_Shallow_Impl(Sequential);
+    Y_Shallow_Impl(Parallel);
 }

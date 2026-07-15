@@ -13,7 +13,6 @@ namespace Yttrium
     Y_Shallow_Decl(Sequential);
     Y_Shallow_Decl(Parallel);
 
-
 }
 
 #endif // !Y_Concurrent_Type_Included
