@@ -32,7 +32,7 @@ namespace Yttrium
         public:
             static const char * const CallSign;    //!< "Y_NUM_THREADS"
             static const char         COLON = ':'; //!< alias
-            static const char         COMA  = ';'; //!< alias
+            static const char         COMA  = ','; //!< alias
 
             Venue(const size_t ncpu=0);
             Venue(const Venue &) noexcept;

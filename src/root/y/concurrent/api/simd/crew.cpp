@@ -40,7 +40,16 @@ namespace Yttrium
             {
                 init();
                 assert(level==threads.space);
-
+                const VList &list = *venue;
+                if(list->size==level)
+                {
+                    size_t i=0;
+                    for(const VNode *vn=list->head;vn;vn=vn->next,++i)
+                    {
+                        const size_t j = **vn;
+                        threads(i)->assign(j);
+                    }
+                }
             }
 
             inline virtual ~Code() noexcept {

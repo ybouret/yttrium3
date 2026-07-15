@@ -6,6 +6,8 @@
 #include "y/string/tokenizer.hpp"
 #include "y/container/sequence/vector.hpp"
 #include "y/container/algorithm/crop.hpp"
+#include "y/string/format.hpp"
+#include "y/format/decimal.hpp"
 #include <cctype>
 
 namespace Yttrium
@@ -73,6 +75,7 @@ namespace Yttrium
             // check avdanced parsing
             {
                 const char * const org = info.c_str();
+                std::cerr << "parsing '" << org << "'" << std::endl;
                 if(strchr(org,COLON))
                 {
                     parseCode(info);
@@ -107,8 +110,16 @@ namespace Yttrium
 
         void Venue:: parseList(const String &info)
         {
-            std::cerr << "no parseList" << std::endl;
-            exit(1);
+            Vector<String> indx;
+            Tokenizer::AppendTo(indx,info,COMA); assert(indx.size()>0);
+            const size_t n = indx.size();
+            for(size_t i=1;i<=n;++i)
+            {
+                const String  label = Formatted::Get("cpu#%s", Decimal(n).c_str());
+                String      & id    = Algorithm::Crop(indx[i],isspace);
+                (**this) << ASCII::Convert::To<size_t>(id,CallSign,label.c_str());
+            }
+
         }
 
 

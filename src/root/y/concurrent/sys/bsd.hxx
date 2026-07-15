@@ -227,6 +227,7 @@ namespace Yttrium
 
 #include <mach/thread_policy.h>
 #include <mach/thread_act.h>
+#include "y/format/decimal.hpp"
 
 namespace Yttrium
 {
@@ -240,7 +241,7 @@ namespace Yttrium
             const int                     mach_result = thread_policy_set(mach_thread, THREAD_AFFINITY_POLICY, (thread_policy_t)&policy_data, THREAD_AFFINITY_POLICY_COUNT);
             if (KERN_SUCCESS != mach_result)
             {
-                const Mach::Exception excp(mach_result, "thread_policy_set");
+                const Mach::Exception excp(mach_result, "thread_policy_set/assign@%s", Decimal(j).c_str());
                 excp.display(std::cerr);
                 return false;
             }
