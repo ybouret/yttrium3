@@ -29,7 +29,7 @@ namespace Yttrium
         }
 
 
-        SIMD * SIMD:: NewSequential()
+        SIMD * SIMD:: Sequential()
         {
             return new Solo();
         }

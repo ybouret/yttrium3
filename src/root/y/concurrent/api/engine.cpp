@@ -1,4 +1,5 @@
 #include "y/concurrent/api/engine.hpp"
+#include "y/concurrent/thread/venue.hpp"
 
 namespace Yttrium
 {
@@ -17,12 +18,7 @@ namespace Yttrium
             Coerce(simd) = 0;
         }
 
-        Engine:: Engine(const Sequential_ &) :
-        Proxy<SIMD>(),
-        simd( SIMD::NewSequential() )
-        {
-            simd->withhold();
-        }
+
 
         Engine:: Engine(const Engine &engine) noexcept :
         Proxy<SIMD>(),
@@ -31,5 +27,15 @@ namespace Yttrium
             simd->withhold();
         }
 
+        Engine:: Engine(SIMD * const user) noexcept :
+        Proxy<SIMD>(),
+        simd(user)
+        {
+            assert(simd);
+            assert(0==simd->quantity());
+            simd->withhold();
+        }
+
+        
     }
 }

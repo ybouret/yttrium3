@@ -6,7 +6,6 @@
 
 #include "y/concurrent/api/simd.hpp"
 #include "y/type/proxy.hpp"
-#include "y/concurrent/type.hpp"
 
 namespace Yttrium
 {
@@ -15,10 +14,10 @@ namespace Yttrium
         class Engine : public Proxy<SIMD>
         {
         public:
-            Engine(const Sequential_ &);
+            Engine(SIMD * const)   noexcept;
             Engine(const Engine &) noexcept;
             virtual ~Engine()      noexcept;
-
+            
         private:
             Y_Disable_Assign(Engine);
             Y_Proxy_Decl();

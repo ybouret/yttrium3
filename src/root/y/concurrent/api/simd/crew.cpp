@@ -236,7 +236,7 @@ namespace Yttrium
         }
 
 
-        SIMD * SIMD:: NewParallel(const Venue venue)
+        SIMD * SIMD:: InParallel(const Venue venue)
         {
             return new Crew(venue);
         }

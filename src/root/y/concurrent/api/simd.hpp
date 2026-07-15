@@ -175,8 +175,8 @@ namespace Yttrium
             // Helper to create dynamic SIMD
             //
             //__________________________________________________________________
-            static SIMD * NewSequential();
-            static SIMD * NewParallel(const Venue);
+            static SIMD * Sequential();
+            static SIMD * InParallel(const Venue);
 
             //__________________________________________________________________
             //
@@ -368,7 +368,13 @@ namespace Yttrium
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         };
+
+
     }
+
+
+
+
 }
 
 #endif // !Y_Concurrent_SIMD_Included
