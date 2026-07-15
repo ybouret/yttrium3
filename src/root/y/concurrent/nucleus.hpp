@@ -11,9 +11,9 @@
 
 namespace Yttrium
 {
-    class Lockable;
+    class     Lockable;
     namespace Memory { class Book; namespace Small { class Blocks; } }
-
+    
     namespace Concurrent
     {
         class SystemMutex;
@@ -82,15 +82,27 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
-            // system primitives
+            // System Mutex
             //
             //__________________________________________________________________
             SystemMutex * acquireSystemMutex();                             //!< inner acquire/setup \return ready system mutex
             void          releaseSystemMutex(SystemMutex * const) noexcept; //!< clear/release system mutex
 
+            //__________________________________________________________________
+            //
+            //
+            // System Thread
+            //
+            //__________________________________________________________________
             SystemThread * acquireSystemThread(Thread &);                      //!< inner acquire/setup \return running SystemThread
             void           releaseSystemThread(SystemThread * const) noexcept; //!< wait/release system thread
 
+            //__________________________________________________________________
+            //
+            //
+            // System Condition
+            //
+            //__________________________________________________________________
             SystemCondition * acquireSystemCondition();                                 //!< inner acquire/setup \return ready system condition
             void              releaseSystemCondition(SystemCondition * const) noexcept; //!< release system condition
 

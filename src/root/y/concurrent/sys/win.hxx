@@ -184,6 +184,22 @@ namespace Yttrium
 			DWORD  tid;
 			HANDLE handle;
 
+            inline bool assign(const size_t cpu) const
+            {
+                const DWORD_PTR mask = DWORD_PTR(1) << j;
+                if (!::SetThreadAffinityMask(code->get(), mask))
+                {
+                    const DWORD err = ::GetLastError();
+                    const Windows::Exception excp(err, "::SetThreadAffinityMask");
+                    excp.display(std::cerr);
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
 		private:
 			Y_Disable_Copy_And_Assign(SystemThread);
 

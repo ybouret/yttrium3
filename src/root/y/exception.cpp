@@ -90,20 +90,27 @@ namespace Yttrium
         return os;
     }
 
-    void Exception:: display(std::ostream &os) const
+    void Exception:: display(std::ostream &os) const noexcept
     {
-        static const char  sep      = '*';
-        const char * const whatText = what();
-        const char * const infoText = info();
-        const size_t       whatSize = Yttrium_Strlen(whatText);
-        const size_t       infoSize = Yttrium_Strlen(infoText);
-        const size_t       width    = Max(whatSize,infoSize);
-        const size_t       frame    = width + 4;
-        const size_t       padding  = width + 1;
-        printLine(os,frame,sep) << std::endl;
-        printLine( os << sep << ' ' << whatText,padding-whatSize,' ') << sep << std::endl;
-        printLine( os << sep << ' ' << infoText,padding-infoSize,' ') << sep << std::endl;
-        printLine(os,frame,sep) << std::endl;
+        try
+        {
+            static const char  sep      = '*';
+            const char * const whatText = what();
+            const char * const infoText = info();
+            const size_t       whatSize = Yttrium_Strlen(whatText);
+            const size_t       infoSize = Yttrium_Strlen(infoText);
+            const size_t       width    = Max(whatSize,infoSize);
+            const size_t       frame    = width + 4;
+            const size_t       padding  = width + 1;
+            printLine(os,frame,sep) << std::endl;
+            printLine( os << sep << ' ' << whatText,padding-whatSize,' ') << sep << std::endl;
+            printLine( os << sep << ' ' << infoText,padding-infoSize,' ') << sep << std::endl;
+            printLine(os,frame,sep) << std::endl;
+        }
+        catch(...)
+        {
+            
+        }
     }
 
 

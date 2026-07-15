@@ -59,8 +59,8 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
-        const char * info() const noexcept; //!< provides information \return info_
-        void display(std::ostream &) const; //!< pretty display
+        const char * info()          const noexcept; //!< provides information \return info_
+        void display(std::ostream &) const noexcept; //!< pretty display
 
 
         Exception & operator<<(const char * const) noexcept; //!< right append text \return *this

@@ -187,6 +187,9 @@ namespace Yttrium
             }
 
 
+            bool assign(const size_t cpu) noexcept;
+
+
         private:
             Y_Disable_Copy_And_Assign(SystemThread);
             Memory::Single<pthread_t> pthr;
@@ -211,3 +214,126 @@ namespace Yttrium
 
 }
 
+#if defined Y_THREAD_AFFINITY
+#error "Y_THREAD_AFFINITY shouldn't be defined"
+#endif
+
+#if defined(Y_Darwin)
+#define Y_THREAD_AFFINITY 1
+#include <mach/thread_policy.h>
+#include <mach/thread_act.h>
+namespace Yttrium
+{
+    namespace Concurrent
+    {
+
+        bool SystemThread::assign(const size_t j) noexcept
+        {
+            thread_affinity_policy_data_t policy_data = { int(j) };
+            mach_port_t                   mach_thread = pthread_mach_thread_np(*pthr());
+            const int                     mach_result = thread_policy_set(mach_thread, THREAD_AFFINITY_POLICY, (thread_policy_t)&policy_data, THREAD_AFFINITY_POLICY_COUNT);
+            if (KERN_SUCCESS != mach_result)
+            {
+                const Mach::Exception excp(mach_result, "thread_policy_set");
+                excp.display(std::cerr);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+        }
+
+    }
+
+}
+
+#endif // defined(Y_Darwin)
+
+
+
+#if defined(Y_Linux)|| defined(Y_FreeBSD)
+#   define Y_THREAD_AFFINITY 1
+#   if defined(Y_FreeBSD)
+#      include <pthread_np.h>
+#      define Y_CPU_SET cpuset_t
+#   else
+#      define Y_CPU_SET cpu_set_t
+#   endif
+
+namespace Yttrium
+{
+    namespace Concurrent
+    {
+        bool   SystemThread::assign(const size_t j) noexcept
+        {
+            Y_CPU_SET the_cpu_set;
+            CPU_ZERO(&the_cpu_set);
+            CPU_SET(j, &the_cpu_set);
+            const int err = pthread_setaffinity_np(*pthr(), sizeof(Y_CPU_SET), &the_cpu_set);
+            if (err != 0)
+            {
+                const Libc::Exception excp(err, "pthread_setaffinity_np");
+                DisplayThreadWarning(excp);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+    }
+
+}
+
+#endif // defined(Y_Linux)|| defined(Y_FreeBSD)
+
+#if defined(Y_SunOS)
+#   define Y_THREAD_AFFINITY 1
+#include <sys/types.h>
+#include <sys/processor.h>
+#include <sys/procset.h>
+
+namespace Yttrium
+{
+    namespace Concurrent
+    {
+        bool SystemThread::assign(const size_t j) noexcept
+        {
+            const int res = processor_bind(P_LWPID, idtype_t(*pthr()), j, NULL);
+            if (0 != res)
+            {
+                const Exception excp("processor_bind failure");
+                excp.display(std::cerr);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+    }
+
+}
+
+#endif // defined(Y_SunOS)
+
+
+#if ! defined(Y_THREAD_AFFINITY)
+#warning "No Thread Affinity"
+namespace Yttrium
+{
+    namespace Concurrent
+    {
+        bool SystemThread::assign(const size_t) noexcept
+        {
+            const Exception excp("No Thread Affinity");
+            excp.display();
+            return false;
+        }
+    }
+}
+
+#endif // ! defined(Y_THREAD_AFFINITY)

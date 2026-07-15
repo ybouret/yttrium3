@@ -31,8 +31,7 @@ namespace Yttrium
         const char* const         Nucleus::CallSign = "Concurrent::Nucleus";
         const char*               Nucleus::callSign() const noexcept { return CallSign; }
         System::AtExit::Longevity Nucleus::lifeTime() const noexcept { return LifeTime; }
-
-
+        
         //______________________________________________________________________
         //
         //
