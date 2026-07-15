@@ -220,12 +220,20 @@ namespace Yttrium
 
 #if defined(Y_Darwin)
 #define Y_THREAD_AFFINITY 1
+
+#if defined(Y_GNU)
+#define _Static_assert static_assert
+#endif
+
 #include <mach/thread_policy.h>
 #include <mach/thread_act.h>
+
 namespace Yttrium
 {
     namespace Concurrent
     {
+
+
 
         bool SystemThread::assign(const size_t j) noexcept
         {
