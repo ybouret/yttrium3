@@ -2,6 +2,8 @@
 #include "y/concurrent/api/engine.hpp"
 #include "y/utest/run.hpp"
 #include "y/concurrent/splitting/tile1d.hpp"
+#include "y/stream/libc/output.hpp"
+#include "y/format/decimal.hpp"
 
 using namespace Yttrium;
 
@@ -36,6 +38,8 @@ namespace
 
             // first prime from the interval
             assert(u>=3);
+            OutputFile fp(fileName);
+            fp << Decimal(u).c_str() << '\n';
 
             // loop
             while(true)
@@ -43,7 +47,7 @@ namespace
                 u += 2;
                 if( Prime::Test(u) )
                 {
-
+                    fp << Decimal(u).c_str() << '\n';
                 }
 
                 if(u>=tile.utmost)
