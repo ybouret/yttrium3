@@ -281,7 +281,7 @@ namespace Yttrium
             if (err != 0)
             {
                 const Libc::Exception excp(err, "pthread_setaffinity_np");
-                excp.diplay(std::cerr);
+                excp.display(std::cerr);
                 return false;
             }
             else
