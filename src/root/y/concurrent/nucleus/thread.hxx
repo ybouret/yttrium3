@@ -17,6 +17,10 @@ namespace Yttrium
             data->threads.recycle(st);
         }
 
+        bool Nucleus:: Assign(SystemThread &st, const size_t cpu) noexcept
+        {
+            return st.assign(cpu);
+        }
 
     }
 
