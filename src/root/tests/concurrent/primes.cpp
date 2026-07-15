@@ -76,6 +76,7 @@ Y_UTEST(concurrent_primes)
     Concurrent::Engine engine( Concurrent::SIMD::InParallel(0) );
 
     (*engine)(detect, & PrimeDetector::run );
+    
 
 
 
