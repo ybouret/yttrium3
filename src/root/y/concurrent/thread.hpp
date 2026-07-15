@@ -55,6 +55,12 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
+
+            //! try to assign thread to cpu
+            /**
+             \param cpu cpu index
+             \return true iff successfully assigned
+             */
             bool assign(const size_t cpu) noexcept;
 
             //__________________________________________________________________

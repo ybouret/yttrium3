@@ -14,24 +14,32 @@ namespace Yttrium
 
         namespace Conservation
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Broken law description
+            //
+            //
+            //__________________________________________________________________
             class Broken
             {
             public:
                 Broken(const Law &, const xreal_t, XWritable &) noexcept;
-                ~Broken() noexcept;
-                Broken(const Broken &) noexcept;
-                Y_OSTREAM_PROTO(Broken);
+                Broken(const Broken &) noexcept; //!< duplicate
+                ~Broken()              noexcept; //!< cleanup
+                Y_OSTREAM_PROTO(Broken);         //!< display
 
                 const Law & law; //!< the law
                 xreal_t     bad; //!< bad score
                 XWritable & prj; //!< projected concentration
 
             private:
-                Y_Disable_Assign(Broken);
+                Y_Disable_Assign(Broken); //!< discarded
             };
 
-            typedef Handy::PlainHeavyList<Broken> BList;
-            typedef BList::NodeType               BNode;
+            typedef Handy::PlainHeavyList<Broken> BList; //!< alias
+            typedef BList::NodeType               BNode; //!< alias
         }
 
     }

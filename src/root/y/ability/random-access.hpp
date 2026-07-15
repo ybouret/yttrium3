@@ -24,9 +24,9 @@ namespace Yttrium
         explicit RandomAccess() noexcept {} //!< setup
         virtual ~RandomAccess() noexcept {} //!< cleanup
 
-        virtual void remove(const size_t indx) noexcept        = 0;
-        virtual void demote(const size_t indx) noexcept        = 0;
-        
+        virtual void remove(const size_t indx) noexcept  = 0; //!< remove object \param indx position
+        virtual void demote(const size_t indx) noexcept  = 0; //!< remove object \param indx position
+
 
     private:
         Y_Disable_Copy_And_Assign(RandomAccess); //!< discarded

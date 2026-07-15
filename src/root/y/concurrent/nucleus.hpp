@@ -96,8 +96,8 @@ namespace Yttrium
             //__________________________________________________________________
             SystemThread * acquireSystemThread(Thread &);                      //!< inner acquire/setup \return running SystemThread
             void           releaseSystemThread(SystemThread * const) noexcept; //!< wait/release system thread
-            static bool    Assign(SystemThread &, const size_t)      noexcept;
-            
+            static bool    Assign(SystemThread &, const size_t)      noexcept; //!< \return true iff successfully assigned to cpu
+
             //__________________________________________________________________
             //
             //

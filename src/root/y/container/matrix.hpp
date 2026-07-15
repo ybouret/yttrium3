@@ -68,6 +68,7 @@ namespace Yttrium
         /**
          \param nr rows
          \param nc columns
+         \param arr linear data of (at least) nr*nc items
          */
         template <typename U>
         inline explicit Matrix(const size_t nr,
@@ -415,6 +416,7 @@ namespace Yttrium
             return true;
         }
 
+        //! multiply each item \param u factor \return *this
         template <typename U> inline
         Matrix & operator*=(U &u)
         {
@@ -424,6 +426,7 @@ namespace Yttrium
             return *this;
         }
 
+        //! divided each item \param u denominator \return *this
         template <typename U> inline
         Matrix & operator/=(U &u)
         {

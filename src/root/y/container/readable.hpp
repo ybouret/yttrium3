@@ -72,6 +72,11 @@ namespace Yttrium
             return os << ']';
         }
 
+        //! display as content of C-style array
+        /**
+         \param os output
+         \return os
+         */
         inline std::ostream & to_c(std::ostream &os) const
         {
             const size_t n = size();
