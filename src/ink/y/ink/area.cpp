@@ -6,6 +6,8 @@ namespace Yttrium
     namespace Ink
     {
 
+        
+
         Area:: ~Area() noexcept
         {
 

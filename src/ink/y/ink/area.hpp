@@ -3,23 +3,28 @@
 #ifndef Y_Ink_Area_Included
 #define Y_Ink_Area_Included 1
 
-#include "y/mkl/v2d.hpp"
+#include "y/concurrent/splitting/leap2d.hpp"
 
 namespace Yttrium
 {
     namespace Ink
     {
 
-        typedef V2D<unit_t> Vertex;
+        typedef Concurrent::Splitting::Leap2D<unit_t> Leap;
+        typedef Leap::vertex_t                        Vertex;
 
-        class Area
+        
+        class Area : public Leap
         {
         public:
-
+            explicit Area(const unit_t W, const unit_t H) noexcept;
             virtual ~Area() noexcept;
-            
+            Area(const Area &) noexcept;
+
+
+
         private:
-            Y_Disable_Copy_And_Assign(Area);
+            Y_Disable_Assign(Area);
         };
 
     }
