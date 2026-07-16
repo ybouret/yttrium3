@@ -4,6 +4,7 @@
 #ifndef Y_Concurrent_Splitting_Tiles1D_Included
 #define Y_Concurrent_Splitting_Tiles1D_Included 1
 
+#include "y/concurrent/subdivisions.hpp"
 #include "y/concurrent/splitting/tile1d.hpp"
 #include "y/container/contiguous/writable.hpp"
 #include "y/memory/troop.hpp"
@@ -112,6 +113,7 @@ namespace Yttrium
             template <typename T>
             class Tiles1D :
             public Leap1D<T>,
+            public Subdivisions,
             public ContiguousWritable< Tile1D<T> >
             {
             public:
@@ -142,20 +144,18 @@ namespace Yttrium
                  */
                 inline explicit Tiles1D(const size_t n, const T dataOffset, const T dataLength) :
                 Leap(dataOffset,dataLength),
-                code( new Code(n) ),
-                ncpu(n)
+                Subdivisions(n),
+                code( new Code(ncpu) )
                 {
-                    assert(ncpu>0);
                     setup();
                 }
 
                 //! setup empty (would remap) \param n ncpu > 0
                 inline explicit Tiles1D(const size_t n) :
                 Leap(),
-                code( new Code(n) ),
-                ncpu(n)
+                Subdivisions(n),
+                code( new Code(ncpu) )
                 {
-                    assert(ncpu>0);
                     setup();
                 }
 
@@ -188,6 +188,12 @@ namespace Yttrium
                     setup();
                 }
 
+                inline void link(void * const user) noexcept
+                {
+                    for(size_t i=ncpu;i>0;--i)
+                        code->cxx[i].user = user;
+                }
+
                 //______________________________________________________________
                 //
                 //
@@ -200,7 +206,6 @@ namespace Yttrium
             private:
                 Y_Disable_Copy_And_Assign(Tiles1D); //!< discarded
                 Code * const code;                  //!< inner code
-                const size_t ncpu;                  //!< number of CPU
 
                 inline virtual const Tile & ask(const size_t indx) const noexcept
                 {
@@ -218,7 +223,11 @@ namespace Yttrium
                     code->free();
                     Tile * tile = code->addr;
                     while(code->size<ncpu)
-                        new (tile++) Tile(ncpu,Coerce(code->size)++,offset,length);
+                    {
+                        void * const u  = tile->user;
+                        Tile * const t  = new (tile++) Tile(ncpu,Coerce(code->size)++,offset,length);
+                        t->user = u;
+                    }
                     assert(ncpu==code->size);
                 }
             };

@@ -4,6 +4,7 @@
 #ifndef Y_Concurrent_Splitting_Tiles2D_Included
 #define Y_Concurrent_Splitting_Tiles2D_Included 1
 
+#include "y/concurrent/subdivisions.hpp"
 #include "y/concurrent/splitting/tile2d.hpp"
 #include "y/container/contiguous/writable.hpp"
 #include "y/memory/troop.hpp"
@@ -28,6 +29,7 @@ namespace Yttrium
             template <typename T>
             class Tiles2D :
             public Leap2D<T>,
+            public Subdivisions,
             public ContiguousWritable< Tile2D<T> >
             {
             public:
@@ -57,20 +59,18 @@ namespace Yttrium
                  */
                 inline explicit Tiles2D(const size_t n, const vertex_t lo, const vertex_t up) :
                 Leap(lo,up),
-                code( new Code(n) ),
-                ncpu(n)
+                Subdivisions(n),
+                code( new Code(ncpu) )
                 {
-                    assert(ncpu>0);
                     setup();
                 }
 
                 //! setup empty \param n parallelism
                 inline explicit Tiles2D(const size_t n) :
                 Leap(),
-                code( new Code(n) ),
-                ncpu(n)
+                Subdivisions(n),
+                code( new Code(ncpu) )
                 {
-                    assert(ncpu>0);
                     setup();
                 }
 
@@ -111,10 +111,15 @@ namespace Yttrium
                     setup();
                 }
 
+                inline void link(void * const user) noexcept
+                {
+                    for(size_t i=ncpu;i>0;--i)
+                        code->cxx[i].user = user;
+                }
+
             private:
                 Y_Disable_Copy_And_Assign(Tiles2D); //!< discarded
                 Code * const code;                  //!< inner code
-                const size_t ncpu;                  //!< parallelism
 
                 inline virtual const Tile & ask(const size_t indx) const noexcept
                 {
@@ -131,7 +136,12 @@ namespace Yttrium
                     assert(code);
                     code->free();
                     Tile * tile = code->addr;
-                    while(code->size<ncpu) new (tile++) Tile(ncpu,Coerce(code->size)++,*this);
+                    while(code->size<ncpu)
+                    {
+                        void * const u = tile->user;
+                        Tile * const t = new (tile++) Tile(ncpu,Coerce(code->size)++,*this);
+                        t->user = u;
+                    }
                     assert(ncpu==code->size);
                 }
             };

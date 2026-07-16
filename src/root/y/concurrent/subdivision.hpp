@@ -1,5 +1,3 @@
-
-
 //! \file
 
 #ifndef Y_Concurrent_Subdivision_Included
@@ -41,6 +39,15 @@ namespace Yttrium
             //
             //__________________________________________________________________
             virtual bool isEmpty() const noexcept = 0; //!< \return true iff empty subdivision
+
+
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            void * user;
 
         private:
             Y_Disable_Copy_And_Assign(Subdivision); //!< discarded

@@ -43,7 +43,6 @@ namespace Yttrium
             {
                 const Tile &tile = (*this)[ctx.indx];
                 Y_Lock(ctx.sync);
-                
             }
 
 
