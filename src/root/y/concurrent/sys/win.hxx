@@ -184,10 +184,10 @@ namespace Yttrium
 			DWORD  tid;
 			HANDLE handle;
 
-            inline bool assign(const size_t cpu) const
+            inline bool assign(const size_t j) const
             {
                 const DWORD_PTR mask = DWORD_PTR(1) << j;
-                if (!::SetThreadAffinityMask(code->get(), mask))
+                if (!::SetThreadAffinityMask(handle, mask))
                 {
                     const DWORD err = ::GetLastError();
                     const Windows::Exception excp(err, "::SetThreadAffinityMask");

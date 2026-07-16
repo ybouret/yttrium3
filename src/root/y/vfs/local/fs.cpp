@@ -338,7 +338,7 @@ namespace Yttrium
 
 #if defined(Y_WIN)
         if( ! ::MoveFile(src,tgt) )
-            throw Windows::Exception( ::GetLastErrpr(), "MoveFile(%s,%s)", src, tgt);
+            throw Windows::Exception( ::GetLastError(), "MoveFile(%s,%s)", src, tgt);
 #endif
 
     }
