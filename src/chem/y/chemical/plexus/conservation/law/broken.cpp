@@ -9,9 +9,12 @@ namespace Yttrium
         namespace Conservation
         {
 
-            Broken:: Broken(const Law &_law, const xreal_t _bad, XWritable & _prj) noexcept :
+            Broken:: Broken(const Law    & _law,
+                            const xreal_t  _xsc,
+                            XWritable    & _prj) noexcept :
             law(_law),
-            bad(_bad),
+            xsc(_xsc),
+            bad(xsc/law.gamma),
             prj(_prj)
             {
 
@@ -19,6 +22,7 @@ namespace Yttrium
 
             Broken:: Broken(const Broken &_) noexcept :
             law(_.law),
+            xsc(_.xsc),
             bad(_.bad),
             prj(_.prj)
             {

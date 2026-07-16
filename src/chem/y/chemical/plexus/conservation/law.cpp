@@ -46,7 +46,7 @@ namespace Yttrium
                 const xreal_t xs = xadd();
                 if(xs.mantissa<0)
                 {
-                    return -xs/gamma;
+                    return -xs;
                 }
                 else
                 {

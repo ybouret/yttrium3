@@ -54,7 +54,7 @@ namespace Yttrium
                 //
                 //______________________________________________________________
 
-                //! \return excess score, the lower the better, zero means no excess
+                //! \return excess of law, zero means OK
                 xreal_t excess(const XReadable &, const Level, XAdd &) const;
 
                 //! emit GraphViz code

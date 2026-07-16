@@ -25,12 +25,16 @@ namespace Yttrium
             class Broken
             {
             public:
-                Broken(const Law &, const xreal_t, XWritable &) noexcept;
+                Broken(const Law    &theLaw,
+                       const xreal_t excess,
+                       XWritable    &thePrj) noexcept;
+                
                 Broken(const Broken &) noexcept; //!< duplicate
                 ~Broken()              noexcept; //!< cleanup
                 Y_OSTREAM_PROTO(Broken);         //!< display
 
                 const Law & law; //!< the law
+                xreal_t     xsc; //!< excess of concentration
                 xreal_t     bad; //!< bad score
                 XWritable & prj; //!< projected concentration
 
