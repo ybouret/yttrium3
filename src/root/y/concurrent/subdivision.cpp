@@ -10,11 +10,10 @@ namespace Yttrium
         }
 
         Subdivision:: Subdivision(const size_t sz, const size_t rk) noexcept :
-        Member(sz,rk),
-        user(0)
+        Member(sz,rk) 
         {
         }
-        
+
     }
 
 }

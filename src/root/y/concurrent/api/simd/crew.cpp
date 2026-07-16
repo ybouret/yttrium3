@@ -17,6 +17,8 @@ namespace Yttrium
 {
     namespace Concurrent
     {
+        const char * const Crew:: CallSign = "InParallel";
+
 
         class Crew:: Code : public Object
         {
@@ -245,6 +247,9 @@ namespace Yttrium
         {
             return new Crew(venue);
         }
+
+        const char * Crew:: callSign() const noexcept { return CallSign; }
+
     }
 
 }

@@ -115,6 +115,11 @@ namespace Yttrium
             private:
                 Y_Disable_Copy_And_Assign(Tiles2D); //!< discarded
                 Code * const code;                  //!< inner code
+                
+                virtual const Subdivision & getSub(const size_t indx) const noexcept
+                {
+                    return ask(indx);
+                }
 
                 inline virtual const Tile & ask(const size_t indx) const noexcept
                 {
@@ -133,9 +138,7 @@ namespace Yttrium
                     Tile * tile = code->addr;
                     while(code->size<ncpu)
                     {
-                        void * const u = tile->user;
-                        Tile * const t = new (tile++) Tile(ncpu,Coerce(code->size)++,*this);
-                        t->user = u;
+                        new (tile++) Tile(ncpu,Coerce(code->size)++,*this);
                     }
                     assert(ncpu==code->size);
                 }

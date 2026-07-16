@@ -28,7 +28,7 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(Subdivisions);
-            //virtual const Subdivision & getSub(const size_t i)  const noexcept = 0;
+            virtual const Subdivision & getSub(const size_t) const noexcept = 0;
         };
 
     }

@@ -23,7 +23,15 @@ namespace Yttrium
         class Crew : public SIMD
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
             class Code;
+            static const char * const CallSign; //!< "InParallel"
+            
             //__________________________________________________________________
             //
             //
@@ -39,10 +47,11 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual size_t     size()     const noexcept;
-            virtual size_t     capacity() const noexcept;
-            virtual Lockable & sync()           noexcept;
-            
+            virtual size_t       size()     const noexcept;
+            virtual size_t       capacity() const noexcept;
+            virtual Lockable &   sync()           noexcept;
+            virtual const char * callSign() const noexcept;
+
         private:
             virtual const Context & ask(const size_t) const noexcept;
             Y_Disable_Copy_And_Assign(Crew); //!< discarded

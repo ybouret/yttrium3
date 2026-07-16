@@ -8,6 +8,7 @@
 #include "y/type/temporary.hpp"
 #include "y/container/writable.hpp"
 #include "y/object/counted.hpp"
+#include "y/ability/identifiable.hpp"
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4371 ) // layout of class may have changed
@@ -28,7 +29,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class SIMD : public CountedObject, public Writable<Context>
+        class SIMD : public CountedObject, public Writable<Context>, public Identifiable
         {
         public:
             //__________________________________________________________________

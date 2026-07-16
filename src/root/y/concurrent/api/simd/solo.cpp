@@ -4,6 +4,9 @@ namespace Yttrium
 {
     namespace Concurrent
     {
+
+        const char * const Solo:: CallSign = "Sequential";
+
         Solo:: Solo() noexcept : fake(), full(fake)
         {
         }
@@ -34,6 +37,8 @@ namespace Yttrium
         {
             return new Solo();
         }
+
+        const char * Solo:: callSign() const noexcept { return CallSign; }
 
     }
 

@@ -25,6 +25,14 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const char * const CallSign; //!< "Sequential"
+
+            //__________________________________________________________________
+            //
+            //
             // C++
             //
             //__________________________________________________________________
@@ -38,9 +46,10 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual size_t     size()     const noexcept;
-            virtual size_t     capacity() const noexcept;
-            virtual Lockable & sync()           noexcept;
+            virtual size_t       size()     const noexcept;
+            virtual size_t       capacity() const noexcept;
+            virtual Lockable &   sync()           noexcept;
+            virtual const char * callSign() const noexcept;
 
         private:
             virtual const Context & ask(const size_t) const noexcept;

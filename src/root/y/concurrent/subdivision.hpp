@@ -47,7 +47,7 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            void * user;
+            //void * user;
 
         private:
             Y_Disable_Copy_And_Assign(Subdivision); //!< discarded
