@@ -38,15 +38,15 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual size_t size()     const noexcept;
-            virtual size_t capacity() const noexcept;
-
+            virtual size_t     size()     const noexcept;
+            virtual size_t     capacity() const noexcept;
+            virtual Lockable & sync()           noexcept;
 
         private:
             virtual const Context & ask(const size_t) const noexcept;
 
             Y_Disable_Copy_And_Assign(Solo); //!< discarded
-            FakeLock sync;                   //!< sequential lock
+            FakeLock fake;                   //!< sequential lock
             Context  full;                   //!< full range context
 
             //__________________________________________________________________

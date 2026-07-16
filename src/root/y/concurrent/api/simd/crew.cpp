@@ -235,6 +235,11 @@ namespace Yttrium
             return *(code->metactx[i]);
         }
 
+        Lockable & Crew:: sync() noexcept
+        {
+            assert(code);
+            return code->mutex;
+        }
 
         SIMD * SIMD:: InParallel(const Venue venue)
         {

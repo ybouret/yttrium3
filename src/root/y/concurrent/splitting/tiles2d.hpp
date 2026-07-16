@@ -5,8 +5,8 @@
 #define Y_Concurrent_Splitting_Tiles2D_Included 1
 
 #include "y/concurrent/splitting/tile2d.hpp"
+#include "y/container/contiguous/writable.hpp"
 #include "y/memory/troop.hpp"
-#include "y/container/contiguous/readable.hpp"
 #include "y/type/destroy.hpp"
 #include "y/object.hpp"
 
@@ -28,7 +28,7 @@ namespace Yttrium
             template <typename T>
             class Tiles2D :
             public Leap2D<T>,
-            public ContiguousReadable< Tile2D<T> >
+            public ContiguousWritable< Tile2D<T> >
             {
             public:
                 //______________________________________________________________

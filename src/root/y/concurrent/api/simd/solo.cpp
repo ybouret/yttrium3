@@ -4,7 +4,7 @@ namespace Yttrium
 {
     namespace Concurrent
     {
-        Solo:: Solo() noexcept : sync(), full(sync)
+        Solo:: Solo() noexcept : fake(), full(fake)
         {
         }
 
@@ -28,6 +28,7 @@ namespace Yttrium
             return full;
         }
 
+        Lockable & Solo:: sync() noexcept { return fake; }
 
         SIMD * SIMD:: Sequential()
         {

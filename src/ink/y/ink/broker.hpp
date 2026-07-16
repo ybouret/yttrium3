@@ -20,14 +20,33 @@ namespace Yttrium
         class Broker : public Engine, public Tiles
         {
         public:
+            typedef Concurrent::Context Context;
+
             explicit Broker(const Engine &engine);
             virtual ~Broker() noexcept;
             
             void map(const Area &) noexcept;
-            
+
+
+            void run()
+            {
+                Concurrent::SIMD &simd = **this;
+                simd(*this, & Broker::call );
+            }
+
         private:
             Y_Disable_Copy_And_Assign(Broker);
+
             const Vertex v0;
+
+            void call(Context &ctx)
+            {
+                const Tile &tile = (*this)[ctx.indx];
+                Y_Lock(ctx.sync);
+                
+            }
+
+
         };
     }
 
