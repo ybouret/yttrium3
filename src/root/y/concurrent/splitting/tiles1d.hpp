@@ -188,11 +188,7 @@ namespace Yttrium
                     setup();
                 }
 
-                inline void link(void * const user) noexcept
-                {
-                    for(size_t i=ncpu;i>0;--i)
-                        code->cxx[i].user = user;
-                }
+                
 
                 //______________________________________________________________
                 //
