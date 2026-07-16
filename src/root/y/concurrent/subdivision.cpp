@@ -10,7 +10,9 @@ namespace Yttrium
         }
 
         Subdivision:: Subdivision(const size_t sz, const size_t rk) noexcept :
-        Member(sz,rk) 
+        Member(sz,rk),
+        entry(0),
+        bytes(0)
         {
         }
 
