@@ -10,27 +10,52 @@ namespace Yttrium
     namespace Ink
     {
 
-        typedef V2D<unit_t> Vertex;
+        typedef V2D<unit_t> Vertex; //!< alias
 
-
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Area description
+        //
+        //
+        //______________________________________________________________________
         class Area
         {
         public:
-            explicit Area(const unit_t W, const unit_t H);
-            virtual ~Area() noexcept;
-            Area(const Area &) noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Area(const unit_t W, const unit_t H); //!< setup \param W width>0 \param H height>0
+            virtual ~Area()                      noexcept; //!< cleanup
+            Area(const Area &)                   noexcept; //!< duplicate
 
-            Vertex getUpper() const noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            Vertex getUpper() const noexcept; //!< \return (xt,yt)
 
-            const unit_t w;
-            const unit_t h;
-            const size_t n;
-            const unit_t xt;
-            const unit_t yt;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const unit_t w;  //!< width
+            const unit_t h;  //!< height
+            const size_t n;  //!< items
+            const unit_t xt; //!< width-1
+            const unit_t yt; //!< heigh-1
 
 
         private:
-            Y_Disable_Assign(Area);
+            Y_Disable_Assign(Area); //!< discarded
         };
 
     }

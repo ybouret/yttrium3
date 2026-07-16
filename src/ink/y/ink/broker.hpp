@@ -12,28 +12,60 @@ namespace Yttrium
 {
     namespace Ink
     {
-        typedef Concurrent::Engine                     Engine;
-        typedef Concurrent::Splitting::Tile2D<unit_t>  Tile;
-        typedef Concurrent::Splitting::Tiles2D<unit_t> Tiles;
+        typedef Concurrent::Engine                     Engine; //!< alias
+        typedef Concurrent::Splitting::Tile2D<unit_t>  Tile;   //!< alias
+        typedef Concurrent::Splitting::Tiles2D<unit_t> Tiles;  //!< alias
 
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Broker for tiled operations
+        //
+        //
+        //______________________________________________________________________
         class Broker : public Engine, public Tiles
         {
         public:
-            typedef Concurrent::Context Context;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef Concurrent::Context Context; //!< alias
 
-            explicit Broker(const Engine &engine);
-            virtual ~Broker() noexcept;
-            
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Broker(const Engine &); //!< setup from existing engine
+            virtual ~Broker() noexcept;      //!< cleanup
+
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! remap tiles to area metrics
             void map(const Area &) noexcept;
 
 
-            void operator()(void)
-            {
-                Concurrent::SIMD &simd = **this;
-                simd(*this, & Broker::call );
-            }
+            //! test call
+            void operator()(void);
 
+            //! operation on pixmap without argument
+            /**
+             call host.meth(tile,pixmap)
+             \param pixmap derived from Area
+             \param host   host object
+             \param meth   object method
+             */
             template <
             typename PIXMAP,
             typename OBJECT,
@@ -46,6 +78,14 @@ namespace Yttrium
                 simd(*this, & Broker::call0<PIXMAP,OBJECT,METHOD>, wrap0);
             }
 
+            //! operation on pixmap with argument
+            /**
+             call host.meth(tile,pixmap,source)
+             \param pixmap derived from Area
+             \param host   host object
+             \param meth   object method
+             \param source argument for method
+             */
             template <
             typename PIXMAP,
             typename OBJECT,
@@ -61,7 +101,7 @@ namespace Yttrium
 
 
 
-
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         private:
             Y_Disable_Copy_And_Assign(Broker);
             const Vertex v0;
@@ -109,14 +149,8 @@ namespace Yttrium
                 (host.*meth)(tile,*arg.pxm,*arg.src);
             }
 
-
-            void call(Context &ctx)
-            {
-                const Tile &tile = (*this)[ctx.indx];
-                Y_Lock(ctx.sync);
-                std::cerr << tile.c_str() << " : " << tile << std::endl;
-            }
-
+            void call(Context &);
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         };
     }

@@ -23,6 +23,20 @@ namespace Yttrium
         {
             remap(v0,a.getUpper());
         }
+
+        void Broker:: operator()(void)
+        {
+            Concurrent::SIMD &simd = **this;
+            simd(*this, & Broker::call );
+        }
+
+        void Broker:: call(Context &ctx)
+        {
+            const Tile &tile = (*this)[ctx.indx];
+            Y_Lock(ctx.sync);
+            std::cerr << tile.c_str() << " : " << tile << std::endl;
+        }
+
     }
 
 }

@@ -177,7 +177,7 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual Lockable & sync() noexcept = 0;
+            virtual Lockable & sync() noexcept = 0; //!< \return internal synchronisation lock
 
             //__________________________________________________________________
             //

@@ -21,13 +21,34 @@ namespace Yttrium
         class Subdivisions
         {
         public:
-            explicit Subdivisions(const size_t) noexcept;
-            virtual ~Subdivisions() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Subdivisions(const size_t) noexcept; //!< setup with ncpu
+            virtual ~Subdivisions()             noexcept; //!< cleanup
 
-            const size_t ncpu;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const size_t ncpu; //!< dimensions
 
         private:
-            Y_Disable_Copy_And_Assign(Subdivisions);
+            Y_Disable_Copy_And_Assign(Subdivisions); //!< discarded
+
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
+
+            //! \return subdivision in [1:ncpu]
             virtual const Subdivision & getSub(const size_t) const noexcept = 0;
         };
 
