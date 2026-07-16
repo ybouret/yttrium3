@@ -12,17 +12,31 @@ namespace Yttrium
 {
     namespace Concurrent
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Proxy acting as smart pointer to SIMD
+        //
+        //
+        //______________________________________________________________________
         class Engine : public Proxy<SIMD>
         {
         public:
-            Engine(SIMD * const)   noexcept;
-            Engine(const Engine &) noexcept;
-            virtual ~Engine()      noexcept;
-            
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            Engine(SIMD * const)   noexcept; //!< setup with new SIMD
+            Engine(const Engine &) noexcept; //!< duplicate (shared copy)
+            virtual ~Engine()      noexcept; //!< cleanup
+
         private:
-            Y_Disable_Assign(Engine);
-            Y_Proxy_Decl();
-            SIMD * const simd;
+            Y_Disable_Assign(Engine); //!< discarded
+            Y_Proxy_Decl();           //!< helper
+            SIMD * const simd;        //!< shared instance
         };
 
     }

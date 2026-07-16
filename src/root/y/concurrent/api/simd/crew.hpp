@@ -30,7 +30,7 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Crew(const Venue); //!< setup \param n number of threads
+            explicit Crew(const Venue); //!< setup with threads venue
             virtual ~Crew() noexcept;   //!< cleanup
 
             //__________________________________________________________________

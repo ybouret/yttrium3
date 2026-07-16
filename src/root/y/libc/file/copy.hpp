@@ -11,8 +11,10 @@ namespace Yttrium
 {
     namespace Libc
     {
+        //! File Copy API
         struct FileCopy
         {
+            //! copy input file to output file
             static void To(OutputFile &, InputFile &);
 
         };

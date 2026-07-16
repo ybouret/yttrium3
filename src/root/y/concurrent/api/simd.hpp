@@ -175,8 +175,8 @@ namespace Yttrium
             // Helper to create dynamic SIMD
             //
             //__________________________________________________________________
-            static SIMD * Sequential();
-            static SIMD * InParallel(const Venue);
+            static SIMD * Sequential();             //!< \return new sequential SIMD
+            static SIMD * InParallel(const Venue);  //!< \return new parallel SIMD
 
             //__________________________________________________________________
             //
