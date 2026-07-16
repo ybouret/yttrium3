@@ -49,6 +49,11 @@ namespace Yttrium
         {
         }
 
+        Vertex Area:: getUpper() const noexcept
+        {
+            return Vertex(xt,yt);
+        }
+
 
     }
 }

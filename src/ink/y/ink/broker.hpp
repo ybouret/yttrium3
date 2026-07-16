@@ -12,8 +12,7 @@ namespace Yttrium
 {
     namespace Ink
     {
-
-        typedef Concurrent::Engine Engine;
+        typedef Concurrent::Engine                     Engine;
         typedef Concurrent::Splitting::Tile2D<unit_t>  Tile;
         typedef Concurrent::Splitting::Tiles2D<unit_t> Tiles;
 
@@ -23,7 +22,7 @@ namespace Yttrium
         public:
             explicit Broker(const Engine &engine);
             virtual ~Broker() noexcept;
-
+            
             void map(const Area &) noexcept;
             
         private:

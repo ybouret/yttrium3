@@ -21,7 +21,7 @@ namespace Yttrium
 
         void Broker:: map(const Area &a) noexcept
         {
-            remap(v0,Vertex(a.xt,a.yt));
+            remap(v0,a.getUpper());
         }
     }
 

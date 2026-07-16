@@ -20,11 +20,14 @@ namespace Yttrium
             virtual ~Area() noexcept;
             Area(const Area &) noexcept;
 
+            Vertex getUpper() const noexcept;
+
             const unit_t w;
             const unit_t h;
             const size_t n;
             const unit_t xt;
             const unit_t yt;
+
 
         private:
             Y_Disable_Assign(Area);
