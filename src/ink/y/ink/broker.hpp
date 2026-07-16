@@ -38,13 +38,28 @@ namespace Yttrium
             typename PIXMAP,
             typename OBJECT,
             typename METHOD>
-            inline void run(PIXMAP &pixmap, OBJECT &host, METHOD meth)
+            inline void operator()(PIXMAP &pixmap, OBJECT &host, METHOD meth)
             {
                 map(pixmap);
                 Wrap0<PIXMAP,OBJECT,METHOD>  wrap0 = { &pixmap, &host, meth };
                 Concurrent::SIMD    & simd = **this;
                 simd(*this, & Broker::call0<PIXMAP,OBJECT,METHOD>, wrap0);
             }
+
+            template <
+            typename PIXMAP,
+            typename OBJECT,
+            typename METHOD,
+            typename SOURCE>
+            inline void operator()(PIXMAP &pixmap, OBJECT &host, METHOD meth, SOURCE &source)
+            {
+                map(pixmap);
+                Wrap1<PIXMAP,OBJECT,METHOD,SOURCE>  wrap1 = { &pixmap, &host, meth, &source };
+                Concurrent::SIMD    & simd = **this;
+                simd(*this, & Broker::call1<PIXMAP,OBJECT,METHOD,SOURCE>, wrap1);
+            }
+
+
 
 
         private:
@@ -69,6 +84,29 @@ namespace Yttrium
                 OBJECT & host = *arg.host;
                 METHOD   meth = arg.meth;
                 (host.*meth)(tile,*arg.pxm);
+            }
+
+            template <typename PIXMAP, typename OBJECT, typename METHOD, typename SOURCE>
+            struct Wrap1
+            {
+                PIXMAP * pxm;
+                OBJECT * host;
+                METHOD   meth;
+                SOURCE * src;
+            };
+
+            template <typename PIXMAP, typename OBJECT, typename METHOD, typename SOURCE> inline
+            void call1(Context &ctx, Wrap1<PIXMAP,OBJECT,METHOD,SOURCE> &arg)
+            {
+                assert(arg.pxm);
+                assert(arg.host);
+                assert(arg.meth);
+                assert(arg.src);
+
+                Tile   & tile = (*this)[ctx.indx];
+                OBJECT & host = *arg.host;
+                METHOD   meth = arg.meth;
+                (host.*meth)(tile,*arg.pxm,*arg.src);
             }
 
 
