@@ -34,7 +34,7 @@ namespace
 
         inline void run(const Concurrent::Context &ctx)
         {
-            const Tile   tile(ctx.size,ctx.rank,ctx.sync,3,nmax-2);
+            const Tile   tile(ctx,3,nmax-2);
             const String fileName = MakeFileName(ctx);
 
             uint32_t u=tile.offset;

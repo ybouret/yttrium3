@@ -14,6 +14,11 @@ namespace Yttrium
         namespace Splitting
         {
 
+#define Y_Concurrent_Tile1D()                           \
+/**/    offset( dataOffset ),                           \
+/**/    length( part<T>(dataLength, Coerce(offset) ) ), \
+/**/    utmost( offset+length-_1 )
+
             //__________________________________________________________________
             //
             //
@@ -52,11 +57,18 @@ namespace Yttrium
                                        const size_t rk,
                                        Lockable    &lk,
                                        const T      dataOffset,
-                                       const T      dataLength) :
+                                       const T      dataLength) noexcept :
                 Subdivision(sz,rk,lk),
-                offset(dataOffset),
-                length( part<T>(dataLength, Coerce(offset) ) ),
-                utmost(offset+length-_1)
+                Y_Concurrent_Tile1D()
+                {
+
+                }
+
+                inline explicit Tile1D(const Context & ctx,
+                                       const T         dataOffset,
+                                       const T         dataLength) noexcept :
+                Subdivision(ctx),
+                Y_Concurrent_Tile1D()
                 {
 
                 }

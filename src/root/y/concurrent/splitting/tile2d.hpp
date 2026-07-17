@@ -16,7 +16,8 @@ namespace Yttrium
 
         namespace Splitting
         {
-           
+
+
 
             //__________________________________________________________________
             //
@@ -99,6 +100,11 @@ namespace Yttrium
                 Y_Disable_Assign(HSegment); //!< discarded
             };
 
+#define Y_Concurrent_Tile2D() \
+span(0), \
+get(0), \
+cxx(0), \
+wksp()
             //__________________________________________________________________
             //
             //
@@ -138,10 +144,16 @@ namespace Yttrium
                                        Lockable        &lk,
                                        const Leap2D<T> &leap) noexcept :
                 Tile1D<T>(sz,rk,lk,0,leap.items),
-                span(0),
-                get(0),
-                cxx(0),
-                wksp()
+                Y_Concurrent_Tile2D()
+                {
+                    build(leap);
+                }
+
+                inline explicit Tile2D(const Context   & ctx,
+                                       const Leap2D<T> & leap) noexcept :
+
+                Tile1D<T>(ctx,0,leap.items),
+                Y_Concurrent_Tile2D()
                 {
                     build(leap);
                 }
@@ -246,7 +258,7 @@ namespace Yttrium
                 inline void build(const Leap2D<T> &leap) noexcept
                 {
                     if(this->length<=0) return;
-                    
+
                     Coerce(cxx)        = static_cast<Segment*>( Y_BZero(wksp) )-1;
                     const vertex_t ini = leap.at(this->offset);
                     const vertex_t end = leap.at(this->utmost); assert(end.y>=ini.y);
