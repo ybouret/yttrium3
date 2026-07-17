@@ -11,25 +11,23 @@ namespace Yttrium
     namespace Ink
     {
 
+        class Bitrow
+        {
+        public:
+            Bitrow(void * const, const unit_t) noexcept;
+            void * const p;
+            const unit_t w;
+        private:
+            Y_Disable_Copy_And_Assign(Bitrow);
+            ~Bitrow() noexcept;
+        };
 
-    
         class Bitmap : public Area
         {
         public:
             class Code;
             typedef void (*Proc)(void*);
-            class Row
-            {
-            public:
-                Row(void * const, const unit_t) noexcept;
 
-                void * const p;
-                const unit_t w;
-
-            private:
-                Y_Disable_Copy_And_Assign(Row);
-                ~Row() noexcept;
-            };
 
             explicit Bitmap(const unit_t   W,
                             const unit_t   H,
@@ -46,7 +44,7 @@ namespace Yttrium
             Y_Disable_Assign(Bitmap);
             Code   * const code;
             const size_t   rlen;
-            Row * const    row_;
+            Bitrow * const row_;
 
             void releaseCode() noexcept;
             void acquireRows();

@@ -142,7 +142,7 @@ namespace Yttrium
             acquireRows();
         }
 
-        Bitmap::Row:: Row(void * const P, const unit_t W) noexcept :
+        Bitrow:: Bitrow(void * const P, const unit_t W) noexcept :
         p(P),
         w(W)
         {
@@ -163,10 +163,10 @@ namespace Yttrium
             {
                 assert(code);
                 assert(!row_);
-                Coerce(row_)  = static_cast<Row *>( BmpMgr().acquire(Coerce(rlen)  = h * sizeof(Row)) );
+                Coerce(row_)  = static_cast<Bitrow *>( BmpMgr().acquire(Coerce(rlen)  = h * sizeof(Bitrow)) );
                 char * p = code->entry();
                 for(unit_t j=0;j<h;++j,p+=s)
-                    new (row_+j) Row(p,w);
+                    new (row_+j) Bitrow(p,w);
             }
             catch(...)
             {
