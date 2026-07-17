@@ -15,6 +15,16 @@ namespace Yttrium
         {
         }
 
+        Embed:: Embed(void * &     entry,
+                      const size_t numBlocks,
+                      const size_t blockSize) noexcept :
+        pblock(&entry),
+        length(numBlocks*blockSize),
+        offset(0)
+        {
+            assert(blockSize>0);
+        }
+
         Embed:: ~Embed() noexcept
         {
 

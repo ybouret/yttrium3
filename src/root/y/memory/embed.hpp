@@ -45,6 +45,13 @@ namespace Yttrium
 
             }
 
+            Embed(void * &     entry,
+                  const size_t numBlocks,
+                  const size_t blockSize) noexcept;
+
+
+
+
             Embed(const Embed &) noexcept; //!< duplicate
             ~Embed() noexcept;             //!< cleanup
             Y_OSTREAM_PROTO(Embed);        //!< display
