@@ -23,7 +23,14 @@ namespace Yttrium
         Context:: ~Context() noexcept
         {
         }
+
+        Context:: Context(const Context &ctx) noexcept :
+        Member(ctx),
+        sync(ctx.sync)
+        {
+        }
         
+
     }
 
 }

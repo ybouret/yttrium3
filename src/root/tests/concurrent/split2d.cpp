@@ -1,5 +1,6 @@
 
 #include "y/concurrent/splitting/tiles2d.hpp"
+#include "y/concurrent/fake-lock.hpp"
 #include "y/utest/run.hpp"
 #include <typeinfo>
 
@@ -18,23 +19,24 @@ namespace {
         const Concurrent::Splitting::Leap2D<T> leap(lo,up);
         std::cerr << leap.lower << " => " << leap.upper << " : " << leap.items << std::endl;
 
+        Concurrent::FakeLock sync;
         for(size_t size=1;size<=8;++size)
         {
             std::cerr << "-- size=" << size << std::endl;
             for(size_t rank=0;rank<size;++rank)
             {
-                Concurrent::Splitting::Tile2D<T> tile(size,rank,leap);
+                Concurrent::Splitting::Tile2D<T> tile(size,rank,sync,leap);
                 std::cerr << "\t" << tile.c_str() << ": " << tile << std::endl;
             }
 
             {
-                Concurrent::Splitting::Tiles2D<T> tiles(size,lo,up);
+                Concurrent::Splitting::Tiles2D<T> tiles(size,sync,lo,up);
                 std::cerr << "\t" << tiles << std::endl;
             }
 
             {
-                Concurrent::Splitting::Tiles2D<T> tiles(size);
-                tiles.remap(lo,up);
+                Concurrent::Splitting::Tiles2D<T> tiles(size,sync);
+                tiles.remap(lo,up,sync);
             }
         }
 

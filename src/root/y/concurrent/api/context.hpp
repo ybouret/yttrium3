@@ -38,7 +38,8 @@ namespace Yttrium
                              const size_t rk,
                              Lockable &   lk) noexcept;
             explicit Context(Lockable &)      noexcept; //!< setup with PERSISTENT lockable
-            virtual ~Context() noexcept; //!< cleanup
+            Context(const Context &)          noexcept; //!< duplicate
+            virtual ~Context()                noexcept; //!< cleanup
 
             //__________________________________________________________________
             //
@@ -49,7 +50,7 @@ namespace Yttrium
             Lockable &sync; //!< PERSISTENT lockable
             
         private:
-            Y_Disable_Copy_And_Assign(Context); //!< discarded
+            Y_Disable_Assign(Context); //!< discarded
         };
     }
 }

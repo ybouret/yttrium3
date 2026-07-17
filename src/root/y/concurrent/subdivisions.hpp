@@ -27,7 +27,7 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Subdivisions(const size_t) noexcept; //!< setup with ncpu
+            explicit Subdivisions(const size_t) noexcept; //!< setup with ncpu and persistent lock
             virtual ~Subdivisions()             noexcept; //!< cleanup
 
             //__________________________________________________________________

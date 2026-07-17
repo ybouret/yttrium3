@@ -9,12 +9,22 @@ namespace Yttrium
         {
         }
 
-        Subdivision:: Subdivision(const size_t sz, const size_t rk) noexcept :
-        Member(sz,rk),
+        Subdivision:: Subdivision(const size_t sz,
+                                  const size_t rk,
+                                  Lockable    &lk) noexcept :
+        Context(sz,rk,lk),
         entry(0),
         bytes(0)
         {
         }
+
+        Subdivision:: Subdivision(const Context &ctx)  noexcept :
+        Context(ctx),
+        entry(0),
+        bytes(0)
+        {
+        }
+        
 
     }
 

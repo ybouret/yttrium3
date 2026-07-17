@@ -138,25 +138,29 @@ namespace Yttrium
 
                 //! setup
                 /**
-                 \param n          ncpu > 0
+                 \param core       ncpu > 0
                  \param dataOffset data offset
                  \param dataLength data length
                  */
-                inline explicit Tiles1D(const size_t n, const T dataOffset, const T dataLength) :
+                inline explicit Tiles1D(const size_t core,
+                                        Lockable    &sync,
+                                        const T      dataOffset,
+                                        const T      dataLength) :
                 Leap(dataOffset,dataLength),
-                Subdivisions(n),
+                Subdivisions(core),
                 code( new Code(ncpu) )
                 {
-                    setup();
+                    setup(sync);
                 }
 
                 //! setup empty (would remap) \param n ncpu > 0
-                inline explicit Tiles1D(const size_t n) :
+                inline explicit Tiles1D(const size_t core,
+                                        Lockable    &sync) :
                 Leap(),
-                Subdivisions(n),
+                Subdivisions(core),
                 code( new Code(ncpu) )
                 {
-                    setup();
+                    setup(sync);
                 }
 
 
@@ -218,14 +222,14 @@ namespace Yttrium
                 }
 
                 //! create all tiles
-                inline void setup() noexcept
+                inline void setup(Lockable &sync) noexcept
                 {
                     assert(code);
                     code->free();
                     Tile * tile = code->addr;
                     while(code->size<ncpu)
                     {
-                        new (tile++) Tile(ncpu,Coerce(code->size)++,offset,length);
+                        new (tile++) Tile(ncpu,Coerce(code->size)++,sync,offset,length);
                     }
                     assert(ncpu==code->size);
                 }

@@ -57,21 +57,25 @@ namespace Yttrium
                  \param lo lower coordinate
                  \param up upper coordinate
                  */
-                inline explicit Tiles2D(const size_t n, const vertex_t lo, const vertex_t up) :
+                inline explicit Tiles2D(const size_t   nc,
+                                        Lockable      &lk,
+                                        const vertex_t lo,
+                                        const vertex_t up) :
                 Leap(lo,up),
-                Subdivisions(n),
+                Subdivisions(nc),
                 code( new Code(ncpu) )
                 {
-                    setup();
+                    setup(lk);
                 }
 
                 //! setup empty \param n parallelism
-                inline explicit Tiles2D(const size_t n) :
+                inline explicit Tiles2D(const size_t nc,
+                                        Lockable    &lk) :
                 Leap(),
-                Subdivisions(n),
+                Subdivisions(nc),
                 code( new Code(ncpu) )
                 {
-                    setup();
+                    setup(lk);
                 }
 
                 //! cleanup
@@ -97,7 +101,9 @@ namespace Yttrium
                 //______________________________________________________________
 
                 //! remap if necessary \param lo new lower \param up new upper
-                inline void remap(const vertex_t lo, const vertex_t up) noexcept
+                inline void remap(const vertex_t lo,
+                                  const vertex_t up,
+                                  Lockable      &lk) noexcept
                 {
                     {
                         Leap &     self = *this;
@@ -108,7 +114,7 @@ namespace Yttrium
                         Coerce(self.width) = next.width;
                         Coerce(self.items) = next.items;
                     }
-                    setup();
+                    setup(lk);
                 }
 
                 
@@ -131,14 +137,14 @@ namespace Yttrium
                 }
 
                 //! create all tiles
-                inline void setup() noexcept
+                inline void setup(Lockable &sync) noexcept
                 {
                     assert(code);
                     code->free();
                     Tile * tile = code->addr;
                     while(code->size<ncpu)
                     {
-                        new (tile++) Tile(ncpu,Coerce(code->size)++,*this);
+                        new (tile++) Tile(ncpu,Coerce(code->size)++,sync,*this);
                     }
                     assert(ncpu==code->size);
                 }

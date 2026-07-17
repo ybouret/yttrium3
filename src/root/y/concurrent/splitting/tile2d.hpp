@@ -135,8 +135,9 @@ namespace Yttrium
                 //! build from leap \param sz size \param rk rank \param leap source
                 inline explicit Tile2D(const size_t     sz,
                                        const size_t     rk,
+                                       Lockable        &lk,
                                        const Leap2D<T> &leap) noexcept :
-                Tile1D<T>(sz,rk,0,leap.items),
+                Tile1D<T>(sz,rk,lk,0,leap.items),
                 span(0),
                 get(0),
                 cxx(0),

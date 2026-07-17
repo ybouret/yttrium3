@@ -3,7 +3,7 @@
 #ifndef Y_Concurrent_Subdivision_Included
 #define Y_Concurrent_Subdivision_Included 1
 
-#include "y/concurrent/member.hpp"
+#include "y/concurrent/api/context.hpp"
 
 namespace Yttrium
 {
@@ -18,7 +18,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Subdivision : public Member
+        class Subdivision : public Context
         {
         public:
             //__________________________________________________________________
@@ -28,8 +28,11 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            //! setup \param sz size \param rk rank
-            explicit Subdivision(const size_t sz, const size_t rk) noexcept;
+            //! setup \param sz size \param rk rank \param lk PERSISTENT lock
+            explicit Subdivision(const size_t sz,
+                                 const size_t rk,
+                                 Lockable    &lk) noexcept;
+            explicit Subdivision(const Context &) noexcept; //!< setup from context
             virtual ~Subdivision() noexcept; //!< cleanup
 
             //__________________________________________________________________

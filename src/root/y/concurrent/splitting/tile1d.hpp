@@ -50,9 +50,10 @@ namespace Yttrium
                  */
                 inline explicit Tile1D(const size_t sz,
                                        const size_t rk,
+                                       Lockable    &lk,
                                        const T      dataOffset,
                                        const T      dataLength) :
-                Subdivision(sz,rk),
+                Subdivision(sz,rk,lk),
                 offset(dataOffset),
                 length( part<T>(dataLength, Coerce(offset) ) ),
                 utmost(offset+length-_1)

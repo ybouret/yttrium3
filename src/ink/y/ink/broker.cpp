@@ -8,7 +8,7 @@ namespace Yttrium
 
         Broker:: Broker(const Engine &engine) :
         Engine(engine),
-        Tiles(engine->size()),
+        Tiles(engine->size(),(**this).sync()),
         v0()
         {
            
@@ -21,7 +21,7 @@ namespace Yttrium
 
         void Broker:: map(const Area &a) noexcept
         {
-            remap(v0,a.getUpper());
+            remap(v0,a.getUpper(),(**this).sync());
         }
 
         void Broker:: operator()(void)
