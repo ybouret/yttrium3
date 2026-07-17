@@ -101,6 +101,7 @@ namespace Yttrium
 
 
 
+
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         private:
             Y_Disable_Copy_And_Assign(Broker);
@@ -145,7 +146,7 @@ namespace Yttrium
 
                 Tile   & tile = (*this)[ctx.indx];
                 OBJECT & host = *arg.host;
-                METHOD   meth = arg.meth;
+                METHOD   meth =  arg.meth;
                 (host.*meth)(tile,*arg.pxm,*arg.src);
             }
 
