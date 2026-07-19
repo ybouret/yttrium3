@@ -100,6 +100,29 @@ namespace Yttrium
             }
 
 
+            //! operation on pixmap with two argument
+            /**
+             call host.meth(tile,pixmap,source)
+             \param pixmap derived from Area
+             \param host   host object
+             \param meth   object method
+             \param source argument for method
+             */
+            template <
+            typename PIXMAP,
+            typename OBJECT,
+            typename METHOD,
+            typename SOURCE,
+            typename EXTRA1>
+            inline void operator()(PIXMAP &pixmap, OBJECT &host, METHOD meth, SOURCE &source, EXTRA1 &extra1)
+            {
+                map(pixmap);
+                Wrap2<PIXMAP,OBJECT,METHOD,SOURCE,EXTRA1>  wrap2 = { &pixmap, &host, meth, &source, &extra1 };
+                Concurrent::SIMD    & simd = **this;
+                simd(*this, & Broker::call2<PIXMAP,OBJECT,METHOD,SOURCE,EXTRA1>, wrap2);
+            }
+
+
 
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
@@ -149,6 +172,32 @@ namespace Yttrium
                 METHOD   meth =  arg.meth;
                 (host.*meth)(tile,*arg.pxm,*arg.src);
             }
+
+            template <typename PIXMAP, typename OBJECT, typename METHOD, typename SOURCE, typename EXTRA1>
+            struct Wrap2
+            {
+                PIXMAP * pxm;
+                OBJECT * host;
+                METHOD   meth;
+                SOURCE * src;
+                EXTRA1 * ex1;
+            };
+
+            template <typename PIXMAP, typename OBJECT, typename METHOD, typename SOURCE,typename EXTRA1> inline
+            void call2(Context &ctx, Wrap2<PIXMAP,OBJECT,METHOD,SOURCE,EXTRA1> &arg)
+            {
+                assert(arg.pxm);
+                assert(arg.host);
+                assert(arg.meth);
+                assert(arg.src);
+                assert(arg.ex1);
+
+                Tile   & tile = (*this)[ctx.indx];
+                OBJECT & host = *arg.host;
+                METHOD   meth =  arg.meth;
+                (host.*meth)(tile,*arg.pxm,*arg.src,*arg.ex1);
+            }
+
 
             void call(Context &);
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)

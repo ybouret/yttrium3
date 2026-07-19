@@ -122,6 +122,8 @@ namespace Yttrium
         Area(W,H),
         d( CheckD(D) ),
         s( w*d ),
+        zfx(w),
+        zfy(h),
         code( new Code(*this,ctor,dtor) ),
         rlen(0),
         row_(0)
@@ -134,6 +136,8 @@ namespace Yttrium
         Area(bmp),
         d(bmp.d),
         s(bmp.s),
+        zfx(bmp.zfx),
+        zfy(bmp.zfy),
         code(bmp.code),
         rlen(0),
         row_(0)
@@ -142,11 +146,11 @@ namespace Yttrium
             acquireRows();
         }
 
-        Bitrow:: Bitrow(void * const P, const unit_t W) noexcept :
+        Bitrow:: Bitrow(void * const P, const ZeroFlux &zfx) noexcept :
         p(P),
-        w(W)
+        f(zfx)
         {
-            assert(p); assert(w);
+            assert(p); assert(f.count>0);
         }
 
         void Bitmap:: releaseRows() noexcept
