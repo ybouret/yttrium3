@@ -12,10 +12,10 @@ namespace Yttrium
 {
     namespace Ink
     {
-        typedef Concurrent::Engine                     Engine; //!< alias
-        typedef Concurrent::Splitting::Tile2D<unit_t>  Tile;   //!< alias
-        typedef Concurrent::Splitting::Tiles2D<unit_t> Tiles;  //!< alias
-
+        typedef Concurrent::Engine                     Engine;  //!< alias
+        typedef Concurrent::Splitting::Tile2D<unit_t>  Tile;    //!< alias
+        typedef Concurrent::Splitting::Tiles2D<unit_t> Tiles;   //!< alias
+        typedef Tile::Segment                          Segment; //!< alias
 
         //______________________________________________________________________
         //

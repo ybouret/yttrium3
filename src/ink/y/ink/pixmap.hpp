@@ -101,6 +101,15 @@ namespace Yttrium
                 assert(addr);
                 Destruct( static_cast<MutableType *>(addr) );
             }
+            
+
+            template <typename U> inline
+            void copy(Broker &broker, const Pixmap<U> &source)
+            {
+
+            }
+
+
 
         };
     }
