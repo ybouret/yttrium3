@@ -606,12 +606,14 @@ namespace Yttrium
 
     };
 
+    //! \param lhs lhs \param rhs rhs \return true iff lhs==rhs
     template <typename T, typename U>
     inline bool operator==(const Matrix<T> &lhs, const Matrix<U> &rhs)
     {
         return lhs.isEqualTo(rhs);
     }
 
+    //! \param lhs lhs \param rhs rhs \return true iff lhs!=rhs
     template <typename T, typename U>
     inline bool operator!=(const Matrix<T> &lhs, const Matrix<U> &rhs)
     {

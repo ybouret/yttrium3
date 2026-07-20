@@ -32,6 +32,12 @@ namespace Yttrium
                 //______________________________________________________________
 
                 //! setup for list of laws
+                /**
+                 \param xml output
+                 \param laws original SubLevel laws
+                 \param topo original SubLevel topology
+                 \param lfmt helper to format laws
+                 */
                 explicit Canons(XML::Log                &xml,
                                 const Core::ListOf<Law> &laws,
                                 const Topology          &topo,
