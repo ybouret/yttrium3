@@ -13,10 +13,11 @@ namespace Yttrium
     {
         struct BuildHistogram
         {
+            typedef Histogram::freq_t freq_t;
+
             class Ops
             {
             public:
-                typedef Histogram::freq_t freq_t;
                 static const unsigned     Bins  = Histogram::Bins;
                 static const size_t       Bytes = sizeof(freq_t) * Bins;
 
@@ -24,10 +25,22 @@ namespace Yttrium
                 virtual ~Ops() noexcept;
 
                 template <typename T, typename PIXEL_TO_BYTE> inline
-                void add(Tile &tile, const Pixmap<T> &source, PIXEL_TO_BYTE &proc)
+                void collect(Tile &tile, const Pixmap<T> &source, PIXEL_TO_BYTE &proc)
                 {
                     assert(tile.bytes>=Bytes);
-                    
+                    assert(tile.entry);
+                    freq_t * const H = static_cast<freq_t *>( memset(tile.entry,0,Bytes) );
+                    for(size_t k=tile.span;k>0;--k)
+                    {
+                        const Segment                  s = tile[k];
+                        const typename Pixmap<T>::Row &r = source(s.start.y);
+                        for(unit_t x=s.start.x,i=s.width;i>0;--i,++x)
+                        {
+                            const T &     data = r(x);
+                            const uint8_t byte = proc(data);
+                            ++H[byte];
+                        }
+                    }
                 }
 
             private:
@@ -42,7 +55,9 @@ namespace Yttrium
             {
                 Ops ops;
                 broker.ensureCache(Ops::Bytes);
-                broker(source, ops, & Ops::add<T,PIXEL_TO_BYTE>, proc);
+                broker(source, ops, & Ops::collect<T,PIXEL_TO_BYTE>, proc);
+                for(size_t i=broker.size();i>0;--i)
+                    H.merge( static_cast<freq_t*>( broker[i].entry) );
             }
 
 

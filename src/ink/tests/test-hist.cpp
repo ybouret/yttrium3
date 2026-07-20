@@ -2,7 +2,8 @@
 #include "y/ink/histogram/build.hpp"
 #include "y/utest/run.hpp"
 #include "y/core/rand.hpp"
-//#include "y/string.hpp"
+#include "y/string.hpp"
+#include "y/stream/libc/output.hpp"
 
 #include <cmath>
 
@@ -37,9 +38,24 @@ Y_UTEST(hist)
     }
 
     Ink::Histogram Hseq;
+    Ink::Histogram Hpar;
 
     Ink::BuildHistogram::Add(Hseq,seq,pxm,f2b);
+    Ink::BuildHistogram::Add(Hpar,par,pxm,f2b);
 
+    std::cerr << "total: " << Hseq.total << " / " << Hpar.total << std::endl;
+    Y_CHECK(Hseq.total==Hpar.total);
+    Y_CHECK(Hseq==Hpar);
+    Y_CHECK(!(Hseq!=Hpar));
+    {
+        OutputFile fp("hseq.dat");
+        Hseq.save(fp);
+    }
+
+    {
+        OutputFile fp("hpar.dat");
+        Hpar.save(fp);
+    }
 
 
 }

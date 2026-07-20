@@ -64,9 +64,11 @@ namespace Yttrium
             
         private:
             Y_Disable_Copy_And_Assign(Subdivisions); //!< discarded
+            void noCache() noexcept;
+            
             const size_t wlen; //!< cache memory length
             void * const wksp; //!< cache memory address
-            
+
 
         };
 

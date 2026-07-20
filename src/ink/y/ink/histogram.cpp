@@ -50,6 +50,35 @@ namespace Yttrium
         }
 
 
+        bool operator==(const Histogram &lhs, const Histogram &rhs) noexcept
+        {
+            return lhs.total == rhs.total && 0==memcmp(lhs.bin,rhs.bin, Histogram::Bins * sizeof(Histogram::freq_t) );
+        }
+
+        bool operator!=(const Histogram &lhs, const Histogram &rhs) noexcept
+        {
+            return lhs.total != rhs.total || 0!=memcmp(lhs.bin,rhs.bin, Histogram::Bins * sizeof(Histogram::freq_t) );
+        }
+
+
+    }
+
+}
+
+#include "y/stream/output.hpp"
+#include "y/format/decimal.hpp"
+
+namespace Yttrium
+{
+    namespace Ink
+    {
+        void Histogram:: save(OutputStream &fp) const
+        {
+            for(unsigned i=0;i<Bins;++i)
+            {
+                fp("%u %s\n", i, Decimal(bin[i]).c_str());
+            }
+        }
 
     }
 

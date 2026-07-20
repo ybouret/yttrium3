@@ -8,6 +8,11 @@ namespace Yttrium
     namespace Concurrent
     {
 
+        namespace
+        {
+            typedef Memory::Archon MemMgr;
+
+        }
 
         Subdivisions:: Subdivisions(const size_t n) noexcept :
         ncpu(n),
@@ -17,29 +22,30 @@ namespace Yttrium
             assert(ncpu>0);
         }
 
-        Subdivisions:: ~Subdivisions() noexcept
-        {
-            
-        }
-
-        namespace
-        {
-            typedef Memory::Archon MemMgr;
-
-        }
-
-        void Subdivisions:: deleteCache() noexcept
+        void Subdivisions:: noCache() noexcept
         {
             if(wlen)
             {
                 static Memory::Allocator & mgr = MemMgr::Location();
                 mgr.release( Coerce(wksp), Coerce(wlen) );
-                updateCache();
             }
             else
             {
                 assert(0==wksp);
             }
+        }
+
+        Subdivisions:: ~Subdivisions() noexcept
+        {
+            noCache();
+        }
+
+
+
+        void Subdivisions:: deleteCache() noexcept
+        {
+            noCache();
+            updateCache();
         }
 
         Subdivision & Subdivisions:: sub(const size_t i) noexcept

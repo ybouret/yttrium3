@@ -8,6 +8,8 @@
 
 namespace Yttrium
 {
+    class OutputStream;
+
     namespace Ink
     {
 
@@ -25,7 +27,12 @@ namespace Yttrium
 
             void operator()(const uint8_t);
             void merge(const freq_t * const H) noexcept;
-            
+
+            friend bool operator==(const Histogram &, const Histogram &) noexcept;
+            friend bool operator!=(const Histogram &, const Histogram &) noexcept;
+
+            void save(OutputStream &) const;
+
 
             const freq_t total;
         private:
