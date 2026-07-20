@@ -40,10 +40,11 @@ namespace Yttrium
 
         }
 
+	 
         Area:: Area(const unit_t W, const unit_t H) :
         w( CheckW(W) ),
         h( CheckH(H) ),
-        n( w*h ),
+        n( (size_t) w*h ),
         xt(w-1),
         yt(h-1)
         {

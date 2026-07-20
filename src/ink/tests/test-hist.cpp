@@ -15,7 +15,7 @@ namespace
     static inline
     uint8_t f2b(const float f)
     {
-        return floorf(255.0f*f+0.5f);
+        return (uint8_t)floorf(255.0f*f+0.5f);
     }
 }
 

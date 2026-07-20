@@ -5,10 +5,14 @@ namespace Yttrium
 {
     namespace Ink
     {
+		Lockable & Broker:: sync_() noexcept
+		{
+			return (**this).sync();
+		}
 
         Broker:: Broker(const Engine &engine) :
         Engine(engine),
-        Tiles(engine->size(),(**this).sync()),
+        Tiles(engine->size(),sync_()),
         v0()
         {
            
@@ -21,13 +25,13 @@ namespace Yttrium
 
         void Broker:: map(const Area &a) noexcept
         {
-            remap(v0,a.getUpper(),(**this).sync());
+            remap(v0,a.getUpper(),sync_());
         }
 
         void Broker:: operator()(void)
         {
-            Concurrent::SIMD &simd = **this;
-            simd(*this, & Broker::call );
+            Concurrent::SIMD &self = **this;
+            self(*this, & Broker::call );
         }
 
         void Broker:: call(Context &ctx)

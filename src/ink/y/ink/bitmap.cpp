@@ -114,6 +114,12 @@ namespace Yttrium
             }
         }
 
+
+		Bitmap & Bitmap::self_() noexcept
+		{
+			return *this;
+		}
+
         Bitmap:: Bitmap(const unit_t   W,
                         const unit_t   H,
                         const unsigned D,
@@ -121,10 +127,10 @@ namespace Yttrium
                         Proc const     dtor) :
         Area(W,H),
         d( CheckD(D) ),
-        s( w*d ),
+        s( w * (unit_t)d ),
         zfx(w),
         zfy(h),
-        code( new Code(*this,ctor,dtor) ),
+        code( new Code(self_(),ctor,dtor) ),
         rlen(0),
         row_(0)
         {
@@ -170,7 +176,7 @@ namespace Yttrium
                 Coerce(row_)  = static_cast<Bitrow *>( BmpMgr().acquire(Coerce(rlen)  = h * sizeof(Bitrow)) );
                 char * p = code->entry();
                 for(unit_t j=0;j<h;++j,p+=s)
-                    new (row_+j) Bitrow(p,w);
+                    new (row_+j) Bitrow(p,zfy);
             }
             catch(...)
             {

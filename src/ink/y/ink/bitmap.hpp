@@ -98,6 +98,7 @@ namespace Yttrium
             void releaseCode() noexcept;
             void acquireRows();
             void releaseRows() noexcept;
+			Bitmap & self_()   noexcept;
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
         };
 

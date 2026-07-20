@@ -27,7 +27,7 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            ZeroFlux(const size_t n)  noexcept; //!< setup \param n length in one dimension
+            ZeroFlux(const unit_t  n) noexcept; //!< setup \param n length in one dimension
             ZeroFlux(const ZeroFlux&) noexcept; //!< duplicate
             ~ZeroFlux() noexcept;               //!< cleanup
 

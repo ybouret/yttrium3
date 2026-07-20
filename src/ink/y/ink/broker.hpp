@@ -74,8 +74,8 @@ namespace Yttrium
             {
                 map(pixmap);
                 Wrap0<PIXMAP,OBJECT,METHOD>  wrap0 = { &pixmap, &host, meth };
-                Concurrent::SIMD    & simd = **this;
-                simd(*this, & Broker::call0<PIXMAP,OBJECT,METHOD>, wrap0);
+                Concurrent::SIMD    & self = **this;
+                self(*this, & Broker::call0<PIXMAP,OBJECT,METHOD>, wrap0);
             }
 
             //! operation on pixmap with argument
@@ -95,8 +95,8 @@ namespace Yttrium
             {
                 map(pixmap);
                 Wrap1<PIXMAP,OBJECT,METHOD,SOURCE>  wrap1 = { &pixmap, &host, meth, &source };
-                Concurrent::SIMD    & simd = **this;
-                simd(*this, & Broker::call1<PIXMAP,OBJECT,METHOD,SOURCE>, wrap1);
+                Concurrent::SIMD    & self = **this;
+                self(*this, & Broker::call1<PIXMAP,OBJECT,METHOD,SOURCE>, wrap1);
             }
 
 
@@ -119,8 +119,8 @@ namespace Yttrium
             {
                 map(pixmap);
                 Wrap2<PIXMAP,OBJECT,METHOD,SOURCE,EXTRA1>  wrap2 = { &pixmap, &host, meth, &source, &extra1 };
-                Concurrent::SIMD    & simd = **this;
-                simd(*this, & Broker::call2<PIXMAP,OBJECT,METHOD,SOURCE,EXTRA1>, wrap2);
+                Concurrent::SIMD    & self = **this;
+                self(*this, & Broker::call2<PIXMAP,OBJECT,METHOD,SOURCE,EXTRA1>, wrap2);
             }
 
 
@@ -201,6 +201,7 @@ namespace Yttrium
 
 
             void call(Context &);
+			Lockable & sync_() noexcept;
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         };

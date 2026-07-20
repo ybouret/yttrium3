@@ -52,7 +52,7 @@ namespace Yttrium
                     assert(tile.bytes>=Bytes);
                     assert(tile.entry);
                     freq_t * const H = static_cast<freq_t *>( memset(tile.entry,0,Bytes) );
-                    for(size_t k=tile.span;k>0;--k)
+                    for(unit_t k=tile.span;k>0;--k)
                     {
                         const Segment                  s = tile[k];
                         const typename Pixmap<T>::Row &r = source(s.start.y);

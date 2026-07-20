@@ -1,6 +1,5 @@
-
-
 #include "y/ink/zero-flux.hpp"
+#include <cassert>
 
 namespace Yttrium
 {
@@ -11,11 +10,11 @@ namespace Yttrium
         {
         }
 
-        ZeroFlux:: ZeroFlux(const size_t n) noexcept :
-        count( (unit_t)n ),
+        ZeroFlux:: ZeroFlux(const unit_t n) noexcept :
+        count( n ),
         twice( 2*count-1 )
         {
-
+			assert(count >= 0);
         }
 
         ZeroFlux:: ZeroFlux(const ZeroFlux &z) noexcept :
