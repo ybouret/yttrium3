@@ -416,6 +416,7 @@ namespace Yttrium
             return true;
         }
 
+
         //! multiply each item \param u factor \return *this
         template <typename U> inline
         Matrix & operator*=(U &u)
@@ -604,6 +605,18 @@ namespace Yttrium
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
     };
+
+    template <typename T, typename U>
+    inline bool operator==(const Matrix<T> &lhs, const Matrix<U> &rhs)
+    {
+        return lhs.isEqualTo(rhs);
+    }
+
+    template <typename T, typename U>
+    inline bool operator!=(const Matrix<T> &lhs, const Matrix<U> &rhs)
+    {
+        return !lhs.isEqualTo(rhs);
+    }
 
 }
 
