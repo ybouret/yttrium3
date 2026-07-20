@@ -54,6 +54,11 @@ namespace Yttrium
             return Vertex(xt,yt);
         }
 
+        bool Area:: gotSameWxH(const Area &a) const noexcept
+        {
+            return (w==a.w) && (h==a.h);
+        }
+
 
     }
 }

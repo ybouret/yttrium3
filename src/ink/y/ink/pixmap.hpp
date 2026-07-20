@@ -66,6 +66,14 @@ namespace Yttrium
             {
             }
 
+            template <typename U>
+            explicit Pixmap(const Broker &broker, const CopyOf_ &, const Pixmap<U> &pxm) :
+            Bitmap(pxm.w,pxm.h,sizeof(T), CTor, DTor),
+            row( Hide::Cast<Row>(row_) )
+            {
+                broker(*this, & Pixmap<T>::copyProc<U>, pxm);
+            }
+
 
             inline Row & operator[](const unit_t j) noexcept
             {
@@ -87,6 +95,14 @@ namespace Yttrium
                 assert(j>=0); assert(j<h); return row[j];
             }
 
+            template <typename U> inline
+            Pixmap<T> & copy(const Pixmap<U> &pxm)
+            {
+                assert(gotSameWxH(pxm));
+                broker(*this, & Pixmap<T>::copyProc<U>, pxm);
+            }
+
+
         private:
             Y_Disable_Assign(Pixmap);
             Row * const row;
@@ -101,13 +117,24 @@ namespace Yttrium
                 assert(addr);
                 Destruct( static_cast<MutableType *>(addr) );
             }
-            
 
-            template <typename U> inline
-            void copy(Broker &broker, const Pixmap<U> &source)
+            template <typename U>
+            inline void copyProc(const Tile &tile, const Pixmap<U> &source)
             {
-
+                Pixmap<T> &target = *this;
+                for(size_t k=tile.span;k>0;--k)
+                {
+                    const Segment                 s   = tile[k];
+                    const unit_t                  y   = s.start.y;
+                    Pixmap<T>::Row                & tgt = target(y);
+                    const typename Pixmap<U>::Row & src = source(y);
+                    for(unit_t x=s.start.x,i=s.width;i>0;--i,++x)
+                    {
+                        tgt(x) = src(x);
+                    }
+                }
             }
+
 
 
 

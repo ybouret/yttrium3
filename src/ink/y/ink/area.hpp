@@ -39,7 +39,8 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            Vertex getUpper() const noexcept; //!< \return (xt,yt)
+            Vertex getUpper()                const noexcept; //!< \return (xt,yt)
+            bool   gotSameWxH(const Area &) const noexcept; //!< \return true iff same metrics
 
             //__________________________________________________________________
             //
