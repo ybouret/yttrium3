@@ -14,6 +14,7 @@ namespace Yttrium
         namespace Splitting
         {
 
+            //! helper for constructor
 #define Y_Concurrent_Tile1D()                           \
 /**/    offset( dataOffset ),                           \
 /**/    length( part<T>(dataLength, Coerce(offset) ) ), \
@@ -50,6 +51,7 @@ namespace Yttrium
                 /**
                  \param sz size
                  \param rk rank
+                 \param lk PERSISTENT lock
                  \param dataOffset data offset
                  \param dataLength data length
                  */
@@ -64,6 +66,12 @@ namespace Yttrium
 
                 }
 
+                //! setup
+                /**
+                 \param ctx        context to duplicate
+                 \param dataOffset data offset
+                 \param dataLength data length
+                 */
                 inline explicit Tile1D(const Context & ctx,
                                        const T         dataOffset,
                                        const T         dataLength) noexcept :

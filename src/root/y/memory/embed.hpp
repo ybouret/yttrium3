@@ -45,6 +45,12 @@ namespace Yttrium
 
             }
 
+            //! setup
+            /**
+             \param entry      address to fill
+             \param numBlocks numBlocks to acquire
+             \param blockSize size of each block
+             */
             Embed(void * &     entry,
                   const size_t numBlocks,
                   const size_t blockSize) noexcept;

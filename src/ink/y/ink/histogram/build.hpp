@@ -6,6 +6,7 @@
 
 #include "y/ink/histogram.hpp"
 #include "y/ink/pixmap.hpp"
+#include <cstring>
 
 namespace Yttrium
 {

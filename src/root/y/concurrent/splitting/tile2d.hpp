@@ -100,6 +100,7 @@ namespace Yttrium
                 Y_Disable_Assign(HSegment); //!< discarded
             };
 
+            //! helper for constructor
 #define Y_Concurrent_Tile2D() \
 span(0), \
 get(0), \
@@ -138,7 +139,13 @@ wksp()
                 //
                 //______________________________________________________________
 
-                //! build from leap \param sz size \param rk rank \param leap source
+                //! build from leap
+                /**
+                 \param sz   size
+                 \param rk   rank
+                 \param lk   PERISTENT lock
+                 \param leap source
+                 */
                 inline explicit Tile2D(const size_t     sz,
                                        const size_t     rk,
                                        Lockable        &lk,
@@ -149,6 +156,11 @@ wksp()
                     build(leap);
                 }
 
+                //! build from leap
+                /**
+                 \param ctx  context to duplicate
+                 \param leap source
+                 */
                 inline explicit Tile2D(const Context   & ctx,
                                        const Leap2D<T> & leap) noexcept :
 

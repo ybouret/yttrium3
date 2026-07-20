@@ -50,8 +50,8 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            void * const entry;
-            const size_t bytes;
+            void * const entry; //!< local cache entry
+            const size_t bytes; //!< local cache bytes
 
         private:
             Y_Disable_Copy_And_Assign(Subdivision); //!< discarded

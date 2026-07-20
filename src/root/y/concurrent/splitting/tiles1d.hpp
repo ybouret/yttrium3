@@ -139,6 +139,7 @@ namespace Yttrium
                 //! setup
                 /**
                  \param core       ncpu > 0
+                 \param sync       PERSITENT lock
                  \param dataOffset data offset
                  \param dataLength data length
                  */
@@ -153,7 +154,11 @@ namespace Yttrium
                     setup(sync);
                 }
 
-                //! setup empty (would remap) \param n ncpu > 0
+                //! setup empty (would remap)
+                /**
+                 \param core ncpu > 0
+                 \param sync PERSITENT lock
+                 */
                 inline explicit Tiles1D(const size_t core,
                                         Lockable    &sync) :
                 Leap(),
@@ -179,8 +184,9 @@ namespace Yttrium
                 /**
                  \param dataOffset data offset
                  \param dataLength data length
+                 \param sync PERSISTENT lock
                  */
-                inline void remap(const T dataOffset, const T dataLength)
+                inline void remap(const T dataOffset, const T dataLength, Lockable &sync)
                 {
                     {
                         Leap &     oldLeap = *this;
@@ -189,7 +195,7 @@ namespace Yttrium
                         Coerce(oldLeap.offset) = newLeap.offset;
                         Coerce(oldLeap.length) = newLeap.length;
                     }
-                    setup();
+                    setup(sync);
                 }
 
 
@@ -220,7 +226,7 @@ namespace Yttrium
                     return code->cxx[indx];
                 }
 
-                //! (re)create all tiles
+                //! (re)create all tiles \param sync sync object
                 inline void setup(Lockable &sync) noexcept
                 {
                     assert(code);

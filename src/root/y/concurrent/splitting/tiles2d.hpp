@@ -53,7 +53,8 @@ namespace Yttrium
 
                 //! setup
                 /**
-                 \param n parallelism
+                 \param nc parallelism
+                 \param lk PERSISTENT lock
                  \param lo lower coordinate
                  \param up upper coordinate
                  */
@@ -68,7 +69,7 @@ namespace Yttrium
                     setup(lk);
                 }
 
-                //! setup empty \param n parallelism
+                //! setup empty \param nc parallelism \param lk PERSISTENT lock
                 inline explicit Tiles2D(const size_t nc,
                                         Lockable    &lk) :
                 Leap(),
@@ -104,7 +105,12 @@ namespace Yttrium
                 //
                 //______________________________________________________________
 
-                //! remap if necessary \param lo new lower \param up new upper
+                //! remap if necessary
+                /**
+                 \param lo new lower
+                 \param up new upper
+                 \param lk PERSISTENT sync for each tile
+                 */
                 inline void remap(const vertex_t lo,
                                   const vertex_t up,
                                   Lockable      &lk) noexcept
@@ -136,7 +142,7 @@ namespace Yttrium
                     return code->cxx[indx];
                 }
 
-                //! (re)create all tiles
+                //! (re)create all tiles \param sync PERSISTENT sync for each tile
                 inline void setup(Lockable &sync) noexcept
                 {
                     assert(code);

@@ -25,6 +25,7 @@ namespace {
             {
                 Concurrent::Splitting::Tiles1D<T> tiles(size,sync,offset,length);
                 std::cerr << tiles << std::endl;
+                tiles.remap(offset+1,length,sync);
             }
         }
 

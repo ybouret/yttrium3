@@ -49,9 +49,9 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            void deleteCache()   noexcept;
-            void ensureCache(const size_t bytesPerSubdivision);
-            void updateCache() noexcept;
+            void deleteCache() noexcept; //!< delete global cache and local caches
+            void updateCache() noexcept; //!< update local caches from global cache
+            void ensureCache(const size_t bytesPerSubdivision); //!< ensure local cache \param bytesPerSubdivision miminal local cache
 
 
             //__________________________________________________________________
@@ -64,8 +64,8 @@ namespace Yttrium
             
         private:
             Y_Disable_Copy_And_Assign(Subdivisions); //!< discarded
-            void noCache() noexcept;
-            
+            void noCache() noexcept; //!< remove inner cache
+
             const size_t wlen; //!< cache memory length
             void * const wksp; //!< cache memory address
 
