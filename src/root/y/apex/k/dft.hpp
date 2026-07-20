@@ -10,14 +10,9 @@
 #include "y/exception.hpp"
 #include "y/pointer/auto.hpp"
 
-#define Y_Apex_Use_Archon 1 //!< help archon directly
 
-#if defined(Y_Apex_Use_Archon)
+
 #include "y/memory/allocator/archon.hpp"
-#else
-#include "y/apex/k/overseer.hpp"
-#endif
-
 
 
 #if defined(Y_Apex_Trace)
@@ -31,12 +26,8 @@ namespace Yttrium
     namespace Apex
     {
 
-#if defined(Y_Apex_Use_Archon)
         typedef Memory::Archon DFT_Allocator; //!< alias
-#else
-        typedef Overseer       DFT_Allocator;
-#endif
-
+        
         template <typename T> struct Transfer;
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         template <> struct Transfer<uint32_t>
