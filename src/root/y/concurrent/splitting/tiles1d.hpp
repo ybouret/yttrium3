@@ -200,18 +200,17 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
-                inline virtual size_t size()     const noexcept { return ncpu; }
-                inline virtual size_t capacity() const noexcept { return ncpu; }
+                inline virtual size_t              size()                 const noexcept { return ncpu; }
+                inline virtual size_t              capacity()             const noexcept { return ncpu; }
+                inline virtual const Subdivision & sub(const size_t indx) const noexcept
+                {
+                    return ask(indx);
+                }
 
             private:
                 Y_Disable_Copy_And_Assign(Tiles1D); //!< discarded
                 Code * const code;                  //!< inner code
                 
-                virtual const Subdivision & getSub(const size_t indx) const noexcept
-                {
-                    return ask(indx);
-                }
-
                 inline virtual const Tile & ask(const size_t indx) const noexcept
                 {
                     assert(code);
@@ -221,7 +220,7 @@ namespace Yttrium
                     return code->cxx[indx];
                 }
 
-                //! create all tiles
+                //! (re)create all tiles
                 inline void setup(Lockable &sync) noexcept
                 {
                     assert(code);
@@ -232,6 +231,7 @@ namespace Yttrium
                         new (tile++) Tile(ncpu,Coerce(code->size)++,sync,offset,length);
                     }
                     assert(ncpu==code->size);
+                    updateCache();
                 }
             };
 

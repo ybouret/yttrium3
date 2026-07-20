@@ -124,8 +124,8 @@ namespace Yttrium
                 Pixmap<T> &target = *this;
                 for(size_t k=tile.span;k>0;--k)
                 {
-                    const Segment                 s   = tile[k];
-                    const unit_t                  y   = s.start.y;
+                    const Segment                   s   = tile[k];
+                    const unit_t                    y   = s.start.y;
                     Pixmap<T>::Row                & tgt = target(y);
                     const typename Pixmap<U>::Row & src = source(y);
                     for(unit_t x=s.start.x,i=s.width;i>0;--i,++x)
