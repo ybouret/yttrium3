@@ -102,11 +102,12 @@ namespace Yttrium
 
             //! operation on pixmap with two argument
             /**
-             call host.meth(tile,pixmap,source)
+             call host.meth(tile,pixmap,source,extra1)
              \param pixmap derived from Area
              \param host   host object
              \param meth   object method
              \param source argument for method
+             \param extra1 extra1 argument for method
              */
             template <
             typename PIXMAP,

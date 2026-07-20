@@ -9,9 +9,17 @@ using namespace Yttrium;
 
 Y_UTEST(pixmap)
 {
-    
-    Ink::Pixmap<int>    ipxm(32,16);
+    Concurrent::Engine seqEngine = Concurrent::SIMD::Sequential();
+    Concurrent::Engine parEngine = Concurrent::SIMD::InParallel(0);
+
+    Ink::Broker seq(seqEngine);
+    Ink::Broker par(parEngine);
+
+    Ink::Pixmap<short>  wpxm(32,16);
     Ink::Pixmap<String> spxm(6,4);
+    Ink::Pixmap<int>    apxm(seq,CopyOf,wpxm);
+    Ink::Pixmap<int>    bpxm(par,CopyOf,wpxm);
+
 
 }
 Y_UDONE()

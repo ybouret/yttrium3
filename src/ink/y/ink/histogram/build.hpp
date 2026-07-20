@@ -12,19 +12,40 @@ namespace Yttrium
 {
     namespace Ink
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Building Histograms
+        //
+        //
+        //______________________________________________________________________
         struct BuildHistogram
         {
-            typedef Histogram::freq_t freq_t;
+            typedef Histogram::freq_t freq_t; //!< alias
 
+
+            //______________________________________________________________________
+            //
+            //
+            //! Ops class
+            //
+            //______________________________________________________________________
             class Ops
             {
             public:
-                static const unsigned     Bins  = Histogram::Bins;
-                static const size_t       Bytes = sizeof(freq_t) * Bins;
+                static const unsigned     Bins  = Histogram::Bins;        //!< alias
+                static const size_t       Bytes = sizeof(freq_t) * Bins; //!< alias
 
-                explicit Ops() noexcept;
-                virtual ~Ops() noexcept;
+                explicit Ops() noexcept; //!< setup
+                virtual ~Ops() noexcept; //!< cleanup
 
+                //! collect data in local cache
+                /**
+                 \param tile tile to scan
+                 \param source source to read
+                 \param proc   pixel to byte value
+                 */
                 template <typename T, typename PIXEL_TO_BYTE> inline
                 void collect(Tile &tile, const Pixmap<T> &source, PIXEL_TO_BYTE &proc)
                 {
@@ -45,22 +66,32 @@ namespace Yttrium
                 }
 
             private:
-                Y_Disable_Copy_And_Assign(Ops);
+                Y_Disable_Copy_And_Assign(Ops); //!< discarded
             };
 
+            //! add histogram from source to given histogram
+            /**
+             \param H      target histogram
+             \param broker broker
+             \param source source pixmap
+             \param proc   pixel to byte value
+             */
             template <typename T, typename PIXEL_TO_BYTE> static inline
             void Add(Histogram       & H,
                      Broker          & broker,
                      const Pixmap<T> & source,
                      PIXEL_TO_BYTE   & proc)
             {
-                Ops ops;
-                broker.ensureCache(Ops::Bytes);
-                broker(source, ops, & Ops::collect<T,PIXEL_TO_BYTE>, proc);
-                for(size_t i=broker.size();i>0;--i)
-                    H.merge( static_cast<freq_t*>( broker[i].entry) );
+                {
+                    Ops ops;
+                    broker.ensureCache(Ops::Bytes);
+                    broker(source, ops, & Ops::collect<T,PIXEL_TO_BYTE>, proc);
+                }
+                Merge(H,broker);
             }
 
+        private:
+            static void Merge(Histogram &, Broker &); //!< merge local histograms
 
 
         };
