@@ -27,7 +27,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 if(Y_MSC)
-        string( APPEND CMAKE_CXX_FLAGS " -wd4820 -wd4710 -wd5039")
+        string( APPEND CMAKE_CXX_FLAGS " -wd4820 -wd4710 -wd5039 -wd4668 -wd4571 -wd4625 -wd4626 -wd4774 -wd5026 -wd5027")
 endif()
 
 # Default policy is from 3.10
