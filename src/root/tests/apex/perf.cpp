@@ -18,7 +18,7 @@ static long double tmx     = 0.01L;
 template <typename WORD, typename CORE> static inline
 SignType CompareDFT(const size_t nbits)
 {
-    //(std::cerr << "\tDFT(" << std::setw(4) << nbits << ") -- " << sizeof(WORD)*8 << "-bits | " << sizeof(CORE)*8 << "-bits: ").flush();
+    (std::cerr << "\tDFT(" << std::setw(4) << nbits << " bits) -- " << sizeof(WORD)*8 << "-bits | " << sizeof(CORE)*8 << "-bits: " << std::endl).flush();
 
     Core::Rand       ran;
     System::WallTime chrono;
@@ -29,15 +29,15 @@ SignType CompareDFT(const size_t nbits)
     size_t   same   = 0;
     do {
         //++nops;
-        AutoPtr< Keg<WORD> > lhs  = Keg<WORD>::MakeRandom(ran, nbits);
-        AutoPtr< Keg<WORD> > rhs  = Keg<WORD>::MakeRandom(ran, nbits);
+        AutoPtr< Keg<WORD> > lhs = Keg<WORD>::MakeRandom(ran, nbits);  assert(lhs.isValid());
+        AutoPtr< Keg<WORD> > rhs  = Keg<WORD>::MakeRandom(ran, nbits); assert(rhs.isValid());
 
         uint64_t             mark = System::WallTime::Ticks();
-        AutoPtr< Keg<WORD> > dft  = KegDFT::Compute(*lhs,*rhs);
+        AutoPtr< Keg<WORD> > dft = KegDFT::Compute(*lhs, *rhs); assert(dft.isValid());
         dft64 += System::WallTime::Ticks() - mark;
 
         mark = System::WallTime::Ticks();
-        AutoPtr< Keg<WORD> > mul  = KegMul::Compute<WORD,CORE>(lhs->word, lhs->words, rhs->word, rhs->words);
+        AutoPtr< Keg<WORD> > mul = KegMul::Compute<WORD, CORE>(lhs->word, lhs->words, rhs->word, rhs->words); assert(mul.isValid());
         mul64 += System::WallTime::Ticks() - mark;
 
         const SignType curr = Sign::Of(dft64,mul64);
@@ -50,10 +50,9 @@ SignType CompareDFT(const size_t nbits)
             last = curr;
             same = 1;
         }
-        //std::cerr << "same=" << same << std::endl;
     }
     while( chrono(dft64) < tmx || same < 10);
-    //std::cerr << nbits << "\t=> " << std::setw(3) << last << " #same=" << std::setw(8) << same << std::endl;
+    std::cerr << nbits << "\t=> " << std::setw(3) << last << " #same=" << std::setw(8) << same << std::endl;
     return last;
 }
 
@@ -71,19 +70,19 @@ void TestDFT()
     do
     {
         upperBits <<= 1;
-        ++count; (std::cerr << '.').flush();
+        ++count; (std::cerr << '#').flush();
     } while( Negative !=  CompareDFT<WORD,CORE>(upperBits) );
 
     while(upperBits-lowerBits>1)
     {
-        ++count; (std::cerr << '.').flush();
+        ++count;
         const size_t   middleBits = (upperBits+lowerBits) >> 1;
         const SignType middleSign = CompareDFT<WORD,CORE>(middleBits);
         switch(middleSign)
         {
-            case Positive: lowerBits = middleBits; continue;
-            case Negative: upperBits = middleBits; continue;
-            case __Zero__: upperBits = lowerBits = middleBits;
+            case Positive:  (std::cerr << '+').flush(); lowerBits = middleBits; continue;
+            case Negative:  (std::cerr << '-').flush(); upperBits = middleBits; continue;
+            case __Zero__:  (std::cerr << '*').flush(); upperBits = lowerBits = middleBits;
                 break;
         }
         break;
