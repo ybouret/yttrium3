@@ -93,6 +93,7 @@ Y_UTEST(concurrent_primes)
     {
         const Concurrent::Member primary(engine->size(),0);
         const String             oldPath = MakeFileName(primary);
+        (void)fs.tryRemoveFile(fileName);
         fs.moveFile(oldPath,fileName);
     }
 
