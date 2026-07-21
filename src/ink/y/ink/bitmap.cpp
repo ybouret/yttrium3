@@ -176,7 +176,10 @@ namespace Yttrium
                 Coerce(row_)  = static_cast<Bitrow *>( BmpMgr().acquire(Coerce(rlen)  = h * sizeof(Bitrow)) );
                 char * p = code->entry();
                 for(unit_t j=0;j<h;++j,p+=s)
-                    new (row_+j) Bitrow(p,zfy);
+                {
+                    new (row_+j) Bitrow(p,zfx);
+
+                }
             }
             catch(...)
             {

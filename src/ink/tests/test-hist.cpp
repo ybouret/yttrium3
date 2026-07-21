@@ -29,6 +29,7 @@ Y_UTEST(hist)
     Core::Rand          ran;
     Ink::Pixmap<float>  pxm(32,16);
 
+
     for(unit_t y=0;y<pxm.h;++y)
     {
         for(unit_t x=0;x<pxm.w;++x)
@@ -36,6 +37,7 @@ Y_UTEST(hist)
             pxm(y)(x) = ran();
         }
     }
+
 
     Ink::Histogram Hseq;
     Ink::Histogram Hpar;
