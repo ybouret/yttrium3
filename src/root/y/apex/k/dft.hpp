@@ -193,7 +193,7 @@ namespace Yttrium
                 InSituMax(BigBlockShift,blockShift);
                 assert( (size_t(1) << blockShift) >= 2*nn*sizeof(double) );
 
-                
+
                 {
 #if defined(Y_Apex_Trace)
                     mark = System::WallTime::Ticks();
@@ -202,7 +202,11 @@ namespace Yttrium
                     double *  const b = a+nn;                                // b[1:nn]
                     uint8_t * const w = static_cast<uint8_t*>(blockEntry);   // w[0:..] to use result memory
 
-//#define Y_APEX_DFT_RAW_SEND 1
+                    for(size_t j=0;j<n;++j) { (void) lhs.getByte(j); }
+
+
+#define Y_APEX_DFT_RAW_SEND 1
+
 #if defined(Y_APEX_DFT_RAW_SEND)
                     for(size_t i=n,j=0;i>0;--i) a[i] = lhs.getByte(j++);
                     for(size_t i=m,j=0;i>0;--i) b[i] = rhs.getByte(j++);
@@ -211,7 +215,9 @@ namespace Yttrium
                     Transfer<WORD>::Send(b,rhs.word,rhs.words);
 #endif
 
+
                     DFT::RealForward(a,b,nn);
+
 
                     b[1] *= a[1];
                     b[2] *= a[2];
@@ -226,6 +232,7 @@ namespace Yttrium
 
 
                     DFT::RealReverse(b,nn);
+
                     double              cy  = 0;
                     static const double RX  = 256.0;
                     for(size_t j=nn;j>0;--j) {
@@ -235,6 +242,8 @@ namespace Yttrium
                     }
                     if (cy >= RX)
                         throw Specific::Exception("DFT::Multiplication","%s",AlgebraicFailure);
+
+                    
 
                     Coerce(dft->words) = Alignment::To<WORD>::Ceil(mpn) / sizeof(WORD);
                     assert(dft->words*sizeof(WORD)>=mpn);
@@ -315,7 +324,7 @@ namespace Yttrium
 
                     //#define Y_APEX_DFT_RAW_SEND 1
 #if defined(Y_APEX_DFT_RAW_SEND)
-                    for(size_t i=m,j=0;i>0;--i) b[i] = arg.getByte(j++);
+                    for(size_t i=n,j=0;i>0;--i) b[i] = arg.getByte(j++);
 #else
                     Transfer<WORD>::Send(b,arg.word,arg.words);
 #endif
