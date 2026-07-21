@@ -215,9 +215,14 @@ namespace Yttrium
             return nucleus;
         }
 
+        bool Nucleus:: Exists() noexcept
+        {
+            return 0 != NucleusInstance;
+        }
+
         Nucleus& Nucleus::Location() noexcept
         {
-            assert(0 != NucleusInstance);
+            assert( Exists() );
             return *NucleusInstance;
         }
 

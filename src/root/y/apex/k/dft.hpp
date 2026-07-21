@@ -191,12 +191,15 @@ namespace Yttrium
                 const unsigned blockShift = ns+1+IntegerLog2For<double>::Value;
                 void   * const blockEntry = mgr.acquireBlock(blockShift);
                 InSituMax(BigBlockShift,blockShift);
+                assert( (size_t(1) << blockShift) >= 2*nn*sizeof(double) );
+
+                
                 {
 #if defined(Y_Apex_Trace)
                     mark = System::WallTime::Ticks();
 #endif
-                    double * const  a = static_cast<double *>(blockEntry)-1; // a[1:nn]
-                    double * const  b = a+nn;                                // b[1:nn]
+                    double *  const a = static_cast<double *>(blockEntry)-1; // a[1:nn]
+                    double *  const b = a+nn;                                // b[1:nn]
                     uint8_t * const w = static_cast<uint8_t*>(blockEntry);   // w[0:..] to use result memory
 
 //#define Y_APEX_DFT_RAW_SEND 1

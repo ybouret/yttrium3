@@ -70,7 +70,7 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
-                virtual void lock() noexcept;
+                virtual void lock()   noexcept;
                 virtual void unlock() noexcept;
 
                 //______________________________________________________________
@@ -116,6 +116,9 @@ namespace Yttrium
                  \return true iff blockAddr within one of arena
                  */
                 bool   owns(const void * const blockAddr, size_t &blockSize) const noexcept;
+
+                //! \return crc from all arena/chunks
+                uint32_t crc32() const noexcept;
 
             private:
                 Y_Disable_Copy_And_Assign(Blocks); //!< discarding

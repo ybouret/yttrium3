@@ -1,5 +1,6 @@
 #include "y/memory/small/chunk.hpp"
 #include "y/type/ints.hpp"
+#include "y/check/crc32.hpp"
 #include <cassert>
 #include <cstring>
 
@@ -96,6 +97,12 @@ namespace Yttrium
             {
                 return (size_t)providedBlocks - (size_t)stillAvailable;
             }
+
+            uint32_t Chunk:: crc32(const uint32_t crc) const noexcept
+            {
+                return CRC32::Run(crc,data,providedBlocks);
+            }
+
 
         }
 

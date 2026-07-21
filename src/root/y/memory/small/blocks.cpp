@@ -176,6 +176,20 @@ namespace Yttrium
             }
 
 
+            uint32_t Blocks:: crc32() const noexcept
+            {
+                uint32_t crc=0;
+                for(size_t i=0;i<TableSize;++i)
+                {
+                    const Slot &s = table[i];
+                    for(const Arena *a=s.head;a;a=a->next)
+                    {
+                        crc = a->crc32(crc);
+                    }
+                }
+                return crc;
+            }
+
         }
 
     }

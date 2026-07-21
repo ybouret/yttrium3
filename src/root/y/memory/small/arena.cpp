@@ -375,6 +375,17 @@ namespace Yttrium
                 return stillAvailable;
             }
 
+
+            uint32_t Arena:: crc32(uint32_t crc) const noexcept
+            {
+                for(const Chunk *chunk=clist.head;chunk;chunk=chunk->next)
+                {
+                    crc = chunk->crc32(crc);
+                }
+                return crc;
+            }
+
+
         }
 
     }

@@ -152,6 +152,9 @@ namespace Yttrium
          */
         virtual void   release(void * &blockAddr, size_t &blockSize) noexcept;
 
+        //! \return crc32 from slim allocator
+        uint32_t slim32() const noexcept;
+
     private:
         friend class Singleton<Factory,Policy>;
         Y_Disable_Copy_And_Assign(Factory); //!< discarded

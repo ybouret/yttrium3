@@ -72,10 +72,11 @@ namespace Yttrium
                 //! memory location \param p given address \return ownership status
                 Ownership whose(const void * const p) const noexcept;
 
-                //! check address \param p block address \return true if p in [data:last[
-                bool   owns(const void * const p) const noexcept;
-                bool   isEmpty() const noexcept; //!< check if block is empty \return stillAvailable >= providedBlocks
-                size_t missing() const noexcept; //!< missing (a.k.a used) blocks \return rovidedBlocks-stillAvailable
+
+                bool     owns(const void * const p) const noexcept; //!< check address \param p block address \return true if p in [data:last[
+                bool     isEmpty()                  const noexcept; //!< check if block is empty     \return stillAvailable >= providedBlocks
+                size_t   missing()                  const noexcept; //!< missing (a.k.a used) blocks \return providedBlocks-stillAvailable
+                uint32_t crc32(const uint32_t crc)  const noexcept; //!< \param crc input crc \return updated from content
 
                 //______________________________________________________________
                 //

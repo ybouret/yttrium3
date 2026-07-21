@@ -78,7 +78,7 @@ namespace Yttrium
             //__________________________________________________________________
             static  Nucleus &  Instance();          //!< handle instance \return single Nucleus
             static  Nucleus &  Location() noexcept; //!< current location \return existing instance
-
+            static  bool       Exists()   noexcept; //!< \return true iff has instance
             //__________________________________________________________________
             //
             //
