@@ -9,5 +9,6 @@ macro(Y_CLI progname)
 endmacro()
 
 Y_CLI(y_trunc)
+Y_CLI(y_xctest)
 
 

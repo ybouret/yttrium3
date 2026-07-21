@@ -6,6 +6,7 @@
 #define Y_String_Tokenizer_Included 1
 
 #include "y/config/setup.hpp"
+#include "y/string/length.hpp"
 #include "y/string/fwd.hpp"
 
 namespace Yttrium
@@ -87,7 +88,7 @@ namespace Yttrium
                           const String<T> &str,
                           const T * const sep)
             {
-                AppendTo<SEQUENCE>(seq,str,sep,Length(sep),-1);
+                AppendTo<SEQUENCE>(seq,str,sep,StringLength(sep),-1);
             }
 
             //! split src and append all possible tokens to seq
