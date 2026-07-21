@@ -1,5 +1,3 @@
-
-
 //! \file
 
 #ifndef Y_Algorithm_Replace_Included
@@ -25,9 +23,10 @@ namespace Yttrium
         }
 
         template <typename SEQUENCE, typename SOURCE, typename TARGET>
-        static inline void Replace(SEQUENCE &seq, SOURCE &source, TARGET &target)
+        static inline SEQUENCE & Replace(SEQUENCE &seq, SOURCE &source, TARGET &target)
         {
             Replace(seq.begin(),seq.size(),source,target);
+            return seq;
         }
 
     }

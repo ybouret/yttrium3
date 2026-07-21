@@ -1,4 +1,3 @@
-
 //! \file
 
 #ifndef Y_Algorithm_Crop_Included
