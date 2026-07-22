@@ -18,7 +18,7 @@ static long double tmx     = 0.01L;
 template <typename WORD, typename CORE> static inline
 SignType CompareDFT(const size_t nbits)
 {
-    (std::cerr << "\tDFT(" << std::setw(4) << nbits << " bits) -- " << sizeof(WORD)*8 << "-bits | " << sizeof(CORE)*8 << "-bits: " << std::endl).flush();
+    //(std::cerr << "\tDFT(" << std::setw(4) << nbits << " bits) -- " << sizeof(WORD)*8 << "-bits | " << sizeof(CORE)*8 << "-bits: " << std::endl).flush();
 
     Core::Rand       ran;
     System::WallTime chrono;
@@ -52,7 +52,7 @@ SignType CompareDFT(const size_t nbits)
         }
     }
     while( chrono(dft64) < tmx || same < 10);
-    std::cerr << nbits << "\t=> " << std::setw(3) << last << " #same=" << std::setw(8) << same << std::endl;
+	//std::cerr << nbits << "\t=> " << std::setw(3) << last << " #same=" << std::setw(8) << same << std::endl;
     return last;
 }
 

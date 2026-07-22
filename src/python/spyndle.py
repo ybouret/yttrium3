@@ -49,8 +49,8 @@ class Application:
     def what(self):
         return str(self.What(), "utf-8")
 
-    def when(self):
-        return str(self.When(), "utf-8")
+    def info(self):
+        return str(self.Info(), "utf-8")
 
     def callSign(self):
         return str(self.name_(), "utf-8")
