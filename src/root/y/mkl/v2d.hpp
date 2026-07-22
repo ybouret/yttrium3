@@ -5,6 +5,8 @@
 #define Y_MKL_V2D_Included 1
 
 #include "y/mkl/api/pythagoras.hpp"
+#include "y/core/max.hpp"
+#include "y/core/min.hpp"
 #include <iostream>
 #include <cmath>
 
