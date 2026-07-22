@@ -194,6 +194,8 @@ namespace Yttrium
 
                 memset(blockEntry,0xff,(One << blockShift));
 
+                mgr.releaseBlock(blockEntry,blockShift);
+                return dft.yield();
 
                 {
 #if defined(Y_Apex_Trace)

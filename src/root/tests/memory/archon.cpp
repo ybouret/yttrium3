@@ -88,7 +88,7 @@ Y_UTEST(memory_archon)
     std::cerr << "Using blockShift..." << std::endl;
     for(unsigned bs=Memory::Archon::MinBlockShift;bs<=16;++bs)
     {
-        const size_t blockBytes = size_t(1) << bs;        std::cerr << "\t2^" << std::setw(2) << bs << " = " << blockBytes << std::endl;
+        const size_t blockBytes = size_t(1) << bs; std::cerr << "\t2^" << std::setw(2) << bs << " = " << blockBytes << std::endl;
         void * const blockEntry = archon.acquireBlock(bs);
         memset(blockEntry,0xff,blockBytes);
         archon.releaseBlock(blockEntry,bs);
