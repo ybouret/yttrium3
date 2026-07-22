@@ -113,7 +113,6 @@ Y_UTEST(apex_perf2)
 
     TestDFT<uint32_t,uint64_t>();
 
-    Y_PRINTV(Apex::KegDFT::BigBlockShift);
     
 
 }

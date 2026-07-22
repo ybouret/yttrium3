@@ -129,7 +129,6 @@ namespace Yttrium
         struct KegDFT
         {
             static uint64_t       Trace;                //!< to trace call ticks
-            static unsigned       BigBlockShift;        //!< to trace blocks
             static const char     AlgebraicFailure[];  //!< "Algebraic Failure"
 
 
@@ -190,7 +189,6 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 const unsigned blockShift = ns+1+IntegerLog2For<double>::Value;
                 void   * const blockEntry = mgr.acquireBlock(blockShift);
-                InSituMax(BigBlockShift,blockShift);
                 assert( (size_t(1) << blockShift) >= 2*nn*sizeof(double) );
 
 
@@ -202,7 +200,6 @@ namespace Yttrium
                     double *  const b = a+nn;                                // b[1:nn]
                     uint8_t * const w = static_cast<uint8_t*>(blockEntry);   // w[0:..] to use result memory
 
-                    for(size_t j=0;j<n;++j) { (void) lhs.getByte(j); }
 
 
 #define Y_APEX_DFT_RAW_SEND 1
@@ -317,7 +314,6 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 const unsigned blockShift = ns+1+IntegerLog2For<double>::Value;
                 void   * const blockEntry = mgr.acquireBlock(blockShift);
-                InSituMax(BigBlockShift,blockShift);
                 {
                     double * const  b = (static_cast<double *>(blockEntry)-1)+nn; // b[1:nn]
                     uint8_t * const w = static_cast<uint8_t*>(blockEntry);        // w[0:..] to use result memory
