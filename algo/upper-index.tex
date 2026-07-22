@@ -7,8 +7,18 @@
 
 \begin{document}
 
-We have a $n \times n$ matrix, and we want to index the upper diagonal with $$i \in [1:n],\; j \in [i:n]$$
+We have a $n \times n$ matrix, and we want to index the upper diagonal with
+ $$i \in [1:n],\; j \in [i:n]$$
 leading to $\dfrac{n(n+1)}{2}$ terms.
+
+Let us take the $i$-th row where $k$ varies between $A_i=1+\dfrac{i(i-1)}2$ and $B_i=\dfrac{i(i+1)}2$.
+
+For a given $k$:
+\begin{equation}
+	1+\dfrac{i(i-1)}2 = k \implies i = \dfrac{1+\sqrt{8k-3}}{2}
+\end{equation}
+
+\end{document}
 
 The last index for each $i$ is:
 \begin{equation}
