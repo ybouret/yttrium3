@@ -375,4 +375,30 @@ macro(Y_Regression THE_LIB)
         set(Y_UnitTests ${_UnitTests} PARENT_SCOPE)
 endmacro()
 
+################################################################################
+#
+#
+# Helper for DLL/Modules
+#
+#
+################################################################################
 
+set(Y_UUID "-${Y_Platform}-${Y_Machine}")
+set(Y_DLL_UUID "${Y_UUID}.dll")
+
+function(Y_CopyDLL THE_TARGET DLL_NAME)
+	add_custom_command( TARGET ${THE_TARGET} POST_BUILD 
+	COMMAND ${CMAKE_COMMAND} -E echo "-- Copy '$<TARGET_FILE:${THE_TARGET}>'"
+	COMMAND ${CMAKE_COMMAND} -E echo "-- to   '${DLL_NAME}'"
+	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${THE_TARGET}> ${DLL_NAME}
+	VERBATIM)
+
+	if(XCODE)
+		add_custom_command( TARGET ${THE_TARGET} POST_BUILD 
+		COMMAND ${CMAKE_COMMAND} -E echo "-- sign '${DLL_NAME}'"
+    	        COMMAND codesign --remove-signature ${DLL_NAME}
+    	        COMMAND xcrun codesign -s - ${DLL_NAME}
+    	        VERBATIM)
+	endif()
+
+endfunction()
