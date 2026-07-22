@@ -1,0 +1,65 @@
+""" importing ctypes """
+import ctypes as ct
+import platform
+
+class Application:
+
+    def __init__(self):
+        print("-- create --")
+        dll_uuid = "-" + platform.system().lower() + "-" + platform.machine().lower() + ".dll"
+        self.dll = ct.cdll.LoadLibrary("./spyndle" + dll_uuid)
+        self.sine = self.dll.sine
+
+        self.sine.argtypes = [ct.c_double]
+        self.sine.restype = ct.c_double
+
+        self.What = self.dll.Spyndle_What
+        self.What.argtypes = []
+        self.What.restype = ct.c_char_p
+
+        self.Info = self.dll.Spyndle_Info
+        self.Info.argtypes = []
+        self.Info.restype = ct.c_char_p
+
+        self.Init = self.dll.Spyndle_Init
+        self.Init.argtypes = []
+        self.Init.restype = ct.c_bool
+
+        self.Quit = self.dll.Spyndle_Quit
+        self.Quit.argtypes = []
+
+        assert self.Init(), self.what()
+
+        self.norm = self.dll.Application_norm
+        self.norm.argtypes = [ct.c_double, ct.c_double]
+        self.norm.restype = ct.c_double
+
+        self.name_ = self.dll.Application_callSign
+        self.name_.argtypes = []
+        self.name_.restype = ct.c_char_p
+
+        self.crc = self.dll.Application_crc
+        self.crc.argtypes = [ct.c_char_p]
+        self.crc.restype = ct.c_uint32
+
+    def __del__(self):
+        print("-- delete --")
+        self.Quit()
+
+    def what(self):
+        return str(self.What(), "utf-8")
+
+    def when(self):
+        return str(self.When(), "utf-8")
+
+    def callSign(self):
+        return str(self.name_(), "utf-8")
+
+
+print("-- main --")
+app = Application()
+print(app.sine(0.1))
+print(app.norm(3, 4))
+print(app.callSign())
+print(app.crc(bytes("Hello", "utf-8")))
+print("-- done --")

@@ -90,7 +90,7 @@ namespace Yttrium
 #define Y_Spyndle(CLASS) \
 Y_DLL_EXTERN() \
 Y_EXPORT const char * Y_DLL_API Spyndle_What() noexcept { return CLASS::What;   } \
-Y_EXPORT const char * Y_DLL_API Spyndle_When() noexcept { return CLASS::When;   } \
+Y_EXPORT const char * Y_DLL_API Spyndle_Info() noexcept { return CLASS::Info;   } \
 Y_EXPORT bool         Y_DLL_API Spyndle_Init() noexcept { return CLASS::Init(); } \
 Y_EXPORT void         Y_DLL_API Spyndle_Quit() noexcept { CLASS::Quit();        } \
 Y_DLL_FINISH()
