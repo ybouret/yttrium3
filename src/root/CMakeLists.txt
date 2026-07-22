@@ -132,6 +132,7 @@ y/field
 y/field/layout
 y/rtld
 y/rtld/spyndle
+y/color
 )
 
 add_subdirectory(tests)
