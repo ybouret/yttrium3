@@ -1,4 +1,6 @@
-#include "y/concurrent/splitting/tile1d.hpp"
+#include "y/concurrent/subdivision.hpp"
+#include "y/container/matrix/coord.hpp"
+
 #include "y/utest/run.hpp"
 
 #include "y/calculus/isqrt.hpp"
@@ -20,7 +22,9 @@ namespace Yttrium
                 virtual ~UpperDiagonalTile() noexcept;
 
                 size_t getRow(const size_t k) const noexcept;
-                size_t getCol(const size_t k, const size_t i) const noexcept;
+                size_t getCol(const size_t k, const size_t r) const noexcept;
+
+                MatrixCoord coord(const size_t k) const noexcept;
 
                 const size_t n;        //!< n x n array
                 const size_t B;        //!< 1 + 2*n*
@@ -66,8 +70,17 @@ namespace Yttrium
                 assert(k>=1);
                 assert(k<=kNumber);
                 const size_t im1 = i-1;
-                const size_t kmx = im1*(n+1) - ( (i*im1)>>1 );
-                return im1 + k-kmx;
+                // const size_t kmx = im1*(n+1) - ( (i*im1)>>1 );
+                // return im1 + k-kmx;
+                // return k - (im1*n-( (i*im1)>>1 ));
+                return ( (i*im1)>>1 )+ k - im1*n;
+            }
+
+            MatrixCoord UpperDiagonalTile:: coord(const size_t k) const noexcept
+            {
+                const size_t r = getRow(k);
+                const size_t c = getCol(k,r);
+                return MatrixCoord(r,c);
             }
 
 
@@ -88,9 +101,11 @@ Y_UTEST(concurrent_updiag)
         Concurrent:: Splitting:: UpperDiagonalTile udt(n);
         for(size_t k=1;k<=kmax;++k)
         {
-            const size_t r = udt.getRow(k);
-            const size_t c = udt.getCol(k,r);
-            std::cerr << "\tk=" << std::setw(2) << k << " : r=" << r << " : c=" << c << std::endl;
+            //const size_t r = udt.getRow(k);
+            //const size_t c = udt.getCol(k,r);
+            //std::cerr << "\tk = " << std::setw(2) << k << " : r = " << r << " : c = " << c << std::endl;
+            const MatrixCoord p = udt.coord(k);
+            std::cerr << "\tk = " << std::setw(2) << k << " : " << p << std::endl;
         }
 
     }
