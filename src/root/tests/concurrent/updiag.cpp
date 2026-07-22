@@ -2,6 +2,7 @@
 #include "y/container/matrix/coord.hpp"
 
 #include "y/utest/run.hpp"
+#include "y/concurrent/fake-lock.hpp"
 
 #include "y/calculus/isqrt.hpp"
 #include "y/calculus/alignment.hpp"
@@ -13,13 +14,19 @@ namespace Yttrium
         namespace Splitting
         {
 
-            class UpperDiagonalTile
+            class UpperDiagonalTile : public Subdivision
             {
             public:
 
-                explicit UpperDiagonalTile(const size_t extent) noexcept;
+                explicit UpperDiagonalTile(const size_t mySize,
+                                           const size_t myRank,
+                                           Lockable &   myLock,
+                                           const size_t extent) noexcept;
 
                 virtual ~UpperDiagonalTile() noexcept;
+
+                virtual bool isEmpty() const noexcept;
+
 
                 size_t getRow(const size_t k) const noexcept;
                 size_t getCol(const size_t k, const size_t r) const noexcept;
@@ -40,15 +47,28 @@ namespace Yttrium
             };
 
 
-            UpperDiagonalTile:: UpperDiagonalTile(const size_t extent) noexcept :
+            bool UpperDiagonalTile:: isEmpty() const noexcept { return kLength <= 0; }
+
+            UpperDiagonalTile:: UpperDiagonalTile(const size_t mySize,
+                                                  const size_t myRank,
+                                                  Lockable &   myLock,
+                                                  const size_t extent) noexcept :
+            Subdivision(mySize,myRank,myLock),
             n(extent),
             B(1+(n<<1)),
             B2(B*B),
             kNumber( (n*(n+1)>>1) ),
             kOffset(1),
-            kLength(kNumber),
+            kLength( part(kNumber,Coerce(kOffset)) ),
             kUtmost(kOffset + kLength - 1 )
             {
+                if(kLength>0)
+                {
+                    const MatrixCoord ini = coord(kOffset);
+                    const MatrixCoord end = coord(kUtmost);
+                    std::cerr << "ini: " << ini << std::endl;
+                    std::cerr << "end: " << end << std::endl;
+                }
             }
 
             UpperDiagonalTile:: ~UpperDiagonalTile() noexcept
@@ -70,9 +90,6 @@ namespace Yttrium
                 assert(k>=1);
                 assert(k<=kNumber);
                 const size_t im1 = i-1;
-                // const size_t kmx = im1*(n+1) - ( (i*im1)>>1 );
-                // return im1 + k-kmx;
-                // return k - (im1*n-( (i*im1)>>1 ));
                 return ( (i*im1)>>1 )+ k - im1*n;
             }
 
@@ -93,12 +110,13 @@ using namespace Yttrium;
 
 Y_UTEST(concurrent_updiag)
 {
+    Concurrent::FakeLock access;
 
     for(size_t n=1;n<=4;++n)
     {
         std::cerr << std::endl << "n=" << n << std::endl;
         const size_t kmax = (n*(n+1))>>1;
-        Concurrent:: Splitting:: UpperDiagonalTile udt(n);
+        Concurrent:: Splitting:: UpperDiagonalTile udt(1,0,access,n);
         for(size_t k=1;k<=kmax;++k)
         {
             //const size_t r = udt.getRow(k);
