@@ -85,7 +85,7 @@ namespace Yttrium
         template <typename T> static inline
         void ReleaseZombie(T * const zombie) noexcept { operator delete(zombie,sizeof(T));  }
 
-        static uint32_t Slim32(); //!< \return crc32 from allocator
+        
 
     private:
         Y_Disable_Copy_And_Assign(Object); //!< discarded

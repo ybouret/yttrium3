@@ -96,24 +96,7 @@ namespace Yttrium
         }
     }
 
-    uint32_t Object:: Factory:: slim32() const noexcept
-    {
-        if(Concurrent::Nucleus::Exists())
-        {
-            return Concurrent::Nucleus::Location().blocks->crc32();
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    uint32_t Object:: Slim32()
-    {
-        static const Object::Factory &f = Object::Factory::Instance();
-        return f.slim32();
-    }
-
+    
 
 }
 

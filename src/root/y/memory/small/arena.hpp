@@ -109,9 +109,7 @@ namespace Yttrium
                 //! specific toXML \param xml target
                 void toXML(XML::Log &xml) const;
 
-                //! \param crc input crc \return updated from chunk list
-                uint32_t crc32(uint32_t crc) const noexcept;
-
+                
                 //______________________________________________________________
                 //
                 //
