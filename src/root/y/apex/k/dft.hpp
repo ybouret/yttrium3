@@ -143,6 +143,7 @@ namespace Yttrium
                                 const Keg<WORD> &rhs)
             {
                 static DFT_Allocator &mgr = DFT_Allocator::Instance();
+                static const size_t   One = 1;
 
                 //--------------------------------------------------------------
                 //
@@ -161,15 +162,15 @@ namespace Yttrium
                 //
                 //--------------------------------------------------------------
                 const size_t mn = Max(m,n);
-                size_t       nn = 1;
+                size_t       nn = One;
                 unsigned     ns = 0;
                 while (nn < mn)
                 {
-                    nn <<= 1; ++ns; assert( size_t(1) << ns == nn);
+                    nn <<= 1; ++ns; assert( One << ns == nn);
                 }
                 const size_t nc = nn; // number of complexes
                 nn <<= 1; ++ns;       // number of reals
-                assert( size_t(1) << ns == nn);
+                assert( One << ns == nn);
 
                 //--------------------------------------------------------------
                 //
@@ -189,7 +190,9 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 const unsigned blockShift = ns+1+IntegerLog2For<double>::Value;
                 void   * const blockEntry = mgr.acquireBlock(blockShift);
-                assert( (size_t(1) << blockShift) >= 2*nn*sizeof(double) );
+                assert( (One << blockShift) >= 2*nn*sizeof(double) );
+
+                memset(blockEntry,0xff,(One << blockShift));
 
 
                 {
