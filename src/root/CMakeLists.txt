@@ -131,6 +131,7 @@ y/information/stream
 y/field
 y/field/layout
 y/rtld
+y/rtld/spyndle
 )
 
 add_subdirectory(tests)
