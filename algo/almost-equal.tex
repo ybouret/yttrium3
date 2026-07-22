@@ -1,0 +1,35 @@
+\documentclass[aps,12pt]{revtex4}
+\usepackage[a4paper]{geometry}
+\usepackage{graphicx}
+\usepackage{amssymb,amsfonts,amsmath,amsthm}
+\usepackage{bm}
+\usepackage{pslatex}
+\usepackage{chemarr}
+\usepackage{mathptmx}
+\usepackage{bookman}
+
+
+\begin{document}
+
+We declare that $a$ is almost equal to $b$ iff
+\begin{equation}
+	\dfrac{\vert a - b \vert}{ \max(\theta,\min(\vert a \vert,\vert b \vert)) } \leq \epsilon
+\end{equation}
+with a small $\theta$.
+When $b=0$, 
+\begin{equation}
+	\phi(a) = \dfrac{\vert a \vert }{ \max(\theta,\vert a \vert) } \leq \epsilon
+\end{equation}
+
+We want $\theta \gg \mu$, where $\mu$ is the mininal non zero floating point value.
+\begin{equation}
+\phi(|a|<\theta) = \dfrac{|a|}{\theta} \leq \epsilon \iff a \simeq 0
+\end{equation}
+
+\begin{equation}
+	\theta \gg \mu / \epsilon
+\end{equation} 	
+
+ 	
+ 	
+\end{document}
