@@ -4,7 +4,7 @@
 #include "y/random/shuffle.hpp"
 #include "y/random/fill.hpp"
 #include "y/libc/block/zeroed.h"
-
+#include <cstring>
 #include "y/utest/run.hpp"
 
 
@@ -83,7 +83,16 @@ Y_UTEST(memory_archon)
     archon.writeXML(std::cerr);
     archon.gc(128);
     archon.writeXML(std::cerr);
+    std::cerr << std::endl;
 
+    std::cerr << "Using blockShift..." << std::endl;
+    for(unsigned bs=Memory::Archon::MinBlockShift;bs<=16;++bs)
+    {
+        const size_t blockBytes = size_t(1) << bs;        std::cerr << "\t2^" << std::setw(2) << bs << " = " << blockBytes << std::endl;
+        void * const blockEntry = archon.acquireBlock(bs);
+        memset(blockEntry,0xff,blockBytes);
+        archon.releaseBlock(blockEntry,bs);
+    }
 
 }
 Y_UDONE()
