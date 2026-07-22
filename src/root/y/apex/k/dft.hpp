@@ -192,10 +192,8 @@ namespace Yttrium
                 void   * const blockEntry = mgr.acquireBlock(blockShift);
                 assert( (One << blockShift) >= 2*nn*sizeof(double) );
 
-                memset(blockEntry,0xff,(One << blockShift));
+                //memset(blockEntry,0xff,(One << blockShift));
 
-                mgr.releaseBlock(blockEntry,blockShift);
-                return dft.yield();
 
                 {
 #if defined(Y_Apex_Trace)
@@ -204,6 +202,7 @@ namespace Yttrium
                     double *  const a = static_cast<double *>(blockEntry)-1; // a[1:nn]
                     double *  const b = a+nn;                                // b[1:nn]
                     uint8_t * const w = static_cast<uint8_t*>(blockEntry);   // w[0:..] to use result memory
+
 
 
 
@@ -235,6 +234,8 @@ namespace Yttrium
 
                     DFT::RealReverse(b,nn);
 
+                    //mgr.releaseBlock(blockEntry,blockShift); return dft.yield();
+
                     double              cy  = 0;
                     static const double RX  = 256.0;
                     for(size_t j=nn;j>0;--j) {
@@ -244,6 +245,7 @@ namespace Yttrium
                     }
                     if (cy >= RX)
                         throw Specific::Exception("DFT::Multiplication","%s",AlgebraicFailure);
+
 
                     
 
