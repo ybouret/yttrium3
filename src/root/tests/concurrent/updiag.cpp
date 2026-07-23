@@ -40,11 +40,13 @@ namespace Yttrium
                 const size_t kOffset;  //!< initial valid k
                 const size_t kLength;  //!< number of indices, 0 meanms empty
                 const size_t kUtmost;  //!< utmost  valid k
-                //const size_t h;        //!< height
+                const size_t h;        //!< height
 
             private:
                 Y_Disable_Copy_And_Assign(UpperDiagonalTile);
+                void setup() noexcept;
             };
+
 
 
             bool UpperDiagonalTile:: isEmpty() const noexcept { return kLength <= 0; }
@@ -60,15 +62,10 @@ namespace Yttrium
             kNumber( (n*(n+1)>>1) ),
             kOffset(1),
             kLength( part(kNumber,Coerce(kOffset)) ),
-            kUtmost(kOffset + kLength - 1 )
+            kUtmost(kOffset + kLength - 1 ),
+            h(0)
             {
-                if(kLength>0)
-                {
-                    const MatrixCoord ini = coord(kOffset);
-                    const MatrixCoord end = coord(kUtmost);
-                    std::cerr << "ini: " << ini << std::endl;
-                    std::cerr << "end: " << end << std::endl;
-                }
+                setup();
             }
 
             UpperDiagonalTile:: ~UpperDiagonalTile() noexcept
@@ -100,6 +97,18 @@ namespace Yttrium
                 return MatrixCoord(r,c);
             }
 
+            void UpperDiagonalTile:: setup() noexcept
+            {
+                if(kLength>0)
+                {
+                    const MatrixCoord ini = coord(kOffset);
+                    const MatrixCoord end = coord(kUtmost);
+                    Coerce(h) = end.c - ini.c + 1;
+                    std::cerr << "ini: " << ini << std::endl;
+                    std::cerr << "end: " << end << std::endl;
+                    std::cerr << "h  : " << h   << std::endl;
+                }
+            }
 
         }
     }
