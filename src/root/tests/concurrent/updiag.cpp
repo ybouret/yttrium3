@@ -6,6 +6,7 @@
 
 #include "y/calculus/isqrt.hpp"
 #include "y/calculus/alignment.hpp"
+#include "y/libc/block/zero.h"
 
 namespace Yttrium
 {
@@ -14,9 +15,47 @@ namespace Yttrium
         namespace Splitting
         {
 
+            class UpperDiagonalSegment
+            {
+            public:
+                UpperDiagonalSegment(const MatrixCoord &c, const size_t w) noexcept;
+                UpperDiagonalSegment(const UpperDiagonalSegment &) noexcept;
+                ~UpperDiagonalSegment() noexcept;
+
+                const MatrixCoord start;
+                const size_t      width;
+
+            private:
+                Y_Disable_Assign(UpperDiagonalSegment);
+            };
+
+            UpperDiagonalSegment:: UpperDiagonalSegment(const MatrixCoord &c, const size_t w) noexcept :
+            start(c), width(w)
+            {
+                assert(width>0);
+            }
+
+            UpperDiagonalSegment:: ~UpperDiagonalSegment() noexcept
+            {
+            }
+
+            UpperDiagonalSegment:: UpperDiagonalSegment(const UpperDiagonalSegment &uds) noexcept :
+            start(uds.start),
+            width(uds.width)
+            {
+
+            }
+
+
             class UpperDiagonalTile : public Subdivision
             {
             public:
+                typedef UpperDiagonalSegment Segment;
+                static const size_t Precomputed = 2;
+                static const size_t NeededBytes = Precomputed * sizeof(Segment);
+                static const size_t NeededWords = Alignment::WordsGEQ<NeededBytes>::Count;
+
+                typedef Segment (UpperDiagonalTile::*Get)(const size_t) const;
 
                 explicit UpperDiagonalTile(const size_t mySize,
                                            const size_t myRank,
@@ -33,18 +72,36 @@ namespace Yttrium
 
                 MatrixCoord coord(const size_t k) const noexcept;
 
-                const size_t n;        //!< n x n array
-                const size_t B;        //!< 1 + 2*n*
-                const size_t B2;       //!< B^2
-                const size_t kNumber;  //!< n*(n+1)/2
-                const size_t kOffset;  //!< initial valid k
-                const size_t kLength;  //!< number of indices, 0 meanms empty
-                const size_t kUtmost;  //!< utmost  valid k
-                const size_t h;        //!< height
+                const size_t    n;                 //!< n x n array
+                const size_t    span;              //!< segments
+                Get const       get;               //!< get method
+                Segment * const cxx;               //!< cxx[1..2]
+                void *          wksp[NeededWords]; //!< inner space
+                const size_t    B;                 //!< 1 + 2*n*
+                const size_t    B2;                //!< B^2
+                const size_t    kNumber;           //!< n*(n+1)/2
+                const size_t    kOffset;           //!< initial valid k
+                const size_t    kLength;           //!< number of indices, 0 meanms empty
+                const size_t    kUtmost;           //!< utmost  valid k
 
             private:
                 Y_Disable_Copy_And_Assign(UpperDiagonalTile);
                 void setup() noexcept;
+
+                Segment Get1(const size_t) const noexcept
+                {
+                    assert(1==span);
+                    return cxx[1];
+                }
+
+                Segment Get2(const size_t indx) const
+                {
+                    assert(2==span);
+                    assert(indx>=1);
+                    assert(indx<=2);
+                    return cxx[indx];
+                }
+
             };
 
 
@@ -57,13 +114,16 @@ namespace Yttrium
                                                   const size_t extent) noexcept :
             Subdivision(mySize,myRank,myLock),
             n(extent),
+            span(0),
+            get(0),
+            cxx(0),
+            wksp(),
             B(1+(n<<1)),
             B2(B*B),
             kNumber( (n*(n+1)>>1) ),
             kOffset(1),
             kLength( part(kNumber,Coerce(kOffset)) ),
-            kUtmost(kOffset + kLength - 1 ),
-            h(0)
+            kUtmost(kOffset + kLength - 1 )
             {
                 setup();
             }
@@ -99,14 +159,28 @@ namespace Yttrium
 
             void UpperDiagonalTile:: setup() noexcept
             {
+                Coerce(cxx) = static_cast<Segment *>( Y_BZero(wksp) )-1;
                 if(kLength>0)
                 {
                     const MatrixCoord ini = coord(kOffset);
                     const MatrixCoord end = coord(kUtmost);
-                    Coerce(h) = end.c - ini.c + 1;
+                    switch( Coerce(span) = end.c - ini.c + 1 )
+                    {
+                        case 1:
+                            Coerce(get) = & UpperDiagonalTile:: Get1;
+                            break;
+
+                        case 2:
+                            Coerce(get) = & UpperDiagonalTile:: Get2;
+                            break;
+
+                        default:
+                            assert(span>=3);
+                            break;
+                    }
                     std::cerr << "ini: " << ini << std::endl;
                     std::cerr << "end: " << end << std::endl;
-                    std::cerr << "h  : " << h   << std::endl;
+                    std::cerr << "h  : " << span   << std::endl;
                 }
             }
 
