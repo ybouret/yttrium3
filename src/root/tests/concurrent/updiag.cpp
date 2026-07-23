@@ -1,5 +1,4 @@
-#include "y/concurrent/subdivision.hpp"
-#include "y/container/matrix/coord.hpp"
+#include "y/concurrent/splitting/udt.hpp"
 
 #include "y/utest/run.hpp"
 #include "y/concurrent/fake-lock.hpp"
@@ -15,38 +14,7 @@ namespace Yttrium
         namespace Splitting
         {
 
-            class UpperDiagonalSegment
-            {
-            public:
-                UpperDiagonalSegment(const MatrixCoord &c, const size_t w) noexcept;
-                UpperDiagonalSegment(const UpperDiagonalSegment &) noexcept;
-                ~UpperDiagonalSegment() noexcept;
-
-                const MatrixCoord start;
-                const size_t      width;
-
-            private:
-                Y_Disable_Assign(UpperDiagonalSegment);
-            };
-
-            UpperDiagonalSegment:: UpperDiagonalSegment(const MatrixCoord &c, const size_t w) noexcept :
-            start(c), width(w)
-            {
-                assert(width>0);
-            }
-
-            UpperDiagonalSegment:: ~UpperDiagonalSegment() noexcept
-            {
-            }
-
-            UpperDiagonalSegment:: UpperDiagonalSegment(const UpperDiagonalSegment &uds) noexcept :
-            start(uds.start),
-            width(uds.width)
-            {
-
-            }
-
-
+           
             class UpperDiagonalTile : public Subdivision
             {
             public:
@@ -100,6 +68,23 @@ namespace Yttrium
                     assert(indx>=1);
                     assert(indx<=2);
                     return cxx[indx];
+                }
+
+                Segment GetN(const size_t indx) const
+                {
+                    assert(2<span);
+                    assert(indx>=1);
+                    assert(indx<=span);
+                    if(indx<=1)
+                        return cxx[1];
+                    else
+                        if(indx>=span)
+                            return cxx[2];
+                    else
+                    {
+                        assert(indx>1);
+                        assert(indx<span);
+                    }
                 }
 
             };
