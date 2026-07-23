@@ -44,7 +44,8 @@ namespace Yttrium
         template <typename T> inline
         MatrixCoord( const V2D<T> v ) noexcept : r(v.y), c(v.x) {}
 
-        friend bool operator==(const MatrixCoord &, const MatrixCoord &) noexcept;
+        friend bool operator==(const MatrixCoord &, const MatrixCoord &) noexcept; //!< \return true iff equal
+        friend bool operator!=(const MatrixCoord &, const MatrixCoord &) noexcept; //!< \return true iff different
 
         //______________________________________________________________________
         //

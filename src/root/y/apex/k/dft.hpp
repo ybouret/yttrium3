@@ -206,7 +206,7 @@ namespace Yttrium
 
 
 
-#define Y_APEX_DFT_RAW_SEND 1
+//#define Y_APEX_DFT_RAW_SEND 1
 
 #if defined(Y_APEX_DFT_RAW_SEND)
                     for(size_t i=n,j=0;i>0;--i) a[i] = lhs.getByte(j++);

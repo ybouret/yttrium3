@@ -1,4 +1,4 @@
-#include "y/concurrent/splitting/udt.hpp"
+#include "y/concurrent/splitting/udts.hpp"
 #include "y/utest/run.hpp"
 
 #include "y/concurrent/fake-lock.hpp"
@@ -28,6 +28,7 @@ Y_UTEST(concurrent_udt)
         std::cerr << "n=" << n << std::endl;
         const size_t kmax = (n*(n+1))>>1;
 
+        // single
         {
             Concurrent:: Splitting:: UpperDiagonalTile udt(1,0,access,n);
             coords.free();
@@ -40,6 +41,7 @@ Y_UTEST(concurrent_udt)
             Y_ASSERT(kmax==coords.size());
         }
 
+        // manual
         for(size_t size=1;size<=8;++size)
         {
             coords.free();
@@ -60,6 +62,32 @@ Y_UTEST(concurrent_udt)
                 }
             }
             Y_ASSERT(kmax==coords.size());
+        }
+
+        // auto
+        for(size_t size=1;size<=8;++size)
+        {
+            Concurrent::Splitting::UpperDiagonalTiles udts(size,access);
+            udts.ensureCache(100);
+            udts.remap(n,access);
+            coords.free();
+            for(size_t i=1;i<=udts.size();++i)
+            {
+                const Concurrent::Splitting::UpperDiagonalTile &udt = udts[i];
+                Y_ASSERT(udt.bytes>=100);
+                for(size_t i=1;i<=udt.span;++i)
+                {
+                    Concurrent:: Splitting:: UpperDiagonalSegment s = udt[i];
+                    MatrixCoord p = s.start;
+                    for(size_t j=s.width;j>0;--j,++p.c)
+                    {
+                        Y_ASSERT( !FoundIn(coords,p) );
+                        coords << p;
+                    }
+                }
+            }
+            Y_ASSERT(kmax==coords.size());
+            
         }
 
 
