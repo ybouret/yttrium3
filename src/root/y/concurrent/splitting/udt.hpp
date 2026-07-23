@@ -70,37 +70,9 @@ namespace Yttrium
                 Y_Disable_Copy_And_Assign(UpperDiagonalTile);
                 void setup() noexcept;
 
-                Segment Get1(const size_t) const noexcept
-                {
-                    assert(1==span);
-                    return cxx[1];
-                }
-
-                Segment Get2(const size_t indx) const
-                {
-                    assert(2==span);
-                    assert(indx>=1);
-                    assert(indx<=2);
-                    return cxx[indx];
-                }
-
-                Segment GetN(const size_t indx) const
-                {
-                    assert(2<span);
-                    assert(indx>=1);
-                    assert(indx<=span);
-                    if(indx<=1)
-                        return cxx[1];
-                    else
-                        if(indx>=span)
-                            return cxx[2];
-                        else
-                        {
-                            assert(indx>1);
-                            assert(indx<span);
-                        }
-                }
-
+                Segment Get1(const size_t) const noexcept;
+                Segment Get2(const size_t) const noexcept;
+                Segment GetN(const size_t) const noexcept;
             };
 
 

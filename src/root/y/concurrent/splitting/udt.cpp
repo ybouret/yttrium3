@@ -116,6 +116,39 @@ namespace Yttrium
                     std::cerr << "h  : " << span   << std::endl;
                 }
             }
+
+            UpperDiagonalTile::Segment UpperDiagonalTile:: Get1(const size_t) const noexcept
+            {
+                assert(1==span);
+                return cxx[1];
+            }
+
+            UpperDiagonalTile::Segment UpperDiagonalTile:: Get2(const size_t indx) const noexcept
+            {
+                assert(2==span);
+                assert(indx>=1);
+                assert(indx<=2);
+                return cxx[indx];
+            }
+
+            UpperDiagonalTile::Segment UpperDiagonalTile:: GetN(const size_t indx) const noexcept
+            {
+                assert(2<span);
+                assert(indx>=1);
+                assert(indx<=span);
+                if(indx<=1)
+                    return cxx[1];
+                else
+                    if(indx>=span)
+                        return cxx[2];
+                    else
+                    {
+                        assert(indx>1);
+                        assert(indx<span);
+                    }
+            }
+
+
         }
     }
 }
