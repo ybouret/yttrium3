@@ -97,7 +97,7 @@ namespace Yttrium
                 {
                     const MatrixCoord ini = coord(kOffset);
                     const MatrixCoord end = coord(kUtmost);
-                    switch( Coerce(span) = end.c - ini.c + 1 )
+                    switch( Coerce(span) = end.r - ini.r + 1 )
                     {
                         case 1: {
                             Coerce(get) = & UpperDiagonalTile:: Get1;
@@ -122,13 +122,11 @@ namespace Yttrium
 
                             // last segment: from diag to end
                             new (cxx+2) Segment( MatrixCoord(end.r,end.r), end.c-end.r+1);
-
-                            
                             break;
                     }
-                    std::cerr << "ini: " << ini << std::endl;
-                    std::cerr << "end: " << end << std::endl;
-                    std::cerr << "h  : " << span   << std::endl;
+                    //std::cerr << "ini: " << ini << std::endl;
+                    //std::cerr << "end: " << end << std::endl;
+                    //std::cerr << "h  : " << span   << std::endl;
                 }
             }
 
@@ -160,10 +158,19 @@ namespace Yttrium
                     {
                         assert(indx>1);
                         assert(indx<span);
+                        const size_t r = cxx[1].start.r + indx - 1;
+                        return Segment( MatrixCoord(r,r), (n-r)+1);
                     }
             }
 
 
+            UpperDiagonalTile::Segment UpperDiagonalTile:: operator[](const size_t i) const noexcept
+            {
+                assert(i>=1);
+                assert(i<=span);
+                assert(get);
+                return (*this.*get)(i);
+            }
         }
     }
 }

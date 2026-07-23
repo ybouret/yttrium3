@@ -53,6 +53,8 @@ namespace Yttrium
                 size_t getCol(const size_t k, const size_t r) const noexcept;
 
                 MatrixCoord coord(const size_t k) const noexcept;
+                Segment     operator[](const size_t) const noexcept; //!< in [1:span]
+
 
                 const size_t    n;                 //!< n x n array
                 const size_t    span;              //!< segments
