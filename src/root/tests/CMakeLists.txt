@@ -99,7 +99,7 @@ Y_UTEST(concurrent:condition)
 Y_UTEST(concurrent:member)
 Y_UTEST(concurrent:split1d)
 Y_UTEST(concurrent:split2d)
-Y_UTEST(concurrent:updiag)
+Y_UTEST(concurrent:udt)
 Y_UTEST(concurrent:simd)
 Y_UTEST(concurrent:primes)
 
