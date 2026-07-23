@@ -11,6 +11,7 @@ namespace Yttrium
     namespace Algorithm
     {
 
+        //! data replacement
         template <typename ITERATOR, typename SOURCE, typename TARGET>
         static inline
         void Replace(ITERATOR curr, size_t size, SOURCE &source, TARGET &target)
