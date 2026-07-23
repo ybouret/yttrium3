@@ -33,10 +33,18 @@ namespace Yttrium
         MatrixCoord & operator=(const MatrixCoord &) noexcept; //!< assign \return *this
         Y_OSTREAM_PROTO(MatrixCoord);                          //!< displau
 
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+
         //! helper for tiles \param v computed from Tile2D/UpperDiagonalTile
         template <typename T> inline
         MatrixCoord( const V2D<T> v ) noexcept : r(v.y), c(v.x) {}
 
+        friend bool operator==(const MatrixCoord &, const MatrixCoord &) noexcept;
 
         //______________________________________________________________________
         //

@@ -8,7 +8,7 @@ namespace Yttrium
 
         namespace Splitting
         {
-            UpperDiagonalSegment:: UpperDiagonalSegment(const MatrixCoord &c, const size_t w) noexcept :
+            UpperDiagonalSegment:: UpperDiagonalSegment(const MatrixCoord c, const size_t w) noexcept :
             start(c), width(w)
             {
                 assert(width>0);
@@ -85,8 +85,8 @@ namespace Yttrium
 
             MatrixCoord UpperDiagonalTile:: coord(const size_t k) const noexcept
             {
-                const size_t r = getRow(k);
-                const size_t c = getCol(k,r);
+                const size_t r = getRow(k);   assert(r>=1); assert(r<=n);
+                const size_t c = getCol(k,r); assert(c>=r); assert(c<=n);
                 return MatrixCoord(r,c);
             }
 
@@ -99,16 +99,31 @@ namespace Yttrium
                     const MatrixCoord end = coord(kUtmost);
                     switch( Coerce(span) = end.c - ini.c + 1 )
                     {
-                        case 1:
+                        case 1: {
                             Coerce(get) = & UpperDiagonalTile:: Get1;
-                            break;
+                            new (cxx+1) Segment(ini,end.r-ini.r+1); // only segment
+                        }  break;
 
                         case 2:
                             Coerce(get) = & UpperDiagonalTile:: Get2;
+                            // first segment: fron ini to end or row
+                            new (cxx+1) Segment(ini,n-ini.r+1);
+
+                            // second segment: from diag to end
+                            new (cxx+2) Segment( MatrixCoord(end.r,end.r), end.c-end.r+1);
                             break;
 
                         default:
                             assert(span>=3);
+                            Coerce(get) = & UpperDiagonalTile:: GetN;
+
+                            // first segment: fron ini to end or row
+                            new (cxx+1) Segment(ini,n-ini.r+1);
+
+                            // last segment: from diag to end
+                            new (cxx+2) Segment( MatrixCoord(end.r,end.r), end.c-end.r+1);
+
+                            
                             break;
                     }
                     std::cerr << "ini: " << ini << std::endl;

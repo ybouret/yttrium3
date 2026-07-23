@@ -18,7 +18,7 @@ namespace Yttrium
             class UpperDiagonalSegment
             {
             public:
-                UpperDiagonalSegment(const MatrixCoord &c, const size_t w) noexcept;
+                UpperDiagonalSegment(const MatrixCoord c, const size_t w) noexcept;
                 UpperDiagonalSegment(const UpperDiagonalSegment &) noexcept;
                 ~UpperDiagonalSegment() noexcept;
 

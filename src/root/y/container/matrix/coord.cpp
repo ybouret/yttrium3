@@ -35,6 +35,11 @@ namespace Yttrium
         return os;
     }
 
+    bool operator==(const MatrixCoord &lhs, const MatrixCoord &rhs) noexcept
+    {
+        return lhs.r==rhs.r && lhs.c==rhs.c;
+    }
+
 }
 
 
