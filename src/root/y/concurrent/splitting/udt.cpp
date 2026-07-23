@@ -101,13 +101,13 @@ namespace Yttrium
                     {
                         case 1: {
                             Coerce(get) = & UpperDiagonalTile:: Get1;
-                            new (cxx+1) Segment(ini,end.r-ini.r+1); // only segment
+                            new (cxx+1) Segment(ini,end.c-ini.c+1); // only segment
                         }  break;
 
                         case 2:
                             Coerce(get) = & UpperDiagonalTile:: Get2;
                             // first segment: fron ini to end or row
-                            new (cxx+1) Segment(ini,n-ini.r+1);
+                            new (cxx+1) Segment(ini,n-ini.c+1);
 
                             // second segment: from diag to end
                             new (cxx+2) Segment( MatrixCoord(end.r,end.r), end.c-end.r+1);
@@ -118,7 +118,7 @@ namespace Yttrium
                             Coerce(get) = & UpperDiagonalTile:: GetN;
 
                             // first segment: fron ini to end or row
-                            new (cxx+1) Segment(ini,n-ini.r+1);
+                            new (cxx+1) Segment(ini,n-ini.c+1);
 
                             // last segment: from diag to end
                             new (cxx+2) Segment( MatrixCoord(end.r,end.r), end.c-end.r+1);

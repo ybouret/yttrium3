@@ -23,9 +23,9 @@ Y_UTEST(concurrent_udt)
     Concurrent::FakeLock access;
     Vector<MatrixCoord>  coords(WithAtLeast,10000);
 
-    for(size_t n=1;n<=50;++n)
+    for(size_t n=1;n<=60;++n)
     {
-        std::cerr << std::endl << "n=" << n << std::endl;
+        std::cerr << "n=" << n << std::endl;
         const size_t kmax = (n*(n+1))>>1;
 
         {
@@ -42,7 +42,6 @@ Y_UTEST(concurrent_udt)
 
         for(size_t size=1;size<=8;++size)
         {
-            std::cerr << "\tsize=" << size << std::endl;
             coords.free();
             for(size_t rank=0;rank<size;++rank)
             {
@@ -60,8 +59,6 @@ Y_UTEST(concurrent_udt)
                     }
                 }
             }
-            std::cerr << "\t#coords: " << coords.size() << " / " << kmax << std::endl;
-            std::cerr << coords << std::endl;
             Y_ASSERT(kmax==coords.size());
         }
 
