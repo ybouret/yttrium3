@@ -43,6 +43,17 @@ namespace Yttrium
             //__________________________________________________________________
             virtual bool isEmpty() const noexcept = 0; //!< \return true iff empty subdivision
 
+            template <typename T> inline
+            T & as() noexcept {
+                assert(bytes>=sizeof(T));
+                return *static_cast<T*>(entry);
+            }
+
+            template <typename T> inline
+            const T & as() const noexcept {
+                assert(bytes>=sizeof(T));
+                return *static_cast<const T*>(entry);
+            }
 
             //__________________________________________________________________
             //

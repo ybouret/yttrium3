@@ -16,17 +16,17 @@ namespace Yttrium
     namespace Cameo
     {
 
-#if 0
         template <typename T>
         class Addenda :
-        public Proxy< Core::ListOf< Addition<T> > >
+        public Proxy< Core::ListOf< Addition<T> > >,
+        public Container
         {
         public:
             typedef Addition<T>                AdditionType;
             typedef Core::ListOf<AdditionType> CoreListType;
             typedef Proxy<CoreListType>        ProxyType;
 
-            inline explicit Addenda(const size_t n) :
+            inline explicit Addenda(const size_t n = 0) :
             ProxyType(), list(), pool()
             {
                 grow(n);
@@ -40,21 +40,36 @@ namespace Yttrium
 
             inline virtual ~Addenda() noexcept {}
 
-            inline void grow(const size_t n)
-            {
+            inline virtual size_t size()     const noexcept { return list.size; }
+            inline virtual size_t capacity() const noexcept { return pool.size; }
+
+
+            inline void grow(const size_t n) {
                 for(size_t i=0;i<n;++i)
-                {
                     pool.store( new AdditionType() );
-                }
             }
 
-            inline void grow(const size_t n, const size_t minCapacity)
-            {
+            inline void grow(const size_t n, const size_t minCapacity) {
                 for(size_t i=0;i<n;++i)
-                {
                     pool.store( new AdditionType(minCapacity) );
-                }
             }
+
+            inline AdditionType *make(const size_t n)
+            {
+                notAbove(n);
+                prefetch(n);
+                while(list.size<n) list.pushTail( new AdditionType() );
+                return list.head;
+            }
+
+            inline AdditionType *make(const size_t n, const size_t minCapacity)
+            {
+                notAbove(n);
+                prefetch(n);
+                while(list.size<n) list.pushTail( new AdditionType(minCapacity) );
+                return list.head;
+            }
+
 
         private:
             Y_Disable_Copy_And_Assign(Addenda);
@@ -63,10 +78,18 @@ namespace Yttrium
 
             inline virtual const CoreListType & locus() const noexcept { return list; }
 
+            inline void prefetch(const size_t n) noexcept
+            {
+                while(list.size<n && pool.size) list.pushTail( pool.query() );
+            }
+
+            inline void notAbove(const size_t n) noexcept
+            {
+                while(list.size>n) pool.store( list.popTail() );
+            }
 
 
         };
-#endif
 
     }
 
