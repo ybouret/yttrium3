@@ -18,8 +18,10 @@ namespace Yttrium
 
         template <typename T>
         class Addenda :
+        public CountedObject,
         public Proxy< Core::ListOf< Addition<T> > >,
-        public Container
+        public Container,
+        public Recyclable
         {
         public:
             typedef Addition<T>                AdditionType;
@@ -27,7 +29,7 @@ namespace Yttrium
             typedef Proxy<CoreListType>        ProxyType;
 
             inline explicit Addenda(const size_t n = 0) :
-            ProxyType(), list(), pool()
+            CountedObject(), ProxyType(), list(), pool()
             {
                 grow(n);
             }
@@ -42,7 +44,7 @@ namespace Yttrium
 
             inline virtual size_t size()     const noexcept { return list.size; }
             inline virtual size_t capacity() const noexcept { return pool.size; }
-
+            inline virtual void   free()           noexcept { while(list.size) pool.store(list.popTail()); }
 
             inline void grow(const size_t n) {
                 for(size_t i=0;i<n;++i)
@@ -78,13 +80,11 @@ namespace Yttrium
 
             inline virtual const CoreListType & locus() const noexcept { return list; }
 
-            inline void prefetch(const size_t n) noexcept
-            {
+            inline void prefetch(const size_t n) noexcept {
                 while(list.size<n && pool.size) list.pushTail( pool.query() );
             }
 
-            inline void notAbove(const size_t n) noexcept
-            {
+            inline void notAbove(const size_t n) noexcept {
                 while(list.size>n) pool.store( list.popTail() );
             }
 
