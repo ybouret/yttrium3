@@ -184,7 +184,7 @@ namespace Yttrium
                     p_i[i] += g2;
                 }
                 Y_XMLog(xml, "p=" << p << " / " << g2);
-                p.asArray().to_c(std::cerr << "p_c={") << "}" << std::endl;
+                //p.asArray().to_c(std::cerr << "p_c={") << "}" << std::endl;
 
 
                 //--------------------------------------------------------------
@@ -251,10 +251,18 @@ namespace Yttrium
                     }
                 }
 
-                Y_XMLog(xml, "nuT=" << nuT);
+                Y_XMLog(xml, "nuT = " << nuT);
                 //nuT.asArray().to_c(std::cerr << "nuT_c={") << "}" << std::endl;
 
-                Matrix<apq> rhs(CopyOf,p);
+                Matrix<apq>  rhs(CopyOf,p); Y_XMLog(xml, "rhs = " << rhs);
+                const size_t rank = MKL::XGJ::Build(nuT,rhs);
+                Y_XMLog(xml, "rank=" << rank);
+                if(rank!=n)
+                    throw Specific::Exception(Name,"bad topology for dependency");
+
+                std::cerr << "nuT=" << nuT << std::endl;
+                std::cerr << "rhs=" << rhs << std::endl;
+
 
 
 
