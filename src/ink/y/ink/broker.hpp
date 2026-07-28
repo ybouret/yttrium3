@@ -59,6 +59,15 @@ namespace Yttrium
             //! test call
             void operator()(void);
 
+
+            //__________________________________________________________________
+            //
+            //
+            // Calling Object/Method
+            //
+            //__________________________________________________________________
+
+
             //! operation on pixmap without argument
             /**
              call host.meth(tile,pixmap)
