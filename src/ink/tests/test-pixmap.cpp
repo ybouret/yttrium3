@@ -1,4 +1,6 @@
 #include "y/ink/pixmap.hpp"
+#include "y/ink/ops/convert.hpp"
+
 #include "y/utest/run.hpp"
 
 #include "y/string.hpp"

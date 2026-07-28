@@ -63,9 +63,108 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
+            // Calling Function
+            //
+            //__________________________________________________________________
+
+            //! function(tile,pixmap)
+            template <typename PIXMAP,typename FUNCTION>
+            inline void apply(PIXMAP &pixmap, FUNCTION &function)
+            {
+                map(pixmap);
+                Proc0<PIXMAP,FUNCTION> proc0 = { &pixmap, &function };
+                Concurrent::SIMD    &  self  = **this;
+                self(*this, & Broker::exec0<PIXMAP,FUNCTION>, proc0);
+            }
+
+            template <typename PIXMAP, typename FUNCTION>
+            struct Proc0 {
+                PIXMAP   *pxm;
+                FUNCTION *fcn;
+            };
+
+            template <typename PIXMAP, typename FUNCTION> inline
+            void exec0(Context &ctx, Proc0<PIXMAP,FUNCTION> &arg)
+            {
+                assert(arg.pxm);
+                assert(arg.fcn);
+                Tile   & tile = (*this)[ctx.indx];
+                (*arg.fcn)(tile,*arg.pxm);
+            }
+
+            template <
+            typename PIXMAP,
+            typename FUNCTION,
+            typename EXTRA1>
+            inline void apply(PIXMAP &pixmap, FUNCTION &function, EXTRA1 &extra1)
+            {
+                map(pixmap);
+                Proc1<PIXMAP,FUNCTION,EXTRA1> proc1 = { &pixmap, &function, &extra1 };
+                Concurrent::SIMD    &         self  = **this;
+                self(*this, & Broker::exec1<PIXMAP,FUNCTION>, proc1);
+            }
+
+
+            template <typename PIXMAP, typename FUNCTION, typename EXTRA1>
+            struct Proc1 {
+                PIXMAP   *pxm;
+                FUNCTION *fcn;
+                EXTRA1   *xt1;
+            };
+
+            template <typename PIXMAP, typename FUNCTION, typename EXTRA1> inline
+            void exec1(Context &ctx, Proc1<PIXMAP,FUNCTION,EXTRA1> &arg)
+            {
+                assert(arg.pxm);
+                assert(arg.fcn);
+                assert(arg.xt1);
+                Tile   & tile = (*this)[ctx.indx];
+                (*arg.fcn)(tile,*arg.pxm,*arg.xt1);
+            }
+
+
+            template <
+            typename PIXMAP,
+            typename FUNCTION,
+            typename EXTRA1,
+            typename EXTRA2>
+            inline void apply(PIXMAP &pixmap, FUNCTION &function, EXTRA1 &extra1, EXTRA2 &extra2)
+            {
+                map(pixmap);
+                Proc2<PIXMAP,FUNCTION,EXTRA1,EXTRA2> proc2 = { &pixmap, &function, &extra1, &extra2 };
+                Concurrent::SIMD    &                self  = **this;
+                self(*this, & Broker::exec2<PIXMAP,FUNCTION>, proc2);
+            }
+
+
+            template <typename PIXMAP, typename FUNCTION, typename EXTRA1, typename EXTRA2>
+            struct Proc2 {
+                PIXMAP   *pxm;
+                FUNCTION *fcn;
+                EXTRA1   *xt1;
+                EXTRA2   *xt2;
+            };
+
+            template <typename PIXMAP, typename FUNCTION, typename EXTRA1, typename EXTRA2> inline
+            void exec2(Context &ctx, Proc2<PIXMAP,FUNCTION,EXTRA1,EXTRA2> &arg)
+            {
+                assert(arg.pxm);
+                assert(arg.fcn);
+                assert(arg.xt1);
+                assert(arg.xt2);
+                Tile   & tile = (*this)[ctx.indx];
+                (*arg.fcn)(tile,*arg.pxm,*arg.xt1,*arg.xt2);
+            }
+
+
+
+            //__________________________________________________________________
+            //
+            //
             // Calling Object/Method
             //
             //__________________________________________________________________
+
 
 
             //! operation on pixmap without argument
@@ -140,6 +239,9 @@ namespace Yttrium
             Y_Disable_Copy_And_Assign(Broker);
             const Vertex v0;
 
+
+
+            // Wrapper for Object/Method
             template <typename PIXMAP, typename OBJECT, typename METHOD>
             struct Wrap0
             {

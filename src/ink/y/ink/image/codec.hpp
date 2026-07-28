@@ -6,7 +6,7 @@
 #include "y/ink/image.hpp"
 #include "y/object/counted.hpp"
 #include "y/ink/image/options.hpp"
-//#include "y/ink/ops.hpp"
+#include "y/ink/ops/convert.hpp"
 //#include "y/ink/ops/minmax.hpp"
 #include "y/color/ramp.hpp"
 
@@ -66,7 +66,6 @@ namespace Yttrium
             Image load( const String &,     const Options * const)               const; //!< \return load alias
             Image load( const char * const, const Options * const)               const; //!< \return load alias
 
-#if 0
             //! save with conversion
             /**
              \param broker   cpu broker
@@ -106,6 +105,7 @@ namespace Yttrium
                 save(broker,toRGBA,pixmap,_,options);
             }
 
+#if 0
             //! save with a color ramp and automatic scaling
             /**
              \param colorRamp precomputed color ramp
