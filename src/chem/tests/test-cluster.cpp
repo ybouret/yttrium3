@@ -69,6 +69,7 @@ Y_UTEST(cluster)
     std::cerr << "lib=" << lib << std::endl;
 
 
+#if 0
     {
         std::cerr << std::endl;
         Matrix<apq> nuT(2,1);
@@ -112,7 +113,7 @@ Y_UTEST(cluster)
         std::cerr << "a=" << nuT << std::endl;
         std::cerr << "b=" << p   << std::endl;
     }
-
+#endif
 
 
 

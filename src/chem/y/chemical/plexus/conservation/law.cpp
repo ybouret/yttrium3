@@ -187,6 +187,13 @@ namespace Yttrium
                 p.asArray().to_c(std::cerr << "p_c={") << "}" << std::endl;
 
 
+                //--------------------------------------------------------------
+                //
+                //
+                // compile projection matrix
+                //
+                //
+                //--------------------------------------------------------------
                 {
                     const SNode *sn = slist->head;
                     for(size_t i=1;i<=m;++i,sn=sn->next)
@@ -227,7 +234,6 @@ namespace Yttrium
                 //
                 //
                 //--------------------------------------------------------------
-
                 const size_t n = eqdb->list->size; assert(n>0);
                 Matrix<apq>  nuT(m,n);
                 {
@@ -246,7 +252,10 @@ namespace Yttrium
                 }
 
                 Y_XMLog(xml, "nuT=" << nuT);
-                nuT.asArray().to_c(std::cerr << "nuT_c={") << "}" << std::endl;
+                //nuT.asArray().to_c(std::cerr << "nuT_c={") << "}" << std::endl;
+
+                Matrix<apq> rhs(CopyOf,p);
+
 
 
             }
