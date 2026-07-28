@@ -14,6 +14,19 @@ namespace Yttrium
         {
 
 
+            template <typename PIXMAP, typename APPLY>
+            inline void ForEach(Tile &tile, PIXMAP &pixmap, APPLY &apply)
+            {
+                for(unit_t k=tile.span;k>0;--k)
+                {
+                    const Segment                s = tile[k];
+                    const unit_t                 y = s.start.y;
+                    typename       PIXMAP::Row & r = pixmap(y);
+                    for(unit_t x=s.start.x,i=s.width;i>0;--i,++x)
+                        apply( r(x) );
+                }
+            }
+
             template <typename PIXMAP, typename CONVERT, typename ORIGIN>
             inline void ForEach(Tile &tile, PIXMAP &pixmap, CONVERT &convert, ORIGIN &origin)
             {

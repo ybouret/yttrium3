@@ -139,6 +139,18 @@ namespace Yttrium
                 assert(j>=0); assert(j<h); return row[j];
             }
 
+            inline Type & operator()(const Vertex &p) noexcept
+            {
+                return (*this)(p.y)(p.x);
+            }
+
+            inline ConstType & operator()(const Vertex &p) const noexcept
+            {
+                return (*this)(p.y)(p.x);
+            }
+
+
+
             //! copy \param broker broker \param pxm source \return *this
             template <typename U> inline
             Pixmap<T> & copy(Broker &broker, const Pixmap<U> &pxm)

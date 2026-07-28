@@ -203,6 +203,22 @@ wksp()
                     return (*this.*get)(i);
                 }
 
+                inline vertex_t start() const noexcept
+                {
+                    assert( !this->isEmpty() );
+                    assert(get);
+                    return (*this.*get)(1).start;
+                }
+
+                inline vertex_t finish() const noexcept
+                {
+                    assert( !this->isEmpty() );
+                    assert(get);
+                    return (*this.*get)(span).finish();
+                }
+
+
+
                 //______________________________________________________________
                 //
                 //
