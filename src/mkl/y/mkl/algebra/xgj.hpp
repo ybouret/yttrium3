@@ -22,9 +22,9 @@ namespace Yttrium
         //______________________________________________________________________
         struct XGJ
         {
-            //! apply Gauss-Jordan with row pivoting
+            //! apply top-down Gauss-Jordan with row pivoting
             /**
-             \param a primary matrix to apply algorithm
+             \param a primary matrix to apply algorithm, made a upper triangular
              \param b replica matrix (a.k.a "unknown")
              \return number of valid rows
              */
@@ -36,6 +36,8 @@ namespace Yttrium
                                  const size_t       i);
 #endif
 
+            static void Solve(Matrix<apq> &a, const size_t rank, Matrix<apq> &b);
+            
 
 
         };

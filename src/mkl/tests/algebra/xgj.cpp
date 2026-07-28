@@ -4,6 +4,7 @@
 #include "y/random/type-gen.hpp"
 #include "y/core/rand.hpp"
 #include "y/container/cxx/array.hpp"
+#include "y/ascii/convert.hpp"
 
 using namespace Yttrium;
 using namespace MKL;
@@ -12,7 +13,10 @@ Y_UTEST(algebra_xgj)
 {
     Core::Rand ran;
 
-    for(size_t n=1;n<=6;++n)
+    size_t nmax = 6;
+    if(argc>1) nmax = ASCII::Convert::To<size_t>(argv[1],"nmax",0);
+
+    for(size_t n=1;n<=nmax;++n)
     {
         for(size_t iter=0;iter<8;++iter)
         {
@@ -38,6 +42,8 @@ Y_UTEST(algebra_xgj)
             std::cerr << "aa=" << aa << std::endl;
             std::cerr << "bb=" << bb << std::endl;
 
+            Matrix<apq> aaa(aa), bbb(bb);
+
             if( n == rk )
             {
                 LU<apq>       lu(n);
@@ -52,6 +58,10 @@ Y_UTEST(algebra_xgj)
                 std::cerr << "xx = " << bb << std::endl;
                 Y_CHECK(b==bb);
             }
+
+            XGJ::Solve(aaa,rk,bbb);
+
+
         }
 
     }

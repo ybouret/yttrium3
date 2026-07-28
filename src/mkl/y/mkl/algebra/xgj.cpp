@@ -41,10 +41,20 @@ namespace Yttrium
 
             for(size_t i=1;i<=m;++i)
             {
+                //--------------------------------------------------------------
+                //
+                // find pivot
+                //
+                //--------------------------------------------------------------
                 size_t    ip = 0;
                 const apq pv = FindPivot(ip,a,i);
                 if(pv.is0()) return i-1;
 
+                //--------------------------------------------------------------
+                //
+                // swap if necessary
+                //
+                //--------------------------------------------------------------
                 if(ip!=i)
                 {
                     std::cerr << "swap(" << i << "," << ip << ")" << std::endl;
@@ -52,6 +62,11 @@ namespace Yttrium
                     b.swapRows(i,ip);
                 }
 
+                //--------------------------------------------------------------
+                //
+                // make upper triangular
+                //
+                //--------------------------------------------------------------
                 assert(pv==a[i][i]);
                 const size_t i1=i+1;
                 for(size_t k=i1;k<=n;++k)
@@ -63,11 +78,23 @@ namespace Yttrium
                     for(size_t j=i1;j<=c;++j) a_k[j] -= fac * a[i][j];
                     for(size_t j=l;j>0;--j)   b_k[j] -= fac * b[i][j];
                 }
+                
             }
 
             return m;
         }
 
+
+        void XGJ:: Solve(Matrix<apq> &a, const size_t rank, Matrix<apq> &b)
+        {
+            assert(a.rows==b.rows);
+            assert(rank<=a.rows);
+            const size_t n = a.rows;
+            for(size_t i=n;i>0;--i)
+            {
+                const apq &piv = a[i][i]; assert( !piv.is0() );
+            }
+        }
     }
 }
 
