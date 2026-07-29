@@ -7,7 +7,7 @@
 #include "y/object/counted.hpp"
 #include "y/ink/image/options.hpp"
 #include "y/ink/ops/convert.hpp"
-//#include "y/ink/ops/minmax.hpp"
+#include "y/ink/ops/min-max.hpp"
 #include "y/color/ramp.hpp"
 
 namespace Yttrium
@@ -105,7 +105,6 @@ namespace Yttrium
                 save(broker,toRGBA,pixmap,_,options);
             }
 
-#if 0
             //! save with a color ramp and automatic scaling
             /**
              \param colorRamp precomputed color ramp
@@ -121,12 +120,13 @@ namespace Yttrium
                       const FILENAME    &   fileName,
                       const Options * const options) const
             {
-                const PixelRange<T>    px = MinMax::Of(broker,pixmap);
-                const Color::RampOf<T> ramp(colorRamp,px.vmin,px.vmax);
+                const Ops::PixelRange<T> px = Ops::MinMax(broker,pixmap);
+                const Color::RampOf<T>   ramp(colorRamp,px.vmin,px.vmax);
                 save(broker,ramp,pixmap,fileName,options);
             }
 
-#endif
+
+
             //! convert indices to RGBA using a set of colors
             struct IndexToRGBA
             {
