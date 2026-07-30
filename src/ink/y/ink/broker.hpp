@@ -72,25 +72,12 @@ namespace Yttrium
             inline void apply(PIXMAP &pixmap, FUNCTION &function)
             {
                 map(pixmap);
-                Proc0<PIXMAP,FUNCTION> proc0 = { &pixmap, &function };
-                Concurrent::SIMD    &  self  = **this;
-                self(*this, & Broker::exec0<PIXMAP,FUNCTION>, proc0);
+                Proc0<PIXMAP,FUNCTION> args = { &pixmap, &function };
+                Concurrent::SIMD    &  self = **this;
+                self(*this, & Broker::exec0<PIXMAP,FUNCTION>, args);
             }
 
-            template <typename PIXMAP, typename FUNCTION>
-            struct Proc0 {
-                PIXMAP   *pxm;
-                FUNCTION *fcn;
-            };
 
-            template <typename PIXMAP, typename FUNCTION> inline
-            void exec0(Context &ctx, Proc0<PIXMAP,FUNCTION> &arg)
-            {
-                assert(arg.pxm);
-                assert(arg.fcn);
-                Tile   & tile = (*this)[ctx.indx];
-                (*arg.fcn)(tile,*arg.pxm);
-            }
 
             template <
             typename PIXMAP,
@@ -105,22 +92,6 @@ namespace Yttrium
             }
 
 
-            template <typename PIXMAP, typename FUNCTION, typename EXTRA1>
-            struct Proc1 {
-                PIXMAP   *pxm;
-                FUNCTION *fcn;
-                EXTRA1   *xt1;
-            };
-
-            template <typename PIXMAP, typename FUNCTION, typename EXTRA1> inline
-            void exec1(Context &ctx, Proc1<PIXMAP,FUNCTION,EXTRA1> &arg)
-            {
-                assert(arg.pxm);
-                assert(arg.fcn);
-                assert(arg.xt1);
-                Tile   & tile = (*this)[ctx.indx];
-                (*arg.fcn)(tile,*arg.pxm,*arg.xt1);
-            }
 
 
             template <
@@ -238,6 +209,38 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(Broker);
             const Vertex v0;
+
+            template <typename PIXMAP, typename FUNCTION>
+            struct Proc0 {
+                PIXMAP   *pxm;
+                FUNCTION *fcn;
+            };
+
+            template <typename PIXMAP, typename FUNCTION> inline
+            void exec0(Context &ctx, Proc0<PIXMAP,FUNCTION> &arg)
+            {
+                assert(arg.pxm);
+                assert(arg.fcn);
+                Tile   & tile = (*this)[ctx.indx];
+                (*arg.fcn)(tile,*arg.pxm);
+            }
+
+            template <typename PIXMAP, typename FUNCTION, typename EXTRA1>
+            struct Proc1 {
+                PIXMAP   *pxm;
+                FUNCTION *fcn;
+                EXTRA1   *xt1;
+            };
+
+            template <typename PIXMAP, typename FUNCTION, typename EXTRA1> inline
+            void exec1(Context &ctx, Proc1<PIXMAP,FUNCTION,EXTRA1> &arg)
+            {
+                assert(arg.pxm);
+                assert(arg.fcn);
+                assert(arg.xt1);
+                Tile   & tile = (*this)[ctx.indx];
+                (*arg.fcn)(tile,*arg.pxm,*arg.xt1);
+            }
 
 
 
