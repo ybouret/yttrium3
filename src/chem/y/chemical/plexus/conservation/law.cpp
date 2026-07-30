@@ -6,6 +6,7 @@
 #include "y/apex/api/simplify.hpp"
 #include "y/xml/element.hpp"
 #include "y/mkl/algebra/xgj.hpp"
+#include "y/mkl/algebra/lu.hpp"
 
 namespace Yttrium
 {
@@ -276,6 +277,15 @@ namespace Yttrium
                 std::cerr << "nuT1=" << nuT1 << std::endl;
                 std::cerr << "rhs1=" << rhs1 << std::endl;
 
+
+                {
+                    MKL::LU<apq> lu(n);
+                    if(!lu.build(nuT1)) throw Specific::Exception(Name,"unexpected singular topology for dependency");
+                    CxxArray<apq> tmp(n);
+                    lu.solve(nuT1,rhs1,tmp);
+                }
+
+                std::cerr << "mat=" << rhs1 << "/" << g2 << std::endl;
 
             }
 
