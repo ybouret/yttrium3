@@ -42,8 +42,7 @@ Y_UTEST(algebra_xgj)
             std::cerr << "aa=" << aa << std::endl;
             std::cerr << "bb=" << bb << std::endl;
 
-            Matrix<apq> aaa(aa), bbb(bb);
-
+            
             if( n == rk )
             {
                 LU<apq>       lu(n);
@@ -59,7 +58,6 @@ Y_UTEST(algebra_xgj)
                 Y_CHECK(b==bb);
             }
 
-            XGJ::Solve(aaa,rk,bbb);
 
 
         }

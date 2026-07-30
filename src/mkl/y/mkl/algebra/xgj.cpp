@@ -85,16 +85,7 @@ namespace Yttrium
         }
 
 
-        void XGJ:: Solve(Matrix<apq> &a, const size_t rank, Matrix<apq> &b)
-        {
-            assert(a.rows==b.rows);
-            assert(rank<=a.rows);
-            const size_t n = a.rows;
-            for(size_t i=n;i>0;--i)
-            {
-                const apq &piv = a[i][i]; assert( !piv.is0() );
-            }
-        }
+        
     }
 }
 

@@ -90,10 +90,7 @@ namespace Yttrium
                 Concurrent::SIMD    &         self  = **this;
                 self(*this, & Broker::exec1<PIXMAP,FUNCTION>, proc1);
             }
-
-
-
-
+            
             template <
             typename PIXMAP,
             typename FUNCTION,

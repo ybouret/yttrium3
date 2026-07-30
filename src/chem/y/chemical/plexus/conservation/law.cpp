@@ -260,10 +260,21 @@ namespace Yttrium
                 if(rank!=n)
                     throw Specific::Exception(Name,"bad topology for dependency");
 
+                // extract sub-matrices
                 std::cerr << "nuT=" << nuT << std::endl;
                 std::cerr << "rhs=" << rhs << std::endl;
 
+                Matrix<apq> nuT1(n,n);
+                Matrix<apq> rhs1(n,m);
+                for(size_t i=1;i<=n;++i)
+                {
+                    for(size_t j=1;j<=n;++j) nuT1[i][j] = nuT[i][j];
+                    for(size_t j=1;j<=m;++j) rhs1[i][j] = rhs[i][j];
 
+                }
+
+                std::cerr << "nuT1=" << nuT1 << std::endl;
+                std::cerr << "rhs1=" << rhs1 << std::endl;
 
 
             }

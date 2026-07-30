@@ -36,7 +36,6 @@ namespace Yttrium
                                  const size_t       i);
 #endif
 
-            static void Solve(Matrix<apq> &a, const size_t rank, Matrix<apq> &b);
             
 
 
