@@ -124,6 +124,16 @@ else()
 endif()
 message(STATUS "Building for target architecture: ${PNG_TARGET_ARCHITECTURE}")
 
+if(WIN32)
+
+cmake_print_variables(CMAKE_CURRENT_SOURCE_DIR)
+set(ZLIB_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../zlib")
+set(ZLIB_USE_STATIC_LIBS ON)
+include_directories(${ZLIB_ROOT})
+set(ZLIB_INCLUDE_DIRS ${ZLIB_ROOT})
+
+else()
+
 # Allow the users to specify a custom location of zlib.
 # With CMake 3.12 and newer, this option is no longer necessary.
 option(PNG_BUILD_ZLIB "[Deprecated; please use ZLIB_ROOT]" OFF)
@@ -140,6 +150,9 @@ endif()
 # Find the zlib library.
 find_package(ZLIB REQUIRED)
 set(PNG_LINK_LIBRARIES ZLIB::ZLIB)
+
+endif()
+
 
 # Find the math library (unless we already know it's not available or
 # not needed).
