@@ -71,9 +71,9 @@ Y_UTEST(concurrent_udt)
             udts.ensureCache(100);
             udts.remap(n,access);
             coords.free();
-            for(size_t i=1;i<=udts.size();++i)
+            for(size_t k=1;k<=udts.size();++k)
             {
-                const Concurrent::Splitting::UpperDiagonalTile &udt = udts[i];
+                const Concurrent::Splitting::UpperDiagonalTile &udt = udts[k];
                 Y_ASSERT(udt.bytes>=100);
                 for(size_t i=1;i<=udt.span;++i)
                 {
