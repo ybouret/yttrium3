@@ -160,6 +160,13 @@ namespace Yttrium
                 return *this;
             }
 
+            template <typename U> inline
+            Pixmap<T> & ld(Broker &broker, U &source)
+            {
+                broker(*this, *this, & Pixmap<T>::ldProc<U>, source);
+                return *this;
+            }
+
 
         private:
             Y_Disable_Assign(Pixmap); //!< discarded
@@ -194,6 +201,22 @@ namespace Yttrium
                     }
                 }
             }
+
+            template <typename U>
+            inline void ldProc(const Tile &tile, Pixmap<T> &target, const U &source)
+            {
+                for(unit_t k=tile.span;k>0;--k)
+                {
+                    const Segment                   seg = tile[k];
+                    const unit_t                    y   = seg.start.y;
+                    Pixmap<T>::Row                & tgt = target(y);
+                    for(unit_t x=seg.start.x,i=seg.width;i>0;--i,++x)
+                    {
+                        tgt(x) = source;
+                    }
+                }
+            }
+
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
 

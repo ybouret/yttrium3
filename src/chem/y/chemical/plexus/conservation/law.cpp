@@ -261,7 +261,7 @@ namespace Yttrium
                 if(rank!=n)
                     throw Specific::Exception(Name,"bad topology for dependency");
 
-                // extract sub-matrices
+                // extract sub-matrices of maximal ranks
                 std::cerr << "nuT=" << nuT << std::endl;
                 std::cerr << "rhs=" << rhs << std::endl;
 
