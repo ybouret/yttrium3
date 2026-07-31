@@ -60,7 +60,7 @@ namespace Yttrium
         {
             //std::cerr << "get(" << f << ")" << std::endl;
             const float x = Clamp<float>(0,f,1);
-            size_t      ilo = (size_t)floorf(x*idmax+0.5f);
+            size_t      ilo = (size_t)floorf(x*(float)idmax+0.5f);
             if(ilo>=count) --ilo;
             const float  xlo = (float)ilo;
             const float  whi = Clamp<float>(0,x-xlo,1);

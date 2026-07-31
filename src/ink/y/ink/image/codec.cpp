@@ -56,8 +56,9 @@ namespace Yttrium
         RGBA Codec:: IndexToRGBA:: operator()(size_t i) const noexcept
         {
             if(i<=0) return RGBA(0,0,0);
-            assert(cmap.size()>0);
-            return cmap[++((--i)%=cmap.size())];
+            const Readable<RGBA>& self = *cmap;
+            assert(self.size()>0);
+            return self[++((--i)%=self.size())];
         }
 
 

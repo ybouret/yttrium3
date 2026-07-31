@@ -130,7 +130,7 @@ namespace Yttrium
             //! convert indices to RGBA using a set of colors
             struct IndexToRGBA
             {
-                const Readable<RGBA> &cmap; //!< persistent colors
+                const Readable<RGBA> * cmap; //!< persistent colors
 
                 //! \return (0,0,0) if zero, cyclic values in cmap otherwise
                 RGBA operator()(size_t) const noexcept;
@@ -151,7 +151,7 @@ namespace Yttrium
                              const FILENAME       &fileName,
                              const Options * const options) const
             {
-                const IndexToRGBA toRGBA = { colorMap };
+                const IndexToRGBA toRGBA = { &colorMap };
                 save(broker,toRGBA,pixmap,fileName,options);
             }
 

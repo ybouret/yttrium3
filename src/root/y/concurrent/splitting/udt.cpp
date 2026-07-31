@@ -136,29 +136,29 @@ namespace Yttrium
                 return cxx[1];
             }
 
-            UpperDiagonalTile::Segment UpperDiagonalTile:: Get2(const size_t indx) const noexcept
+            UpperDiagonalTile::Segment UpperDiagonalTile:: Get2(const size_t i) const noexcept
             {
                 assert(2==span);
-                assert(indx>=1);
-                assert(indx<=2);
-                return cxx[indx];
+                assert(i>=1);
+                assert(i<=2);
+                return cxx[i];
             }
 
-            UpperDiagonalTile::Segment UpperDiagonalTile:: GetN(const size_t indx) const noexcept
+            UpperDiagonalTile::Segment UpperDiagonalTile:: GetN(const size_t i) const noexcept
             {
                 assert(2<span);
-                assert(indx>=1);
-                assert(indx<=span);
-                if(indx<=1)
+                assert(i>=1);
+                assert(i<=span);
+                if(i<=1)
                     return cxx[1];
                 else
                     if(indx>=span)
                         return cxx[2];
                     else
                     {
-                        assert(indx>1);
-                        assert(indx<span);
-                        const size_t r = cxx[1].start.r + indx - 1;
+                        assert(i>1);
+                        assert(i<span);
+                        const size_t r = cxx[1].start.r + i - 1;
                         return Segment( MatrixCoord(r,r), (n-r)+1);
                     }
             }
