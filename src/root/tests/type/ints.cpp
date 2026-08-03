@@ -14,11 +14,17 @@ namespace
         assert(name);
         std::cerr << "<" << name << "> = " << typeid(T).name() << std::endl;
         Y_PRINTV( IntegerFor<T>::Bytes );
-        std::cerr << "==> " << typeid( typename IntegerFor<T>::Type ).name() << std::endl;
+        std::cerr << "\t==> " << typeid( typename IntegerFor<T>::Type ).name() << std::endl;
         Y_PRINTV( IntegerFor<T>::Minimum );
         Y_PRINTV( IntegerFor<T>::Maximum );
         std::cerr << std::endl;
     }
+
+    class Whatever
+    {
+    public:
+        typedef void (Whatever:: *MethodPointer)(void);
+    };
 
 }
 
@@ -54,11 +60,13 @@ Y_UTEST(type_ints)
     Y_PRINTV(       SignedInt<int64_t>::Minimum );
 
     std::cerr << std::endl << "Matching:" << std::endl;
+
     ShowInt(int);
     ShowInt(size_t);
     ShowInt(unit_t);
 
-    
+    std::cerr << std::endl << "Method Pointer Size:" << std::endl;
+    Y_SIZEOF(Whatever::MethodPointer);
 }
 Y_UDONE()
 
