@@ -4,6 +4,7 @@
 #include "y/utest/run.hpp"
 
 #include "y/libc/block/zero.h"
+#include <cstring>
 #include "y/format/hexadecimal.hpp"
 
 namespace Yttrium
@@ -18,9 +19,10 @@ namespace Yttrium
             static const unsigned MaxArgs = 2;
             typedef void (VaList::*Meth)(void);
             typedef void (*Func)(void);
-            static const size_t BytesForArgs = MaxArgs * sizeof(void*);
-            static const size_t BytesForFunc = BytesForArgs + sizeof(Func);
-            static const size_t BytesForMeth = BytesForArgs + sizeof(void *) + sizeof(Meth);
+            static const size_t BytesForArgs  = MaxArgs * sizeof(void*);
+            static const size_t BytesForFunc  = BytesForArgs + sizeof(Func);
+            static const size_t MethodLength  = Alignment::To<void*>::CeilOf<sizeof(Meth)>::Value;
+            static const size_t BytesForMeth  = BytesForArgs + sizeof(void *) + MethodLength;
             static const size_t RequiredBytes = MetaMax<BytesForFunc,BytesForMeth>::Value;
             static const size_t RequiredWords = Alignment::WordsGEQ<RequiredBytes>::Count;
 
@@ -86,19 +88,43 @@ namespace Yttrium
                 return record(alias.addr);
             }
 
+            template <typename OBJECT, typename METHOD> inline
+            VaList & operator()(OBJECT &host, METHOD meth)
+            {
+                return record(&host).save(meth);
+            }
+
+            //! unpack data \return cast a previously stored args
             template <typename T> inline
             T & as() noexcept
             {
                 return *static_cast<T*>( unpack() );
             }
 
+            //! unpack a C-style function \return cast of previously stored function address
             template <typename CFUNCTION> inline
             CFUNCTION func()
             {
-                return (CFUNCTION) unpack();
+                union {
+                    void *    addr;
+                    CFUNCTION func;
+                } alias = { unpack() }; assert(0!=alias.func);
+                return alias.func;
             }
 
-
+            template <typename METHOD> inline
+            METHOD meth() noexcept
+            {
+                assert(codeBytes()>=MethodLength);
+                assert(sizeof(METHOD)==sizeof(Meth));
+                union {
+                    char   buff[sizeof(METHOD)];
+                    METHOD user;
+                } alias = { 0 };
+                memcpy(&alias,rptr,sizeof(METHOD));
+                rptr += MethodLength;
+                return alias.user;
+            }
 
 
         private:
@@ -108,12 +134,22 @@ namespace Yttrium
             uint8_t * const    data;
             void *             wksp[RequiredWords];
 
+            
             void *  unpack() noexcept
             {
                 assert(codeBytes()>=sizeof(void*));
                 void * const addr = *(void **)rptr;
                 rptr += sizeof(void*);
                 return addr;
+            }
+
+
+            VaList & mwrite(const void * const addr) noexcept
+            {
+                assert( freeBytes() >= MethodLength );
+                (void)memcpy(wptr,addr,sizeof(Meth));
+                wptr += MethodLength;
+                return *this;
             }
 
             VaList & record(const void * const addr) noexcept
@@ -123,6 +159,22 @@ namespace Yttrium
                 wptr += sizeof(void *);
                 return *this;
             }
+
+            template <typename METHOD> inline
+            VaList & save(METHOD method) noexcept
+            {
+                assert(method);
+                assert(sizeof(METHOD)==sizeof(Meth));
+                union
+                {
+                    METHOD meth;
+                } alias =  { method };
+                return mwrite(&alias);
+            }
+
+
+
+
         };
 
         std::ostream & operator<<(std::ostream &os, const VaList &vp)
@@ -145,6 +197,17 @@ namespace
     {
         std::cerr << "I do nothing.." << std::endl;
     }
+
+    struct DoNothing
+    {
+        typedef void (DoNothing:: *Proto)(void);
+
+        void call(void)
+        {
+            doNothing();
+        }
+
+    };
 }
 
 Y_UTEST(concurrent_args)
@@ -159,19 +222,33 @@ Y_UTEST(concurrent_args)
     Y_SIZEOF(Concurrent::VaList);
 
 
-    Concurrent::VaList vp; Y_CHECK(vp.freeBytes() >= Concurrent::VaList::RequiredBytes );
-    Y_PRINTV(vp);
+    {
+        Concurrent::VaList vp;
+        Y_CHECK(vp.freeBytes() >= Concurrent::VaList::RequiredBytes );
+        Y_PRINTV(vp);
 
-    int a = 8;
-    Y_PRINTV( (void*) &a );
-    Y_PRINTV(vp<<a);
-    Y_PRINTV(vp(doNothing));
+        int a = 8;
+        Y_PRINTV( (void*) &a );
+        Y_PRINTV(vp<<a);
+        Y_PRINTV(vp(doNothing));
 
-    a=7;
-    Y_PRINTV( vp.as<const int>() );
+        a=7;
+        Y_PRINTV( vp.as<const int>() );
 
-    CProto f = vp.func<CProto>();
-    f();
+        CProto f = vp.func<CProto>();
+        f();
+
+    }
+
+    {
+        Concurrent::VaList vp;
+        DoNothing host;
+        Y_PRINTV( (void*) &host );
+        Y_PRINTV( vp(host, & DoNothing:: call ) );
+
+        DoNothing        &who = vp.as<DoNothing>();           Y_CHECK( &who == &host);
+        DoNothing::Proto  run = vp.meth<DoNothing::Proto>();  Y_CHECK( &DoNothing::call == run);
+    }
 
 
 
