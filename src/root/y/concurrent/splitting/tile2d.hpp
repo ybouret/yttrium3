@@ -203,6 +203,8 @@ wksp()
                     return (*this.*get)(i);
                 }
 
+
+                //! \return lowest coordinate of tile
                 inline vertex_t start() const noexcept
                 {
                     assert( !this->isEmpty() );
@@ -210,15 +212,14 @@ wksp()
                     return (*this.*get)(1).start;
                 }
 
+                //! \return highest coordinate of tile
                 inline vertex_t finish() const noexcept
                 {
                     assert( !this->isEmpty() );
                     assert(get);
                     return (*this.*get)(span).finish();
                 }
-
-
-
+                
                 //______________________________________________________________
                 //
                 //
