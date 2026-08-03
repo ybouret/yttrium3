@@ -55,10 +55,41 @@ namespace Yttrium
                 return static_cast<size_t>( (data+RequiredBytes)-wptr );
             }
 
+            size_t codeBytes() const noexcept
+            {
+                assert(wptr>=data);
+                assert(wptr<=data+RequiredBytes);
+                assert(rptr>=data);
+                assert(rptr<=wptr);
+                return static_cast<size_t>(wptr-rptr);
+            }
+
+
+            //! pack an argument address
             template <typename T> inline
             VaList & operator<<(T &args)
             {
                 return record(&args);
+            }
+
+
+            //! pack a C-style function address
+            template <typename CFUNCTION>
+            VaList & operator()(CFUNCTION cfunction)
+            {
+                assert(0!=cfunction);
+                union {
+                    CFUNCTION func;
+                    void *    addr;
+                } alias =  { cfunction };
+                assert(0!=alias.addr);
+                return record(alias.addr);
+            }
+
+            template <typename T> inline
+            T & as() noexcept
+            {
+                return *static_cast<T*>( unpack() );
             }
 
 
@@ -70,6 +101,15 @@ namespace Yttrium
             uint8_t *          rptr;
             uint8_t * const    data;
             void *             wksp[RequiredWords];
+
+            void *  unpack() noexcept
+            {
+                assert(codeBytes()>=sizeof(void*));
+                void * const addr = *(void **)rptr;
+                rptr += sizeof(void*);
+                return addr;
+            }
+
             VaList & record(const void * const addr) noexcept
             {
                 assert( freeBytes() >= sizeof(void *) );
@@ -91,6 +131,14 @@ namespace Yttrium
 
 using namespace Yttrium;
 
+namespace
+{
+    static inline void doNothing(void)
+    {
+        std::cerr << "I do nothing.." << std::endl;
+    }
+}
+
 Y_UTEST(concurrent_args)
 {
 
@@ -109,6 +157,12 @@ Y_UTEST(concurrent_args)
     int a = 8;
     Y_PRINTV( (void*) &a );
     Y_PRINTV(vp<<a);
+    Y_PRINTV(vp(doNothing));
+
+    a=7;
+    Y_PRINTV( vp.as<const int>() );
+
+
 
 
 }
