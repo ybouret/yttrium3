@@ -71,7 +71,7 @@ namespace Yttrium
                 {
                 }
 
-                //! setup with one argument
+                //! setup with two arguments
                 /**
                  \param user function address
                  \param usr1 first argument

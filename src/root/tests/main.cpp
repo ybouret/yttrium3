@@ -66,6 +66,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(concurrent_udt);
     Y_UTEST(concurrent_simd);
     Y_UTEST(concurrent_primes);
+    Y_UTEST(concurrent_args);
 
 
     Y_UTEST(memory_small_chunk);

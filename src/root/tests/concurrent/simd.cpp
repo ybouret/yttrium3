@@ -2,7 +2,6 @@
 #include "y/concurrent/api/simd/crew.hpp"
 #include "y/type/temporary.hpp"
 #include "y/utest/run.hpp"
-//#include "y/string/env/convert.hpp"
 
 
 using namespace Yttrium;

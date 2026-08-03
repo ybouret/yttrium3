@@ -4,6 +4,7 @@
 #ifndef Y_Core_MetaMax_Included
 #define Y_Core_MetaMax_Included 1
 
+#include "y/config/setup.hpp"
 
 namespace Yttrium
 {
