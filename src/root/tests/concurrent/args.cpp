@@ -92,6 +92,12 @@ namespace Yttrium
                 return *static_cast<T*>( unpack() );
             }
 
+            template <typename CFUNCTION> inline
+            CFUNCTION func()
+            {
+                return (CFUNCTION) unpack();
+            }
+
 
 
 
@@ -133,6 +139,8 @@ using namespace Yttrium;
 
 namespace
 {
+    typedef void (*CProto)(void);
+
     static inline void doNothing(void)
     {
         std::cerr << "I do nothing.." << std::endl;
@@ -161,6 +169,9 @@ Y_UTEST(concurrent_args)
 
     a=7;
     Y_PRINTV( vp.as<const int>() );
+
+    CProto f = vp.func<CProto>();
+    f();
 
 
 
