@@ -120,7 +120,7 @@ namespace Yttrium
                 union {
                     char   buff[sizeof(METHOD)];
                     METHOD user;
-                } alias = { 0 };
+                } alias = { {0} };
                 memcpy(&alias,rptr,sizeof(METHOD));
                 rptr += MethodLength;
                 return alias.user;
@@ -248,6 +248,9 @@ Y_UTEST(concurrent_args)
 
         DoNothing        &who = vp.as<DoNothing>();           Y_CHECK( &who == &host);
         DoNothing::Proto  run = vp.meth<DoNothing::Proto>();  Y_CHECK( &DoNothing::call == run);
+
+        (who.*run)();
+
     }
 
 
