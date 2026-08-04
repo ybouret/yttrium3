@@ -1,6 +1,6 @@
 #include "y/concurrent/va-list.hpp"
 #include "y/format/hexadecimal.hpp"
-
+#include "y/libc/block/zeroed.h"
 #include <cstring>
 
 
@@ -53,7 +53,7 @@ namespace Yttrium
         void * VaList:: unpack() noexcept
         {
             assert(codeBytes()>=sizeof(void*));
-            void * const addr = *(void **)rptr;
+            void * const addr = *(void **)rptr; assert(0!=addr);
             rptr += sizeof(void*);
             return addr;
         }
@@ -61,6 +61,8 @@ namespace Yttrium
         VaList & VaList:: record(const void * const addr) noexcept
         {
             assert( freeBytes() >= sizeof(void *) );
+            assert( 0 != addr );
+
             *(void **)wptr = (void *) addr;
             wptr += sizeof(void *);
             return *this;
@@ -69,7 +71,9 @@ namespace Yttrium
         VaList & VaList:: mwrite(const void * const addr) noexcept
         {
             assert( freeBytes() >= MethodLength );
-            (void)memcpy(wptr,addr,sizeof(Meth));
+            assert( 0 != addr );
+            assert( Y_FALSE == Yttrium_Zeroed(addr,sizeof(Meth)) );
+            (void) memcpy(wptr,addr,sizeof(Meth));
             wptr += MethodLength;
             return *this;
         }
@@ -78,7 +82,8 @@ namespace Yttrium
         void VaList:: mquery(void * const addr) noexcept
         {
             assert(codeBytes()>=MethodLength);
-            memcpy(addr,rptr,sizeof(Meth));
+            assert( Y_FALSE == Yttrium_Zeroed(rptr,sizeof(Meth)) );
+            (void) memcpy(addr,rptr,sizeof(Meth));
             rptr += MethodLength;
         }
 
