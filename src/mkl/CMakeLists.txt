@@ -7,6 +7,8 @@ y/mkl/interpolation
 y/mkl/derivatives
 y/mkl/root
 y/mkl/minimize
+y/mkl/ode
+y/mkl/ode/explicit
 )
 
 add_subdirectory(tests)
