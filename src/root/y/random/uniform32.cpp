@@ -30,6 +30,12 @@ namespace Yttrium
             return ( half + (double)next32()   )/denom;
         }
 
+        double Uniform32:: symm32() noexcept
+        {
+            const double u = (*this)();
+            return 1.0 - (u+u);
+        }
+
         template <> double       Uniform32:: to<double>()       noexcept { return (*this)(); }
         template <> float        Uniform32:: to<float>()        noexcept { return (float)((*this)()); }
         template <> long double  Uniform32:: to<long double>()  noexcept { return (long double)((*this)()); }
@@ -52,6 +58,10 @@ namespace Yttrium
             const uint64_t hi = next32();
             return lo | (hi<<32);
         }
+
+        template <> double       Uniform32:: symm<double>()       noexcept { return               symm32(); }
+        template <> float        Uniform32:: symm<float>()        noexcept { return (float)       symm32(); }
+        template <> long double  Uniform32:: symm<long double>()  noexcept { return (long double) symm32(); }
 
     }
 

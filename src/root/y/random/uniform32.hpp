@@ -5,11 +5,22 @@
 #define Y_Random_Uniform32_Included 1
 
 #include "y/random/coin-flip.hpp"
+#include "y/mkl/xreal.hpp"
 
 namespace Yttrium
 {
     namespace Random
     {
+
+        template <typename T> struct Alea;
+
+        //! select T for XReal<T>
+        template <typename T> struct Alea< XReal<T> > { typedef T Type; /*!< alias */ };
+
+        //! select T for real T
+        template <typename T> struct Alea { typedef T Type; /*!< alias */ };
+
+
         //______________________________________________________________________
         //
         //
@@ -45,9 +56,12 @@ namespace Yttrium
             //
             //__________________________________________________________________
             double operator()() noexcept; //!< \return uniform ]0:1[
+            double symm32()     noexcept; //!< \return uniform ]-1:1[
+
+            template <typename T> T to()   noexcept; //!< \return value for ...
+            template <typename T> T symm() noexcept;
 
 
-            template <typename T> T to() noexcept; //!< \return value for ...
 
             //__________________________________________________________________
             //
