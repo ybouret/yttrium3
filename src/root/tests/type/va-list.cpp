@@ -1,11 +1,5 @@
-#include "y/concurrent/va-list.hpp"
-
-
-
+#include "y/type/va-list.hpp"
 #include "y/utest/run.hpp"
-
-
-
 
 using namespace Yttrium;
 
@@ -30,7 +24,7 @@ namespace
     };
 }
 
-Y_UTEST(concurrent_args)
+Y_UTEST(type_va_list)
 {
 
     Y_SIZEOF(Concurrent::VaList::Func);

@@ -85,7 +85,8 @@ Y_UTEST(calculus:primes)
 
 
 
-Y_UTEST(type_ints)
+Y_UTEST(type:ints)
+Y_UTEST(type:va_list)
 
 Y_UTEST(concurrent:nucleus)
 Y_UTEST(concurrent:ram)
@@ -102,7 +103,6 @@ Y_UTEST(concurrent:split2d)
 Y_UTEST(concurrent:udt)
 Y_UTEST(concurrent:simd)
 Y_UTEST(concurrent:primes)
-Y_UTEST(concurrent:args)
 
 Y_UTEST(memory:small:chunk)
 Y_UTEST(memory:small:arena)
