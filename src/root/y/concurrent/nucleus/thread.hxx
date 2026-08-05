@@ -19,6 +19,7 @@ namespace Yttrium
 
         bool Nucleus:: Assign(SystemThread &st, const size_t cpu) noexcept
         {
+            //std::cerr << "assign to " << cpu << std::endl;
             return st.assign(cpu);
         }
 

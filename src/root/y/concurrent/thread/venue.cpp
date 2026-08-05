@@ -77,7 +77,7 @@ namespace Yttrium
             // check avdanced parsing
             {
                 const char * const org = info.c_str();
-                std::cerr << "parsing '" << org << "'" << std::endl;
+                //std::cerr << "parsing '" << org << "'" << std::endl;
                 if(strchr(org,COLON))
                 {
                     parseCode(info);

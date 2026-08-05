@@ -4,7 +4,7 @@
 #define Y_Concurrent_SIMD_Included 1
 
 #include "y/concurrent/api/context.hpp"
-#include "y/type/va/list.hpp"
+#include "y/type/va/args.hpp"
 #include "y/type/copy-of.hpp"
 #include "y/type/temporary.hpp"
 #include "y/container/writable.hpp"
@@ -79,6 +79,60 @@ namespace Yttrium
             //__________________________________________________________________
 
             void operator()(Proc0); //!< execute procedure on each context
+
+
+            template <typename ARG1> static
+            void CallFunc1(Context &ctx, Arguments &args)
+            {
+                typedef void (*LocalProc)(Context &, ARG1 &);
+                VaArgs ap(args);
+                ap.func<LocalProc>()(ctx,ap.as<ARG1>());
+            }
+
+            //! execute func(ctx,arg1) for each context
+            /**
+             \param func function
+             \param arg1 first argument
+             */
+            template <typename ARG1> inline
+            void operator()( void (*func)(Context &, ARG1 &), ARG1 &arg1 )
+            {
+                assert(!procedure);
+                assert(!arguments);
+                assert(func);
+                Arguments                    args(func); args << arg1;
+                const Temporary<Arguments *> tmpArgs(arguments,&args);
+                const Temporary<Procedure>   tmpProc(procedure,CallFunc1<ARG1>);
+                run();
+            }
+
+            template <typename ARG1, typename ARG2> static
+            void CallFunc2(Context &ctx, Arguments &args)
+            {
+                typedef void (*LocalProc)(Context &, ARG1 &, ARG2 &);
+                VaArgs ap(args);
+                ap.func<LocalProc>()(ctx,ap.as<ARG1>(),ap.as<ARG2>());
+            }
+
+            //! execute func(ctx,arg1,arg2) for each context
+            /**
+             \param func function
+             \param arg1 first argument
+             \param arg2 first argument
+             */
+            template <typename ARG1, typename ARG2> inline
+            void operator()( void (*func)(Context &, ARG1 &, ARG2 &), ARG1 &arg1, ARG2 &arg2 )
+            {
+                assert(!procedure);
+                assert(!arguments);
+                assert(func);
+                Arguments                    args(func); args << arg1 << arg2;
+                const Temporary<Arguments *> tmpArgs(arguments,&args);
+                const Temporary<Procedure>   tmpProc(procedure,CallFunc2<ARG1,ARG2>);
+                run();
+            }
+
+
 
 #if 0
             //! execute func(ctx,arg1) for each context

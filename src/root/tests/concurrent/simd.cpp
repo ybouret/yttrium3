@@ -31,6 +31,19 @@ namespace
         }
     }
 
+    static inline
+    void DoSomething2(Concurrent::Context &context, const size_t &total, const int &data)
+    {
+        size_t offset = 1;
+        const size_t length = context.part(total,offset);
+
+
+        {
+            Y_Lock(context.sync);
+            (std::cerr << "DoSomething2 in " << context << " with " << total << " : " << offset << "+" << length << " @data=" << data << std::endl).flush();
+        }
+    }
+
     class Dummy
     {
     public:
@@ -67,8 +80,8 @@ namespace
 
 Y_UTEST(concurrent_simd)
 {
-    std::cerr << "-- entering " << test << std::endl;
-    
+    std::cerr << "-- entering " << test << std::endl << std::endl;
+
 
     Concurrent::Solo solo;
     Concurrent::Crew crew(0);
@@ -79,12 +92,19 @@ Y_UTEST(concurrent_simd)
     crew(DoSomething);
     std::cerr << std::endl;
 
-#if 0
     const size_t total = 10;
     solo(DoSomething1,total);
     crew(DoSomething1,total);
     std::cerr << std::endl;
 
+    {
+        const int data = 7;
+        solo(DoSomething2,total,data);
+        crew(DoSomething2,total,data);
+        std::cerr << std::endl;
+    }
+
+#if 0
     Dummy dummy;
     solo(dummy, & Dummy::par);
     crew(dummy, & Dummy::par);

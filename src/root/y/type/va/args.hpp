@@ -16,6 +16,7 @@ namespace Yttrium
         ~VaArgs() noexcept;
 
         size_t   codeBytes() const noexcept; //!< \return bytes still containing code
+
         //! unpack data \return cast a previously stored args
         template <typename T> inline
         T & as() noexcept

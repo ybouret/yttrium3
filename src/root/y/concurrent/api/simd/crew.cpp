@@ -49,7 +49,7 @@ namespace Yttrium
                     for(const VNode *vn=list->head;vn;vn=vn->next,++i)
                     {
                         const size_t j = **vn;
-                        threads(i)->assign(j);
+                        (void) threads(i)->assign(j);
                     }
                 }
             }

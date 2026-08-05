@@ -29,8 +29,8 @@ namespace Yttrium
 
         void SIMD:: CallFunc0(Context &ctx, Arguments &args)
         {
-            //Proc0 const func = args.func<Proc0>();
-            //func(ctx);
+            VaArgs ap(args);
+            ap.func<Proc0>()(ctx);
         }
 
         void SIMD:: operator()(Proc0 func)
@@ -39,7 +39,7 @@ namespace Yttrium
             assert(!arguments);
             assert(0!=func);
 
-            Arguments                    args; args(func);
+            Arguments                    args(func);
             const Temporary<Arguments *> tmpArgs(arguments,&args);
             const Temporary<Procedure>   tmpProc(procedure,CallFunc0);
             run();

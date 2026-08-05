@@ -6,14 +6,19 @@
 
 namespace Yttrium
 {
+    VaList & VaList:: onInit() noexcept
+    {
+        Coerce(data) = static_cast<uint8_t *>( memset(wksp,0,sizeof(wksp)) );
+        wptr         = data;
+        return *this;
+    }
 
     VaList:: VaList() noexcept :
     wptr(0),
     data(0),
     wksp()
     {
-        Coerce(data) = static_cast<uint8_t *>( memset(wksp,0,sizeof(wksp)) );
-        wptr         = data;
+        onInit();
     }
 
     VaList:: ~VaList() noexcept

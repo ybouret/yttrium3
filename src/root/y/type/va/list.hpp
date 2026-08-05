@@ -12,6 +12,8 @@ namespace Yttrium
 
     class VaArgs;
 
+#define Y_VaList() wptr(0), data(0), wksp()
+
     //__________________________________________________________________________
     //
     //
@@ -56,6 +58,15 @@ namespace Yttrium
         ~VaList() noexcept;      //!< cleanup
         Y_OSTREAM_PROTO(VaList); //!< display
 
+        template <typename CFUNCTION> inline
+        VaList(CFUNCTION cfunction) noexcept :
+        Y_VaList()
+        {
+            onInit()(cfunction);
+        }
+
+
+
         //______________________________________________________________________
         //
         //
@@ -97,14 +108,15 @@ namespace Yttrium
 
 
 
-#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
     private:
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         Y_Disable_Copy_And_Assign(VaList);
         friend class VaArgs;
         uint8_t *          wptr;
         uint8_t * const    data;
         void *             wksp[RequiredWords];
-        
+
+        VaList & onInit() noexcept;
         VaList & record(const void * const) noexcept; //!< \return *this with encoded address
         VaList & mwrite(const void * const) noexcept; //!< \return *this with written method
        
