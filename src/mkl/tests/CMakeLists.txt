@@ -3,6 +3,7 @@ Y_CreateTest(mkl
 algebra
 root
 minimize
+ode
 )
 
 Y_LinkLibraries(test-mkl y-mkl)
