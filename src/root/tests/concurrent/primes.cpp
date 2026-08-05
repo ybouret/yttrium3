@@ -87,7 +87,8 @@ Y_UTEST(concurrent_primes)
     Concurrent::Engine engine( Concurrent::SIMD::InParallel(0) );
     (std::cerr << "Computing..." << std::endl).flush();
 
-    (*engine)(detect, & PrimeDetector::run );
+    int todo;
+    //(*engine)(detect, & PrimeDetector::run );
 
     const String fileName = "p.dat";
     {

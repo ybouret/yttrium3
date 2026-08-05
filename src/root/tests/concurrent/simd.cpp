@@ -79,6 +79,7 @@ Y_UTEST(concurrent_simd)
     crew(DoSomething);
     std::cerr << std::endl;
 
+#if 0
     const size_t total = 10;
     solo(DoSomething1,total);
     crew(DoSomething1,total);
@@ -92,7 +93,8 @@ Y_UTEST(concurrent_simd)
     solo(dummy, & Dummy::par1, total);
     crew(dummy, & Dummy::par1, total);
     std::cerr << std::endl;
-
+#endif
+    
     std::cerr << "-- leaving " << test << std::endl << std::endl;
 }
 Y_UDONE()

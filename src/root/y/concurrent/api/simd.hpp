@@ -4,6 +4,7 @@
 #define Y_Concurrent_SIMD_Included 1
 
 #include "y/concurrent/api/context.hpp"
+#include "y/type/va-list.hpp"
 #include "y/type/copy-of.hpp"
 #include "y/type/temporary.hpp"
 #include "y/container/writable.hpp"
@@ -38,128 +39,10 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            typedef void (SIMD::*Meth)(void); //!< method pointer alias
-
-            //__________________________________________________________________
-            //
-            //
-            //! Holding arguments
-            //
-            //__________________________________________________________________
-            class Arguments
-            {
-            public:
-                
-                //______________________________________________________________
-                //
-                // C++
-                //______________________________________________________________
-                Arguments(const CopyOf_ &, void * const) noexcept; //!< setup with arg1 as copy of address
-                ~Arguments() noexcept;  //!< cleanup
-
-                //! setup with one argument
-                /**
-                \param user function address
-                \param usr1 first argument
-                 */
-                template <typename ARG1> inline
-                Arguments(void * const user, ARG1 &usr1) noexcept :
-                addr(user),
-                arg1( (void*)&usr1 ),
-                arg2(0),
-                meth(0)
-                {
-                }
-
-                //! setup with two arguments
-                /**
-                 \param user function address
-                 \param usr1 first argument
-                 \param usr2 second argument
-                 */
-                template <typename ARG1,typename ARG2> inline
-                Arguments(void * const user, ARG1 &usr1, ARG2 &usr2) noexcept :
-                addr(user),
-                arg1( (void*)&usr1 ),
-                arg2( (void*)&usr2 )
-                {
-                }
-
-
-                //! setup with object and method
-                /**
-                 \param object host
-                 \param method host.method(context)
-                 */
-                template <typename OBJECT, typename METHOD> inline
-                Arguments(OBJECT &object, METHOD method) noexcept :
-                addr( (void*)&object ),
-                arg1(0), arg2(0),
-                meth( MethodToMeth(method) )
-                {
-
-                }
-
-                //! setup with object, method and argument
-                /**
-                 \param object host
-                 \param method host.method(context,usr1)
-                 \param usr1   first user argument
-                 */
-                template <typename OBJECT, typename METHOD, typename ARG1> inline
-                Arguments(OBJECT &object, METHOD method, ARG1 &usr1) noexcept :
-                addr( (void*)&object ),
-                arg1( (void*) &usr1 ),
-                arg2(0),
-                meth( MethodToMeth(method) )
-                {
-
-                }
-
-                //! setup with object, method and two arguments
-                /**
-                 \param object host
-                 \param method host.method(context,usr1)
-                 \param usr1   first user argument
-                 \param usr2   second user argument
-                 */
-                template <typename OBJECT, typename METHOD, typename ARG1, typename ARG2> inline
-                Arguments(OBJECT &object, METHOD method, ARG1 &usr1, ARG2 &usr2) noexcept :
-                addr( (void*) &object ),
-                arg1( (void*) &usr1 ),
-                arg2( (void*) &usr2 ),
-                meth( MethodToMeth(method) )
-                {
-
-                }
-
-                
-                //______________________________________________________________
-                //
-                // Members
-                //______________________________________________________________
-                void * const addr; //!< anonymous address
-                void * const arg1; //!< first  argument address
-                void * const arg2; //!< second argument address
-                Meth   const meth; //!< method pointer
-
-            private:
-                Y_Disable_Copy_And_Assign(Arguments); //!< discarded
-
-#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-                template <typename METHOD> inline
-                Meth MethodToMeth(METHOD method) noexcept
-                {
-                    union {
-                        METHOD M;
-                        Meth   m;
-                    } alias =  { method };
-                    return alias.m;
-                }
-#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            };
-
+            typedef VaList Arguments;
             typedef void (*Procedure)(Context &, Arguments &); //!< alias
+            typedef void (*Proc0)(Context &);
+
 
             //__________________________________________________________________
             //
@@ -195,8 +78,9 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            void operator()( void (*)(Context &) ); //!< execute function on each context
+            void operator()(Proc0); //!< execute procedure on each context
 
+#if 0
             //! execute func(ctx,arg1) for each context
             /**
              \param func function
@@ -289,11 +173,14 @@ namespace Yttrium
                 run();
             }
 
+#endif
 
         protected:
             virtual void run() = 0; //!< run procedure on each context with optional argument(s)
             Procedure  procedure;   //!< temporary procedure
             Arguments *arguments;   //!< temporary arguments
+
+
 
         private:
             Y_Disable_Copy_And_Assign(SIMD); //!< discarded
@@ -301,6 +188,7 @@ namespace Yttrium
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             static void CallFunc0(Context &ctx, Arguments &args);
 
+#if 0
             template <typename ARG1> static
             void CallFunc1(Context &ctx, Arguments &args)
             {
@@ -372,7 +260,7 @@ namespace Yttrium
                                   *static_cast<ARG1 *>(args.arg1),
                                   *static_cast<ARG2 *>(args.arg2));
             }
-
+#endif
 
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
