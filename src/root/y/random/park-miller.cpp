@@ -33,7 +33,7 @@ namespace Yttrium
         }
 
         ParkMiller:: ParkMiller()  :
-        Uniform32(IM-1),
+        Bits(IM-1),
         seed( ParkMillerSeed() )
         {
         }

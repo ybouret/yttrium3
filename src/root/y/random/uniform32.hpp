@@ -29,7 +29,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Uniform32
+        class Bits
         {
         public:
             //__________________________________________________________________
@@ -38,8 +38,8 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Uniform32(const uint32_t) noexcept; //!< setup with max32
-            virtual ~Uniform32()               noexcept; //!< cleanup
+            explicit Bits(const uint32_t) noexcept; //!< setup with max32
+            virtual ~Bits()               noexcept; //!< cleanup
 
             //__________________________________________________________________
             //
@@ -72,7 +72,7 @@ namespace Yttrium
             const uint32_t max32; //!< 32 bits in [0:max32]
             const double   denom; //!< max32 + 1
         private:
-            Y_Disable_Copy_And_Assign(Uniform32); //!< discarded
+            Y_Disable_Copy_And_Assign(Bits); //!< discarded
         };
 
     }

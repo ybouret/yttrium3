@@ -18,7 +18,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class ParkMiller : public Uniform32
+        class ParkMiller : public Bits
         {
         public:
             explicit ParkMiller();

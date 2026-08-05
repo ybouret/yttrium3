@@ -10,7 +10,7 @@ using namespace Yttrium;
 
 namespace
 {
-    static inline void checkStats(Random::Uniform32 &ran)
+    static inline void checkStats(Random::Bits &ran)
     {
         static const size_t n = 100000;
         Vector<double>      r(WithAtLeast,n);
