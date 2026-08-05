@@ -4,7 +4,7 @@
 #define Y_Concurrent_SIMD_Included 1
 
 #include "y/concurrent/api/context.hpp"
-#include "y/type/va-list.hpp"
+#include "y/type/va/list.hpp"
 #include "y/type/copy-of.hpp"
 #include "y/type/temporary.hpp"
 #include "y/container/writable.hpp"

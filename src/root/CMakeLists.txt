@@ -36,6 +36,7 @@ y/threading
 y/calculus
 y/calculus/prime
 y/type
+y/type/va
 y/memory
 y/memory/type
 y/memory/small

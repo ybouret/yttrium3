@@ -29,8 +29,8 @@ namespace Yttrium
 
         void SIMD:: CallFunc0(Context &ctx, Arguments &args)
         {
-            Proc0 const func = args.func<Proc0>();
-            func(ctx);
+            //Proc0 const func = args.func<Proc0>();
+            //func(ctx);
         }
 
         void SIMD:: operator()(Proc0 func)

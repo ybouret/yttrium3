@@ -1,4 +1,4 @@
-#include "y/type/va-list.hpp"
+#include "y/type/va/args.hpp"
 #include "y/utest/run.hpp"
 
 using namespace Yttrium;
@@ -47,9 +47,10 @@ Y_UTEST(type_va_list)
         Y_PRINTV(vp(doNothing));
 
         a=7;
-        Y_PRINTV( vp.as<const int>() );
+        VaArgs ap(vp);
+        Y_PRINTV( ap.as<const int>() );
 
-        CProto f = vp.func<CProto>();
+        CProto f = ap.func<CProto>();
         f();
 
     }
@@ -60,11 +61,11 @@ Y_UTEST(type_va_list)
         Y_PRINTV( (void*) &host );
         Y_PRINTV( vp(host, & DoNothing:: call ) );
 
-        DoNothing        &who = vp.as<DoNothing>();
-        DoNothing::Proto  run = vp.meth<DoNothing::Proto>();
+        VaArgs            ap(vp);
+        DoNothing        &who = ap.as<DoNothing>();
+        DoNothing::Proto  run = ap.meth<DoNothing::Proto>();
         (who.*run)();
     }
-
 
 
 

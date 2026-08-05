@@ -10,6 +10,7 @@
 namespace Yttrium
 {
 
+    class VaArgs;
 
     //__________________________________________________________________________
     //
@@ -63,7 +64,6 @@ namespace Yttrium
         //______________________________________________________________________
         size_t   usedBytes() const noexcept; //!< \return used bytes
         size_t   freeBytes() const noexcept; //!< \return free bytes
-        size_t   codeBytes() const noexcept; //!< \return bytes still containing code
 
 
 
@@ -94,48 +94,20 @@ namespace Yttrium
             return record(&host).save(meth);
         }
 
-        //! unpack data \return cast a previously stored args
-        template <typename T> inline
-        T & as() noexcept
-        {
-            return *static_cast<T*>( unpack() );
-        }
-
-        //! unpack a C-style function \return cast of previously stored function address
-        template <typename CFUNCTION> inline
-        CFUNCTION func()
-        {
-            union {
-                void *    addr;
-                CFUNCTION func;
-            } alias = { unpack() }; assert(0!=alias.func);
-            return alias.func;
-        }
 
 
-        //! unpack a memthod pointer \return cat of previously stored method pointer
-        template <typename METHOD> inline
-        METHOD meth() noexcept
-        {
-            assert(sizeof(METHOD)==sizeof(Meth));
-            union { METHOD user; } alias = { 0 };
-            mquery(&alias);
-            return alias.user;
-        }
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
     private:
         Y_Disable_Copy_And_Assign(VaList);
+        friend class VaArgs;
         uint8_t *          wptr;
-        uint8_t *          rptr;
         uint8_t * const    data;
         void *             wksp[RequiredWords];
         
-        void   * unpack()                   noexcept; //!< \return decoded address
         VaList & record(const void * const) noexcept; //!< \return *this with encoded address
         VaList & mwrite(const void * const) noexcept; //!< \return *this with written method
-        void     mquery(void * const)       noexcept; //!< decode method at given address
-
+       
 
         template <typename METHOD> inline
         VaList & save(METHOD method) noexcept
@@ -145,7 +117,6 @@ namespace Yttrium
             return mwrite(&alias);
         }
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
-
 
 
     };
