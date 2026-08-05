@@ -4,6 +4,7 @@
 #ifndef Y_Random_Uniform32_Included
 #define Y_Random_Uniform32_Included 1
 
+#include "y/ability/identifiable.hpp"
 #include "y/random/coin-flip.hpp"
 #include "y/mkl/xreal.hpp"
 
@@ -29,7 +30,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Bits
+        class Bits : public Identifiable
         {
         public:
             //__________________________________________________________________

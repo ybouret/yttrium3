@@ -21,10 +21,13 @@ namespace Yttrium
         class ParkMiller : public Bits
         {
         public:
+            static const char * const CallSign;
+
             explicit ParkMiller();
             virtual ~ParkMiller() noexcept;
 
-            virtual uint32_t next32() noexcept;
+            virtual uint32_t     next32() noexcept;
+            virtual const char * callSign() const noexcept;
 
         private:
             Y_Disable_Copy_And_Assign(ParkMiller); //!< discarded

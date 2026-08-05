@@ -32,6 +32,14 @@ namespace Yttrium
 
         }
 
+        const char * const ParkMiller:: CallSign = "ParkMiller";
+
+        const char * ParkMiller:: callSign() const noexcept
+        {
+            return CallSign;
+        }
+
+
         ParkMiller:: ParkMiller()  :
         Bits(IM-1),
         seed( ParkMillerSeed() )
