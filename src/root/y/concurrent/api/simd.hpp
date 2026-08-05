@@ -74,7 +74,7 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
-            // Methods to call in parallel
+            // Methods to call functions
             //
             //__________________________________________________________________
 
@@ -82,7 +82,7 @@ namespace Yttrium
 
 
             template <typename ARG1> static
-            void CallFunc1(Context &ctx, Arguments &args)
+            void Call1(Context &ctx, Arguments &args)
             {
                 typedef void (*LocalProc)(Context &, ARG1 &);
                 VaArgs ap(args);
@@ -102,12 +102,12 @@ namespace Yttrium
                 assert(func);
                 Arguments                    args(func); args << arg1;
                 const Temporary<Arguments *> tmpArgs(arguments,&args);
-                const Temporary<Procedure>   tmpProc(procedure,CallFunc1<ARG1>);
+                const Temporary<Procedure>   tmpProc(procedure,Call1<ARG1>);
                 run();
             }
 
             template <typename ARG1, typename ARG2> static
-            void CallFunc2(Context &ctx, Arguments &args)
+            void Call2(Context &ctx, Arguments &args)
             {
                 typedef void (*LocalProc)(Context &, ARG1 &, ARG2 &);
                 VaArgs ap(args);
@@ -128,48 +128,100 @@ namespace Yttrium
                 assert(func);
                 Arguments                    args(func); args << arg1 << arg2;
                 const Temporary<Arguments *> tmpArgs(arguments,&args);
-                const Temporary<Procedure>   tmpProc(procedure,CallFunc2<ARG1,ARG2>);
+                const Temporary<Procedure>   tmpProc(procedure,Call2<ARG1,ARG2>);
                 run();
             }
 
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods to invoke methods
+            //
+            //__________________________________________________________________
+
+            template <typename OBJECT, typename METHOD> static inline
+            void Invoke0(Context &ctx, Arguments &args)
+            {
+                VaArgs ap(args);
+                OBJECT &host = ap.as<OBJECT>();
+                METHOD  meth = ap.meth<METHOD>();
+                (host.*meth)(ctx);
+            }
+
+            //! invoke object.method(context) \param object host \param method to invoke
+            template <typename OBJECT,typename METHOD> inline
+            void operator()(OBJECT &object, METHOD method)
+            {
+                assert(!procedure);
+                assert(!arguments);
+                assert(method);
+                Arguments                    args(object,method);
+                const Temporary<Arguments *> tmpArgs(arguments,&args);
+                const Temporary<Procedure>   tmpProc(procedure,Invoke0<OBJECT,METHOD>);
+                run();
+            }
+
+
+
+            template <typename OBJECT, typename METHOD, typename ARG1> static inline
+            void Invoke1(Context &ctx, Arguments &args)
+            {
+                VaArgs ap(args);
+                OBJECT &host = ap.as<OBJECT>();
+                METHOD  meth = ap.meth<METHOD>();
+                (host.*meth)(ctx,ap.as<ARG1>());
+            }
+
+            //! invoke object.method(context,arg1)
+            /**
+             \param object host
+             \param method to invoke
+             \param arg1   first argument
+             */
+            template <typename OBJECT,typename METHOD, typename ARG1> inline
+            void operator()(OBJECT &object, METHOD method, ARG1 &arg1)
+            {
+                assert(!procedure);
+                assert(!arguments);
+                assert(method);
+                Arguments                    args(object,method); args << arg1;
+                const Temporary<Arguments *> tmpArgs(arguments,&args);
+                const Temporary<Procedure>   tmpProc(procedure,Invoke1<OBJECT,METHOD,ARG1>);
+                run();
+            }
+
+
+            template <typename OBJECT, typename METHOD, typename ARG1, typename ARG2> static inline
+            void Invoke2(Context &ctx, Arguments &args)
+            {
+                VaArgs ap(args);
+                OBJECT &host = ap.as<OBJECT>();
+                METHOD  meth = ap.meth<METHOD>();
+                (host.*meth)(ctx,ap.as<ARG1>(),ap.as<ARG2>());
+            }
+
+            //! invoke object.method(context,arg1,arg2)
+            /**
+             \param object host
+             \param method to invoke
+             \param arg1   first  argument
+             \param arg2   second argument
+             */
+            template <typename OBJECT,typename METHOD, typename ARG1, typename ARG2> inline
+            void operator()(OBJECT &object, METHOD method, ARG1 &arg1, ARG2 &arg2)
+            {
+                assert(!procedure);
+                assert(!arguments);
+                assert(method);
+                Arguments                    args(object,method); args << arg1 << arg2;
+                const Temporary<Arguments *> tmpArgs(arguments,&args);
+                const Temporary<Procedure>   tmpProc(procedure,Invoke2<OBJECT,METHOD,ARG1,ARG2>);
+                run();
+            }
+            
 
 #if 0
-            //! execute func(ctx,arg1) for each context
-            /**
-             \param func function
-             \param arg1 first argument
-             */
-            template <typename ARG1> inline
-            void operator()( void (*func)(Context &, ARG1 &), ARG1 &arg1 )
-            {
-                assert(!procedure);
-                assert(!arguments);
-                assert(func);
-                Arguments                    args((void*)func,arg1);
-                const Temporary<Arguments *> tmpArgs(arguments,&args);
-                const Temporary<Procedure>   tmpProc(procedure,CallFunc1<ARG1>);
-                run();
-            }
-
-            //! execute func(ctx,arg1,arg2) for each context
-            /**
-             \param func function
-             \param arg1 first argument
-             \param arg2 first argument
-             */
-            template <typename ARG1, typename ARG2> inline
-            void operator()( void (*func)(Context &, ARG1 &, ARG2 &), ARG1 &arg1, ARG2 &arg2 )
-            {
-                assert(!procedure);
-                assert(!arguments);
-                assert(func);
-                Arguments                    args((void*)func,arg1,arg2);
-                const Temporary<Arguments *> tmpArgs(arguments,&args);
-                const Temporary<Procedure>   tmpProc(procedure,CallFunc2<ARG1,ARG2>);
-                run();
-            }
-
             //__________________________________________________________________
             //
             //

@@ -13,10 +13,7 @@ namespace Yttrium
         return *this;
     }
 
-    VaList:: VaList() noexcept :
-    wptr(0),
-    data(0),
-    wksp()
+    VaList:: VaList() noexcept : Y_VaList()
     {
         onInit();
     }

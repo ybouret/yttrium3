@@ -65,7 +65,12 @@ namespace Yttrium
             onInit()(cfunction);
         }
 
-
+        template <typename OBJECT, typename METHOD> inline
+        VaList(OBJECT &host, METHOD meth) noexcept :
+        Y_VaList()
+        {
+            onInit()(host,meth);
+        }
 
         //______________________________________________________________________
         //
