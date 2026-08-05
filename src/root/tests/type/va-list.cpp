@@ -27,18 +27,18 @@ namespace
 Y_UTEST(type_va_list)
 {
 
-    Y_SIZEOF(Concurrent::VaList::Func);
-    Y_SIZEOF(Concurrent::VaList::Meth);
-    Y_PRINTV(Concurrent::VaList::BytesForFunc);
-    Y_PRINTV(Concurrent::VaList::BytesForMeth);
-    Y_PRINTV(Concurrent::VaList::RequiredBytes);
-    Y_PRINTV(Concurrent::VaList::RequiredWords);
-    Y_SIZEOF(Concurrent::VaList);
+    Y_SIZEOF(VaList::Func);
+    Y_SIZEOF(VaList::Meth);
+    Y_PRINTV(VaList::BytesForFunc);
+    Y_PRINTV(VaList::BytesForMeth);
+    Y_PRINTV(VaList::RequiredBytes);
+    Y_PRINTV(VaList::RequiredWords);
+    Y_SIZEOF(VaList);
 
 
     {
-        Concurrent::VaList vp;
-        Y_CHECK(vp.freeBytes() >= Concurrent::VaList::RequiredBytes );
+        VaList vp;
+        Y_CHECK(vp.freeBytes() >= VaList::RequiredBytes );
         Y_PRINTV(vp);
 
         int a = 8;
@@ -55,16 +55,14 @@ Y_UTEST(type_va_list)
     }
 
     {
-        Concurrent::VaList vp;
+        VaList    vp;
         DoNothing host;
         Y_PRINTV( (void*) &host );
         Y_PRINTV( vp(host, & DoNothing:: call ) );
 
-        DoNothing        &who = vp.as<DoNothing>();           //Y_CHECK( &who == &host);
-        DoNothing::Proto  run = vp.meth<DoNothing::Proto>();  //Y_CHECK( &DoNothing::call == run);
-
+        DoNothing        &who = vp.as<DoNothing>();
+        DoNothing::Proto  run = vp.meth<DoNothing::Proto>();
         (who.*run)();
-
     }
 
 
