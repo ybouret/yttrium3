@@ -6,7 +6,7 @@
 
 #include "y/random/bits.hpp"
 #include "y/mkl/numeric.hpp"
-#include "y/core/utils.hpp"
+#include "y/core/twice.hpp"
 
 namespace Yttrium
 {
@@ -98,5 +98,5 @@ namespace Yttrium
 
 }
 
-#endif
+#endif // !Y_Random_Gaussian_Included
 

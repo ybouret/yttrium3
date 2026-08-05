@@ -13,7 +13,7 @@ Y_UTEST(random_in3d)
     Random::ParkMiller ran;
 
     {
-        OutputFile fp("in2d.dat");
+        OutputFile fp("in3d.dat");
         for(size_t i=0;i<100;++i)
         {
             const V3D<float> v = Random::OnSphere< V3D<float> >(ran);

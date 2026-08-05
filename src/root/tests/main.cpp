@@ -230,6 +230,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(random_uniform32);
     Y_UTEST(random_in2d);
     Y_UTEST(random_in3d);
+    Y_UTEST(random_gaussian);
 
     Y_UTEST(field_layouts);
     Y_UTEST(field_1d);

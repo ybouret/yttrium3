@@ -7,6 +7,8 @@
 #include "y/ability/identifiable.hpp"
 #include "y/random/coin-flip.hpp"
 #include "y/mkl/xreal.hpp"
+#include "y/object/counted.hpp"
+#include "y/pointer/arc.hpp"
 
 namespace Yttrium
 {
@@ -30,7 +32,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Bits : public Identifiable
+        class Bits : public CountedObject, public Identifiable
         {
         public:
             //__________________________________________________________________
@@ -75,6 +77,8 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(Bits); //!< discarded
         };
+
+        typedef ArcPtr<Bits> SharedBits;
 
     }
 }

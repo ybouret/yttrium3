@@ -71,7 +71,7 @@ namespace Yttrium
             rctx()
             {
                 clear();
-                for(size_t i=0;i<RANDSIZ;++i) rctx.randrsl[i] = Random::Seed64::Get64();
+                for(size_t i=0;i<RANDSIZ;++i) rctx.randrsl[i] = Random::Seed64::Get32();
                 randinit(&rctx,true);
             }
 
