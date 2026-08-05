@@ -5,21 +5,7 @@ namespace Yttrium
 {
     namespace Concurrent
     {
-
-#if 0
-        SIMD:: Arguments:: Arguments(const CopyOf_ &, void * const user) noexcept :
-        addr(user),
-        arg1(0),
-        arg2(0),
-        meth(0)
-        {
-        }
-
-
-
-        SIMD:: Arguments:: ~Arguments() noexcept {}
-#endif
-
+        
         SIMD:: SIMD() noexcept : procedure(0), arguments(0) {}
 
         SIMD:: ~SIMD() noexcept
@@ -27,7 +13,7 @@ namespace Yttrium
         }
 
 
-        void SIMD:: CallFunc0(Context &ctx, Arguments &args)
+        void SIMD:: Call0(Context &ctx, Arguments &args)
         {
             VaArgs ap(args);
             ap.func<Proc0>()(ctx);
@@ -41,7 +27,7 @@ namespace Yttrium
 
             Arguments                    args(func);
             const Temporary<Arguments *> tmpArgs(arguments,&args);
-            const Temporary<Procedure>   tmpProc(procedure,CallFunc0);
+            const Temporary<Procedure>   tmpProc(procedure,Call0);
             run();
         }
 
