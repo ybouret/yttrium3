@@ -4,7 +4,7 @@
 #ifndef Y_Random_Park_Miller_Included
 #define Y_Random_Park_Miller_Included 1
 
-#include "y/random/uniform32.hpp"
+#include "y/random/bits.hpp"
 
 namespace Yttrium
 {

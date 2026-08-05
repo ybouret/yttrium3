@@ -1,5 +1,5 @@
 
-#include "y/random/uniform32.hpp"
+#include "y/random/bits.hpp"
 #include <iostream>
 
 namespace Yttrium

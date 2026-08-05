@@ -3,7 +3,7 @@
 #ifndef Y_Random_In2D_Included
 #define Y_Random_In2D_Included 1
 
-#include "y/random/uniform32.hpp"
+#include "y/random/bits.hpp"
 #include "y/mkl/numeric.hpp"
 
 namespace Yttrium
