@@ -3,9 +3,9 @@
 #ifndef Y_Random_In3D_Included
 #define Y_Random_In3D_Included 1
 
-#include "y/random/bits.hpp"
+#include "y/random/uniform32.hpp"
 #include "y/mkl/numeric.hpp"
-#include "y/core/utils.hpp"
+#include "y/core/twice.hpp"
 
 namespace Yttrium
 {
@@ -73,5 +73,5 @@ namespace Yttrium
 
 }
 
-#endif
+#endif // !Y_Random_In3D_Included
 

@@ -262,6 +262,7 @@ Y_UTEST(random:type_gen)
 Y_UTEST(random:seed64)
 Y_UTEST(random:uniform32)
 Y_UTEST(random:in2d)
+Y_UTEST(random:in3d)
 
 Y_UTEST(field:layouts)
 Y_UTEST(field:1d)
