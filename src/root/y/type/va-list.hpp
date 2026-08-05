@@ -130,8 +130,7 @@ namespace Yttrium
         uint8_t *          rptr;
         uint8_t * const    data;
         void *             wksp[RequiredWords];
-
-
+        
         void   * unpack()                   noexcept; //!< \return decoded address
         VaList & record(const void * const) noexcept; //!< \return *this with encoded address
         VaList & mwrite(const void * const) noexcept; //!< \return *this with written method
