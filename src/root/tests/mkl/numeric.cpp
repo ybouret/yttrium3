@@ -27,6 +27,7 @@ template <typename T> static inline void showNumeric()
     SHOW(GOLDEN);
     SHOW(INV_GOLDEN);
     SHOW(THETA);
+
 }
 
 Y_UTEST(mkl_numeric)

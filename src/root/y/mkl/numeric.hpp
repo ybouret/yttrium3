@@ -61,6 +61,7 @@ template <> const XReal<long double> Numeric< XReal<long double> > :: VAR
         Y_MKL_NUMERIC(GOLDEN);       //!< declare GOLDEN
         Y_MKL_NUMERIC(INV_GOLDEN);   //!< declare INV_GOLDEN
         Y_MKL_NUMERIC(THETA);        //!< declare THETA
+        
 #endif // !defined(_MSC_VER)
 
     }

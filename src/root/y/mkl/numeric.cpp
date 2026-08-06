@@ -40,6 +40,39 @@ template <> const TYPE Numeric< XReal<double> >      :: VAR = Numeric<double> ::
 template <> const TYPE Numeric< XReal<long double> > :: VAR = Numeric<long double> :: VAR
 
         Y_MKL_DECL_TYPE(unsigned,MANT_DIG);
+#if 0
+        template <> const unsigned Numeric<float>       :: MANT_DIG32 = MANT_DIG < 32 ? MANT_DIG : 32;
+        template <> const unsigned Numeric<double>      :: MANT_DIG32 = MANT_DIG < 32 ? MANT_DIG : 32;
+        template <> const unsigned Numeric<long double> :: MANT_DIG32 = MANT_DIG < 32 ? MANT_DIG : 32;
+
+        namespace
+        {
+            template <typename T, unsigned M32> struct GetDENOM32
+            {
+                static const uint32_t ONE   = 1;
+                static const uint32_t DEN32 = ONE << M32;
+
+                static const T Value() noexcept
+                {
+                    static const T _ = DEN32;
+                    return _;
+
+                }
+            };
+
+            template <typename T> struct GetDENOM32<T,32>
+            {
+                static const T Value() noexcept { return 4294967296; }
+            };
+        }
+
+        template <> const float       Numeric<float>       :: DENOM32 = GetDENOM32<float,MANT_DIG32>::Value();
+        template <> const double      Numeric<double>      :: DENOM32 = GetDENOM32<double,MANT_DIG32>::Value();
+        template <> const long double Numeric<long double> :: DENOM32 = GetDENOM32<long double,MANT_DIG32>::Value();
+#endif
+
+
+
         Y_MKL_DECL_TYPE(unsigned,DIG);
 
         Y_MKL_DECL_TYPE(int,MIN_EXP);
