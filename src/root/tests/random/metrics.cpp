@@ -1,5 +1,6 @@
 #include "y/utest/run.hpp"
 #include "y/core/rand.hpp"
+#include "y/mkl/numeric.hpp"
 
 #include "y/format/hexadecimal.hpp"
 #include <cfloat>
@@ -9,6 +10,7 @@ namespace Yttrium
     namespace Random
     {
 
+#if 0
         template <typename T>
         class Metrics
         {
@@ -182,7 +184,7 @@ namespace Yttrium
         template <> const long double Metrics<long double> :: MANT_DEN32 = GetDENOM32<long double,MANT_DIG32>::Value;
 
 
-
+#endif
 
     }
 
@@ -190,11 +192,28 @@ namespace Yttrium
 
 using namespace Yttrium;
 
+namespace
+{
+    template <typename T>
+    void computeMetrics()
+    {
+        static const T eps   = MKL::Numeric<T>::EPSILON;
+        static const T half  = 0.5f;
+        static const T one   = 1;
+        static const T top32 = half/eps-one;
+        Y_PRINTV(eps);
+        Y_PRINTV(top32);
+
+        std::cerr << std::endl;
+    }
+}
 
 
 Y_UTEST(random_metrics)
 {
     Core::Rand ran;
+
+#if 0
     Random::Metrics<float>::Test();
 
     { Random::Metrics<float> fm(0xff);   fm.test(ran);     }
@@ -202,10 +221,12 @@ Y_UTEST(random_metrics)
     return 0;
     { Random::Metrics<float> fm(0xffffff);  fm.test(ran);     }
     { Random::Metrics<float> fm(0xfffffff); fm.test(ran);     }
+#endif
 
 
-
-
+    computeMetrics<float>();
+    computeMetrics<double>();
+    computeMetrics<long double>();
 
 }
 Y_UDONE()
