@@ -40,6 +40,9 @@ namespace Yttrium
         template <> float        Bits:: to<float>()        noexcept { return (float)((*this)()); }
         template <> long double  Bits:: to<long double>()  noexcept { return (long double)((*this)()); }
 
+
+        template <> XReal<double> Bits:: to< XReal<double> >() noexcept { return to<double>(); }
+
         template <> uint32_t Bits:: to<uint32_t>() noexcept { return next32(); }
         template <> uint16_t Bits:: to<uint16_t>() noexcept { return (uint16_t)next32(); }
         template <> uint8_t  Bits:: to<uint8_t>() noexcept { return (uint8_t)next32(); }

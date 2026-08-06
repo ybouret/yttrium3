@@ -139,13 +139,13 @@ namespace Yttrium
                 Equation(this, & dAstra<T>::compute ),
                 r0(position),
                 v0(r0.ortho()),
-                radius(r0.norm()),
+                radius(r0.abs()),
                 omega(pulsation),
                 omega2(omega*omega),
                 speed(radius*omega),
                 proj(this, & dAstra<T>::project )
                 {
-                    Coerce(v0) /= v0.norm();
+                    Coerce(v0) /= v0.abs();
                     Coerce(v0) *= speed;
                 }
 

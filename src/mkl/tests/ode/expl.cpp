@@ -14,7 +14,9 @@
 
 #include "y/utest/run.hpp"
 #include "y/stream/libc/output.hpp"
-//#include "y/random/in2d.hpp"
+#include "y/random/in2d.hpp"
+
+#include "y/random/mt19937.hpp"
 
 using namespace Yttrium;
 using namespace MKL;

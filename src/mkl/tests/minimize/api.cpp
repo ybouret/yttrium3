@@ -24,13 +24,13 @@ namespace
     }
 
     template <typename T> static
-    inline T getX(Random::Uniform32 &ran)
+    inline T getX(Random::Bits &ran)
     {
         return (1.0f - 2.0f * ran.to<float>());
     }
 
     template <typename T> static inline
-    void testMin(Random::Uniform32 &ran)
+    void testMin(Random::Bits &ran)
     {
         bool verbose = true;
         XML::Log xml(std::cerr,verbose);

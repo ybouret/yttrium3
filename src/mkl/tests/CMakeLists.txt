@@ -27,3 +27,6 @@ Y_UTEST(zroot)
 
 Y_UTEST(min:parabolic)
 Y_UTEST(min:api)
+
+Y_UTEST(ode:rk4)
+Y_UTEST(ode:expl)

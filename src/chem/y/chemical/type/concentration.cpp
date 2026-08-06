@@ -4,9 +4,9 @@ namespace Yttrium
 {
     namespace Chemical
     {
-        xreal_t   Concentration:: Get(Random::Uniform32 &ran,
-                                      const real_t       probaZ,
-                                      const real_t       probaN) noexcept
+        xreal_t   Concentration:: Get(Random::Bits   &ran,
+                                      const real_t    probaZ,
+                                      const real_t    probaN) noexcept
         {
             static const double minLog10 = MinLog10;
             static const double maxLog10 = MaxLog10;
@@ -19,11 +19,11 @@ namespace Yttrium
             return ( ran() <= probaN ? -c : c);
         }
 
-        void Concentration:: Fill(Random::Uniform32 &ran,
-                                  XWritable &C,
-                                  const size_t M,
-                                  const real_t probaZ,
-                                  const real_t probaN) noexcept
+        void Concentration:: Fill(Random::Bits &ran,
+                                  XWritable    &C,
+                                  const size_t  M,
+                                  const real_t  probaZ,
+                                  const real_t  probaN) noexcept
         {
             for(size_t i=M;i>0;--i) C[i] = Get(ran,probaZ,probaN);
         }
