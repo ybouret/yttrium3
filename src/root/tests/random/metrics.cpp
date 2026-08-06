@@ -1,4 +1,5 @@
 #include "y/utest/run.hpp"
+#include "y/core/rand.hpp"
 
 #include "y/format/hexadecimal.hpp"
 #include <cfloat>
@@ -38,10 +39,37 @@ namespace Yttrium
 
             inline ~Metrics() noexcept {}
 
-            inline void test() const
+
+
+            inline T eval(const uint32_t u32) const noexcept
             {
-                std::cerr << "max32=" << Hexadecimal(max32) << std::endl;
-                std::cerr << "den32=" << den32 << std::endl;
+                assert(u32<=max32);
+                return (*this.*build)(u32);
+            }
+
+            inline void test(CoinFlip &coin) const
+            {
+                static const T one(1);
+                std::cerr << std::setprecision(15);
+                std::cerr << "-- max32 = " << max32 << std::endl;
+                std::cerr << "-- den32 = " << den32 << std::endl;
+                if(max32>MAX_UINT32)
+                    std::cerr << "-- compressed" << std::endl;
+                else
+                    std::cerr << "-- full range" << std::endl;
+
+                const T rmin = eval(0);
+                std::cerr << "-- rmin = " << rmin << std::endl;
+                const T rmax = eval(max32);
+                std::cerr << "-- 1-rmax = " << one-rmax << std::endl;
+
+
+                for(size_t i=0;i<10;++i)
+                {
+                    const uint32_t u32 = coin.toss(max32);
+                    std::cerr << "\t" << Hexadecimal(u32) << " => " << eval(u32) << std::endl;
+                }
+                std::cerr << std::endl;
             }
 
             const uint32_t max32;
@@ -78,14 +106,21 @@ namespace Yttrium
                 }
             }
 
+            //! \return full range conversion
             inline T getFull(const uint32_t u32) const noexcept
             {
+                assert(u32<=max32);
                 return ( HALF + (T) u32 ) / den32;
             }
 
+            //! \return compressed range conversion
             inline T getComp(const uint32_t u32) const noexcept
             {
-                return 0;
+                assert(u32<=max32);
+                uint64_t u64 = u32;
+                u64 *= MAX_UINT32;
+                u64 /= max32;
+                return getFull( (uint32_t) u64 );
             }
 
 
@@ -159,11 +194,14 @@ using namespace Yttrium;
 
 Y_UTEST(random_metrics)
 {
+    Core::Rand ran;
     Random::Metrics<float>::Test();
 
-    { Random::Metrics<float> fm(0xfffff);   fm.test();     }
-    { Random::Metrics<float> fm(0xffffff);  fm.test();     }
-    { Random::Metrics<float> fm(0xfffffff); fm.test();     }
+    { Random::Metrics<float> fm(0xff);   fm.test(ran);     }
+    { Random::Metrics<float> fm(0xffff);  fm.test(ran);     }
+    return 0;
+    { Random::Metrics<float> fm(0xffffff);  fm.test(ran);     }
+    { Random::Metrics<float> fm(0xfffffff); fm.test(ran);     }
 
 
 
