@@ -9,6 +9,7 @@ y/mkl/root
 y/mkl/minimize
 y/mkl/ode
 y/mkl/ode/explicit
+y/mkl/tao
 )
 
 add_subdirectory(tests)

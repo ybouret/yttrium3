@@ -4,6 +4,7 @@ algebra
 root
 minimize
 ode
+tao
 )
 
 Y_LinkLibraries(test-mkl y-mkl)
@@ -30,3 +31,5 @@ Y_UTEST(min:api)
 
 Y_UTEST(ode:rk4)
 Y_UTEST(ode:expl)
+
+Y_UTEST(tao:device)
