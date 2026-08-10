@@ -4,6 +4,7 @@
 #define Y_Concurrent_Subdivisions_Included 1
 
 #include "y/concurrent/subdivision.hpp"
+#include "y/concurrent/api/local/memory.hpp"
 
 namespace Yttrium
 {
@@ -27,8 +28,9 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Subdivisions(const size_t) noexcept; //!< setup with ncpu 
-            virtual ~Subdivisions()             noexcept; //!< cleanup
+            explicit Subdivisions(const size_t);                               //!< setup with ncpu, create a a new local memory
+            explicit Subdivisions(const size_t, const LocalMemory &) noexcept; //!< setup with ncpu and an existing local memory
+            virtual ~Subdivisions()                                  noexcept; //!< cleanup
 
 
             //__________________________________________________________________
@@ -49,10 +51,9 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            void deleteCache() noexcept; //!< delete global cache and local caches
-            void updateCache() noexcept; //!< update local caches from global cache
-            void ensureCache(const size_t bytesPerSubdivision); //!< ensure local cache \param bytesPerSubdivision miminal local cache
-
+            void updateLocalCaches() noexcept;           //!< update local caches from shared memory
+            void removeLocalCaches() noexcept;           //!< remove all local caches, keep shared memory
+            void ensureLocalCaches(const size_t bytes); //!< check memory and update
 
             //__________________________________________________________________
             //
@@ -60,14 +61,11 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            const size_t ncpu; //!< dimensions
-            
+            const size_t ncpu;  //!< dimensions
+            LocalMemory  shmm;  //!< shared memory manager
+
         private:
             Y_Disable_Copy_And_Assign(Subdivisions); //!< discarded
-            void noCache() noexcept; //!< remove inner cache
-
-            const size_t wlen; //!< cache memory length
-            void * const wksp; //!< cache memory address
 
 
         };

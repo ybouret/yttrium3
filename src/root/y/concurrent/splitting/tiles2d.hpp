@@ -153,7 +153,7 @@ namespace Yttrium
                         new (tile++) Tile(ncpu,Coerce(code->size)++,sync,*this);
                     }
                     assert(ncpu==code->size);
-                    updateCache();
+                    updateLocalCaches();
                 }
             };
 

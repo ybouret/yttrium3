@@ -4,9 +4,7 @@
 
 #include "y/memory/allocator/archon.hpp"
 #include "y/calculus/alignment.hpp"
-#include "y/system/error.hpp"
 
-#include <cerrno>
 #include <cstring>
 
 namespace Yttrium
@@ -16,7 +14,7 @@ namespace Yttrium
 
         namespace
         {
-            static const char CallSign[] = "Concurrent::LocalCache";
+            //static const char CallSign[] = "Concurrent::LocalCache";
         }
 
         class LocalCache:: Code : public Object
@@ -29,7 +27,6 @@ namespace Yttrium
 
             inline virtual ~Code() noexcept {
                 release();
-                if(locked) Libc::Error::Critical(EINVAL,"%s stilled locked!",CallSign);
             }
 
             inline void match(const size_t required)
@@ -86,7 +83,6 @@ namespace Yttrium
             assert(blockSize>0);
             assert(numBlocks>0);
             assert(code);
-            if(code->locked) Libc::Error::Critical(EINVAL,"%s.ensure() while locked!",CallSign);
             const size_t bs       = Alignment::SystemMemory::Ceil(blockSize);
             const size_t required = bs * numBlocks;
             code->match(required);
@@ -107,19 +103,6 @@ namespace Yttrium
 
 
 
-        void LocalCache:: lock() noexcept
-        {
-            assert(code);
-            if(code->locked) Libc::Error::Critical(EINVAL,"%s already locked!",CallSign);
-            code->locked = true;
-        }
-
-        void LocalCache:: unlock() noexcept
-        {
-            assert(code);
-            if(!code->locked) Libc::Error::Critical(EINVAL,"%s already unlocked!",CallSign);
-            code->locked = false;
-        }
 
     }
 

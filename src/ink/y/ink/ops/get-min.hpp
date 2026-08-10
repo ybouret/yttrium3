@@ -38,7 +38,7 @@ namespace Yttrium
 
                 // prepare
                 broker.map(pixmap);
-                broker.ensureCache( sizeof(Type) );
+                broker.ensureLocalCaches( sizeof(Type) );
 
                 // collect each tile
                 broker.apply(pixmap,GetMinCB<PIXMAP>);

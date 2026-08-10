@@ -34,10 +34,7 @@ namespace Yttrium
             const size_t length = borrowable(buffer.length());
 
             if(length<=0)
-            {
-                Coerce(entry) = 0;
-                Coerce(bytes) = 0;
-            }
+                clearCache();
             else
             {
                 char * const addr = static_cast<char *>(buffer.rw());
@@ -45,6 +42,12 @@ namespace Yttrium
                 Coerce(bytes) = length;
             }
 
+        }
+
+        void Subdivision:: clearCache() noexcept
+        {
+            Coerce(entry) = 0;
+            Coerce(bytes) = 0;
         }
 
     }

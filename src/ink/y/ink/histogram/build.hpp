@@ -84,7 +84,7 @@ namespace Yttrium
             {
                 {
                     Ops ops;
-                    broker.ensureCache(Ops::Bytes);
+                    broker.ensureLocalCaches(Ops::Bytes);
                     broker(source, ops, & Ops::collect<T,PIXEL_TO_BYTE>, proc);
                 }
                 Merge(H,broker);

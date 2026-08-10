@@ -60,6 +60,7 @@ namespace Yttrium
 
             //! set entry and bytes from partial buffer
             void borrowFrom(Memory::ReadWriteBuffer &) noexcept;
+            void clearCache() noexcept;
 
             //__________________________________________________________________
             //

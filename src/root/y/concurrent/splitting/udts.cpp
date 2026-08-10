@@ -81,7 +81,7 @@ namespace Yttrium
                 if(extent!=code->cxx[1].n)
                 {
                     code->build(ncpu,access,extent);
-                    updateCache();
+                    updateLocalCaches();
                 }
             }
 

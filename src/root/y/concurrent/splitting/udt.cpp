@@ -152,7 +152,7 @@ namespace Yttrium
                 if(i<=1)
                     return cxx[1];
                 else
-                    if(indx>=span)
+                    if(i>=span)
                         return cxx[2];
                     else
                     {

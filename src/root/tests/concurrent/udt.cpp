@@ -68,7 +68,7 @@ Y_UTEST(concurrent_udt)
         for(size_t size=1;size<=8;++size)
         {
             Concurrent::Splitting::UpperDiagonalTiles udts(size,access);
-            udts.ensureCache(100);
+            udts.ensureLocalCaches(100);
             udts.remap(n,access);
             coords.free();
             for(size_t k=1;k<=udts.size();++k)
