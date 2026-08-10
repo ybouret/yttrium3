@@ -18,7 +18,7 @@ namespace Yttrium
         //
         //
         //
-        //! Handle memory to dispatch to Subdivision
+        //! Handle shared memory to dispatch to Subdivision
         //
         //
         //______________________________________________________________________
@@ -26,7 +26,7 @@ namespace Yttrium
         {
         public:
 
-            explicit LocalMemory();                    //!< setup with NEW local cache
+            LocalMemory();                             //!< setup with NEW local cache
             LocalMemory(const LocalMemory &) noexcept; //!< duplicate, shared copy
             virtual ~LocalMemory()           noexcept; //!< cleanup
 

@@ -6,6 +6,7 @@
 
 #include "y/memory/buffer/rw.hpp"
 #include "y/object/counted.hpp"
+#include "y/ability/lockable.hpp"
 
 namespace Yttrium
 {
@@ -19,7 +20,10 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class LocalCache : public CountedObject, public Memory::ReadWriteBuffer
+        class LocalCache :
+        public CountedObject,
+        public Memory::ReadWriteBuffer,
+        public Lockable
         {
         public:
             class Code;
@@ -45,7 +49,16 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
-            // Methids
+            // Interface
+            //
+            //__________________________________________________________________
+            virtual void lock()   noexcept;
+            virtual void unlock() noexcept;
+
+            //__________________________________________________________________
+            //
+            //
+            // Methods
             //
             //__________________________________________________________________
 

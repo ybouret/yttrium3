@@ -4,6 +4,9 @@
 
 #include "y/memory/allocator/archon.hpp"
 #include "y/calculus/alignment.hpp"
+#include "y/system/error.hpp"
+
+#include <cerrno>
 #include <cstring>
 
 namespace Yttrium
@@ -17,7 +20,10 @@ namespace Yttrium
         public:
             typedef Memory::Archon MemMgr;
 
-            inline explicit Code() : entry(0), bytes(0)
+            inline explicit Code() :
+            entry(0),
+            bytes(0),
+            locked(false)
             {
             }
 
@@ -44,10 +50,11 @@ namespace Yttrium
 
             void *   entry;
             size_t   bytes;
+            bool     locked;
 
         private:
             Y_Disable_Copy_And_Assign(Code);
-            
+
             inline void release() noexcept
             {
                 if(entry)
@@ -74,11 +81,17 @@ namespace Yttrium
 
         }
 
+        namespace
+        {
+            static const char CallSign[] = "Concurrent::LocalCache";
+        }
+
         LocalCache & LocalCache:: ensure(const size_t blockSize, const size_t numBlocks)
         {
             assert(blockSize>0);
             assert(numBlocks>0);
             assert(code);
+            if(code->locked) Libc::Error::Critical(EINVAL,"%s.ensure() while locked!",CallSign);
             const size_t bs       = Alignment::SystemMemory::Ceil(blockSize);
             const size_t required = bs * numBlocks;
             code->match(required);
@@ -97,9 +110,21 @@ namespace Yttrium
             return code->entry;
         }
 
-        
 
 
+        void LocalCache:: lock() noexcept
+        {
+            assert(code);
+            if(code->locked) Libc::Error::Critical(EINVAL,"%s already locked!",CallSign);
+            code->locked = true;
+        }
+
+        void LocalCache:: unlock() noexcept
+        {
+            assert(code);
+            if(!code->locked) Libc::Error::Critical(EINVAL,"%s already unlocked!",CallSign);
+            code->locked = false;
+        }
 
     }
 
