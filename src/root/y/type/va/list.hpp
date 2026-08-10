@@ -59,6 +59,7 @@ namespace Yttrium
         ~VaList() noexcept;      //!< cleanup
         Y_OSTREAM_PROTO(VaList); //!< display
 
+        //! setup \param cfunction initialized with cfunction
         template <typename CFUNCTION> inline
         VaList(CFUNCTION cfunction) noexcept :
         Y_VaList()
@@ -66,6 +67,7 @@ namespace Yttrium
             onInit()(cfunction);
         }
 
+        //! setup \param host object \param meth method 
         template <typename OBJECT, typename METHOD> inline
         VaList(OBJECT &host, METHOD meth) noexcept :
         Y_VaList()

@@ -66,7 +66,7 @@ namespace Yttrium
             return alias.user;
         }
 
-#if defined(DOXYGEN_SHOULD_SKIP_THIS)
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
     private:
         Y_Disable_Copy_And_Assign(VaArgs);
         VaList  & list;
@@ -74,7 +74,7 @@ namespace Yttrium
 
         void   * unpack()             noexcept; //!< \return decoded address
         void     mquery(void * const) noexcept; //!< decode method at given address
-#endif // defined(DOXYGEN_SHOULD_SKIP_THIS)
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
     };
 
