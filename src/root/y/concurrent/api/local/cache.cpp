@@ -14,23 +14,22 @@ namespace Yttrium
     namespace Concurrent
     {
 
+        namespace
+        {
+            static const char CallSign[] = "Concurrent::LocalCache";
+        }
 
         class LocalCache:: Code : public Object
         {
         public:
             typedef Memory::Archon MemMgr;
 
-            inline explicit Code() :
-            entry(0),
-            bytes(0),
-            locked(false)
-            {
-            }
+            inline explicit Code() noexcept: entry(0), bytes(0), locked(false) {}
 
 
-            inline virtual ~Code() noexcept
-            {
+            inline virtual ~Code() noexcept {
                 release();
+                if(locked) Libc::Error::Critical(EINVAL,"%s stilled locked!",CallSign);
             }
 
             inline void match(const size_t required)
@@ -42,9 +41,8 @@ namespace Yttrium
                     entry = mgr.acquire(bytes=required);
                 }
                 else
-                {
                     (void) memset(entry,0,bytes);
-                }
+
             }
 
 
@@ -81,10 +79,7 @@ namespace Yttrium
 
         }
 
-        namespace
-        {
-            static const char CallSign[] = "Concurrent::LocalCache";
-        }
+
 
         LocalCache & LocalCache:: ensure(const size_t blockSize, const size_t numBlocks)
         {
