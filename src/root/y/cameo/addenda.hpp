@@ -82,16 +82,24 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
+
+            //! \param n number of addition(s) to add into cache
             inline void grow(const size_t n) {
                 for(size_t i=0;i<n;++i)
                     pool.store( new AdditionType() );
             }
 
+            //! \param n number of addition(s) to add into cache \param minCapacity capacity per new addition
             inline void grow(const size_t n, const size_t minCapacity) {
                 for(size_t i=0;i<n;++i)
                     pool.store( new AdditionType(minCapacity) );
             }
 
+            //! prepare list
+            /**
+             \param n number of addition(s) to present
+             \return head of inner list
+             */
             inline AdditionType *make(const size_t n)
             {
                 notAbove(n);
@@ -100,6 +108,12 @@ namespace Yttrium
                 return list.head;
             }
 
+            //! prepare list
+            /**
+             \param n number of addition(s) to present
+             \param minCapacity capacity of new addition if needed
+             \return head of inner list
+             */
             inline AdditionType *make(const size_t n, const size_t minCapacity)
             {
                 notAbove(n);
