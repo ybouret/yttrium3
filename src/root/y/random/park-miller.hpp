@@ -21,11 +21,29 @@ namespace Yttrium
         class ParkMiller : public Bits
         {
         public:
-            static const char * const CallSign;
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const char * const CallSign; //!< "ParkMiller"
 
-            explicit ParkMiller();
-            virtual ~ParkMiller() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit ParkMiller();           //!< setup with random seed
+            virtual ~ParkMiller() noexcept;  //!< cleanup
 
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
             virtual uint32_t     next32() noexcept;
             virtual const char * callSign() const noexcept;
 

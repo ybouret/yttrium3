@@ -49,8 +49,19 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
+            //! ensure internal memory
+            /**
+             \param blockSize blockSize>0, will be aligbned
+             \param numBlocks numBlocks>0, a.k.a num threads
+             \return updated *this
+             */
             LocalCache & ensure(const size_t blockSize, const size_t numBlocks);
 
+            //! ensure internal memory for given type
+            /**
+             \param numBlocks numBlocks>0, a.j.a num threads
+             \return update *this
+             */
             template <typename T> inline
             LocalCache & ensure(const size_t numBlocks) {
                 return ensure(sizeof(T),numBlocks);
@@ -60,8 +71,8 @@ namespace Yttrium
 
 
         private:
-            Y_Disable_Copy_And_Assign(LocalCache);
-            Code * const code;
+            Y_Disable_Copy_And_Assign(LocalCache); //!< discard
+            Code * const code;                     //!< inner code
         };
     }
 

@@ -39,9 +39,9 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            typedef VaList Arguments;
+            typedef VaList Arguments;                          //!< alias
             typedef void (*Procedure)(Context &, Arguments &); //!< alias
-            typedef void (*Proc0)(Context &);
+            typedef void (*Proc0)(Context &);                  //!< alias
 
 
             //__________________________________________________________________
