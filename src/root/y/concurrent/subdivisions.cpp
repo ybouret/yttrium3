@@ -28,10 +28,17 @@ namespace Yttrium
             assert(ncpu>0);
         }
 
+        Subdivisions:: Subdivisions(const Subdivisions &parent) noexcept :
+        ncpu(parent.ncpu),
+        shmm(parent.shmm)
+        {
+
+        }
+
 
         Subdivisions:: ~Subdivisions() noexcept
         {
-            //noCache();
+            
         }
 
 

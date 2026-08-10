@@ -30,6 +30,7 @@ namespace Yttrium
             //__________________________________________________________________
             explicit Subdivisions(const size_t);                               //!< setup with ncpu, create a a new local memory
             explicit Subdivisions(const size_t, const LocalMemory &) noexcept; //!< setup with ncpu and an existing local memory
+            explicit Subdivisions(const Subdivisions &)              noexcept; //!< setup with smae ncpu and local memory
             virtual ~Subdivisions()                                  noexcept; //!< cleanup
 
 
@@ -65,7 +66,7 @@ namespace Yttrium
             LocalMemory  shmm;  //!< shared memory manager
 
         private:
-            Y_Disable_Copy_And_Assign(Subdivisions); //!< discarded
+            Y_Disable_Assign(Subdivisions); //!< discarded
 
 
         };
