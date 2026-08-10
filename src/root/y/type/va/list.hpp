@@ -10,8 +10,9 @@
 namespace Yttrium
 {
 
-    class VaArgs;
+    class VaArgs; // forward declaration
 
+    //! helper to construct empty VaList
 #define Y_VaList() wptr(0), data(0), wksp()
 
     //__________________________________________________________________________

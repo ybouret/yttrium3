@@ -9,12 +9,32 @@
 namespace Yttrium
 {
 
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Decode arguments from VaList
+    //
+    //
+    //__________________________________________________________________________
     class VaArgs
     {
     public:
-        VaArgs(VaList &) noexcept;
-        ~VaArgs() noexcept;
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+        VaArgs(VaList &) noexcept; //!< setup from PERSISTENT lust
+        ~VaArgs()        noexcept; //!< cleanup
 
+        //______________________________________________________________________
+        //
+        //
+        // methods
+        //
+        //______________________________________________________________________
         size_t   codeBytes() const noexcept; //!< \return bytes still containing code
 
         //! unpack data \return cast a previously stored args
@@ -46,6 +66,7 @@ namespace Yttrium
             return alias.user;
         }
 
+#if defined(DOXYGEN_SHOULD_SKIP_THIS)
     private:
         Y_Disable_Copy_And_Assign(VaArgs);
         VaList  & list;
@@ -53,6 +74,7 @@ namespace Yttrium
 
         void   * unpack()             noexcept; //!< \return decoded address
         void     mquery(void * const) noexcept; //!< decode method at given address
+#endif // defined(DOXYGEN_SHOULD_SKIP_THIS)
 
     };
 
