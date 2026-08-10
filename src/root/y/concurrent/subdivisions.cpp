@@ -67,6 +67,12 @@ namespace Yttrium
                 updateLocalCaches();
             }
 
+#if !defined(NDEBUG)
+            for(size_t i=1;i<=ncpu;++i)
+            {
+                assert( sub(i).bytes >= bytes );
+            }
+#endif // !defined(NDEBUG)
         }
 
         

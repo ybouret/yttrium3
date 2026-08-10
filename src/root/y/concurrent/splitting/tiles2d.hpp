@@ -124,7 +124,7 @@ namespace Yttrium
                         Coerce(self.width) = next.width;
                         Coerce(self.items) = next.items;
                     }
-                    setup(lk);
+                    setup(lk); // metrics has changed
                 }
 
                 

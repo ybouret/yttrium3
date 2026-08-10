@@ -195,7 +195,7 @@ namespace Yttrium
                         Coerce(oldLeap.offset) = newLeap.offset;
                         Coerce(oldLeap.length) = newLeap.length;
                     }
-                    setup(sync);
+                    setup(sync); // metrics has changed
                 }
 
 
