@@ -11,12 +11,43 @@ namespace Yttrium
 {
     namespace Concurrent
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Memory to dispatch to SIMD
+        //
+        //
+        //______________________________________________________________________
         class LocalCache : public CountedObject, public Memory::ReadWriteBuffer
         {
         public:
             class Code;
-            explicit LocalCache();
-            virtual ~LocalCache() noexcept;
+
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit LocalCache();           //!< setup emtpy
+            virtual ~LocalCache() noexcept;  //!< cleanup
+
+            //__________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //__________________________________________________________________
+            virtual const void * ro()     const noexcept;
+            virtual size_t       length() const noexcept;
+
+            //__________________________________________________________________
+            //
+            //
+            // Methids
+            //
+            //__________________________________________________________________
 
             LocalCache & ensure(const size_t blockSize, const size_t numBlocks);
 
@@ -25,9 +56,9 @@ namespace Yttrium
                 return ensure(sizeof(T),numBlocks);
             }
 
+            size_t maxBlockSizeFor(const size_t numBlocks) const noexcept;
 
-            virtual const void * ro()     const noexcept;
-            virtual size_t       length() const noexcept;
+
 
         private:
             Y_Disable_Copy_And_Assign(LocalCache);

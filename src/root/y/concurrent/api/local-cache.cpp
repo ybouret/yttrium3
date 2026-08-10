@@ -4,6 +4,7 @@
 
 #include "y/memory/allocator/archon.hpp"
 #include "y/calculus/alignment.hpp"
+#include <cstring>
 
 namespace Yttrium
 {
@@ -33,6 +34,10 @@ namespace Yttrium
                     static MemMgr & mgr = MemMgr:: Instance();
                     release();
                     entry = mgr.acquire(bytes=required);
+                }
+                else
+                {
+                    (void) memset(entry,0,bytes);
                 }
             }
 
@@ -91,6 +96,17 @@ namespace Yttrium
             assert(code);
             return code->entry;
         }
+
+        size_t LocalCache:: maxBlockSizeFor(const size_t numBlocks) const noexcept
+        {
+            assert(code);
+            assert(numBlocks>0);
+            size_t res = code->bytes/numBlocks;
+            while(res>0 && 0 != (res%sizeof(void*))) --res;
+            return res;
+        }
+
+
 
     }
 
