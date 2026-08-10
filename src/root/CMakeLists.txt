@@ -32,6 +32,7 @@ y/concurrent/thread
 y/concurrent/splitting
 y/concurrent/api
 y/concurrent/api/simd
+y/concurrent/api/local
 y/threading
 y/calculus
 y/calculus/prime

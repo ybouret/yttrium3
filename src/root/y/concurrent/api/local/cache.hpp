@@ -15,7 +15,7 @@ namespace Yttrium
         //
         //
         //
-        //! Memory to dispatch to SIMD
+        //! Cache to dispatch to Subdivisions
         //
         //
         //______________________________________________________________________

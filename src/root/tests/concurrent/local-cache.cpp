@@ -1,5 +1,5 @@
 
-#include "y/concurrent/api/local-cache.hpp"
+#include "y/concurrent/api/local/memory.hpp"
 #include "y/utest/run.hpp"
 
 using namespace Yttrium;
@@ -7,11 +7,11 @@ using namespace Yttrium;
 Y_UTEST(concurrent_local_cache)
 {
 
-    Concurrent::LocalCache lc;
+    Concurrent::LocalMemory mem;
 
-    lc.ensure(10,8);
+    mem->ensure(10,8);
 
-    Y_PRINTV(lc.length());
+    Y_PRINTV(mem->length());
 
 }
 Y_UDONE()

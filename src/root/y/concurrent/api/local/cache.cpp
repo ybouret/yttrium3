@@ -1,5 +1,5 @@
 
-#include "y/concurrent/api/local-cache.hpp"
+#include "y/concurrent/api/local/cache.hpp"
 #include "y/type/destroy.hpp"
 
 #include "y/memory/allocator/archon.hpp"
