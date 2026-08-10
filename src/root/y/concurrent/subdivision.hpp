@@ -4,6 +4,7 @@
 #define Y_Concurrent_Subdivision_Included 1
 
 #include "y/concurrent/api/context.hpp"
+#include "y/memory/buffer/rw.hpp"
 
 namespace Yttrium
 {
@@ -56,6 +57,9 @@ namespace Yttrium
                 assert(bytes>=sizeof(T));
                 return *static_cast<const T*>(entry);
             }
+
+            //! set entry and bytes from partial buffer
+            void borrowFrom(Memory::ReadWriteBuffer &) noexcept;
 
             //__________________________________________________________________
             //

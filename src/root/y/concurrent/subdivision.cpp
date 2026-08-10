@@ -24,7 +24,28 @@ namespace Yttrium
         bytes(0)
         {
         }
+
+
         
+
+        
+        void Subdivision:: borrowFrom(Memory::ReadWriteBuffer &buffer) noexcept
+        {
+            const size_t length = borrowable(buffer.length());
+
+            if(length<=0)
+            {
+                Coerce(entry) = 0;
+                Coerce(bytes) = 0;
+            }
+            else
+            {
+                char * const addr = static_cast<char *>(buffer.rw());
+                Coerce(entry) = & addr[ rank*length ];
+                Coerce(bytes) = length;
+            }
+
+        }
 
     }
 

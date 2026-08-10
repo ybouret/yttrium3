@@ -56,7 +56,6 @@ namespace Yttrium
                 return ensure(sizeof(T),numBlocks);
             }
 
-            size_t maxBlockSizeFor(const size_t numBlocks) const noexcept;
 
 
 

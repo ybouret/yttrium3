@@ -71,6 +71,21 @@ namespace Yttrium
         }
 
 
+
+        size_t Member:: Borrowable(const size_t blockSize, const size_t mySize) noexcept
+        {
+            assert(mySize>0);
+            size_t length = blockSize/mySize;
+            while( (length>0) && 0 != (length % sizeof(void*) ) ) --length;
+            return length;
+        }
+
+
+        size_t Member:: borrowable(const size_t blockSize) const noexcept
+        {
+            return Borrowable(blockSize,size);
+        }
+
     }
 
 }

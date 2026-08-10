@@ -104,6 +104,18 @@ namespace Yttrium
                 return Part(size,indx,extent,travel);
             }
 
+            //! compute borrowable memory from a blockSize
+            /**
+             \param blockSize user block size
+             \param mySize    number of threads
+             \return aligned available bytes
+             */
+            static size_t Borrowable(const size_t blockSize, const size_t mySize) noexcept;
+
+            //! \param blockSize user block size \return borrowable bytes from blockSize
+            size_t borrowable(const size_t blockSize) const noexcept;
+
+
             //__________________________________________________________________
             //
             //

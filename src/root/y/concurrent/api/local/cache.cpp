@@ -97,14 +97,7 @@ namespace Yttrium
             return code->entry;
         }
 
-        size_t LocalCache:: maxBlockSizeFor(const size_t numBlocks) const noexcept
-        {
-            assert(code);
-            assert(numBlocks>0);
-            size_t res = code->bytes/numBlocks;
-            while(res>0 && 0 != (res%sizeof(void*))) --res;
-            return res;
-        }
+        
 
 
 
