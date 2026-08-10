@@ -103,6 +103,7 @@ Y_UTEST(concurrent:split2d)
 Y_UTEST(concurrent:udt)
 Y_UTEST(concurrent:simd)
 Y_UTEST(concurrent:primes)
+Y_UTEST(concurrent:local_cache)
 
 Y_UTEST(memory:small:chunk)
 Y_UTEST(memory:small:arena)
