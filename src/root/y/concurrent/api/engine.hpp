@@ -36,6 +36,7 @@ namespace Yttrium
         private:
             Y_Disable_Assign(Engine); //!< discarded
             Y_Proxy_Decl();           //!< helper
+        protected:
             SIMD * const simd;        //!< shared instance
         };
 
