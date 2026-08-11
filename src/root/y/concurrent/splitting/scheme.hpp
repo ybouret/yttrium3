@@ -14,20 +14,40 @@ namespace Yttrium
         namespace Splitting
         {
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Base class to share parallelism and local memory
+            //
+            //
+            //__________________________________________________________________
             class Scheme
             {
             public:
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
 
-                //! setup parallelism
-                explicit Scheme(const size_t);
-                virtual ~Scheme() noexcept;
-                Scheme(const Scheme &) noexcept;
 
+                explicit Scheme(const size_t);   //!< setup parallelism and NEW local memory
+                virtual ~Scheme() noexcept;      //!< cleanup
+                Scheme(const Scheme &) noexcept; //!< duplicate, no-throw
+
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
                 const size_t parallelism; //!< parallelism > 0
                 LocalMemory  localMemory; //!< shared local memory
 
             private:
-                Y_Disable_Assign(Scheme);
+                Y_Disable_Assign(Scheme); //!< discarded
             };
         }
 

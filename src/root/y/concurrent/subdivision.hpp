@@ -58,9 +58,8 @@ namespace Yttrium
                 return *static_cast<const T*>(entry);
             }
 
-            //! set entry and bytes from partial buffer
-            void borrowFrom(Memory::ReadWriteBuffer &) noexcept;
-            void clearCache() noexcept;
+            void borrowFrom(Memory::ReadWriteBuffer &) noexcept; //!< set entry and bytes from partial buffer
+            void clearCache()                          noexcept; //!< clear entry and bytes
 
             //__________________________________________________________________
             //

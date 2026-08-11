@@ -138,17 +138,18 @@ namespace Yttrium
 
                 //! setup
                 /**
-                 \param core       ncpu > 0
+                 \param init       threads of scheme
                  \param sync       PERSITENT lock
                  \param dataOffset data offset
                  \param dataLength data length
                  */
-                inline explicit Tiles1D(const size_t       core,
+                template <typename INITIALIZER>
+                inline explicit Tiles1D(const INITIALIZER &init,
                                         Lockable    &      sync,
                                         const T            dataOffset,
                                         const T            dataLength) :
                 Leap(dataOffset,dataLength),
-                Subdivisions(core),
+                Subdivisions(init),
                 code( new Code(parallelism) )
                 {
                     setup(sync);
@@ -156,13 +157,14 @@ namespace Yttrium
 
                 //! setup empty (would remap)
                 /**
-                 \param core ncpu > 0
+                 \param init threads of scheme
                  \param sync PERSITENT lock
                  */
-                inline explicit Tiles1D(const size_t core,
-                                        Lockable    &sync) :
+                template <typename INITIALIZER>
+                inline explicit Tiles1D(const INITIALIZER &init,
+                                        Lockable          &sync) :
                 Leap(),
-                Subdivisions(core),
+                Subdivisions(init),
                 code( new Code(parallelism) )
                 {
                     setup(sync);

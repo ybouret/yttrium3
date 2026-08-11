@@ -53,35 +53,40 @@ namespace Yttrium
 
                 //! setup
                 /**
-                 \param nc parallelism
-                 \param lk PERSISTENT lock
-                 \param lo lower coordinate
-                 \param up upper coordinate
+                 \param init threads or scheme
+                 \param sync PERSISTENT lock
+                 \param lo   lower coordinate
+                 \param up   upper coordinate
                  */
-                inline explicit Tiles2D(const size_t   nc,
-                                        Lockable      &lk,
-                                        const vertex_t lo,
-                                        const vertex_t up) :
+                template <typename INITIALIZER>
+                inline explicit Tiles2D(const INITIALIZER   &init,
+                                        Lockable            &sync,
+                                        const vertex_t       lo,
+                                        const vertex_t       up) :
                 Leap(lo,up),
-                Subdivisions(nc),
+                Subdivisions(init),
                 code( new Code(parallelism) )
                 {
-                    setup(lk);
+                    setup(sync);
                 }
 
-                //! setup empty \param nc parallelism \param lk PERSISTENT lock
-                inline explicit Tiles2D(const size_t nc,
-                                        Lockable    &lk) :
+                //! setup empty
+                /**
+                 \param init threads or scheme
+                 \param sync PERSISTENT lock
+                 */
+                template <typename INITIALIZER>
+                inline explicit Tiles2D(const INITIALIZER &init,
+                                        Lockable          &sync) :
                 Leap(),
-                Subdivisions(nc),
+                Subdivisions(init),
                 code( new Code(parallelism) )
                 {
-                    setup(lk);
+                    setup(sync);
                 }
 
                 //! cleanup
-                inline virtual ~Tiles2D() noexcept
-                {
+                inline virtual ~Tiles2D() noexcept {
                     assert(code); Destroy(code);
                 }
 
