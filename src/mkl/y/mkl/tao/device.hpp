@@ -18,6 +18,7 @@ namespace Yttrium
             typedef Concurrent::Splitting::Tiles1D<size_t>    Tiles1D;
             typedef Concurrent::Splitting::Tiles2D<size_t>    Tiles2D;
             typedef Concurrent::Splitting::UpperDiagonalTiles UDTS;
+            typedef Concurrent::Splitting::Scheme             Scheme;
 
             typedef Tiles1D::Tile Tile1D;
             typedef Tiles2D::Tile Tile2D;
@@ -31,14 +32,15 @@ namespace Yttrium
                 explicit Device(const Concurrent::Engine &);
                 virtual ~Device() noexcept;
 
-                static size_t SizeOfCode() noexcept;
+                Scheme  scheme;  //!< holds local memory
+                Tiles1D tiles1d; //!< for vector/vector ops
+                Tiles2D tiles2d; //!< for matrix/vector, matrix/matrix ops
+                UDTS    udts;    //!< for upper diagonal ops
 
             private:
                 Y_Disable_Copy_And_Assign(Device);
-                Code * const code;
-            public:
-                Concurrent::LocalCache &localCache;
-                
+
+
             };
         }
     }

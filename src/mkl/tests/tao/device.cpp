@@ -11,9 +11,8 @@ Y_UTEST(tao_device)
     MKL::Tao::Device seq(seqEngine);
     MKL::Tao::Device par(parEngine);
 
-    Y_PRINTV(MKL::Tao::Device::SizeOfCode());
     
-
+    Y_SIZEOF(MKL::Tao::Device);
 
 
 }
