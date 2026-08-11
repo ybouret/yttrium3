@@ -64,7 +64,7 @@ namespace Yttrium
                                         const vertex_t up) :
                 Leap(lo,up),
                 Subdivisions(nc),
-                code( new Code(ncpu) )
+                code( new Code(parallelism) )
                 {
                     setup(lk);
                 }
@@ -74,7 +74,7 @@ namespace Yttrium
                                         Lockable    &lk) :
                 Leap(),
                 Subdivisions(nc),
-                code( new Code(ncpu) )
+                code( new Code(parallelism) )
                 {
                     setup(lk);
                 }
@@ -91,8 +91,8 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
-                inline virtual size_t              size()                 const noexcept { return ncpu; }
-                inline virtual size_t              capacity()             const noexcept { return ncpu; }
+                inline virtual size_t              size()                 const noexcept { return parallelism; }
+                inline virtual size_t              capacity()             const noexcept { return parallelism; }
                 inline virtual const Subdivision & sub(const size_t indx) const noexcept
                 {
                     return ask(indx);
@@ -136,9 +136,9 @@ namespace Yttrium
                 inline virtual const Tile & ask(const size_t indx) const noexcept
                 {
                     assert(code);
-                    assert(ncpu==code->size);
+                    assert(parallelism==code->size);
                     assert(indx>=1);
-                    assert(indx<=ncpu);
+                    assert(indx<=parallelism);
                     return code->cxx[indx];
                 }
 
@@ -148,11 +148,11 @@ namespace Yttrium
                     assert(code);
                     code->free();
                     Tile * tile = code->addr;
-                    while(code->size<ncpu)
+                    while(code->size<parallelism)
                     {
-                        new (tile++) Tile(ncpu,Coerce(code->size)++,sync,*this);
+                        new (tile++) Tile(parallelism,Coerce(code->size)++,sync,*this);
                     }
-                    assert(ncpu==code->size);
+                    assert(parallelism==code->size);
                     updateLocalCaches();
                 }
             };

@@ -50,8 +50,13 @@ namespace Yttrium
                  \param mySize number of tiles
                  \param access persistent access
                  */
-                explicit UpperDiagonalTiles(const size_t mySize,
-                                            Lockable &   access);
+                explicit UpperDiagonalTiles(const size_t       mySize,
+                                            Lockable &         access);
+
+                //! setup with empty tiles
+                explicit UpperDiagonalTiles(const Splitting::Scheme &scheme,
+                                            Lockable                &access);
+
 
                 //! cleanup
                 virtual ~UpperDiagonalTiles() noexcept;
@@ -62,9 +67,9 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
-                virtual const Tile &sub(const size_t) const noexcept;
-                virtual size_t      size()            const noexcept;
-                virtual size_t      capacity()        const noexcept;
+                virtual const Tile & sub(const size_t) const noexcept;
+                virtual size_t       size()            const noexcept;
+                virtual size_t       capacity()        const noexcept;
 
                 //______________________________________________________________
                 //

@@ -4,7 +4,7 @@
 #define Y_Concurrent_Subdivisions_Included 1
 
 #include "y/concurrent/subdivision.hpp"
-#include "y/concurrent/api/local/memory.hpp"
+#include "y/concurrent/splitting/scheme.hpp"
 
 namespace Yttrium
 {
@@ -19,7 +19,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Subdivisions
+        class Subdivisions : public Splitting::Scheme
         {
         public:
             //__________________________________________________________________
@@ -28,10 +28,15 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Subdivisions(const size_t);                               //!< setup with ncpu, create a a new local memory
-            explicit Subdivisions(const size_t, const LocalMemory &) noexcept; //!< setup with ncpu and an existing local memory
-            explicit Subdivisions(const Subdivisions &)              noexcept; //!< setup with smae ncpu and local memory
-            virtual ~Subdivisions()                                  noexcept; //!< cleanup
+
+            //! setup parallelism and new local memory
+            explicit Subdivisions(const size_t);
+
+            //! setup by no-throw copy of scheme
+            explicit Subdivisions(const Splitting::Scheme &) noexcept;
+
+            //! cleanup
+            virtual ~Subdivisions() noexcept; 
 
 
             //__________________________________________________________________
@@ -56,17 +61,10 @@ namespace Yttrium
             void removeLocalCaches() noexcept;           //!< remove all local caches, keep shared memory
             void ensureLocalCaches(const size_t bytes); //!< check memory and update
 
-            //__________________________________________________________________
-            //
-            //
-            // Members
-            //
-            //__________________________________________________________________
-            const size_t ncpu;  //!< dimensions
-            LocalMemory  shmm;  //!< shared memory manager
+            
 
         private:
-            Y_Disable_Assign(Subdivisions); //!< discarded
+            Y_Disable_Copy_And_Assign(Subdivisions); //!< discarded
 
 
         };

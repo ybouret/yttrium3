@@ -26,7 +26,6 @@ namespace
         static const T half  = 0.5f;
         static const T one   = 1;
         static const T top32 = half/eps-one;
-        static const T two   = 2;
         static const T top32Shift = std::floor( std::log(top32) / std::log(2) );
         Y_PRINTV(eps);
         Y_PRINTV(top32);

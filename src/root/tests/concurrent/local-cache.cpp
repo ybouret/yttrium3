@@ -7,7 +7,7 @@ using namespace Yttrium;
 Y_UTEST(concurrent_local_cache)
 {
 
-    Concurrent::LocalMemory mem;
+    Concurrent::LocalMemory mem = 0;
 
     mem->ensure(10,8);
 

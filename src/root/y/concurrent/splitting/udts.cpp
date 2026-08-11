@@ -62,13 +62,22 @@ namespace Yttrium
                 Destroy(code);
             }
 
-            UpperDiagonalTiles:: UpperDiagonalTiles(const size_t nc,
-                                                    Lockable    &lk) :
+            UpperDiagonalTiles:: UpperDiagonalTiles(const size_t       nc,
+                                                    Lockable    &      lk) :
             Subdivisions(nc),
-            code(new Code(nc,lk) )
+            code(new Code(parallelism,lk) )
             {
 
             }
+            
+
+            UpperDiagonalTiles:: UpperDiagonalTiles(const Splitting::Scheme &scheme,
+                                                    Lockable                &access) :
+            Subdivisions(scheme),
+            code( new Code(parallelism,access) )
+            {
+            }
+
 
             const UpperDiagonalTile & UpperDiagonalTiles:: sub(const size_t i) const noexcept
             {
@@ -80,19 +89,19 @@ namespace Yttrium
                 assert(code);
                 if(extent!=code->cxx[1].n)
                 {
-                    code->build(ncpu,access,extent);
+                    code->build(parallelism,access,extent);
                     updateLocalCaches();
                 }
             }
 
-            size_t UpperDiagonalTiles:: size()     const noexcept { return ncpu; }
-            size_t UpperDiagonalTiles:: capacity() const noexcept { return ncpu; }
+            size_t UpperDiagonalTiles:: size()     const noexcept { return parallelism; }
+            size_t UpperDiagonalTiles:: capacity() const noexcept { return parallelism; }
 
             const UpperDiagonalTile & UpperDiagonalTiles:: ask(const size_t i) const noexcept
             {
                 assert(code);
                 assert(i>0);
-                assert(i<=ncpu);
+                assert(i<=parallelism);
                 return code->cxx[i];
             }
 

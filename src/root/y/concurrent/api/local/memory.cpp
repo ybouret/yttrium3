@@ -17,8 +17,8 @@ namespace Yttrium
         {
         }
 
-        LocalMemory:: LocalMemory() :
-        SharedLocalCache( new LocalCache() )
+        LocalMemory:: LocalMemory(LocalCache * const p) :
+        SharedLocalCache( p ? p : new LocalCache() )
         {
         }
         

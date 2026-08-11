@@ -25,8 +25,7 @@ namespace Yttrium
         class LocalMemory : public SharedLocalCache
         {
         public:
-
-            LocalMemory();                             //!< setup with NEW local cache
+            LocalMemory(LocalCache * const);           //!< setup with given or new local cache
             LocalMemory(const LocalMemory &) noexcept; //!< duplicate, shared copy
             virtual ~LocalMemory()           noexcept; //!< cleanup
 

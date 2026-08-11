@@ -15,22 +15,15 @@ namespace Yttrium
         }
 
         Subdivisions:: Subdivisions(const size_t n) :
-        ncpu(n),
-        shmm()
+        Splitting::Scheme(n)
         {
-            assert(ncpu>0);
+            assert(parallelism>0);
         }
 
-        Subdivisions:: Subdivisions(const size_t n, const LocalMemory &localMem) noexcept :
-        ncpu(n),
-        shmm(localMem)
-        {
-            assert(ncpu>0);
-        }
 
-        Subdivisions:: Subdivisions(const Subdivisions &parent) noexcept :
-        ncpu(parent.ncpu),
-        shmm(parent.shmm)
+
+        Subdivisions:: Subdivisions(const Splitting::Scheme &scheme) noexcept :
+        Splitting::Scheme(scheme)
         {
 
         }
@@ -53,14 +46,14 @@ namespace Yttrium
 
         void Subdivisions:: updateLocalCaches() noexcept
         {
-            for(size_t i=1;i<=ncpu;++i)
-                sub(i).borrowFrom(*shmm);
+            for(size_t i=1;i<=parallelism;++i)
+                sub(i).borrowFrom(*localMemory);
         }
 
 
         void Subdivisions:: removeLocalCaches() noexcept
         {
-            for(size_t i=1;i<=ncpu;++i)
+            for(size_t i=1;i<=parallelism;++i)
             {
                 sub(i).clearCache();
             }
@@ -70,12 +63,12 @@ namespace Yttrium
         {
             if(bytes>0)
             {
-                shmm->ensure(bytes,ncpu);
+                localMemory->ensure(bytes,parallelism);
                 updateLocalCaches();
             }
 
 #if !defined(NDEBUG)
-            for(size_t i=1;i<=ncpu;++i)
+            for(size_t i=1;i<=parallelism;++i)
             {
                 assert( sub(i).bytes >= bytes );
             }
