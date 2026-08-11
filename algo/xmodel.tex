@@ -1,0 +1,32 @@
+\documentclass[aps,12pt]{revtex4}
+\usepackage[a4paper]{geometry}
+\usepackage{graphicx}
+\usepackage{amssymb,amsfonts,amsmath,amsthm}
+\usepackage{bm}
+\usepackage{pslatex}
+\usepackage{chemarr}
+\usepackage{mathptmx}
+%\usepackage{bookman}
+
+\begin{document}
+
+\section{Approximation: Michaelis-Menten}
+
+\begin{equation}
+ S + E \xrightleftharpoons[k_d]{k_f} ES \xrightarrow[]{k_p} E + P,\;\; E_0 = [E] + [ES]
+\end{equation}
+
+\begin{equation}
+\left\lbrace
+\begin{array}{ccl}
+\partial_t [S]  & = & v_d - v_f\\
+\partial_t [P]  & = & v_p \\
+\partial_t [ES] & = & v_f - v_d - v_p\\
+v_d & = & k_d [ES]\\ 
+v_p & = & k_p [ES]\\
+v_f & = & k_f [E][S]\\
+\end{array}
+\right.
+\end{equation}
+
+\end{document}
