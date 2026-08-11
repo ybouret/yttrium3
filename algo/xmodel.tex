@@ -40,7 +40,13 @@ k_b = k_d + k_p
 
 \begin{equation}
 \boxed{
-	\partial_t [P] = -\partial_t [S] \simeq k_p E_0 \dfrac{[S]}{[S]+\dfrac{k_b}{k_f}} = k_p E_0 \dfrac{[S]}{[S]+K_M}, \;\; K_M = \dfrac{k_b}{k_f} = \dfrac{k_d+k_p}{k_f}
+\begin{array}{rcl}
+	\partial_t [P] & = & -\partial_t [S] \simeq k_p E_0 \dfrac{[S]}{[S]+\dfrac{k_b}{k_f}} = V_0^+\dfrac{[S]}{[S]+K_M}\\
+	\\
+	 K_M & = & \dfrac{k_b}{k_f} = \dfrac{k_d+k_p}{k_f}\\
+	 \\
+	 V_0^+ & = & k_p E_0\\
+\end{array}
 	}
 \end{equation}
 
@@ -85,6 +91,22 @@ K_M = \dfrac{k_b}{k_f}, \;\; \rho = \dfrac{k_r}{k_f}
 	{[E]}  & = & [ES] \dfrac{K_M}{[S] + \rho [P]} = E_0 \dfrac{K_M}{K_M + [S] + \rho [P]}\\
 \end{array}
 \right.
+\end{equation}
+
+And finally:
+\begin{equation}
+\boxed{
+\begin{array}{rcl}
+	\partial_t [P]  & = & - \partial_t [S] = V_0^+ \dfrac{[S]}{K_M + [S] + \rho [P]} - V_0^-\dfrac{\rho [P]}{K_M + [S] + \rho [P]}\\
+	\\
+	K_M & = & \dfrac{k_b}{k_f} = \dfrac{k_d+k_p}{k_f}\\
+	\\
+	\rho & = & \dfrac{k_r}{k_f}\\
+	\\
+	 V_0^+ & = & k_p E_0\\
+	 V_0^- & = & k_d E_0\\
+\end{array}
+}
 \end{equation}
 
 \end{document}
