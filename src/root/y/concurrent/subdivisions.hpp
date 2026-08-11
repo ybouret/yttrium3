@@ -60,7 +60,21 @@ namespace Yttrium
             void removeLocalCaches() noexcept;          //!< remove all local caches, keep shared memory
             void ensureLocalCaches(const size_t bytes); //!< check memory and update
 
-            
+            template <typename NODE> inline
+            void link(NODE * node)
+            {
+                typedef NODE * NodePtr;
+                assert(0!=node);
+                ensureLocalCaches(sizeof(NodePtr));
+                for(size_t i=1;i<=parallelism;++i,node=node->next)
+                {
+                    assert(node);
+                    Subdivision &target = sub(i); assert(target.entry); assert(target.bytes>=sizeof(NodePtr));
+                    *(NodePtr *)target.entry = node;
+                }
+            }
+
+
 
         private:
             Y_Disable_Copy_And_Assign(Subdivisions); //!< discarded

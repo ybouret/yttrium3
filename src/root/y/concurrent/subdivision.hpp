@@ -57,6 +57,7 @@ namespace Yttrium
                 assert(bytes>=sizeof(T));
                 return *static_cast<const T*>(entry);
             }
+            
 
             void borrowFrom(Memory::ReadWriteBuffer &) noexcept; //!< set entry and bytes from partial buffer
             void clearCache()                          noexcept; //!< clear entry and bytes
