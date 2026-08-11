@@ -39,7 +39,52 @@ k_b = k_d + k_p
 \end{equation}
 
 \begin{equation}
-	\partial_t [P] = -\partial_t [S] \simeq k_p E_0 \dfrac{[S]}{[S]+\dfrac{k_b}{k_f}}
+\boxed{
+	\partial_t [P] = -\partial_t [S] \simeq k_p E_0 \dfrac{[S]}{[S]+\dfrac{k_b}{k_f}} = k_p E_0 \dfrac{[S]}{[S]+K_M}, \;\; K_M = \dfrac{k_b}{k_f} = \dfrac{k_d+k_p}{k_f}
+	}
+\end{equation}
+
+\section{Approximation: Reversible Michaelis-Menten}
+
+\begin{equation}
+ S + E \xrightleftharpoons[k_d]{k_f} ES \xrightleftharpoons[k_r]{k_p} E + P,\;\; E_0 = [E] + [ES]
+\end{equation}
+
+\begin{equation}
+\left\lbrace
+\begin{array}{ccl}
+\partial_t [S]  & = & v_d - v_f\\
+\partial_t [P]  & = & v_p - v_r \\
+\partial_t [ES] & = & v_f - v_d + v_r - v_p\\
+v_d & = & k_d [ES]\\ 
+v_p & = & k_p [ES]\\
+v_f & = & k_f [E][S]\\
+v_r & = & k_r [E][P]\\
+\end{array}
+\right.
+\end{equation}
+
+Using:
+\begin{equation}
+k_b = k_d + k_p
+\end{equation}
+
+\begin{equation}
+[ES] \simeq E_0 \dfrac{k_r [P] + k_f [S]}{k_b + k_r [P] + k_f [S] }
+\end{equation}
+Using:
+\begin{equation}
+K_M = \dfrac{k_b}{k_f}, \;\; \rho = \dfrac{k_r}{k_f}
+\end{equation}
+
+\begin{equation}
+\left\lbrace
+\begin{array}{ccl}
+	{[ES]} & = & E_0 \dfrac{[S] + \rho [P]}{K_M + [S] + \rho [P]}\\
+	\\
+	{[E]}  & = & [ES] \dfrac{K_M}{[S] + \rho [P]} = E_0 \dfrac{K_M}{K_M + [S] + \rho [P]}\\
+\end{array}
+\right.
 \end{equation}
 
 \end{document}
