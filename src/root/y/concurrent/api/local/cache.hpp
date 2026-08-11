@@ -52,7 +52,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-            //! ensure internal memory
+            //! ensure internal ZEROED memory
             /**
              \param blockSize blockSize>0, will be aligbned
              \param numBlocks numBlocks>0, a.k.a num threads

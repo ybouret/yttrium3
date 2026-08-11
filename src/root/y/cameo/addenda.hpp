@@ -9,7 +9,9 @@
 #include "y/type/proxy.hpp"
 #include "y/core/list/cxx.hpp"
 #include "y/core/pool/cxx.hpp"
-
+#include "y/ability/collectable.hpp"
+#include "y/core/pool/to-list.hpp"
+#include "y/core/list/to-pool.hpp"
 
 namespace Yttrium
 {
@@ -29,7 +31,8 @@ namespace Yttrium
         public CountedObject,
         public Proxy< Core::ListOf< Addition<T> > >,
         public Container,
-        public Recyclable
+        public Recyclable,
+        public Collectable
         {
         public:
             //__________________________________________________________________
@@ -75,6 +78,23 @@ namespace Yttrium
             inline virtual size_t size()     const noexcept { return list.size; }
             inline virtual size_t capacity() const noexcept { return pool.size; }
             inline virtual void   free()           noexcept { while(list.size) pool.store(list.popTail()); }
+            inline virtual void   release()        noexcept
+            {
+                list.release();
+                pool.release();
+            }
+
+            inline virtual void gc(const uint8_t amount) noexcept
+            {
+                CoreListType L;
+                Core::PoolToList::Make(L,pool).sortByIncreasingAddress();
+                {
+                    const size_t newSize = NewSize(amount,L.size);
+                    while(L.size>newSize) delete L.popTail();
+                }
+                Core::ListToPool::Make(pool,L);
+            }
+
 
             //__________________________________________________________________
             //

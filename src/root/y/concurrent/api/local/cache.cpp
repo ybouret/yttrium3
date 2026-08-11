@@ -4,6 +4,7 @@
 
 #include "y/memory/allocator/archon.hpp"
 #include "y/calculus/alignment.hpp"
+#include "y/libc/block/zeroed.h"
 
 #include <cstring>
 
@@ -36,6 +37,7 @@ namespace Yttrium
                     static MemMgr & mgr = MemMgr:: Instance();
                     release();
                     entry = mgr.acquire(bytes=required);
+                    assert( Y_TRUE == Yttrium_Zeroed(entry,bytes) );
                 }
                 else
                     (void) memset(entry,0,bytes);

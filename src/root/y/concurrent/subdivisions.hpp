@@ -56,9 +56,8 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-
-            void updateLocalCaches() noexcept;           //!< update local caches from shared memory
-            void removeLocalCaches() noexcept;           //!< remove all local caches, keep shared memory
+            void updateLocalCaches() noexcept;          //!< update local caches from shared memory
+            void removeLocalCaches() noexcept;          //!< remove all local caches, keep shared memory
             void ensureLocalCaches(const size_t bytes); //!< check memory and update
 
             
