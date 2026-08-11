@@ -50,7 +50,13 @@ namespace Yttrium
             {
             }
 
+            size_t Device:: SizeOfCode() noexcept
+            {
+                return sizeof(Code);
+            }
+
         }
+
 
     }
 }

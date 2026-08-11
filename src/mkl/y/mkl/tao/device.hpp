@@ -31,7 +31,7 @@ namespace Yttrium
                 explicit Device(const Concurrent::Engine &);
                 virtual ~Device() noexcept;
 
-
+                static size_t SizeOfCode() noexcept;
 
             private:
                 Y_Disable_Copy_And_Assign(Device);
