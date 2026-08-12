@@ -65,8 +65,8 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 Scheme  scheme;  //!< holds local memory
-                Tiles1D tiles1d; //!< for vector/vector ops
-                Tiles2D tiles2d; //!< for matrix/vector, matrix/matrix ops
+                Tiles1D tiles1d; //!< for vector/vector, matrix/vector ops
+                Tiles2D tiles2d; //!< for matrix/matrix ops
                 UDTS    udts;    //!< for upper diagonal ops
 
             private:
