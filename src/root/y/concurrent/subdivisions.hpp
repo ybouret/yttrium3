@@ -60,7 +60,7 @@ namespace Yttrium
             void removeLocalCaches() noexcept;          //!< remove all local caches, keep shared memory
             void ensureLocalCaches(const size_t bytes); //!< check memory and update
 
-            //! store successive node addresses in subdivision
+            //! store successive node addresses per subdivision
             template <typename NODE> inline
             void link(NODE * node)
             {
@@ -69,10 +69,40 @@ namespace Yttrium
                 ensureLocalCaches(sizeof(NodePtr));
                 for(size_t i=1;i<=parallelism;++i,node=node->next)
                 {
+                    Subdivision &target = sub(i);
                     assert(node);
-                    Subdivision &target = sub(i); assert(target.entry); assert(target.bytes>=sizeof(NodePtr));
+                    assert(target.entry);
+                    assert(target.bytes>=sizeof(NodePtr));
                     *(NodePtr *)target.entry = node;
                 }
+            }
+
+            //__________________________________________________________________
+            //
+            //
+            // Cameo::Addenda helpers
+            //
+            //__________________________________________________________________
+
+            //! helper to link a Cameo::Addition<T> per subdivision
+            /**
+             \param addenda Cameo::Addenta<T>
+             */
+            template <typename ADDENDA> inline
+            void attach(ADDENDA &addenda)
+            {
+                link( addenda.make(parallelism) );
+            }
+
+            //! helper to link a Cameo::Addition<T> per subdivision
+            /**
+             \param addenda Cameo::Addenta<T>
+             \param minCapacity min capacity of new Cameo::Addtion if needed
+             */
+            template <typename ADDENDA> inline
+            void attach(ADDENDA &addenda, const size_t minCapacity)
+            {
+                link( addenda.make(parallelism,minCapacity) );
             }
 
 
