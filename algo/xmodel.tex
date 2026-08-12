@@ -117,7 +117,7 @@ And finally:
 \section{One Way Flip}
 
 \begin{itemize}
-\item We assume that a species $A$ in a first medium is exchange with a species $B$ by a transporter $E$.
+\item We assume that a species $A$ in a first medium is exchange with a species $B$ in a second medium by a transporter $E$.
 \item We assume that $n_A$ molecules of $A$   and $n_B$ molecules of $B$
 are necessary to form $A^\ast-E-B^\ast$.
 \item The exchange is then perform with a flip of $A^\ast-E-B^\ast$.
@@ -126,13 +126,26 @@ are necessary to form $A^\ast-E-B^\ast$.
 \begin{equation}
 \left\lbrace
 \begin{array}{c}
-n_A\;A + E + n_B\;B \xrightleftharpoons[k_d]{k_f} A^\ast-E-B^\ast \\
-A^\ast-E-B^\ast \xrightarrow[]{k_x} E + (n_A\;A \leftrightsquigarrow n_B\;B)\\
-E_0 = [E] + [A^\ast-E-B^\ast]\\
+n_A\;A + E + n_B\;B' \xrightleftharpoons[k_d]{k_f} A^\ast-E-B^\ast \\
+A^\ast-E-B^\ast \xrightarrow[]{k_x} E + n_A\;A' + n_B B\\
+E_0 = [E] + [AEB]\\
 \end{array}
 \right.
 \end{equation}
 
+We write:
+\begin{equation}
+\left\lbrace
+\begin{array}{ccl}
+v_f & = & k_f [A]^{n_A} [E] [B']^{n_B} \\
+v_d & = & k_d [AEB] \\
+v_x & = & k_x [AEB] \\
+\partial_t [A]   & = & -n_A  v_f + v_d - n_A v_x\\
+\partial_t [B']  & = & -n_B v_f + v_d  - n_B v_x\\
+\partial_t [AEB] & = & v_f - v_d - v_x\\
+\end{array}
+\right.
+\end{equation}
 
 
 
