@@ -60,6 +60,7 @@ namespace Yttrium
             void removeLocalCaches() noexcept;          //!< remove all local caches, keep shared memory
             void ensureLocalCaches(const size_t bytes); //!< check memory and update
 
+            //! store successive node addresses in subdivision
             template <typename NODE> inline
             void link(NODE * node)
             {
