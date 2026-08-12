@@ -6,6 +6,7 @@
 \usepackage{pslatex}
 \usepackage{chemarr}
 \usepackage{mathptmx}
+%\usepackage{mathabx}
 %\usepackage{bookman}
 
 \begin{document}
@@ -49,6 +50,8 @@ k_b = k_d + k_p
 \end{array}
 	}
 \end{equation}
+
+\newpage 
 
 \section{Approximation: Reversible Michaelis-Menten}
 
@@ -108,5 +111,29 @@ And finally:
 \end{array}
 }
 \end{equation}
+
+\newpage
+
+\section{One Way Flip}
+
+\begin{itemize}
+\item We assume that a species $A$ in a first medium is exchange with a species $B$ by a transporter $E$.
+\item We assume that $n_A$ molecules of $A$   and $n_B$ molecules of $B$
+are necessary to form $A^\ast-E-B^\ast$.
+\item The exchange is then perform with a flip of $A^\ast-E-B^\ast$.
+\end{itemize}
+
+\begin{equation}
+\left\lbrace
+\begin{array}{c}
+n_A\;A + E + n_B\;B \xrightleftharpoons[k_d]{k_f} A^\ast-E-B^\ast \\
+A^\ast-E-B^\ast \xrightarrow[]{k_x} E + (n_A\;A \leftrightsquigarrow n_B\;B)\\
+E_0 = [E] + [A^\ast-E-B^\ast]\\
+\end{array}
+\right.
+\end{equation}
+
+
+
 
 \end{document}
