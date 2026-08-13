@@ -78,7 +78,7 @@ namespace Yttrium
             Y_Disable_Copy_And_Assign(Bits); //!< discarded
         };
 
-        typedef ArcPtr<Bits> SharedBits;
+        typedef ArcPtr<Bits> SharedBits; //!< alias for allocated Bits
 
     }
 }

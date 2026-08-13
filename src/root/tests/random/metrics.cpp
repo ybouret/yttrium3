@@ -10,6 +10,47 @@ namespace Yttrium
     namespace Random
     {
 
+#if 0
+        template <typename T>
+        class Metrics
+        {
+        public:
+            static const T        EPSILON;
+            static const unsigned MAX_SHIFT;
+            static const unsigned NMAX;
+            static const T        DMAX;
+
+        };
+
+        template <> const float       Metrics<float>       :: EPSILON = FLT_EPSILON;
+        template <> const double      Metrics<double>      :: EPSILON = DBL_EPSILON;
+        template <> const long double Metrics<long double> :: EPSILON = LDBL_EPSILON;
+
+        template <> const unsigned Metrics<float>::       MAX_SHIFT = (unsigned) floorf( - logf(EPSILON) / logf(2.0f) - 1.0f );
+        template <> const unsigned Metrics<double>::      MAX_SHIFT = (unsigned) floor(  - log(EPSILON)  / log(2.0)   - 1.0  );
+        template <> const unsigned Metrics<long double>:: MAX_SHIFT = (unsigned) floorl( - logl(EPSILON) / logl(2.0L) - 1.0L );
+
+        template <> const unsigned Metrics<float>::       NMAX = (MAX_SHIFT < 32 ? MAX_SHIFT : 32);
+        template <> const unsigned Metrics<double>::      NMAX = (MAX_SHIFT < 32 ? MAX_SHIFT : 32);
+        template <> const unsigned Metrics<long double>:: NMAX = (MAX_SHIFT < 32 ? MAX_SHIFT : 32);
+
+        namespace
+        {
+            template <typename T, const unsigned N> struct GetDenom
+            {
+                static const T Value = (T) ( uint32_t(1) << N );
+            };
+
+            template <typename T> struct GetDenom<T,32>
+            {
+                static const T Value = (T) 4294967296;
+            };
+        }
+
+        //template <> const float Metrics<float>:: DMAX = GetDenom<float,NMAX>::Value;
+#endif
+
+
 
     }
 
@@ -19,36 +60,22 @@ using namespace Yttrium;
 
 namespace
 {
-    template <typename T>
-    void computeMetrics()
-    {
-        static const T eps   = MKL::Numeric<T>::EPSILON;
-        static const T half  = 0.5f;
-        static const T one   = 1;
-        static const T top32 = half/eps-one;
-        static const T top32Shift = std::floor( std::log(top32) / std::log(2) );
-        Y_PRINTV(eps);
-        Y_PRINTV(top32);
-        Y_PRINTV(top32Shift);
 
-        std::cerr << std::endl;
-    }
 }
 
 
 Y_UTEST(random_metrics)
 {
     Core::Rand ran;
-    computeMetrics<float>();
-    computeMetrics<double>();
-    computeMetrics<long double>();
 
-    static const double numer = 4294967295.5;
-    static const double denom = 4294967296.0;
-    const double alpha = 0.5 / denom;
-    const double beta  = numer/denom;
-    std::cerr << alpha << " " << 1.0-beta << " / " << MKL::Numeric<double>::EPSILON << std::endl;
+    Y_PRINTV( MKL::Numeric<float>::EPSILON );
+    Y_PRINTV( MKL::Numeric<float>::DIG );
 
+    Y_PRINTV( MKL::Numeric<double>::EPSILON );
+    Y_PRINTV( MKL::Numeric<double>::DIG );
+
+    Y_PRINTV( MKL::Numeric<long double>::EPSILON );
+    Y_PRINTV( MKL::Numeric<long double>::DIG );
 
 }
 Y_UDONE()
