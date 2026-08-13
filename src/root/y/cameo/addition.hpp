@@ -117,6 +117,24 @@ namespace Yttrium
                 return self();
             }
 
+            //! dot product plus value of same-sized arrays
+            /**
+             \param lhs array
+             \param rhs array
+             \param arg subtracted
+             \return <lhs|rhs> - arg
+             */
+            template <typename LARRAY, typename RARRAY, typename ARG> inline
+            Type dotadd(LARRAY &lhs, RARRAY &rhs, ARG &arg)
+            {
+                assert(lhs.size()==rhs.size());
+                SummatorType &self = *this;
+                self.ldz();
+                for(size_t i=lhs.size();i>0;--i) addProd(lhs[i],rhs[i]);
+                self += arg;
+                return self();
+            }
+
             //! dot product minus value of same-sized arrays
             /**
              \param lhs array

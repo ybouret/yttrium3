@@ -284,6 +284,13 @@ namespace Yttrium
             for(size_t i=I+1; i<=nr; ++i,++ir) copyMinorRow(m,ir,i,J);
         }
 
+        //______________________________________________________________________
+        //
+        //
+        // Embedded algebraic operations
+        //
+        //______________________________________________________________________
+
         //! in place multiplication: target = *this * source \param target output vector \param source input vector
         template <typename TARGET, typename SOURCE> inline
         void mul(TARGET &target, SOURCE &source) const
@@ -292,6 +299,23 @@ namespace Yttrium
             Cameo::Addition<T> xadd(cols);
             for(size_t i=rows;i>0;--i)
                 target[i] = xadd.dot( row[i], source);
+        }
+
+        //! in place multiplication and addition : target = *this * source + rhs
+        /**
+         \param target output vector
+         \param source input vector
+         \param rhs    vector to subtract
+         */
+        template <typename TARGET, typename SOURCE, typename RHS> inline
+        void muladd(TARGET &target, SOURCE &source, RHS &rhs) const
+        {
+            assert(rows==target.size());
+            assert(cols==source.size());
+            assert(rows==rhs.size());
+            Cameo::Addition<T> xadd(cols);
+            for(size_t i=rows;i>0;--i)
+                target[i] = xadd.dotadd( row[i], source, rhs[i]);
         }
 
         //! in place multiplication and subtraction : target = *this * source - rhs
@@ -394,6 +418,26 @@ namespace Yttrium
             }
         }
 
+        //! multiply each item \param u factor \return *this
+        template <typename U> inline
+        Matrix & operator*=(U &u)
+        {
+            for(size_t i=rows;i>0;--i)
+                for(size_t j=cols;j>0;--j)
+                    (*this)[i][j] *= u;
+            return *this;
+        }
+
+        //! divided each item \param u denominator \return *this
+        template <typename U> inline
+        Matrix & operator/=(U &u)
+        {
+            for(size_t i=rows;i>0;--i)
+                for(size_t j=cols;j>0;--j)
+                    (*this)[i][j] /= u;
+            return *this;
+        }
+
 
         //! \return light array of data
         LightArray<Type> asArray() noexcept {
@@ -416,28 +460,7 @@ namespace Yttrium
             return true;
         }
 
-
-        //! multiply each item \param u factor \return *this
-        template <typename U> inline
-        Matrix & operator*=(U &u)
-        {
-            for(size_t i=rows;i>0;--i)
-                for(size_t j=cols;j>0;--j)
-                    (*this)[i][j] *= u;
-            return *this;
-        }
-
-        //! divided each item \param u denominator \return *this
-        template <typename U> inline
-        Matrix & operator/=(U &u)
-        {
-            for(size_t i=rows;i>0;--i)
-                for(size_t j=cols;j>0;--j)
-                    (*this)[i][j] /= u;
-            return *this;
-        }
-
-
+        
     private:
         size_t              length; //!< bytes
         RowType * const     row;    //!< row in [1:rows]
