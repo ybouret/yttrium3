@@ -5,31 +5,36 @@
 #include "y/format/hexadecimal.hpp"
 #include <cfloat>
 
+#include "y/core/min.hpp"
+
+
 namespace Yttrium
 {
     namespace Random
     {
 
-#if 0
         template <typename T>
         class Metrics
         {
         public:
             static const T        EPSILON;
-            static const unsigned MAX_SHIFT;
-            static const unsigned NMAX;
-            static const T        DMAX;
-
+            static const unsigned MAX_SHL;
+            static const unsigned TOP_SHL;
         };
 
         template <> const float       Metrics<float>       :: EPSILON = FLT_EPSILON;
         template <> const double      Metrics<double>      :: EPSILON = DBL_EPSILON;
         template <> const long double Metrics<long double> :: EPSILON = LDBL_EPSILON;
 
-        template <> const unsigned Metrics<float>::       MAX_SHIFT = (unsigned) floorf( - logf(EPSILON) / logf(2.0f) - 1.0f );
-        template <> const unsigned Metrics<double>::      MAX_SHIFT = (unsigned) floor(  - log(EPSILON)  / log(2.0)   - 1.0  );
-        template <> const unsigned Metrics<long double>:: MAX_SHIFT = (unsigned) floorl( - logl(EPSILON) / logl(2.0L) - 1.0L );
+        template <> const unsigned Metrics<float>::       MAX_SHL = (unsigned) floorf( - logf(FLT_EPSILON)  / logf(2.0f) - 1.0f );
+        template <> const unsigned Metrics<double>::      MAX_SHL = (unsigned) floor(  - log(DBL_EPSILON)   / log(2.0)   - 1.0  );
+        template <> const unsigned Metrics<long double>:: MAX_SHL = (unsigned) floorl( - logl(LDBL_EPSILON) / logl(2.0L) - 1.0L );
 
+        template <> const unsigned Metrics<float>::       TOP_SHL = Min<unsigned>(MAX_SHL,32);
+        template <> const unsigned Metrics<double>::      TOP_SHL = Min<unsigned>(MAX_SHL,32);
+        template <> const unsigned Metrics<long double>:: TOP_SHL = Min<unsigned>(MAX_SHL,32);
+
+#if 0
         template <> const unsigned Metrics<float>::       NMAX = (MAX_SHIFT < 32 ? MAX_SHIFT : 32);
         template <> const unsigned Metrics<double>::      NMAX = (MAX_SHIFT < 32 ? MAX_SHIFT : 32);
         template <> const unsigned Metrics<long double>:: NMAX = (MAX_SHIFT < 32 ? MAX_SHIFT : 32);
@@ -60,6 +65,16 @@ using namespace Yttrium;
 
 namespace
 {
+    template <typename T> static inline
+    void showMetrics()
+    {
+        std::cerr << "-- \t\t Metrics for <" << typeid(T).name() << "> :" << std::endl;
+        Y_PRINTV( Random::Metrics<T>::EPSILON );
+        Y_PRINTV( Random::Metrics<T>::MAX_SHL);
+        Y_PRINTV( Random::Metrics<T>::TOP_SHL);
+
+        std::cerr << std::endl;
+    }
 
 }
 
@@ -68,14 +83,9 @@ Y_UTEST(random_metrics)
 {
     Core::Rand ran;
 
-    Y_PRINTV( MKL::Numeric<float>::EPSILON );
-    Y_PRINTV( MKL::Numeric<float>::DIG );
-
-    Y_PRINTV( MKL::Numeric<double>::EPSILON );
-    Y_PRINTV( MKL::Numeric<double>::DIG );
-
-    Y_PRINTV( MKL::Numeric<long double>::EPSILON );
-    Y_PRINTV( MKL::Numeric<long double>::DIG );
+    showMetrics<float>();
+    showMetrics<double>();
+    showMetrics<long double>();
 
 }
 Y_UDONE()
