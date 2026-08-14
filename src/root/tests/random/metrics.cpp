@@ -76,6 +76,10 @@ namespace Yttrium
 
             T getComp(const uint32_t u32) const noexcept
             {
+                uint64_t u64 = u32;
+                u64 *= TOP_U32;
+                u64 /= m32;
+                return getFull( (uint32_t) u64 );
 
             }
 
@@ -161,6 +165,15 @@ namespace
         std::cerr << std::endl;
     }
 
+    template <typename T> static inline
+    void testMetrics(const uint32_t umax)
+    {
+        std::cerr << "-- \t\t test Metrics for <" << typeid(T).name() << ">, umax=" << umax << std::endl;
+        Random::Metrics<T> rm(umax);
+
+    }
+
+
 }
 
 
@@ -172,10 +185,10 @@ Y_UTEST(random_metrics)
     showMetrics<double>();
     showMetrics<long double>();
 
-    { Random::Metrics<float> fm(0xff); }
-    { Random::Metrics<float> fm(0xffff); }
-    { Random::Metrics<float> fm(0xffffff); }
-    { Random::Metrics<float> fm(0xffffffff); }
+    testMetrics<float>(0xff);
+    testMetrics<float>(0xffff);
+    testMetrics<float>(0xffffff);
+    testMetrics<float>(0xffffffff); 
 
 }
 Y_UDONE()
