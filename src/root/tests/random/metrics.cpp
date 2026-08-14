@@ -20,6 +20,8 @@ namespace Yttrium
             static const T        EPSILON;
             static const unsigned MAX_SHL;
             static const unsigned TOP_SHL;
+            static const T        TOP_DEN;
+
         };
 
         template <> const float       Metrics<float>       :: EPSILON = FLT_EPSILON;
@@ -34,26 +36,27 @@ namespace Yttrium
         template <> const unsigned Metrics<double>::      TOP_SHL = Min<unsigned>(MAX_SHL,32);
         template <> const unsigned Metrics<long double>:: TOP_SHL = Min<unsigned>(MAX_SHL,32);
 
-#if 0
-        template <> const unsigned Metrics<float>::       NMAX = (MAX_SHIFT < 32 ? MAX_SHIFT : 32);
-        template <> const unsigned Metrics<double>::      NMAX = (MAX_SHIFT < 32 ? MAX_SHIFT : 32);
-        template <> const unsigned Metrics<long double>:: NMAX = (MAX_SHIFT < 32 ? MAX_SHIFT : 32);
-
         namespace
         {
-            template <typename T, const unsigned N> struct GetDenom
+            template <typename T> static inline
+            T GetTopDen32(const unsigned top_shl)
             {
-                static const T Value = (T) ( uint32_t(1) << N );
-            };
-
-            template <typename T> struct GetDenom<T,32>
-            {
-                static const T Value = (T) 4294967296;
+                static const uint32_t one = 1;
+                assert(top_shl<=32);
+                switch(top_shl)
+                {
+                    case 32: return (T) 4294967296;
+                    default:
+                        break;
+                }
+                return (T)(one<<top_shl);
             };
         }
 
-        //template <> const float Metrics<float>:: DMAX = GetDenom<float,NMAX>::Value;
-#endif
+        template <> const float       Metrics<float>::       TOP_DEN = GetTopDen32<float>(TOP_SHL);
+        template <> const double      Metrics<double>::      TOP_DEN = GetTopDen32<double>(TOP_SHL);
+        template <> const long double Metrics<long double>:: TOP_DEN = GetTopDen32<long double>(TOP_SHL);
+
 
 
 
@@ -72,6 +75,7 @@ namespace
         Y_PRINTV( Random::Metrics<T>::EPSILON );
         Y_PRINTV( Random::Metrics<T>::MAX_SHL);
         Y_PRINTV( Random::Metrics<T>::TOP_SHL);
+        Y_PRINTV( Random::Metrics<T>::TOP_DEN);
 
         std::cerr << std::endl;
     }
