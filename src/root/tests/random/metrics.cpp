@@ -39,6 +39,11 @@ namespace Yttrium
 
             }
 
+            inline T eval(const uint32_t u32) const noexcept
+            {
+                return (*this.*get)(u32);
+            }
+
             const uint32_t m32;
             const T        d32;
             Get const      get;
@@ -168,9 +173,13 @@ namespace
     template <typename T> static inline
     void testMetrics(const uint32_t umax)
     {
+        static const T one = 1;
         std::cerr << "-- \t\t test Metrics for <" << typeid(T).name() << ">, umax=" << umax << std::endl;
         Random::Metrics<T> rm(umax);
+        Y_PRINTV( rm.eval(0) );
+        Y_PRINTV( one-rm.eval(umax) );
 
+        std::cerr << std::endl;
     }
 
 
@@ -188,7 +197,12 @@ Y_UTEST(random_metrics)
     testMetrics<float>(0xff);
     testMetrics<float>(0xffff);
     testMetrics<float>(0xffffff);
-    testMetrics<float>(0xffffffff); 
+    testMetrics<float>(0xffffffff);
+
+    testMetrics<double>(0xff);
+    testMetrics<double>(0xffff);
+    testMetrics<double>(0xffffff);
+    testMetrics<double>(0xffffffff);
 
 }
 Y_UDONE()
