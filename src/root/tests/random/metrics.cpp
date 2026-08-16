@@ -85,7 +85,6 @@ namespace Yttrium
                 u64 *= TOP_U32;
                 u64 /= m32;
                 return getFull( (uint32_t) u64 );
-
             }
 
         };
@@ -98,9 +97,9 @@ namespace Yttrium
         template <> const double      Metrics<double>      :: HALF = 0.5;
         template <> const long double Metrics<long double> :: HALF = 0.5L;
 
-        template <> const unsigned Metrics<float>::       MAX_SHL = (unsigned) floorf( - logf(FLT_EPSILON)  / logf(2.0f) - 1.0f );
-        template <> const unsigned Metrics<double>::      MAX_SHL = (unsigned) floor(  - log(DBL_EPSILON)   / log(2.0)   - 1.0  );
-        template <> const unsigned Metrics<long double>:: MAX_SHL = (unsigned) floorl( - logl(LDBL_EPSILON) / logl(2.0L) - 1.0L );
+        template <> const unsigned Metrics<float>::       MAX_SHL = (unsigned) floorf( - logf(EPSILON) / logf(2.0f) - 1.0f );
+        template <> const unsigned Metrics<double>::      MAX_SHL = (unsigned) floor(  - log(EPSILON)  / log(2.0)   - 1.0  );
+        template <> const unsigned Metrics<long double>:: MAX_SHL = (unsigned) floorl( - logl(EPSILON) / logl(2.0L) - 1.0L );
 
         template <> const unsigned Metrics<float>::       TOP_SHL = Min<unsigned>(MAX_SHL,32);
         template <> const unsigned Metrics<double>::      TOP_SHL = Min<unsigned>(MAX_SHL,32);
@@ -176,8 +175,12 @@ namespace
         static const T one = 1;
         std::cerr << "-- \t\t test Metrics for <" << typeid(T).name() << ">, umax=" << umax << std::endl;
         Random::Metrics<T> rm(umax);
-        Y_PRINTV( rm.eval(0) );
-        Y_PRINTV( one-rm.eval(umax) );
+        const T minRan = rm.eval(0);
+        const T maxRan = rm.eval(umax);
+        Y_PRINTV( minRan );
+        Y_PRINTV( one - maxRan );
+        Y_CHECK(minRan>=rm.EPSILON);
+        Y_CHECK(one-maxRan>=rm.EPSILON);
 
         std::cerr << std::endl;
     }
@@ -203,6 +206,11 @@ Y_UTEST(random_metrics)
     testMetrics<double>(0xffff);
     testMetrics<double>(0xffffff);
     testMetrics<double>(0xffffffff);
+
+    testMetrics<long double>(0xff);
+    testMetrics<long double>(0xffff);
+    testMetrics<long double>(0xffffff);
+    testMetrics<long double>(0xffffffff);
 
 }
 Y_UDONE()
