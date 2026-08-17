@@ -38,10 +38,17 @@ namespace Yttrium
         class Bits : public CountedObject, public Identifiable
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
             class Code;
-            typedef TL::IsoFloatingPoint                               IsoFloatingPoint;
-            typedef TL3(XReal<float>,XReal<double>,XReal<long double>) ExtFloatingPoint;
+            typedef TL::IsoFloatingPoint                               IsoFloatingPoint; //!< floating point list
+            typedef TL3(XReal<float>,XReal<double>,XReal<long double>) ExtFloatingPoint; //!< extended reals list
 
+            //! compute method
             enum Property
             {
                 UseF, //!< produce iso floating point
@@ -50,8 +57,10 @@ namespace Yttrium
                 UseU  //!< produce unsigned
             };
 
+            //! property selector
             template <typename T> struct Select
             {
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
                 static const bool IsIsoFloatingPoint = ( TL::IndexOf<IsoFloatingPoint,T>::Value >= 0 );
                 static const bool IsExtFloatingPoint = ( TL::IndexOf<ExtFloatingPoint,T>::Value >= 0 );
 
@@ -69,8 +78,8 @@ namespace Yttrium
                 static const size_t    UseI_Bit = InWhateverIntegers ? (One << UseI) : 0x00;
                 static const size_t    UseU_Bit = InWhateverUnsigned ? (One << UseU) : 0x00;
                 static const size_t    Guess = UseF_Bit | UseX_Bit | UseI_Bit | UseU_Bit;
-                static const Property  PPTY = (Property) IntegerLog2<Guess>::Value;
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+                static const Property  PPTY = (Property) IntegerLog2<Guess>::Value; //!< property for given type
             };
 
 
@@ -103,19 +112,24 @@ namespace Yttrium
             //! \return float|double|long double|uint[8|16|32|64]_t
             template <typename T>  T get() noexcept;
 
-            double operator()() noexcept; //!< \return uniform ]0:1[
+            double operator()() noexcept; //!< \return default double precision uniform ]0:1[
 
 
+            //! \return any type from Select
             template <typename T> inline T to() noexcept
             {
                 static const IntToType< Select<T>::PPTY > ppty = {};
                 return make<T>(ppty);
             }
 
+
+            //! \return ]-1:1[ for [XReal] float|double|long double
             template <typename T> inline T symm() noexcept
             {
-                const T u = to<T>();
-                return ((T)1) - (u+u);
+                typedef typename Alea<T>::Type CoreType;
+                static const CoreType _1 = 1;
+                const CoreType        uu = to<CoreType>();
+                return _1 - (uu+uu);
             }
 
 
@@ -127,19 +141,15 @@ namespace Yttrium
             //__________________________________________________________________
         private:
             Y_Disable_Copy_And_Assign(Bits); //!< discarded
-            Code * const code;
+            Code * const code;               //!< inner code
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
             template <typename T> inline
-            T make(const IntToType<UseF> &) noexcept
-            {
-                return get<T>();
-            }
+            T make(const IntToType<UseF> &) noexcept { return get<T>(); }
 
             template <typename T> inline
-            T make(const IntToType<UseX> &) noexcept
-            {
-                return get<T>();
-            }
+            T make(const IntToType<UseX> &) noexcept { return get<T>(); }
 
             template <typename T> inline
             T make(const IntToType<UseU> &) noexcept
@@ -154,7 +164,7 @@ namespace Yttrium
                 typedef typename IntegerFor<T>::UnsignedAlias::Type UType;
                 return static_cast<T>( get<UType>() );
             }
-
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
         };
 
         typedef ArcPtr<Bits> SharedBits; //!< alias for allocated Bits
