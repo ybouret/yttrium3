@@ -187,6 +187,11 @@ namespace Yttrium
         template <> double      Bits:: get<double>()      noexcept { assert(code); return code->d.eval( next32() ); }
         template <> long double Bits:: get<long double>() noexcept { assert(code); return code->D.eval( next32() ); }
 
+        template <> XReal<float>       Bits:: get< XReal<float> >()       noexcept { assert(code); return code->f.eval( next32() ); }
+        template <> XReal<double>      Bits:: get< XReal<double> >()      noexcept { assert(code); return code->d.eval( next32() ); }
+        template <> XReal<long double> Bits:: get< XReal<long double> >() noexcept { assert(code); return code->D.eval( next32() ); }
+
+
         double Bits:: operator()() noexcept { assert(code); return code->d.eval( next32() ); }
 
         template <>

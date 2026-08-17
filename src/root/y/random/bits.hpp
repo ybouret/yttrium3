@@ -105,7 +105,7 @@ namespace Yttrium
 
             double operator()() noexcept; //!< \return uniform ]0:1[
 
-            
+
             template <typename T> inline T to() noexcept
             {
                 static const IntToType< Select<T>::PPTY > ppty = {};
@@ -144,13 +144,15 @@ namespace Yttrium
             template <typename T> inline
             T make(const IntToType<UseU> &) noexcept
             {
-                
+                typedef typename IntegerFor<T>::UnsignedAlias::Type UType;
+                return static_cast<T>( get<UType>() );
             }
 
             template <typename T> inline
             T make(const IntToType<UseI> &) noexcept
             {
-
+                typedef typename IntegerFor<T>::UnsignedAlias::Type UType;
+                return static_cast<T>( get<UType>() );
             }
 
         };
