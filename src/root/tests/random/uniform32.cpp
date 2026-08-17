@@ -7,6 +7,7 @@
 #include "y/utest/run.hpp"
 
 #include "y/container/sequence/vector.hpp"
+#include <typeinfo>
 
 using namespace Yttrium;
 
