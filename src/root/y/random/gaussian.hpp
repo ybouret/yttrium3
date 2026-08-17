@@ -83,13 +83,15 @@ namespace Yttrium
             //! compute two succesive values
             inline void BoxMuller() noexcept
             {
+#if 0
                 Random::Bits &ran = **this;
                 CoreType r = ran.to<CoreType>();
                 while(r <= MKL::Numeric<CoreType>::EPSILON ) r = ran.to<CoreType>();
-                const CoreType theta = MKL::Numeric<T>::PI * ran.symm<CoreType>();
+                const CoreType theta =  MKL::Numeric<T>::PI * ran.symm<CoreType>();
                 const CoreType ampli = std::sqrt(-Twice( std::log(r) ));
                 g0 = ampli * std::sin(theta);
                 g1 = ampli * std::cos(theta);
+#endif
             }
 
 
