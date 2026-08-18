@@ -17,6 +17,15 @@ void recv(void * const       buffer,
           const MPI_Comm     comm = MPI_COMM_WORLD);
 
 
+void sendSize(const size_t       length,
+              const size_t       dest,
+              const int          tag  = DefaultTag,
+              const MPI_Comm     comm = MPI_COMM_WORLD);
+
+size_t recvSize(const size_t   src,
+                const int      tag  = DefaultTag,
+                const MPI_Comm comm = MPI_COMM_WORLD);
+
 void sendBytes(const void * const buffer,
                const size_t       length,
                const size_t       dest,
@@ -28,6 +37,8 @@ void recvBytes(void * const   buffer,
                const size_t   src,
                const int      tag  = DefaultTag,
                const MPI_Comm comm = MPI_COMM_WORLD);
+
+
 
 
 template <typename T> inline

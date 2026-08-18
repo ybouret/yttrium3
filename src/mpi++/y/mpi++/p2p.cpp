@@ -1,5 +1,6 @@
 
 #include "y/mpi++/api.hpp"
+#include "y/check/static.hpp"
 
 namespace Yttrium
 {
@@ -81,6 +82,53 @@ namespace Yttrium
         Y_MPI_Call(MPI_Recv(buffer,GetCount(length,"MPI::recvBytes"),MPI_BYTE,(int)src,tag,comm,&st));
         recvRate.ticks += Y_MPI_Gain();
         recvRate.bytes += length;
+    }
+
+    void MPI:: sendSize(const size_t       length,
+                        const size_t       dest,
+                        const int          tag ,
+                        const MPI_Comm     comm)
+    {
+        const uint64_t u64 = length;
+        send1(u64,dest,tag,comm);
+    }
+
+    namespace
+    {
+        template <bool>
+        struct U64ToSize;
+
+        template <>
+        struct U64ToSize<false>
+        {
+            static inline size_t Convert(const uint64_t u64)
+            {
+                static const uint64_t MaxSize = IntegerFor<size_t>::Maximum;
+                assert(sizeof(size_t)<sizeof(uint64_t));
+                if(u64>MaxSize) throw Specific::Exception(MPI::CallSign,"MPI::recvSize overflow");
+                return (size_t)u64;
+            }
+        };
+
+
+        template <>
+        struct U64ToSize<true>
+        {
+            static inline size_t Convert(const uint64_t u64) noexcept
+            {
+                assert(sizeof(size_t)>=sizeof(uint64_t));
+                return u64;
+            }
+        };
+
+    }
+
+    size_t MPI:: recvSize(const size_t   src,
+                          const int      tag  ,
+                          const MPI_Comm comm)
+    {
+        const uint64_t        u64 = recv1<uint64_t>(src,tag,comm);
+        return U64ToSize<sizeof(size_t)>=sizeof(uint64_t)>::Convert(u64);
     }
 
 }
