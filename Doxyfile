@@ -1029,7 +1029,8 @@ WARN_LOGFILE           =
 INPUT                  = src/root/y \
                          src/mkl/y \
                          src/chem/y \
-                         src/lua++/y 
+                         src/lua++/y \
+                         src/mpi++/y
 #src/ink/y
 
 # This tag can be used to specify the character encoding of the source files

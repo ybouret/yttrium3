@@ -30,6 +30,14 @@
 namespace Yttrium
 {
 
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! MPI wrappers
+    //
+    //
+    //__________________________________________________________________________
     class MPI : public Singleton<MPI,ClassLockPolicy>, public Concurrent::Member
     {
     public:
@@ -122,10 +130,10 @@ namespace Yttrium
         const char * const  processorName; //!< MPI_GetProcessorName
 
     private:
-        Y_Disable_Copy_And_Assign(MPI);
+        Y_Disable_Copy_And_Assign(MPI); //!< discarded
         friend class Singleton<MPI,ClassLockPolicy>;
-        virtual ~MPI() noexcept;
-        explicit MPI();
+        virtual ~MPI() noexcept; //!< cleanup: MPI_Finalize()
+        explicit MPI();          //!< setup from Initialize(...)
     };
 
     //! helper to handle errors
