@@ -6,16 +6,14 @@
 #pragma warning ( disable : 5220 )
 #endif
 
+#include "y/string.hpp"
 #include "y/singleton.hpp"
 #include "y/concurrent/life-time.hpp"
 #include "y/exception.hpp"
 #include "y/system/wall-time.hpp"
-
-#include "y/string.hpp"
-
 #include "y/concurrent/member.hpp"
-
-
+#include "y/container/associative/hash/map.hpp"
+#include "y/memory/type/moniker.hpp"
 
 #include <typeinfo>
 
@@ -52,6 +50,28 @@ namespace Yttrium
         static const char *       HumanReadableThreadLevel(const int) noexcept; //!< \return thread level
         static const int          DefaultTag = 1;                               //!< default tag
         static const size_t       MaxCount   = IntegerFor<int>::Maximum;        //!< for int/size_t conversion
+
+        //______________________________________________________________________
+        //
+        //
+        //! DataType
+        //
+        //______________________________________________________________________
+        class DataType
+        {
+        public:
+            typedef HashMap<String,DataType> Table;
+
+            DataType(const MPI_Datatype, const size_t) noexcept;
+            DataType(const DataType &) noexcept;
+            ~DataType() noexcept;
+
+            const MPI_Datatype dt;
+            const size_t       sz;
+
+        private:
+            Y_Disable_Assign(DataType);
+        };
 
         //______________________________________________________________________
         //
@@ -121,6 +141,13 @@ namespace Yttrium
          */
         static int GetCount(const size_t count, const char * const func);
 
+        const DataType & getDataType(const std::type_info &) const;
+
+        template <typename T> inline
+        const DataType & getDataTypeOf() const {
+            return getDataType( typeid(T) );
+        };
+
         //______________________________________________________________________
         //
         //
@@ -140,26 +167,30 @@ namespace Yttrium
         void ack(const size_t peer);
         void syn(const size_t peer);
 
+
+
         //______________________________________________________________________
         //
         //
         // Members
         //
         //______________________________________________________________________
-        const int           threadLevel;   //!< current thread level
-        const bool          primary;       //!< primary flag
-        const bool          replica;       //!< replica flag
-        const bool          parallel;      //!< size>1
-        Rate                sendRate;      //!< sending rate
-        Rate                recvRate;      //!< receiving rate
-        const char * const  processorName; //!< MPI_GetProcessorName
-
+        const int             threadLevel;   //!< current thread level
+        const bool            primary;       //!< primary flag
+        const bool            replica;       //!< replica flag
+        const bool            parallel;      //!< size>1
+        Rate                  sendRate;      //!< sending rate
+        Rate                  recvRate;      //!< receiving rate
+        const char * const    processorName; //!< MPI_GetProcessorName
+        const DataType::Table table;         //!< table of data types
 
     private:
         Y_Disable_Copy_And_Assign(MPI); //!< discarded
         friend class Singleton<MPI,ClassLockPolicy>;
         virtual ~MPI() noexcept; //!< cleanup: MPI_Finalize()
         explicit MPI();          //!< setup from Initialize(...)
+
+        void buildTable();
     };
 
     //! helper to handle errors

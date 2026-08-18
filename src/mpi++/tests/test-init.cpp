@@ -24,6 +24,16 @@ Y_UTEST(init)
     }
     Y_MPI_ForEach(mpi, std::cerr << mpi << std::endl);
 
+    if(mpi.primary)
+    {
+        std::cerr << "Table:" << std::endl;
+        for(MPI::DataType::Table::ConstIterator it=mpi.table.begin();it!=mpi.table.end();++it)
+        {
+            std::cerr << it->key() << " : sizeof=" << (*it).sz << std::endl;
+        }
+    }
+
+
 }
 Y_UDONE()
 

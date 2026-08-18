@@ -2,6 +2,9 @@
 #include "y/mpi++/api.hpp"
 #include "y/type/temporary.hpp"
 
+
+
+
 namespace Yttrium
 {
     const char * const MPI:: CallSign = "MPI";
@@ -63,7 +66,8 @@ namespace Yttrium
     parallel(false),
     sendRate(),
     recvRate(),
-    processorName(__mpi_processor_name)
+    processorName(__mpi_processor_name),
+    table()
     {
         if(!__mpi_auth) throw Specific:: Exception(CallSign,"must call Init(...)");
 
@@ -93,8 +97,77 @@ namespace Yttrium
             Y_MPI_Call( MPI_Get_processor_name(__mpi_processor_name,&res) );
         }
 
-        
+        buildTable();
+
     }
 
+
+    namespace
+    {
+        template <typename T> static inline
+        void populate(MPI::DataType::Table & table,
+                      const MPI_Datatype     datatype)
+        {
+            static const size_t   datasize = sizeof(T);
+            const String          key = typeid(T).name();
+            {
+                MPI::DataType * const mdt = table.search(key);
+                if(mdt)
+                {
+                    if( mdt->sz != datasize )
+                        throw Specific::Exception(MPI::CallSign, "invalid data size for <%s>", key.c_str());
+                    return;
+                }
+            }
+
+            const MPI::DataType mdt(datatype,datasize);
+            if(!table.insert(key,mdt))
+                throw Specific::Exception(MPI::CallSign, "failed to populate <%s>", key.c_str());
+        }
+    }
+
+#define Y_MPI_DECL(type,TYPE) populate<type>(Coerce(table),MPI_##TYPE)
+
+    void MPI:: buildTable()
+    {
+        Y_MPI_DECL(float,FLOAT);
+        Y_MPI_DECL(double,DOUBLE);
+        Y_MPI_DECL(long double,LONG_DOUBLE);
+
+        Y_MPI_DECL(char,CHAR);
+        Y_MPI_DECL(unsigned char,UNSIGNED_CHAR);
+
+        Y_MPI_DECL(short,SHORT);
+        Y_MPI_DECL(unsigned short,UNSIGNED_SHORT);
+
+        Y_MPI_DECL(int,INT);
+        Y_MPI_DECL(unsigned,UNSIGNED);
+
+        Y_MPI_DECL(long,LONG);
+        Y_MPI_DECL(unsigned long,UNSIGNED_LONG);
+
+        Y_MPI_DECL(long long,LONG);
+        Y_MPI_DECL(unsigned long long,UNSIGNED_LONG_LONG);
+
+        Y_MPI_DECL(int8_t, INT8_T);
+        Y_MPI_DECL(int16_t,INT16_T);
+        Y_MPI_DECL(int32_t,INT32_T);
+        Y_MPI_DECL(int64_t,INT64_T);
+
+        Y_MPI_DECL(uint8_t, UINT8_T);
+        Y_MPI_DECL(uint16_t,UINT16_T);
+        Y_MPI_DECL(uint32_t,UINT32_T);
+        Y_MPI_DECL(uint64_t,UINT64_T);
+
+    }
+
+
+    const MPI::DataType & MPI:: getDataType(const std::type_info &ti) const
+    {
+        const String           key = ti.name();
+        const DataType * const mdt = table.search(key);
+        if(!mdt) throw Specific::Exception(CallSign,"unregistered <%s>", key.c_str());
+        return *mdt;
+    }
 
 }
