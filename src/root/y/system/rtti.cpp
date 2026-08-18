@@ -52,16 +52,7 @@ namespace Yttrium
         return name().c_str();
     }
 
-#if 0
-    RTTI & RTTI:: aka(const char * const id)
-    {
-        const String uid = id;
-        if(!is(uid))
-            Coerce(pool).store( new Alias( uid.c_str() ) );
-        
-        return *this;
-    }
-#endif
+
 
     std::ostream & operator<<(std::ostream &os, const RTTI &rtti)
     {
@@ -79,6 +70,7 @@ namespace Yttrium
 #include "y/pointer/arc.hpp"
 #include "y/container/associative/hash/map.hpp"
 #include "y/singleton.hpp"
+#include "y/concurrent/life-time.hpp"
 
 namespace Yttrium
 {
@@ -95,10 +87,22 @@ namespace Yttrium
     public HMap
     {
     public:
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
         static const char * const CallSign;
-        static const Longevity    LifeTime = 0;
+        static const Longevity    LifeTime = LifeTimeFor::RTTI;
 
 
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
         inline explicit Table() :
         Singleton<Table, ClassLockPolicy>(),
         HMap()
@@ -107,23 +111,40 @@ namespace Yttrium
 
         inline virtual ~Table() noexcept {}
 
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+
+        //! on-the-fly get/create
         RTTI & get(const String &uid)
         {
             Y_Lock(access);
 
+            //__________________________________________________________________
+            //
             // search existing
+            //___________________________________________________________________
             {
                 HRTTI * const hook = search(uid);
                 if(hook) return **hook;
             }
 
+            //__________________________________________________________________
+            //
             // create new
+            //__________________________________________________________________
             HRTTI handle = new RTTI(uid);
             if(!insert(uid,handle))
                 throw Specific::Exception(CallSign,"uexpected multiple <%s>", uid.c_str());
-            return *handle;
+
+            RTTI & rtti = *handle; assert(has(rtti));
+            return rtti;
         }
 
+        //! check ownership
         inline bool has(const RTTI &rtti) const noexcept
         {
             for(const Alias *alias=rtti.pool.head;alias;alias=alias->next)
@@ -131,10 +152,12 @@ namespace Yttrium
                 const HRTTI * const hook = search(*alias);
                 if(!hook)              continue; // mismatch name
                 if( &**hook != &rtti ) continue; // mismatch address
+                return true;
             }
             return false;
         }
 
+        //! create an alias for 
         RTTI & aka(RTTI &rtti, const String &uid)
         {
             //------------------------------------------------------------------
@@ -150,7 +173,10 @@ namespace Yttrium
             //
             //------------------------------------------------------------------
             if(rtti.is(uid))
+            {
+                assert( search(uid) );
                 return rtti; // already named
+            }
 
             //------------------------------------------------------------------
             //
@@ -169,10 +195,16 @@ namespace Yttrium
             //------------------------------------------------------------------
             Coerce(rtti.pool).store( new Alias(uid) );
 
+            //------------------------------------------------------------------
+            //
+            // register alias
+            //
+            //------------------------------------------------------------------
             try
             {
-                // TODO
-                rtti;
+                const HRTTI handle = &rtti;
+                if(!insert(uid,handle))
+                    throw Specific::Exception(CallSign,"failed to insert <%s> for <%s>", uid.c_str(), rtti.name().c_str());
             }
             catch(...)
             {
@@ -191,5 +223,25 @@ namespace Yttrium
 
 
     const char * const RTTI:: Table:: CallSign = "RTTI:: Table";
+
+
+    RTTI & RTTI:: aka(const String &uid)
+    {
+        static Table &table = Table::Instance();
+        return table.aka(*this,uid);
+    }
+
+    RTTI & RTTI:: aka(const char * const uid)
+    {
+        const String _(uid);
+        return aka(_);
+    }
+
+    RTTI & RTTI:: Of(const std::type_info &ti)
+    {
+        static Table &table = Table::Instance();
+        const String  uid   = ti.name();
+        return table.get(uid);
+    }
 
 }
