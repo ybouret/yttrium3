@@ -115,6 +115,8 @@ namespace Yttrium
             //! \param blockSize user block size \return borrowable bytes from blockSize
             size_t borrowable(const size_t blockSize) const noexcept;
 
+            size_t prevRank() const noexcept;
+            size_t nextRank() const noexcept;
 
             //__________________________________________________________________
             //

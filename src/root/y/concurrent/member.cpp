@@ -86,6 +86,23 @@ namespace Yttrium
             return Borrowable(blockSize,size);
         }
 
+        size_t Member:: nextRank() const noexcept
+        {
+            if(indx>=size)
+                return 0;
+            else
+                return rank+1;
+        }
+
+        size_t Member:: prevRank() const noexcept
+        {
+            if(rank<=0)
+                return size-1;
+            else
+                return rank-1;
+        }
+
+
     }
 
 }
