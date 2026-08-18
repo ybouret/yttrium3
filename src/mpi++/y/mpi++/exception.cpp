@@ -29,15 +29,13 @@ namespace Yttrium
         }
 
 
-        //memset(info,0,sizeof(info));
         int resultLen = sizeof(what_);
         (void) MPI_Error_string(err,what_, &resultLen);
-        //{
-        //    va_list ap;
-        //    va_start(ap,fmt);
-        //    (void) Core::Variadic::Format(tell, sizeof(tell), fmt, &ap);
-        //    va_end(ap);
-        //}
+
+        std::cerr << "MPI:Excp:info: " << info_ << std::endl;
+        std::cerr << "MPI:Excp:what: " << what_ << std::endl;
+        std::cerr << std::endl;
+
     }
 
 
