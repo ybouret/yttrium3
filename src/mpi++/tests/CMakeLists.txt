@@ -4,4 +4,6 @@ Y_LinkLibraries(test-mpi++ y-mpi++ ${MPI_C_LIBRARIES})
 enable_testing()
 
 #Y_UTEST(init)
+#Y_UTEST(coll)
+
 

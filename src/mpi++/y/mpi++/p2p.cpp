@@ -1,6 +1,5 @@
 
 #include "y/mpi++/api.hpp"
-#include "y/check/static.hpp"
 
 namespace Yttrium
 {
