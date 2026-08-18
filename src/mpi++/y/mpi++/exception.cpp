@@ -38,9 +38,9 @@ namespace Yttrium
             (void) MPI_Error_string(err,output, &outlen);
             std::cerr << "output: '" << output << "' / " << outlen << std::endl;
 
-            //memset(what_,0,sizeof(what_));
-            //memcpy(what_,output,Min<size_t>(sizeof(what_)-1,outlen));
-            //std::cerr << "what_ : '" << what_ << "'";
+            memset(what_,0,sizeof(what_));
+            memcpy(what_,output,Min<size_t>(sizeof(what_)-1,outlen));
+            std::cerr << "what_ : '" << what_ << "'";
 
         }
 
