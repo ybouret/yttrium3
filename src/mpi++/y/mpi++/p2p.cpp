@@ -71,7 +71,7 @@ namespace Yttrium
     }
 
     void MPI:: recvBytes(void * const   buffer,
-                         size_t         length,
+                         const size_t   length,
                          const size_t   src,
                          const int      tag,
                          const MPI_Comm comm)
@@ -129,5 +129,52 @@ namespace Yttrium
         const uint64_t        u64 = recv1<uint64_t>(src,tag,comm);
         return U64ToSize<sizeof(size_t)>=sizeof(uint64_t)>::Convert(u64);
     }
+
+
+    void MPI:: sendrecv(const void * const sendbuf,
+                        const size_t       sendcount,
+                        const MPI_Datatype sendtype,
+                        const uint64_t     sendbytes,
+                        const size_t       dest,
+                        void * const       recvbuf,
+                        const size_t       recvcount,
+                        const MPI_Datatype recvtype,
+                        const uint64_t     recvbytes,
+                        const size_t       source,
+                        const int          sendtag,
+                        const int          recvtag,
+                        const MPI_Comm     comm )
+    {
+        static const char fn[] = "MPI_Sendrecv";
+        MPI_Status        st;
+
+        Y_MPI_Mark();
+        Y_MPI_Call(MPI_Sendrecv(sendbuf, GetCount(sendcount,fn),sendtype, (int)dest, sendtag,
+                                recvbuf, GetCount(recvcount,fn),recvtype, (int)source,recvtag,
+                                comm,&st));
+        const uint64_t ell = Y_MPI_Gain();
+        recvRate.ticks += ell;
+        recvRate.bytes += recvbytes;
+
+        sendRate.ticks += ell;
+        sendRate.bytes += sendbytes;
+
+    }
+
+    void MPI:: sendrecvBytes(const void * const sendbuf,
+                             const size_t       sendcount,
+                             const size_t       dest,
+                             void * const       recvbuf,
+                             const size_t       recvcount,
+                             const size_t       source,
+                             const int          sendtag,
+                             const int          recvtag,
+                             const MPI_Comm     comm)
+    {
+        sendrecv(sendbuf,sendcount,MPI_BYTE,sendcount,dest,
+                 recvbuf,recvcount,MPI_BYTE,recvcount,source,
+                 sendtag,recvtag,comm);
+    }
+
 
 }

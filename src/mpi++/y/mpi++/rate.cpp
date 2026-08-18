@@ -1,4 +1,5 @@
 #include "y/mpi++/api.hpp"
+//#include "y/apex/natural.hpp"
 
 namespace Yttrium
 {
@@ -15,6 +16,18 @@ namespace Yttrium
     {
     }
 
+    HumanReadable MPI:: Rate:: hrt( const System::WallTime &chrono ) const
+    {
+        if(ticks<=0)
+        {
+            return HumanReadable(0);
+        }
+        else
+        {
+            const long double speed = (long double) bytes / chrono(ticks);
+            return HumanReadable( (uint64_t)speed );
+        }
+    }
 
 }
 

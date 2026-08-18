@@ -14,6 +14,7 @@
 #include "y/concurrent/member.hpp"
 #include "y/container/associative/hash/map.hpp"
 #include "y/memory/type/moniker.hpp"
+#include "y/format/human-readable.hpp"
 
 #include <typeinfo>
 
@@ -93,6 +94,12 @@ namespace Yttrium
 
             //__________________________________________________________________
             //
+            // Methods
+            //__________________________________________________________________
+            HumanReadable hrt(const System::WallTime &) const ;
+
+            //__________________________________________________________________
+            //
             // Members
             //__________________________________________________________________
             uint64_t bytes; //!< cumulative bytes
@@ -112,7 +119,7 @@ namespace Yttrium
             Exception(const int err, const char * fmt,...) noexcept Y_Printf_Check(3,4);
             Exception(const Exception &) noexcept;      //!< duplicate
             virtual ~Exception()         noexcept;      //!< cleanup
-            
+
         private:
             Y_Disable_Assign(Exception); //!< discarding
         };
@@ -227,6 +234,12 @@ namespace Yttrium
 /**/            do { CODE; } while(false); \
 /**/            mpi_.ack(0);\
 /**/        }\
+/**/    } while(false)
+
+#define Y_MPI_Trace(THE_MPI,CODE) do                        \
+/**/    {                                                   \
+/**/        MPI &mpi_ = (THE_MPI);                          \
+/**/        if(mpi_.primary) { do { CODE; } while(false); } \
 /**/    } while(false)
 }
 
