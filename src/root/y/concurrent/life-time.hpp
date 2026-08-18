@@ -33,6 +33,7 @@ static const System::AtExit::Longevity CLASS = ConcurrentNucleus - (__LINE__-Hel
         Y_LifeTimeFor(ObjectFactory);      //!< for Object::Factory
         Y_LifeTimeFor(LightObjectFactory); //!< for LightObject::Factory
         Y_LifeTimeFor(RTTI);               //!< for RTTI
+        Y_LifeTimeFor(MPI);                //!< for MPI
         Y_LifeTimeFor(LocalFS);            //!< for VFS::LocalFS
     };
 
