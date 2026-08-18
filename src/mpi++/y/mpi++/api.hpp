@@ -121,6 +121,31 @@ namespace Yttrium
          */
         static int GetCount(const size_t count, const char * const func);
 
+        //______________________________________________________________________
+        //
+        //
+        // Peer To Peer API
+        //
+        //______________________________________________________________________
+#include "y/mpi++/_p2p.hpp"
+
+
+        //______________________________________________________________________
+        //
+        //
+        // Helpers to sync
+        //
+        //______________________________________________________________________
+        void syncWith(const size_t peer);
+        void ack(const size_t peer);
+        void syn(const size_t peer);
+
+        //______________________________________________________________________
+        //
+        //
+        // Members
+        //
+        //______________________________________________________________________
         const int           threadLevel;   //!< current thread level
         const bool          primary;       //!< primary flag
         const bool          replica;       //!< replica flag
@@ -128,6 +153,7 @@ namespace Yttrium
         Rate                sendRate;      //!< sending rate
         Rate                recvRate;      //!< receiving rate
         const char * const  processorName; //!< MPI_GetProcessorName
+
 
     private:
         Y_Disable_Copy_And_Assign(MPI); //!< discarded

@@ -22,7 +22,7 @@ Y_UTEST(init)
         }
 
     }
-    //Y_MPI_ForEach(mpi, std::cerr << mpi << std::endl);
+    Y_MPI_ForEach(mpi, std::cerr << mpi << std::endl);
 
 }
 Y_UDONE()
