@@ -1,6 +1,7 @@
 #include "y/mpi++/api.hpp"
 #include "y/libc/str/fmt.h"
 #include <cstring>
+#include "y/system/error.hpp"
 
 namespace Yttrium
 {
@@ -24,7 +25,11 @@ namespace Yttrium
         {
             va_list ap;
             va_start(ap,fmt);
-            Yttrium_Strfmt(info_,sizeof(info_), fmt, &ap );
+            const int res = Yttrium_Strfmt(info_,sizeof(info_), fmt, &ap );
+            if(res<0)
+            {
+                perror("writing info...");
+            }
             va_end(ap);
         }
 
