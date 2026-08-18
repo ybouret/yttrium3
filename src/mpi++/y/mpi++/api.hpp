@@ -97,6 +97,7 @@ namespace Yttrium
             // Methods
             //__________________________________________________________________
             HumanReadable hrt(const System::WallTime &) const ;
+            void          ldz() noexcept;
 
             //__________________________________________________________________
             //
@@ -181,7 +182,7 @@ namespace Yttrium
         void syncWith(const size_t peer);
         void ack(const size_t peer);
         void syn(const size_t peer);
-
+        void resetRates() noexcept;
 
 
         //______________________________________________________________________

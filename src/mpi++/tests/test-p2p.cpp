@@ -18,7 +18,7 @@ Y_UTEST(p2p)
 
     Y_MPI_Trace(mpi, std::cerr << "Testing ping..." << std::endl; );
     char buffer[128];
-    Y_MPI_Trace(mpi, Y_PRINTV(sizeof(buffer)));
+
     for(size_t iter=0;iter<16;++iter)
     {
         if(mpi.primary)
@@ -44,7 +44,11 @@ Y_UTEST(p2p)
                   << " | recv: " << std::setw(10) << mpi.recvRate.bytes << "@" << mpi.recvRate.hrt(chrono) << std::endl;);
 
 
+    mpi.resetRates();
 
+    {
+        
+    }
 
 }
 Y_UDONE()

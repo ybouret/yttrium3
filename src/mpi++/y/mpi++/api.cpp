@@ -170,4 +170,11 @@ namespace Yttrium
         return *mdt;
     }
 
+    void MPI:: resetRates() noexcept
+    {
+        sendRate.ldz();
+        recvRate.ldz();
+    }
+
+
 }

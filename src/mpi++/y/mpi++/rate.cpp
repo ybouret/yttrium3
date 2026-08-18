@@ -29,5 +29,12 @@ namespace Yttrium
         }
     }
 
+    void MPI:: Rate:: ldz() noexcept
+    {
+        ticks = 0;
+        bytes = 0;
+    }
+
+
 }
 
