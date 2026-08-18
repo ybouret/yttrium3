@@ -31,7 +31,7 @@ namespace Yttrium
         }
 
 
-        int resultLen = sizeof(what_);
+        int resultLen = sizeof(what_)-1;
         (void) MPI_Error_string(err,what_, &resultLen);
 
         std::cerr << "MPI:Excp:info: " << info_ << std::endl;
