@@ -25,11 +25,8 @@ namespace Yttrium
         {
             va_list ap;
             va_start(ap,fmt);
-            const int res = Yttrium_Strfmt(info_,sizeof(info_), fmt, &ap );
-            if(res<0)
-            {
-                perror("writing info...");
-            }
+            Yttrium_Strfmt(info_,sizeof(info_), fmt, &ap );
+            std::cerr << "info_:'" << info_ << "'" << std::endl;
             va_end(ap);
         }
 
