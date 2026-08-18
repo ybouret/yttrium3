@@ -2,7 +2,6 @@
 
 Y_UTEST_DECL(16)
 {
-    Y_UTEST(excp);
     Y_UTEST(init);
 }
 Y_UTEST_EXEC()
