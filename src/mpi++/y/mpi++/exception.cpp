@@ -2,6 +2,7 @@
 #include "y/libc/str/fmt.h"
 #include <cstring>
 #include "y/system/error.hpp"
+#include "y/core/min.hpp"
 
 namespace Yttrium
 {
@@ -25,14 +26,25 @@ namespace Yttrium
         {
             va_list ap;
             va_start(ap,fmt);
-            Yttrium_Strfmt(info_,sizeof(info_), fmt, &ap );
+            (void) Yttrium_Strfmt(info_,sizeof(info_), fmt, &ap );
             std::cerr << "info_:'" << info_ << "'" << std::endl;
             va_end(ap);
         }
 
+        {
+            char output[MPI_MAX_ERROR_STRING];
+            int  outlen=0;
+            (void) memset(output,0,sizeof(output));
+            (void) MPI_Error_string(err,output, &outlen);
+            std::cerr << "output: '" << output << "' / " << outlen << std::endl;
 
-        int resultLen = sizeof(what_)-1;
-        (void) MPI_Error_string(err,what_, &resultLen);
+            //memset(what_,0,sizeof(what_));
+            //memcpy(what_,output,Min<size_t>(sizeof(what_)-1,outlen));
+            //std::cerr << "what_ : '" << what_ << "'";
+
+        }
+
+
 
         std::cerr << "MPI:Excp:info: " << info_ << std::endl;
         std::cerr << "MPI:Excp:what: " << what_ << std::endl;
