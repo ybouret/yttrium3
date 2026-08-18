@@ -18,8 +18,10 @@ int Yttrium_Strfmt(char * const       buffer,
         const int res = vsnprintf(buffer,buflen,fmt,*app);
         fflush(stdout);
         printf("strfmt error: %d\n", res);
+        if(res<0)
+            memset(buffer,0,buflen);
+        printf("buffer: '%s'\n", buffer);
         fflush(stdout);
-        if(res<0) memset(buffer,0,buflen);
         return res;
     }
 }
