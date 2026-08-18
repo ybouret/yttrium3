@@ -27,29 +27,18 @@ namespace Yttrium
             va_list ap;
             va_start(ap,fmt);
             (void) Yttrium_Strfmt(info_,sizeof(info_), fmt, &ap );
-            std::cerr << "info_:'" << info_ << "'" << std::endl;
             va_end(ap);
         }
 
         {
             char output[MPI_MAX_ERROR_STRING];
             int  outlen=0;
-            (void) memset(output,0,sizeof(output));
-            (void) MPI_Error_string(err,output, &outlen);
-            std::cerr << "output: '" << output << "' / " << outlen << std::endl;
-
+            (void) MPI_Error_string(err,(char*) memset(output,0,sizeof(output)), &outlen);
             memset(what_,0,sizeof(what_));
             memcpy(what_,output,Min<size_t>(sizeof(what_)-1,outlen));
-            std::cerr << "what_ : '" << what_ << "'";
 
         }
-
-
-
-        std::cerr << "MPI:Excp:info: " << info_ << std::endl;
-        std::cerr << "MPI:Excp:what: " << what_ << std::endl;
-        std::cerr << std::endl;
-
+        
     }
 
 
