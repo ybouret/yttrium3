@@ -291,14 +291,33 @@ namespace Yttrium
         //
         //______________________________________________________________________
 
+        //! compute irow-th term of matrix/vector multiplication
+        /**
+         \param irow 1<=irow<=rows
+         \param xadd inner addition
+         \param source compatible source
+         \return dot(row[irow],source)
+         */
+        template <typename U, typename SOURCE> inline
+        U mul_(const size_t         irow,
+               Cameo::Addition<U> & xadd,
+               SOURCE &             source) const
+        {
+            assert(cols==source.size());
+            assert(irow<=rows);
+            assert(irow>0);
+            return xadd.dot( row[irow], source);
+        }
+
         //! in place multiplication: target = *this * source \param target output vector \param source input vector
         template <typename TARGET, typename SOURCE> inline
         void mul(TARGET &target, SOURCE &source) const
         {
-            assert(rows==target.size()); assert(cols==source.size());
+            assert(rows==target.size());
+            assert(cols==source.size());
             Cameo::Addition<T> xadd(cols);
             for(size_t i=rows;i>0;--i)
-                target[i] = xadd.dot( row[i], source);
+                target[i] = mul_(i,xadd,source);
         }
 
         //! in place multiplication and addition : target = *this * source + rhs
