@@ -40,9 +40,10 @@ Y_UTEST(p2p)
 
         }
 
-        Y_MPI_ForEach(mpi,std::cerr << mpi << ": "
-                      << "send: "    << HumanReadable(mpi.sendRate.bytes) << "@" << mpi.sendRate.hrt(chrono)
-                      << " | recv: " << HumanReadable(mpi.recvRate.bytes) << "@" << mpi.recvRate.hrt(chrono) << std::endl);
+        Y_MPI_ForEach(mpi,std::cerr << mpi
+                      << " | send: " << mpi.sendRate.str(chrono)
+                      << " | recv: " << mpi.recvRate.str(chrono)
+                      << std::endl);
     }
 
     Y_MPI_Trace(mpi, std::cerr << std::endl << "Testing ring..." << std::endl; );
@@ -56,9 +57,10 @@ Y_UTEST(p2p)
         Random::FillWith(ran,here,sizeof(here));
         mpi.sendrecvBytes(here, sizeof(here), mpi.prevRank(), peer, sizeof(peer), mpi.nextRank());
     }
-    Y_MPI_ForEach(mpi,std::cerr << mpi << ": "
-                  << "send: "    << HumanReadable(mpi.sendRate.bytes) << "@" << mpi.sendRate.hrt(chrono)
-                  << " | recv: " << HumanReadable(mpi.recvRate.bytes) << "@" << mpi.recvRate.hrt(chrono) << std::endl);
+    Y_MPI_ForEach(mpi,std::cerr << mpi
+                  << " | send: " << mpi.sendRate.str(chrono)
+                  << " | recv: " << mpi.recvRate.str(chrono)
+                  << std::endl);
 
 
 }

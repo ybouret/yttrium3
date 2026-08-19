@@ -24,7 +24,9 @@
 //! disable mpicxx
 #define MPICH_SKIP_MPICXX 1
 
+
 #if defined(Y_WIN) && defined(Y_GNU)
+//! disable Microsoft annonations...
 #define MSMPI_NO_SAL 1
 #endif
 
@@ -102,6 +104,8 @@ namespace Yttrium
             //__________________________________________________________________
             HumanReadable hrt(const System::WallTime &) const ;
             void          ldz() noexcept;
+
+            String        str(const System::WallTime &) const;
 
             //__________________________________________________________________
             //
