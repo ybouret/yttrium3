@@ -43,15 +43,15 @@ namespace Yttrium
         // Metrics
         //
         //______________________________________________________________________
-        static const size_t BytesForArgs  = MinArgs * sizeof(void*);                           //!< alias
-        static const size_t BytesForFunc  = BytesForArgs + sizeof(Func);                       //!< alias
-        static const size_t MethodLength  = Alignment::To<void*>::CeilOf<sizeof(Meth)>::Value; //!< alias
-        static const size_t BytesForMeth  = BytesForArgs + sizeof(void *) + MethodLength;      //!< alias
-        static const size_t RequiredTotal = MetaMax<BytesForFunc,BytesForMeth>::Value ;        //!< alias
-        static const size_t RequiredBytes = (MetaNextPowerOfTwo<RequiredTotal>::Value << 1) - 2 * sizeof(void*); //!< alias
-        static const size_t RequiredWords = Alignment::WordsGEQ<RequiredBytes>::Count;  //!< alias
-        static const size_t MaxFuncArgs   = (RequiredBytes - sizeof(Func))/sizeof(void*);
-        static const size_t MaxMethArgs   = (RequiredBytes - (sizeof(void*)+MethodLength))/sizeof(void*);
+        static const size_t BytesForArgs  = MinArgs * sizeof(void*);                                             //!< alias
+        static const size_t BytesForFunc  = BytesForArgs + sizeof(Func);                                         //!< alias
+        static const size_t MethodLength  = Alignment::To<void*>::CeilOf<sizeof(Meth)>::Value;                   //!< alias
+        static const size_t BytesForMeth  = BytesForArgs + sizeof(void *) + MethodLength;                        //!< alias
+        static const size_t RequiredTotal = MetaMax<BytesForFunc,BytesForMeth>::Value ;                          //!< alias
+        static const size_t RequiredBytes = (MetaNextPowerOfTwo<RequiredTotal>::Value << 1) - 2 * sizeof(void*); //!< for alignement
+        static const size_t RequiredWords = Alignment::WordsGEQ<RequiredBytes>::Count;                           //!< alias
+        static const size_t MaxFuncArgs   = (RequiredBytes - sizeof(Func))/sizeof(void*);                        //!< alias
+        static const size_t MaxMethArgs   = (RequiredBytes - (sizeof(void*)+MethodLength))/sizeof(void*);        //!< alias
 
         //______________________________________________________________________
         //

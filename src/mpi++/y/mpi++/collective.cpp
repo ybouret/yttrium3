@@ -7,15 +7,14 @@ namespace Yttrium
                      const size_t       count,
                      const MPI_Datatype datatype,
                      const uint64_t     bytes,
-                     const size_t       root,
-                     const MPI_Comm     comm)
+                     const size_t       root)
     {
         Y_MPI_Mark();
         Y_MPI_Call(MPI_Bcast(buffer,
                              GetCount(count,"MPI_Bcast"),
                              datatype,
                              (int)root,
-                             comm));
+                             MPI_COMM_WORLD));
         const uint64_t ell = Y_MPI_Gain();
         if(root == rank)
         {

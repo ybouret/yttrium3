@@ -55,7 +55,7 @@ namespace Yttrium
         // Methods
         //
         //______________________________________________________________________
-        Core::String<char> str() const;
+        Core::String<char> str() const; //!< \return readable string
 
         //______________________________________________________________________
         //
