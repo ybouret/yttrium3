@@ -17,7 +17,7 @@
 cmake_minimum_required(VERSION 3.14...4.2)
 
 if(Y_MSC)
-    string( APPEND CMAKE_C_FLAGS " -wd4146 -wd4464 -wd4711 -wd5045 -wd4668 -wd4820 -wd4574 -wd4710")
+    string( APPEND CMAKE_C_FLAGS " -wd4146 -wd4464 -wd4711 -wd5045 -wd4668 -wd4820 -wd4574 -wd4710 -wd4255")
 endif()
 
 set(PNGLIB_MAJOR 1)

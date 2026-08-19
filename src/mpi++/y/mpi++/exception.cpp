@@ -35,7 +35,7 @@ namespace Yttrium
             int  outlen=0;
             (void) MPI_Error_string(err,(char*) memset(output,0,sizeof(output)), &outlen);
             memset(what_,0,sizeof(what_));
-            memcpy(what_,output,Min<size_t>(sizeof(what_)-1,outlen));
+            memcpy(what_,output,Min<size_t>(sizeof(what_)-1,(size_t)outlen));
 
         }
         

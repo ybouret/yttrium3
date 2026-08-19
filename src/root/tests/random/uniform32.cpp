@@ -22,8 +22,8 @@ namespace
         for(size_t i=n;i>0;--i) r << ran.to<T>();
         Cameo::Addition<T>      xadd(n);
         std::cerr << "--     for " << typeid(T).name()  << std::endl;
-        const double ave = MKL::Statistics::Average::Of(r,xadd);
-        const double var = MKL::Statistics::Variance::Of(r,ave,xadd);
+        const T ave = MKL::Statistics::Average::Of(r,xadd);
+        const T var = MKL::Statistics::Variance::Of(r,ave,xadd);
         std::cerr << "--         ave=" << ave << std::endl;
         std::cerr << "--         var=" << var << std::endl;
     }
@@ -35,8 +35,8 @@ namespace
         for(size_t i=n;i>0;--i) r << (long double)ran.to<T>();
         Cameo::Addition<long double>  xadd(n);
         std::cerr << "--     for " << typeid(T).name()  << std::endl;
-        const double ave = MKL::Statistics::Average::Of(r,xadd);
-        const double var = MKL::Statistics::Variance::Of(r,ave,xadd);
+        const T ave = MKL::Statistics::Average::Of(r,xadd);
+        const T var = MKL::Statistics::Variance::Of(r,ave,xadd);
         std::cerr << "--         ave=" << ave << std::endl;
         std::cerr << "--         var=" << var << std::endl;
     }
