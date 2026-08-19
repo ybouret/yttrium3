@@ -67,8 +67,8 @@ add_subdirectory(mkl)
 add_subdirectory(lua++)
 add_subdirectory(chem)
 add_subdirectory(ink)
-add_subdirectory(mpi++)
 add_subdirectory(fltk)
+add_subdirectory(mpi++)
 
 ################################################################################
 #
