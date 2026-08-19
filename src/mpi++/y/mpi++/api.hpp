@@ -39,7 +39,7 @@ namespace Yttrium
     //
     //
     //
-    //! MPI wrappers
+    //! MPI wrappers in MPI_COMM_WORLD
     //
     //
     //__________________________________________________________________________
@@ -67,7 +67,7 @@ namespace Yttrium
         class DataType
         {
         public:
-            typedef HashMap<String,DataType> Table;
+            typedef HashMap<String,DataType> Table; //!< hash table of types
 
             DataType(const MPI_Datatype, const size_t) noexcept;
             DataType(const DataType &) noexcept;
