@@ -27,14 +27,18 @@ namespace
 Y_UTEST(type_va_list)
 {
 
+    std::cerr << "(*) Metrics for VaList: " << std::endl;
     Y_SIZEOF(VaList::Func);
     Y_SIZEOF(VaList::Meth);
     Y_PRINTV(VaList::BytesForFunc);
     Y_PRINTV(VaList::BytesForMeth);
+    Y_PRINTV(VaList::RequiredTotal);
     Y_PRINTV(VaList::RequiredBytes);
     Y_PRINTV(VaList::RequiredWords);
     Y_SIZEOF(VaList);
-
+    std::cerr << "(*) Arguments: " << std::endl;
+    Y_PRINTV(VaList::MaxFuncArgs);
+    Y_PRINTV(VaList::MaxMethArgs);
 
     {
         VaList vp;

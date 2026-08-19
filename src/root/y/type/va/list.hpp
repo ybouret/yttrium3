@@ -6,6 +6,7 @@
 #include "y/core/meta-max.hpp"
 #include "y/calculus/alignment.hpp"
 #include "y/ostream-proto.hpp"
+#include "y/calculus/meta2.hpp"
 
 namespace Yttrium
 {
@@ -32,7 +33,7 @@ namespace Yttrium
         // Definitions
         //
         //______________________________________________________________________
-        static const unsigned MaxArgs = 3;  //!< maximum of extra arguments
+        static const unsigned MinArgs = 3;  //!< minimum extra arguments
         typedef void (VaList::*Meth)(void); //!< method pointer alias
         typedef void (*Func)(void);         //!< C function alias
 
@@ -42,12 +43,15 @@ namespace Yttrium
         // Metrics
         //
         //______________________________________________________________________
-        static const size_t BytesForArgs  = MaxArgs * sizeof(void*);                           //!< alias
+        static const size_t BytesForArgs  = MinArgs * sizeof(void*);                           //!< alias
         static const size_t BytesForFunc  = BytesForArgs + sizeof(Func);                       //!< alias
         static const size_t MethodLength  = Alignment::To<void*>::CeilOf<sizeof(Meth)>::Value; //!< alias
         static const size_t BytesForMeth  = BytesForArgs + sizeof(void *) + MethodLength;      //!< alias
-        static const size_t RequiredBytes = MetaMax<BytesForFunc,BytesForMeth>::Value;         //!< alias
-        static const size_t RequiredWords = Alignment::WordsGEQ<RequiredBytes>::Count;         //!< alias
+        static const size_t RequiredTotal = MetaMax<BytesForFunc,BytesForMeth>::Value ;        //!< alias
+        static const size_t RequiredBytes = (MetaNextPowerOfTwo<RequiredTotal>::Value << 1) - 2 * sizeof(void*); //!< alias
+        static const size_t RequiredWords = Alignment::WordsGEQ<RequiredBytes>::Count;  //!< alias
+        static const size_t MaxFuncArgs   = (RequiredBytes - sizeof(Func))/sizeof(void*);
+        static const size_t MaxMethArgs   = (RequiredBytes - (sizeof(void*)+MethodLength))/sizeof(void*);
 
         //______________________________________________________________________
         //
