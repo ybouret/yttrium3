@@ -32,7 +32,7 @@ namespace Yttrium
         // Definitions
         //
         //______________________________________________________________________
-        static const unsigned MaxArgs = 2;  //!< maximum of extra arguments
+        static const unsigned MaxArgs = 3;  //!< maximum of extra arguments
         typedef void (VaList::*Meth)(void); //!< method pointer alias
         typedef void (*Func)(void);         //!< C function alias
 
