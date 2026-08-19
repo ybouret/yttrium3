@@ -24,6 +24,10 @@
 //! disable mpicxx
 #define MPICH_SKIP_MPICXX 1
 
+#if defined(Y_WIN) && defined(Y_GNU)
+#define MSMPI_NO_SAL 1
+#endif
+
 #include <mpi.h>
 
 namespace Yttrium
