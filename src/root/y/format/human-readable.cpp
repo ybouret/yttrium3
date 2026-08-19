@@ -65,20 +65,41 @@ namespace Yttrium
 #pragma warning ( disable : 4774 ) // format for sprintf
 #endif 
 
+    namespace
+    {
+        static const unsigned HR_BUFFSIZ = 512;
+
+        static inline
+        char * hr_c_str(char buffer[], const size_t buflen, const HumanReadable &hr)
+        {
+            assert(buffer); assert(buflen>0);
+            memset(buffer,0,buflen);
+            char fmt[32];
+            memset(fmt,0,sizeof(fmt));
+            snprintf(fmt, sizeof(fmt), "%%4u.%%0%uu%%c",2);
+            const HumanReadable::Divider &hd = HumanReadable::Divide[hr.sfx];
+            const unsigned                fp = unsigned( floor(100.0*double(hr.rem)/ (double) hd.factor) );
+            snprintf(buffer,buflen,fmt,hr.quot, fp, hd.suffix);
+            return buffer;
+        }
+    }
+
     std::ostream & operator<<(std::ostream &os, const HumanReadable &hr)
     {
         // request: 4 + 1 + precision
-        char buf[512];
-        char fmt[32];
-        memset(buf,0,sizeof(buf));
-        memset(fmt,0,sizeof(fmt));
-
-        snprintf(fmt, sizeof(fmt), "%%4u.%%0%uu%%c",2);
-        const HumanReadable::Divider &hd = HumanReadable::Divide[hr.sfx];
-        const unsigned                fp = unsigned( floor(100.0*double(hr.rem)/ (double) hd.factor) );
-        snprintf(buf, sizeof(buf),fmt,hr.quot, fp, hd.suffix);
-        os << buf;
-        return os;
+        char buf[HR_BUFFSIZ];
+        return os << hr_c_str(buf,sizeof(buf),hr);
     }
 
+}
+
+#include "y/string.hpp"
+
+namespace Yttrium
+{
+    String HumanReadable:: str() const
+    {
+        char buf[HR_BUFFSIZ];
+        return String( hr_c_str(buf,sizeof(buf),*this) );
+    }
 }

@@ -5,6 +5,7 @@
 
 #include "y/config/setup.hpp"
 #include "y/ostream-proto.hpp"
+#include "y/string/fwd.hpp"
 
 namespace Yttrium
 {
@@ -48,6 +49,20 @@ namespace Yttrium
         ~HumanReadable()                     noexcept; //!< cleanup
         Y_OSTREAM_PROTO(HumanReadable);                //!< display with 2 digits
 
+        //______________________________________________________________________
+        //
+        //
+        // Methods
+        //
+        //______________________________________________________________________
+        Core::String<char> str() const;
+
+        //______________________________________________________________________
+        //
+        //
+        // Members
+        //
+        //______________________________________________________________________
         const unsigned quot; //!< quotient
         const unsigned rem;  //!< remainder
         const unsigned sfx;  //!< value = quot * 10^(3*sfx) + rem
