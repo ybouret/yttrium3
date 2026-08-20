@@ -43,16 +43,20 @@ namespace Yttrium
         // Metrics
         //
         //______________________________________________________________________
-        static const size_t BytesForArgs  = MinArgs * sizeof(void*);                                             //!< alias
-        static const size_t BytesForFunc  = BytesForArgs + sizeof(Func);                                         //!< alias
-        static const size_t MethodLength  = Alignment::To<void*>::CeilOf<sizeof(Meth)>::Value;                   //!< alias
-        static const size_t BytesForMeth  = BytesForArgs + sizeof(void *) + MethodLength;                        //!< alias
-        static const size_t RequiredTotal = MetaMax<BytesForFunc,BytesForMeth>::Value ;                          //!< alias
-        static const size_t RequiredBytes = (MetaNextPowerOfTwo<RequiredTotal>::Value << 1) - 2 * sizeof(void*); //!< for alignement
-        static const size_t RequiredWords = Alignment::WordsGEQ<RequiredBytes>::Count;                           //!< alias
-        static const size_t MaxFuncArgs   = (RequiredBytes - sizeof(Func))/sizeof(void*);                        //!< alias
-        static const size_t MaxMethArgs   = (RequiredBytes - (sizeof(void*)+MethodLength))/sizeof(void*);        //!< alias
+        static const size_t PrologLength  = 2*sizeof(void*);                                   //!< size for inner pointers
+        static const size_t MethodLength  = Alignment::To<void*>::CeilOf<sizeof(Meth)>::Value; //!< size for a method pointer
+        static const size_t InvokeLength  = sizeof(void*) + MethodLength;                      //!< object pointer+method pointer
+        static const size_t SummonLength  = sizeof(Func);            //!< sizeof function
+        static const size_t MinArgsBytes  = MinArgs * sizeof(void*); //!< bytes for arguments address
+        static const size_t InvokeNeeded  = InvokeLength + MinArgsBytes;
+        static const size_t SummonNeeded  = SummonLength + MinArgsBytes;
 
+        static const size_t RequiredTotal = MetaMax<InvokeNeeded,SummonNeeded>::Value ;                     //!< alias
+        static const size_t RequiredBytes = (MetaNextPowerOfTwo<RequiredTotal>::Value << 1) - PrologLength; //!< for alignement
+        static const size_t RequiredWords = Alignment::WordsGEQ<RequiredBytes>::Count;                      //!< alias
+        static const size_t MaxInvokeArgs = (RequiredBytes-InvokeLength)/sizeof(void*);
+        static const size_t MaxSummonArgs = (RequiredBytes-SummonLength)/sizeof(void*);
+        
         //______________________________________________________________________
         //
         //

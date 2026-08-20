@@ -13,7 +13,7 @@ Y_UTEST(tao_device)
 
     
     Y_SIZEOF(MKL::Tao::Device);
-
+    
 
 }
 Y_UDONE()

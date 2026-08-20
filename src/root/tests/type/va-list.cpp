@@ -30,15 +30,18 @@ Y_UTEST(type_va_list)
     std::cerr << "(*) Metrics for VaList: " << std::endl;
     Y_SIZEOF(VaList::Func);
     Y_SIZEOF(VaList::Meth);
-    Y_PRINTV(VaList::BytesForFunc);
-    Y_PRINTV(VaList::BytesForMeth);
+    Y_PRINTV(VaList::InvokeLength);
+    Y_PRINTV(VaList::InvokeNeeded);
+    Y_PRINTV(VaList::SummonLength);
+    Y_PRINTV(VaList::SummonNeeded);
     Y_PRINTV(VaList::RequiredTotal);
     Y_PRINTV(VaList::RequiredBytes);
     Y_PRINTV(VaList::RequiredWords);
     Y_SIZEOF(VaList);
     std::cerr << "(*) Arguments: " << std::endl;
-    Y_PRINTV(VaList::MaxFuncArgs);
-    Y_PRINTV(VaList::MaxMethArgs);
+    Y_PRINTV(VaList::MaxInvokeArgs);
+    Y_PRINTV(VaList::MaxSummonArgs);
+    std::cerr << std::endl;
 
     {
         VaList vp;
