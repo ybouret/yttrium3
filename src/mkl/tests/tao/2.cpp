@@ -21,6 +21,8 @@ namespace Yttrium
                 typename U>
                 struct MulOps
                 {
+                    typedef Cameo::Addition<U> XAdd;
+
                     TARGET          * target;
                     const Matrix<T> * matrix;
                     SOURCE          * source;
@@ -32,9 +34,17 @@ namespace Yttrium
                         assert(matrix);
                         assert(source);
                         assert(tiles1d);
-                        
-                        Y_Lock(ctx.sync);
-                        std::cerr << "in " << ctx << std::endl;
+
+                        const Tile1D &tile = (*tiles1d)[ctx.indx];
+                        XAdd &       xadd  = *tile.as<XAdd *>();
+                        {
+                            Y_Lock(ctx.sync);
+                            std::cerr << "in " << ctx << " => " << tile << ": offset=" << tile.offset << ", length=" << tile.length << std::endl;
+                        }
+                        for(size_t irow=tile.offset,count=tile.length;count>0;--count,++irow)
+                        {
+                            (*target)[irow] = matrix->mul_(irow,xadd,*source);
+                        }
                     }
                 };
 
@@ -68,9 +78,8 @@ namespace Yttrium
                     & target, & matrix, & source , & device.tiles1d
                 };
 
+                // apply ops on each tile
                 (*device)( ops, & Ops :: set);
-
-
             }
 
 
