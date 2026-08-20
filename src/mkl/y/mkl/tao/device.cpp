@@ -28,6 +28,12 @@ namespace Yttrium
             }
             
 
+            Tiles1D & Device:: remap1d(const size_t n) noexcept
+            {
+                tiles1d.remap(1,n, simd->sync());
+                return tiles1d;
+            }
+
         }
 
 

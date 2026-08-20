@@ -61,6 +61,14 @@ namespace Yttrium
                 //______________________________________________________________
                 //
                 //
+                // Methods
+                //
+                //______________________________________________________________
+
+
+                //______________________________________________________________
+                //
+                //
                 // Members
                 //
                 //______________________________________________________________
@@ -68,6 +76,10 @@ namespace Yttrium
                 Tiles1D tiles1d; //!< for vector/vector, matrix/vector ops
                 Tiles2D tiles2d; //!< for matrix/matrix ops
                 UDTS    udts;    //!< for upper diagonal ops
+
+                Tiles1D & remap1d(const size_t n) noexcept;
+
+                
 
             private:
                 Y_Disable_Copy_And_Assign(Device); //!< discarded
