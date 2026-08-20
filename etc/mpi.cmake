@@ -1,4 +1,7 @@
-message(STATUS "    [[ Detecting MPI.... ]] ")
+
+message(STATUS "")
+message(STATUS "Detecting MPI, please wait.. ")
+message(STATUS "")
 
 if(MINGW)
 	message( STATUS "In MINGW" )
@@ -20,6 +23,7 @@ if(MINGW)
 		message( STATUS "no ${MPI_PATH}" )
 	endif()
 else()
+	# fallback to plain MPI from CMake
 	find_package(MPI)
 endif()
 
