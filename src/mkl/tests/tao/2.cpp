@@ -37,14 +37,11 @@ namespace Yttrium
 
                         const Tile1D &tile = (*tiles1d)[ctx.indx];
                         XAdd &       xadd  = *tile.as<XAdd *>();
-                        {
-                            Y_Lock(ctx.sync);
-                            std::cerr << "in " << ctx << " => " << tile << ": offset=" << tile.offset << ", length=" << tile.length << std::endl;
-                        }
+                        //{ Y_Lock(ctx.sync); std::cerr << "in " << ctx << " => " << tile << std::endl; }
+
                         for(size_t irow=tile.offset,count=tile.length;count>0;--count,++irow)
-                        {
                             (*target)[irow] = matrix->mul_(irow,xadd,*source);
-                        }
+
                     }
                 };
 
@@ -72,14 +69,14 @@ namespace Yttrium
                 device.remap1d(nr).attach(addenda,nc);
 
                 // prepare ops
-                typedef Pith::MulOps<TARGET,T,SOURCE,U> Ops;
-                Ops ops =
+                typedef Pith::MulOps<TARGET,T,SOURCE,U> MulOps;
+                MulOps ops =
                 {
                     & target, & matrix, & source , & device.tiles1d
                 };
 
                 // apply ops on each tile
-                (*device)( ops, & Ops :: set);
+                (*device)( ops, & MulOps :: set);
             }
 
 
@@ -90,6 +87,8 @@ namespace Yttrium
 
 
 #include "y/container/cxx/array.hpp"
+#include "y/core/rand.hpp"
+#include "y/random/type-gen.hpp"
 
 using namespace Yttrium;
 
@@ -100,16 +99,29 @@ Y_UTEST(tao2)
 
     MKL::Tao::Device seq(seqEngine);
     MKL::Tao::Device par(parEngine);
+    Core::Rand       ran;
 
     const size_t nr = 4;
     const size_t nc = 3;
     Matrix<double>         A(nr,nc);
     CxxArray<double>       lhs(nr);
+    CxxArray<double>       lhsSeq(nr);
+    CxxArray<double>       lhsPar(nr);
     CxxArray<double>       rhs(nc);
     Cameo::Addenda<double> addenda;
 
-    MKL::Tao::Mul(seq,lhs,A,rhs,addenda);
-    MKL::Tao::Mul(par,lhs,A,rhs,addenda);
+    Random::Generate::Array(ran,rhs);
+    Random::Generate::Matrix(ran,A);
+
+    std::cerr << "A=" << A << std::endl;
+    std::cerr << "rhs=" << rhs << std::endl;
+    std::cerr << std::endl;
+
+    lhs.ld(0); A.mul(lhs,rhs);
+    std::cerr << "lhs   =" << lhs << std::endl;
+
+    lhsSeq.ld(0); MKL::Tao::Mul(seq,lhsSeq,A,rhs,addenda); std::cerr << "lhsSeq=" << lhsSeq << std::endl;
+    lhsPar.ld(0); MKL::Tao::Mul(par,lhsPar,A,rhs,addenda); std::cerr << "lhsPar=" << lhsPar << std::endl;
 
 
 }

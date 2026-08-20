@@ -78,6 +78,7 @@ namespace Yttrium
                 UDTS    udts;    //!< for upper diagonal ops
 
                 Tiles1D & remap1d(const size_t n) noexcept;
+                Tiles2D & remap2d(const size_t nr, const size_t nc) noexcept;
 
                 
 
