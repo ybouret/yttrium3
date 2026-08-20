@@ -287,196 +287,12 @@ namespace Yttrium
         //______________________________________________________________________
         //
         //
-        // Embedded algebraic operations
+        // Algebraic operations
         //
         //______________________________________________________________________
+#include "y/container/matrix/algebra2.hpp"
+#include "y/container/matrix/algebra3.hpp"
 
-        //! compute irow-th term of matrix/vector multiplication
-        /**
-         \param irow 1<=irow<=rows
-         \param xadd inner addition
-         \param source compatible source
-         \return dot(row[irow],source)
-         */
-        template <typename U, typename SOURCE> inline
-        U mul_(const size_t         irow,
-               Cameo::Addition<U> & xadd,
-               SOURCE &             source) const
-        {
-            assert(cols==source.size());
-            assert(irow<=rows);
-            assert(irow>0);
-            return xadd.dot( row[irow], source);
-        }
-
-        //! in place multiplication: target = *this * source \param target output vector \param source input vector
-        template <typename TARGET, typename SOURCE> inline
-        void mul(TARGET &target, SOURCE &source) const
-        {
-            assert(rows==target.size());
-            assert(cols==source.size());
-            Cameo::Addition<T> xadd(cols);
-            for(size_t i=rows;i>0;--i)
-                target[i] = mul_(i,xadd,source);
-        }
-
-
-        //! compute irow-th term of matrix/vector multiplication with addition
-        /**
-         \param irow   1<=irow<=rows
-         \param xadd   inner addition
-         \param source compatible source
-         \param rhs    vector to add
-         \return dotadd(row[irow],source,rhs[irow])
-         */
-        template <typename U, typename SOURCE, typename RHS> inline
-        U muladd_(const size_t         irow,
-                  Cameo::Addition<U> & xadd,
-                  SOURCE &             source,
-                  RHS &                rhs ) const
-        {
-            assert(cols==source.size());
-            assert(irow<=rows);
-            assert(irow>0);
-            return xadd.dotadd( row[irow], source, rhs[irow]);
-        }
-
-        //! in place multiplication and addition : target = *this * source + rhs
-        /**
-         \param target output vector
-         \param source input vector
-         \param rhs    vector to add
-         */
-        template <typename TARGET, typename SOURCE, typename RHS> inline
-        void muladd(TARGET &target, SOURCE &source, RHS &rhs) const
-        {
-            assert(rows==target.size());
-            assert(cols==source.size());
-            assert(rows==rhs.size());
-            Cameo::Addition<T> xadd(cols);
-            for(size_t i=rows;i>0;--i)
-                target[i] = muladd_(i,xadd,source,rhs);
-        }
-
-        //! compute irow-th term of matrix/vector multiplication with subtraction
-        /**
-         \param irow   1<=irow<=rows
-         \param xadd   inner addition
-         \param source compatible source
-         \param rhs    vector to sub
-         \return dotadd(row[irow],source,rhs[irow])
-         */
-        template <typename U, typename SOURCE, typename RHS> inline
-        U mulsub_(const size_t         irow,
-                  Cameo::Addition<U> & xadd,
-                  SOURCE &             source,
-                  RHS &                rhs ) const
-        {
-            assert(cols==source.size());
-            assert(irow<=rows);
-            assert(irow>0);
-            return xadd.dotsub( row[irow], source, rhs[irow]);
-        }
-
-        //! in place multiplication and subtraction : target = *this * source - rhs
-        /**
-         \param target output vector
-         \param source input vector
-         \param rhs    vector to subtract
-         */
-        template <typename TARGET, typename SOURCE, typename RHS> inline
-        void mulsub(TARGET &target, SOURCE &source, RHS &rhs) const
-        {
-            assert(rows==target.size());
-            assert(cols==source.size());
-            assert(rows==rhs.size());
-            Cameo::Addition<T> xadd(cols);
-            for(size_t i=rows;i>0;--i)
-                target[i] = mulsub_(i,xadd,source,rhs);
-        }
-
-        //! *this = lhs * rhs \param lhs matrix \param rhs matrix
-        template <typename LHS, typename RHS> inline
-        void mmul(LHS &lhs, RHS &rhs)
-        {
-            assert(lhs.rows==rows);
-            assert(rhs.cols==cols);
-            assert(lhs.cols==rhs.rows);
-            Matrix &           self = *this;
-            const size_t       nr   = rows;
-            const size_t       nc   = cols;
-            const size_t       nx   = lhs.cols;
-            Cameo::Addition<T> xadd(nx);
-            for(size_t i=nr;i>0;--i)
-            {
-                for(size_t j=nc;j>0;--j)
-                {
-                    xadd.ldz();
-                    for(size_t k=nx;k>0;--k)
-                        xadd.addProd(lhs[i][k], rhs[k][j]);
-                    self[i][j] = xadd();
-                }
-            }
-        }
-
-        //! *this = lhs * rhs' \param lhs matrix \param rhs matrix
-        template <typename LHS, typename RHS> inline
-        void mmul(LHS &lhs, const TransposeOf_ &, RHS &rhs)
-        {
-            assert(rows==lhs.rows);
-            assert(cols==rhs.rows);
-            assert(lhs.cols==rhs.cols);
-            Matrix &           self = *this;
-            const size_t       nr   = rows;
-            const size_t       nc   = cols;
-            Cameo::Addition<T> xadd(lhs.cols);
-            for(size_t i=nr;i>0;--i)
-            {
-                for(size_t j=nc;j>0;--j)
-                    self[i][j] = xadd.dot(lhs[i],rhs[j]);
-            }
-        }
-
-        //! *this = lhs' * rhs \param lhs matrix \param rhs matrix
-        template <typename LHS, typename RHS> inline
-        void mmul(const TransposeOf_ &, LHS &lhs, RHS &rhs)
-        {
-            assert(rows==lhs.cols);
-            assert(cols==rhs.cols);
-            assert(lhs.rows==rhs.rows);
-            Matrix &           self = *this;
-            const size_t       nr   = rows;
-            const size_t       nc   = cols;
-            const size_t       nx   = lhs.rows;
-            Cameo::Addition<T> xadd(nx);
-            for(size_t i=nr;i>0;--i)
-            {
-                for(size_t j=nc;j>0;--j)
-                {
-                    xadd.ldz();
-                    for(size_t k=nx;k>0;--k)
-                        xadd.addProd(lhs[k][i],rhs[k][j]);
-                    self[i][j] = xadd();
-                }
-            }
-        }
-
-        //! compute Gram matrix \param P to compute P'*P
-        template <typename MATRIX> inline
-        void gram(MATRIX &P)
-        {
-            assert(P.rows==rows);
-            assert(P.rows==cols);
-            Matrix &           self = *this;
-            const size_t       nr   = rows;
-            Cameo::Addition<T> xadd(P.cols);
-            for(size_t i=1;i<=nr;++i)
-            {
-                self[i][i] = xadd.dot(P[i],P[i]);
-                for(size_t j=i+1;j<=nr;++j)
-                    self[i][j] = self[j][i] = xadd.dot(P[i],P[j]);
-            }
-        }
 
         //! multiply each item \param u factor \return *this
         template <typename U> inline
@@ -498,6 +314,12 @@ namespace Yttrium
             return *this;
         }
 
+        //______________________________________________________________________
+        //
+        //
+        // Utility methods
+        //
+        //______________________________________________________________________
 
         //! \return light array of data
         LightArray<Type> asArray() noexcept {
@@ -505,7 +327,7 @@ namespace Yttrium
             else         return LightArray<Type>(&row[1][1],items);
         }
 
-        //! \param rhs another matrix \return metrics-wise then element wise comparison
+        //! \param rhs another matrix \return metrics-wise then element-wise comparison
         template <typename U> inline
         bool isEqualTo(const Matrix<U> &rhs) const
         {
