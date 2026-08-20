@@ -1,7 +1,7 @@
 #include "y/utest/driver.hpp"
 
 
-Y_UTEST_DECL(4)
+Y_UTEST_DECL(5)
 {
     Y_UTEST(algebra_rank);
     Y_UTEST(algebra_mmul);

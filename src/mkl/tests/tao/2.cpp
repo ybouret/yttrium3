@@ -28,7 +28,13 @@ namespace Yttrium
 
                     inline void set(Concurrent::Context &ctx)
                     {
-
+                        assert(target);
+                        assert(matrix);
+                        assert(source);
+                        assert(tiles1d);
+                        
+                        Y_Lock(ctx.sync);
+                        std::cerr << "in " << ctx << std::endl;
                     }
                 };
 
@@ -73,6 +79,9 @@ namespace Yttrium
     }
 }
 
+
+#include "y/container/cxx/array.hpp"
+
 using namespace Yttrium;
 
 Y_UTEST(tao2)
@@ -83,7 +92,15 @@ Y_UTEST(tao2)
     MKL::Tao::Device seq(seqEngine);
     MKL::Tao::Device par(parEngine);
 
+    const size_t nr = 4;
+    const size_t nc = 3;
+    Matrix<double>         A(nr,nc);
+    CxxArray<double>       lhs(nr);
+    CxxArray<double>       rhs(nc);
+    Cameo::Addenda<double> addenda;
 
+    MKL::Tao::Mul(seq,lhs,A,rhs,addenda);
+    MKL::Tao::Mul(par,lhs,A,rhs,addenda);
 
 
 }
