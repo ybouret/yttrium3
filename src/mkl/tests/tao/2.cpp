@@ -43,6 +43,23 @@ namespace Yttrium
                             (*target)[irow] = matrix->mul_(irow,xadd,*source);
 
                     }
+
+
+                    inline void add(Concurrent::Context &ctx)
+                    {
+                        assert(target);
+                        assert(matrix);
+                        assert(source);
+                        assert(tiles1d);
+
+                        const Tile1D &tile = (*tiles1d)[ctx.indx];
+                        XAdd &       xadd  = *tile.as<XAdd *>();
+                        for(size_t irow=tile.offset,count=tile.length;count>0;--count,++irow)
+                            (*target)[irow] = matrix->mul_(irow,xadd,*source);
+
+                    }
+
+
                 };
 
             }
