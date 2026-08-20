@@ -321,7 +321,7 @@ namespace Yttrium
         }
 
 
-        //! compute irow-th term of matrix/vector multiplication
+        //! compute irow-th term of matrix/vector multiplication with addition
         /**
          \param irow   1<=irow<=rows
          \param xadd   inner addition
@@ -358,6 +358,26 @@ namespace Yttrium
                 target[i] = muladd_(i,xadd,source,rhs);
         }
 
+        //! compute irow-th term of matrix/vector multiplication with subtraction
+        /**
+         \param irow   1<=irow<=rows
+         \param xadd   inner addition
+         \param source compatible source
+         \param rhs    vector to sub
+         \return dotadd(row[irow],source,rhs[irow])
+         */
+        template <typename U, typename SOURCE, typename RHS> inline
+        U mulsub_(const size_t         irow,
+                  Cameo::Addition<U> & xadd,
+                  SOURCE &             source,
+                  RHS &                rhs ) const
+        {
+            assert(cols==source.size());
+            assert(irow<=rows);
+            assert(irow>0);
+            return xadd.dotsub( row[irow], source, rhs[irow]);
+        }
+
         //! in place multiplication and subtraction : target = *this * source - rhs
         /**
          \param target output vector
@@ -372,7 +392,7 @@ namespace Yttrium
             assert(rows==rhs.size());
             Cameo::Addition<T> xadd(cols);
             for(size_t i=rows;i>0;--i)
-                target[i] = xadd.dotsub( row[i], source, rhs[i]);
+                target[i] = mulsub_(i,xadd,source,rhs);
         }
 
         //! *this = lhs * rhs \param lhs matrix \param rhs matrix

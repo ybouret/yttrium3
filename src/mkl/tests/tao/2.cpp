@@ -44,8 +44,8 @@ namespace Yttrium
 
                     }
 
-
-                    inline void add(Concurrent::Context &ctx)
+                    template <typename RHS>
+                    inline void add(Concurrent::Context &ctx, RHS &rhs)
                     {
                         assert(target);
                         assert(matrix);
@@ -55,7 +55,22 @@ namespace Yttrium
                         const Tile1D &tile = (*tiles1d)[ctx.indx];
                         XAdd &       xadd  = *tile.as<XAdd *>();
                         for(size_t irow=tile.offset,count=tile.length;count>0;--count,++irow)
-                            (*target)[irow] = matrix->mul_(irow,xadd,*source);
+                            (*target)[irow] = matrix->muladd_(irow,xadd,*source,rhs);
+
+                    }
+
+                    template <typename RHS>
+                    inline void sub(Concurrent::Context &ctx, RHS &rhs)
+                    {
+                        assert(target);
+                        assert(matrix);
+                        assert(source);
+                        assert(tiles1d);
+
+                        const Tile1D &tile = (*tiles1d)[ctx.indx];
+                        XAdd &       xadd  = *tile.as<XAdd *>();
+                        for(size_t irow=tile.offset,count=tile.length;count>0;--count,++irow)
+                            (*target)[irow] = matrix->mulsub_(irow,xadd,*source,rhs);
 
                     }
 
@@ -95,6 +110,75 @@ namespace Yttrium
                 // apply ops on each tile
                 (*device)( ops, & MulOps :: set);
             }
+
+            template <
+            typename TARGET,
+            typename T,
+            typename SOURCE,
+            typename U,
+            typename RHS>
+            inline void MulAdd(Device            & device,
+                               TARGET            & target,
+                               const Matrix<T>   & matrix,
+                               SOURCE            & source,
+                               RHS               & rhs,
+                               Cameo::Addenda<U> & addenda)
+            {
+                assert(target.size() == matrix.rows);
+                assert(source.size() == matrix.cols);
+
+                // get metrics
+                const size_t nr = matrix.rows;
+                const size_t nc = matrix.cols;
+
+                // prepare device
+                device.remap1d(nr).attach(addenda,nc);
+
+                // prepare ops
+                typedef Pith::MulOps<TARGET,T,SOURCE,U> MulOps;
+                MulOps ops =
+                {
+                    & target, & matrix, & source , & device.tiles1d
+                };
+
+                // apply ops on each tile
+                (*device)( ops, & MulOps :: template add<RHS>, rhs);
+            }
+
+            template <
+            typename TARGET,
+            typename T,
+            typename SOURCE,
+            typename U,
+            typename RHS>
+            inline void MulSub(Device            & device,
+                               TARGET            & target,
+                               const Matrix<T>   & matrix,
+                               SOURCE            & source,
+                               RHS               & rhs,
+                               Cameo::Addenda<U> & addenda)
+            {
+                assert(target.size() == matrix.rows);
+                assert(source.size() == matrix.cols);
+
+                // get metrics
+                const size_t nr = matrix.rows;
+                const size_t nc = matrix.cols;
+
+                // prepare device
+                device.remap1d(nr).attach(addenda,nc);
+
+                // prepare ops
+                typedef Pith::MulOps<TARGET,T,SOURCE,U> MulOps;
+                MulOps ops =
+                {
+                    & target, & matrix, & source , & device.tiles1d
+                };
+
+                // apply ops on each tile
+                (*device)( ops, & MulOps :: template sub<RHS>, rhs);
+            }
+
 
 
         }
