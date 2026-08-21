@@ -10,9 +10,10 @@ namespace Yttrium
 {
     namespace Jive
     {
+        //! Common Expression
         struct Common
         {
-            static const char * const INT;
+            static const char * const INT; //!< natural integer
         };
     }
 

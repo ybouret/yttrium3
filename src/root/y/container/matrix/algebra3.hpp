@@ -1,3 +1,11 @@
+//! compute [i][j] of lhs * rhs
+/**
+ \param lhs matrix
+ \param rhs matrix
+ \param xadd for inner additions
+ \param i    row index
+ \param j    column index
+ */
 
 template <typename LHS, typename RHS> inline
 T mmul_(LHS                &lhs,
@@ -28,19 +36,6 @@ void mmul(LHS &lhs, RHS &rhs)
     const size_t       nc   = cols;
     const size_t       nx   = lhs.cols;
     Cameo::Addition<T> xadd(nx);
-#if 0
-    for(size_t i=nr;i>0;--i)
-    {
-        for(size_t j=nc;j>0;--j)
-        {
-            xadd.ldz();
-            for(size_t k=nx;k>0;--k)
-                xadd.addProd(lhs[i][k], rhs[k][j]);
-            self[i][j] = xadd();
-
-        }
-    }
-#endif
     for(size_t i=nr;i>0;--i)
         for(size_t j=nc;j>0;--j)
             self[i][j] = mmul_(lhs,rhs,xadd,i,j);

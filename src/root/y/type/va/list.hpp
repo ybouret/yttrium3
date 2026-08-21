@@ -46,17 +46,17 @@ namespace Yttrium
         static const size_t PrologLength  = 2*sizeof(void*);                                   //!< size for inner pointers
         static const size_t MethodLength  = Alignment::To<void*>::CeilOf<sizeof(Meth)>::Value; //!< size for a method pointer
         static const size_t InvokeLength  = sizeof(void*) + MethodLength;                      //!< object pointer+method pointer
-        static const size_t SummonLength  = sizeof(Func);            //!< sizeof function
-        static const size_t MinArgsBytes  = MinArgs * sizeof(void*); //!< bytes for arguments address
-        static const size_t InvokeNeeded  = InvokeLength + MinArgsBytes;
-        static const size_t SummonNeeded  = SummonLength + MinArgsBytes;
+        static const size_t SummonLength  = sizeof(Func);                                      //!< sizeof function
+        static const size_t MinArgsBytes  = MinArgs * sizeof(void*);                           //!< bytes for arguments address
+        static const size_t InvokeNeeded  = InvokeLength + MinArgsBytes;                       //!< min needed bytes to invoke methods
+        static const size_t SummonNeeded  = SummonLength + MinArgsBytes;                       //!<  min needed bytes to summon functions
 
         static const size_t RequiredTotal = MetaMax<InvokeNeeded,SummonNeeded>::Value ;                     //!< alias
         static const size_t RequiredBytes = (MetaNextPowerOfTwo<RequiredTotal>::Value << 1) - PrologLength; //!< for alignement
         static const size_t RequiredWords = Alignment::WordsGEQ<RequiredBytes>::Count;                      //!< alias
-        static const size_t MaxInvokeArgs = (RequiredBytes-InvokeLength)/sizeof(void*);
-        static const size_t MaxSummonArgs = (RequiredBytes-SummonLength)/sizeof(void*);
-        
+        static const size_t MaxInvokeArgs = (RequiredBytes-InvokeLength)/sizeof(void*);                     //!< alias
+        static const size_t MaxSummonArgs = (RequiredBytes-SummonLength)/sizeof(void*);                     //!< alias
+
         //______________________________________________________________________
         //
         //

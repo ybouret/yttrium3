@@ -91,7 +91,20 @@ namespace Yttrium
             }
 
             
-
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Matrix/Vector thru Concurrent::SIMD
+            /**
+             \param device  handle parallelism
+             \param target  target vector
+             \param matrix  matrix
+             \param source  source vector
+             \param addenda collection of Cameo::Addition to populate Device
+             */
+            //
+            //__________________________________________________________________
             template <
             typename TARGET,
             typename T,
@@ -124,6 +137,22 @@ namespace Yttrium
                 (*device)( ops, & MulOps :: set);
             }
 
+
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Matrix/Vector multiplication and addition thru Concurrent::SIMD
+            /**
+             \param device  handle parallelism
+             \param target  target vector
+             \param matrix  matrix
+             \param source  source vector
+             \param rhs     vector to add
+             \param addenda collection of Cameo::Addition to populate Device
+             */
+            //
+            //__________________________________________________________________
             template <
             typename TARGET,
             typename T,
@@ -158,6 +187,21 @@ namespace Yttrium
                 (*device)( ops, & MulOps :: template add<RHS>, rhs);
             }
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Matrix/Vector multiplication and subtraction thru Concurrent::SIMD
+            /**
+             \param device  handle parallelism
+             \param target  target vector
+             \param matrix  matrix
+             \param source  source vector
+             \param rhs     vector to sub
+             \param addenda collection of Cameo::Addition to populate Device
+             */
+            //
+            //__________________________________________________________________
             template <
             typename TARGET,
             typename T,
