@@ -174,8 +174,7 @@ namespace Yttrium
         Array & Array:: operator=(const Array &other)
         {
             Array tmp(other);
-            //swapFor(tmp);
-            int todo;
+            xch(tmp);
             return *this;
         }
 
