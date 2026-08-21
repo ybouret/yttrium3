@@ -9,7 +9,9 @@ Y_UTEST(compile)
 
     if(argc>1)
     {
-        json( Jive::Module::OpenFile(argv[1]) );
+        JSON::Value jv;
+        json( jv, Jive::Module::OpenFile(argv[1]) );
+        std::cerr << jv << std::endl;
     }
 
 }

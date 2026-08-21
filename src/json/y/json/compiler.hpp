@@ -22,12 +22,14 @@ namespace Yttrium
 
             void render() const;
 
-            void operator()(Jive::Module * const);
+            void operator()(Value &, Jive::Module * const);
 
 
         private:
             Y_Disable_Copy_And_Assign(Compiler);
             Code * const code;
+        public:
+            bool & verbose;
         };
     }
 

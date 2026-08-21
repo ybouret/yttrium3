@@ -218,5 +218,5 @@ namespace Yttrium
 
 }
 
-#endif
+#endif // !Y_JSON_Value_Included
 

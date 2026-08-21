@@ -61,8 +61,9 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual void initialize();  //!< initialize before editing
-
+            virtual void initialize();       //!< initialize before editing
+            virtual void printState() const; //!< if verbose, after modification
+            
             //__________________________________________________________________
             //
             //

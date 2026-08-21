@@ -47,14 +47,16 @@ namespace Yttrium
             typedef HashSet<String,TerminalArticle::Pointer> TDB;
             typedef HashSet<String,InternalArticle::Pointer> IDB;
 
-            inline explicit Code(const Identifier &userLang) :
+            inline explicit Code(const Identifier &userLang,
+                                 const Editor     &userEdit) :
             Object(),
             depth(0),
             lang(userLang),
             tdb(),
             idb(),
             policy(Rigorous),
-            verbose(false)
+            verbose(false),
+            editor(userEdit)
             {
             }
 
@@ -86,6 +88,7 @@ namespace Yttrium
             IDB              idb;
             EditPolicy       policy;
             bool             verbose;
+            const Editor    &editor;
 
         private:
             Y_Disable_Copy_And_Assign(Code);
@@ -119,6 +122,7 @@ namespace Yttrium
                         (**todo).proc(lx);
                     else
                         applyPolicyFor(name);
+                    if(verbose) editor.printState();
                 }
                 else
                 {
@@ -134,6 +138,7 @@ namespace Yttrium
                         (**todo).proc(nargs);
                     else
                         applyPolicyFor(name);
+                    if(verbose) editor.printState();
                 }
             }
 
@@ -148,7 +153,7 @@ namespace Yttrium
         };
 
         Editor:: Editor(const Identifier &userLang) :
-        code( new Code(userLang) ),
+        code( new Code(userLang,*this) ),
         depth( code->depth ),
         lang( code->lang ),
         verbose( code->verbose )
@@ -195,6 +200,10 @@ namespace Yttrium
             if(verbose) std::cerr << "[init] " << lang << std::endl;
         }
 
+        void Editor:: printState() const
+        {
+            // default is do-nothing
+        }
 
 
     }
