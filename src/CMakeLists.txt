@@ -64,6 +64,7 @@ add_subdirectory(y)
 ################################################################################
 add_subdirectory(root)
 add_subdirectory(mkl)
+add_subdirectory(json)
 add_subdirectory(lua++)
 add_subdirectory(chem)
 add_subdirectory(ink)
