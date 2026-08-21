@@ -3,6 +3,7 @@
 #include "y/jive/parser.hpp"
 #include "y/check/static.hpp"
 #include "y/jive/lexical/plugin/jstring.hpp"
+#include "y/jive/editor.hpp"
 
 namespace Yttrium
 {
@@ -20,7 +21,8 @@ namespace Yttrium
 
 
         class Compiler:: Code :
-        public Jive::Parser
+        public Jive::Parser,
+        public Jive::Editor
         {
         public:
             explicit Code();
@@ -36,7 +38,8 @@ namespace Yttrium
         Compiler:: Code:: ~Code() noexcept {}
 
         Compiler:: Code:: Code() :
-        Jive::Parser(CallSign)
+        Jive::Parser(CallSign),
+        Jive::Editor(name)
         {
             Y_STATIC_CHECK( Y_Is_SuperSubClass_Strict(Object,Code), BadCode);
 
@@ -109,13 +112,15 @@ namespace Yttrium
             //
             //------------------------------------------------------------------
             validate();
+            verbose = true;
         }
 
 
         void Compiler:: Code:: compile(Jive::Module *const m)
         {
-            AutoPtr<XNode> ast = getAST(m);
-            
+            Jive::Editor & edit = *this;
+            AutoPtr<XNode> ast  = getAST(m);
+            edit(ast,Jive::Tolerant);
         }
 
         ////////////////////////////////////////////////////////////////////////
