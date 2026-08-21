@@ -20,6 +20,11 @@ namespace Yttrium
             explicit Compiler();
             virtual ~Compiler() noexcept;
 
+            void render() const;
+
+            void operator()(Jive::Module * const);
+
+
         private:
             Y_Disable_Copy_And_Assign(Compiler);
             Code * const code;
