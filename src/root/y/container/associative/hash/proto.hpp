@@ -510,6 +510,14 @@ namespace Yttrium
         //! access metrics from the table \return inner table
         inline const Table * operator->() const noexcept { assert(htab); return htab; }
 
+        //! no throw data exchange \param peer another hash proto
+        inline void xch( HashProto &peer ) noexcept
+        {
+            list.swapForList(peer.list);
+            pool.swapForPool(peer.pool);
+            CoerceSwap(htab,peer.htab);
+        }
+
         //______________________________________________________________________
         //
         //

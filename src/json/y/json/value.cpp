@@ -256,8 +256,7 @@ namespace Yttrium
         Object & Object:: operator=(const Object &other)
         {
             Pairs tmp(other);
-            //tmp.swapFor(*this);
-            int todo;
+            xch(tmp);
             return *this;
         }
 
