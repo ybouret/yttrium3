@@ -26,9 +26,9 @@ namespace Yttrium
                 return core;
             }
 
-            void String_:: initialize(const char ini,
-                                      const char end,
-                                      const char * const esc)
+            void String_:: initialize(const char         ini,
+                                      const char         end,
+                                      const char * const raw)
             {
                 // return on end char
                 backOn(end,NoEndOfLine);
@@ -41,6 +41,12 @@ namespace Yttrium
                             doChar( (char)i );
                 }
 
+                //   extra raw char
+                {
+                    const size_t n = StringLength(raw);
+                    for(size_t i=0;i<n;++i) doChar(raw[i]);
+                }
+
                 // escape backslash
                 doEscMark('\\');
 
@@ -48,11 +54,7 @@ namespace Yttrium
                 {              doEscMark(ini); }
                 { if(ini!=end) doEscMark(end); }
 
-                // escape extra
-                {
-                    const size_t n = StringLength(esc);
-                    for(size_t i=0;i<n;++i) doEscMark(esc[i]);
-                }
+
 
                 // escape control character
                 drop("escCntl","[\\\\][nrtvfab]",this, & String_::onEscCntl);
@@ -113,6 +115,7 @@ namespace Yttrium
             void String_:: doEscMark(const char c)
             {
                 const String rx = Formatted::Get("[\\\\]\\x%02x", (unsigned)c);
+                //std::cerr << "Escaping '" << c << "'" << std::endl;
                 drop(c,rx,this, &String_::onEscMark);
             }
 

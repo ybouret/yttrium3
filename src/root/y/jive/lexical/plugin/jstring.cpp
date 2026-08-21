@@ -8,7 +8,7 @@ namespace Yttrium
         namespace Lexical
         {
 
-            const char * const JString:: XEsc = "\'<>";
+            const char * const JString:: XRaw = "\'<>";
 
             
 

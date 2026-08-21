@@ -8,7 +8,7 @@ namespace Yttrium
     {
         namespace Lexical
         {
-            const char * const RString:: XEsc = "\"<>";
+            const char * const RString:: XRaw = "\"<>";
 
 
             RString:: ~RString() noexcept

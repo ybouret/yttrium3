@@ -71,7 +71,7 @@ namespace
 
         void onSTRING(const Lexeme &lx)
         {
-            strings << lx.str();
+            strings << lx.raw();
             std::cerr << "strings=" << strings << std::endl;
         }
 

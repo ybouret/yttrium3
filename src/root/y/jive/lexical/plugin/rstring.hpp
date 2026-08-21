@@ -29,7 +29,7 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 static const char         Mark = '\''; //!< alias
-                static const char * const XEsc;        //!< register dquotes, langle and rangle
+                static const char * const XRaw;        //!< register dquotes, langle and rangle
 
                 //______________________________________________________________
                 //
@@ -45,7 +45,7 @@ namespace Yttrium
                 template <typename PID> inline
                 explicit RString(const PID & pid,
                                  Stack     & stk) :
-                String_(pid,stk,Mark,Mark,XEsc)
+                String_(pid,stk,Mark,Mark,XRaw)
                 {
                 }
 

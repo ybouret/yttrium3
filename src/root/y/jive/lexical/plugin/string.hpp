@@ -36,19 +36,19 @@ namespace Yttrium
                  \param stk lexer stack
                  \param ini ini char
                  \param end end char
-                 \param esc extra escaped char
+                 \param raw extra raw char
                  */
                 template <typename PID> inline
-                explicit String_(const PID & pid,
-                                 Stack     & stk,
-                                 const char  ini,
-                                 const char  end,
-                                 const char * const esc) :
+                explicit String_(const PID &        pid,
+                                 Stack     &        stk,
+                                 const char         ini,
+                                 const char         end,
+                                 const char * const raw) :
                 AdvancedPlugin(pid,ini,stk,RejectEOS),
                 spot(name),
                 data()
                 {
-                    initialize(ini,end,esc);
+                    initialize(ini,end,raw);
                 }
 
                 //! cleanup

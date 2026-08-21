@@ -81,7 +81,7 @@ namespace Yttrium
             }
 
             inline void onSTRING(const Lexeme &lexeme) {
-                const String s = lexeme.str(); //std::cerr << "s='" << s << "'" << std::endl;
+                const String s = lexeme.raw(); //std::cerr << "s='" << s << "'" << std::endl;
                 Value v(s);
                 vstk.add(v);
             }

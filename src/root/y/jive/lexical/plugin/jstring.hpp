@@ -25,7 +25,7 @@ namespace Yttrium
             {
             public:
                 static const char         Mark = '\"'; //!< alias
-                static const char * const XEsc;        //!< register quote, langle and rangle
+                static const char * const XRaw;        //!< register quote, langle and rangle
 
                 //______________________________________________________________
                 //
@@ -41,7 +41,7 @@ namespace Yttrium
                 template <typename PID> inline
                 explicit JString(const PID & pid,
                                  Stack     & stk) :
-                String_(pid,stk,Mark,Mark,XEsc)
+                String_(pid,stk,Mark,Mark,XRaw)
                 {
                 }
 

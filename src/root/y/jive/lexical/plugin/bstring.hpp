@@ -31,7 +31,7 @@ namespace Yttrium
                 //______________________________________________________________
                 static const char Ini = '<';    //!< alias
                 static const char End = '>';    //!< alias
-                static const char * const XEsc; //!< register quote and dquotes
+                static const char * const XRaw; //!< register quote and dquotes
 
                 //______________________________________________________________
                 //
@@ -47,7 +47,7 @@ namespace Yttrium
                 template <typename PID> inline
                 explicit BString(const PID & pid,
                                  Stack     & stk) :
-                String_(pid,stk,Ini,End,XEsc)
+                String_(pid,stk,Ini,End,XRaw)
                 {
                 }
 
