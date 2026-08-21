@@ -1,4 +1,21 @@
 
+template <typename LHS, typename RHS> inline
+T mmul_(LHS                &lhs,
+        RHS                &rhs,
+        Cameo::Addition<T> &xadd,
+        const size_t        i,
+        const size_t        j)
+{
+    assert(lhs.rows==rows);
+    assert(rhs.cols==cols);
+    assert(lhs.cols==rhs.rows);
+    const size_t nx   = lhs.cols;
+    xadd.ldz();
+    for(size_t k=nx;k>0;--k)
+        xadd.addProd(lhs[i][k], rhs[k][j]);
+    return xadd();
+}
+
 //! *this = lhs * rhs \param lhs matrix \param rhs matrix
 template <typename LHS, typename RHS> inline
 void mmul(LHS &lhs, RHS &rhs)
@@ -11,6 +28,7 @@ void mmul(LHS &lhs, RHS &rhs)
     const size_t       nc   = cols;
     const size_t       nx   = lhs.cols;
     Cameo::Addition<T> xadd(nx);
+#if 0
     for(size_t i=nr;i>0;--i)
     {
         for(size_t j=nc;j>0;--j)
@@ -19,8 +37,13 @@ void mmul(LHS &lhs, RHS &rhs)
             for(size_t k=nx;k>0;--k)
                 xadd.addProd(lhs[i][k], rhs[k][j]);
             self[i][j] = xadd();
+
         }
     }
+#endif
+    for(size_t i=nr;i>0;--i)
+        for(size_t j=nc;j>0;--j)
+            self[i][j] = mmul_(lhs,rhs,xadd,i,j);
 }
 
 

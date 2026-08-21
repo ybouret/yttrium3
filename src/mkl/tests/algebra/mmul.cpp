@@ -25,6 +25,10 @@ Y_UTEST(algebra_mmul)
                     Matrix<apz> b(nx,nc);
                     Random::Generate::Matrix(ran,b);
                     M.mmul(a,b);
+                    std::cerr << "a=" << a << std::endl;
+                    std::cerr << "b=" << b << std::endl;
+                    std::cerr << "M=a*b-" << M << std::endl;
+
 
                     Matrix<apz> c(nx,nr);
                     Random::Generate::Matrix(ran,c);
