@@ -23,8 +23,9 @@ Y_UTEST_DECL(5)
     Y_UTEST(ode_rk4);
     Y_UTEST(ode_expl);
 
-    Y_UTEST(tao_device);
+    Y_UTEST(tao_device);	
     Y_UTEST(tao2);
+    Y_UTEST(tao3);
 
 }
 Y_UTEST_EXEC()

@@ -34,4 +34,6 @@ Y_UTEST(ode:expl)
 
 Y_UTEST(tao:device)
 Y_UTEST(tao2)
+Y_UTEST(tao3)
+
 

@@ -32,6 +32,7 @@ namespace Yttrium
                 struct MulOps
                 {
                     typedef Cameo::Addition<U> XAdd;    //!< alias
+                    
                     TARGET                   * target;  //!< target vector address
                     const Matrix<T>          * matrix;  //!< matrix address
                     SOURCE                   * source;  //!< source vector address
@@ -85,8 +86,8 @@ namespace Yttrium
 
                     }
 
-
                 };
+
 
             }
 
@@ -168,6 +169,7 @@ namespace Yttrium
             {
                 assert(target.size() == matrix.rows);
                 assert(source.size() == matrix.cols);
+                assert(source.size() == rhs.size() );
 
                 // get metrics
                 const size_t nr = matrix.rows;
@@ -217,6 +219,7 @@ namespace Yttrium
             {
                 assert(target.size() == matrix.rows);
                 assert(source.size() == matrix.cols);
+                assert(source.size() == rhs.size() );
 
                 // get metrics
                 const size_t nr = matrix.rows;
