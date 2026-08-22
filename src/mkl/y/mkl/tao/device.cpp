@@ -34,10 +34,11 @@ namespace Yttrium
                 return tiles1d;
             }
 
-            Tiles2D & Device:: remap2d(const size_t nr, const size_t nc) noexcept
+            Tiles2D & Device:: remap2d(const MatrixMetrics &metrics) noexcept
             {
-                static const Tile2D::vertex_t c1(1,1);
-                tiles2d.remap(c1, Tile2D::vertex_t(nr,nc), simd->sync());
+                static const Tile2D::vertex_t org(1,1);
+                const Tile2D::vertex_t        vtx(metrics.cols,metrics.rows);
+                tiles2d.remap(org,vtx, simd->sync());
                 return tiles2d;
             }
 

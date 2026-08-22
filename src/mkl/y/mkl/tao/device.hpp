@@ -8,6 +8,7 @@
 #include "y/concurrent/splitting/tiles2d.hpp"
 #include "y/concurrent/splitting/udts.hpp"
 #include "y/cameo/addenda.hpp"
+#include "y/container/matrix/metrics.hpp"
 
 namespace Yttrium
 {
@@ -33,9 +34,10 @@ namespace Yttrium
             // Tile per Tiles
             //
             //__________________________________________________________________
-            typedef Tiles1D::Tile Tile1D; //!< alias
-            typedef Tiles2D::Tile Tile2D; //!< alias
-            typedef UDTS::Tile    UDT;    //!< alias
+            typedef Tiles1D::Tile   Tile1D;  //!< alias
+            typedef Tiles2D::Tile   Tile2D;  //!< alias
+            typedef UDTS::Tile      UDT;     //!< alias
+            typedef Tile2D::Segment Segment; //!< alias
 
 
             //__________________________________________________________________
@@ -77,8 +79,8 @@ namespace Yttrium
                 Tiles2D tiles2d; //!< for matrix/matrix ops
                 UDTS    udts;    //!< for upper diagonal ops
 
-                Tiles1D & remap1d(const size_t n) noexcept;
-                Tiles2D & remap2d(const size_t nr, const size_t nc) noexcept;
+                Tiles1D & remap1d(const size_t numRows) noexcept;
+                Tiles2D & remap2d(const MatrixMetrics &metrics) noexcept;
 
                 
 

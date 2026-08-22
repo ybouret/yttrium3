@@ -35,7 +35,7 @@ namespace Yttrium
                         assert(target); assert(lhs); assert(rhs); assert(tiles2d);
                         const Tile2D &tile = (*tiles2d)[ctx.indx];
                         XAdd &       xadd  = *tile.as<XAdd *>();
-
+                        
                     }
 
                 };
@@ -59,7 +59,7 @@ namespace Yttrium
                 const size_t nr = target.rows; assert(nr>0);
                 const size_t nc = target.cols; assert(nc>0);
                 const size_t nx = lhs.cols;
-                device.remap2d(nr,nc).attach(addenda,nx);
+                device.remap2d(target).attach(addenda,nx);
 
                 typedef Pith::MMulOps<T, LHS, RHS, U> MulOps;
                 MulOps ops = {
