@@ -35,7 +35,11 @@ namespace Yttrium
                         assert(target); assert(lhs); assert(rhs); assert(tiles2d);
                         const Tile2D &tile = (*tiles2d)[ctx.indx];
                         XAdd &       xadd  = *tile.as<XAdd *>();
-                        
+                        for(size_t k=tile.span;k>0;--k)
+                        {
+                            const Segment s = tile[k];
+                        }
+
                     }
 
                 };
