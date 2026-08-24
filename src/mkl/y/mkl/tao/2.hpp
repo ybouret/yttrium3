@@ -92,7 +92,7 @@ namespace Yttrium
             }
 
 
-#define Y_MKL_TAO2_SETUP()                              \
+#define Y_MKL_TAO2_SETUP( CODE )                        \
 /**/    assert(target.size() == matrix.rows);           \
 /**/    assert(source.size() == matrix.cols);           \
 /*      ** get metric                                */ \
@@ -104,7 +104,8 @@ namespace Yttrium
 /**/    typedef Pith::MulOps<TARGET,T,SOURCE,U> MulOps; \
 /**/    MulOps ops =  {                                 \
 /**/        &target, &matrix, &source, &device.tiles1d  \
-/**/    }
+/**/    };                                              \
+/**/    (*device) CODE
 
 
             //__________________________________________________________________
@@ -132,25 +133,7 @@ namespace Yttrium
                             SOURCE            & source,
                             Cameo::Addenda<U> & addenda)
             {
-                assert(target.size() == matrix.rows);
-                assert(source.size() == matrix.cols);
-
-                // get metrics
-                const size_t nr = matrix.rows;
-                const size_t nc = matrix.cols;
-
-                // prepare device
-                device.remap1d(nr).attach(addenda,nc);
-
-                // prepare ops
-                typedef Pith::MulOps<TARGET,T,SOURCE,U> MulOps;
-                MulOps ops =
-                {
-                    & target, & matrix, & source , & device.tiles1d
-                };
-
-                // apply ops on each tile
-                (*device)( ops, & MulOps :: set);
+                Y_MKL_TAO2_SETUP( (ops, & MulOps::set) );
             }
 
 
@@ -182,26 +165,7 @@ namespace Yttrium
                                RHS               & rhs,
                                Cameo::Addenda<U> & addenda)
             {
-                assert(target.size() == matrix.rows);
-                assert(source.size() == matrix.cols);
-                assert(source.size() == rhs.size() );
-
-                // get metrics
-                const size_t nr = matrix.rows;
-                const size_t nc = matrix.cols;
-
-                // prepare device
-                device.remap1d(nr).attach(addenda,nc);
-
-                // prepare ops
-                typedef Pith::MulOps<TARGET,T,SOURCE,U> MulOps;
-                MulOps ops =
-                {
-                    & target, & matrix, & source , & device.tiles1d
-                };
-
-                // apply ops on each tile
-                (*device)( ops, & MulOps :: template add<RHS>, rhs);
+                Y_MKL_TAO2_SETUP(( ops, & MulOps :: template add<RHS>, rhs) );
             }
 
             //__________________________________________________________________
@@ -232,26 +196,7 @@ namespace Yttrium
                                RHS               & rhs,
                                Cameo::Addenda<U> & addenda)
             {
-                assert(target.size() == matrix.rows);
-                assert(source.size() == matrix.cols);
-                assert(source.size() == rhs.size() );
-
-                // get metrics
-                const size_t nr = matrix.rows;
-                const size_t nc = matrix.cols;
-
-                // prepare device
-                device.remap1d(nr).attach(addenda,nc);
-
-                // prepare ops
-                typedef Pith::MulOps<TARGET,T,SOURCE,U> MulOps;
-                MulOps ops =
-                {
-                    & target, & matrix, & source , & device.tiles1d
-                };
-
-                // apply ops on each tile
-                (*device)( ops, & MulOps :: template sub<RHS>, rhs);
+                Y_MKL_TAO2_SETUP(( ops, & MulOps :: template sub<RHS>, rhs) );
             }
 
 
