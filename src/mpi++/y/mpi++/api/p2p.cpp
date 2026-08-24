@@ -87,41 +87,11 @@ namespace Yttrium
         send1(u64,dest,tag);
     }
 
-    namespace
-    {
-        template <bool>
-        struct U64ToSize;
-
-        template <>
-        struct U64ToSize<false>
-        {
-            static inline size_t Convert(const uint64_t u64)
-            {
-                static const uint64_t MaxSize = IntegerFor<size_t>::Maximum;
-                assert(sizeof(size_t)<sizeof(uint64_t));
-                if(u64>MaxSize) throw Specific::Exception(MPI::CallSign,"received size overflow");
-                return (size_t)u64;
-            }
-        };
-
-
-        template <>
-        struct U64ToSize<true>
-        {
-            static inline size_t Convert(const uint64_t u64) noexcept
-            {
-                assert(sizeof(size_t)>=sizeof(uint64_t));
-                return u64;
-            }
-        };
-
-    }
 
     size_t MPI:: recvSize(const size_t   src,
                           const int      tag)
     {
-        const uint64_t        u64 = recv1<uint64_t>(src,tag);
-        return U64ToSize<sizeof(size_t)>=sizeof(uint64_t)>::Convert(u64);
+        return ConvertU64ToSize( recv1<uint64_t>(src,tag) );
     }
 
 
@@ -168,7 +138,7 @@ namespace Yttrium
                  &r64,1,_.dt,sizeof(uint64_t),recvRank,
                  sendtag,
                  recvtag);
-        return U64ToSize<sizeof(size_t)>=sizeof(uint64_t)>::Convert(r64);
+        return ConvertU64ToSize(r64);
     }
 
 
