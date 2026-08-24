@@ -25,6 +25,10 @@ void bcastBytes(void * const buffer,
                 const size_t root);
 
 
+void bcastSize(size_t     & length,
+               const size_t root);
+
+
 //! broadcasting one type
 /**
  \param data I/O data

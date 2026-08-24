@@ -57,4 +57,28 @@ namespace Yttrium
         }
     }
 
+    void MPI:: bcastSize(size_t     & length,
+                         const size_t root)
+    {
+        uint64_t u64 = length;
+        Y_MPI_Mark();
+        Y_MPI_Call(MPI_Bcast(&u64,
+                             1,
+                             MPI_UINT64_T,
+                             (int)root,
+                             MPI_COMM_WORLD));
+        const uint64_t ell = Y_MPI_Gain();
+        if(root == rank)
+        {
+            sendRate.bytes += sizeof(uint64_t);
+            sendRate.ticks += ell;
+        }
+        else
+        {
+            recvRate.bytes += sizeof(uint64_t);
+            recvRate.ticks += ell;
+            length = ConvertU64ToSize(u64);
+        }
+    }
+
 }
