@@ -5,6 +5,7 @@
 #include "y/core/rand.hpp"
 #include "y/random/fill.hpp"
 #include "y/format/hexadecimal.hpp"
+#include <cstring>
 
 using namespace Yttrium;
 
