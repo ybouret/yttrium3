@@ -42,7 +42,6 @@ Y_UTEST(coll)
         Y_MPI_Trace(mpi,std::cerr << "bcastSize..." << std::endl);
         Y_MPI_ForEach(mpi,std::cerr << mpi << ": sz=" << sz << std::endl);
         Y_MPI_Trace(mpi,std::cerr << std::endl);
-
     }
 
 
