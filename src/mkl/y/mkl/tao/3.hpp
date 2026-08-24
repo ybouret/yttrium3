@@ -33,11 +33,22 @@ namespace Yttrium
                     inline void straight(Concurrent::Context &ctx)
                     {
                         assert(target); assert(lhs); assert(rhs); assert(tiles2d);
+
                         const Tile2D &tile = (*tiles2d)[ctx.indx];
                         XAdd &       xadd  = *tile.as<XAdd *>();
-                        for(size_t k=tile.span;k>0;--k)
+                        const size_t nx    = lhs->cols;
+                        for(size_t t=tile.span;t>0;--t)
                         {
-                            const Segment s = tile[k];
+                            const Segment s  = tile[t];
+                            const size_t  i  = s.start.y;
+                            Writable<T>  &Ai = (*target)[i];
+                            for(size_t j=s.start.x,n=s.width;n>0;--n,++j)
+                            {
+                                xadd.ldz();
+                                for(size_t k=nx;k>0;--k)
+                                    xadd.addProd( (*lhs)[i][k], (*rhs)[k][j] );
+                                Ai[j] =  xadd();
+                            }
                         }
 
                     }
@@ -57,29 +68,36 @@ namespace Yttrium
                       RHS       &         rhs,
                       Cameo::Addenda<U> & addenda)
             {
+                //--------------------------------------------------------------
+                //
+                // sanity check
+                //
+                //--------------------------------------------------------------
                 assert(lhs.rows==target.rows);
                 assert(rhs.cols==target.cols);
                 assert(lhs.cols==rhs.rows);
-                const size_t nr = target.rows; assert(nr>0);
-                const size_t nc = target.cols; assert(nc>0);
-                const size_t nx = lhs.cols;
-                device.remap2d(target).attach(addenda,nx);
+                assert(target.rows>0);
+                assert(target.cols>0);
+                assert(lhs.cols>0);
 
+                //--------------------------------------------------------------
+                //
+                // prepare tiles
+                //
+                //--------------------------------------------------------------
+                device.remap2d(target).attach(addenda,lhs.cols);
+
+                //--------------------------------------------------------------
+                //
+                // prepare ops and use device
+                //
+                //--------------------------------------------------------------
                 typedef Pith::MMulOps<T, LHS, RHS, U> MulOps;
                 MulOps ops = {
                     &target, &lhs, &rhs, & device.tiles2d
                 };
-
                 (*device)( ops, & MulOps::straight );
-                
 
-#if 0
-                const size_t nx   = lhs.cols;
-                xadd.ldz();
-                for(size_t k=nx;k>0;--k)
-                    xadd.addProd(lhs[i][k], rhs[k][j]);
-                return xadd();
-#endif
             }
 
         }

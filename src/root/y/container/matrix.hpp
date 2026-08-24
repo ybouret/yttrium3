@@ -293,6 +293,17 @@ namespace Yttrium
 #include "y/container/matrix/algebra2.hpp"
 #include "y/container/matrix/algebra3.hpp"
 
+        //! set all items to same value \param value user's value
+        inline Matrix & ld(ParamType value)
+        {
+            if(items>0)
+            {
+                MutableType * p = &row[1][1];
+                for(size_t n=items;n>0;--n)
+                    *(p++) = value;
+            }
+            return *this;
+        }
 
         //! multiply each item \param u factor \return *this
         template <typename U> inline

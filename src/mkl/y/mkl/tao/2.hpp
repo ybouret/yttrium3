@@ -91,7 +91,22 @@ namespace Yttrium
 
             }
 
-            
+
+#define Y_MKL_TAO2_SETUP()                              \
+/**/    assert(target.size() == matrix.rows);           \
+/**/    assert(source.size() == matrix.cols);           \
+/*      ** get metric                                */ \
+/**/    const size_t nr = matrix.rows;                  \
+/**/    const size_t nc = matrix.cols;                  \
+/*      **  prepare device                           */ \
+/**/    device.remap1d(nr).attach(addenda,nc);          \
+/*      ** prepare ops                               */ \
+/**/    typedef Pith::MulOps<TARGET,T,SOURCE,U> MulOps; \
+/**/    MulOps ops =  {                                 \
+/**/        &target, &matrix, &source, &device.tiles1d  \
+/**/    }
+
+
             //__________________________________________________________________
             //
             //
