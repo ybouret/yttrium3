@@ -66,8 +66,6 @@ namespace Yttrium
 
             //__________________________________________________________________
             //
-            //
-            //
             //! Matrix/Matrix multiplication
             /**
              \param device  tiles and parallelism management
@@ -76,9 +74,7 @@ namespace Yttrium
              \param rhs     rhs matrix
              \param addenda Cameo::Addenda for tiles
              */
-            //
-            //
-            //__________________________________________________________________
+             //__________________________________________________________________
             template <
             typename T,
             typename LHS,
@@ -128,17 +124,26 @@ namespace Yttrium
         {
             namespace Pith
             {
+                //______________________________________________________________
+                //
+                //
+                //
+                //! embedding data to invoke Gram matrix
+                //
+                //
+                //______________________________________________________________
                 template <
                 typename T,
                 typename U,
                 typename V> struct GramOps
                 {
-                    typedef Cameo::Addition<V> XAdd;
+                    typedef Cameo::Addition<V> XAdd; //!< alis
 
-                    Matrix<T>       * target;
-                    const Matrix<U> * source;
-                    UDTS            * udts;
+                    Matrix<T>       * target; //!< target squared matrix
+                    const Matrix<U> * source; //!< source matrix
+                    UDTS            * udts;   //!< tiles
 
+                    //! source*source' on given tile \param ctx contex to fetch tile
                     inline void run(Concurrent::Context &ctx)
                     {
                         assert(target); assert(source); assert(udts);
@@ -164,6 +169,16 @@ namespace Yttrium
                 };
             }
 
+            //__________________________________________________________________
+            //
+            //! Gram Matrix computation
+            /**
+             \param device  tiles and parallelism management
+             \param target  target square matrix
+             \param source  source matrix
+             \param addenda Cameo::Addenda for tiles
+             */
+            //__________________________________________________________________
             template <
             typename T,
             typename U,

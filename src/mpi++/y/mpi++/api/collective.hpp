@@ -24,7 +24,11 @@ void bcastBytes(void * const buffer,
                 const size_t length,
                 const size_t root);
 
-
+//! MPI_BCast size_t
+/**
+ \param length size_t to broadcast
+ \param root   sender rank
+ */
 void bcastSize(size_t     & length,
                const size_t root);
 

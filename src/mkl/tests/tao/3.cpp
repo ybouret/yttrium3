@@ -43,8 +43,6 @@ Y_UTEST(tao3)
         MKL::Tao::Gram(par,Gp,lhs,addenda);
         std::cerr << "Gs=" << Gs << "-lhs*lhs'" << std::endl;
         std::cerr << "Gp=" << Gp << "-lhs*lhs'" << std::endl;
-
-
     }
 
 }
