@@ -13,6 +13,13 @@ void bcast(void * const       buffer,
            const uint64_t     bytes,
            const size_t       root);
 
+
+
+void bcastBytes(void * const buffer,
+                const size_t length,
+                const size_t root);
+
+
 //! broadcasting one type
 /**
  \param data I/O data
