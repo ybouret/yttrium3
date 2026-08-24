@@ -99,7 +99,7 @@ namespace Yttrium
             {
                 static const uint64_t MaxSize = IntegerFor<size_t>::Maximum;
                 assert(sizeof(size_t)<sizeof(uint64_t));
-                if(u64>MaxSize) throw Specific::Exception(MPI::CallSign,"MPI::recvSize overflow");
+                if(u64>MaxSize) throw Specific::Exception(MPI::CallSign,"received size overflow");
                 return (size_t)u64;
             }
         };
@@ -153,6 +153,24 @@ namespace Yttrium
         sendRate.bytes += sendbytes;
 
     }
+
+
+    size_t MPI:: sendRecvSize(const size_t sendLength,
+                              const size_t sendRank,
+                              const size_t recvRank,
+                              const int    sendtag,
+                              const int    recvtag)
+    {
+        static const DataType &_ = getDataTypeOf<uint64_t>();
+        const uint64_t s64 = sendLength;
+        uint64_t       r64 = 0;
+        sendrecv(&s64,1,_.dt,sizeof(uint64_t),sendRank,
+                 &r64,1,_.dt,sizeof(uint64_t),recvRank,
+                 sendtag,
+                 recvtag);
+        return U64ToSize<sizeof(size_t)>=sizeof(uint64_t)>::Convert(r64);
+    }
+
 
     void MPI:: sendrecvBytes(const void * const sendbuf,
                              const size_t       sendcount,

@@ -79,6 +79,22 @@ size_t recvSize(const size_t   src,
                 const int      tag  = DefaultTag);
 
 
+
+//! MPI_Sendrecv size_t
+/**
+ \param  sendLength size_t to send
+ \param  sendRank   destination rank
+ \param  recvRank   source rank
+ \param sendtag     optional tag
+ \param recvtag     optional tag
+ \return received size_t
+ */
+size_t sendRecvSize(const size_t sendLength,
+                    const size_t sendRank,
+                    const size_t recvRank,
+                    const int    sendtag = DefaultTag,
+                    const int    recvtag = DefaultTag);
+
 //! MPI_Send bytes
 /**
  \param buffer buffer to send
