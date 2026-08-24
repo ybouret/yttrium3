@@ -1,5 +1,3 @@
-
-
 #include "y/mpi++/api.hpp"
 #include "y/utest/run.hpp"
 #include "y/core/rand.hpp"

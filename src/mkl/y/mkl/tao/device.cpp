@@ -28,19 +28,26 @@ namespace Yttrium
             }
             
 
-            Tiles1D & Device:: remap1d(const size_t n) noexcept
+            Tiles1D & Device:: remapT1D(const size_t n) noexcept
             {
                 tiles1d.remap(1,n, simd->sync());
                 return tiles1d;
             }
 
-            Tiles2D & Device:: remap2d(const MatrixMetrics &metrics) noexcept
+            Tiles2D & Device:: remapT2D(const MatrixMetrics &metrics) noexcept
             {
                 static const Tile2D::vertex_t org(1,1);
                 const Tile2D::vertex_t        vtx(metrics.cols,metrics.rows);
                 tiles2d.remap(org,vtx, simd->sync());
                 return tiles2d;
             }
+
+            UDTS    &  Device:: remapUDT(const size_t n) noexcept
+            {
+                udts.remap(n,simd->sync());
+                return udts;
+            }
+
 
 
         }

@@ -37,8 +37,7 @@ namespace Yttrium
             typedef Tiles1D::Tile   Tile1D;  //!< alias
             typedef Tiles2D::Tile   Tile2D;  //!< alias
             typedef UDTS::Tile      UDT;     //!< alias
-            typedef Tile2D::Segment Segment; //!< alias
-
+            
 
             //__________________________________________________________________
             //
@@ -80,12 +79,14 @@ namespace Yttrium
                 UDTS    udts;    //!< for upper diagonal ops
 
                 //! remap 1D tiles \param numRows output number of rows \return tiles1d
-                Tiles1D & remap1d(const size_t numRows)         noexcept;
+                Tiles1D & remapT1D(const size_t numRows)         noexcept;
 
-                //! remap 2D tile \param metrics output metrics \return tiles2d
-                Tiles2D & remap2d(const MatrixMetrics &metrics) noexcept;
+                //! remap 2D tiles \param metrics output metrics \return tiles2d
+                Tiles2D & remapT2D(const MatrixMetrics &metrics) noexcept;
 
-                
+                //! remad UDTS \param n dimension of the square matrix \return udts
+                UDTS    &  remapUDT(const size_t n) noexcept;
+
 
             private:
                 Y_Disable_Copy_And_Assign(Device); //!< discarded

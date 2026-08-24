@@ -48,9 +48,9 @@ namespace Yttrium
                         const size_t nx    = lhs->cols;
                         for(size_t t=tile.span;t>0;--t)
                         {
-                            const Segment s  = tile[t];
-                            const size_t  i  = s.start.y;
-                            Writable<T>  &Ai = (*target)[i];
+                            const Tile2D::Segment s  = tile[t];
+                            const size_t          i  = s.start.y;
+                            Writable<T>          &Ai = (*target)[i];
                             for(size_t j=s.start.x,n=s.width;n>0;--n,++j)
                             {
                                 xadd.ldz();
@@ -107,7 +107,7 @@ namespace Yttrium
                 // prepare tiles
                 //
                 //--------------------------------------------------------------
-                device.remap2d(target).attach(addenda,lhs.cols);
+                device.remapT2D(target).attach(addenda,lhs.cols);
 
                 //--------------------------------------------------------------
                 //
@@ -119,9 +119,69 @@ namespace Yttrium
                     &target, &lhs, &rhs, & device.tiles2d
                 };
                 (*device)( ops, & MulOps::straight );
-
             }
 
+        }
+
+
+        namespace Tao
+        {
+            namespace Pith
+            {
+                template <
+                typename T,
+                typename U,
+                typename V> struct GramOps
+                {
+                    typedef Cameo::Addition<V> XAdd;
+
+                    Matrix<T>       * target;
+                    const Matrix<U> * source;
+                    UDTS            * udts;
+
+                    inline void run(Concurrent::Context &ctx)
+                    {
+                        assert(target); assert(source); assert(udts);
+
+                        const UDT &udt  = (*udts)[ctx.indx];
+                        XAdd      &xadd = *udt.as<XAdd *>();
+                        for(size_t i=1;i<=udt.span;++i)
+                        {
+
+                            const UDT::Segment s = udt[i];
+                            MatrixCoord        p = s.start;
+                            Writable<T>       &Ai = (*target)[p.r];
+                            for(size_t jj=s.width;jj>0;--jj,++p.c)
+                            {
+                                const T & Aij = (Ai[p.c] = xadd.dot((*source)[p.r],(*source)[p.c]));
+                                if(p.c!=p.r)
+                                    (*target)[p.c][p.r] = Aij;
+                            }
+
+                        }
+                    }
+
+                };
+            }
+
+            template <
+            typename T,
+            typename U,
+            typename V> inline
+            void Gram(Device            & device,
+                      Matrix<T>         & target,
+                      const Matrix<U>   & source,
+                      Cameo::Addenda<V> & addenda)
+            {
+                assert(target.isSquare());
+                assert(source.rows == target.rows);
+
+                device.remapUDT(target.rows).attach(addenda,source.cols);
+
+                typedef Pith::GramOps<T,U,V> GramOps;
+                GramOps ops = { & target, & source, & device.udts };
+                (*device)( ops, & GramOps:: run );
+            }
         }
 
     }

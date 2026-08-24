@@ -22,6 +22,7 @@ Y_UTEST(tao3)
     Cameo::Addenda<double> addenda;
     Matrix<double>         A(nr,nc);
     Matrix<double>         B(nr,nc);
+    Matrix<double>         Gs(nr,nr), Gp(nr,nr);
     for(size_t nx=1;nx<=8;++nx)
     {
         Matrix<double> lhs(nr,nx);
@@ -38,7 +39,12 @@ Y_UTEST(tao3)
         MKL::Tao::MMul(par,B,lhs,rhs,addenda);
         std::cerr << "B=" << B << "-lhs*rhs" << std::endl;
 
-        break;
+        MKL::Tao::Gram(seq,Gs,lhs,addenda);
+        MKL::Tao::Gram(par,Gp,lhs,addenda);
+        std::cerr << "Gs=" << Gs << "-lhs*lhs'" << std::endl;
+        std::cerr << "Gp=" << Gp << "-lhs*lhs'" << std::endl;
+
+
     }
 
 }

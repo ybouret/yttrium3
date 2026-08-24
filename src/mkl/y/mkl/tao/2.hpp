@@ -99,7 +99,7 @@ namespace Yttrium
 /**/    const size_t nr = matrix.rows;                  \
 /**/    const size_t nc = matrix.cols;                  \
 /*      **  prepare device                           */ \
-/**/    device.remap1d(nr).attach(addenda,nc);          \
+/**/    device.remapT1D(nr).attach(addenda,nc);         \
 /*      ** prepare ops                               */ \
 /**/    typedef Pith::MulOps<TARGET,T,SOURCE,U> MulOps; \
 /**/    MulOps ops =  {                                 \
