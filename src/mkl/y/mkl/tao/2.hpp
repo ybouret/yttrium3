@@ -91,7 +91,7 @@ namespace Yttrium
 
             }
 
-
+            //! helper code to prepare tiles for MulOps
 #define Y_MKL_TAO2_SETUP( CODE )                        \
 /**/    assert(target.size() == matrix.rows);           \
 /**/    assert(source.size() == matrix.cols);           \

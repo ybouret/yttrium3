@@ -79,7 +79,10 @@ namespace Yttrium
                 Tiles2D tiles2d; //!< for matrix/matrix ops
                 UDTS    udts;    //!< for upper diagonal ops
 
-                Tiles1D & remap1d(const size_t numRows) noexcept;
+                //! remap 1D tiles \param numRows output number of rows \return tiles1d
+                Tiles1D & remap1d(const size_t numRows)         noexcept;
+
+                //! remap 2D tile \param metrics output metrics \return tiles2d
                 Tiles2D & remap2d(const MatrixMetrics &metrics) noexcept;
 
                 

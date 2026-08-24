@@ -17,6 +17,14 @@ namespace Yttrium
 
             namespace Pith
             {
+                //______________________________________________________________
+                //
+                //
+                //
+                //! embedding data to invoke matrix multiplications
+                //
+                //
+                //______________________________________________________________
                 template <
                 typename T,
                 typename LHS,
@@ -30,6 +38,7 @@ namespace Yttrium
                     RHS                      * rhs;     //!< rhs matrix
                     Tiles2D                  * tiles2d; //!< device tiles2d address
 
+                    //! lhs*rhs on given tile \param ctx contex to fetch tile
                     inline void straight(Concurrent::Context &ctx)
                     {
                         assert(target); assert(lhs); assert(rhs); assert(tiles2d);
@@ -50,13 +59,26 @@ namespace Yttrium
                                 Ai[j] =  xadd();
                             }
                         }
-
                     }
 
                 };
             }
 
-
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Matrix/Matrix multiplication
+            /**
+             \param device  tiles and parallelism management
+             \param target  target matrix
+             \param lhs     lhs matrix
+             \param rhs     rhs matrix
+             \param addenda Cameo::Addenda for tiles
+             */
+            //
+            //
+            //__________________________________________________________________
             template <
             typename T,
             typename LHS,
