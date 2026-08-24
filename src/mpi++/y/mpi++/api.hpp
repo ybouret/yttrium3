@@ -69,15 +69,15 @@ namespace Yttrium
         public:
             typedef HashMap<String,DataType> Table; //!< hash table of types
 
-            DataType(const MPI_Datatype, const size_t) noexcept;
-            DataType(const DataType &) noexcept;
-            ~DataType() noexcept;
+            DataType(const MPI_Datatype, const size_t) noexcept; //!< setup with type and size
+            DataType(const DataType &)                 noexcept; //!< duplicate
+            ~DataType()                                noexcept; //!< cleanup
 
-            const MPI_Datatype dt;
-            const size_t       sz;
+            const MPI_Datatype dt; //!< datatype
+            const size_t       sz; //!< size of type
 
         private:
-            Y_Disable_Assign(DataType);
+            Y_Disable_Assign(DataType); //!< discard
         };
 
         //______________________________________________________________________
@@ -102,10 +102,9 @@ namespace Yttrium
             //
             // Methods
             //__________________________________________________________________
-            HumanReadable hrt(const System::WallTime &) const ;
-            void          ldz() noexcept;
-
-            String        str(const System::WallTime &) const;
+            void          ldz()                      noexcept; //!< reset
+            HumanReadable hrt(const System::WallTime &) const; //!< return readable rate
+            String        str(const System::WallTime &) const; //!< return printable string
 
             //__________________________________________________________________
             //
@@ -157,8 +156,10 @@ namespace Yttrium
          */
         static int GetCount(const size_t count, const char * const func);
 
+        //! \return data type from type info of MPI supported type
         const DataType & getDataType(const std::type_info &) const;
 
+        //! \return data type from type of T, a supported MPI ty[e
         template <typename T> inline
         const DataType & getDataTypeOf() const {
             return getDataType( typeid(T) );
@@ -187,10 +188,10 @@ namespace Yttrium
         // Helpers to sync
         //
         //______________________________________________________________________
-        void syncWith(const size_t peer);
-        void ack(const size_t peer);
-        void syn(const size_t peer);
-        void resetRates() noexcept;
+        void syncWith(const size_t peer); //!< ack/syn       \param peer peer rank
+        void ack(const size_t peer);      //!< send one byte \param peer peer rank
+        void syn(const size_t peer);      //!< recv one byte \param peer peer rank
+        void resetRates() noexcept;       //!< reset all rates
 
 
         //______________________________________________________________________
@@ -213,8 +214,7 @@ namespace Yttrium
         friend class Singleton<MPI,ClassLockPolicy>;
         virtual ~MPI() noexcept; //!< cleanup: MPI_Finalize()
         explicit MPI();          //!< setup from Initialize(...)
-
-        void buildTable();
+        void buildTable();       //!< build table of supported MPI data type
     };
 
     //! helper to handle errors
