@@ -29,13 +29,19 @@ namespace Yttrium
         // C++
         //
         //______________________________________________________________________
+
+        //! setup \param name identifier \param minCapacity data minimal capacity
         template <typename NAME> inline
-        explicit OutputMemoryStream(const NAME &name) : OutputStream(name)
+        explicit OutputMemoryStream(const NAME  & name,
+                                    const size_t  minCapacity=0
+                                    ) :
+        OutputStream(name),
+        data(WithAtLeast,minCapacity)
         {
         }
-        
-        virtual ~OutputMemoryStream() noexcept;
 
+        //! cleanup
+        virtual ~OutputMemoryStream() noexcept;
 
         //______________________________________________________________________
         //
@@ -47,11 +53,17 @@ namespace Yttrium
         virtual void write(const char);
         virtual void write(const void * const, const size_t);
 
-        Vector<char> data;
+        //______________________________________________________________________
+        //
+        //
+        // Members
+        //
+        //______________________________________________________________________
+        Vector<char> data; //!< inner data
 
     private:
-        Y_Disable_Copy_And_Assign(OutputMemoryStream);
-        Y_Proxy_Decl();
+        Y_Disable_Copy_And_Assign(OutputMemoryStream); //!< discarded
+        Y_Proxy_Decl(); //!< helper
 
     };
 }
