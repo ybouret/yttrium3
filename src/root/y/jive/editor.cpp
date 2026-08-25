@@ -152,8 +152,14 @@ namespace Yttrium
             }
         };
 
+        Editor& Editor::self() noexcept
+        {
+            return *this;
+        }
+
+
         Editor:: Editor(const Identifier &userLang) :
-        code( new Code(userLang,*this) ),
+        code( new Code(userLang,self()) ),
         depth( code->depth ),
         lang( code->lang ),
         verbose( code->verbose )

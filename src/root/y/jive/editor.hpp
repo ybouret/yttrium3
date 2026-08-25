@@ -109,6 +109,7 @@ namespace Yttrium
             Code * const code;
             void attach(const String &, const OnInternal &);
             void attach(const String &, const OnTerminal &);
+            Editor& self() noexcept;
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         public:
