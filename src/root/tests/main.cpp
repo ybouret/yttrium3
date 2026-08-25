@@ -153,6 +153,7 @@ Y_UTEST_DECL(8)
     Y_UTEST(stream_serialize);
     Y_UTEST(stream_gz_in);
     Y_UTEST(stream_gz_out);
+    Y_UTEST(stream_mem_out);
     Y_UTEST(stream_identifiers);
     Y_UTEST(stream_input_proc);
     Y_UTEST(stream_bz2_in);

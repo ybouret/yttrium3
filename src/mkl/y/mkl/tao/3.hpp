@@ -111,9 +111,7 @@ namespace Yttrium
                 //
                 //--------------------------------------------------------------
                 typedef Pith::MMulOps<T, LHS, RHS, U> MulOps;
-                MulOps ops = {
-                    &target, &lhs, &rhs, & device.tiles2d
-                };
+                MulOps ops = { &target, &lhs, &rhs, & device.tiles2d };
                 (*device)( ops, & MulOps::straight );
             }
 
