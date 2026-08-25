@@ -43,7 +43,7 @@ Y_UTEST(cluster)
 
     bool      verbose = true;
     XML::Log  xml(std::cerr,verbose);
-    Partition part(xml,eqs);
+    const Partition part(xml,eqs);
 
     Vector<xreal_t>   K;
     const size_t      M = lib->size();
