@@ -7,15 +7,22 @@
 
 namespace Yttrium
 {
-
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! MPI Codec for a given type
+    //
+    //
+    //__________________________________________________________________________
     class MPI:: Codec
     {
     public:
 
-        virtual ~Codec() noexcept;
+        virtual ~Codec() noexcept; //!< cleanup
 
     private:
-        Y_Disable_Copy_And_Assign(Codec);
+        Y_Disable_Copy_And_Assign(Codec); //!< discard
     };
 
 }
