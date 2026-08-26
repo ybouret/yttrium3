@@ -32,6 +32,13 @@ namespace Yttrium
         const AddrKey & key() const noexcept;
 
 
+        virtual void send(MPI &              mpi,
+                          const void * const blockAddr,
+                          const size_t       numBlocks,
+                          const size_t       dest,
+                          const int          tag) = 0;
+
+
         const RTTI    & rtti; //!< unique system rtti
         const AddrKey   tkey; //!< rtti as unique key
 

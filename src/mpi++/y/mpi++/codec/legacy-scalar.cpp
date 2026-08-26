@@ -17,5 +17,14 @@ namespace Yttrium
 
     }
 
+    void MPI:: LegacyScalarCodec::send(MPI &              mpi,
+                                       const void * const blockAddr,
+                                       const size_t       numBlocks,
+                                       const size_t       dest,
+                                       const int          tag)
+    {
+        mpi.send(blockAddr,numBlocks,dataType.dt,dataType.sz*numBlocks,dest,tag);
+    }
+
 }
 

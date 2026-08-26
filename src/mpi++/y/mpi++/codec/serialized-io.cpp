@@ -10,8 +10,7 @@ namespace Yttrium
 
     }
 
-    MPI:: SerializedIOCodec:: SerializedIOCodec(const MPI            & mpi,
-                                                const std::type_info & tid) :
+    MPI:: SerializedIOCodec:: SerializedIOCodec(const std::type_info & tid) :
     Codec(tid),
     buffer( rtti.name() )
     {

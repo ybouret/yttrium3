@@ -16,9 +16,15 @@ namespace Yttrium
                                    const size_t           dim);
         virtual ~LegacyVectorCodec() noexcept;
 
+        virtual void send(MPI &              mpi,
+                          const void * const blockAddr,
+                          const size_t       numBlocks,
+                          const size_t       dest,
+                          const int          tag);
+
         const DataType dataType;
         const size_t   dimensions;
-
+        
     private:
         Y_Disable_Copy_And_Assign(LegacyVectorCodec);
     };
