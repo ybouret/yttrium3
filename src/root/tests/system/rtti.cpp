@@ -5,7 +5,6 @@ using namespace Yttrium;
 
 Y_UTEST(system_rtti)
 {
-
     RTTI &f = RTTI::Of<float>();
 
     Y_PRINTV(f);
@@ -15,8 +14,8 @@ Y_UTEST(system_rtti)
 
     Y_PRINTV( RTTI::Make<size_t>("size_t") );
     Y_PRINTV( RTTI::CXX<double>() );
-
-
+    std::cerr << std::endl;
+    
 }
 Y_UDONE()
 

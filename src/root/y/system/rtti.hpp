@@ -76,41 +76,29 @@ namespace Yttrium
         RTTI & aka(const String &);               //!< \return *this with new alias
         RTTI & aka(const char * const);           //!< \return *this with new alias
 
+        
         //! \return unique RTTI for type
         static RTTI & Of(const std::type_info &);
 
         //! \return unique RTTI for type
         template <typename T> static inline
-        RTTI & Of()
-        {
-            return Of( typeid(T) );
-        }
+        RTTI & Of() { return Of( typeid(T) ); }
 
         //! \param uid user's desired alias \return unique RTTI for type with user alias
         template <typename T> static inline
-        RTTI & Make(const String &uid)
-        {
-            return Of( typeid(T) ).aka(uid);
-        }
+        RTTI & Make(const String &uid) { return Of( typeid(T) ).aka(uid); }
 
         //! \param uid user's desired alias \return unique RTTI for type with user alias
         template <typename T> static inline
-        RTTI & Make(const char * const uid)
-        {
-            return Of( typeid(T) ).aka(uid);
-        }
+        RTTI & Make(const char * const uid) { return Of( typeid(T) ).aka(uid); }
 
         //! \return name of unique RTTI for type
         template <typename T> static inline
-        const String & Name()
-        {
-            return Of<T>().name();
-        }
+        const String & Name() { return Of<T>().name(); }
 
         //! \return "<name>" from unique RTTI for type
         template <typename T> static inline
-        const String CXX()
-        {
+        const String CXX() {
             const String res = Name<T>();
             return '<' + res + '>';
         }

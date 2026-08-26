@@ -107,6 +107,7 @@ namespace Yttrium
         Singleton<Table, ClassLockPolicy>(),
         HMap()
         {
+            setup();
         }
 
         inline virtual ~Table() noexcept {}
@@ -129,8 +130,12 @@ namespace Yttrium
             //___________________________________________________________________
             {
                 HRTTI * const hook = search(uid);
-                if(hook) return **hook;
+                if(hook)
+                {
+                    return **hook;
+                }
             }
+
 
             //__________________________________________________________________
             //
@@ -138,7 +143,7 @@ namespace Yttrium
             //__________________________________________________________________
             HRTTI handle = new RTTI(uid);
             if(!insert(uid,handle))
-                throw Specific::Exception(CallSign,"uexpected multiple <%s>", uid.c_str());
+                throw Specific::Exception(CallSign,"unexpected multiple <%s>", uid.c_str());
 
             RTTI & rtti = *handle; assert(has(rtti));
             return rtti;
@@ -157,7 +162,8 @@ namespace Yttrium
             return false;
         }
 
-        //! create an alias for 
+
+        //! create an alias for
         RTTI & aka(RTTI &rtti, const String &uid)
         {
             //------------------------------------------------------------------
@@ -215,10 +221,20 @@ namespace Yttrium
             return rtti;
         }
 
+        template <typename T> inline
+        void record(const char * const humanReadable)
+        {
+            const std::type_info & tid = typeid(T);
+            const String           sid = tid.name();
+            const String           uid = humanReadable;
+            (void) aka( get(sid), uid );
+        }
+
 
     private:
         Y_Disable_Copy_And_Assign(Table);
         friend class Singleton<Table,ClassLockPolicy>;
+        void setup();
     };
 
 
@@ -244,4 +260,61 @@ namespace Yttrium
         return table.get(uid);
     }
 
+}
+
+
+#include "y/mkl/xreal.hpp"
+#include "y/mkl/complex.hpp"
+
+namespace Yttrium
+{
+
+#define Y_RTTI(TYPE) do { record<TYPE>(#TYPE); } while(false)
+
+
+    void RTTI:: Table:: setup()
+    {
+
+        Y_RTTI(float); return;
+        Y_RTTI(double);
+        Y_RTTI(long double);
+
+        Y_RTTI(XReal<float>);
+        Y_RTTI(XReal<double>);
+        Y_RTTI(XReal<long double>);
+
+        Y_RTTI(Complex<float>);
+        Y_RTTI(Complex<double>);
+        Y_RTTI(Complex<long double>);
+
+
+
+        Y_RTTI(char);
+        Y_RTTI(unsigned char);
+
+        Y_RTTI(short);
+        Y_RTTI(unsigned short);
+
+        Y_RTTI(int);
+        Y_RTTI(unsigned);
+
+        Y_RTTI(long);
+        Y_RTTI(unsigned long);
+
+        Y_RTTI(int8_t);
+        Y_RTTI(uint8_t);
+
+        Y_RTTI(int16_t);
+        Y_RTTI(uint16_t);
+
+        Y_RTTI(int32_t);
+        Y_RTTI(uint32_t);
+
+        Y_RTTI(int64_t);
+        Y_RTTI(uint64_t);
+
+    }
+
+
+    
 }
