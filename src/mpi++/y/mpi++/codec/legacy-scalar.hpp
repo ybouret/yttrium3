@@ -10,9 +10,11 @@ namespace Yttrium
     class MPI:: LegacyScalarCodec : public Codec
     {
     public:
-        explicit LegacyScalarCodec(const std::type_info &);
+        explicit LegacyScalarCodec(const MPI &, const std::type_info &);
         virtual ~LegacyScalarCodec() noexcept;
-        
+
+        const DataType dataType;
+
     private:
         Y_Disable_Copy_And_Assign(LegacyScalarCodec);
     };

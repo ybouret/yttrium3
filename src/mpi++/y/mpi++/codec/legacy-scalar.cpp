@@ -9,8 +9,10 @@ namespace Yttrium
 
     }
 
-    MPI:: LegacyScalarCodec:: LegacyScalarCodec(const std::type_info &tid) :
-    Codec(tid)
+    MPI:: LegacyScalarCodec:: LegacyScalarCodec(const MPI            & mpi,
+                                                const std::type_info & tid) :
+    Codec(tid),
+    dataType( mpi.getDataType(tid) )
     {
 
     }

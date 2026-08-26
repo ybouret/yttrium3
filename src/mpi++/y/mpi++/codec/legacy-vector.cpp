@@ -10,8 +10,12 @@ namespace Yttrium
 
     }
 
-    MPI:: LegacyVectorCodec:: LegacyVectorCodec(const std::type_info &tid) :
-    Codec(tid)
+    MPI:: LegacyVectorCodec:: LegacyVectorCodec(const MPI            & mpi,
+                                                const std::type_info & tid,
+                                                const size_t           dim) :
+    Codec(tid),
+    dataType( mpi.getDataType(tid) ),
+    dimensions(dim)
     {
 
     }
