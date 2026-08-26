@@ -16,15 +16,24 @@ namespace Yttrium
         class Cluster : public Object
         {
         public:
-
+            //! setup
+            /**
+             \param xml output
+             \param grp independant group of dependent equilibria
+             \param eqs database of equilibria
+             \param tlK Top Level Constants
+             */
             explicit Cluster(XML::Log     & xml,
-                             const EGroup & grp);
+                             const EGroup & grp,
+                             Equilibria   & eqs,
+                             XWritable    & tlK);
 
             virtual ~Cluster() noexcept;
 
             const Topology             topology;
             const Conservations        conservations;
             const Conservation::Canons canons;
+            const Combinatorics        combinatorics;
 
             Cluster * next;
             Cluster * prev;

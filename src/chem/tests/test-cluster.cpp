@@ -62,7 +62,7 @@ Y_UTEST(cluster)
             adjudicator.judge(xml,C,TopLevel);
         }
 
-        //Combinatorics        combinatorics(xml,topo,eqs,K);
+        Combinatorics        combinatorics(xml,topo,eqs,K);
     }
 
     std::cerr << std::endl;
