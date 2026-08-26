@@ -6,7 +6,8 @@
 #include "y/mpi++/api.hpp"
 #include "y/system/rtti.hpp"
 #include "y/container/associative/addr-key.hpp"
-
+#include "y/pointer/keyed.hpp"
+#include "y/pointer/arc.hpp"
 namespace Yttrium
 {
     //__________________________________________________________________________
@@ -20,17 +21,12 @@ namespace Yttrium
     class MPI:: Codec : public CountedObject
     {
     public:
-
-        //int LegacyScalar;
-        //int LegacyVector;
-        //int SerializedIO;
-
+        typedef Keyed<AddrKey, ArcPtr<Codec> > Handle;
 
         explicit Codec(const std::type_info &);
         virtual ~Codec() noexcept; //!< cleanup
 
         const AddrKey & key() const noexcept;
-
 
         virtual void send(MPI &              mpi,
                           const void * const blockAddr,
