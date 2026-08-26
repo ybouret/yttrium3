@@ -3,16 +3,12 @@
 #include "y/utest/run.hpp"
 
 #include "y/stream/libc/output.hpp"
-#include "y/chemical/reactive/equilibrium/partition.hpp"
-#include "y/chemical/plexus/conservations.hpp"
-#include "y/chemical/plexus/conservation/canons.hpp"
+
+#include "y/chemical/plexus/clusters.hpp"
+
 #include "y/chemical/plexus/conservation/adjudicator.hpp"
-#include "y/chemical/type/concentration.hpp"
 
-#include "y/chemical/plexus/combinatorics.hpp"
-
-#include "y/container/sequence/vector.hpp"
-#include "y/container/cxx/array.hpp"
+ #include "y/container/cxx/array.hpp"
 #include "y/string/env/convert.hpp"
 #include "y/random/park-miller.hpp"
 
@@ -38,16 +34,20 @@ Y_UTEST(cluster)
     std::cerr << "lib=" << lib << std::endl;
     std::cerr << "eqs=" << eqs << std::endl;
 
-    const double probaZ = EnvironmentConvert::To<double>("probaZ",0);
-    const double probaN = EnvironmentConvert::To<double>("probaN",0);
 
     bool      verbose = true;
     XML::Log  xml(std::cerr,verbose);
+    Clusters  cls(xml,eqs);
+
+
+#if 0
     const Partition part(xml,eqs);
 
     Vector<xreal_t>   K;
     const size_t      M = lib->size();
     CxxArray<xreal_t> C(M);
+    const double probaZ = EnvironmentConvert::To<double>("probaZ",0);
+    const double probaN = EnvironmentConvert::To<double>("probaN",0);
     Concentration::Fill(ran,C,M,probaZ,probaN);
 
     for(const EGroup *g=part.party.head;g;g=g->next)
@@ -67,52 +67,6 @@ Y_UTEST(cluster)
 
     std::cerr << std::endl;
     std::cerr << "lib=" << lib << std::endl;
-
-
-#if 0
-    {
-        std::cerr << std::endl;
-        Matrix<apq> nuT(2,1);
-        nuT[1][1] = -1;
-        nuT[2][1] =  1;
-        std::cerr << "nuT=" << nuT << std::endl;
-        Matrix<apq> p(2,2);
-        p[1][1] = 1;  p[1][2] = -1;
-        p[2][1] = -1; p[2][2] =  1;
-        std::cerr << "p=" << p << std::endl;
-        const size_t r = MKL::XGJ::Build(nuT,p);
-        std::cerr << "r=" << r << std::endl;
-        std::cerr << "a=" << nuT << std::endl;
-        std::cerr << "b=" << p   << std::endl;
-    }
-
-    {
-        std::cerr << std::endl;
-        const int arr[] = {-1,0,1,-1,0,1};
-        Matrix<apq> nuT(3,2,arr);
-        std::cerr << "nuT=" << nuT << std::endl;
-        const int brr[] = {2,-1,-1,-1,2,-1,-1,-1,2};
-        Matrix<apq> p(3,3,brr);
-        std::cerr << "p=" << p << std::endl;
-        const size_t r = MKL::XGJ::Build(nuT,p);
-        std::cerr << "r=" << r << std::endl;
-        std::cerr << "a=" << nuT << std::endl;
-        std::cerr << "b=" << p   << std::endl;
-    }
-
-    {
-        std::cerr << std::endl;
-        const int arr[] = {-1,0,1,1};
-        Matrix<apq> nuT(4,1,arr);
-        std::cerr << "nuT=" << nuT << std::endl;
-        const int brr[] = {2,0,-2,-2,0,6,0,0,-2,0,5,-1,-2,0,-1,5};
-        Matrix<apq> p(4,4,brr);
-        std::cerr << "p=" << p << std::endl;
-        const size_t r = MKL::XGJ::Build(nuT,p);
-        std::cerr << "r=" << r << std::endl;
-        std::cerr << "a=" << nuT << std::endl;
-        std::cerr << "b=" << p   << std::endl;
-    }
 #endif
 
 

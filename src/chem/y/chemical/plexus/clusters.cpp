@@ -1,5 +1,6 @@
 
 #include "y/chemical/plexus/clusters.hpp"
+#include "y/chemical/reactive/equilibrium/partition.hpp"
 
 namespace Yttrium
 {

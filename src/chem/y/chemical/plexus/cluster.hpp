@@ -2,7 +2,6 @@
 #ifndef Y_Chemical_Plexus_Cluster_Included
 #define Y_Chemical_Plexus_Cluster_Included 1
 
-#include "y/chemical/reactive/equilibrium/partition.hpp"
 #include "y/chemical/plexus/conservations.hpp"
 #include "y/chemical/plexus/conservation/canons.hpp"
 #include "y/chemical/plexus/conservation/adjudicator.hpp"
