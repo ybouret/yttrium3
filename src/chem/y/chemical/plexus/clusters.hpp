@@ -18,11 +18,15 @@ namespace Yttrium
 
             virtual ~Clusters() noexcept;
 
+            //! compute all constants \param t evaluation time
+            const XReadable & K(const xreal_t t);
+
         private:
             Y_Disable_Copy_And_Assign(Clusters);
             Y_Proxy_Decl();
             CxxListOf<Cluster> list;
             Vector<xreal_t>    topK;
+
 
         };
     }
