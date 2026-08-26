@@ -159,6 +159,9 @@ namespace Yttrium
         Y_MPI_DECL(uint32_t,UINT32_T);
         Y_MPI_DECL(uint64_t,UINT64_T);
 
+        Y_MPI_DECL(bool,C_BOOL);
+        
+
     }
 
 
