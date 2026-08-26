@@ -58,7 +58,7 @@ namespace Yttrium
         static const int          DefaultTag = 1;                               //!< default tag
         static const size_t       MaxCount   = IntegerFor<int>::Maximum;        //!< for int/size_t conversion
         static size_t             ConvertU64ToSize(const uint64_t);             //!< \return converted u64 to size_t, with check
-
+        class Codec;
 
         //______________________________________________________________________
         //

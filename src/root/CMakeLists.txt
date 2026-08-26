@@ -19,6 +19,7 @@ y/core/tree
 y/random
 y/system
 y/system/wall-time
+y/system/rtti
 y/ascii
 y/ascii/base64
 y/ascii/convert
