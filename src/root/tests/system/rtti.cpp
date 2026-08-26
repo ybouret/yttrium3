@@ -15,7 +15,11 @@ Y_UTEST(system_rtti)
     Y_PRINTV( RTTI::Make<size_t>("size_t") );
     Y_PRINTV( RTTI::CXX<double>() );
     std::cerr << std::endl;
-    
+
+    RTTI::List L;
+    RTTI::Collect(L);
+    std::cerr << L << std::endl;
+
 }
 Y_UDONE()
 

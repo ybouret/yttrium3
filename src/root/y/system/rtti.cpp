@@ -275,7 +275,7 @@ namespace Yttrium
     void RTTI:: Table:: setup()
     {
 
-        Y_RTTI(float); return;
+        Y_RTTI(float);  
         Y_RTTI(double);
         Y_RTTI(long double);
 
@@ -315,6 +315,16 @@ namespace Yttrium
 
     }
 
+    void RTTI:: Collect(List &L)
+    {
+        static const Table &table = Table::Instance();
+        L.free();
+        for(Table::ConstIterator it=table.begin();it!=table.end();++it)
+        {
+            const RTTI &rtti = **it;
+            if(!L.found(rtti)) L << rtti;
+        }
+    }
 
     
 }

@@ -6,6 +6,7 @@
 #include "y/string.hpp"
 #include "y/core/pool/cxx.hpp"
 #include "y/ability/identifiable.hpp"
+#include "y/handy/basic/light/list.hpp"
 #include <typeinfo>
 
 namespace Yttrium
@@ -28,6 +29,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
         static const char * const CallSign; //!< "RTTI"
+        typedef Handy::BasicLightList<const RTTI> List;
         class Table;
         class Key;
 
@@ -102,6 +104,8 @@ namespace Yttrium
             const String res = Name<T>();
             return '<' + res + '>';
         }
+
+        static void Collect(List &);
 
         //______________________________________________________________________
         //

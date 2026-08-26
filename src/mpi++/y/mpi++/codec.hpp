@@ -19,6 +19,11 @@ namespace Yttrium
     {
     public:
 
+        int LegacyScalar;
+        int LegacyVector;
+        int SerializedIO;
+        
+
         virtual ~Codec() noexcept; //!< cleanup
 
     private:
