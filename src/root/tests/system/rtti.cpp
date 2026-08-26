@@ -18,8 +18,11 @@ Y_UTEST(system_rtti)
 
     RTTI::List L;
     RTTI::Collect(L);
-    std::cerr << L << std::endl;
-
+    std::cerr << "RTTI:" << std::endl;
+    for(const RTTI::List::NodeType *node=L->head;node;node=node->next)
+    {
+        std::cerr << "-- " << **node << std::endl;
+    }
 }
 Y_UDONE()
 
