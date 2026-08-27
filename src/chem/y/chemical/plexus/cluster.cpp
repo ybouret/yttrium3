@@ -1,7 +1,5 @@
 
 #include "y/chemical/plexus/cluster.hpp"
-#include "y/stream/output.hpp"
-#include "y/format/decimal.hpp"
 
 namespace Yttrium
 {
@@ -10,7 +8,7 @@ namespace Yttrium
 
         Cluster:: ~Cluster() noexcept
         {
-            
+
         }
 
         Cluster:: Cluster(XML::Log     & xml,
@@ -28,9 +26,22 @@ namespace Yttrium
 
         }
 
+    }
 
+}
+
+#include "y/stream/output.hpp"
+#include "y/format/decimal.hpp"
+#include "y/chemical/weasel.hpp"
+
+namespace Yttrium
+{
+    namespace Chemical
+    {
         OutputStream & Cluster:: viz(OutputStream &fp, const size_t order) const
         {
+            const Weasel &weasel = Weasel::Instance();
+
             assert( order >= 1 );
             assert( order <= combinatorics.grade.size() );
 
@@ -39,7 +50,9 @@ namespace Yttrium
             // write all species
             for(const SNode *sn=topology.slist->head;sn;sn=sn->next)
             {
-                (**sn).viz(fp,0,0);
+                const Species &    sp    = **sn;
+                const String       color = weasel.getColorFor(sp,SubLevel);
+                sp.viz(fp,color.c_str(),0);
             }
 
             // write equilibria
@@ -47,16 +60,19 @@ namespace Yttrium
             for(const ENode *en=elist->head;en;en=en->next)
             {
                 const Components &eq = **en;
-                eq.vizSelf(fp,0,0);
-                eq.vizLink(fp,0);
+                const String     color = weasel.getColorFor(eq,SubLevel);
+                eq.vizSelf(fp,color.c_str(),0);
+                eq.vizLink(fp,color.c_str());
             }
 
             // write conservations
             if(1==order)
             {
+                size_t ci = 0;
                 for(const Conservation::Law *law = conservations.laws.head;law;law=law->next)
                 {
-                    law->viz(fp,0);
+                    const String color = weasel.getColorFor(ci++);
+                    law->viz(fp,color.c_str());
                 }
             }
 

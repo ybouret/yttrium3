@@ -8,6 +8,9 @@ namespace Yttrium
 {
     namespace Chemical
     {
+
+        const char * const Species:: ColorSchemeName = "dark27";
+
         Species:: ~Species() noexcept
         {
         }
@@ -28,7 +31,7 @@ namespace Yttrium
         {
             nodeName(fp) << '[';
             fp << "label=<" << makeHTML() << ">,shape=box";
-            if(color) fp << ",color=\"" << color << "\",fontcolor=\"" << color << "\"";
+            if(color) fp << ",color=" << color << ",fontcolor=" << color << "";
             if(style) fp << ",style=\"" << style << "\"";
             return Endl(fp << ']');
         }

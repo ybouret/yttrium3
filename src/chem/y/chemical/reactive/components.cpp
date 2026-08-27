@@ -201,7 +201,7 @@ namespace Yttrium
             {
                 fp(",label=\"%u\"",nu);
             }
-            if(color) fp << ",color=\"" << color << "\",fontcolor=\"" << color << "\"";
+            if(color) fp << ",color=" << color << ",fontcolor=" << color << "";
         }
 
         OutputStream & Components:: vizLink(OutputStream &fp,

@@ -30,6 +30,7 @@ namespace Yttrium
             //__________________________________________________________________
             static const char * const CallSign; //!< "Equilibrium"
             static const char * const Symbol;   //!< "<=>"
+            static const char * const ColorSchemeName; //!< for GraphViz
             class Translator;
 
             //__________________________________________________________________

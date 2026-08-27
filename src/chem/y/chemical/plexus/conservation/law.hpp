@@ -36,7 +36,7 @@ namespace Yttrium
                 //______________________________________________________________
                 typedef CxxListOf<Law>      List; //!< alias
                 static const char *  const  Name; //!< Conservation::Law
-
+                
                 //______________________________________________________________
                 //
                 //
@@ -66,7 +66,7 @@ namespace Yttrium
                 OutputStream & viz(OutputStream &fp, const char * const color) const;
                 String         html() const; //!< \return html label
 
-                bool linkedTo( const Law & )      const noexcept; //!< \return true iff common species
+                bool linkedTo(const Law & )       const noexcept; //!< \return true iff common species
                 bool linkedTo(const Components &) const noexcept; //!< \return true iff common species
 
                 //! post-compile law

@@ -13,6 +13,7 @@ namespace Yttrium
     namespace Chemical
     {
 
+
         //______________________________________________________________________
         //
         //
@@ -34,6 +35,7 @@ namespace Yttrium
             class Code;
             static const char * const CallSign;     //!< "Weasel"
             static const Longevity    LifeTime = 0; //!< life time
+            
 
             //__________________________________________________________________
             //
@@ -50,8 +52,10 @@ namespace Yttrium
                             Library    &,
                             Equilibria &);
 
+            String getColorFor(const Species    &, const Level) const noexcept;
+            String getColorFor(const Components &, const Level) const noexcept;
+            String getColorFor(const size_t)                    const noexcept; //!< \return color for conservation law
 
-            
         private:
             friend class Singleton<Weasel,ClassLockPolicy>;
             Y_Disable_Copy_And_Assign(Weasel); //!< discarde

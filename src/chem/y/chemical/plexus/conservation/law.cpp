@@ -93,14 +93,14 @@ namespace Yttrium
                     //Label(fp,label);
                     fp << "label=<" << html() << ">,shape=component";
                 }
-                if(color) fp << ",color=\"" << color << "\"";
+                if(color) fp << ",color=" << color << ",fontcolor=" << color;
                 Endl(fp << ']');
 
                 for(const Actor *ac=(**this).head;ac;ac=ac->next)
                 {
                     to(&ac->sp,fp) << '[';
                     fp << "arrowhead=odot";
-                    if(color) fp << ",color=\"" << color << "\"";
+                    if(color) fp << ",color=" << color << ",fontcolor=" << color;
                     Endl(fp << ']');
                 }
                 return fp;
@@ -125,7 +125,7 @@ namespace Yttrium
                 return false;
             }
 
-            const char * const Law::Name = "Conservation::Law";
+            const char * const Law::Name            = "Conservation::Law";
 
             void Law:: compile(XML::Log       & xml,
                                const SList    & slist,

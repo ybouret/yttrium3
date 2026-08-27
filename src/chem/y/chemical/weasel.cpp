@@ -5,11 +5,14 @@
 #include "y/type/pulverize.hpp"
 #include "y/lua++/state.hpp"
 
+#include "y/graphviz/color-scheme.hpp"
+
 namespace Yttrium
 {
     namespace Chemical
     {
         const char * const Weasel:: CallSign = "Weasel";
+        static const char * const LawColorSchemeName = "accent8";
 
 
         class Weasel::Code
@@ -19,7 +22,10 @@ namespace Yttrium
             lvm( new Lua::State() ),
             parser(),
             ftrans(parser.formula.name),
-            etrans(parser.equilibrium.name,lvm)
+            etrans(parser.equilibrium.name,lvm),
+            scs( GraphViz::ColorScheme::Query(Species::ColorSchemeName) ),
+            ecs( GraphViz::ColorScheme::Query(Equilibrium::ColorSchemeName) ),
+            lcs( GraphViz::ColorScheme::Query(LawColorSchemeName) )
             {
             }
 
@@ -32,6 +38,10 @@ namespace Yttrium
             Parser                  parser;
             Formula::Translator     ftrans;
             Equilibrium::Translator etrans;
+
+            const GraphViz::ColorScheme  &scs;
+            const GraphViz::ColorScheme  &ecs;
+            const GraphViz::ColorScheme  &lcs;
 
         private:
             Y_Disable_Copy_And_Assign(Code);
@@ -114,6 +124,23 @@ namespace Yttrium
         //    return code->lvm->eval<lua_Number>(expr);
         //}
 
+        String Weasel:: getColorFor(const Species &sp, const Level L) const noexcept
+        {
+            assert(code);
+            return code->scs[ sp.indx[L] ];
+        }
+
+        String Weasel:: getColorFor(const Components &eq, const Level L) const noexcept
+        {
+            assert(code);
+            return code->ecs[ eq.indx[L] ];
+        }
+
+        String Weasel::  getColorFor(const size_t lawIndx) const noexcept
+        {
+            assert(code);
+            return code->lcs[ lawIndx ];
+        }
 
 
     }
