@@ -42,16 +42,19 @@ Y_UTEST(cluster)
     for(size_t gr=1;gr<=cls.maxGrade;++gr)
     {
         const String fn = Formatted::Get("cs%u.dot", (unsigned)gr);
-        OutputFile   fp(fn);
-        Vizible::Enter(fp);
-        for(const Cluster *cl=cls->head;cl;cl=cl->next)
         {
-            if(gr<=cl->combinatorics.grade.size())
+            OutputFile   fp(fn);
+            Vizible::Enter(fp);
+            for(const Cluster *cl=cls->head;cl;cl=cl->next)
             {
-                cl->viz(fp,gr);
+                if(gr<=cl->combinatorics.grade.size())
+                {
+                    cl->viz(fp,gr);
+                }
             }
+            Vizible::Leave(fp);
         }
-        Vizible::Leave(fp);
+        Vizible::DotToPng(fn);
     }
 
 

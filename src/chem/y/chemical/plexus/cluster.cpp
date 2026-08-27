@@ -42,6 +42,15 @@ namespace Yttrium
                 (**sn).viz(fp,0,0);
             }
 
+            // write equilibria
+            const EList &elist = combinatorics.grade[order];
+            for(const ENode *en=elist->head;en;en=en->next)
+            {
+                const Components &eq = **en;
+                eq.vizSelf(fp,0,0);
+                eq.vizLink(fp,0);
+            }
+
             fp("}\n");
             return fp;
         }

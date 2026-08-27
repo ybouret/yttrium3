@@ -60,7 +60,7 @@ namespace Yttrium
                 {
                     for(const Cluster *cl=list.head;cl;cl=cl->next)
                     {
-                        const unsigned GraphVizID = cl->gvid;
+                        const size_t GraphVizID = cl->gvid;
                         Y_XML_Element_Attr(xml,Cluster, Y_XML_Attr(GraphVizID) );
                         for(const ENode *en=cl->topology.elist->head;en;en=en->next)
                         {
