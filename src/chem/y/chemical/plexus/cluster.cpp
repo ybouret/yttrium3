@@ -23,6 +23,7 @@ namespace Yttrium
         prev(0),
         gvid(0)
         {
+
         }
 
     }

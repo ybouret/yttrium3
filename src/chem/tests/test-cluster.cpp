@@ -40,6 +40,10 @@ Y_UTEST(cluster)
     Clusters  cls(xml,eqs);
 
     Y_SIZEOF(Topology);
+    Y_SIZEOF(Conservations);
+    Y_SIZEOF(Conservation::Canons);
+    Y_SIZEOF(Combinatorics);
+
     Y_SIZEOF(Cluster);
 
 

@@ -157,8 +157,8 @@ namespace Yttrium
                     emx << eq;
                     ecf << cf;
                 }
-                //std::cerr << "|_emx=" << emx << std::endl;
-                //std::cerr << "|_ecf=" << ecf << std::endl;
+                std::cerr << "|_emx=" << emx << std::endl;
+                std::cerr << "|_ecf=" << ecf << std::endl;
 
                 //--------------------------------------------------------------
                 //
