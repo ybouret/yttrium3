@@ -1,3 +1,4 @@
+//! \file
 
 #ifndef Y_Chemical_Plexus_Cluster_Included
 #define Y_Chemical_Plexus_Cluster_Included 1
@@ -12,9 +13,23 @@ namespace Yttrium
 {
     namespace Chemical
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Independant cluster of dependent equilibria
+        //
+        //
+        //______________________________________________________________________
         class Cluster : public Object
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
             //! setup
             /**
              \param xml output
@@ -27,19 +42,25 @@ namespace Yttrium
                              Equilibria   & eqs,
                              XWritable    & tlK);
 
+            //! cleanup
             virtual ~Cluster() noexcept;
 
-            const Topology             topology;
-            const Conservations        conservations;
-            const Conservation::Canons canons;
-            const Combinatorics        combinatorics;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            const Topology             topology;       //!< topology (from partition)
+            const Conservations        conservations;  //!< conservation laws
+            const Conservation::Canons canons;         //!< conservation canons
+            const Combinatorics        combinatorics;  //!< combinatorics
+            Cluster *                  next;           //!< for list
+            Cluster *                  prev;           //!< for list
+            const unsigned             gvid;           //!< GrapViz ID
 
-            Cluster *      next;
-            Cluster *      prev;
-            const unsigned gvid; //!< GrapViz ID
-            
         private:
-            Y_Disable_Copy_And_Assign(Cluster);
+            Y_Disable_Copy_And_Assign(Cluster); //!< discarded
         };
     }
 

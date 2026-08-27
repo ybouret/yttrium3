@@ -39,6 +39,9 @@ Y_UTEST(cluster)
     XML::Log  xml(std::cerr,verbose);
     Clusters  cls(xml,eqs);
 
+    Y_SIZEOF(Topology);
+    Y_SIZEOF(Cluster);
+
 
 #if 0
     const Partition part(xml,eqs);

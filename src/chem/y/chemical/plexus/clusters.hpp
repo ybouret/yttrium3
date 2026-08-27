@@ -9,27 +9,58 @@ namespace Yttrium
 {
     namespace Chemical
     {
-        
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Gathering clusters
+        //
+        //
+        //______________________________________________________________________
         class Clusters : public Proxy<const Core::ListOf<Cluster> >
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+
+            //! setup
+            /**
+             \param xml for output
+             \param eqs initial equilibria, updated
+             \param t0  initial time evaluation
+             */
             explicit Clusters(XML::Log   &  xml,
                               Equilibria &  eqs,
                               const xreal_t t0 = 0);
 
+            //! cleanup
             virtual ~Clusters() noexcept;
+
+
+            //__________________________________________________________________
+            //
+            //
+            // Methodss
+            //
+            //__________________________________________________________________
 
             //! update all constants \param t evaluation time
             void update(const xreal_t t);
 
+            
+
         private:
-            Y_Disable_Copy_And_Assign(Clusters);
-            Y_Proxy_Decl();
-            CxxListOf<Cluster> list;
-            Vector<xreal_t>    topK;
+            Y_Disable_Copy_And_Assign(Clusters); //!< discarded
+            Y_Proxy_Decl();                      //!< helper
+            CxxListOf<Cluster> list;             //!< inner list
+            Vector<xreal_t>    topK;             //!< top level constants
 
         public:
-            const XReadable & K;
+            const XReadable & K; //!< top level constant
 
         };
     }

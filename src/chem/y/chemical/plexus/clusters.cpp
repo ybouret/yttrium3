@@ -54,18 +54,19 @@ namespace Yttrium
             // Initialize
             //__________________________________________________________________
             update(t0);
-            const size_t finalCount = eqs->size();
-            Y_XML_Element_Attr(xml,DisplayInitial,Y_XML_Attr(finalCount) << Y_XML_Attr(initialCount));
-
             if(xml.verbose)
             {
-                for(const Cluster *cl=list.head;cl;cl=cl->next)
+                const size_t finalCount = eqs->size();
+                Y_XML_Element_Attr(xml,DisplayInitial,Y_XML_Attr(finalCount) << Y_XML_Attr(initialCount));
                 {
-                    const unsigned gvid = cl->gvid;
-                    Y_XML_Element_Attr(xml,Cluster, Y_XML_Attr(gvid) );
-                    for(const ENode *en=cl->topology.elist->head;en;en=en->next)
+                    for(const Cluster *cl=list.head;cl;cl=cl->next)
                     {
-                        eqs.EqFormat::print(xml() << "@ ",**en,true,t0);
+                        const unsigned gvid = cl->gvid;
+                        Y_XML_Element_Attr(xml,Cluster, Y_XML_Attr(gvid) );
+                        for(const ENode *en=cl->topology.elist->head;en;en=en->next)
+                        {
+                            eqs.EqFormat::print(xml() << "@ ",**en,true,t0);
+                        }
                     }
                 }
             }
