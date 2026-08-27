@@ -4,7 +4,7 @@
 
 #include "y/chemical/plexus/topology.hpp"
 #include "y/chemical/reactive/equilibria.hpp"
-
+#include "y/container/cxx/array.hpp"
 
 namespace Yttrium
 {
@@ -48,6 +48,8 @@ namespace Yttrium
                                    const XReadable &);
 
             virtual ~Combinatorics() noexcept; //!< cleanup
+
+            CxxArray<EList> grade;
 
         private:
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)

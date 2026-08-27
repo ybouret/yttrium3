@@ -29,7 +29,8 @@ namespace Yttrium
         Combinatorics:: Combinatorics(XML::Log        & xml,
                                       Topology        & topo,
                                       Equilibria      & eqs,
-                                      const XReadable & K)
+                                      const XReadable & K) :
+        grade(topo.group->size)
         {
             Y_XML_Element(xml,BuildCombinatorics);
 
@@ -43,6 +44,10 @@ namespace Yttrium
             //--------------------------------------------------------------
             Coven::StandardSurvey  primary(MinCoeff);
             buildPrimary(primary,xml,topo);
+
+            // registering primary
+            for(ENode *en=topo.group->head;en;en=en->next)
+                grade[1] << **en;
 
 
             //--------------------------------------------------------------
@@ -157,8 +162,10 @@ namespace Yttrium
                     emx << eq;
                     ecf << cf;
                 }
-                std::cerr << "|_emx=" << emx << std::endl;
-                std::cerr << "|_ecf=" << ecf << std::endl;
+                assert(order==emx->size);
+                assert(order==ecf->size);
+                //std::cerr << "|_emx=" << emx << std::endl;
+                //std::cerr << "|_ecf=" << ecf << std::endl;
 
                 //--------------------------------------------------------------
                 //
@@ -186,17 +193,23 @@ namespace Yttrium
                 if(xml.verbose)
                     eqs.EqFormat::print(xml() << "[+] ",*eq,false,0.0);
                 Coerce(topo.elist) << *eq;
+                grade[order]  << *eq;
             }
 
             Indexed::SubLabel( Indexed::TopHSort( Coerce(topo.elist) ) );
 
 
             Y_XML_Element(xml,Summary);
-            Y_XMLog(xml,"initial equilibria: " << topo.group->size);
-            Y_XMLog(xml,"created equilibria: " << stoDB->size);
-            Y_XMLog(xml,"all     equilibria: " << topo.elist->size);
+            Y_XMLog(xml,"-- initial equilibria: " << topo.group->size << " (a.k.a #grade[1])");
+            Y_XMLog(xml,"-- created equilibria: " << stoDB->size);
+            for(size_t i=2;i<=grade.size();++i)
+            {
+                Y_XMLog(xml,"                     |_#grade[" << std::setw(2) << i << "] = " << grade[i]->size);
+            }
+            Y_XMLog(xml,"-- all     equilibria: " << topo.elist->size);
             if(xml.verbose)
             {
+
                 for(const ENode *en=topo.elist->head;en;en=en->next)
                 {
                     eqs.EqFormat::print(xml() << "@ ",**en,false,0.0);

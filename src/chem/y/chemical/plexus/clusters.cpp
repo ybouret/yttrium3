@@ -1,6 +1,5 @@
 
 #include "y/chemical/plexus/clusters.hpp"
-#include "y/chemical/reactive/equilibrium/partition.hpp"
 
 namespace Yttrium
 {
@@ -18,17 +17,12 @@ namespace Yttrium
         Proxy<const Core::ListOf<Cluster> >(),
         list(),
         topK(),
-        K(topK)
+        K(topK),
+        part(xml,eqs)
         {
 
             const size_t initialCount = eqs->size();
             Y_XML_Element_Attr(xml,BuildClusters,Y_XML_Attr(initialCount));
-
-            //__________________________________________________________________
-            //
-            // create partition
-            //__________________________________________________________________
-            const Partition part(xml,eqs);
 
             //__________________________________________________________________
             //
@@ -38,7 +32,6 @@ namespace Yttrium
                 unsigned gvid = 0;
                 for(const EGroup *g=part.party.head;g;g=g->next)
                     Coerce(list.pushTail( new Cluster(xml,*g,eqs,topK) )->gvid) = gvid++;
-
             }
 
 

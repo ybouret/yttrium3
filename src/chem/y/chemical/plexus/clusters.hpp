@@ -3,6 +3,7 @@
 #define Y_Chemical_Plexus_Clusters_Included 1
 
 #include "y/chemical/plexus/cluster.hpp"
+#include "y/chemical/reactive/equilibrium/partition.hpp"
 #include "y/container/sequence/vector.hpp"
 
 namespace Yttrium
@@ -62,6 +63,8 @@ namespace Yttrium
         public:
             const XReadable & K; //!< top level constant
 
+        private:
+            const Partition part;
         };
     }
 
