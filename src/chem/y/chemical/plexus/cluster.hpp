@@ -34,8 +34,9 @@ namespace Yttrium
             const Conservation::Canons canons;
             const Combinatorics        combinatorics;
 
-            Cluster * next;
-            Cluster * prev;
+            Cluster *      next;
+            Cluster *      prev;
+            const unsigned gvid; //!< GrapViz ID
             
         private:
             Y_Disable_Copy_And_Assign(Cluster);

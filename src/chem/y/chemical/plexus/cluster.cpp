@@ -20,7 +20,8 @@ namespace Yttrium
         canons(xml,conservations.laws,topology,conservations.lfmt),
         combinatorics(xml,Coerce(topology),eqs,tlK),
         next(0),
-        prev(0)
+        prev(0),
+        gvid(0)
         {
         }
 

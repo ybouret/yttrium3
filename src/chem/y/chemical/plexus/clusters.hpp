@@ -13,13 +13,14 @@ namespace Yttrium
         class Clusters : public Proxy<const Core::ListOf<Cluster> >
         {
         public:
-            explicit Clusters(XML::Log   & xml,
-                              Equilibria & eqs);
+            explicit Clusters(XML::Log   &  xml,
+                              Equilibria &  eqs,
+                              const xreal_t t0 = 0);
 
             virtual ~Clusters() noexcept;
 
-            //! compute all constants \param t evaluation time
-            const XReadable & K(const xreal_t t);
+            //! update all constants \param t evaluation time
+            void update(const xreal_t t);
 
         private:
             Y_Disable_Copy_And_Assign(Clusters);
@@ -27,6 +28,8 @@ namespace Yttrium
             CxxListOf<Cluster> list;
             Vector<xreal_t>    topK;
 
+        public:
+            const XReadable & K;
 
         };
     }
