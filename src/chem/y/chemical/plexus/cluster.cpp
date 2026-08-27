@@ -1,5 +1,7 @@
 
 #include "y/chemical/plexus/cluster.hpp"
+#include "y/stream/output.hpp"
+#include "y/format/decimal.hpp"
 
 namespace Yttrium
 {
@@ -25,6 +27,25 @@ namespace Yttrium
         {
 
         }
+
+
+        OutputStream & Cluster:: viz(OutputStream &fp, const size_t order) const
+        {
+            assert( order >= 1 );
+            assert( order <= combinatorics.grade.size() );
+
+            fp("subgraph cluster_%s {\n",Decimal(gvid).c_str());
+
+            // write all species
+            for(const SNode *sn=topology.slist->head;sn;sn=sn->next)
+            {
+                (**sn).viz(fp,0,0);
+            }
+
+            fp("}\n");
+            return fp;
+        }
+
 
     }
 

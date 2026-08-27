@@ -51,7 +51,7 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            OutputStream & viz(OutputStream &, const size_t order);
+            OutputStream & viz(OutputStream &, const size_t order) const;
 
             //__________________________________________________________________
             //
@@ -65,7 +65,7 @@ namespace Yttrium
             const Combinatorics        combinatorics;  //!< combinatorics
             Cluster *                  next;           //!< for list
             Cluster *                  prev;           //!< for list
-            const unsigned             gvid;           //!< GrapViz ID
+            const size_t               gvid;           //!< GrapViz ID
 
         private:
             Y_Disable_Copy_And_Assign(Cluster); //!< discarded

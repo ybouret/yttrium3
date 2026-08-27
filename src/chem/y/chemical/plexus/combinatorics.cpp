@@ -207,6 +207,9 @@ namespace Yttrium
                 Y_XMLog(xml,"                     |_#grade[" << std::setw(2) << i << "] = " << grade[i]->size);
             }
             Y_XMLog(xml,"-- all     equilibria: " << topo.elist->size);
+
+            return;
+
             if(xml.verbose)
             {
 

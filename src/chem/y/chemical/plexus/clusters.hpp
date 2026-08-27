@@ -45,7 +45,7 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
-            // Methodss
+            // Methods
             //
             //__________________________________________________________________
 
@@ -62,9 +62,11 @@ namespace Yttrium
 
         public:
             const XReadable & K; //!< top level constant
+            const size_t      maxGrade;
 
         private:
             const Partition part;
+
         };
     }
 

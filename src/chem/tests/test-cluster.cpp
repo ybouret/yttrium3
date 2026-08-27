@@ -13,7 +13,7 @@
 #include "y/random/park-miller.hpp"
 
 #include "y/mkl/algebra/xgj.hpp"
-
+#include "y/string/format.hpp"
 
 using namespace Yttrium;
 using namespace Chemical;
@@ -39,12 +39,22 @@ Y_UTEST(cluster)
     XML::Log  xml(std::cerr,verbose);
     Clusters  cls(xml,eqs);
 
-    Y_SIZEOF(Topology);
-    Y_SIZEOF(Conservations);
-    Y_SIZEOF(Conservation::Canons);
-    Y_SIZEOF(Combinatorics);
+    for(size_t gr=1;gr<=cls.maxGrade;++gr)
+    {
+        const String fn = Formatted::Get("cs%u.dot", (unsigned)gr);
+        OutputFile   fp(fn);
+        Vizible::Enter(fp);
+        for(const Cluster *cl=cls->head;cl;cl=cl->next)
+        {
+            if(gr<=cl->combinatorics.grade.size())
+            {
+                cl->viz(fp,gr);
+            }
+        }
+        Vizible::Leave(fp);
+    }
 
-    Y_SIZEOF(Cluster);
+
 
 
 #if 0

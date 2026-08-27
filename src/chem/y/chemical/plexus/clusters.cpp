@@ -1,5 +1,6 @@
 
 #include "y/chemical/plexus/clusters.hpp"
+#include "y/core/max.hpp"
 
 namespace Yttrium
 {
@@ -18,6 +19,7 @@ namespace Yttrium
         list(),
         topK(),
         K(topK),
+        maxGrade(0),
         part(xml,eqs)
         {
 
@@ -31,7 +33,11 @@ namespace Yttrium
             {
                 unsigned gvid = 0;
                 for(const EGroup *g=part.party.head;g;g=g->next)
-                    Coerce(list.pushTail( new Cluster(xml,*g,eqs,topK) )->gvid) = gvid++;
+                {
+                    Cluster * const cl =list.pushTail( new Cluster(xml,*g,eqs,topK) );
+                    Coerce(cl->gvid) = gvid++;
+                    InSituMax(Coerce(maxGrade),cl->combinatorics.grade.size());
+                }
             }
 
 
@@ -54,12 +60,13 @@ namespace Yttrium
                 {
                     for(const Cluster *cl=list.head;cl;cl=cl->next)
                     {
-                        const unsigned gvid = cl->gvid;
-                        Y_XML_Element_Attr(xml,Cluster, Y_XML_Attr(gvid) );
+                        const unsigned GraphVizID = cl->gvid;
+                        Y_XML_Element_Attr(xml,Cluster, Y_XML_Attr(GraphVizID) );
                         for(const ENode *en=cl->topology.elist->head;en;en=en->next)
                         {
                             eqs.EqFormat::print(xml() << "@ ",**en,true,t0);
                         }
+                        Y_XMLog(xml, "|_species=" << cl->topology.slist);
                     }
                 }
             }
