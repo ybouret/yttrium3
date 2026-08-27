@@ -89,8 +89,9 @@ namespace Yttrium
             {
                 nodeName(fp) << '[';
                 {
-                    const String label = html();
-                    Label(fp,label);
+                    //const String label = html();
+                    //Label(fp,label);
+                    fp << "label=<" << html() << ">,shape=component";
                 }
                 if(color) fp << ",color=\"" << color << "\"";
                 Endl(fp << ']');
@@ -98,7 +99,7 @@ namespace Yttrium
                 for(const Actor *ac=(**this).head;ac;ac=ac->next)
                 {
                     to(&ac->sp,fp) << '[';
-                    fp << "arrowhead=oinv";
+                    fp << "arrowhead=odot";
                     if(color) fp << ",color=\"" << color << "\"";
                     Endl(fp << ']');
                 }

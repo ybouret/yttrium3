@@ -51,6 +51,15 @@ namespace Yttrium
                 eq.vizLink(fp,0);
             }
 
+            // write conservations
+            if(1==order)
+            {
+                for(const Conservation::Law *law = conservations.laws.head;law;law=law->next)
+                {
+                    law->viz(fp,0);
+                }
+            }
+
             fp("}\n");
             return fp;
         }
