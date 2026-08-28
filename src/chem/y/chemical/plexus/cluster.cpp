@@ -25,8 +25,8 @@ namespace Yttrium
         Object(),
         Topology(xml,grp),
         Conservations(xml,_topo()),
+        Combinatorics(xml,_topo(),eqs,tlK),
         canons(xml,laws,_topo(),lfmt),
-        combinatorics(xml,_topo(),eqs,tlK),
         next(0),
         prev(0),
         gvid(0)
@@ -51,7 +51,7 @@ namespace Yttrium
             const Weasel &weasel = Weasel::Instance();
 
             assert( order >= 1 );
-            assert( order <= combinatorics.grade.size() );
+            assert( order <= grade.size() );
 
             fp("subgraph cluster_%s {\n",Decimal(gvid).c_str());
 
@@ -64,10 +64,10 @@ namespace Yttrium
             }
 
             // write equilibria
-            const EList &elist = combinatorics.grade[order];
+            const EList &elist = grade[order];
             for(const ENode *en=elist->head;en;en=en->next)
             {
-                const Components &eq = **en;
+                const Components &eq   = **en;
                 const String     color = weasel.getColorFor(eq,SubLevel);
                 eq.vizSelf(fp,color.c_str(),0);
                 eq.vizLink(fp,color.c_str());

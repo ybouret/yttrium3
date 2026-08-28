@@ -47,7 +47,7 @@ Y_UTEST(cluster)
             Vizible::Enter(fp);
             for(const Cluster *cl=cls->head;cl;cl=cl->next)
             {
-                if(gr<=cl->combinatorics.grade.size())
+                if(gr<=cl->grade.size())
                 {
                     cl->viz(fp,gr);
                 }

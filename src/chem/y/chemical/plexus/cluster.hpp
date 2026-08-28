@@ -23,7 +23,8 @@ namespace Yttrium
         //______________________________________________________________________
         class Cluster : public Object,
         public Topology,
-        public Conservations
+        public Conservations,
+        public Combinatorics
         {
         public:
             //__________________________________________________________________
@@ -61,9 +62,7 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            //const Conservations        conservations;  //!< conservation laws
             const Conservation::Canons canons;         //!< conservation canons
-            const Combinatorics        combinatorics;  //!< combinatorics
             Cluster *                  next;           //!< for list
             Cluster *                  prev;           //!< for list
             const size_t               gvid;           //!< GrapViz ID

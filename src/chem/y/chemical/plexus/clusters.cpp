@@ -36,7 +36,7 @@ namespace Yttrium
                 {
                     Cluster * const cl =list.pushTail( new Cluster(xml,*g,eqs,topK) );
                     Coerce(cl->gvid) = gvid++;
-                    InSituMax(Coerce(maxGrade),cl->combinatorics.grade.size());
+                    InSituMax(Coerce(maxGrade),cl->grade.size());
                 }
             }
 
