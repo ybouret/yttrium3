@@ -52,7 +52,28 @@ namespace Yttrium
             //! update all constants \param t evaluation time
             void update(const xreal_t t);
 
+            //! output graphViz code
+            /**
+             \param fp output stream
+             \param gr grade to render
+             \return fp
+             */
             OutputStream & viz(OutputStream &fp, const size_t gr) const;
+
+            void renderGraphViz(const String & dotName, const size_t gr) const;
+
+            template <typename BASENAME> inline
+            void render(const BASENAME &baseName, const size_t gr) const
+            {
+                String _ = baseName;
+                renderGraphViz( MakeDotName(_,gr), gr );
+            }
+
+            template <typename BASENAME> inline
+            void renderAll(const BASENAME &baseName) const {
+                for(size_t gr=1;gr<=maxGrade;++gr)
+                    render(baseName,gr);
+            }
 
 
 
@@ -61,6 +82,8 @@ namespace Yttrium
             Y_Proxy_Decl();                      //!< helper
             CxxListOf<Cluster> list;             //!< inner list
             Vector<xreal_t>    topK;             //!< top level constants
+
+            static const String & MakeDotName(String &baseName, const size_t gr);
 
         public:
             const XReadable & K; //!< top level constant

@@ -98,6 +98,27 @@ namespace Yttrium
             return fp;
         }
 
+    }
+
+}
+
+#include "y/format/decimal.hpp"
+
+namespace Yttrium
+{
+    namespace Chemical
+    {
+        void Clusters:: renderGraphViz(const String & dotName, const size_t gr) const
+        {
+            Vizible::Render(dotName,*this,gr);
+        }
+
+        const String & Clusters:: MakeDotName(String &baseName, const size_t gr)
+        {
+            baseName += Decimal(gr).c_str();
+            baseName += ".dot";
+            return baseName;
+        }
 
     }
 

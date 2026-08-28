@@ -40,7 +40,7 @@ namespace Yttrium
 
         void   _VFS:: Show(VFS::Entry &entry, void * const)
         {
-            std::cerr << "[" << entry << "]" << std::endl;
+            std::cerr << "[" << entry << "] [path=" << entry.path << "] [base=" << entry.base << "]" << std::endl;
         }
 
         void   _VFS:: Display(VFS::Entry &entry)

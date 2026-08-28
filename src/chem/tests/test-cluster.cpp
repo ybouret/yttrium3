@@ -14,12 +14,15 @@
 
 #include "y/mkl/algebra/xgj.hpp"
 #include "y/string/format.hpp"
+#include "y/jive/vfs.hpp"
+#include "y/vfs/local/fs.hpp"
 
 using namespace Yttrium;
 using namespace Chemical;
 
 Y_UTEST(cluster)
 {
+    VFS &              fs     = LocalFS::Instance();
     Weasel &           weasel = Weasel::Instance();
     Library            lib;
     Equilibria         eqs;
@@ -38,28 +41,13 @@ Y_UTEST(cluster)
     bool      verbose = true;
     XML::Log  xml(std::cerr,verbose);
     Clusters  cls(xml,eqs);
+    std::cerr << std::endl;
 
-    for(size_t gr=1;gr<=cls.maxGrade;++gr)
-    {
-        const String fn = Formatted::Get("cs%u.dot", (unsigned)gr);
-        Vizible::Render(fn,cls,gr);
 
-#if 0
-        {
-            OutputFile   fp(fn);
-            Vizible::Enter(fp);
-            for(const Cluster *cl=cls->head;cl;cl=cl->next)
-            {
-                if(gr<=cl->grade.size())
-                {
-                    cl->viz(fp,gr);
-                }
-            }
-            Vizible::Leave(fp);
-        }
-        Vizible::DotToPng(fn);
-#endif
-    }
+    Jive::_VFS::Apply(fs, ".", "cs[:digit:][.]png", Jive::Matching::Exactly, VFS::Entry::Base, Jive::_VFS::Remove);
+
+    cls.renderAll("cs");
+
 
 
 
