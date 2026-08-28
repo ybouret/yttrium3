@@ -11,14 +11,22 @@ namespace Yttrium
 
         }
 
+        Topology & Cluster:: _topo() noexcept
+        {
+            return *this;
+        }
+
+
+
         Cluster:: Cluster(XML::Log     & xml,
                           const EGroup & grp,
                           Equilibria   & eqs,
                           XWritable    & tlK) :
-        topology(xml,grp),
-        conservations(xml,topology),
-        canons(xml,conservations.laws,topology,conservations.lfmt),
-        combinatorics(xml,Coerce(topology),eqs,tlK),
+        Object(),
+        Topology(xml,grp),
+        Conservations(xml,_topo()),
+        canons(xml,laws,_topo(),lfmt),
+        combinatorics(xml,_topo(),eqs,tlK),
         next(0),
         prev(0),
         gvid(0)
@@ -48,7 +56,7 @@ namespace Yttrium
             fp("subgraph cluster_%s {\n",Decimal(gvid).c_str());
 
             // write all species
-            for(const SNode *sn=topology.slist->head;sn;sn=sn->next)
+            for(const SNode *sn=slist->head;sn;sn=sn->next)
             {
                 const Species &    sp    = **sn;
                 const String       color = weasel.getColorFor(sp,SubLevel);
@@ -69,7 +77,7 @@ namespace Yttrium
             if(1==order)
             {
                 size_t ci = 0;
-                for(const Conservation::Law *law = conservations.laws.head;law;law=law->next)
+                for(const Conservation::Law *law = laws.head;law;law=law->next)
                 {
                     const String color = weasel.getColorFor(ci++);
                     law->viz(fp,color.c_str());

@@ -21,7 +21,9 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Cluster : public Object
+        class Cluster : public Object,
+        public Topology,
+        public Conservations
         {
         public:
             //__________________________________________________________________
@@ -59,8 +61,7 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            const Topology             topology;       //!< topology (from partition)
-            const Conservations        conservations;  //!< conservation laws
+            //const Conservations        conservations;  //!< conservation laws
             const Conservation::Canons canons;         //!< conservation canons
             const Combinatorics        combinatorics;  //!< combinatorics
             Cluster *                  next;           //!< for list
@@ -69,6 +70,7 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(Cluster); //!< discarded
+            Topology & _topo() noexcept;
         };
     }
 

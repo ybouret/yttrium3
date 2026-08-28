@@ -62,11 +62,11 @@ namespace Yttrium
                     {
                         const size_t GraphVizID = cl->gvid;
                         Y_XML_Element_Attr(xml,Cluster, Y_XML_Attr(GraphVizID) );
-                        for(const ENode *en=cl->topology.elist->head;en;en=en->next)
+                        for(const ENode *en=cl->elist->head;en;en=en->next)
                         {
                             eqs.EqFormat::print(xml() << "@ ",**en,true,t0);
                         }
-                        Y_XMLog(xml, "|_species=" << cl->topology.slist);
+                        Y_XMLog(xml, "|_species=" << cl->slist);
                     }
                 }
             }
@@ -78,7 +78,7 @@ namespace Yttrium
         {
             for(Cluster *cl=list.head;cl;cl=cl->next)
             {
-                for(ENode *en=cl->topology.elist->head;en;en=en->next)
+                for(ENode *en=cl->elist->head;en;en=en->next)
                 {
                     Equilibrium &eq = **en;
                     eq(topK,TopLevel) = eq.K(t);
