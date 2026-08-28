@@ -95,7 +95,7 @@ Y_UTEST(jive_json)
         AutoPtr<Jive::Syntax::XNode> tree = json.getAST( Jive::Module::OpenFile(argv[1]) );
         {
             const String dotFile = *json.lang + "-ast-tree.dot";
-            Vizible::Render(dotFile,*tree,false);
+            Vizible::Render(dotFile,*tree);
         }
         std::cerr << std::endl;
         edit(tree,Jive::Tolerant);

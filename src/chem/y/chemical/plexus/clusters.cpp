@@ -86,6 +86,19 @@ namespace Yttrium
             }
         }
 
+        OutputStream & Clusters:: viz(OutputStream &fp, const size_t gr) const
+        {
+            for(const Cluster *cl=list.head;cl;cl=cl->next)
+            {
+                if(gr<=cl->grade.size())
+                {
+                    cl->viz(fp,gr);
+                }
+            }
+            return fp;
+        }
+
+
     }
 
 }

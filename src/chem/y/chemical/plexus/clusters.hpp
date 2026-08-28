@@ -52,7 +52,9 @@ namespace Yttrium
             //! update all constants \param t evaluation time
             void update(const xreal_t t);
 
-            
+            OutputStream & viz(OutputStream &fp, const size_t gr) const;
+
+
 
         private:
             Y_Disable_Copy_And_Assign(Clusters); //!< discarded

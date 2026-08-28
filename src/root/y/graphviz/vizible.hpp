@@ -115,14 +115,27 @@ namespace Yttrium
         /**
          \param dotFile 'file.dot'
          \param obj     object with 'viz(OutputStream&)' method
-         \param keepDot don't remove dotFile upon success
          - upon success 'file.png' is created
          */
         template <typename FILENAME, typename CLASS> static inline
-        void Render(const FILENAME &dotFile, const CLASS &obj, const bool keepDot=false)
+        void Render(const FILENAME &dotFile, const CLASS &obj)
         {
             SaveAs(dotFile,obj);
-            DotToPng(dotFile,keepDot);
+            DotToPng(dotFile);
+        }
+
+        //! save and render vizible object
+        /**
+         \param dotFile 'file.dot'
+         \param obj     object with 'viz(OutputStream&)' method
+         \param keepDot don't remove dotFile upon success
+         - upon success 'file.png' is created
+         */
+        template <typename FILENAME, typename CLASS, typename ARG> static inline
+        void Render(const FILENAME &dotFile, const CLASS &obj, ARG &arg)
+        {
+            SaveAs(dotFile,obj,arg);
+            DotToPng(dotFile);
         }
 
 

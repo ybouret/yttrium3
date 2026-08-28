@@ -8,4 +8,4 @@ Y_UTEST(weasel)
 Y_UTEST(db)
 Y_UTEST(aftermath)
 Y_UTEST(cluster)
-
+Y_UTEST(solver)

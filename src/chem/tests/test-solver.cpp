@@ -1,4 +1,5 @@
 
+
 #include "y/chemical/weasel.hpp"
 #include "y/utest/run.hpp"
 
@@ -8,7 +9,7 @@
 
 #include "y/chemical/plexus/conservation/adjudicator.hpp"
 
- #include "y/container/cxx/array.hpp"
+#include "y/container/cxx/array.hpp"
 #include "y/string/env/convert.hpp"
 #include "y/random/park-miller.hpp"
 
@@ -18,7 +19,7 @@
 using namespace Yttrium;
 using namespace Chemical;
 
-Y_UTEST(cluster)
+Y_UTEST(solver)
 {
     Weasel &           weasel = Weasel::Instance();
     Library            lib;
@@ -39,12 +40,10 @@ Y_UTEST(cluster)
     XML::Log  xml(std::cerr,verbose);
     Clusters  cls(xml,eqs);
 
+#if 0
     for(size_t gr=1;gr<=cls.maxGrade;++gr)
     {
         const String fn = Formatted::Get("cs%u.dot", (unsigned)gr);
-        Vizible::Render(fn,cls,gr);
-
-#if 0
         {
             OutputFile   fp(fn);
             Vizible::Enter(fp);
@@ -58,9 +57,8 @@ Y_UTEST(cluster)
             Vizible::Leave(fp);
         }
         Vizible::DotToPng(fn);
-#endif
     }
-
+#endif
 
 
 

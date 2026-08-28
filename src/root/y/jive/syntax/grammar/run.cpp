@@ -110,7 +110,7 @@ namespace Yttrium
                 if(false)
                 {
                     const String dotFile = *lang + "-raw-tree.dot";
-                    Vizible::Render(dotFile,*tree,false);
+                    Vizible::Render(dotFile,*tree);
                 }
 
                 //--------------------------------------------------------------

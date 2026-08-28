@@ -59,7 +59,7 @@ Y_UTEST(jive_eval)
         AutoPtr<Jive::Syntax::XNode> tree = eval.getAST( Jive::Module::OpenFile(argv[1]) );
         {
             const String dotFile = *eval.lang + "-ast-tree.dot";
-            Vizible::Render(dotFile,*tree,false);
+            Vizible::Render(dotFile,*tree);
         }
         std::cerr << std::endl;
         edit(tree,Jive::Tolerant);

@@ -85,7 +85,7 @@ Y_UTEST(jive_weasel)
         AutoPtr<Jive::Syntax::XNode> tree = weasel.getAST( Jive::Module::OpenFile(argv[1]) );
         {
             const String dotFile = *weasel.lang + "-ast-tree.dot";
-            Vizible::Render(dotFile,*tree,false);
+            Vizible::Render(dotFile,*tree);
         }
         std::cerr << std::endl;
         edit(tree,Jive::Tolerant);

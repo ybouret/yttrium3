@@ -85,7 +85,7 @@ namespace Yttrium
             if(false)
             {
                 const String dotFile = *lang + "-ast-tree.dot";
-                Vizible::Render(dotFile,*tree,false);
+                Vizible::Render(dotFile,*tree);
             }
             XList &top = tree->list();
             while(top.size)
