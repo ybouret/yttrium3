@@ -45,7 +45,6 @@ Y_UTEST(cluster)
 
 
     Jive::_VFS::Apply(fs, ".", "cs[:digit:][.]png", Jive::Matching::Exactly, VFS::Entry::Base, Jive::_VFS::Remove);
-
     cls.renderAll("cs");
 
 

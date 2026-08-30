@@ -16,6 +16,44 @@
 #include "y/mkl/algebra/xgj.hpp"
 #include "y/string/format.hpp"
 
+#include "y/vfs/local/fs.hpp"
+#include "y/jive/vfs.hpp"
+
+
+namespace Yttrium
+{
+    namespace Chemical
+    {
+
+        class Solver
+        {
+        public:
+
+            explicit Solver(const Cluster &cls);
+            virtual ~Solver() noexcept;
+
+            const Cluster &cluster;
+
+        private:
+            Y_Disable_Copy_And_Assign(Solver);
+        };
+
+        Solver:: Solver( const Cluster  &cls) :
+        cluster(cls)
+        {
+            
+        }
+
+
+
+        Solver:: ~Solver() noexcept
+        {
+        }
+
+
+    }
+}
+
 using namespace Yttrium;
 using namespace Chemical;
 
@@ -40,25 +78,8 @@ Y_UTEST(solver)
     XML::Log  xml(std::cerr,verbose);
     Clusters  cls(xml,eqs);
 
-#if 0
-    for(size_t gr=1;gr<=cls.maxGrade;++gr)
-    {
-        const String fn = Formatted::Get("cs%u.dot", (unsigned)gr);
-        {
-            OutputFile   fp(fn);
-            Vizible::Enter(fp);
-            for(const Cluster *cl=cls->head;cl;cl=cl->next)
-            {
-                if(gr<=cl->grade.size())
-                {
-                    cl->viz(fp,gr);
-                }
-            }
-            Vizible::Leave(fp);
-        }
-        Vizible::DotToPng(fn);
-    }
-#endif
+    Jive::_VFS::Apply( LocalFS::Instance(), ".", "cs[:digit:][.]png", Jive::Matching::Exactly, VFS::Entry::Base, Jive::_VFS::Remove);
+    cls.renderAll("cs");
 
 
 
@@ -72,23 +93,7 @@ Y_UTEST(solver)
     const double probaN = EnvironmentConvert::To<double>("probaN",0);
     Concentration::Fill(ran,C,M,probaZ,probaN);
 
-    for(const EGroup *g=part.party.head;g;g=g->next)
-    {
-        Topology             topo(xml,*g);
-        Conservations        conservations(xml,topo);
-        Conservation::Canons canons(xml,conservations.laws,topo,conservations.lfmt);
-
-        for(const Conservation::Canon *canon=canons->head;canon;canon=canon->next)
-        {
-            Conservation::Adjudicator adjudicator(*canon);
-            adjudicator.judge(xml,C,TopLevel);
-        }
-
-        Combinatorics        combinatorics(xml,topo,eqs,K);
-    }
-
-    std::cerr << std::endl;
-    std::cerr << "lib=" << lib << std::endl;
+    
 #endif
 
 
