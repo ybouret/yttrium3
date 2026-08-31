@@ -69,6 +69,7 @@ namespace Yttrium
             void    transfer(XWritable       &target, const Level tgt,
                              const XReadable &source, const Level src) const;
 
+            std::ostream & displayCompact(std::ostream &, const XReadable &, const Level) const;
 
         private:
             Y_Disable_Copy_And_Assign(Actors); //!< discarded

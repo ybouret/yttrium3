@@ -53,6 +53,7 @@ namespace Yttrium
             assert( order >= 1 );
             assert( order <= grade.size() );
 
+
             fp("subgraph cluster_%s {\n",Decimal(gvid).c_str());
 
             // write all species
@@ -60,7 +61,12 @@ namespace Yttrium
             {
                 const Species &    sp    = **sn;
                 const String       color = weasel.getColorFor(sp,SubLevel);
-                sp.viz(fp,color.c_str(),0);
+                const char *       style = 0;
+                if(unbounded->book.query(sp))
+                {
+                    style="dashed";
+                }
+                sp.viz(fp,color.c_str(),style);
             }
 
             // write equilibria

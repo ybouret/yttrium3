@@ -21,7 +21,7 @@ namespace Yttrium
     //! helper to implement append code
 #define Y_CxxSeries_Append( CODE )               \
 assert(code); assert(code->size<code->capacity); \
-new (code->entry+code->size) MutableType CODE ;  \
+new (code->addr+code->size) MutableType CODE ;  \
 ++Coerce(code->size)
 
     //__________________________________________________________________________
@@ -143,11 +143,51 @@ new (code->entry+code->size) MutableType CODE ;  \
             Y_CxxSeries_Append(());
         }
 
-        //! append item with 1-argument constructor \param u value for constructor
+        //! append item with 1-argument constructor
+        /**
+         \param u value for constructor
+         */
         template <typename U>
         inline void append( U &u )
         {
             Y_CxxSeries_Append((u));
+        }
+
+
+        //! append item with 2-arguments constructor
+        /**
+         \param u value for constructor
+         \param v value for constructor
+         */
+        template <typename U, typename V>
+        inline void append( U &u, V &v )
+        {
+            Y_CxxSeries_Append((u,v));
+        }
+
+        //! append item with 3-arguments constructor
+        /**
+         \param u value for constructor
+         \param v value for constructor
+         \param 2 value for constructor
+         */
+        template <typename U, typename V, typename W>
+        inline void append( U &u, V &v, W &w )
+        {
+            Y_CxxSeries_Append((u,v,w));
+        }
+
+        //! append item with 4-arguments constructor
+        /**
+         \param u value for constructor
+         \param v value for constructor
+         \param w value for constructor
+         \param x value for constructor
+         */
+        template <typename U, typename V, typename W, typename X>
+        inline void append( U &u, V &v, W &w, X &x)
+        {
+            Y_CxxSeries_Append((u,v,w,x));
         }
 
 

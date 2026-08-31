@@ -220,7 +220,7 @@ namespace Yttrium
                 arrowLegend(fp,ac->nu,color);
                 Endl(fp<<']');
             }
-            
+
             return fp;
         }
 
@@ -230,6 +230,14 @@ namespace Yttrium
             reac.transfer(target,tgt,source,src);
             prod.transfer(target,tgt,source,src);
         }
+
+        std::ostream & Components:: displayCompact(std::ostream &os, const XReadable &C, const Level L) const
+        {
+            reac.displayCompact(os,C,L) << '=';
+            return prod.displayCompact(os,C,L);
+        }
+
+
     }
 
 }

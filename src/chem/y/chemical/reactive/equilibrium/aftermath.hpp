@@ -59,6 +59,7 @@ namespace Yttrium
 
             //! solve 1D equilibrium
             /**
+             Cout MUST be preloaded with Cinp
              \param xml  output
              \param Cout solved state
              \param Lout solved level
@@ -86,8 +87,8 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            const EqStatus st; //!< status
-            const xreal_t  xi; //!< required xi
+            const EqStatus     st; //!< status
+            const xreal_t      xi; //!< required xi
 
         private:
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)

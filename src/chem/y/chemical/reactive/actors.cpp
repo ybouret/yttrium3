@@ -127,6 +127,29 @@ namespace Yttrium
             }
         }
 
+        namespace
+        {
+            static inline
+            void displayCompactC(std::ostream &os, const Actor &ac,  const XReadable &C, const Level L)
+            {
+                os << "[" << ac.name << "]=" << ac.sp(C,L).str();
+            }
+        }
+
+        std::ostream & Actors:: displayCompact(std::ostream &os, const XReadable &C, const Level L) const
+        {
+            os << '{';
+            const Actor *ac =  list.head;
+            if(ac)
+            {
+                displayCompactC(os,*ac,C,L);
+                for(ac=ac->next;ac;ac=ac->next) displayCompactC(os<<',',*ac,C,L);
+            }
+            os << '}';
+            return os;
+        }
+
+
     }
 
 }

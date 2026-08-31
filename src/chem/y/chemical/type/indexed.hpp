@@ -116,15 +116,16 @@ namespace Yttrium
              \param hlist  handy list of indexed objects
              */
             template <typename TARGET, typename SOURCE, typename HLIST> static inline
-            void Transfer(TARGET &target, const Level tgt,
-                          SOURCE &source, const Level src,
-                          HLIST &hlist)
+            TARGET & Transfer(TARGET &target, const Level tgt,
+                              SOURCE &source, const Level src,
+                              HLIST &hlist)
             {
                 for(typename HLIST::NodeType *node=hlist->head;node;node=node->next)
                 {
                     const Indexed &id = **node;
                     id(target,tgt) = id(source,src);
                 }
+                return target;
             }
 
 

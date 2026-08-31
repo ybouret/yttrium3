@@ -65,7 +65,7 @@ namespace Yttrium
                 return E.massAction(K,X,C,L,xi);
             }
 
-            xreal_t cycle(XML::Log &);
+            xreal_t cycle();
 
 
             MKL::ZRid<xreal_t> solve;
@@ -80,18 +80,16 @@ namespace Yttrium
             Y_Disable_Copy_And_Assign(Engine);
         };
 
-        xreal_t Aftermath::Engine:: cycle(XML::Log &xml)
+        xreal_t Aftermath::Engine:: cycle()
         {
 
-            //Y_XML_Element(xml,Cycle);
             // initializing
             const xreal_t  zero(0);
             Engine        &F  = *this;
             XTriplet       x = {  zero, zero, zero };
             XTriplet       ma = {  F(),  zero, zero };
             const SignType ms = Sign::Of(ma.a.mantissa);
-            Y_XMLog(xml,"ma = " << ma.a.str());
-            
+
             // need to find x.c
             switch(E.kind)
             {
@@ -155,13 +153,13 @@ namespace Yttrium
             }
 
             const xreal_t ex = solve(F,x,ma);
-            Y_XMLog(xml,"ex = " << ex.str());
             E.safeMove(C,L,ex);
-            Core::Display(std::cerr << "C=", &C[1], C.size(), xreal_t::ToString) << std::endl;
-
             return ex;
         }
 
+
+#define Y_CHEM_SHOW(LABEL) \
+do { if(xml.verbose) eq.displayCompact( xml() << "[" #LABEL "] ",Cinp,Linp) << std::endl; } while(false)
 
         Aftermath Aftermath:: Compute(XML::Log         &xml,
                                       XWritable        &Cout,
@@ -181,7 +179,6 @@ namespace Yttrium
             // setup
             //
             //------------------------------------------------------------------
-            Cout.load(Cinp); // check
             EqStatus es = Running;
 
             if(eq.reac.active(Cinp,Linp) )
@@ -191,11 +188,13 @@ namespace Yttrium
                 {
                     // active products
                     assert(Running==es);
+                    Y_CHEM_SHOW(Running);
                 }
                 else
                 {
                     // inactive products
                     es = Crucial;
+                    Y_CHEM_SHOW(Crucial);
                 }
             }
             else
@@ -205,22 +204,19 @@ namespace Yttrium
                 {
                     // active products
                     es = Crucial;
+                    Y_CHEM_SHOW(Crucial);
                 }
                 else
                 {
                     es = Blocked;
-                    Y_XMLog(xml, "[Blocked]");
+                    Y_CHEM_SHOW(Blocked);
                     return Aftermath(es,0);
                 }
             }
 
 
             assert(Running==es||Crucial==es);
-            if(xml.verbose)
-            {
-                Core::Display( xml() << "C=", &Cout[1], Cout.size(), xreal_t::ToString) << std::endl;
-                if(Crucial==es) xml() << "[Crucial]" << std::endl;
-            }
+
 
 
             {
@@ -249,13 +245,13 @@ namespace Yttrium
                 }
 
                 Engine  F(Cout,eq,eK,S,Lout,xmul);
-                xreal_t xi = F.cycle(xml);
+                xreal_t xi = F.cycle();
                 xreal_t ax = MKL::Fabs<xreal_t>(xi);
                 while(true)
                 {
                     if( Sign::Of(xi.mantissa) == __Zero__ )
                         break;
-                    const xreal_t newXi = F.cycle(xml);
+                    const xreal_t newXi = F.cycle();
                     const xreal_t absXi = MKL::Fabs<xreal_t>(newXi);
                     if(absXi>=ax) break;
                     xi = newXi;
@@ -264,8 +260,10 @@ namespace Yttrium
             }
 
             // need to recompute full extent
+
             const xreal_t xi = eq.extent(Cinp, Linp, Cout, Lout, xadd);
-            Y_XMLog(xml, "xi = " << xi.str());
+            if(xml.verbose) eq.displayCompact( xml() << "[Solving] ",Cout,Lout) << std::endl;
+            Y_XMLog(xml, "|_@xi = " << xi.str());
             return Aftermath(es,xi);
         }
 

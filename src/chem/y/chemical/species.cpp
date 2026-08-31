@@ -32,7 +32,7 @@ namespace Yttrium
             nodeName(fp) << '[';
             fp << "label=<" << makeHTML() << ">,shape=box";
             if(color) fp << ",color=" << color << ",fontcolor=" << color << "";
-            if(style) fp << ",style=\"" << style << "\"";
+            if(style) fp << ",style=" << style;
             return Endl(fp << ']');
         }
 

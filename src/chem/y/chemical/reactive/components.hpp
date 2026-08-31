@@ -121,6 +121,10 @@ namespace Yttrium
              */
             void transfer(XWritable       &target, const Level tgt,
                           const XReadable &source, const Level src) const;
+            
+
+            std::ostream & displayCompact(std::ostream &os, const XReadable &, const Level) const;
+            
 
             //__________________________________________________________________
             //

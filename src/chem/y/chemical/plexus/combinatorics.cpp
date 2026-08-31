@@ -194,6 +194,7 @@ namespace Yttrium
                     eqs.EqFormat::print(xml() << "[+] ",*eq,false,0.0);
                 Coerce(topo.elist) << *eq;
                 grade[order]  << *eq;
+                Coerce(topo.efmt).enroll(*eq);
             }
 
             Indexed::SubLabel( Indexed::TopHSort( Coerce(topo.elist) ) );
