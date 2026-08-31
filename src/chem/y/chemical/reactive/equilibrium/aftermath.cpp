@@ -13,15 +13,21 @@ namespace Yttrium
         {
         }
 
-        Aftermath:: Aftermath(const EqStatus _st, const xreal_t _xi) noexcept :
+        Aftermath:: Aftermath(const EqStatus _st,
+                              const xreal_t  _xi,
+                              const size_t   _nz) noexcept :
         st(_st),
-        xi(_xi)
+        xi(_xi),
+        ax(xi.abs()),
+        nz(_nz)
         {
         }
 
         Aftermath:: Aftermath(const Aftermath &_) noexcept :
         st(_.st),
-        xi(_.xi)
+        xi(_.xi),
+        ax(_.ax),
+        nz(_.nz)
         {
 
         }
@@ -179,38 +185,64 @@ do { if(xml.verbose) eq.displayCompact( xml() << "[" #LABEL "] ",Cinp,Linp) << s
             // setup
             //
             //------------------------------------------------------------------
-            EqStatus es = Running;
-
+            EqStatus es  = Running;
+            size_t   nrz = 0;
+            size_t   npz = 0;
             if(eq.reac.active(Cinp,Linp) )
             {
+                //--------------------------------------------------------------
+                //
                 // active reactants
+                //
+                //--------------------------------------------------------------
+                assert(eq.reac.countZeroed(Cinp,Linp)<=0);
+
                 if(eq.prod.active(Cinp,Linp))
                 {
+                    //----------------------------------------------------------
                     // active products
+                    //----------------------------------------------------------
+                    assert(eq.prod.countZeroed(Cinp,Linp)<=0);
                     assert(Running==es);
                     Y_CHEM_SHOW(Running);
                 }
                 else
                 {
+                    //----------------------------------------------------------
                     // inactive products
-                    es = Crucial;
+                    //----------------------------------------------------------
+                    npz = eq.prod.countZeroed(Cinp,Linp); assert(npz>0);
+                    es  = Crucial;
                     Y_CHEM_SHOW(Crucial);
                 }
             }
             else
             {
+                //--------------------------------------------------------------
+                //
                 // inactive reactants
+                //
+                //--------------------------------------------------------------
+                nrz = eq.reac.countZeroed(Cinp,Linp); assert(nrz>0);
+
                 if(eq.prod.active(Cinp,Linp))
                 {
+                    //----------------------------------------------------------
                     // active products
+                    //----------------------------------------------------------
+                    assert(eq.prod.countZeroed(Cinp,Linp)<=0);
                     es = Crucial;
                     Y_CHEM_SHOW(Crucial);
                 }
                 else
                 {
+                    //----------------------------------------------------------
+                    // inactive products
+                    //----------------------------------------------------------
+                    npz = eq.prod.countZeroed(Cinp,Linp); assert(npz>0);
                     es = Blocked;
                     Y_CHEM_SHOW(Blocked);
-                    return Aftermath(es,0);
+                    return Aftermath(es,0,nrz+npz);
                 }
             }
 
@@ -262,9 +294,10 @@ do { if(xml.verbose) eq.displayCompact( xml() << "[" #LABEL "] ",Cinp,Linp) << s
             // need to recompute full extent
 
             const xreal_t xi = eq.extent(Cinp, Linp, Cout, Lout, xadd);
+            const size_t  nz = nrz+npz; assert( nz==eq.countZeroed(Cinp,Linp) );
             if(xml.verbose) eq.displayCompact( xml() << "[Solving] ",Cout,Lout) << std::endl;
-            Y_XMLog(xml, "|_@xi = " << xi.str());
-            return Aftermath(es,xi);
+            Y_XMLog(xml, "|_@xi = " << std::setw(24) << xi.str() << ", nz=" << nrz << "+" << npz << "=" << nz);
+            return Aftermath(es,xi,nz);
         }
 
     }

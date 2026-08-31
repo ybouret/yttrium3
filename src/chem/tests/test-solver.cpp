@@ -60,6 +60,21 @@ namespace Yttrium
 
             ~Ansatz() noexcept {}
 
+
+
+            //! take the smallest |xi| that solves the biggest nz
+            static inline SignType IncreasingAX(const Ansatz &lhs, const Ansatz &rhs) noexcept
+            {
+                switch( Sign::Of(lhs.am.nz,rhs.am.nz) )
+                {
+                    case Positive: return Negative;
+                    case Negative: return Positive;
+                    case __Zero__: break;
+                }
+                return Sign::Of(lhs.am.ax,rhs.am.ax);
+            }
+
+
         private:
             Y_Disable_Assign(Ansatz);
         };
@@ -89,7 +104,9 @@ namespace Yttrium
         Solver:: Solver( const Cluster  &cluster) :
         cls(cluster),
         Ceq(cls.elist->size,cls.M),
-        ans(cls.elist->size)
+        ans(cls.elist->size),
+        xmul(),
+        xadd()
         {
             
         }
@@ -108,6 +125,10 @@ namespace Yttrium
         {
             const size_t count = cls.elist->size;
             Y_XML_Element_Attr(xml,SolverRun, Y_XML_Attr(count) );
+            if(xml.verbose)
+            {
+                cls.sfmt.display(*xml,cls.slist,"\t\t[",C,L,"]", xreal_t::ToString);
+            }
 
             {
                 bool emergency = false;
@@ -151,10 +172,11 @@ namespace Yttrium
                     }
 
                     const size_t n = ans.size(); assert(n>=1);
+                    Core::HSort::Make( &ans[1], n, Ansatz::IncreasingAX );
                     for(size_t i=1;i<=n;++i)
                     {
                         const Ansatz &a = ans[i];
-                        Y_XMLog(xml, "@xi = " << std::setw(26) << a.am.xi.str() << " : " << a.eq);
+                        Y_XMLog(xml, "@xi = " << std::setw(22) << a.am.xi.str() << ", nz=" << std::setw(3) << a.am.nz << " : " << a.eq);
                     }
 
 

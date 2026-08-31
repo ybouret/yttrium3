@@ -4,7 +4,7 @@
 #ifndef Y_Chemical_Assembly_Included
 #define Y_Chemical_Assembly_Included 1
 
-#include "y/chemical/type/entity.hpp"
+#include "y/chemical/type/indexed.hpp"
 #include "y/format/justify.hpp"
 
 namespace Yttrium
@@ -48,6 +48,43 @@ namespace Yttrium
 
             //! pretty justified print \return output stream
             std::ostream & print(std::ostream &, const Entity &, const Justify::Type = Justify::Left) const;
+
+            //! display a list of data from array
+            template <typename HLIST, typename ARRAY> inline
+            void display(std::ostream &os, const HLIST &list,
+                         const char * const pfx,
+                         ARRAY &            A,
+                         const Level        L,
+                         const char * const sfx) const
+            {
+                for(const typename HLIST::NodeType *node=list->head;node;node=node->next)
+                {
+                    if(pfx) os << pfx;
+                    print(os,(**node));
+                    if(sfx) os << sfx;
+                    os << " = " << (**node)(A,L) << std::endl;
+                }
+            }
+
+            //! display a list of transformed data from array
+            template <typename HLIST, typename ARRAY, typename PROC> inline
+            void display(std::ostream &os, const HLIST &list,
+                         const char * const pfx,
+                         ARRAY &            A,
+                         const Level        L,
+                         const char * const sfx,
+                         PROC &             proc) const
+            {
+                for(const typename HLIST::NodeType *node=list->head;node;node=node->next)
+                {
+                    if(pfx) os << pfx;
+                    print(os,(**node));
+                    if(sfx) os << sfx;
+                    os << " = " << proc( (**node)(A,L) ) << std::endl;
+                }
+            }
+
+
 
             //__________________________________________________________________
             //

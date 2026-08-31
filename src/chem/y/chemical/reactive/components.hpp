@@ -123,8 +123,12 @@ namespace Yttrium
                           const XReadable &source, const Level src) const;
             
 
-            std::ostream & displayCompact(std::ostream &os, const XReadable &, const Level) const;
-            
+            //! display compact concentrations \return output stream
+            std::ostream & displayCompact(std::ostream &, const XReadable &, const Level) const;
+
+
+            //! \return zeroed concentration in given state
+            size_t countZeroed(const XReadable &, const Level) const noexcept;
 
             //__________________________________________________________________
             //

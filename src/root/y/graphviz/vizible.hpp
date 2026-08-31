@@ -128,7 +128,7 @@ namespace Yttrium
         /**
          \param dotFile 'file.dot'
          \param obj     object with 'viz(OutputStream&)' method
-         \param keepDot don't remove dotFile upon success
+         \param arg     transfered to SaveAs
          - upon success 'file.png' is created
          */
         template <typename FILENAME, typename CLASS, typename ARG> static inline

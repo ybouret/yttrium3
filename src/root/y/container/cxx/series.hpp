@@ -169,7 +169,7 @@ new (code->addr+code->size) MutableType CODE ;  \
         /**
          \param u value for constructor
          \param v value for constructor
-         \param 2 value for constructor
+         \param w value for constructor
          */
         template <typename U, typename V, typename W>
         inline void append( U &u, V &v, W &w )

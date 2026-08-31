@@ -49,7 +49,13 @@ namespace Yttrium
 
             virtual ~Combinatorics() noexcept; //!< cleanup
 
-            CxxArray<EList> grade;
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            CxxArray<EList> grade; //!< list of equilibria ranked by grade
 
         private:
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)

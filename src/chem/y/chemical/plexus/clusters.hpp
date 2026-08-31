@@ -60,8 +60,19 @@ namespace Yttrium
              */
             OutputStream & viz(OutputStream &fp, const size_t gr) const;
 
+            //! render graphViz
+            /**
+             \param dotName graphivz file name
+             \param gr      grade to render
+             */
             void renderGraphViz(const String & dotName, const size_t gr) const;
 
+
+            //! render graphViz
+            /**
+             \param baseName dotName = baseName + gr + ".dot"
+             \param gr       grade to render
+             */
             template <typename BASENAME> inline
             void render(const BASENAME &baseName, const size_t gr) const
             {
@@ -69,6 +80,7 @@ namespace Yttrium
                 renderGraphViz( MakeDotName(_,gr), gr );
             }
 
+            //! render all grades \param baseName base name for all graphs
             template <typename BASENAME> inline
             void renderAll(const BASENAME &baseName) const {
                 for(size_t gr=1;gr<=maxGrade;++gr)
@@ -83,14 +95,15 @@ namespace Yttrium
             CxxListOf<Cluster> list;             //!< inner list
             Vector<xreal_t>    topK;             //!< top level constants
 
-            static const String & MakeDotName(String &baseName, const size_t gr);
+            //! \return name
+            static const String & MakeDotName(String &, const size_t);
 
         public:
-            const XReadable & K; //!< top level constant
-            const size_t      maxGrade;
+            const XReadable & K;        //!< top level constant
+            const size_t      maxGrade; //!< maximal grade over clusters
 
         private:
-            const Partition part;
+            const Partition part;       //!< initial partition
 
         };
     }

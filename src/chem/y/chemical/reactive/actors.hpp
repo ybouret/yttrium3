@@ -69,7 +69,11 @@ namespace Yttrium
             void    transfer(XWritable       &target, const Level tgt,
                              const XReadable &source, const Level src) const;
 
+            //! display compact concentrations \return ostream
             std::ostream & displayCompact(std::ostream &, const XReadable &, const Level) const;
+
+            //! \return  zeroed concentrations in given state
+            size_t countZeroed(const XReadable &, const Level) const noexcept;
 
         private:
             Y_Disable_Copy_And_Assign(Actors); //!< discarded

@@ -27,8 +27,14 @@ namespace Yttrium
         public Vizible
         {
         public:
-            static const char * const ColorSchemeName;
-            
+            //__________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const char * const ColorSchemeName; //!< color scheme for species
+
             //__________________________________________________________________
             //
             //

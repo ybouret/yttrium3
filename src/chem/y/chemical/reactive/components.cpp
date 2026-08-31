@@ -237,6 +237,12 @@ namespace Yttrium
             return prod.displayCompact(os,C,L);
         }
 
+        size_t Components:: countZeroed(const XReadable &C, const Level L) const noexcept
+        {
+            return reac.countZeroed(C,L) + prod.countZeroed(C,L);
+        }
+
+
 
     }
 

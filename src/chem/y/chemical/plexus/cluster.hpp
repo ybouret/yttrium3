@@ -54,7 +54,15 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            OutputStream & viz(OutputStream &, const size_t order) const;
+
+            //! display given grade
+            /**
+             if(1==gr) then conservations are emitted
+             \param os output stream
+             \param gr grade in [1:grade.size()]
+             \return os
+             */
+            OutputStream & viz(OutputStream &os, const size_t gr) const;
 
             //__________________________________________________________________
             //
@@ -69,7 +77,7 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(Cluster); //!< discarded
-            Topology & _topo() noexcept;
+            Topology & _topo() noexcept;        //!< helper \return *this*
         };
     }
 

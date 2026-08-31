@@ -52,8 +52,8 @@ namespace Yttrium
                             Library    &,
                             Equilibria &);
 
-            String getColorFor(const Species    &, const Level) const noexcept;
-            String getColorFor(const Components &, const Level) const noexcept;
+            String getColorFor(const Species    &, const Level) const noexcept; //!< \return color for species
+            String getColorFor(const Components &, const Level) const noexcept; //!< \return color for components
             String getColorFor(const size_t)                    const noexcept; //!< \return color for conservation law
 
         private:

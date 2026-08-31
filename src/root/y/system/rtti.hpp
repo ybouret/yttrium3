@@ -28,8 +28,8 @@ namespace Yttrium
         // Definitions
         //
         //______________________________________________________________________
-        static const char * const CallSign; //!< "RTTI"
-        typedef Handy::BasicLightList<const RTTI> List;
+        static const char * const                 CallSign; //!< "RTTI"
+        typedef Handy::BasicLightList<const RTTI> List;     //!< alias
         class Table;
         class Key;
 
@@ -105,6 +105,7 @@ namespace Yttrium
             return '<' + res + '>';
         }
 
+        //! collect unique declared RTTI
         static void Collect(List &);
 
         //______________________________________________________________________

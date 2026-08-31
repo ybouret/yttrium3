@@ -132,7 +132,7 @@ namespace Yttrium
             static inline
             void displayCompactC(std::ostream &os, const Actor &ac,  const XReadable &C, const Level L)
             {
-                os << "[" << ac.name << "]=" << ac.sp(C,L).str();
+                os << "[" << ac.sp.name << "]=" << ac.sp(C,L).str();
             }
         }
 
@@ -148,6 +148,18 @@ namespace Yttrium
             os << '}';
             return os;
         }
+
+
+        size_t Actors:: countZeroed(const XReadable &C, const Level L) const noexcept
+        {
+            size_t count = 0;
+            for(const Actor * ac=list.head;ac;ac=ac->next)
+            {
+                if( ac->sp(C,L).mantissa <= 0 ) ++count;
+            }
+            return count;
+        }
+
 
 
     }
