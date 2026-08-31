@@ -92,14 +92,32 @@ namespace Yttrium
                 }
             }
 
+
+            const size_t n = ans.size();
             {
-                Y_XMLog(xml, "Ready to compute with #" << ans.size());
-                for(size_t i=1;i<=ans.size();++i)
+                Y_XMLog(xml, "Selecting #" << ans.size());
+                for(size_t i=n;i>0;--i)
                 {
-                    const Ansatz &a = ans[i]; assert(a.am.st==Running);
-                    Y_XMLog(xml, "@xi = " << std::setw(22) << a.am.xi.str() << " : " << a.eq);
+                    Ansatz  &a  = ans[i]; assert(a.am.st==Running);
+                    a.A0  = a.affinity(xadd,C,L);
                 }
+                Core::HSort::Make( &ans[1], n, Ansatz::DecreasingAA );
+
+                if(xml.verbose)
+                {
+                    for(size_t i=1;i<=n;++i)
+                    {
+                        const Ansatz  &a  = ans[i]; assert(a.am.st==Running);
+                        Y_XMLog(xml, " @ xi = " << std::setw(22) << a.am.xi.str()
+                                <<   " | AA = " << std::setw(22) << a.A0.str()
+                                <<   " | " << a.eq);
+                    }
+                }
+
+
             }
+
+            
 
 
 

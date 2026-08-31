@@ -62,6 +62,12 @@ namespace Yttrium
             xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level, const xreal_t) const; //!< \return shifted mass action
             void    safeMove(XWritable &, const Level, const xreal_t)                       const noexcept; //!< safely move concentration using extent
 
+            xreal_t affinity(const xreal_t     logK,
+                             XAdd            & xadd,
+                             const XReadable & Ctry,
+                             const Level       Ltry) const;
+
+
             //! compute extent from a transformation
             /**
              \param Cold old state

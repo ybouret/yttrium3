@@ -134,6 +134,17 @@ namespace Yttrium
             prod.safeMove(C,L,xi);
         }
 
+        xreal_t Components:: affinity(const xreal_t     logK,
+                                      XAdd            & xadd,
+                                      const XReadable & Ctry,
+                                      const Level       Ltry) const
+        {
+            xadd.set(logK);
+            reac.addAffinity(xadd,Ctry,Ltry);
+            prod.subAffinity(xadd,Ctry,Ltry);
+            return xadd();
+        }
+
         xreal_t Components:: extent(const XReadable & Cold,
                                     const Level       Lold,
                                     const XReadable & Cnew,

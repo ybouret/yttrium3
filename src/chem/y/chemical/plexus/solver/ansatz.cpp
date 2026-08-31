@@ -14,16 +14,20 @@ namespace Yttrium
                         const XReadable   & _cc) noexcept :
         eq(_eq),
         eK(_eK),
+        lK(eK.log()),
         am(_am),
-        cc(_cc)
+        cc(_cc),
+        A0(0)
         {
         }
 
         Ansatz:: Ansatz(const Ansatz &_) noexcept :
         eq(_.eq),
         eK(_.eK),
+        lK(_.lK),
         am(_.am),
-        cc(_.cc)
+        cc(_.cc),
+        A0(_.A0)
         {
         }
 
@@ -41,6 +45,23 @@ namespace Yttrium
             }
             return Sign::Of(lhs.am.ax,rhs.am.ax);
         }
+
+        SignType Ansatz:: DecreasingAA(const Ansatz &lhs, const Ansatz &rhs) noexcept
+        {
+            const xreal_t laa = lhs.A0.abs();
+            const xreal_t raa = rhs.A0.abs();
+            return Sign::Of(raa,laa);
+        }
+
+
+
+        xreal_t Ansatz:: affinity(XAdd &xadd, const XReadable &Ctry, const Level Ltry) const
+        {
+            return eq.affinity(lK,xadd,Ctry,Ltry);
+        }
+
+        
+
 
     }
 

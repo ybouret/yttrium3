@@ -292,7 +292,6 @@ do { if(xml.verbose) eq.displayCompact( xml() << "[" #LABEL "] ",Cinp,Linp) << s
             }
 
             // need to recompute full extent
-
             const xreal_t xi = eq.extent(Cinp, Linp, Cout, Lout, xadd);
             const size_t  nz = nrz+npz; assert( nz==eq.countZeroed(Cinp,Linp) );
             if(xml.verbose) eq.displayCompact( xml() << "[Solving] ",Cout,Lout) << std::endl;

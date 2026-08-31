@@ -53,7 +53,8 @@ namespace Yttrium
             void massAction(XMul &, const XReadable &, const Level) const; //!< update mass action
             void massAction(XMul &, const XReadable &, const Level, const xreal_t) const; //!< updated shifted mass action
 
-
+            void addAffinity(XAdd &, const XReadable &, const Level) const;
+            void subAffinity(XAdd &, const XReadable &, const Level) const;
 
             xreal_t extent(const XReadable &, const Level)            const noexcept; //!< \return limiting extent
             bool    active(const XReadable &, const Level)            const noexcept; //!< \return false if one concentration is <= 0

@@ -69,10 +69,23 @@ namespace Yttrium
         void Actors:: massAction(XMul &X, const XReadable &C, const Level L, const xreal_t xi) const
         {
             for(const Actor * a=list.head;a;a=a->next)
-            {
                 a->massAction(X,C,L,xi);
-            }
+
         }
+
+        void Actors:: addAffinity(XAdd &xadd, const XReadable &C, const Level L) const
+        {
+            for(const Actor * a=list.head;a;a=a->next)
+                a->addAffinity(xadd,C,L);
+        }
+
+        void Actors:: subAffinity(XAdd &xadd, const XReadable &C, const Level L) const
+        {
+            for(const Actor * a=list.head;a;a=a->next)
+                a->subAffinity(xadd,C,L);
+        }
+
+
 
         apz  Actors:: charge() const
         {

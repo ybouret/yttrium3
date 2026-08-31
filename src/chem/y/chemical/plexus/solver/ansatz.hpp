@@ -57,8 +57,12 @@ namespace Yttrium
             //__________________________________________________________________
 
             //! \return sign to take the smallest |xi| that solves the biggest nz
-            static  SignType IncreasingAX(const Ansatz &, const Ansatz &) noexcept;
+            static SignType IncreasingAX(const Ansatz &, const Ansatz &) noexcept;
 
+            static SignType DecreasingAA(const Ansatz &, const Ansatz &) noexcept;
+
+            xreal_t affinity(XAdd &xadd, const XReadable &Ctry, const Level Ltry) const;
+            
             //__________________________________________________________________
             //
             //
@@ -67,9 +71,11 @@ namespace Yttrium
             //__________________________________________________________________
             const Equilibrium & eq; //!< source equilibrium
             const xreal_t       eK; //!< source constant
+            const xreal_t       lK; //!< log(eK)
             const Aftermath     am; //!< 1D aftermath
             const XReadable &   cc; //!< 1D solved concentration
-
+            xreal_t             A0; //!< Affinity at origin
+            
         private:
             Y_Disable_Assign(Ansatz); //!< discarded
         };
