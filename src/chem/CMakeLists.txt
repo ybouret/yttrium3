@@ -12,6 +12,7 @@ y/chemical/plexus
 y/chemical/plexus/conservation
 y/chemical/plexus/conservation/law
 y/chemical/plexus/combinatorics
+y/chemical/plexus/solver
 )
 
 add_subdirectory(tests)
