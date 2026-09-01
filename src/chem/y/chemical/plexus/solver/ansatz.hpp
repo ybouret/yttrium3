@@ -59,8 +59,16 @@ namespace Yttrium
             //! \return sign to take the smallest |xi| that solves the biggest nz
             static SignType IncreasingAX(const Ansatz &, const Ansatz &) noexcept;
 
+            //! \return sign to take the tallest |AA|
             static SignType DecreasingAA(const Ansatz &, const Ansatz &) noexcept;
 
+            //! compute affinity
+            /**
+             \param xadd inner additions
+             \param Ctry trial concentration
+             \param Ltry trial level
+             \return affinity at Ctry
+             */
             xreal_t affinity(XAdd &xadd, const XReadable &Ctry, const Level Ltry) const;
             
             //__________________________________________________________________

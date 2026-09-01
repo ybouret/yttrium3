@@ -13,7 +13,8 @@ namespace Yttrium
         Ceq(cls.elist->size,cls.M),
         ans(cls.elist->size),
         xmul(),
-        xadd()
+        xadd(),
+        finder( new Coven::Finder(cls.M) )
         {
 
         }
