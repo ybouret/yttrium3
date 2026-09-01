@@ -32,6 +32,14 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(Solver);
+
+            //! regularize concentrations, return number of valid ansatzs
+            size_t regularize(XML::Log &, XWritable &, const Level, const XReadable &);
+
+            //! regularize, then build basis from independent eqs
+            size_t buildBasis(XML::Log &, XWritable &, const Level, const XReadable &);
+
+
         };
     }
 
