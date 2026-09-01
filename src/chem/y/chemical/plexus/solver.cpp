@@ -14,8 +14,14 @@ namespace Yttrium
         ans(cls.elist->size),
         xmul(),
         xadd(),
+        jac(cls.N),
         finder( new Coven::Finder(cls.M) )
         {
+            for(size_t i=1;i<=cls.N;++i)
+            {
+                jac.append(i,i);
+                assert(jac[i].isSquare());
+            }
 
         }
 

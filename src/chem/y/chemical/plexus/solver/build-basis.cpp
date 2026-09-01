@@ -1,6 +1,7 @@
 
 #include "y/chemical/plexus/solver.hpp"
 #include "y/core/hsort.hpp"
+#include "y/ascii/plural.hpp"
 
 namespace Yttrium
 {
@@ -54,7 +55,7 @@ namespace Yttrium
             // selecting
             //
             //------------------------------------------------------------------
-            Y_XMLog(xml, "-- selecting at most " << N << " amongst #" << ans.size() );
+            Y_XMLog(xml, "-- selecting at most " << N << " equilibri" << ASCII::Plural::uma(N) << " out of " << ans.size() );
             finder->free();
             for(size_t i=1;i<=n;++i)
             {
@@ -66,7 +67,7 @@ namespace Yttrium
                     Y_XMLog(xml, "[+] " << eq.name);
                     if(finder->size>=N)
                     {
-                        Y_XMLog(xml, "-- found full basis");
+                        Y_XMLog(xml, "-- found FULL basis");
                         break;
                     }
                 }
@@ -79,19 +80,17 @@ namespace Yttrium
             }
 
 
-
+            //------------------------------------------------------------------
+            //
+            // cleanup
+            //
+            //------------------------------------------------------------------
             n = finder->size;
-            if(n<N) Y_XMLog(xml, "-- found partial basis");
-
+            if(n<N) Y_XMLog(xml, "-- found PARTIAL basis");
             while(ans.size()>n)
-            {
                 ans.popTail();
-            }
-
             assert(ans.size() == n);
-
-
-            return ans.size();
+            return n;
         }
 
     }

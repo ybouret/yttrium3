@@ -17,7 +17,10 @@ namespace Yttrium
         }
 
 
-
+        const char * Plural:: uma(const size_t n) noexcept
+        {
+            return n > 1 ? "a" : "um";
+        }
     }
 
 }

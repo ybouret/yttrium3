@@ -23,12 +23,13 @@ namespace Yttrium
                      const Level       L,
                      const XReadable & K);
 
-            const Cluster &cls;
-            XMatrix        Ceq;
-            Ansatz::Series ans;
-            XMul           xmul;
-            XAdd           xadd;
-            Finder         finder;
+            const Cluster &    cls;
+            XMatrix            Ceq;
+            Ansatz::Series     ans;
+            XMul               xmul;
+            XAdd               xadd;
+            CxxSeries<XMatrix> jac;
+            Finder             finder;
 
         private:
             Y_Disable_Copy_And_Assign(Solver);

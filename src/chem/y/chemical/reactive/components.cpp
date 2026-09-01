@@ -254,6 +254,27 @@ namespace Yttrium
         }
 
 
+        void Components:: dAffinity(XWritable &J, const XReadable &C, const Level L) const
+        {
+
+            J.ld(0);
+
+            for(const Actor *ac=reac->head;ac;ac=ac->next)
+            {
+                const Species &sp = ac->sp;
+                const xreal_t  cc = sp(C,L); assert(cc.mantissa>0);
+                sp(J,SubLevel) = ac->xn /cc;
+            }
+
+            for(const Actor *ac=prod->head;ac;ac=ac->next)
+            {
+                const Species &sp = ac->sp;
+                const xreal_t  cc = sp(C,L); assert(cc.mantissa>0);
+                sp(J,SubLevel) = -ac->xn /cc;
+            }
+
+        }
+
 
     }
 

@@ -15,6 +15,8 @@ namespace Yttrium
         {
             static const char * s(const size_t) noexcept; //!< \return lower-case optional "s"
             static const char * S(const size_t) noexcept; //!< \return upper-case option "S"
+
+            static const char * uma(const size_t) noexcept; //!< \return lowercase "um|a"
         };
 
     }
