@@ -41,7 +41,15 @@ namespace Yttrium
             Y_XML_Element_Attr(xml,SolverRun, Y_XML_Attr(count) );
             const size_t n = buildBasis(xml,C,L,K);
             Y_XMLog(xml, "dof = " << n);
-            
+
+            XMatrix &J = jac[n];
+            for(size_t i=1;i<=n;++i)
+            {
+                const Ansatz &a = ans[i];
+                a.eq.addAffinityJacobian(J[i],C,L);
+            }
+
+            std::cerr << "J=" << J << std::endl;
         }
 
 
