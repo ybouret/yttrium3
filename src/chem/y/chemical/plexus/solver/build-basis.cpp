@@ -63,7 +63,7 @@ namespace Yttrium
                 const IRow        &nu = cls.allNu[  eq.indx[SubLevel] ];
                 if(finder->accepts(nu))
                 {
-                    Y_XMLog(xml, "[accept] " << eq.name);
+                    Y_XMLog(xml, "[+] " << eq.name);
                     if(finder->size>=N)
                     {
                         Y_XMLog(xml, "-- found full basis");
@@ -72,7 +72,7 @@ namespace Yttrium
                 }
                 else
                 {
-                    Y_XMLog(xml, "[reject] " << eq.name);
+                    Y_XMLog(xml, "[-] " << eq.name);
                     ans.remove(i);
                     --n;
                 }
