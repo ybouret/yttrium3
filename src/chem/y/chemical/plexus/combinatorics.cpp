@@ -30,7 +30,8 @@ namespace Yttrium
                                       Topology        & topo,
                                       Equilibria      & eqs,
                                       const XReadable & K) :
-        grade(topo.group->size)
+        grade(topo.group->size),
+        allNu()
         {
             Y_XML_Element(xml,BuildCombinatorics);
 
@@ -199,6 +200,29 @@ namespace Yttrium
 
             Indexed::SubLabel( Indexed::TopHSort( Coerce(topo.elist) ) );
 
+
+            {
+
+                //--------------------------------------------------------------
+                //
+                //
+                // Building all Nu
+                //
+                //
+                //--------------------------------------------------------------
+                const size_t numEq = topo.elist->size;
+                const size_t numSp = topo.slist->size;
+                IMatrix    & theNu = Coerce(allNu).make(numEq,numSp);
+                Y_XML_Element_Attr(xml,FullTopology,Y_XML_Attr(numEq) << Y_XML_Attr(numSp) );
+
+                for(const ENode *en=topo.elist->head;en;en=en->next)
+                {
+                    const Equilibrium &eq = **en;
+                    const size_t       ei = eq.indx[SubLevel];
+                    eq.topology(theNu[ei],SubLevel);
+                    Y_XMLog(xml, theNu[ei] << " \t@" << eq.name);
+                }
+            }
 
             Y_XML_Element(xml,Summary);
             Y_XMLog(xml,"-- initial equilibria: " << topo.group->size << " (a.k.a #grade[1])");

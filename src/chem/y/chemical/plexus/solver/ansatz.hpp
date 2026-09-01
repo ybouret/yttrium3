@@ -74,7 +74,7 @@ namespace Yttrium
             const xreal_t       lK; //!< log(eK)
             const Aftermath     am; //!< 1D aftermath
             const XReadable &   cc; //!< 1D solved concentration
-            xreal_t             A0; //!< Affinity at origin
+            const xreal_t       A0; //!< Affinity at origin
             
         private:
             Y_Disable_Assign(Ansatz); //!< discarded

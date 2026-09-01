@@ -56,7 +56,8 @@ namespace Yttrium
             //
             //__________________________________________________________________
             CxxArray<EList> grade; //!< list of equilibria ranked by grade
-
+            const IMatrix   allNu; //!< full topology
+            
         private:
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             Y_Disable_Copy_And_Assign(Combinatorics);

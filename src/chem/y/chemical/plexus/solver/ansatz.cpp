@@ -27,7 +27,7 @@ namespace Yttrium
         lK(_.lK),
         am(_.am),
         cc(_.cc),
-        A0(_.A0)
+        A0(_.A0) 
         {
         }
 

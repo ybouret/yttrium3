@@ -34,6 +34,13 @@ namespace Yttrium
             Y_XML_Element_Attr(xml,SolverRun, Y_XML_Attr(count) );
 
 
+            //------------------------------------------------------------------
+            //
+            //
+            // Regularize concentrations
+            //
+            //
+            //------------------------------------------------------------------
             {
                 Y_XML_Element(xml,Regularize);
             REGULARIZE:
@@ -50,13 +57,13 @@ namespace Yttrium
                     const Aftermath     am = Aftermath::Compute(xml,cc,SubLevel,C,L,eq,eK,xmul,xadd);
                     switch(am.st)
                     {
-                        case Blocked: continue;
+                        case Blocked:
+                            continue;
                         case Running:
-                            if(!emergency) ans.append(eq,eK,am,cc);
+                            if(!emergency)    ans.append(eq,eK,am,cc);
                             continue;
                         case Crucial:
-                            emergency = true;
-                            ans.append(eq,eK,am,cc);
+                            emergency = true; ans.append(eq,eK,am,cc);
                             continue;
                     }
                 }
@@ -92,24 +99,30 @@ namespace Yttrium
                 }
             }
 
-
-            const size_t n = ans.size();
+            //------------------------------------------------------------------
+            //
+            //
+            // Select
+            //
+            //
+            //------------------------------------------------------------------
+            const size_t n_ok = ans.size();
             {
                 Y_XMLog(xml, "Selecting #" << ans.size());
-                for(size_t i=n;i>0;--i)
+                for(size_t i=n_ok;i>0;--i)
                 {
-                    Ansatz  &a  = ans[i]; assert(a.am.st==Running);
-                    a.A0  = a.affinity(xadd,C,L);
+                    Ansatz  &a     = ans[i]; assert(a.am.st==Running);
+                    Coerce(a.A0)  = a.affinity(xadd,C,L);
                 }
-                Core::HSort::Make( &ans[1], n, Ansatz::DecreasingAA );
+                Core::HSort::Make( &ans[1], n_ok, Ansatz::DecreasingAA );
 
                 if(xml.verbose)
                 {
-                    for(size_t i=1;i<=n;++i)
+                    for(size_t i=1;i<=n_ok;++i)
                     {
                         const Ansatz  &a  = ans[i]; assert(a.am.st==Running);
                         Y_XMLog(xml, " @ xi = " << std::setw(22) << a.am.xi.str()
-                                <<   " | AA = " << std::setw(22) << a.A0.str()
+                                <<   " | A0 = " << std::setw(22) << a.A0.str()
                                 <<   " | " << a.eq);
                     }
                 }
@@ -117,7 +130,7 @@ namespace Yttrium
 
             }
 
-            
+
 
 
 
