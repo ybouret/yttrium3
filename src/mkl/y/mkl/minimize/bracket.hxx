@@ -20,7 +20,7 @@ bool Bracket::Inside<real_t>( XML::Log &xml, Triplet<real_t> &x, Triplet<real_t>
     {
         assert(f.a<=f.c);
 
-        f.b = F( x.b = Clamp(x.a,Half<real_t>::Of(x.a,x.c),x.c) );
+        f.b = F( x.b = Clamp(x.a,Half<real_t>(x.a,x.c),x.c) );
         Y_XMLog(xml, "F(" << x.b << ")=" << f.b);
         if(f.b<=f.a)
         {

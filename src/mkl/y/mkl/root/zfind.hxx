@@ -18,7 +18,7 @@ bool ZFind<real_t>:: found(Handle &hx, Handle &hf, Triplet<real_t> &x, Triplet<r
     switch( Sign::Pair(sa,sc) )
     {
         case Sign::ZZ:
-            x.b = Half<real_t>::Of(x.a+x.c);
+            x.b = Half<real_t>(x.a,x.c);
             f.b = F(x.b);
             if( __Zero__ != Sign::Of(f.b) ) throw Specific::Exception( callSign(), "found invalid initial middle point");
             return true;

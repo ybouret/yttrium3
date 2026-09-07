@@ -65,12 +65,13 @@ namespace Yttrium
                 step(xml,x,f,F);
                 T x_opt = x.b;
 
-                // llop
+                // loop
                 while(true)
                 {
                     ++cycle;
                     Y_XMLog(xml, "[cycle=" << cycle << "]");
                     step(xml,x,f,F);
+                    std::cerr << "\t\tf=" << f << std::endl;
                     const T    x_new = x.b;
                     const bool f_cvg = AlmostEqual<T>::Are(f.a,f.b) && AlmostEqual<T>::Are(f.b,f.c);
                     const bool x_cvg = AlmostEqual<T>::Are(x_opt,x_new);

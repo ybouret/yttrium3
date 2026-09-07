@@ -41,28 +41,25 @@ namespace Yttrium
 
         }
 
-        //! wrapper to select fabs()
-        template <typename T> struct Half
+
+        //! \param x value \return x/2
+        template <typename T> inline
+        T Half(typename TypeTraits<T>::ParamType x)
         {
-            Y_Args_Declare(T,Type);                                   //!< aliases
+            static const typename Kernel::Selected<T>::API choice = {};
+            return Kernel::Half<T>(x,choice);
+        }
 
-            //! \param x value \return x/2
-            static inline Type Of(ParamType x)
-            {
-                static const typename Kernel::Selected<T>::API choice = {};
-                return Kernel::Half<T>(x,choice);
-            }
+        //! \param x value \param y value \return (x+y)/2
+        template <typename T> inline
+        T Half(typename TypeTraits<T>::ParamType x, typename TypeTraits<T>::ParamType y)
+        {
+            static const typename Kernel::Selected<T>::API choice = {};
+            T sum = x+y;
+            return Kernel::Half<T>(sum,choice);
+        }
 
-            //! \param x value \param y value \return (x+y)/2
-            static inline Type Of(ParamType x, ParamType y)
-            {
-                static const typename Kernel::Selected<T>::API choice = {};
-                ConstType sum = x+y;
-                return Kernel::Half<T>(sum,choice);
-            }
-        };
-
-
+        
 
 
     }

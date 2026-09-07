@@ -55,19 +55,18 @@ namespace Yttrium
             const xreal_t F0 = F(C,L);
             Y_XMLog(xml, "F0 = " << F0.str());
 
-            // initialize Cini at starting point
             if(Trace)
-            {
-                OutputFile::Overwrite("solver.gp");
-            }
+                trace.free();
 
             for(size_t i=1;i<=n;++i)
             {
                 const Ansatz & a  = ans[i];
                 optimizing(xml,a,F0,i);
-
             }
 
+            if(Trace)
+                std::cerr << trace << std::endl;
+            
 
             //XMatrix &J = jac[n]; std::cerr << "J=" << J << std::endl;
         }
@@ -104,7 +103,7 @@ namespace Yttrium
             static inline
             void savePoint(OutputStream &fp, Solver &solver, const xreal_t u)
             {
-                const xreal_t f = solver.F(u);
+                const xreal_t f = solver(u);
                 fp << u.str() << ' ' << f.str() << '\n';
             }
 
@@ -114,14 +113,14 @@ namespace Yttrium
                                   const unsigned np)
         {
 
-            savePoint(fp,*this,0);
+            savePoint(fp,*this,0.0);
             const xreal_t den(np);
             for(unsigned i=1;i<np;++i)
             {
                 const xreal_t u = xreal_t(i) / den;
                 savePoint(fp,*this,u);
             }
-            savePoint(fp,*this,1);
+            savePoint(fp,*this,1.0);
         }
 
 
@@ -138,7 +137,7 @@ namespace Yttrium
             return Fadd().sqrt();
         }
 
-        xreal_t Solver:: F(const xreal_t u)
+        xreal_t Solver:: operator()(const xreal_t u)
         {
             const xreal_t one(1);
             const xreal_t v = one - u;

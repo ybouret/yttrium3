@@ -6,6 +6,7 @@
 
 #include "y/chemical/plexus/solver/ansatz.hpp"
 #include "y/coven/finder.hpp"
+#include "y/mkl/minimize/api.hpp"
 
 namespace Yttrium
 {
@@ -28,8 +29,10 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            typedef AutoPtr<Coven::Finder> Finder; //!< alias
-            static bool                    Trace;  //!< emit profiles
+            typedef AutoPtr<Coven::Finder>    Finder; //!< alias
+            static bool                       Trace;  //!< emit profiles
+            typedef MKL::Minimize             Minimize;
+            typedef Minimize::Engine<xreal_t> Optimizer;
 
             //__________________________________________________________________
             //
@@ -52,7 +55,7 @@ namespace Yttrium
                      const XReadable & K);
 
             xreal_t F(const XReadable &C, const Level L);
-            xreal_t F(const xreal_t u);
+            xreal_t operator()(const xreal_t u);
 
             void   saveProfile(OutputStream &, const unsigned np);
             String MakeFileName(const String &);
@@ -73,9 +76,11 @@ namespace Yttrium
             XMul               xmul;   //!< for inner multiplication
             XAdd               xadd;   //!< for inner additions
             XAdd               Fadd;   //!< for F computation
+            Optimizer          opt;
             CxxSeries<XMatrix> jac;    //!< preformated matrices
             Finder             finder; //!< helper to build basis
-
+            String             trace;  //!< gnuplot
+            
         private:
             Y_Disable_Copy_And_Assign(Solver); //!< discarded
 

@@ -110,7 +110,7 @@ namespace Yttrium
             //! \return (a+c)/2
             inline T middle() const
             {
-                return Half<T>::Of(a,c);
+                return Half<T>(a,c);
             }
 
             //! \param data data[0..2] target

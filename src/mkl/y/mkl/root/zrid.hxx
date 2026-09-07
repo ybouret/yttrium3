@@ -85,7 +85,7 @@ real_t ZRid<real_t>:: lookup(Triplet<real_t> &x, Triplet<real_t> &f, FunctionTyp
     while(true)
     {
         // take midpoint
-        const SignType s_b = Sign::Of( f.b = F( x.b=Half<real_t>::Of(x.a+x.c) ));
+        const SignType s_b = Sign::Of( f.b = F( x.b=Half<real_t>(x.a,x.c) ));
         if(__Zero__==s_b) { return x.b; }
 
         // prepare possibilities
@@ -99,7 +99,7 @@ real_t ZRid<real_t>:: lookup(Triplet<real_t> &x, Triplet<real_t> &f, FunctionTyp
         const real_t S          = Sqrt<real_t>(D);
         const real_t sdx        = (f_h / S) * (x.c-x.a);
         const real_t adx        = Fabs<real_t>(sdx);
-        const real_t dx         = Half<real_t>::Of(adx);
+        const real_t dx         = Half<real_t>(adx);
         const bool   increasing = Sign::LTZ(f.a);
         if( increasing )
         {

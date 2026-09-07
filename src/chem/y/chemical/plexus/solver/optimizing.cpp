@@ -1,6 +1,7 @@
 #include "y/chemical/plexus/solver.hpp"
 #include "y/stream/libc/output.hpp"
 
+
 namespace Yttrium
 {
     namespace Chemical
@@ -11,9 +12,10 @@ namespace Yttrium
                                  const xreal_t  F0,
                                  const size_t   i)
         {
-            Cend.load(a.cc); // initialize Cend at 1D solution
-            const xreal_t  Fi = F(Cend,SubLevel);
-            Y_XMLog(xml,"F = " << Fi.str() <<  " @" << a.eq);
+            // initialize Cend at 1D solution
+            Cend.load(a.cc);
+            const xreal_t  F1 = F(Cend,SubLevel);
+            Y_XMLog(xml,"F = " << F1.str() <<  " @" << a.eq);
 
             if(Trace)
             {
@@ -22,17 +24,26 @@ namespace Yttrium
                 saveProfile(fp,500);
 
                 {
-                    OutputFile fp("solver.gp",true);
                     if(1==i)
-                        fp << "plot ";
+                        trace += "plot ";
                     else
-                        fp << ", ";
-                    fp << "'" << fn << "' w l";
-                    if(i==ans.size()) fp << '\n';
+                        trace += ", ";
+                    trace += ("'" + fn + "' w l");
                 }
-
             }
+            Solver &self = *this;
+            // study cases
+            XTriplet xx = {  0, 0.5,         1 };
+            XTriplet ff = { F0, self(xx.b), F1 };
 
+            Y_XMLog(xml,ff.a.str() << " -> " << ff.b.str() << " -> " << ff.c.str() );
+
+            const xreal_t x_opt = opt.find(xml,self,Minimize::Inside,xx,ff,Minimize::Standard);
+
+
+
+
+            return true;
         }
     }
 

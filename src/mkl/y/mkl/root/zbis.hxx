@@ -35,7 +35,7 @@ real_t ZBis<real_t>:: lookup(Triplet<real_t> &x, Triplet<real_t> &f, FunctionTyp
     // initial bisection
     //
     //--------------------------------------------------------------------------
-    switch( Sign::Of( f.b = F(x.b=Half<real_t>::Of(x.a,x.c) ) ) )
+    switch( Sign::Of( f.b = F(x.b=Half<real_t>(x.a,x.c) ) ) )
     {
         case __Zero__: // exact
             return x.b;
@@ -55,7 +55,7 @@ real_t ZBis<real_t>:: lookup(Triplet<real_t> &x, Triplet<real_t> &f, FunctionTyp
     while(true)
     {
         const real_t x_old = x.b;
-        switch( Sign::Of( f.b = F(x.b=Half<real_t>::Of(x.a+x.c) ) ) )
+        switch( Sign::Of( f.b = F(x.b=Half<real_t>(x.a,x.c) ) ) )
         {
             case __Zero__: // exact
                 return x.b;

@@ -99,18 +99,18 @@ namespace Yttrium
                         {
                             case Negative:
                                 assert(lw<rw); // reduce rw
-                                sample(xml, Half<T>::Of(x.b,x.c), F);
+                                sample(xml, Half<T>(x.b,x.c), F);
                                 break;
 
                             case Positive:
                                 assert(rw<lw); // reduce lw
-                                sample(xml, Half<T>::Of(x.a,x.b), F);
+                                sample(xml, Half<T>(x.a,x.b), F);
                                 break;
 
                             case __Zero__: // symmetric
                                 xsym = true;
-                                sample(xml, Half<T>::Of(x.a,x.b), F);
-                                sample(xml, Half<T>::Of(x.b,x.c), F);
+                                sample(xml, Half<T>(x.a,x.b), F);
+                                sample(xml, Half<T>(x.b,x.c), F);
                                 break;
                         }
                     }
@@ -131,7 +131,7 @@ namespace Yttrium
                     {
                         // beta = 0 => predicts 1/2
                         Y_XMLog(xml, "-- beta=0");
-                        sample(xml, Half<T>::Of(x.b,x.c), F);
+                        sample(xml, Half<T>(x.b,x.c), F);
                     }
                     else
                     {
@@ -139,7 +139,7 @@ namespace Yttrium
                         {
                             // beta = 1 => predicts 1/2
                             Y_XMLog(xml, "-- beta=1");
-                            sample(xml, Half<T>::Of(x.a,x.b), F);
+                            sample(xml, Half<T>(x.a,x.b), F);
                         }
                         else
                         {
@@ -159,7 +159,7 @@ namespace Yttrium
                                 case __Zero__: {
                                     Y_XMLog(xml, "-- take middle point (xsym=" << xsym << ")" );
                                     if(!xsym)
-                                        sample(xml, Half<T>::Of(x.a,x.b),F);
+                                        sample(xml, Half<T>(x.a,x.b),F);
                                 } break;
 
 
@@ -317,7 +317,7 @@ namespace Yttrium
                         case __Zero__: return;
                         case Negative: assert(lw<rw); {
                             Y_XMLog(xml, "[<] balance right");
-                            const T xn = Half<T>::Of(x.b,x.c);
+                            const T xn = Half<T>(x.b,x.c);
                             const T fn = F(xn);
                             show(xml,xn,fn);
                             if(fn<=f.b)
@@ -342,7 +342,7 @@ namespace Yttrium
                         } break;
                         case Positive: assert(rw<lw); {
                             Y_XMLog(xml, "[>] balance left");
-                            const T xn = Half<T>::Of(x.a,x.b);
+                            const T xn = Half<T>(x.a,x.b);
                             const T fn = F(xn);
                             show(xml,xn,fn);
                             if(fn<=f.b)
