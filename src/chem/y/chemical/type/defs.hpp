@@ -9,6 +9,7 @@
 #include "y/cameo/multiplication.hpp"
 #include "y/cameo/addition.hpp"
 #include "y/mkl/triplet.hpp"
+#include "y/container/cxx/array.hpp"
 
 namespace Yttrium
 {
@@ -21,8 +22,8 @@ namespace Yttrium
         typedef Cameo::Multiplication<xreal_t> XMul;      //!< alias
         typedef Cameo::Addition<xreal_t>       XAdd;      //!< alias
         typedef MKL::Triplet<xreal_t>          XTriplet;  //!< alias
+        typedef CxxArray<xreal_t>              XArray;    //!< alias
 
-        
     }
 
 }

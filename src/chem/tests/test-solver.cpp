@@ -47,6 +47,8 @@ Y_UTEST(solver)
     Clusters  cls(xml,eqs);
 
     Jive::_VFS::Apply( LocalFS::Instance(), ".", "cs[:digit:][.]png", Jive::Matching::Exactly, VFS::Entry::Base, Jive::_VFS::Remove);
+    Jive::_VFS::Apply( LocalFS::Instance(), ".", "ycp", Jive::Matching::Exactly, VFS::Entry::Ext, Jive::_VFS::Remove);
+
     cls.renderAll("cs");
 
     const size_t      M = lib->size();
@@ -55,6 +57,8 @@ Y_UTEST(solver)
     const double      probaN = EnvironmentConvert::To<double>("probaN",0);
     Concentration::Fill(ran,C,M,probaZ,probaN);
 
+    Solver::Trace = true;
+    
     for(const Cluster *cl=cls->head;cl;cl=cl->next)
     {
         Solver solver(*cl);

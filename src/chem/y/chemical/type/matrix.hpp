@@ -14,8 +14,7 @@ namespace Yttrium
         typedef Matrix<unsigned> UMatrix; //!< alias
         typedef Matrix<int>      IMatrix; //!< alias
         typedef Matrix<xreal_t>  XMatrix; //!< alias
-
-        typedef IMatrix::RowType IRow;
+        typedef IMatrix::RowType IRow;    //!< alias
     }
 
 }
