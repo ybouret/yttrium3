@@ -19,6 +19,7 @@ namespace Yttrium
         nu(_nu),
         sp(_sp),
         xn(nu),
+        n2(xn*xn),
         zero(),
         next(0),
         prev(0)

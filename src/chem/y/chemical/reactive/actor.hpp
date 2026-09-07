@@ -77,6 +77,7 @@ namespace Yttrium
             const unsigned nu;   //!< coefficient
             const Species &sp;   //!< species
             const xreal_t  xn;   //!< nu as xreal
+            const xreal_t  n2;   //!< nu^2 as xreal
             const xreal_t  zero; //!< helper
             Actor *        next; //!< for list
             Actor *        prev; //!< for list
