@@ -26,6 +26,30 @@ Starting from $\vec C_0\in \mathbb{R}^M$, the reachable state by the extent vect
 	\vec C = \vec C_0 + \bm{\nu}^T \vec \xi 
 \end{equation}
 
+\section{Differential Relations}
+
+\begin{equation}
+\partial_{\vec{\xi}} \vec C = \bm{\nu}^T
+\end{equation}
+
+We define the reaction quotient:
+\begin{equation}
+	Q_i = \dfrac{\prod_j C_j^{\nu_{ij}} }{ K_i}
+\end{equation}
+
+We define the affinity:
+\begin{equation}
+	\mathcal A_i = - \ln Q_i = \ln K_i - \sum_j \nu_{ij} \ln C_j
+\end{equation}
+	
+\begin{equation}
+\partial_{\vec{C}} A_i = 
+\begin{bmatrix}
+\vdots\\
+-\dfrac{\nu_{ij}}{C_j}\\
+\vdots\\
+\end{bmatrix}
+\end{equation}
 
 \section{Conservation Laws}
 

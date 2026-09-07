@@ -1,5 +1,3 @@
-
-
 #ifndef Y_MPI_Codec_Included
 #define Y_MPI_Codec_Included 1
 
@@ -8,6 +6,7 @@
 #include "y/container/associative/addr-key.hpp"
 #include "y/pointer/keyed.hpp"
 #include "y/pointer/arc.hpp"
+
 namespace Yttrium
 {
     //__________________________________________________________________________
