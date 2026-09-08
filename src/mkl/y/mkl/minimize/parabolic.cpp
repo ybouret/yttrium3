@@ -196,11 +196,19 @@ namespace Yttrium
 
             static inline void show(XML::Log &xml, const T X, const T FX)
             {
-                Y_XMLog(xml, "-- f(" << std::setw(W) << X << ") = " << std::setw(W) << FX );
+                if(xml.verbose)
+                {
+                    xml() << "-- f(";
+                    DisplayScalar<T>::On(*xml,X);
+                    *xml << ") = ";
+                    DisplayScalar<T>::On(*xml,FX) << std::endl;
+                }
+                //Y_XMLog(xml, "-- f(" << std::setw(W) << X << ") = " << std::setw(W) << FX );
             }
 
             inline void sample(XML::Log &xml, const T xt, Function<T,T> &F)
             {
+                assert(nn<NMAX);
                 ff[nn] = F(xx[nn] = xt);
                 show(xml,xx[nn],ff[nn]);
                 ++nn;
@@ -316,7 +324,9 @@ namespace Yttrium
 
                     switch( Sign::Of(lw,rw) )
                     {
-                        case __Zero__: return;
+                        case __Zero__:
+                            return;
+
                         case Negative: assert(lw<rw); {
                             Y_XMLog(xml, "[<] balance right");
                             const T xn = Half<T>(x.b,x.c);
@@ -382,8 +392,8 @@ namespace Yttrium
                     fp << "\n";
                 }
 
-                std::cerr << std::endl << " exit " << std::endl;
-                exit(1);
+                //std::cerr << std::endl << " exit " << std::endl;
+                //exit(1);
 
             }
 

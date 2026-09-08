@@ -5,22 +5,35 @@ bool Bracket::Inside<real_t>( XML::Log &xml, Triplet<real_t> &x, Triplet<real_t>
 
     Y_XML_Element(xml,BracketInside);
 
+    //--------------------------------------------------------------------------
+    //
     // ensure a is the minimum
+    //
+    //--------------------------------------------------------------------------
     if(f.a>f.c)
     {
         Swap(x.a,x.c);
         Swap(f.a,f.c);
     }
     assert(f.a<=f.c);
-    Y_XMLog(xml, "F(" << x.a << ")=" << f.a << " => F(" << x.c << ")=" << f.c);
+    if(xml.verbose)
+    {
+        DisplayScalar<real_t>::On(xml() << "F(",x.a) << ")=";
+        DisplayScalar<real_t>::On(*xml,f.a) << " => ";
+        DisplayScalar<real_t>::On(*xml << "F(",x.c) << ")=";
+        DisplayScalar<real_t>::On(*xml,f.c) << std::endl;
+    }
 
-
+    //--------------------------------------------------------------------------
+    //
     // loop
+    //
+    //--------------------------------------------------------------------------
     while(true)
     {
         assert(f.a<=f.c);
         f.b = F( x.b = x.middle() );
-        Y_XMLog(xml, "F(" << x.b << ")=" << f.b << " @middle");
+        Y_XMLog(xml, "x=" << x << "; f=" << f);
         if(f.b<=f.a)
         {
             assert(f.b<=f.c);
