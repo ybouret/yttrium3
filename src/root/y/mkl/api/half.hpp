@@ -7,6 +7,7 @@
 #define Y_MKL_Half_Included 1
 
 #include "y/mkl/api/selector.hpp"
+//#include <iostream>
 
 namespace Yttrium
 {
@@ -56,6 +57,8 @@ namespace Yttrium
         {
             static const typename Kernel::Selected<T>::API choice = {};
             T sum = x+y;
+            //T res = Kernel::Half<T>(sum,choice);
+            //std::cerr << "x=" << x<< ", y=" << y << ", sum=" << sum << " => " << res << std::endl;
             return Kernel::Half<T>(sum,choice);
         }
 

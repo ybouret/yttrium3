@@ -1,3 +1,5 @@
+//! \file
+
 #ifndef Y_MKL_Triplet_Included
 #define Y_MKL_Triplet_Included 1
 
@@ -6,6 +8,8 @@
 #include "y/core/sort3.hpp"
 #include "y/core/max.hpp"
 #include "y/core/min.hpp"
+#include "y/core/secure.hpp"
+#include "y/mkl/scalar/display.hpp"
 
 #include <iostream>
 
@@ -84,7 +88,11 @@ namespace Yttrium
             //! display \param os output stream \param self *this \return os
             inline friend std::ostream & operator<<(std::ostream &os, const Triplet &self)
             {
-                return os << '[' << self.a << ';' << self.b << ';' << self.c << ']';
+                DisplayScalar<T>::On(os << '[',self.a) << ';';
+                DisplayScalar<T>::On(os,       self.b) << ';';
+                return DisplayScalar<T>::On(os,self.c) << ']';
+
+                //return os << '[' << self.a << ';' << self.b << ';' << self.c << ']';
             }
 
             //! \return maximum amplitude
@@ -110,7 +118,7 @@ namespace Yttrium
             //! \return (a+c)/2
             inline T middle() const
             {
-                return Half<T>(a,c);
+                return Secure(a,Half<T>(a,c),c);
             }
 
             //! \param data data[0..2] target

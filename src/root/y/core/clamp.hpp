@@ -4,9 +4,12 @@
 #ifndef Y_Core_Clamp_Included
 #define Y_Core_Clamp_Included 1
 
+#include <cassert>
 
 namespace Yttrium
 {
+
+
     //__________________________________________________________________________
     //
     //! inline clamping between two values
@@ -20,6 +23,7 @@ namespace Yttrium
     template <typename T> inline
     T Clamp(const T lower, const T value, const T upper)
     {
+        assert(lower<=upper);
         if(value<=lower)
             return lower;
         else

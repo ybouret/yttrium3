@@ -35,7 +35,6 @@ Y_UTEST(mkl_numeric)
     showNumeric<float>();
     showNumeric<double>();
     showNumeric<long double>();
-
 }
 Y_UDONE()
 

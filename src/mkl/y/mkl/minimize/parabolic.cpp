@@ -221,6 +221,8 @@ namespace Yttrium
                 assert(nn>=3);
                 Core::HSort::Make(xx,nn,Sign::Increasing<T>,ff);
 
+                Core::Display(std::cerr << "xx=",xx,nn) << std::endl;
+                Core::Display(std::cerr << "ff=",ff,nn) << std::endl;
 
                 // locate minimum
                 size_t im = 0;
@@ -268,9 +270,9 @@ namespace Yttrium
                         f.load(&ff[ia]); assert(f.isLocalMinimum());
                     }
                 }
+
                 Y_XMLog(xml, "x=" << x << "; f=" << f);
-
-
+                
 
                 {
                     OutputFile fp("para-step.data",true);
@@ -340,6 +342,7 @@ namespace Yttrium
                             }
 
                         } break;
+
                         case Positive: assert(rw<lw); {
                             Y_XMLog(xml, "[>] balance left");
                             const T xn = Half<T>(x.a,x.b);
@@ -378,6 +381,9 @@ namespace Yttrium
                     fp("%.15g %.15g 4\n", (double) x[1], (double) f[1]);
                     fp << "\n";
                 }
+
+                std::cerr << std::endl << " exit " << std::endl;
+                exit(1);
 
             }
 

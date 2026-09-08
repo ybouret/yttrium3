@@ -44,7 +44,7 @@ namespace Yttrium
                         break;
 
                     case Minimize::Inside:
-                        if(!Bracket::Inside(xml,x,f,F))
+                        if( !Bracket::Inside(xml,x,f,F) )
                         {
                             (void) F(x.a);
                             return x.a;
