@@ -7,7 +7,7 @@
 #define Y_MKL_Half_Included 1
 
 #include "y/mkl/api/selector.hpp"
-//#include <iostream>
+#include "y/mkl/numeric.hpp"
 
 namespace Yttrium
 {
@@ -27,8 +27,7 @@ namespace Yttrium
             template <typename T>
             inline T Half(const T x, const FloatingAPI &) noexcept
             {
-                static const T half = (T)(0.5);
-                return x*half;
+                return x*MKL::Numeric<T>::HALF;
             }
 
             //! \param x value \return x.shr

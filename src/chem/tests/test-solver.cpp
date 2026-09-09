@@ -27,6 +27,8 @@ using namespace Chemical;
 
 Y_UTEST(solver)
 {
+    XRealOutput::Mode = XRealOutput::Compact;
+    
     Weasel &           weasel = Weasel::Instance();
     Library            lib;
     Equilibria         eqs;

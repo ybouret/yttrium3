@@ -196,14 +196,7 @@ namespace Yttrium
 
             static inline void show(XML::Log &xml, const T X, const T FX)
             {
-                if(xml.verbose)
-                {
-                    xml() << "-- f(";
-                    DisplayScalar<T>::On(*xml,X);
-                    *xml << ") = ";
-                    DisplayScalar<T>::On(*xml,FX) << std::endl;
-                }
-                //Y_XMLog(xml, "-- f(" << std::setw(W) << X << ") = " << std::setw(W) << FX );
+                Y_XMLog(xml, "-- f(" << std::setw(W) << X << ") = " << std::setw(W) << FX );
             }
 
             inline void sample(XML::Log &xml, const T xt, Function<T,T> &F)

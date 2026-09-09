@@ -9,7 +9,6 @@
 #include "y/core/max.hpp"
 #include "y/core/min.hpp"
 #include "y/core/secure.hpp"
-#include "y/mkl/scalar/display.hpp"
 
 #include <iostream>
 
@@ -17,6 +16,8 @@ namespace Yttrium
 {
     namespace MKL
     {
+
+
 
         //______________________________________________________________________
         //
@@ -71,6 +72,20 @@ namespace Yttrium
                 return isIncreasing() || isDecreasing();
             }
 
+            //! \return ordering sign
+            inline SignType getSign() const
+            {
+                if( isIncreasing() )
+                    return Positive;
+                else
+                {
+                    if( isDecreasing() )
+                        return Negative;
+                    else
+                        return __Zero__; // spurious
+                }
+            }
+
             //! sort a <= b <= c
             inline void sort() noexcept
             {
@@ -88,11 +103,7 @@ namespace Yttrium
             //! display \param os output stream \param self *this \return os
             inline friend std::ostream & operator<<(std::ostream &os, const Triplet &self)
             {
-                DisplayScalar<T>::On(os << '[',self.a) << ';';
-                DisplayScalar<T>::On(os,       self.b) << ';';
-                return DisplayScalar<T>::On(os,self.c) << ']';
-
-                //return os << '[' << self.a << ';' << self.b << ';' << self.c << ']';
+                return os << '[' << self.a << ';' << self.b << ';' << self.c << ']';
             }
 
             //! \return maximum amplitude

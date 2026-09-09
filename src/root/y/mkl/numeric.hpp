@@ -37,9 +37,15 @@ namespace Yttrium
             static const T        FTOL;         //!< 10^(-DIG)
             static const T        SQRT_EPSILON; //!< sqrt(EPSILON)
             static const T        GOLDEN;       //!< (1+sqrt(5))/2
-            static const T        INV_GOLDEN;   //!< 1/GOLDEN = GOLDEN-1 = (sqrt(5)-1)/2
+            static const T        GOLDEN_R;     //!< GOLDEN_R = GOLDEN-1  = (sqrt(5)-1)/2
+            static const T        GOLDEN_C;     //!< GOLDEN_C = 1-GOLDEN_R
 
             static const T        THETA;        //!< threshold for Almost Equal
+
+            static const T        ZERO;
+            static const T        ONE;
+            static const T        HALF;
+
         };
 
 #if !defined(_MSC_VER)
@@ -59,9 +65,13 @@ template <> const XReal<long double> Numeric< XReal<long double> > :: VAR
         Y_MKL_NUMERIC(FTOL);         //!< declare FTOL
         Y_MKL_NUMERIC(SQRT_EPSILON); //!< declare SQRT_EPSILON
         Y_MKL_NUMERIC(GOLDEN);       //!< declare GOLDEN
-        Y_MKL_NUMERIC(INV_GOLDEN);   //!< declare INV_GOLDEN
+        Y_MKL_NUMERIC(GOLDEN_R);     //!< declare GOLDEN_R
+        Y_MKL_NUMERIC(GOLDEN_C);     //!< declare GOLDEN_C
         Y_MKL_NUMERIC(THETA);        //!< declare THETA
-        
+        Y_MKL_NUMERIC(ZERO);         //!< declare ZERO
+        Y_MKL_NUMERIC(ONE);          //!< declare ONE
+        Y_MKL_NUMERIC(HALF);         //!< declare HALF
+
 #endif // !defined(_MSC_VER)
 
     }

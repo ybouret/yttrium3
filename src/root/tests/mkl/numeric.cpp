@@ -25,8 +25,12 @@ template <typename T> static inline void showNumeric()
     SHOW(FTOL);
     SHOW(SQRT_EPSILON);
     SHOW(GOLDEN);
-    SHOW(INV_GOLDEN);
+    SHOW(GOLDEN_R);
+    SHOW(GOLDEN_C);
     SHOW(THETA);
+    SHOW(ZERO);
+    SHOW(ONE);
+    SHOW(HALF);
 
 }
 
@@ -35,6 +39,10 @@ Y_UTEST(mkl_numeric)
     showNumeric<float>();
     showNumeric<double>();
     showNumeric<long double>();
+    showNumeric< XReal<float> >();
+    showNumeric< XReal<double> >();
+    showNumeric< XReal<long double> >();
+
 }
 Y_UDONE()
 

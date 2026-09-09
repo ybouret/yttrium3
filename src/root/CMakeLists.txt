@@ -75,7 +75,6 @@ y/object/light
 y/string
 y/string/env
 y/mkl
-y/mkl/scalar
 y/mkl/api
 y/mkl/statistics
 y/apex

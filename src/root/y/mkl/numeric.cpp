@@ -40,36 +40,7 @@ template <> const TYPE Numeric< XReal<double> >      :: VAR = Numeric<double> ::
 template <> const TYPE Numeric< XReal<long double> > :: VAR = Numeric<long double> :: VAR
 
         Y_MKL_DECL_TYPE(unsigned,MANT_DIG);
-#if 0
-        template <> const unsigned Numeric<float>       :: MANT_DIG32 = MANT_DIG < 32 ? MANT_DIG : 32;
-        template <> const unsigned Numeric<double>      :: MANT_DIG32 = MANT_DIG < 32 ? MANT_DIG : 32;
-        template <> const unsigned Numeric<long double> :: MANT_DIG32 = MANT_DIG < 32 ? MANT_DIG : 32;
 
-        namespace
-        {
-            template <typename T, unsigned M32> struct GetDENOM32
-            {
-                static const uint32_t ONE   = 1;
-                static const uint32_t DEN32 = ONE << M32;
-
-                static const T Value() noexcept
-                {
-                    static const T _ = DEN32;
-                    return _;
-
-                }
-            };
-
-            template <typename T> struct GetDENOM32<T,32>
-            {
-                static const T Value() noexcept { return 4294967296; }
-            };
-        }
-
-        template <> const float       Numeric<float>       :: DENOM32 = GetDENOM32<float,MANT_DIG32>::Value();
-        template <> const double      Numeric<double>      :: DENOM32 = GetDENOM32<double,MANT_DIG32>::Value();
-        template <> const long double Numeric<long double> :: DENOM32 = GetDENOM32<long double,MANT_DIG32>::Value();
-#endif
 
 
 
@@ -117,14 +88,17 @@ Y_MKL_DECL_XREAL(VAR)
         template <> const float       Numeric<float>       :: GOLDEN = (1.0f+sqrtf(5.0f))/2.0f;
         template <> const double      Numeric<double>      :: GOLDEN = (1.0+sqrt(5.0))/2.0;
         template <> const long double Numeric<long double> :: GOLDEN = (1.0l+sqrtl(5.0l))/2.0l;
-
-        template <> const float       Numeric<float>       :: INV_GOLDEN = (-1.0f+sqrtf(5.0f))/2.0f;
-        template <> const double      Numeric<double>      :: INV_GOLDEN = (-1.0+sqrt(5.0))/2.0;
-        template <> const long double Numeric<long double> :: INV_GOLDEN = (-1.0l+sqrtl(5.0l))/2.0l;
-
         Y_MKL_DECL_XREAL(GOLDEN);
-        Y_MKL_DECL_XREAL(INV_GOLDEN);
 
+        template <> const float       Numeric<float>       :: GOLDEN_R = (-1.0f+sqrtf(5.0f))/2.0f;
+        template <> const double      Numeric<double>      :: GOLDEN_R = (-1.0+sqrt(5.0))/2.0;
+        template <> const long double Numeric<long double> :: GOLDEN_R = (-1.0l+sqrtl(5.0l))/2.0l;
+        Y_MKL_DECL_XREAL(GOLDEN_R);
+
+        template <> const float       Numeric<float>       :: GOLDEN_C = 1.0f - GOLDEN_R;
+        template <> const double      Numeric<double>      :: GOLDEN_C = 1.0  - GOLDEN_R;
+        template <> const long double Numeric<long double> :: GOLDEN_C = 1.0l - GOLDEN_R;
+        Y_MKL_DECL_XREAL(GOLDEN_C);
 
         template <> const float       Numeric<float>       :: THETA = std::pow( 10.0f, 1.0f + std::ceil( std::log10( FLT_MIN/FTOL)));
         template <> const double      Numeric<double>      :: THETA = std::pow( 10.0,  1.0  + std::ceil( std::log10(  DBL_MIN/FTOL)));
@@ -132,6 +106,21 @@ Y_MKL_DECL_XREAL(VAR)
 
         Y_MKL_DECL_XREAL(THETA);
 
+
+        template <> const float       Numeric<float>::       ZERO = 0.0f;
+        template <> const double      Numeric<double>::      ZERO = 0.0;
+        template <> const long double Numeric<long double>:: ZERO = 0.0l;
+        Y_MKL_DECL_XREAL(ZERO);
+
+        template <> const float       Numeric<float>::       ONE = 1.0f;
+        template <> const double      Numeric<double>::      ONE = 1.0;
+        template <> const long double Numeric<long double>:: ONE = 1.0l;
+        Y_MKL_DECL_XREAL(ONE);
+
+        template <> const float       Numeric<float>::       HALF = 0.5f;
+        template <> const double      Numeric<double>::      HALF = 0.5;
+        template <> const long double Numeric<long double>:: HALF = 0.5l;
+        Y_MKL_DECL_XREAL(HALF);
 
     }
 

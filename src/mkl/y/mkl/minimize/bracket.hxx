@@ -7,7 +7,7 @@ bool Bracket::Inside<real_t>( XML::Log &xml, Triplet<real_t> &x, Triplet<real_t>
 
     //--------------------------------------------------------------------------
     //
-    // ensure a is the minimum
+    // ensure .a is the minimum
     //
     //--------------------------------------------------------------------------
     if(f.a>f.c)
@@ -16,13 +16,51 @@ bool Bracket::Inside<real_t>( XML::Log &xml, Triplet<real_t> &x, Triplet<real_t>
         Swap(f.a,f.c);
     }
     assert(f.a<=f.c);
-    if(xml.verbose)
+    
+
+    //--------------------------------------------------------------------------
+    //
+    // construct first point
+    //
+    //--------------------------------------------------------------------------
+    f.b = F( x.b = x.middle() ); assert(x.isOrdered());
+    Y_XMLog(xml, "x=" << x << "; f=" << f << " #" << Sign::HumanReadable( x.getSign()) );
+
+
+    // check for local minimum
+    if( f.b <= f.a )
     {
-        DisplayScalar<real_t>::On(xml() << "F(",x.a) << ")=";
-        DisplayScalar<real_t>::On(*xml,f.a) << " => ";
-        DisplayScalar<real_t>::On(*xml << "F(",x.c) << ")=";
-        DisplayScalar<real_t>::On(*xml,f.c) << std::endl;
+        assert(f.b<=f.c);
+        assert(f.isLocalMinimum());
+        Y_XMLog(xml, "[success] local minimum" );
+        return true;
     }
+
+    // check for global minimum
+    if( AlmostEqual<real_t>::Are(x.a,x.b) )
+    {
+        x.b = x.c = x.a;
+        f.b = f.c = f.a;
+        Y_XMLog(xml, "[failure] global minimum" );
+        return false;
+    }
+
+    // need to move to a new triplet
+    if(f.b>=f.c)
+    {
+        f.c = f.b;
+        x.c = x.b;
+    }
+    else
+    {
+        assert(f.b<f.c);
+        assert(f.b>f.a);
+
+    }
+
+
+
+    exit(1);
 
     //--------------------------------------------------------------------------
     //
