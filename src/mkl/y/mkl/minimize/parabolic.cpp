@@ -54,6 +54,7 @@ namespace Yttrium
                              Triplet<T>    & f,
                              FunctionType  & F)
             {
+                Y_XML_Element_Attr(xml,Grow,Y_XML_Attr(x) << Y_XML_Attr(f));
                 assert(x.isIncreasing());
                 assert(f.isLocalMinimum());
 
@@ -125,6 +126,8 @@ namespace Yttrium
 
                     }
                 }
+
+                extract(xml,x,f);
             }
 
             inline void step(XML::Log      & xml,
@@ -148,7 +151,7 @@ namespace Yttrium
 
                 {
                     OutputFile fp("para-func.data");
-                    const unsigned np = 100;
+                    const unsigned np = 10000;
                     for(unsigned i=0;i<=np;++i)
                     {
                         const T XX = x.a + ((T)i) * (x.c-x.a) / (T)np;
@@ -175,7 +178,6 @@ namespace Yttrium
                 //
                 //
                 //--------------------------------------------------------------
-                extract(xml,x,f);
                 {
                     OutputFile fp("para-step.data",true);
                     saveStack(fp,2);
@@ -197,7 +199,6 @@ namespace Yttrium
                 //
                 //
                 //--------------------------------------------------------------
-                extract(xml,x,f);
                 {
                     OutputFile fp("para-step.data",true);
                     //saveStack(fp,2);
@@ -277,8 +278,11 @@ namespace Yttrium
                 assert(nn>=3);
                 Core::HSort::Make(xx,nn,Sign::Increasing<T>,ff);
 
-                Core::Display(std::cerr << "xx=",xx,nn) << std::endl;
-                Core::Display(std::cerr << "ff=",ff,nn) << std::endl;
+                if(xml.verbose)
+                {
+                    Core::Display( xml() << "xx=",xx,nn) << std::endl;
+                    Core::Display( xml() << "ff=",ff,nn) << std::endl;
+                }
 
                 // locate minimum
                 size_t im = 0;
@@ -334,17 +338,19 @@ namespace Yttrium
             }
 
             inline void sampleRight(XML::Log      & xml,
+                                    const T         rw,
                                     Triplet<T>    & x,
                                     Function<T,T> & F)
             {
-                sample(xml, Clamp(x.b,x.b + C *(x.c-x.b), x.c), F);
+                sample(xml, Clamp(x.b,x.b + C*rw, x.c), F);
             }
 
             inline void sampleLeft(XML::Log      & xml,
+                                   const T         lw,
                                    Triplet<T>    & x,
                                    Function<T,T> & F)
             {
-                sample(xml, Clamp(x.a,x.b - C *(x.b-x.a), x.b), F);
+                sample(xml, Clamp(x.a,x.b - C*lw, x.b), F);
             }
 
             inline void balance(XML::Log      & xml,
@@ -356,38 +362,27 @@ namespace Yttrium
                 assert(x.isOrdered());
                 assert(f.isLocalMinimum());
 
+                T lw   = Max(x.b-x.a,zero);
+                T rw   = Max(x.c-x.b,zero);
                 while(true)
                 {
                     preload(x,f);
-
-                    const T lw   = Max(x.b-x.a,zero);
-                    const T rw   = Max(x.c-x.b,zero);
-                    T       wmin = lw;
-                    T       wmax = rw;
+                    switch( Sign::Of(lw,rw) )
+                    {
+                        case Negative: assert(lw<rw);           sampleRight(xml,rw,x,F); break;
+                        case Positive: assert(lw>rw);           sampleLeft(xml,lw,x,F);  break;
+                        case __Zero__: sampleRight(xml,rw,x,F); sampleLeft(xml,lw,x,F);  break;
+                    }
+                    extract(xml,x,f);
+                    T  wmin = (lw = Max(x.b-x.a,zero));
+                    T  wmax = (rw = Max(x.c-x.b,zero));
                     if(wmin>wmax)
                         Swap(wmin,wmax);
 
+                    assert(wmin<=wmax);
                     std::cerr << "wmin=" << wmin << ", wmax=" << wmax << std::endl;
                     if(wmax<=wmin+wmin)
                         break;
-
-                    if(lw<rw)
-                    {
-                        sampleRight(xml,x,F);
-                    }
-                    else
-                    {
-                        sampleLeft(xml,x,F);
-                    }
-
-                    extract(xml,x,f);
-
-                    //switch( Sign::Of(lw,rw) )
-                    //{
-                    //    case Negative: assert(lw<rw);        sampleRight(xml,x,F); break;
-                    //    case Positive: assert(lw>rw);        sampleLeft(xml,x,F);  break;
-                    //    case __Zero__: sampleRight(xml,x,F); sampleLeft(xml,x,F);  break;
-                    //}
                 }
 
 

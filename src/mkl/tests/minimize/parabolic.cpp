@@ -36,7 +36,7 @@ namespace
         Parabolic<T> parabolic;
         for(size_t i=1;i<=cycles;++i)
         {
-            std::cerr << "[cycle = " << i << "]" << std::endl;
+            std::cerr << "[cycle = " << i << "/" << cycles << "]" << std::endl;
             parabolic.step(xml,F<T>,x,f);
             const T w = x.c-x.a;
             std::cerr << "w=" << w <<  " / " << x << " => " << f << std::endl;
@@ -55,7 +55,7 @@ namespace
                 x_ok = true;
             }
 
-            if(f_ok || x_ok) break;
+            if(f_ok && x_ok) break;
         }
     }
 
