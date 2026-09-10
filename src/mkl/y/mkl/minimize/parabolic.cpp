@@ -43,13 +43,20 @@ namespace Yttrium
             }
 
 
-
+            //__________________________________________________________________
+            //
+            //
+            // best effort to add point(s) towards parabolic approximation
+            //
+            //__________________________________________________________________
             inline void grow(XML::Log      & xml,
                              Triplet<T>    & x,
                              Triplet<T>    & f,
                              FunctionType  & F)
             {
-                assert(x.isIncreasing()); assert(f.isLocalMinimum());
+                assert(x.isIncreasing());
+                assert(f.isLocalMinimum());
+
                 const T width = x.c-x.a;
                 if(x.b<=x.a)
                 {
@@ -87,7 +94,7 @@ namespace Yttrium
                         //
                         //------------------------------------------------------
                         const T        beta  = Clamp(zero,(x.b-x.a)/width,one);
-                        const T        omb   = one-beta;
+                        const T        omb   = Clamp(zero,one-beta,one);
                         const T        alpha = f.a-f.b;
                         const T        gamma = f.c-f.b;
 
@@ -95,17 +102,7 @@ namespace Yttrium
                         {
                             case __Zero__:
                                 Y_XMLog(xml, "[alpha=gamma]" );
-
-                                if( AlmostEqual<T>::Are(beta,half) )
-                                {
-                                    golden(xml,x,F);
-                                }
-                                else
-                                {
-                                    Y_XMLog(xml, "[@middle]");
-                                    sample(xml,Clamp(x.a,x.a+half*width,x.c),F);
-                                }
-
+                                sample(xml,Clamp(x.a,x.a+half*width,x.c),F);
                                 break;
 
                             case Negative: {
@@ -113,18 +110,19 @@ namespace Yttrium
                                 Y_XMLog(xml, "[alpha<gamma]" );
                                 const T eta = alpha/gamma;
                                 const T u_m = Clamp(zero,half*(one-beta*omb*(one-eta)/(beta+omb*eta)),one);
-                                sample(xml,u_m,x,F);
+                                sample(xml,Clamp(x.a,x.a+u_m*(x.c-x.a),x.c),F);
                             } break;
 
                             case Positive: {
                                 Y_XMLog(xml, "[alpha>gamma]");
                                 const T eta = gamma/alpha;
                                 const T u_m = Clamp(zero,half*(one + beta*omb*(one-eta)/(beta*eta+omb)),one);
-                                sample(xml,u_m,x,F);
+                                sample(xml,Clamp(x.a,x.a+u_m*(x.c-x.a),x.c),F);
                             } break;
 
 
                         }
+
                     }
                 }
             }
@@ -145,9 +143,7 @@ namespace Yttrium
                 x.sort(f); assert(x.isIncreasing()); assert(f.isLocalMinimum());
 
                 Y_XML_Element_Attr(xml,ParabolicStep, Y_XML_Attr(x) << Y_XML_Attr(f) );
-                x.save(xx);
-                f.save(ff);
-                nn=3;
+                preload(x,f);
 
 
                 {
@@ -180,10 +176,34 @@ namespace Yttrium
                 //
                 //--------------------------------------------------------------
                 extract(xml,x,f);
+                {
+                    OutputFile fp("para-step.data",true);
+                    saveStack(fp,2);
+                    saveState(fp,x,f,3);
+                }
+                //--------------------------------------------------------------
+                //
+                //
+                // balance
+                //
+                //
+                //--------------------------------------------------------------
+                balance(xml,x,f,F);
 
+                //--------------------------------------------------------------
+                //
+                //
+                // extract balanced
+                //
+                //
+                //--------------------------------------------------------------
+                extract(xml,x,f);
+                {
+                    OutputFile fp("para-step.data",true);
+                    //saveStack(fp,2);
+                    saveState(fp,x,f,4);
+                }
 
-
-                exit(1);
             }
 
             size_t  nn;        //!< sampling size
@@ -198,6 +218,16 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(Code);
+
+            inline void preload(const Triplet<T>    & x,
+                                const Triplet<T>    & f) noexcept
+            {
+                Y_BZero(xx);
+                Y_BZero(ff);
+                x.save(xx);
+                f.save(ff);
+                nn = 3;
+            }
 
             static inline void show(XML::Log &xml, const T X, const T FX)
             {
@@ -214,50 +244,34 @@ namespace Yttrium
                 ++nn;
             }
 
-            inline void goldenLeft(XML::Log &xml, const Triplet<T> &x, FunctionType &F)
+
+            inline void saveState(OutputStream     & fp,
+                                  const Triplet<T> & x,
+                                  const Triplet<T> & f,
+                                  const unsigned     color) const
             {
-                sample(xml,Clamp(x.a,x.b-C*(x.b-x.a),x.b),F); // golden left
+                fp("%.15g %.15g %u\n", (double) x[1], (double) f[1], color);
+                fp("%.15g %.15g %u\n", (double) x[2], (double) f[2], color);
+                fp("%.15g %.15g %u\n", (double) x[3], (double) f[3], color);
+                fp("%.15g %.15g %u\n", (double) x[1], (double) f[1], color);
+                fp << "\n";
             }
 
-            inline void goldenRight(XML::Log &xml, const Triplet<T> &x, FunctionType &F)
+            inline void saveStack(OutputStream &fp, const unsigned color) const
             {
-                sample(xml,Clamp(x.b,x.b+C*(x.c-x.b),x.c),F); // golden right
-            }
-
-            inline void golden(XML::Log &xml, const Triplet<T> &x, FunctionType &F)
-            {
-                Y_XMLog(xml, "[>shrink<]");
-                goldenLeft(xml,x,F);
-                goldenRight(xml,x,F);
-            }
-
-
-            inline void sample(XML::Log &xml, const T u_m, const Triplet<T> &x, FunctionType &F)
-            {
-                const T x_m = Clamp(x.a,x.a+u_m*(x.c-x.a),x.c); // prediction
-
-                switch(Sign::Of(x_m,x.b))
+                for(size_t i=0;i<nn;++i)
                 {
-                    case Negative:
-                        assert(x_m<x.b);
-                        sample(xml,x_m,F);
-                        break;
-
-                    case Positive:
-                        assert(x_m>x.b);
-                        sample(xml,x_m,F);
-                        break;
-
-                    case __Zero__: // same point as x.b
-                        golden(xml,x,F);
-                        break;
+                    fp("%.15g %.15g %u\n", (double) xx[i], (double) ff[i], color);
                 }
+                fp("%.15g %.15g %u\n", (double) xx[0], (double) ff[0], color);
+                fp << "\n";
             }
 
 
-            inline void extract(XML::Log   &xml,
-                                Triplet<T> &x,
-                                Triplet<T> &f)
+
+            inline void extract(XML::Log      &xml,
+                                Triplet<T>    &x,
+                                Triplet<T>    &f)
             {
                 Y_XML_Element_Attr(xml, Extract, Y_XML_Attr(nn) );
                 assert(nn>=3);
@@ -316,27 +330,22 @@ namespace Yttrium
                 Y_XMLog(xml, "x=" << x << "; f=" << f);
 
 
-                {
-                    OutputFile fp("para-step.data",true);
-                    for(size_t i=0;i<nn;++i)
-                    {
-                        fp("%.15g %.15g 2\n", (double) xx[i], (double) ff[i]);
-                    }
-                    fp("%.15g %.15g 2\n", (double) xx[0], (double) ff[0]);
-                    fp << "\n";
-
-
-                    fp("%.15g %.15g 3\n", (double) x[1], (double) f[1]);
-                    fp("%.15g %.15g 3\n", (double) x[2], (double) f[2]);
-                    fp("%.15g %.15g 3\n", (double) x[3], (double) f[3]);
-                    fp("%.15g %.15g 3\n", (double) x[1], (double) f[1]);
-                    fp << "\n";
-
-                }
 
             }
 
+            inline void sampleRight(XML::Log      & xml,
+                                    Triplet<T>    & x,
+                                    Function<T,T> & F)
+            {
+                sample(xml, Clamp(x.b,x.b + C *(x.c-x.b), x.c), F);
+            }
 
+            inline void sampleLeft(XML::Log      & xml,
+                                   Triplet<T>    & x,
+                                   Function<T,T> & F)
+            {
+                sample(xml, Clamp(x.a,x.b - C *(x.b-x.a), x.b), F);
+            }
 
             inline void balance(XML::Log      & xml,
                                 Triplet<T>    & x,
@@ -346,90 +355,46 @@ namespace Yttrium
                 Y_XML_Element(xml,Balance);
                 assert(x.isOrdered());
                 assert(f.isLocalMinimum());
+
                 while(true)
                 {
-                    const T lw = Max(x.b-x.a,zero);
-                    const T rw = Max(x.c-x.b,zero);
-                    T wmin = lw;
-                    T wmax = rw;
-                    if(wmin>wmax) Swap(wmin,wmax);
+                    preload(x,f);
+
+                    const T lw   = Max(x.b-x.a,zero);
+                    const T rw   = Max(x.c-x.b,zero);
+                    T       wmin = lw;
+                    T       wmax = rw;
+                    if(wmin>wmax)
+                        Swap(wmin,wmax);
+
+                    std::cerr << "wmin=" << wmin << ", wmax=" << wmax << std::endl;
                     if(wmax<=wmin+wmin)
-                        goto DONE;
+                        break;
 
-                    switch( Sign::Of(lw,rw) )
+                    if(lw<rw)
                     {
-                        case __Zero__:
-                            return;
-
-                        case Negative: assert(lw<rw); {
-                            Y_XMLog(xml, "[<] balance right");
-                            const T xn = Half<T>(x.b,x.c);
-                            const T fn = F(xn);
-                            show(xml,xn,fn);
-                            if(fn<=f.b)
-                            {
-                                // new min
-                                Y_XMLog(xml, "[<] new minimum");
-                                x.a = x.b; f.a = f.b;
-                                x.b = xn;  f.b = fn;
-                                assert(x.isOrdered());
-                                assert(f.isLocalMinimum());
-                                goto DONE;
-                            }
-                            else
-                            {
-                                // shrink interval
-                                Y_XMLog(xml, "[<] shrunk");
-                                x.c = xn; f.c = fn;
-                                assert(x.isOrdered());
-                                assert(f.isLocalMinimum());
-                            }
-
-                        } break;
-
-                        case Positive: assert(rw<lw); {
-                            Y_XMLog(xml, "[>] balance left");
-                            const T xn = Half<T>(x.a,x.b);
-                            const T fn = F(xn);
-                            show(xml,xn,fn);
-                            if(fn<=f.b)
-                            {
-                                // new min
-                                Y_XMLog(xml, "[>] new minimum");
-                                x.c = x.b; f.c = f.b;
-                                x.b = xn;  f.b = fn;
-                                assert(x.isOrdered());
-                                assert(f.isLocalMinimum());
-                                goto DONE;
-                            }
-                            else
-                            {
-                                // shrink interval
-                                Y_XMLog(xml, "[>] shrunk");
-                                x.a = xn; f.a = fn;
-                                assert(x.isOrdered());
-                                assert(f.isLocalMinimum());
-                            }
-                        } break;
+                        sampleRight(xml,x,F);
                     }
+                    else
+                    {
+                        sampleLeft(xml,x,F);
+                    }
+
+                    extract(xml,x,f);
+
+                    //switch( Sign::Of(lw,rw) )
+                    //{
+                    //    case Negative: assert(lw<rw);        sampleRight(xml,x,F); break;
+                    //    case Positive: assert(lw>rw);        sampleLeft(xml,x,F);  break;
+                    //    case __Zero__: sampleRight(xml,x,F); sampleLeft(xml,x,F);  break;
+                    //}
                 }
 
-            DONE:
-                Y_XMLog(xml, "x=" << x << "; f=" << f);
-
-                {
-                    OutputFile fp("para-step.data",true);
-                    fp("%.15g %.15g 4\n", (double) x[1], (double) f[1]);
-                    fp("%.15g %.15g 4\n", (double) x[2], (double) f[2]);
-                    fp("%.15g %.15g 4\n", (double) x[3], (double) f[3]);
-                    fp("%.15g %.15g 4\n", (double) x[1], (double) f[1]);
-                    fp << "\n";
-                }
-
-                //std::cerr << std::endl << " exit " << std::endl;
-                //exit(1);
 
             }
+
+
+
 
         };
 
