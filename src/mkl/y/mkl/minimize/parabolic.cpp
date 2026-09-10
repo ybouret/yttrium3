@@ -93,27 +93,20 @@ namespace Yttrium
 
                         switch(Sign::Of(alpha,gamma))
                         {
-                            case __Zero__: {
+                            case __Zero__:
                                 Y_XMLog(xml, "[alpha=gamma]" );
-                                const T x_m = Clamp(x.a,x.a+half*width,x.c); // middle point
 
-                                switch( Sign::Of(x.b,x_m) )
+                                if( AlmostEqual<T>::Are(beta,half) )
                                 {
-                                    case __Zero__: // x_m = x.b, already sampled!
-                                        golden(xml,x,F);
-                                        break;
-
-                                    case Negative: assert(x.b<x_m);
-                                        sample(xml,x_m,F);                               // sample x_m
-                                        sample(xml,Clamp(x_m,x_m + C*(x.c-x_m), x.c),F); // golden right of x_m
-                                        break;
-
-                                    case Positive: assert(x.b>x_m);
-                                        sample(xml,x_m,F);
-                                        sample(xml,Clamp(x.a,x_m - C*(x_m-x.a), x_m),F); // golden left of x_m
-                                        break;
+                                    golden(xml,x,F);
                                 }
-                            } break;
+                                else
+                                {
+                                    Y_XMLog(xml, "[@middle]");
+                                    sample(xml,Clamp(x.a,x.a+half*width,x.c),F);
+                                }
+
+                                break;
 
                             case Negative: {
                                 assert(alpha<gamma);
@@ -166,7 +159,7 @@ namespace Yttrium
                         const T FF = F(XX);
                         fp("%.15g %.15g\n", (double)XX, (double)FF);
                     }
-
+                    OutputFile::Overwrite("para-step.data");
                 }
 
 
@@ -179,8 +172,16 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 grow(xml,x,f,F);
 
-
+                //--------------------------------------------------------------
+                //
+                //
+                // extract estimate
+                //
+                //
+                //--------------------------------------------------------------
                 extract(xml,x,f);
+
+
 
                 exit(1);
             }
@@ -225,10 +226,10 @@ namespace Yttrium
 
             inline void golden(XML::Log &xml, const Triplet<T> &x, FunctionType &F)
             {
+                Y_XMLog(xml, "[>shrink<]");
                 goldenLeft(xml,x,F);
                 goldenRight(xml,x,F);
             }
-
 
 
             inline void sample(XML::Log &xml, const T u_m, const Triplet<T> &x, FunctionType &F)
@@ -240,20 +241,19 @@ namespace Yttrium
                     case Negative:
                         assert(x_m<x.b);
                         sample(xml,x_m,F);
-                        goldenRight(xml,x,F);
                         break;
 
                     case Positive:
                         assert(x_m>x.b);
                         sample(xml,x_m,F);
-                        goldenLeft(xml,x,F);
                         break;
 
-                    case __Zero__: // same point
+                    case __Zero__: // same point as x.b
                         golden(xml,x,F);
                         break;
                 }
             }
+
 
             inline void extract(XML::Log   &xml,
                                 Triplet<T> &x,
