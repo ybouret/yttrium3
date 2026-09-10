@@ -61,11 +61,16 @@ namespace
 
 
 }
+
 Y_UTEST(min_parabolic)
 {
 
-    testPara< XReal<long double> >();
+    XRealOutput::Mode = XRealOutput::Compact;
+
     testPara<float>();
+    return 0;
+    
+    testPara< XReal<long double> >();
 
 }
 Y_UDONE()

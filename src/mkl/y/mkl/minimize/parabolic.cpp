@@ -31,6 +31,7 @@ namespace Yttrium
             one(  Numeric<T>::ONE ),
             zero( Numeric<T>::ZERO ),
             half( Numeric<T>::HALF ),
+            C(    Numeric<T>::GOLDEN_C ),
             xx(),
             ff()
             {
@@ -41,147 +42,99 @@ namespace Yttrium
             {
             }
 
-#if 0
-            inline void step2(XML::Log      & xml,
-                              Triplet<T>    & x,
-                              Triplet<T>    & f,
-                              Function<T,T> & F)
+
+
+            inline void grow(XML::Log      & xml,
+                             Triplet<T>    & x,
+                             Triplet<T>    & f,
+                             FunctionType  & F)
             {
-
-                //--------------------------------------------------------------
-                //
-                //
-                // initialize triplet
-                //
-                //
-                //--------------------------------------------------------------
-                /*      */ assert(x.isOrdered());    assert(f.isLocalMinimum());
-                x.sort(f); assert(x.isIncreasing()); assert(f.isLocalMinimum());
-
-                Y_XML_Element_Attr(xml,ParabolicStep, Y_XML_Attr(x) << Y_XML_Attr(f) );
-
+                assert(x.isIncreasing()); assert(f.isLocalMinimum());
+                const T width = x.c-x.a;
+                if(x.b<=x.a)
                 {
-                    OutputFile fp("parabolic.data");
-                    const unsigned np = 1000;
-                    for(unsigned i=0;i<=np;++i)
-                    {
-                        const T  w = ( (float)i )/np;
-                        const T  X = x.a * (one-w) + x.c * w;
-                        fp("%.15g %.15g\n", (double) X, (double) F(X));
-                    }
-                    OutputFile::Overwrite("para-step.data");
+                    //----------------------------------------------------------
+                    //
+                    //
+                    // beta=0
+                    //
+                    //
+                    //----------------------------------------------------------
+                    Y_XMLog(xml, "[beta<=0]");
+                    sample(xml,Clamp(x.a,x.a+C*width,x.c),F); // golden from left side
                 }
-
-                //--------------------------------------------------------------
-                //
-                //
-                // Load triplet
-                //
-                //
-                //--------------------------------------------------------------
-                x.save(xx);
-                f.save(ff);
-                nn=3;
-
-                //--------------------------------------------------------------
-                //
-                //
-                // Reduction
-                //
-                //
-                //--------------------------------------------------------------
-                bool xsym = false;
+                else
                 {
-                    Y_XML_Element(xml,Linear);
+                    if(x.b>=x.c)
                     {
-                        const T lw = Max(x.b-x.a,zero); // left  segment
-                        const T rw = Max(x.c-x.b,zero); // right segment
-                        switch( Sign::Of(lw,rw) )
-                        {
-                            case Negative:
-                                assert(lw<rw); // reduce rw
-                                sample(xml, Half<T>(x.b,x.c), F);
-                                break;
-
-                            case Positive:
-                                assert(rw<lw); // reduce lw
-                                sample(xml, Half<T>(x.a,x.b), F);
-                                break;
-
-                            case __Zero__: // symmetric
-                                xsym = true;
-                                sample(xml, Half<T>(x.a,x.b), F);
-                                sample(xml, Half<T>(x.b,x.c), F);
-                                break;
-                        }
-                    }
-                }
-
-                //--------------------------------------------------------------
-                //
-                //
-                // Parabolic inverse : we already processed the
-                // x-symmetric case
-                //
-                //
-                //--------------------------------------------------------------
-
-                {
-                    Y_XML_Element(xml,Quadratic);
-                    if(x.b <= x.a )
-                    {
-                        // beta = 0 => predicts 1/2
-                        Y_XMLog(xml, "-- beta=0");
-                        sample(xml, Half<T>(x.b,x.c), F);
+                        //------------------------------------------------------
+                        //
+                        //
+                        // beta=1
+                        //
+                        //
+                        //------------------------------------------------------
+                        Y_XMLog(xml, "[beta>=1]");
+                        sample(xml,Clamp(x.a,x.c-C*width,x.c),F); // golden from right side
                     }
                     else
                     {
-                        if(x.b>=x.c)
+                        //------------------------------------------------------
+                        //
+                        //
+                        // 0<beta<1
+                        //
+                        //
+                        //------------------------------------------------------
+                        const T        beta  = Clamp(zero,(x.b-x.a)/width,one);
+                        const T        omb   = one-beta;
+                        const T        alpha = f.a-f.b;
+                        const T        gamma = f.c-f.b;
+
+                        switch(Sign::Of(alpha,gamma))
                         {
-                            // beta = 1 => predicts 1/2
-                            Y_XMLog(xml, "-- beta=1");
-                            sample(xml, Half<T>(x.a,x.b), F);
-                        }
-                        else
-                        {
-                            const T beta  = Clamp(zero,(x.b-x.a)/(x.c-x.a),one);
-                            const T omba  = Clamp(zero,one-beta,one);
-                            const T alpha = Max(f.a-f.b,zero);
-                            const T gamma = Max(f.c-f.b,zero);
-                            switch( Sign::Of(alpha,gamma) )
-                            {
-                                case Negative: {
-                                    Y_XMLog(xml, "-- towards x.a=" << x.a);
-                                    const T eta = alpha/gamma;
-                                    const T um  = Clamp(zero,half*(one - beta*omba*(one-eta)/(beta+omba*eta)),half); // <1/2
-                                    sample(xml,um,x,F); // towards 0
-                                } break;
+                            case __Zero__: {
+                                Y_XMLog(xml, "[alpha=gamma]" );
+                                const T x_m = Clamp(x.a,x.a+half*width,x.c); // middle point
 
-                                case __Zero__: {
-                                    Y_XMLog(xml, "-- take middle point (xsym=" << xsym << ")" );
-                                    if(!xsym)
-                                        sample(xml, Half<T>(x.a,x.b),F);
-                                } break;
+                                switch( Sign::Of(x.b,x_m) )
+                                {
+                                    case __Zero__: // x_m = x.b, already sampled!
+                                        golden(xml,x,F);
+                                        break;
+
+                                    case Negative: assert(x.b<x_m);
+                                        sample(xml,x_m,F);                               // sample x_m
+                                        sample(xml,Clamp(x_m,x_m + C*(x.c-x_m), x.c),F); // golden right of x_m
+                                        break;
+
+                                    case Positive: assert(x.b>x_m);
+                                        sample(xml,x_m,F);
+                                        sample(xml,Clamp(x.a,x_m - C*(x_m-x.a), x_m),F); // golden left of x_m
+                                        break;
+                                }
+                            } break;
+
+                            case Negative: {
+                                assert(alpha<gamma);
+                                Y_XMLog(xml, "[alpha<gamma]" );
+                                const T eta = alpha/gamma;
+                                const T u_m = Clamp(zero,half*(one-beta*omb*(one-eta)/(beta+omb*eta)),one);
+                                sample(xml,u_m,x,F);
+                            } break;
+
+                            case Positive: {
+                                Y_XMLog(xml, "[alpha>gamma]");
+                                const T eta = gamma/alpha;
+                                const T u_m = Clamp(zero,half*(one + beta*omb*(one-eta)/(beta*eta+omb)),one);
+                                sample(xml,u_m,x,F);
+                            } break;
 
 
-                                case Positive: {
-                                    assert(gamma<alpha);
-                                    Y_XMLog(xml, "-- towards x.c=" << x.c);
-                                    const T eta = gamma/alpha;
-                                    const T um  = Clamp(half,half*(one + beta*omba*(one-eta)/(eta*beta+omba)),one); // > 1/2
-                                    sample(xml,um,x,F); // towards 1
-                                } break;
-                            }
                         }
                     }
                 }
-
-                extract(xml,x,f);
-                balance(xml,x,f,F);
-
             }
-#endif
-
 
             inline void step(XML::Log      & xml,
                              Triplet<T>    & x,
@@ -203,96 +156,40 @@ namespace Yttrium
                 f.save(ff);
                 nn=3;
 
-                T    beta      = zero;
-                if(x.b<=x.a)
+
                 {
-                    //----------------------------------------------------------
-                    //
-                    // beta=0
-                    //
-                    //----------------------------------------------------------
-                    Y_XMLog(xml, "[beta<=0]");
-                    sampleMiddle(xml,x,F);
-                }
-                else
-                {
-                    if(x.b>=x.c)
+                    OutputFile fp("para-func.data");
+                    const unsigned np = 100;
+                    for(unsigned i=0;i<=np;++i)
                     {
-                        //------------------------------------------------------
-                        //
-                        // beta=1
-                        //
-                        //------------------------------------------------------
-                        Y_XMLog(xml, "[beta>=1]");
-                        sampleMiddle(xml,x,F);
+                        const T XX = x.a + ((T)i) * (x.c-x.a) / (T)np;
+                        const T FF = F(XX);
+                        fp("%.15g %.15g\n", (double)XX, (double)FF);
                     }
-                    else
-                    {
-                        //------------------------------------------------------
-                        //
-                        // 0<beta<1
-                        //
-                        //------------------------------------------------------
-                        beta          = Clamp(zero,(x.b-x.a)/(x.c-x.a),one);
-                        const T omb   = one-beta;
-                        const T alpha = f.a-f.b;
-                        const T gamma = f.c-f.b;
-                        switch(Sign::Of(alpha,gamma))
-                        {
-                            case __Zero__:
-                                Y_XMLog(xml, "[alpha==gamma]" );
-                                sampleMiddle(xml,x,F);
-                                break;
 
-                            case Negative: assert(alpha<gamma); {
-                                Y_XMLog(xml, "[alpha<gamma]" );
-                                const T eta   = alpha/gamma;
-                                const T twice = one-beta*omb*(one-eta)/(beta+omb*eta);
-                                if( AlmostEqual<T>::Are(twice,one))
-                                {
-                                    Y_XMLog(xml,"[1/2_-]");
-                                    sampleMiddle(xml,x,F);
-                                }
-                                else
-                                {
-                                    const T um = Clamp(zero,half*twice,one); assert(um<=half);
-                                    sample(xml,um,F);
-                                }
-                            } break;
-
-                            case Positive: assert(alpha>gamma); {
-                                Y_XMLog(xml, "[alpha>gamma]");
-                                const T eta = gamma/alpha;
-                                const T twice = one + beta*omb*(one-eta)/(beta*eta+omb);
-                                if( AlmostEqual<T>::Are(twice,one))
-                                {
-                                    Y_XMLog(xml,"[1/2_+]");
-                                    sampleMiddle(xml,x,F);
-                                }
-                                else
-                                {
-                                    const T um = Clamp(zero,half*twice,one); assert(um<=half);
-                                    sample(xml,um,F);
-                                }
-                            } break;
-
-                        }
-                    }
                 }
 
 
+                //--------------------------------------------------------------
+                //
+                //
+                // grow sample
+                //
+                //
+                //--------------------------------------------------------------
+                grow(xml,x,f,F);
 
 
-
-
+                extract(xml,x,f);
 
                 exit(1);
             }
 
-            size_t  nn;
-            const T one;
-            const T zero;
-            const T half;
+            size_t  nn;        //!< sampling size
+            const T one;       //!< 1
+            const T zero;      //!< 0
+            const T half;      //!< 1/2
+            const T C;         //!< GOLDEN_C
             T       xx[NMAX];
             T       ff[NMAX];
 
@@ -306,9 +203,9 @@ namespace Yttrium
                 Y_XMLog(xml, "[+] f(" << std::setw(W) << X << ") = " << std::setw(W) << FX );
             }
 
-
-
-            inline void sample(XML::Log &xml, const T xt, FunctionType &F)
+            inline void sample(XML::Log     & xml,
+                               const T        xt,
+                               FunctionType & F)
             {
                 assert(nn<NMAX);
                 ff[nn] = F(xx[nn] = xt);
@@ -316,41 +213,46 @@ namespace Yttrium
                 ++nn;
             }
 
-
-            inline void sampleMiddle(XML::Log &xml, const Triplet<T> &x, FunctionType &F)
+            inline void goldenLeft(XML::Log &xml, const Triplet<T> &x, FunctionType &F)
             {
-                const T xm = x.middle(); sample(xml,xm,F);
+                sample(xml,Clamp(x.a,x.b-C*(x.b-x.a),x.b),F); // golden left
             }
 
-            inline void sampleGolden(XML::Log &xml, const Triplet<T> &x, FunctionType &F)
+            inline void goldenRight(XML::Log &xml, const Triplet<T> &x, FunctionType &F)
             {
-                const T lw = Max(x.b-x.a,zero);
-                const T rw = Max(x.c-x.b,zero);
-                switch( Sign::Of(lw,rw) )
+                sample(xml,Clamp(x.b,x.b+C*(x.c-x.b),x.c),F); // golden right
+            }
+
+            inline void golden(XML::Log &xml, const Triplet<T> &x, FunctionType &F)
+            {
+                goldenLeft(xml,x,F);
+                goldenRight(xml,x,F);
+            }
+
+
+
+            inline void sample(XML::Log &xml, const T u_m, const Triplet<T> &x, FunctionType &F)
+            {
+                const T x_m = Clamp(x.a,x.a+u_m*(x.c-x.a),x.c); // prediction
+
+                switch(Sign::Of(x_m,x.b))
                 {
-                    case Negative: // reduce rw in [b:c]
-                        assert(lw<rw);
-                        sample(xml,Clamp(x.b,x.b+Numeric<T>::GOLDEN_C * rw, x.c),F);
+                    case Negative:
+                        assert(x_m<x.b);
+                        sample(xml,x_m,F);
+                        goldenRight(xml,x,F);
                         break;
 
-                    case Positive: // reduce lw in [a:b]
-                        assert(lw>rw);
-                        sample(xml,Clamp(x.a,x.b-Numeric<T>::GOLDEN_C * lw, x.b),F);
+                    case Positive:
+                        assert(x_m>x.b);
+                        sample(xml,x_m,F);
+                        goldenLeft(xml,x,F);
                         break;
 
-                    case __Zero__: // reduce both
-                        sample(xml,Clamp(x.b,x.b+Numeric<T>::GOLDEN_C * rw, x.c),F);
-                        sample(xml,Clamp(x.a,x.b-Numeric<T>::GOLDEN_C * lw, x.b),F);
+                    case __Zero__: // same point
+                        golden(xml,x,F);
                         break;
                 }
-            }
-
-
-            inline void sample(XML::Log &xml, const T wc, const Triplet<T> &x, FunctionType&F)
-            {
-                assert(nn<NMAX);
-                const T wa = one-wc;
-                return  sample(xml,Clamp(x.a,x.a*wa+x.c*wc,x.c),F);
             }
 
             inline void extract(XML::Log   &xml,
