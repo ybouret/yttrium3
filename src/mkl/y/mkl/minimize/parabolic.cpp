@@ -21,16 +21,16 @@ namespace Yttrium
         class Parabolic<T> :: Code  : public Object
         {
         public:
-            static const size_t   NMAX = 8;
-            static const unsigned W    = 8;
-
+            static const size_t        NMAX = 8;
+            static const size_t        W    = 8;
             typedef Cameo::Addition<T> XAdd;
+            typedef Function<T,T>      FunctionType;
 
             explicit Code() :
             nn(0),
-            one(1),
-            zero(0),
-            half(0.5f),
+            one(  Numeric<T>::ONE ),
+            zero( Numeric<T>::ZERO ),
+            half( Numeric<T>::HALF ),
             xx(),
             ff()
             {
@@ -41,10 +41,11 @@ namespace Yttrium
             {
             }
 
-            inline void step(XML::Log      & xml,
-                             Triplet<T>    & x,
-                             Triplet<T>    & f,
-                             Function<T,T> & F)
+#if 0
+            inline void step2(XML::Log      & xml,
+                              Triplet<T>    & x,
+                              Triplet<T>    & f,
+                              Function<T,T> & F)
             {
 
                 //--------------------------------------------------------------
@@ -179,8 +180,114 @@ namespace Yttrium
                 balance(xml,x,f,F);
 
             }
+#endif
 
 
+            inline void step(XML::Log      & xml,
+                             Triplet<T>    & x,
+                             Triplet<T>    & f,
+                             FunctionType  & F)
+            {
+                //--------------------------------------------------------------
+                //
+                //
+                // initialize triplet
+                //
+                //
+                //--------------------------------------------------------------
+                /*      */ assert(x.isOrdered());    assert(f.isLocalMinimum());
+                x.sort(f); assert(x.isIncreasing()); assert(f.isLocalMinimum());
+
+                Y_XML_Element_Attr(xml,ParabolicStep, Y_XML_Attr(x) << Y_XML_Attr(f) );
+                x.save(xx);
+                f.save(ff);
+                nn=3;
+
+                T    beta      = zero;
+                if(x.b<=x.a)
+                {
+                    //----------------------------------------------------------
+                    //
+                    // beta=0
+                    //
+                    //----------------------------------------------------------
+                    Y_XMLog(xml, "[beta<=0]");
+                    sampleMiddle(xml,x,F);
+                }
+                else
+                {
+                    if(x.b>=x.c)
+                    {
+                        //------------------------------------------------------
+                        //
+                        // beta=1
+                        //
+                        //------------------------------------------------------
+                        Y_XMLog(xml, "[beta>=1]");
+                        sampleMiddle(xml,x,F);
+                    }
+                    else
+                    {
+                        //------------------------------------------------------
+                        //
+                        // 0<beta<1
+                        //
+                        //------------------------------------------------------
+                        beta          = Clamp(zero,(x.b-x.a)/(x.c-x.a),one);
+                        const T omb   = one-beta;
+                        const T alpha = f.a-f.b;
+                        const T gamma = f.c-f.b;
+                        switch(Sign::Of(alpha,gamma))
+                        {
+                            case __Zero__:
+                                Y_XMLog(xml, "[alpha==gamma]" );
+                                sampleMiddle(xml,x,F);
+                                break;
+
+                            case Negative: assert(alpha<gamma); {
+                                Y_XMLog(xml, "[alpha<gamma]" );
+                                const T eta   = alpha/gamma;
+                                const T twice = one-beta*omb*(one-eta)/(beta+omb*eta);
+                                if( AlmostEqual<T>::Are(twice,one))
+                                {
+                                    Y_XMLog(xml,"[1/2_-]");
+                                    sampleMiddle(xml,x,F);
+                                }
+                                else
+                                {
+                                    const T um = Clamp(zero,half*twice,one); assert(um<=half);
+                                    sample(xml,um,F);
+                                }
+                            } break;
+
+                            case Positive: assert(alpha>gamma); {
+                                Y_XMLog(xml, "[alpha>gamma]");
+                                const T eta = gamma/alpha;
+                                const T twice = one + beta*omb*(one-eta)/(beta*eta+omb);
+                                if( AlmostEqual<T>::Are(twice,one))
+                                {
+                                    Y_XMLog(xml,"[1/2_+]");
+                                    sampleMiddle(xml,x,F);
+                                }
+                                else
+                                {
+                                    const T um = Clamp(zero,half*twice,one); assert(um<=half);
+                                    sample(xml,um,F);
+                                }
+                            } break;
+
+                        }
+                    }
+                }
+
+
+
+
+
+
+
+                exit(1);
+            }
 
             size_t  nn;
             const T one;
@@ -196,10 +303,12 @@ namespace Yttrium
 
             static inline void show(XML::Log &xml, const T X, const T FX)
             {
-                Y_XMLog(xml, "-- f(" << std::setw(W) << X << ") = " << std::setw(W) << FX );
+                Y_XMLog(xml, "[+] f(" << std::setw(W) << X << ") = " << std::setw(W) << FX );
             }
 
-            inline void sample(XML::Log &xml, const T xt, Function<T,T> &F)
+
+
+            inline void sample(XML::Log &xml, const T xt, FunctionType &F)
             {
                 assert(nn<NMAX);
                 ff[nn] = F(xx[nn] = xt);
@@ -207,7 +316,37 @@ namespace Yttrium
                 ++nn;
             }
 
-            inline void sample(XML::Log &xml, const T wc, const Triplet<T> &x, Function<T,T> &F)
+
+            inline void sampleMiddle(XML::Log &xml, const Triplet<T> &x, FunctionType &F)
+            {
+                const T xm = x.middle(); sample(xml,xm,F);
+            }
+
+            inline void sampleGolden(XML::Log &xml, const Triplet<T> &x, FunctionType &F)
+            {
+                const T lw = Max(x.b-x.a,zero);
+                const T rw = Max(x.c-x.b,zero);
+                switch( Sign::Of(lw,rw) )
+                {
+                    case Negative: // reduce rw in [b:c]
+                        assert(lw<rw);
+                        sample(xml,Clamp(x.b,x.b+Numeric<T>::GOLDEN_C * rw, x.c),F);
+                        break;
+
+                    case Positive: // reduce lw in [a:b]
+                        assert(lw>rw);
+                        sample(xml,Clamp(x.a,x.b-Numeric<T>::GOLDEN_C * lw, x.b),F);
+                        break;
+
+                    case __Zero__: // reduce both
+                        sample(xml,Clamp(x.b,x.b+Numeric<T>::GOLDEN_C * rw, x.c),F);
+                        sample(xml,Clamp(x.a,x.b-Numeric<T>::GOLDEN_C * lw, x.b),F);
+                        break;
+                }
+            }
+
+
+            inline void sample(XML::Log &xml, const T wc, const Triplet<T> &x, FunctionType&F)
             {
                 assert(nn<NMAX);
                 const T wa = one-wc;
@@ -273,7 +412,7 @@ namespace Yttrium
                 }
 
                 Y_XMLog(xml, "x=" << x << "; f=" << f);
-                
+
 
                 {
                     OutputFile fp("para-step.data",true);

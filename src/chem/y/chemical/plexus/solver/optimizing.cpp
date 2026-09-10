@@ -12,10 +12,18 @@ namespace Yttrium
                                  const xreal_t  F0,
                                  const size_t   i)
         {
+            //------------------------------------------------------------------
+            //
             // initialize Cend at 1D solution
+            //
+            //------------------------------------------------------------------
+            Solver &self = *this;
             Cend.load(a.cc);
             const xreal_t  F1 = F(Cend,SubLevel);
-            Y_XMLog(xml,"F = " << F1.str() <<  " @" << a.eq);
+            Y_XMLog(xml,"F(0) = " << self(0).str() << "/" << F0.str() );
+            Y_XMLog(xml,"F    = " << F1.str() <<  " @" << a.eq);
+            Y_XMLog(xml,"F(1) = " << self(1).str() );
+
 
             if(Trace)
             {
@@ -31,7 +39,8 @@ namespace Yttrium
                     trace += ("'" + fn + "' w l");
                 }
             }
-            Solver &self = *this;
+
+            
             // study cases
             XTriplet xx = {  0, 0.5,         1 };
             XTriplet ff = { F0, self(xx.b), F1 };

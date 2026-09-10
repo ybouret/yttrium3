@@ -143,9 +143,14 @@ namespace Yttrium
             const xreal_t v = one - u;
             for(size_t j=cls.M;j>0;--j)
             {
-                xreal_t cmin = Cini[j]; const xreal_t c0 = cmin;
-                xreal_t cmax = Cend[j]; const xreal_t c1 = cmax;
-                if(cmax<cmin) Swap(cmin,cmax);
+                xreal_t       cmin = Cini[j];
+                xreal_t       cmax = Cend[j];
+                const xreal_t c0 = cmin;
+                const xreal_t c1 = cmax;
+
+                if(cmax<cmin)
+                    Swap(cmin,cmax);
+                assert(cmin<=cmax);
                 Ctry[j] = Clamp(cmin,c0*v+c1*u,cmax);
             }
             return F(Ctry,SubLevel);

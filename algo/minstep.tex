@@ -11,68 +11,47 @@
 
 \begin{document}
 
-We assume that we have a local minimum bracketing such that $a\leq b \leq c$ and $f_b \leq f_a$ and $f_b \leq f_c$.
-
-\begin{enumerate}
-\item  We transform $a$ into $0$, $c$ into $1$ and $b$ into $\beta$
-\item  We transform $f_a-f_b$ into $\alpha \leq 0$ and $f_c-f_b$ into $\gamma \leq 0$.
-\item  We define:
+\begin{itemize}
+\item We assume that we have a local minimum bracketing such that $a\leq b \leq c$ and $f_b \leq f_a$ and $f_b \leq f_c$.
+\item We transform $a$ into $0$, $c$ into $1$ and $b$ into $\beta$.
+\item We transform $f_a-f_b$ into $\alpha \geq 0$ a and $f_c-f_b$ into $\gamma \geq 0$.
+\item The reduced equation is:
 \begin{equation}
 	g(u) = \alpha + (\gamma-\alpha) u - \kappa u(1-u)
 \end{equation}
-so that
-$$
-	g(0) = \alpha, \;\; g(1) = \gamma
-$$
-and using $g(\beta)=0$ we get:
+
+\item $\kappa$ is defined by $g(\beta) = 0$:
 \begin{equation}
-	\kappa = \dfrac{(1-\beta)\alpha + \beta\gamma}{\beta(1-\beta)}
+	\kappa = \dfrac{(1-\beta)\alpha + \beta \gamma }{(1-\beta)\beta}
 \end{equation}
 
-\item
-
+\item By differentiation, the expected minimum is at:
 \begin{equation}
-g(u) = 0 \implies 
-\left\lbrace
-\begin{array}{rcl}
-u & = & \beta\\
-u & = & \dfrac{\alpha(1-\beta)}{\gamma \beta + \alpha (1-\beta)} = 1 - \dfrac{\gamma \beta}{\gamma \beta + \alpha (1-\beta)} = \beta'
-\end{array}
-\right.
+	u_m = \dfrac{1}{2} \left\lbrack 1 - \beta(1-\beta) \dfrac{\gamma-\alpha}{\beta \gamma + (1-\beta)\alpha } \right\rbrack
 \end{equation}
 
-\begin{equation}
-	g'(u) = \underbrace{(\gamma-\alpha)}_{\lambda} + (2u-1) \kappa
-\end{equation}
-$$
-g'(0) = \lambda - \kappa, \;\; g'(1) = \lambda - \kappa, \;\; g'(1/2) = \lambda
-$$
+\item The special case are:
+	\begin{itemize}
+	\item
+		\begin{equation}
+			\lim_{\alpha\simeq\gamma} = \dfrac{1}{2}
+		\end{equation}
+	\item 
+		\begin{equation}
+			\forall (\alpha,\gamma) \; \lim_{\beta\to0} u_m = \lim_{\beta\to1} u_m = \dfrac{1}{2}
+		\end{equation}
+		
+	\item
+		\begin{equation}
+			\forall \gamma>0, \; \lim_{\alpha\to0} u_m = \dfrac{\beta}{2}
+		\end{equation}
+	\item
+		\begin{equation}
+			\forall \alpha>0, \; \lim_{\gamma\to0} u_m = \dfrac{1+\beta}{2}
+		\end{equation}
+	\end{itemize}
 
-\item
-\begin{equation}
-	u_m = \dfrac{1}{2}\left[1 -\dfrac{\gamma-\alpha}{\kappa} \right] = \dfrac{1}{2}\left[1 - \beta(1-\beta) \dfrac{\gamma-\alpha}{\beta \gamma + (1-\beta) \alpha}\right]
-\end{equation}
-
-If $\gamma\approx\alpha$ or $\beta\approx0$ or $\beta\approx1$, then $u_m \approx \frac{1}{2}$.
-
-\end{enumerate}
+	
+\end{itemize}
 
 \end{document}
-
-\item Parabolic fit:
-\begin{equation}
-	D^2 = \dfrac{1}{2} \sum_{i=1}^{N} \left[F_i - (A+Bx_i+Cx_i^2)\right]^2
-\end{equation}
-
-\begin{equation}
-\left\lbrace
-\begin{array}{lclcl}
-	\partial_A D^2 & = & - \sum_i  \left[F_i - (A+Bx_i+Cx_i^2)\right]      & \implies & \sum_i     F_i = N\,A + (\sum_i x_i)\, B + (\sum_i x_i^2)\, C \\
-	\partial_B D^2 & = & - \sum_i  x_i\left[F_i - (A+Bx_i+Cx_i^2)\right]   & \implies & \sum_i x_i F_i = (\sum_i x_i)\,A + (\sum_i x_i^2)\, B + (\sum_i x_i^3)\, C \\
-	\partial_C D^2 & = & - \sum_i  x_i^2\left[F_i - (A+Bx_i+Cx_i^2)\right] & \implies & \sum_i x_i^2 F_i = (\sum_i x_i^2)\,A + (\sum_i x_i^3)\, B + (\sum_i x_i^4)\, C \\
-\end{array}
-\right.
-\end{equation}
-
-
-

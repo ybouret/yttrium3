@@ -36,9 +36,9 @@ namespace Yttrium
 
             static const T        FTOL;         //!< 10^(-DIG)
             static const T        SQRT_EPSILON; //!< sqrt(EPSILON)
-            static const T        GOLDEN;       //!< (1+sqrt(5))/2
-            static const T        GOLDEN_R;     //!< GOLDEN_R = GOLDEN-1  = (sqrt(5)-1)/2
-            static const T        GOLDEN_C;     //!< GOLDEN_C = 1-GOLDEN_R
+            static const T        GOLDEN;       //!< (1+sqrt(5))/2                        = 1.618
+            static const T        GOLDEN_R;     //!< GOLDEN_R = GOLDEN-1  = (sqrt(5)-1)/2 = 0.618
+            static const T        GOLDEN_C;     //!< GOLDEN_C = 1-GOLDEN_R                = 0.382
 
             static const T        THETA;        //!< threshold for Almost Equal
 
