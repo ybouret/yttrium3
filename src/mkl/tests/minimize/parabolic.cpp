@@ -66,7 +66,7 @@ Y_UTEST(min_parabolic)
 {
 
     XRealOutput::Mode = XRealOutput::Compact;
-
+    MKL::ParabolicStep::Trace = true;
     testPara<float>();
     return 0;
     

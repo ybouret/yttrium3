@@ -17,6 +17,17 @@ namespace Yttrium
     namespace MKL
     {
 
+        ParabolicStep:: ParabolicStep() noexcept
+        {
+        }
+
+        ParabolicStep:: ~ParabolicStep() noexcept
+        {
+        }
+
+        bool ParabolicStep:: Trace = false;
+
+
         template <typename T>
         class Parabolic<T> :: Code  : public Object
         {
@@ -57,9 +68,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
 
-
-
-
+            //! find better mininum
             inline void step(XML::Log      & xml,
                              Triplet<T>    & x,
                              Triplet<T>    & f,
@@ -79,6 +88,7 @@ namespace Yttrium
                 preload(x,f);
 
 
+                if(Trace)
                 {
                     OutputFile fp("para-func.data");
                     const unsigned np = 10000;
@@ -100,6 +110,8 @@ namespace Yttrium
                 //
                 //--------------------------------------------------------------
                 grow(xml,x,f,F);
+
+                if(Trace)
                 {
                     OutputFile fp("para-step.data",true);
                     saveStack(fp,2);
@@ -115,9 +127,9 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 balance(xml,x,f,F);
 
+                if(Trace)
                 {
                     OutputFile fp("para-step.data",true);
-                    //saveStack(fp,2);
                     saveState(fp,x,f,4);
                 }
 
@@ -272,10 +284,11 @@ namespace Yttrium
 
 
                         }
-
                     }
                 }
 
+
+                // extract new state
                 extract(xml,x,f);
             }
 
@@ -415,8 +428,7 @@ namespace Yttrium
                     extract(xml,x,f);
                     T  wmin = (lw = Max(x.b-x.a,zero));
                     T  wmax = (rw = Max(x.c-x.b,zero));
-                    if(wmin>wmax)
-                        Swap(wmin,wmax);
+                    if(wmin>wmax) Swap(wmin,wmax);
 
                     assert(wmin<=wmax);
                     std::cerr << "wmin=" << wmin << ", wmax=" << wmax << std::endl;

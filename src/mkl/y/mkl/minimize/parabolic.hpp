@@ -12,6 +12,17 @@ namespace Yttrium
     namespace MKL
     {
 
+        class ParabolicStep
+        {
+        public:
+            explicit ParabolicStep() noexcept;
+            virtual ~ParabolicStep() noexcept;
+            static bool Trace;
+
+        private:
+            Y_Disable_Copy_And_Assign(ParabolicStep);
+        };
+
         //______________________________________________________________________
         //
         //
@@ -21,7 +32,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
         template <typename T>
-        class Parabolic
+        class Parabolic : public ParabolicStep
         {
         public:
             class Code;
