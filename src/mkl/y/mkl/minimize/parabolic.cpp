@@ -7,10 +7,10 @@
 #include "y/type/destroy.hpp"
 #include "y/cameo/addition.hpp"
 #include "y/core/hsort.hpp"
-#include "y/core/hindx.hpp"
 
 #include "y/stream/libc/output.hpp"
 #include "y/xml/element.hpp"
+#include "y/mkl/v2d.hpp"
 #include <iomanip>
 
 namespace Yttrium
@@ -149,7 +149,6 @@ namespace Yttrium
             const T C;         //!< GOLDEN_C
             T       xx[NMAX];  //!< stack
             T       ff[NMAX];  //!< stack
-            size_t  jj[NMAX];  //!< stack
 
 
         private:
@@ -293,26 +292,165 @@ namespace Yttrium
                 extract(xml,x,f);
             }
 
+            inline void loadFlatV1(Triplet<T>    &x,
+                                   Triplet<T>    &f,
+                                   size_t         im) noexcept
+            {
+                if(0==im)
+                {
+                    // left
+                    x.a = x.b = xx[0];
+                    f.a = f.b = ff[0];
+                    x.c = xx[1];
+                    f.c = ff[1];
+                    assert(x.isIncreasing());
+                    assert(f.isLocalMinimum());
+                }
+                else
+                {
+                    if(nn-1==im)
+                    {
+                        // right
+                        x.b = x.c = xx[im];
+                        f.b = f.c = ff[im];
+                        --im;
+                        x.a  = xx[im];
+                        f.a = ff[im];
+                        assert(x.isIncreasing());
+                        assert(f.isLocalMinimum());
+                    }
+                    else
+                    {
+                        // core
+                        --im;
+                        x.load(&xx[im]);
+                        f.load(&ff[im]);
+                        assert(x.isIncreasing());
+                        assert(f.isLocalMinimum());
+                    }
+                }
+            }
+
+            inline void loadFlatV2(Triplet<T>    &x,
+                                   Triplet<T>    &f,
+                                   size_t         lower) noexcept
+            {
+                typedef V2D<T> v2d;
+                assert(lower<nn-1);
+
+                if(0==lower)
+                {
+                    // left
+                    x.load(xx);
+                    f.load(ff);
+                    assert(x.isIncreasing());
+                    assert(f.isLocalMinimum());
+                }
+                else
+                {
+                    if(nn-2==lower)
+                    {
+                        // right
+                        --lower;
+                        x.load(&xx[lower]);
+                        f.load(&ff[lower]);
+                        assert(x.isIncreasing());
+                        assert(f.isLocalMinimum());
+                    }
+                    else
+                    {
+                        std::cerr << "v2 in core!" << std::endl;
+                        const size_t il    = lower-1; assert(lower>0);
+                        const size_t upper = lower+1;
+                        const size_t ir    = upper+1; assert(ir<nn);
+                        const v2d    vl(xx[lower]-xx[il],ff[il]-ff[lower]);
+                        const v2d    vr(xx[ir]-xx[upper],ff[ir]-ff[upper]);
+                        const T      dl = vl.mod2();
+                        const T      dr = vr.mod2();
+                        std::cerr << "vl=" << vl << " @" << dl << std::endl;
+                        std::cerr << "vr=" << vr << " @" << dr << std::endl;
+                        if(dl<=dr)
+                        {
+                            // with left point
+                            x.load(&xx[il]);
+                            f.load(&ff[il]);
+                            assert(x.isIncreasing());
+                            assert(f.isLocalMinimum());
+                        }
+                        else
+                        {
+                            // with right point
+                            x.load(&xx[lower]);
+                            f.load(&ff[lower]);
+                            assert(x.isIncreasing());
+                            assert(f.isLocalMinimum());
+                        }
+                    }
+                }
+
+
+            }
+
+            inline void loadFlatVN(Triplet<T>    &x,
+                                   Triplet<T>    &f,
+                                   const size_t   imin,
+                                   const size_t   same) noexcept
+            {
+                exit(1);
+            }
+
+
+
             inline void extract(XML::Log      &xml,
                                 Triplet<T>    &x,
                                 Triplet<T>    &f)
             {
                 Y_XML_Element_Attr(xml, Extract, Y_XML_Attr(nn) );
 
-                Core::HIndx::Make(jj,ff,nn,Sign::Increasing<T>);
+                //--------------------------------------------------------------
+                //
+                // order xx and ff to have local representation
+                //
+                //--------------------------------------------------------------
+                Core::HSort::Make(xx,nn,Sign::Increasing<T>,ff);
                 if(xml.verbose)
                 {
                     Core::Display( xml() << "xx=",xx,nn) << std::endl;
                     Core::Display( xml() << "ff=",ff,nn) << std::endl;
-                    Core::Display( xml() << "jj=",jj,nn) << std::endl;
-                    for(size_t i=0;i<nn;++i)
-                    {
-                        const size_t j = jj[i];
-                        xml() << std::setw(16) << xx[j] << " => " << std::setw(16) << ff[j] << std::endl;
-                    }
                 }
 
-                exit(1);
+                //--------------------------------------------------------------
+                //
+                // find minimum interval
+                //
+                //--------------------------------------------------------------
+                size_t imin=0;
+                size_t same=1;
+                T      fmin = ff[0];
+                for(size_t i=1;i<nn;++i)
+                {
+                    const T ftmp = ff[i];
+                    switch( Sign::Of(ftmp,fmin) )
+                    {
+                        case Negative: imin = i; fmin=ftmp; same=1; continue;
+                        case Positive: break;
+                        case __Zero__: ++same; continue;
+                    }
+                    break;
+                }
+
+                Y_XMLog(xml,"fmin=" << fmin << " #" << same);
+
+                switch(same)
+                {
+                    case 0: throw Specific::Exception("Parabolic::Step", "Corrupted");
+                    case 1: loadFlatV1(x,f,imin); break;
+                    case 2: loadFlatV2(x,f,imin); break;
+                    default: assert(same>=3); loadFlatVN(x,f,imin,same); break;
+                }
+
+                Y_XMLog(xml, "--> x=" << x << "; f=" << f);
+
             }
 
 
@@ -399,7 +537,6 @@ namespace Yttrium
                     }
                 }
 
-                Y_XMLog(xml, "--> x=" << x << "; f=" << f);
             }
 
             inline void sampleRight(XML::Log      & xml,
