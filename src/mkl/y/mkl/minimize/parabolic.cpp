@@ -7,9 +7,10 @@
 #include "y/type/destroy.hpp"
 #include "y/cameo/addition.hpp"
 #include "y/core/hsort.hpp"
+#include "y/core/hindx.hpp"
+
 #include "y/stream/libc/output.hpp"
 #include "y/xml/element.hpp"
-
 #include <iomanip>
 
 namespace Yttrium
@@ -148,7 +149,7 @@ namespace Yttrium
             const T C;         //!< GOLDEN_C
             T       xx[NMAX];  //!< stack
             T       ff[NMAX];  //!< stack
-
+            size_t  jj[NMAX];  //!< stack
 
 
         private:
@@ -293,6 +294,29 @@ namespace Yttrium
             }
 
             inline void extract(XML::Log      &xml,
+                                Triplet<T>    &x,
+                                Triplet<T>    &f)
+            {
+                Y_XML_Element_Attr(xml, Extract, Y_XML_Attr(nn) );
+
+                Core::HIndx::Make(jj,ff,nn,Sign::Increasing<T>);
+                if(xml.verbose)
+                {
+                    Core::Display( xml() << "xx=",xx,nn) << std::endl;
+                    Core::Display( xml() << "ff=",ff,nn) << std::endl;
+                    Core::Display( xml() << "jj=",jj,nn) << std::endl;
+                    for(size_t i=0;i<nn;++i)
+                    {
+                        const size_t j = jj[i];
+                        xml() << std::setw(16) << xx[j] << " => " << std::setw(16) << ff[j] << std::endl;
+                    }
+                }
+
+                exit(1);
+            }
+
+
+            inline void extractOld(XML::Log      &xml,
                                 Triplet<T>    &x,
                                 Triplet<T>    &f)
             {
