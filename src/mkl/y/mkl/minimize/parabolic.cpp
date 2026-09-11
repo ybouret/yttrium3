@@ -359,7 +359,7 @@ namespace Yttrium
                     }
                     else
                     {
-                        std::cerr << "v2 in core!" << std::endl;
+                       // std::cerr << "v2 in core!" << std::endl;
                         const size_t il    = lower-1; assert(lower>0);
                         const size_t upper = lower+1;
                         const size_t ir    = upper+1; assert(ir<nn);
@@ -367,8 +367,8 @@ namespace Yttrium
                         const v2d    vr(xx[ir]-xx[upper],ff[ir]-ff[upper]);
                         const T      dl = vl.mod2();
                         const T      dr = vr.mod2();
-                        std::cerr << "vl=" << vl << " @" << dl << std::endl;
-                        std::cerr << "vr=" << vr << " @" << dr << std::endl;
+                        //std::cerr << "vl=" << vl << " @" << dl << std::endl;
+                        //std::cerr << "vr=" << vr << " @" << dr << std::endl;
                         if(dl<=dr)
                         {
                             // with left point
@@ -396,7 +396,27 @@ namespace Yttrium
                                    const size_t   imin,
                                    const size_t   same) noexcept
             {
-                exit(1);
+                assert(same>=4);
+                assert(nn>=4);
+                const size_t nt = same-2;          // number of triplets
+                size_t       im = imin;            // initial index
+                T            wm = xx[im+2]-xx[im]; // initial width
+
+                //std::cerr << "width[0]=" << wm << std::endl;
+                for(size_t j=1,i=imin+1;j<nt;++j,++i)
+                {
+                    const T w = xx[i+2]-xx[i];
+                    //std::cerr << "width[" << j << "]=" << w << std::endl;
+
+                    if(w<wm) {
+                        im = i;
+                        wm = w;
+                    }
+                }
+
+                //std::cerr << "winner=" << wm << " @" << im << std::endl;
+                x.load(&xx[im]); assert(x.isOrdered());
+                f.load(&ff[im]); assert(f.isLocalMinimum());
             }
 
 
@@ -446,98 +466,13 @@ namespace Yttrium
                     case 0: throw Specific::Exception("Parabolic::Step", "Corrupted");
                     case 1: loadFlatV1(x,f,imin); break;
                     case 2: loadFlatV2(x,f,imin); break;
-                    default: assert(same>=3); loadFlatVN(x,f,imin,same); break;
+                    case 3: x.load(&xx[imin]); f.load(&ff[imin]);        break;
+                    default: assert(same>=4); loadFlatVN(x,f,imin,same); break;
                 }
 
                 Y_XMLog(xml, "--> x=" << x << "; f=" << f);
-
             }
 
-
-            inline void extractOld(XML::Log      &xml,
-                                Triplet<T>    &x,
-                                Triplet<T>    &f)
-            {
-                Y_XML_Element_Attr(xml, Extract, Y_XML_Attr(nn) );
-
-                //--------------------------------------------------------------
-                //
-                // sort items
-                //
-                //--------------------------------------------------------------
-                assert(nn>=3);
-                Core::HSort::Make(xx,nn,Sign::Increasing<T>,ff);
-
-                if(xml.verbose)
-                {
-                    Core::Display( xml() << "xx=",xx,nn) << std::endl;
-                    Core::Display( xml() << "ff=",ff,nn) << std::endl;
-                }
-
-                //--------------------------------------------------------------
-                //
-                // locate minimum
-                //
-                //--------------------------------------------------------------
-                size_t im = 0;
-                T      fm = ff[0];
-                const size_t nm = nn-1;
-                for(size_t it=1;it<=nm;++it)
-                {
-                    const T ft = ff[it];
-                    if(ft<fm)
-                    {
-                        fm = ft;
-                        im = it;
-                    }
-                }
-
-                if(0==im)
-                {
-                    //----------------------------------------------------------
-                    //
-                    // on the left
-                    //
-                    //----------------------------------------------------------
-                    x.a = x.b = xx[0];
-                    x.c = xx[1];
-                    f.a = f.b = ff[0];
-                    f.c = ff[1];
-                    assert(x.isIncreasing());
-                    assert(f.isLocalMinimum());
-                }
-                else
-                {
-                    if(nm==im)
-                    {
-                        //------------------------------------------------------
-                        //
-                        // on the right
-                        //
-                        //------------------------------------------------------
-                        x.b = x.c = xx[im];
-                        f.b = f.c = ff[im];
-                        --im;
-                        x.a = xx[im];
-                        f.a = xx[im];
-                        assert(x.isIncreasing());
-                        assert(f.isLocalMinimum());
-                    }
-                    else
-                    {
-                        //------------------------------------------------------
-                        //
-                        // generic
-                        //
-                        //------------------------------------------------------
-                        assert(im>0); assert(im<nn-1);
-                        const size_t ia=im-1;
-                        x.load(&xx[ia]); assert(x.isIncreasing());
-                        f.load(&ff[ia]); assert(f.isLocalMinimum());
-                    }
-                }
-
-            }
 
             inline void sampleRight(XML::Log      & xml,
                                     const T         rw,
@@ -592,7 +527,7 @@ namespace Yttrium
                     if(wmin>wmax) Swap(wmin,wmax);
 
                     assert(wmin<=wmax);
-                    std::cerr << "wmin=" << wmin << ", wmax=" << wmax << std::endl;
+                    Y_XMLog(xml,"-- wmin=" << wmin << ", wmax=" << wmax);
                     if(wmax<=wmin+wmin)
                         break;
                 }
