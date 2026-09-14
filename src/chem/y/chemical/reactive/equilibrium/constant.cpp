@@ -11,11 +11,15 @@ namespace Yttrium
         {
         }
 
-        ConstantEquilibrium:: ConstantEquilibrium(const String &eqName, const size_t eqIndx, const xreal_t eqK) :
+        ConstantEquilibrium:: ConstantEquilibrium(const String & eqName,
+                                                  const size_t   eqIndx,
+                                                  const xreal_t  eqK) :
         Equilibrium(eqName,eqIndx),
         K_(eqK)
         {
         }
+
+        
 
         xreal_t ConstantEquilibrium:: getK(xreal_t)
         {

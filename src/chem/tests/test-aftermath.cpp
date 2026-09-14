@@ -15,6 +15,8 @@ using namespace Chemical;
 
 Y_UTEST(aftermath)
 {
+    XRealOutput::Mode = XRealOutput::Compact;
+
     Random::ParkMiller ran;
     Weasel &           weasel = Weasel::Instance();
     Library            lib;

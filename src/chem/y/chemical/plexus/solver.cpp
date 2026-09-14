@@ -150,9 +150,16 @@ namespace Yttrium
 
                 if(cmax<cmin) Swap(cmin,cmax);
                 assert(cmin<=cmax);
-
+                
                 Ctry[j] = Clamp(cmin,c0*v+c1*u,cmax);
             }
+
+            // std::cerr << std::endl;
+            // std::cerr << " Cini = " << Cini << std::endl;
+            // std::cerr << " Cend = " << Cend << std::endl;
+            // std::cerr << " Ctry = " << Ctry << std::endl;
+
+
             return F(Ctry,SubLevel);
         }
 

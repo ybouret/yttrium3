@@ -1,6 +1,7 @@
 
 #include "y/chemical/reactive/equilibrium/aftermath.hpp"
 #include "y/exception.hpp"
+#include "y/mkl/api/almost-equal.hpp"
 #include "y/mkl/root/zrid.hpp"
 #include "y/core/display.hpp"
 #include "y/xml/element.hpp"
@@ -65,6 +66,7 @@ namespace Yttrium
             //! mass action with given extent
             inline xreal_t operator()(const real_t xi) { return E.massAction(K,X,C,L,xi); }
 
+            //! \return new extent from current state
             xreal_t cycle();
 
 
@@ -78,6 +80,10 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(Engine);
+
+            //! solve with sign conservation
+            xreal_t solve1D(XTriplet &xi, XTriplet &ma, const SignType sa);
+
         };
 
         xreal_t Aftermath::Engine:: cycle()
@@ -160,10 +166,88 @@ namespace Yttrium
                     break;
             }
 
-            const xreal_t ex = solve(F,x,ma);
+            assert(__Zero__!=ms);
+
+            // specific solver
+            //const xreal_t ex = solve(F,x,ma);
+            const xreal_t ex = F.solve1D(x,ma,ms);
             E.safeMove(C,L,ex);
             return ex;
         }
+
+
+        xreal_t Aftermath:: Engine:: solve1D(XTriplet      & xi,
+                                             XTriplet      & ma,
+                                             const SignType  sa)
+        {
+            //------------------------------------------------------------------
+            //
+            // sanity check
+            //
+            //------------------------------------------------------------------
+            assert(__Zero__!=sa);
+            assert(Sign::Opposite(sa) == Sign::Of(ma.c) );
+
+            //------------------------------------------------------------------
+            //
+            // select side
+            //
+            //------------------------------------------------------------------
+            xreal_t * xn = 0, *mn=0;
+            xreal_t * xp = 0, *mp=0;
+
+            if( Negative == sa )
+            {
+                xn = & xi.a; mn = & ma.a;
+                xp = & xi.c; mp = & ma.c;
+            }
+            else
+            {
+                assert(Positive==sa);
+                xp = & xi.a; mp = & ma.a;
+                xn = & xi.c; mn = & ma.c;
+            }
+
+
+            //------------------------------------------------------------------
+            //
+            // find (almost) zero
+            //
+            //------------------------------------------------------------------
+            Engine &F = *this;
+            while(true)
+            {
+                xi.b = xi.middle();
+                ma.b = F(xi.b);
+
+                switch(Sign::Of(ma.b))
+                {
+                    case __Zero__:
+                        return xi.b; // just evaluated, strict zero
+
+                    case Negative:
+                        // replace negative side
+                        *xn = xi.b;
+                        *mn = ma.b;
+                        break;
+
+                    case Positive:
+                        // replace positive side
+                        *xp = xi.b;
+                        *mp = ma.b;
+                        break;
+                }
+
+                // check convergence
+                if( MKL::AlmostEqual<xreal_t>::Are(xi.a,xi.c))
+                {
+                    // keep the same sign!!
+                    ma.b = ma.a = F(xi.b=xi.a);
+                    return xi.a;
+                }
+            }
+        }
+
 
 
 #define Y_CHEM_SHOW(LABEL) \
@@ -181,6 +265,7 @@ do { if(xml.verbose) eq.displayCompact( xml() << "[" #LABEL "] ",Cinp,Linp) << s
         {
             const String &eid = eq.name;
             Y_XML_Element_Attr(xml,AftermathCompute,Y_XML_Attr(eid));
+
 
             //------------------------------------------------------------------
             //
@@ -293,15 +378,23 @@ do { if(xml.verbose) eq.displayCompact( xml() << "[" #LABEL "] ",Cinp,Linp) << s
                 }
             }
 
-            //__________________________________________________________________
+            //------------------------------------------------------------------
             //
             // need to recompute full extent
             //
-            //__________________________________________________________________
+            //------------------------------------------------------------------
             const xreal_t xi = eq.extent(Cinp, Linp, Cout, Lout, xadd);
             const size_t  nz = nrz+npz; assert( nz==eq.countZeroed(Cinp,Linp) );
-            if(xml.verbose) eq.displayCompact( xml() << "[Solving] ",Cout,Lout) << std::endl;
-            Y_XMLog(xml, "|_@xi = " << std::setw(24) << xi.str() << ", nz=" << nrz << "+" << npz << "=" << nz);
+            if(xml.verbose)
+            {
+                eq.displayCompact( xml() << "[Solving] ",Cout,Lout) << std::endl;
+                xml()
+                << "|_@xi = " << std::setw(24) << xi.str()
+                << ", nz=" << nrz << "+" << npz << "=" << nz
+                << ", (ma=" << eq.massAction(eK,xmul,Cout,Lout) << ")"
+                << std::endl;
+            }
+
             return Aftermath(es,xi,nz);
         }
 
