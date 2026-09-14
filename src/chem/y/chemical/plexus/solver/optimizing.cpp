@@ -23,14 +23,14 @@ namespace Yttrium
             Cend.load(a.cc);
             const xreal_t  F1 = F(Cend,SubLevel);
             Y_XMLog(xml,"F(0)   = " << self(0).str() << " / " << F0.str() );
-            Y_XMLog(xml,"F(1)   = " << F1.str()      << " / " << self(1).str() );
+            Y_XMLog(xml,"F(0)   = " << self(1).str() << " / " << F1.str() );
 
 
             if(Trace)
             {
                 const String fn = MakeFileName(a.eq.name) + ".ycp";
                 OutputFile   fp(fn);
-                saveProfile(fp,1000);
+                saveProfile(fp,10000);
                 {
                     if(1==i)
                         trace += "plot ";
