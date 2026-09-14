@@ -52,20 +52,35 @@ namespace Yttrium
         {
             const size_t count = cls.elist->size;
             Y_XML_Element_Attr(xml,SolverRun, Y_XML_Attr(count) );
+
+            //------------------------------------------------------------------
+            //
+            // build basis from running eqs
+            //
+            //------------------------------------------------------------------
             const size_t n = buildBasis(xml,C,L,K);
 
-
+            //------------------------------------------------------------------
+            //
             // Initialize starting point
+            //
+            //------------------------------------------------------------------
             Indexed::Transfer(Cini,SubLevel,C,L,cls.slist);
             const xreal_t F0 = F(C,L);
             Y_XMLog(xml, "F0 = " << F0.str());
 
+            //------------------------------------------------------------------
+            //
+            // optimize global objective function over 1D
+            //
+            //------------------------------------------------------------------
             if(Trace)
             {
                 trace.free();
                 tropt.free();
             }
 
+            
             const Ansatz * bestGlobal = 0;
             for(size_t i=1;i<=n;++i)
             {
@@ -94,6 +109,8 @@ namespace Yttrium
                 std::cerr << trace << std::endl;
                 std::cerr << tropt << std::endl;
             }
+
+            
 
 
             //XMatrix &J = jac[n]; std::cerr << "J=" << J << std::endl;
