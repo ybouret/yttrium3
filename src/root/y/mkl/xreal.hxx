@@ -307,11 +307,15 @@ namespace Yttrium
     template <>
     real_t XReal<real_t>::log() const
     {
+        if (mantissa <= 0) throw Libc::Exception(EDOM, "XReal::log()");
+#if 0
+        return std::log( std::ldexp(mantissa, exponent) );
+#else
         static const real_t radix = (real_t)(MKL::Numeric<real_t>::RADIX);
         static const real_t lnr = std::log(radix);
-        if (mantissa <= 0) throw Libc::Exception(EDOM, "XReal::log()");
         const real_t xp = (real_t)exponent;
         return std::log(mantissa) + xp * lnr;
+#endif
     }
 
 
