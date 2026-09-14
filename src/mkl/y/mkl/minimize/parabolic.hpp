@@ -12,12 +12,20 @@ namespace Yttrium
     namespace MKL
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Base class for steps
+        //
+        //
+        //______________________________________________________________________
         class ParabolicStep
         {
         public:
-            explicit ParabolicStep() noexcept;
-            virtual ~ParabolicStep() noexcept;
-            static bool Trace;
+            explicit ParabolicStep() noexcept; //!< setup
+            virtual ~ParabolicStep() noexcept; //!< cleanup
+            static bool Trace;                 //!< tracing results
 
         private:
             Y_Disable_Copy_And_Assign(ParabolicStep);

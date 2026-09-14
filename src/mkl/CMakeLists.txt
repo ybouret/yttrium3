@@ -7,6 +7,7 @@ y/mkl/interpolation
 y/mkl/derivatives
 y/mkl/root
 y/mkl/minimize
+y/mkl/minimize/parabolic
 y/mkl/ode
 y/mkl/ode/explicit
 y/mkl/tao
