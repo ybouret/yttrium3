@@ -26,6 +26,7 @@ namespace Yttrium
                 cls.sfmt.display(*xml,cls.slist,"\t\t[",C,L,"]", xreal_t::ToString);
             }
             ans.free();
+            blk.free();
             for(const ENode *en=cls.elist->head;en;en=en->next)
             {
                 XWritable         & cc =  Indexed::Transfer(Ceq[ans.size()+1],SubLevel,C,L,cls.slist);
@@ -35,6 +36,7 @@ namespace Yttrium
                 switch(am.st)
                 {
                     case Blocked:
+                        blk << Coerce(eq);
                         continue;
                     case Running:
                         if(!emergency)    ans.append(eq,eK,am,cc);
@@ -76,7 +78,6 @@ namespace Yttrium
             }
 
             return ans.size();
-
         }
 
     }

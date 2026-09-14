@@ -62,6 +62,13 @@ namespace Yttrium
             xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level, const xreal_t) const; //!< \return shifted mass action
             void    safeMove(XWritable &, const Level, const xreal_t)                       const noexcept; //!< safely move concentration using extent
 
+            //! compute affinity
+            /**
+             \param logK current log of constant
+             \param xadd for inner additions
+             \param Ctry trial concentrations (regularized)
+             \param Ltry trial level
+             */
             xreal_t affinity(const xreal_t     logK,
                              XAdd            & xadd,
                              const XReadable & Ctry,

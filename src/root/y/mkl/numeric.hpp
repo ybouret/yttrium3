@@ -42,9 +42,9 @@ namespace Yttrium
 
             static const T        THETA;        //!< threshold for Almost Equal
 
-            static const T        ZERO;
-            static const T        ONE;
-            static const T        HALF;
+            static const T        ZERO; //!< 0
+            static const T        ONE;  //!< 1
+            static const T        HALF; //!< 1/2
 
         };
 

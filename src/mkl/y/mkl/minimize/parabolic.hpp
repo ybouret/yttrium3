@@ -28,7 +28,7 @@ namespace Yttrium
             static bool Trace;                 //!< tracing results
 
         private:
-            Y_Disable_Copy_And_Assign(ParabolicStep);
+            Y_Disable_Copy_And_Assign(ParabolicStep); //!< discarded
         };
 
         //______________________________________________________________________

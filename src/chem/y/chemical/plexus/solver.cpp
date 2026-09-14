@@ -17,11 +17,16 @@ namespace Yttrium
         Cend(cls.M),
         Ctry(cls.M),
         ans(cls.elist->size),
+        blk(),
         xmul(),
         xadd(),
         Fadd(),
+        xl10( std::log(10.0) ),
+        opt(),
         jac(cls.N),
-        finder( new Coven::Finder(cls.M) )
+        finder( new Coven::Finder(cls.M) ),
+        trace(),
+        tropt()
         {
             for(size_t i=1;i<=cls.N;++i)
             {
@@ -151,14 +156,13 @@ namespace Yttrium
         xreal_t Solver:: F(const XReadable &C, const Level L)
         {
             Fadd.ldz();
-            for(size_t i=ans.size();i>0;--i)
+             for(size_t i=ans.size();i>0;--i)
             {
                 const xreal_t A  = ans[i].affinity(xadd,C,L);
                 const xreal_t A2 = A*A;
                 Fadd << A2;
-                //std::cerr << "\t\tA=" << A << " @" << ans[i].eq.name << std::endl;
             }
-            return Fadd().sqrt();
+            return Fadd().sqrt() / xl10;
         }
 
         xreal_t Solver:: operator()(const xreal_t u)
@@ -174,16 +178,10 @@ namespace Yttrium
 
                 if(cmax<cmin) Swap(cmin,cmax);
                 assert(cmin<=cmax);
-                
                 Ctry[j] = Clamp(cmin,c0*v+c1*u,cmax);
             }
 
-            // std::cerr << std::endl;
-            // std::cerr << " Cini = " << Cini << std::endl;
-            // std::cerr << " Cend = " << Cend << std::endl;
-            // std::cerr << " Ctry = " << Ctry << std::endl;
-
-
+            
             return F(Ctry,SubLevel);
         }
 

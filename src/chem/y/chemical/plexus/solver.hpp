@@ -7,6 +7,7 @@
 #include "y/chemical/plexus/solver/ansatz.hpp"
 #include "y/coven/finder.hpp"
 #include "y/mkl/minimize/api.hpp"
+#include "y/chemical/reactive/erepo.hpp"
 
 namespace Yttrium
 {
@@ -29,10 +30,10 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            typedef AutoPtr<Coven::Finder>    Finder; //!< alias
-            static bool                       Trace;  //!< emit profiles
-            typedef MKL::Minimize             Minimize;
-            typedef Minimize::Engine<xreal_t> Optimizer;
+            typedef AutoPtr<Coven::Finder>    Finder;    //!< alias
+            static bool                       Trace;     //!< emit profiles
+            typedef MKL::Minimize             Minimize;  //!< alias
+            typedef Minimize::Engine<xreal_t> Optimizer; //!< alias
 
             //__________________________________________________________________
             //
@@ -40,8 +41,8 @@ namespace Yttrium
             // C++
             //
             //__________________________________________________________________
-            explicit Solver(const Cluster &cluster);
-            virtual ~Solver() noexcept;
+            explicit Solver(const Cluster &); //!< setup from cluster
+            virtual ~Solver() noexcept;       //!< cleanup
 
             //__________________________________________________________________
             //
@@ -68,14 +69,17 @@ namespace Yttrium
             //
             //__________________________________________________________________
             const Cluster &    cls;    //!< attached cluster
+
             XMatrix            Ceq;    //!< 1D solutions storage
             XArray             Cini;   //!< SubLevel array
             XArray             Cend;   //!< SubLevel array
             XArray             Ctry;   //!< SubLevel trial
             Ansatz::Series     ans;    //!< possible ansatz
+            ERepo              blk;    //!< blokced
             XMul               xmul;   //!< for inner multiplication
             XAdd               xadd;   //!< for inner additions
             XAdd               Fadd;   //!< for F computation
+            const xreal_t      xl10;   //!< log(10)
             Optimizer          opt;
             CxxSeries<XMatrix> jac;    //!< preformated matrices
             Finder             finder; //!< helper to build basis

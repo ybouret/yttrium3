@@ -65,8 +65,8 @@ namespace Yttrium
             xreal_t extent(const XReadable &, const Level) const noexcept;            //!< \return extent from concentration
             void    safeMove(XWritable &, const Level, const xreal_t) const noexcept; //!< move concentration using extent
 
-            void addAffinity(XAdd &, const XReadable &, const Level) const;
-            void subAffinity(XAdd &, const XReadable &, const Level) const;
+            void addAffinity(XAdd &, const XReadable &, const Level) const; //!< add affinity of regularized concentration
+            void subAffinity(XAdd &, const XReadable &, const Level) const; //!< sub affinity of regularized concentration
 
             //__________________________________________________________________
             //

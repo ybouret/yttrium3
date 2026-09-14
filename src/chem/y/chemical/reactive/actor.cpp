@@ -69,14 +69,14 @@ namespace Yttrium
         void Actor:: addAffinity(XAdd &xadd, const XReadable &C, const Level L) const
         {
             const xreal_t c = sp(C,L); assert(c>zero);
-            const xreal_t l = c.log10();
+            const xreal_t l = c.log();
             for(unsigned i=nu;i>0;--i) xadd.add(l);
         }
 
         void Actor:: subAffinity(XAdd &xadd, const XReadable &C, const Level L) const
         {
             const xreal_t c = sp(C,L); assert(c>zero);
-            const xreal_t l = -c.log10();
+            const xreal_t l = -c.log();
             for(unsigned i=nu;i>0;--i) xadd.add(l);
         }
 
