@@ -1,3 +1,6 @@
+#include "load-flat-v1.hxx"
+#include "load-flat-v2.hxx"
+#include "load-flat-vn.hxx"
 
 inline void extract(XML::Log      &xml,
                     Triplet<T>    &x,
@@ -5,11 +8,11 @@ inline void extract(XML::Log      &xml,
 {
     Y_XML_Element_Attr(xml, Extract, Y_XML_Attr(nn) );
 
-    //--------------------------------------------------------------
+    //--------------------------------------------------------------------------
     //
     // order xx and ff to have local representation
     //
-    //--------------------------------------------------------------
+    //--------------------------------------------------------------------------
     Core::HSort::Make(xx,nn,Sign::Increasing<T>,ff);
     if(xml.verbose)
     {
@@ -17,11 +20,11 @@ inline void extract(XML::Log      &xml,
         Core::Display( xml() << "ff=",ff,nn) << std::endl;
     }
 
-    //--------------------------------------------------------------
+    //--------------------------------------------------------------------------
     //
-    // find minimum interval
+    // find numeric minimum interval
     //
-    //--------------------------------------------------------------
+    //--------------------------------------------------------------------------
     size_t imin=0;
     size_t same=1;
     T      fmin = ff[0];
@@ -39,6 +42,11 @@ inline void extract(XML::Log      &xml,
 
     Y_XMLog(xml,"fmin=" << fmin << " #" << same);
 
+    //--------------------------------------------------------------------------
+    //
+    // process according to interval length
+    //
+    //--------------------------------------------------------------------------
     switch(same)
     {
         case 0: throw Specific::Exception("Parabolic::Step", "Corrupted");
