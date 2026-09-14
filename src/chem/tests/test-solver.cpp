@@ -49,7 +49,7 @@ Y_UTEST(solver)
     Clusters  cls(xml,eqs);
 
     Jive::_VFS::Apply( LocalFS::Instance(), ".", "cs[:digit:][.]png", Jive::Matching::Exactly, VFS::Entry::Base, Jive::_VFS::Remove);
-    Jive::_VFS::Apply( LocalFS::Instance(), ".", "ycp", Jive::Matching::Exactly, VFS::Entry::Ext, Jive::_VFS::Remove);
+    Jive::_VFS::Apply( LocalFS::Instance(), ".", "y[c|o]p", Jive::Matching::Exactly, VFS::Entry::Ext, Jive::_VFS::Remove);
 
     cls.renderAll("cs");
 
