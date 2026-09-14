@@ -57,19 +57,13 @@ namespace Yttrium
             }
 
 
-            inline virtual ~Engine() noexcept
-            {
-            }
+            inline virtual ~Engine() noexcept {}
 
-            inline xreal_t operator()(void)
-            {
-                return E.massAction(K,X,C,L);
-            }
+            //! mass action at initial point
+            inline xreal_t operator()(void) { return E.massAction(K,X,C,L); }
 
-            inline xreal_t operator()(const real_t xi)
-            {
-                return E.massAction(K,X,C,L,xi);
-            }
+            //! mass action with given extent
+            inline xreal_t operator()(const real_t xi) { return E.massAction(K,X,C,L,xi); }
 
             xreal_t cycle();
 
@@ -89,14 +83,22 @@ namespace Yttrium
         xreal_t Aftermath::Engine:: cycle()
         {
 
+            //------------------------------------------------------------------
+            //
             // initializing
-            const xreal_t  zero(0);
-            Engine        &F  = *this;
-            XTriplet       x = {  zero, zero, zero };
-            XTriplet       ma = {  F(),  zero, zero };
-            const SignType ms = Sign::Of(ma.a.mantissa);
+            //
+            //------------------------------------------------------------------
+            const xreal_t  zero = MKL::Numeric<xreal_t>::ZERO;
+            Engine        &F    = *this;
+            XTriplet       x    = {  zero, zero, zero };
+            XTriplet       ma   = {  F(),  zero, zero };
+            const SignType ms   = Sign::Of(ma.a.mantissa);
 
+            //------------------------------------------------------------------
+            //
             // need to find x.c
+            //
+            //------------------------------------------------------------------
             switch(E.kind)
             {
                 case Outlawed:
@@ -109,12 +111,12 @@ namespace Yttrium
                             return zero;
 
                         case Positive:
-                            x.c = S;
+                            x.c  = S;
                             ma.c = F(x.c); assert(ma.c<=zero);
                             break;
 
                         case Negative:
-                            x.c = -E.prod.extent(C,L);
+                            x.c  = -E.prod.extent(C,L);
                             ma.c = F(x.c); assert(ma.c>=zero);
                             break;
                     }
@@ -127,12 +129,12 @@ namespace Yttrium
                             return zero;
 
                         case Positive:
-                            x.c = E.reac.extent(C,L);
+                            x.c  = E.reac.extent(C,L);
                             ma.c = F(x.c); assert(ma.c<=zero);
                             break;
 
                         case Negative:
-                            x.c = -S;
+                            x.c  = -S;
                             ma.c = F(x.c); assert(ma.c>=zero);
                             break;
                             //throw Specific::Exception(CallSign,"todo Negative ReacOnly");
@@ -146,12 +148,12 @@ namespace Yttrium
                             return zero;
 
                         case Positive:
-                            x.c = E.reac.extent(C,L);
+                            x.c  = E.reac.extent(C,L);
                             ma.c = F(x.c); assert(ma.c<=zero);
                             break;
 
                         case Negative:
-                            x.c = - E.prod.extent(C,L);
+                            x.c  = - E.prod.extent(C,L);
                             ma.c = F(x.c); assert(ma.c>=zero);
                             break;
                     }
@@ -291,7 +293,11 @@ do { if(xml.verbose) eq.displayCompact( xml() << "[" #LABEL "] ",Cinp,Linp) << s
                 }
             }
 
+            //__________________________________________________________________
+            //
             // need to recompute full extent
+            //
+            //__________________________________________________________________
             const xreal_t xi = eq.extent(Cinp, Linp, Cout, Lout, xadd);
             const size_t  nz = nrz+npz; assert( nz==eq.countZeroed(Cinp,Linp) );
             if(xml.verbose) eq.displayCompact( xml() << "[Solving] ",Cout,Lout) << std::endl;
