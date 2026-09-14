@@ -56,17 +56,40 @@ namespace Yttrium
             Y_XMLog(xml, "F0 = " << F0.str());
 
             if(Trace)
-                trace.free();
-
-            for(size_t i=1;i<=n;++i)
             {
-                const Ansatz & a  = ans[i];
-                optimizing(xml,a,F0,i);
+                trace.free();
+                tropt.free();
             }
 
+            const Ansatz * bestGlobal = 0;
+            for(size_t i=1;i<=n;++i)
+            {
+                Ansatz & a  = ans[i];
+                if(optimizing(xml,a,F0,i))
+                {
+                    if(!bestGlobal || a.F1 < bestGlobal->F1)
+                    {
+                        bestGlobal = &a;
+                    }
+                }
+            }
+
+            if(bestGlobal)
+            {
+                Y_XMLog(xml, "[+bestGlobal] " << bestGlobal->F1.str() << " @" << bestGlobal->eq.name);
+            }
+            else
+            {
+                Y_XMLog(xml, "[-bestGlobal]");
+            }
+
+
             if(Trace)
+            {
                 std::cerr << trace << std::endl;
-            
+                std::cerr << tropt << std::endl;
+            }
+
 
             //XMatrix &J = jac[n]; std::cerr << "J=" << J << std::endl;
         }
@@ -133,6 +156,7 @@ namespace Yttrium
                 const xreal_t A  = ans[i].affinity(xadd,C,L);
                 const xreal_t A2 = A*A;
                 Fadd << A2;
+                //std::cerr << "\t\tA=" << A << " @" << ans[i].eq.name << std::endl;
             }
             return Fadd().sqrt();
         }

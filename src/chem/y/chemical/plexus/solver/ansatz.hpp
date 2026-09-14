@@ -38,10 +38,10 @@ namespace Yttrium
             //__________________________________________________________________
 
             //! setup
-            Ansatz(const Equilibrium &,
-                   const xreal_t     &,
-                   const Aftermath   &,
-                   const XReadable   &) noexcept;
+            explicit Ansatz(const Equilibrium &,
+                            const xreal_t     &,
+                            const Aftermath   &,
+                            XWritable         &) noexcept;
 
             //! duplicate
             Ansatz(const Ansatz &) noexcept;
@@ -81,9 +81,10 @@ namespace Yttrium
             const xreal_t       eK; //!< source constant
             const xreal_t       lK; //!< log(eK)
             const Aftermath     am; //!< 1D aftermath
-            const XReadable &   cc; //!< 1D solved concentration
+            XWritable       &   cc; //!< 1D solved concentration
             const xreal_t       A0; //!< Affinity at origin
-            
+            xreal_t             F1; //!< objectice function at cc
+
         private:
             Y_Disable_Assign(Ansatz); //!< discarded
         };

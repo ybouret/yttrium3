@@ -168,9 +168,8 @@ namespace Yttrium
 
             assert(__Zero__!=ms);
 
-            // specific solver
-            //const xreal_t ex = solve(F,x,ma);
-            const xreal_t ex = F.solve1D(x,ma,ms);
+            const xreal_t ex = solve(F,x,ma);
+            //const xreal_t ex = F.solve1D(x,ma,ms);
             E.safeMove(C,L,ex);
             return ex;
         }

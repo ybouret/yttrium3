@@ -80,6 +80,7 @@ namespace Yttrium
             CxxSeries<XMatrix> jac;    //!< preformated matrices
             Finder             finder; //!< helper to build basis
             String             trace;  //!< gnuplot
+            String             tropt;  //!< gnuplot, optimized profiles
             
         private:
             Y_Disable_Copy_And_Assign(Solver); //!< discarded
@@ -90,10 +91,16 @@ namespace Yttrium
             //! regularize, then build basis from independent eqs
             size_t buildBasis(XML::Log &, XWritable &, const Level, const XReadable &);
 
-            bool   optimizing(XML::Log &,
-                              const Ansatz &a,
+            bool   optimizing(XML::Log      &xml,
+                              Ansatz        &a,
                               const xreal_t F0,
                               const size_t  i);
+
+
+            void upgrade(XML::Log &xml,
+                         Ansatz   &,
+                         XTriplet &,
+                         XTriplet &);
 
 
         };

@@ -11,13 +11,14 @@ namespace Yttrium
         Ansatz:: Ansatz(const Equilibrium & _eq,
                         const xreal_t     & _eK,
                         const Aftermath   & _am,
-                        const XReadable   & _cc) noexcept :
+                        XWritable         & _cc) noexcept :
         eq(_eq),
         eK(_eK),
         lK(eK.log()),
         am(_am),
         cc(_cc),
-        A0(0)
+        A0(0),
+        F1(0)
         {
         }
 
@@ -27,7 +28,8 @@ namespace Yttrium
         lK(_.lK),
         am(_.am),
         cc(_.cc),
-        A0(_.A0) 
+        A0(_.A0),
+        F1(_.F1)
         {
         }
 

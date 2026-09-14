@@ -7,8 +7,24 @@ namespace Yttrium
     namespace Chemical
     {
 
+        void Solver:: upgrade(XML::Log & xml,
+                              Ansatz   & a,
+                              XTriplet & xx,
+                              XTriplet & ff)
+        {
+            xreal_t x_opt;
+            {
+                const Temporary<bool> quiet(xml.verbose,false);
+                x_opt = opt.find(xml,*this,Minimize::Direct,xx,ff,Minimize::Standard);
+            }
+            Y_XMLog(xml, "[+] F(" << x_opt.str() <<") = " << ff.b );
+            a.F1 = ff.b;
+            a.cc.load(Ctry);
+        }
+
+
         bool Solver:: optimizing(XML::Log     & xml,
-                                 const Ansatz & a,
+                                 Ansatz       & a,
                                  const xreal_t  F0,
                                  const size_t   i)
         {
@@ -24,14 +40,15 @@ namespace Yttrium
             const xreal_t  F1 = F(Cend,SubLevel);
             Y_XMLog(xml,"F(0)   = " << self(0).str() << " / " << F0.str() );
             Y_XMLog(xml,"F(1)   = " << self(1).str() << " / " << F1.str() );
+            Coerce(a.F1) = F1;
 
 
-            
             if(Trace)
             {
-                const String fn = MakeFileName(a.eq.name) + ".ycp";
+                const String bn = MakeFileName(a.eq.name);
+                const String fn = bn + ".ycp";
                 OutputFile   fp(fn);
-                saveProfile(fp,10000);
+                saveProfile(fp,1000);
                 {
                     if(1==i)
                         trace += "plot ";
@@ -41,42 +58,64 @@ namespace Yttrium
                 }
             }
 
-
             // study cases
             XTriplet xx = {  0, MKL::Numeric<xreal_t>::HALF, 1 };
             XTriplet ff = { F0, self(xx.b), F1 };
-
             Y_XMLog(xml,"F(1/2) = " << ff.b.str() );
 
+            // assuming true result
+            bool result = true;
             if(F1<F0)
             {
-                Y_XMLog(xml, "[+]");
                 // directly ok!
                 if(ff.b<F1)
                 {
-                    const bool    flag = xml.verbose; //xml.verbose = false;
-                    const xreal_t x_opt = opt.find(xml,self,Minimize::Direct,xx,ff,Minimize::Standard);
-                    xml.verbose = flag;
-                    Y_XMLog(xml, "[++] F(" << x_opt.str() <<") = " << ff.b );
+                    // and upgradable
+                    upgrade(xml,a,xx,ff);
+                    Y_XMLog(xml, "[++] " << a.F1.str() << " @" << a.eq.name);
+                }
+                else
+                {
+                    Y_XMLog(xml, "[+]  " << a.F1.str() << " @" << a.eq.name);
                 }
 
-
+                assert(true==result);
             }
             else
             {
                 assert(F1>=F0);
-                Y_XMLog(xml, "[-]");
-
+                // not ok
+                if(ff.b<F0)
+                {
+                    // but upgradable
+                    upgrade(xml,a,xx,ff);
+                    assert(true==result);
+                    Y_XMLog(xml, "[-+] " << a.F1.str() << " @" << a.eq.name);
+                }
+                else
+                {
+                    Y_XMLog(xml, "[-]  " << a.F1.str() << " @" << a.eq.name);
+                    result = false;
+                }
             }
 
+            if(Trace)
+            {
+                Cend.load(a.cc);
+                const String fn = MakeFileName(a.eq.name) + ".yop";
+                OutputFile   fp(fn);
+                saveProfile(fp,1000);
+                {
+                    if(1==i)
+                        tropt += "plot ";
+                    else
+                        tropt += ", ";
+                    tropt += ("'" + fn + "' w l");
+                }
+            }
 
+            return result;
 
-
-            return true;
-
-            //const xreal_t x_opt = opt.find(xml,self,Minimize::Inside,xx,ff,Minimize::Standard);
-
-            return true;
         }
     }
 
