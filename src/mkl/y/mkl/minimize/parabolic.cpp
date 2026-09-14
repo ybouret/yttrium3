@@ -154,7 +154,9 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(Code);
 
+#include "parabolic/extract.hxx"
 #include "parabolic/grow.hxx"
+#include "parabolic/balance.hxx"
 
             //! load triplet into stack
             inline void preload(const Triplet<T>    & x,
@@ -336,122 +338,9 @@ namespace Yttrium
 
 
 
-            inline void extract(XML::Log      &xml,
-                                Triplet<T>    &x,
-                                Triplet<T>    &f)
-            {
-                Y_XML_Element_Attr(xml, Extract, Y_XML_Attr(nn) );
+           
 
-                //--------------------------------------------------------------
-                //
-                // order xx and ff to have local representation
-                //
-                //--------------------------------------------------------------
-                Core::HSort::Make(xx,nn,Sign::Increasing<T>,ff);
-                if(xml.verbose)
-                {
-                    Core::Display( xml() << "xx=",xx,nn) << std::endl;
-                    Core::Display( xml() << "ff=",ff,nn) << std::endl;
-                }
-
-                //--------------------------------------------------------------
-                //
-                // find minimum interval
-                //
-                //--------------------------------------------------------------
-                size_t imin=0;
-                size_t same=1;
-                T      fmin = ff[0];
-                for(size_t i=1;i<nn;++i)
-                {
-                    const T ftmp = ff[i];
-                    switch( Sign::Of(ftmp,fmin) )
-                    {
-                        case Negative: imin = i; fmin=ftmp; same=1; continue;
-                        case Positive: break;
-                        case __Zero__: ++same; continue;
-                    }
-                    break;
-                }
-
-                Y_XMLog(xml,"fmin=" << fmin << " #" << same);
-
-                switch(same)
-                {
-                    case 0: throw Specific::Exception("Parabolic::Step", "Corrupted");
-                    case 1: loadFlatV1(x,f,imin); break;
-                    case 2: loadFlatV2(x,f,imin); break;
-                    case 3: x.load(&xx[imin]); f.load(&ff[imin]);        break;
-                    default: assert(same>=4); loadFlatVN(x,f,imin,same); break;
-                }
-
-                Y_XMLog(xml, "--> x=" << x << "; f=" << f);
-            }
-
-
-            inline void sampleRight(XML::Log      & xml,
-                                    const T         rw,
-                                    Triplet<T>    & x,
-                                    Function<T,T> & F)
-            {
-                sample(xml, Clamp(x.b,x.b + C*rw, x.c), F);
-            }
-
-            inline void sampleLeft(XML::Log      & xml,
-                                   const T         lw,
-                                   Triplet<T>    & x,
-                                   Function<T,T> & F)
-            {
-                sample(xml, Clamp(x.a,x.b - C*lw, x.b), F);
-            }
-
-            inline void balance(XML::Log      & xml,
-                                Triplet<T>    & x,
-                                Triplet<T>    & f,
-                                Function<T,T> & F)
-            {
-                Y_XML_Element(xml,Balance);
-                assert(x.isOrdered());
-                assert(f.isLocalMinimum());
-
-                //--------------------------------------------------------------
-                //
-                //
-                // initialize length
-                //
-                //--------------------------------------------------------------
-                T lw   = Max(x.b-x.a,zero);
-                T rw   = Max(x.c-x.b,zero);
-                while(true)
-                {
-                    //----------------------------------------------------------
-                    //
-                    // load current state
-                    //
-                    //----------------------------------------------------------
-                    preload(x,f);
-                    switch( Sign::Of(lw,rw) )
-                    {
-                        case Negative: assert(lw<rw);           sampleRight(xml,rw,x,F); break;
-                        case Positive: assert(lw>rw);           sampleLeft(xml,lw,x,F);  break;
-                        case __Zero__: sampleRight(xml,rw,x,F); sampleLeft(xml,lw,x,F);  break;
-                    }
-                    extract(xml,x,f);
-                    T  wmin = (lw = Max(x.b-x.a,zero));
-                    T  wmax = (rw = Max(x.c-x.b,zero));
-                    if(wmin>wmax) Swap(wmin,wmax);
-
-                    assert(wmin<=wmax);
-                    Y_XMLog(xml,"-- wmin=" << wmin << ", wmax=" << wmax);
-                    if(wmax<=wmin+wmin)
-                        break;
-                }
-
-
-            }
-
-
-
+         
 
         };
 
