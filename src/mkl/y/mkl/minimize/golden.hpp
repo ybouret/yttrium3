@@ -13,10 +13,19 @@ namespace Yttrium
     namespace MKL
     {
 
-
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Golden Ratio Minimum Improving
+        //
+        //
+        //______________________________________________________________________
         template <typename T> struct Golden
         {
 
+            //__________________________________________________________________
+            //
             //! refine local minimum position
             /**
              \param xml output
@@ -24,6 +33,7 @@ namespace Yttrium
              \param f   initial values
              \param F   primary function
              */
+            //__________________________________________________________________
             static void Step(XML::Log      &xml,
                              Triplet<T>    &x,
                              Triplet<T>    &f,
