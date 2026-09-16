@@ -26,6 +26,7 @@ Y_UTEST(chem)
 
 Y_UTEST(zroot)
 
+Y_UTEST(min:golden)
 Y_UTEST(min:parabolic)
 Y_UTEST(min:api)
 

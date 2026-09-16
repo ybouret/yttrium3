@@ -17,6 +17,7 @@ Y_UTEST_DECL(5)
 
     Y_UTEST(zroot);
 
+    Y_UTEST(min_golden);
     Y_UTEST(min_parabolic);
     Y_UTEST(min_api);
 
