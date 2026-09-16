@@ -98,7 +98,7 @@ namespace Yttrium
             else
             {
                 //--------------------------------------------------------------
-                //
+                // global increase or level
                 //--------------------------------------------------------------
                 ff.b = self( xx.b = MKL::Numeric<real_t>::GOLDEN_C );
                 Y_XMLog(xml,"F(C) = " << ff.b.str() );
@@ -117,7 +117,7 @@ namespace Yttrium
                 }
             }
 
-            
+
 
 
             if(Trace)
