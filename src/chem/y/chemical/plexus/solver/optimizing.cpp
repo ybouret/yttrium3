@@ -46,7 +46,7 @@ namespace Yttrium
             if(Trace)
             {
                 const String bn = MakeFileName(a.eq.name);
-                const String fn = bn + ".ycp";
+                const String fn = bn + '.' + StdProfileExt;
                 OutputFile   fp(fn);
                 saveProfile(fp,1000);
                 {
@@ -102,7 +102,7 @@ namespace Yttrium
             if(Trace)
             {
                 Cend.load(a.cc);
-                const String fn = MakeFileName(a.eq.name) + ".yop";
+                const String fn = MakeFileName(a.eq.name) + '.' + OptProfileExt;
                 OutputFile   fp(fn);
                 saveProfile(fp,1000);
                 {

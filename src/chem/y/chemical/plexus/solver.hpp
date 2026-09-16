@@ -34,6 +34,8 @@ namespace Yttrium
             static bool                       Trace;     //!< emit profiles
             typedef MKL::Minimize             Minimize;  //!< alias
             typedef Minimize::Engine<xreal_t> Optimizer; //!< alias
+            static const char * const         StdProfileExt; //!< "ycp"
+            static const char * const         OptProfileExt; //!< "yop"
 
             //__________________________________________________________________
             //

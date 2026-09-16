@@ -87,10 +87,18 @@ namespace Yttrium
             return new Counting(p,nmin,nmax);
         }
 
+        namespace
+        {
+            static inline String CountingTag(const Counting &p)
+            {
+                return Formatted::Get("{%s,%s}",Decimal(p.lower).c_str(),Decimal(p.upper).c_str());
+            }
+        }
+
         OutputStream & Counting:: viz(OutputStream &fp) const
         {
             nodeName(fp) << '[';
-            const String label = Formatted::Get("{%s,%s}",Decimal(lower).c_str(),Decimal(upper).c_str());
+            const String label = CountingTag(*this);
             Label(fp,label);
             fp << ",shape=ellipse";
             Endl(fp<<']');
@@ -107,6 +115,11 @@ namespace Yttrium
         {
             insensitiveMotif();
             return this;
+        }
+
+        String Counting:: str() const
+        {
+            return motif->str() + CountingTag(*this);
         }
 
     }

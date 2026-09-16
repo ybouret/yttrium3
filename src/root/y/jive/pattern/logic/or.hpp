@@ -48,11 +48,12 @@ namespace Yttrium
             //
             //__________________________________________________________________
             virtual Pattern *     clone()                   const;
-            virtual bool          univocal()       const noexcept; // empty of 1 univocal
+            virtual bool          univocal()       const noexcept; // empty if 1 univocal
             virtual bool          sound()          const noexcept; // all must be sound
             virtual void          glean(Leading &) const noexcept; // from all patterns
             virtual bool          takes(Token&,Source&)     const; 
             virtual OutputStream &viz(OutputStream &)       const;
+            virtual String        str()                     const;
             virtual Pattern *     optimized();
             virtual Pattern *     insensitive();
 

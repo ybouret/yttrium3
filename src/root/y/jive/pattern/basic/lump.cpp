@@ -3,6 +3,9 @@
 #include "y/jive/pattern/leading.hpp"
 #include "y/string/format.hpp"
 
+#include "y/format/hexadecimal.hpp"
+#include <cstring>
+
 namespace Yttrium
 {
     namespace Jive
@@ -65,6 +68,33 @@ namespace Yttrium
             Label(fp,label) << ",shape=rectangle";
             //fp << "label=\"" << label << "\",shape=rectangle";
             return Endl(fp<<']');
+        }
+
+
+        String Lump:: str() const
+        {
+            char output[12] =
+            {
+                '[',
+                '\\',
+                'x',
+                0,
+                0,
+                ':',
+                '\\',
+                'x',
+                0,
+                0,
+                ']',
+                0
+            };
+
+            memcpy(output+3,Hexadecimal::LowerByte[lower],2);
+            memcpy(output+8,Hexadecimal::LowerByte[upper],2);
+
+
+
+            return output;
         }
 
     }

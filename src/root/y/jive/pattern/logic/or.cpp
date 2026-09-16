@@ -144,6 +144,30 @@ namespace Yttrium
             insensitivePatterns();
             return optimized();
         }
+
+        String Or:: str() const
+        {
+            switch(size)
+            {
+                case 0: return String();
+                case 1: return head->str();
+                default:
+                    break;
+            }
+            String ans = '(';
+            const Pattern *node=head;
+            ans += node->str();
+            for(node=node->next;node;node=node->next)
+            {
+                ans += '|';
+                ans += node->str();
+            }
+            ans += ')';
+            return ans;
+        }
+
+
+
     }
 
 

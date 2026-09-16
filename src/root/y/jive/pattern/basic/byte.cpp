@@ -3,6 +3,8 @@
 #include "y/jive/pattern/basic/byte.hpp"
 #include "y/stream/output.hpp"
 #include "y/jive/pattern/leading.hpp"
+#include "y/format/hexadecimal.hpp"
+#include <cstring>
 
 namespace Yttrium
 {
@@ -58,6 +60,14 @@ namespace Yttrium
         {
             return this;
         }
+
+        String Byte:: str() const
+        {
+            char output[8] = { '\\', 'x', 0,0,0,0,0,0 };
+            memcpy(output+2,Hexadecimal::LowerByte[code],2);
+            return output;
+        }
+
     }
 
 }

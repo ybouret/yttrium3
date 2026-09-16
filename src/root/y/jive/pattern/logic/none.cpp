@@ -2,6 +2,7 @@
 #include "y/jive/pattern/logic/none.hpp"
 #include "y/jive/pattern/leading.hpp"
 #include "y/stream/output.hpp"
+#include "y/exception.hpp"
 
 namespace Yttrium
 {
@@ -92,6 +93,11 @@ namespace Yttrium
         {
             insensitivePatterns();
             return optimized();
+        }
+
+        String None:: str() const
+        {
+            throw Specific::Exception("Pattern::None", "no str()");
         }
 
     }

@@ -49,16 +49,17 @@ namespace Yttrium
             // Interface
             //
             //__________________________________________________________________
-            virtual bool          takes(Token &, Source &) const  = 0; //!< \return true iff token is extracted from matching source
-            virtual Pattern *     clone()  const                  = 0; //!< \return clone
-            virtual void          glean(Leading &) const noexcept = 0; //!< find leading bytes
-            virtual bool          sound()          const noexcept = 0; //!< \return true iff takes doesn't return successful empty token
-            bool                  frail()          const noexcept;     //!< \return !sound()
-            virtual bool          univocal()       const noexcept = 0; //!< \return true iff univocal result
-            bool                  multiple()       const noexcept;     //!< \return !univocal()
-            virtual OutputStream &viz(OutputStream &)       const = 0; //!< generate graphviz code \return output stream
-            virtual Pattern *     optimized()                     = 0; //!< \return optimized version
-            virtual Pattern *     insensitive()                   = 0; //!< \return case insensitive version
+            virtual bool           takes(Token &, Source &) const  = 0; //!< \return true iff token is extracted from matching source
+            virtual Pattern *      clone()  const                  = 0; //!< \return clone
+            virtual void           glean(Leading &) const noexcept = 0; //!< find leading bytes
+            virtual bool           sound()          const noexcept = 0; //!< \return true iff takes doesn't return successful empty token
+            bool                   frail()          const noexcept;     //!< \return !sound()
+            virtual bool           univocal()       const noexcept = 0; //!< \return true iff univocal result
+            bool                   multiple()       const noexcept;     //!< \return !univocal()
+            virtual OutputStream & viz(OutputStream &)       const = 0; //!< generate graphviz code \return output stream
+            virtual Pattern *      optimized()                     = 0; //!< \return optimized version
+            virtual Pattern *      insensitive()                   = 0; //!< \return case insensitive version
+            virtual String         str()                     const = 0; //!< to regular expression
 
             //__________________________________________________________________
             //

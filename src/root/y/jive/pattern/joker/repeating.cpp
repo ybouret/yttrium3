@@ -101,6 +101,18 @@ namespace Yttrium
             return emitLink(fp);
         }
 
+        String Repeating:: str() const
+        {
+            switch(atLeast)
+            {
+                case 0: return motif->str() + '*';
+                case 1: return motif->str() + '+';
+                default:
+                    break;
+            }
+            return motif->str() + Formatted::Get("{%s}",Decimal(atLeast).c_str());
+        }
+
         Pattern * Repeating:: optimized()
         {
             optimizeMotif();

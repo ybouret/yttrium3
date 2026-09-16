@@ -1,9 +1,9 @@
-
-
-
 #include "y/jive/pattern/basic/excl.hpp"
 #include "y/stream/output.hpp"
 #include "y/jive/pattern/leading.hpp"
+
+#include "y/format/hexadecimal.hpp"
+#include <cstring>
 
 namespace Yttrium
 {
@@ -60,6 +60,22 @@ namespace Yttrium
         Pattern * Excl:: optimized()
         {
             return this;
+        }
+
+        String Excl:: str() const
+        {
+            char output[8] = {
+                '[',
+                '^' ,
+                '\\',
+                'x',
+                0,
+                0,
+                ']',
+                0
+            };
+            memcpy(output+4,Hexadecimal::LowerByte[code],2);
+            return output;
         }
     }
 

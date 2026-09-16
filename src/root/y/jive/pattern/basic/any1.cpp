@@ -62,6 +62,12 @@ namespace Yttrium
             return this;
         }
 
+        String  Any1:: str() const
+        {
+            static const char output[] ="[\\x00:\\xff]";
+            return output;
+        }
+
     }
 
 }

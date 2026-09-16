@@ -16,6 +16,7 @@ namespace Yttrium
         {
             assert(curr[-1] == LBRACE);
 
+            // find content
             const char * const ini = curr;
             while(true)
             {
@@ -27,14 +28,23 @@ namespace Yttrium
             std::cerr << "uid='" << uid << "'" << std::endl;
             if(uid.size()<=0) throw Specific::Exception(CallSign,"empty braces in sub-expression #%u of '%s'", ixpr, expr);
 
+
             if(isalpha(uid[1]))
             {
+                // substitution
                 if(!dict) throw Specific::Exception(CallSign, "no dictionary for '%s'", uid.c_str());
                 Pattern * const q = dict->clone(uid);
                 if(!q)    throw Specific::Exception(CallSign, "no pattern '%s' in dictionary'", uid.c_str());
                 p << q;
                 return;
             }
+            else
+            {
+                // assume repetition or counting
+                
+            }
+
+
 
 
             throw Specific::Exception(CallSign,"invalid '%s' in braces", ASCII::Printable::Text(uid[1]));

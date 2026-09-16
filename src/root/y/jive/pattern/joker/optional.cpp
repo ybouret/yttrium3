@@ -83,6 +83,11 @@ namespace Yttrium
             insensitiveMotif();
             return this;
         }
+
+        String Optional:: str() const
+        {
+            return motif->str() + '?';
+        }
     }
 
 }
