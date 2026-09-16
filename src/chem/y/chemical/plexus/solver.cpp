@@ -25,8 +25,9 @@ namespace Yttrium
         Fadd(),
         xl10( std::log(10.0) ),
         opt(),
-        jac(cls.N),
+        lu(cls.N),
         finder( new Coven::Finder(cls.M) ),
+        jac(cls.N),
         trace(),
         tropt()
         {
@@ -115,10 +116,49 @@ namespace Yttrium
                 std::cerr << tropt << std::endl;
             }
 
-            
+            XMatrix dA(n,cls.M);
+            XMatrix nu(n,cls.M);
+            XMatrix nuT(cls.M,n);
+            XArray  xi(n);
+            for(size_t i=1;i<=n;++i)
+            {
+                XWritable & dA_i = dA[i];
+                Ansatz    & a    = ans[i];
+                a.eq.dAffinity(dA_i,C,L);
+                nu[i].load(cls.allNu[ a.eq.indx[SubLevel]] );
+                xi[i] = -a.A0;
+            }
+
+            nuT.assignTranspose(nu);
 
 
-            //XMatrix &J = jac[n]; std::cerr << "J=" << J << std::endl;
+            std::cerr << "dA=" << dA << std::endl;
+            std::cerr << "nu=" << nu << std::endl;
+            std::cerr << "rhs=" << xi << std::endl;
+
+            XMatrix &J = jac[n];
+            for(size_t i=1;i<=n;++i)
+            {
+                J[i][i] = xadd.dot(dA[i],nu[i]);
+                for(size_t j=i+1;j<=n;++j)
+                {
+                    J[i][j] = J[j][i] = xadd.dot(dA[i],nu[j]);
+                }
+            }
+            std::cerr << "J=" << J << std::endl;
+
+            if(!lu.build(J))
+            {
+                std::cerr << "singular" << std::endl;
+            }
+            XArray dC(cls.M);
+            lu.solve(J,xi);
+            std::cerr << "xi=" << xi << std::endl;
+            nuT.mul(dC,xi);
+            std::cerr << "dC=" << dC << std::endl;
+
+
+
         }
 
     }

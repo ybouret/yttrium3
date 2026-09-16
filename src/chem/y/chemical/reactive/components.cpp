@@ -254,24 +254,22 @@ namespace Yttrium
         }
 
 
-        void Components:: addAffinityJacobian(XWritable &J, const XReadable &C, const Level L) const
+        void Components:: dAffinity(XWritable &dA, const XReadable &C, const Level L) const
         {
 
-#if 0
             for(const Actor *ac=reac->head;ac;ac=ac->next)
             {
                 const Species &sp = ac->sp;
                 const xreal_t  cc = sp(C,L); assert(cc.mantissa>0);
-                sp(J,SubLevel) += ac->xn /cc;
+                sp(dA,SubLevel) = ac->xn /cc;
             }
 
             for(const Actor *ac=prod->head;ac;ac=ac->next)
             {
                 const Species &sp = ac->sp;
                 const xreal_t  cc = sp(C,L); assert(cc.mantissa>0);
-                sp(J,SubLevel) -= -ac->xn /cc;
+                sp(dA,SubLevel) = -ac->xn /cc;
             }
-#endif
 
         }
 

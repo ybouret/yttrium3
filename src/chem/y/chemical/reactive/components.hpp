@@ -74,7 +74,7 @@ namespace Yttrium
                              const XReadable & Ctry,
                              const Level       Ltry) const;
 
-            void addAffinityJacobian(XWritable &J, const XReadable &C, const Level L) const;
+            void dAffinity(XWritable &dA, const XReadable &C, const Level L) const;
 
             //! compute extent from a transformation
             /**

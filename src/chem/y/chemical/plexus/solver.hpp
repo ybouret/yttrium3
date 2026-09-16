@@ -8,6 +8,7 @@
 #include "y/coven/finder.hpp"
 #include "y/mkl/minimize/api.hpp"
 #include "y/chemical/reactive/erepo.hpp"
+#include "y/mkl/algebra/lu.hpp"
 
 namespace Yttrium
 {
@@ -87,8 +88,9 @@ namespace Yttrium
             XAdd               Fadd;   //!< for F computation
             const xreal_t      xl10;   //!< log(10)
             Optimizer          opt;
-            CxxSeries<XMatrix> jac;    //!< preformated matrices
+            MKL::LU<xreal_t>   lu;  
             Finder             finder; //!< helper to build basis
+            CxxSeries<XMatrix> jac;    //!< preformated matrices
             String             trace;  //!< gnuplot
             String             tropt;  //!< gnuplot, optimized profiles
             
