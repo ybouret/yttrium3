@@ -90,7 +90,10 @@ namespace Yttrium
             Optimizer          opt;
             MKL::LU<xreal_t>   lu;  
             Finder             finder; //!< helper to build basis
-            CxxSeries<XMatrix> jac;    //!< preformated matrices
+            CxxSeries<XMatrix> JSer;    //!< preformated J matrices
+            CxxSeries<XMatrix> dASer;   //!< preformated dA matrices
+            CxxSeries<XMatrix> nuSer;   //!< preformated nu matrices
+            CxxSeries<XMatrix> nuTSer;  //!< preformated nuT matrices
             String             trace;  //!< gnuplot
             String             tropt;  //!< gnuplot, optimized profiles
             

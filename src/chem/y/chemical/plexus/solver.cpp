@@ -27,14 +27,19 @@ namespace Yttrium
         opt(),
         lu(cls.N),
         finder( new Coven::Finder(cls.M) ),
-        jac(cls.N),
+        JSer(cls.N),
+        dASer(cls.N),
+        nuSer(cls.N),
+        nuTSer(cls.N),
         trace(),
         tropt()
         {
             for(size_t i=1;i<=cls.N;++i)
             {
-                jac.append(i,i);
-                assert(jac[i].isSquare());
+                JSer.append(i,i);
+                dASer.append(i,cls.M);
+                nuSer.append(i,cls.M);
+                nuTSer.append(cls.M,i);
             }
 
         }
@@ -116,10 +121,11 @@ namespace Yttrium
                 std::cerr << tropt << std::endl;
             }
 
-            XMatrix dA(n,cls.M);
-            XMatrix nu(n,cls.M);
-            XMatrix nuT(cls.M,n);
+            XMatrix & dA  = dASer[n];
+            XMatrix & nu  = nuSer[n];
+            XMatrix & nuT = nuTSer[n];
             XArray  xi(n);
+            dA.ld(MKL::Numeric<xreal_t>::ZERO);
             for(size_t i=1;i<=n;++i)
             {
                 XWritable & dA_i = dA[i];
@@ -136,7 +142,7 @@ namespace Yttrium
             std::cerr << "nu=" << nu << std::endl;
             std::cerr << "rhs=" << xi << std::endl;
 
-            XMatrix &J = jac[n];
+            XMatrix &J = JSer[n];
             for(size_t i=1;i<=n;++i)
             {
                 J[i][i] = xadd.dot(dA[i],nu[i]);
@@ -151,6 +157,7 @@ namespace Yttrium
             {
                 std::cerr << "singular" << std::endl;
             }
+
             XArray dC(cls.M);
             lu.solve(J,xi);
             std::cerr << "xi=" << xi << std::endl;
@@ -233,8 +240,8 @@ namespace Yttrium
             const xreal_t v = one - u;
             for(size_t j=cls.M;j>0;--j)
             {
-                xreal_t       cmin = Cini[j]; assert(cmin.mantissa>0);
-                xreal_t       cmax = Cend[j]; assert(cmax.mantissa>0);
+                xreal_t       cmin = Cini[j]; assert(cmin.mantissa>=0);
+                xreal_t       cmax = Cend[j]; assert(cmax.mantissa>=0);
                 const xreal_t c0   = cmin;
                 const xreal_t c1   = cmax;
 
