@@ -23,9 +23,11 @@ namespace Yttrium
         class ParabolicStep
         {
         public:
+            static bool Trace;                       //!< tracing results
+            static const char * const FuncTraceName; //!< where sample is written
+            static const char * const StepTraceName; //!< where step is written
             explicit ParabolicStep() noexcept; //!< setup
             virtual ~ParabolicStep() noexcept; //!< cleanup
-            static bool Trace;                 //!< tracing results
 
         private:
             Y_Disable_Copy_And_Assign(ParabolicStep); //!< discarded

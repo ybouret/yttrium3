@@ -28,6 +28,10 @@ namespace Yttrium
 
         bool ParabolicStep:: Trace = false;
 
+        const char * const ParabolicStep:: FuncTraceName = "para-func.data";
+        const char * const ParabolicStep:: StepTraceName = "para-step.data";
+
+
 
         template <typename T>
         class Parabolic<T> :: Code  : public Object
@@ -91,7 +95,7 @@ namespace Yttrium
 
                 if(Trace)
                 {
-                    OutputFile fp("para-func.data");
+                    OutputFile fp(FuncTraceName);
                     const unsigned np = 10000;
                     for(unsigned i=0;i<=np;++i)
                     {
@@ -99,7 +103,7 @@ namespace Yttrium
                         const T FF = F(XX);
                         fp("%.15g %.15g\n", (double)XX, (double)FF);
                     }
-                    OutputFile::Overwrite("para-step.data");
+                    OutputFile::Overwrite(StepTraceName);
                 }
 
 
@@ -114,7 +118,7 @@ namespace Yttrium
 
                 if(Trace)
                 {
-                    OutputFile fp("para-step.data",true);
+                    OutputFile fp(StepTraceName,true);
                     saveStack(fp,2);
                     saveState(fp,x,f,3);
                 }
@@ -130,7 +134,7 @@ namespace Yttrium
 
                 if(Trace)
                 {
-                    OutputFile fp("para-step.data",true);
+                    OutputFile fp(StepTraceName,true);
                     saveState(fp,x,f,4);
                 }
 
