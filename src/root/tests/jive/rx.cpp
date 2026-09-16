@@ -24,6 +24,13 @@ Y_UTEST(jive_rx)
         {
             Vizible::Render("rx.dot",*p);
         }
+
+        const String prx = p->str();
+        std::cerr << "prx='" << prx << "'" << std::endl;
+        AutoPtr<Jive::Pattern> q = Jive::RegExp::Compile(prx,0);
+        //Y_CHECK( *q == *p );
+
+
     }
 
 

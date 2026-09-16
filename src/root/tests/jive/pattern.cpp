@@ -42,15 +42,15 @@ namespace  {
             Vizible::Render(dotName,p);
         }
 
-        {
-            const Jive::Motif opt( Jive::Pattern::Optimized(p.clone()) );
-        }
+
 
         {
             const Jive::Motif ign( Jive::Pattern::Insensitive(p.clone()) );
             const String dotName = String("ign-") + p.name + ".dot";
             Vizible::Render(dotName,*ign);
         }
+
+        
 
     }
 
