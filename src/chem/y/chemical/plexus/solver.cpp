@@ -45,7 +45,8 @@ namespace Yttrium
 
         const char * const Solver:: StdProfileExt = "ycp";
         const char * const Solver:: OptProfileExt = "yop";
-
+        const char * const Solver:: ProfilesExtRX = "y[c|o]p";
+        
 
         void Solver:: run(XML::Log        & xml,
                           XWritable       & C,

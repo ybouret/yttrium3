@@ -36,6 +36,7 @@ namespace Yttrium
             typedef Minimize::Engine<xreal_t> Optimizer; //!< alias
             static const char * const         StdProfileExt; //!< "ycp"
             static const char * const         OptProfileExt; //!< "yop"
+            static const char * const         AnyProfileExt; //!< "y[c|o]p"
 
             //__________________________________________________________________
             //
@@ -62,6 +63,8 @@ namespace Yttrium
 
             void   saveProfile(OutputStream &, const unsigned np);
             String MakeFileName(const String &);
+
+            static void TryRemoveProfiles(const String & dirName, const char * const profileExt);
 
 
             //__________________________________________________________________
