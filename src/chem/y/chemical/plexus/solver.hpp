@@ -32,6 +32,7 @@ namespace Yttrium
             //__________________________________________________________________
             typedef AutoPtr<Coven::Finder>    Finder;    //!< alias
             static bool                       Trace;     //!< emit profiles
+            static unsigned                   TracePoints; //!< points per profile
             typedef MKL::Minimize             Minimize;  //!< alias
             typedef Minimize::Engine<xreal_t> Optimizer; //!< alias
             static const char * const         StdProfileExt; //!< "ycp"

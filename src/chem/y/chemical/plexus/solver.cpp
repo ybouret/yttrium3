@@ -8,8 +8,10 @@ namespace Yttrium
     {
 
 
-        bool Solver:: Trace = false;
-        
+        bool     Solver:: Trace       = false;
+        unsigned Solver:: TracePoints = 1000;
+
+
         Solver:: Solver( const Cluster  &cluster) :
         cls(cluster),
         Ceq(cls.elist->size,cls.M),

@@ -1,6 +1,7 @@
 #include "y/chemical/plexus/solver.hpp"
 #include "y/stream/libc/output.hpp"
 #include "y/type/temporary.hpp"
+#include "y/mkl/minimize/golden.hpp"
 
 namespace Yttrium
 {
@@ -30,7 +31,7 @@ namespace Yttrium
         {
             //------------------------------------------------------------------
             //
-            // initialize Cend at 1D solution
+            // Initialize Cend at 1D solution, and deduce F1
             //
             //------------------------------------------------------------------
             const String &eid = a.eq.name;
@@ -38,17 +39,23 @@ namespace Yttrium
             Solver &self = *this;
             Cend.load(a.cc);
             const xreal_t  F1 = F(Cend,SubLevel);
-            Y_XMLog(xml,"F(0)   = " << self(0).str() << " / " << F0.str() );
-            Y_XMLog(xml,"F(1)   = " << self(1).str() << " / " << F1.str() );
-            Coerce(a.F1) = F1;
+            Y_XMLog(xml,"F(0) = " << self(0).str() << " / " << F0.str() );
+            Y_XMLog(xml,"F(1) = " << self(1).str() << " / " << F1.str() );
+            a.F1 = F1;
 
 
+
+            //------------------------------------------------------------------
+            //
+            // Emit Initial Profile
+            //
+            //------------------------------------------------------------------
             if(Trace)
             {
                 const String bn = MakeFileName(a.eq.name);
                 const String fn = bn + '.' + StdProfileExt;
                 OutputFile   fp(fn);
-                saveProfile(fp,1000);
+                saveProfile(fp,TracePoints);
                 {
                     if(1==i)
                         trace += "plot ";
@@ -57,34 +64,44 @@ namespace Yttrium
                     trace += ("'" + fn + "' w l");
                 }
             }
+            
 
-            // study cases
-            XTriplet xx = {  0, MKL::Numeric<xreal_t>::HALF, 1 };
-            XTriplet ff = { F0, self(xx.b), F1 };
-            Y_XMLog(xml,"F(1/2) = " << ff.b.str() );
-
-            // assuming true result
-            bool result = true;
+            //------------------------------------------------------------------
+            //
+            // Study Result
+            //
+            //------------------------------------------------------------------
+            XTriplet xx = { MKL::Numeric<xreal_t>::ZERO, MKL::Numeric<xreal_t>::ZERO, MKL::Numeric<xreal_t>::ONE };
+            XTriplet ff = { F0, F0, F1 };
+            bool     result = true;
             if(F1<F0)
             {
-                // directly ok!
+                //--------------------------------------------------------------
+                // global decrease
+                //--------------------------------------------------------------
+                ff.b = self( xx.b = MKL::Numeric<real_t>::GOLDEN_R );
+                Y_XMLog(xml,"F(R) = " << ff.b.str() );
+
                 if(ff.b<F1)
                 {
-                    // and upgradable
+                    // still upgradable
                     upgrade(xml,a,xx,ff);
                     Y_XMLog(xml, "[++] " << a.F1.str() << " @" << a.eq.name);
                 }
                 else
                 {
+                    // assume global minimun
                     Y_XMLog(xml, "[+]  " << a.F1.str() << " @" << a.eq.name);
                 }
 
-                assert(true==result);
             }
             else
             {
-                assert(F1>=F0);
-                // not ok
+                //--------------------------------------------------------------
+                //
+                //--------------------------------------------------------------
+                ff.b = self( xx.b = MKL::Numeric<real_t>::GOLDEN_C );
+                Y_XMLog(xml,"F(C) = " << ff.b.str() );
                 if(ff.b<F0)
                 {
                     // but upgradable
@@ -94,17 +111,21 @@ namespace Yttrium
                 }
                 else
                 {
+                    // assume wrong direction
                     Y_XMLog(xml, "[-]  " << a.F1.str() << " @" << a.eq.name);
                     result = false;
                 }
             }
+
+            
+
 
             if(Trace)
             {
                 Cend.load(a.cc);
                 const String fn = MakeFileName(a.eq.name) + '.' + OptProfileExt;
                 OutputFile   fp(fn);
-                saveProfile(fp,1000);
+                saveProfile(fp,TracePoints);
                 {
                     if(1==i)
                         tropt += "plot ";
@@ -115,6 +136,7 @@ namespace Yttrium
             }
 
             return result;
+
 
         }
     }
