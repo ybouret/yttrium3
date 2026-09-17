@@ -71,7 +71,7 @@ namespace Yttrium
 
             //------------------------------------------------------------------
             //
-            // optimize global objective function over 1D
+            // optimize local objective function over 1D
             //
             //------------------------------------------------------------------
             if(Trace)
@@ -81,26 +81,26 @@ namespace Yttrium
             }
 
             
-            const Ansatz * bestGlobal = 0;
+            const Ansatz * bestLocal = 0;
             for(size_t i=1;i<=n;++i)
             {
                 Ansatz & a  = ans[i];
                 if(optimizing(xml,a,F0,i))
                 {
-                    if(!bestGlobal || a.F1 < bestGlobal->F1)
+                    if(!bestLocal || a.F1 < bestLocal->F1)
                     {
-                        bestGlobal = &a;
+                        bestLocal = &a;
                     }
                 }
             }
 
-            if(bestGlobal)
+            if(bestLocal)
             {
-                Y_XMLog(xml, "[+bestGlobal] " << bestGlobal->F1.str() << " @" << bestGlobal->eq.name);
+                Y_XMLog(xml, "[+bestLocal] " << bestLocal->F1.str() << " @" << bestLocal->eq.name);
             }
             else
             {
-                Y_XMLog(xml, "[-bestGlobal]");
+                Y_XMLog(xml, "[-bestLocal]");
             }
 
 
@@ -109,6 +109,12 @@ namespace Yttrium
                 std::cerr << trace << std::endl;
                 std::cerr << tropt << std::endl;
             }
+
+            //------------------------------------------------------------------
+            //
+            // try and move to global minimum
+            //
+            //------------------------------------------------------------------
 
             XMatrix & J   = algebra->J[n];
             XMatrix & dA  = algebra->dA[n];

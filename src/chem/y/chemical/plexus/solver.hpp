@@ -102,6 +102,14 @@ namespace Yttrium
             //! regularize, then build basis from independent eqs
             size_t buildBasis(XML::Log &, XWritable &, const Level, const XReadable &);
 
+            //! optimze ansatz over the full affinity
+            /**
+             \param xml output
+             \param a   ansatz to optimize
+             \param F0  initial start
+             \param i   ansatz index (for trace)
+             \return true if local minimum is found
+             */
             bool   optimizing(XML::Log      &xml,
                               Ansatz        &a,
                               const xreal_t F0,
