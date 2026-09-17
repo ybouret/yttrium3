@@ -5,12 +5,32 @@
 #define Y_Chemical_Plexus_Algebra_Included 1
 
 #include "y/chemical/type/defs.hpp"
+#include "y/chemical/type/matrix.hpp"
+#include "y/container/cxx/series.hpp"
+#include "y/mkl/algebra/lu.hpp"
 
 namespace Yttrium
 {
     namespace Chemical
     {
 
+        class Algebra : public Object
+        {
+        public:
+
+            explicit Algebra(const size_t n, const size_t m);
+            virtual ~Algebra() noexcept;
+
+            MKL::LU<xreal_t>   lu;
+            CxxSeries<XMatrix> J;
+            CxxSeries<XMatrix> dA;
+            CxxSeries<XMatrix> nu;
+            CxxSeries<XMatrix> nuT;
+
+            
+        private:
+            Y_Disable_Copy_And_Assign(Algebra);
+        };
     }
 
 }

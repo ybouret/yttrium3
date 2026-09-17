@@ -5,6 +5,7 @@
 #define Y_Chemical_Plexus_Solver_Included 1
 
 #include "y/chemical/plexus/solver/ansatz.hpp"
+#include "y/chemical/plexus/solver/algebra.hpp"
 #include "y/coven/finder.hpp"
 #include "y/mkl/minimize/api.hpp"
 #include "y/chemical/reactive/erepo.hpp"
@@ -86,14 +87,9 @@ namespace Yttrium
             XMul               xmul;   //!< for inner multiplication
             XAdd               xadd;   //!< for inner additions
             XAdd               Fadd;   //!< for F computation
-            const xreal_t      xl10;   //!< log(10)
             Optimizer          opt;
-            MKL::LU<xreal_t>   lu;  
             Finder             finder; //!< helper to build basis
-            CxxSeries<XMatrix> JSer;    //!< preformated J matrices
-            CxxSeries<XMatrix> dASer;   //!< preformated dA matrices
-            CxxSeries<XMatrix> nuSer;   //!< preformated nu matrices
-            CxxSeries<XMatrix> nuTSer;  //!< preformated nuT matrices
+            AutoPtr<Algebra>   algebra; //!< algebra content
             String             trace;  //!< gnuplot
             String             tropt;  //!< gnuplot, optimized profiles
             

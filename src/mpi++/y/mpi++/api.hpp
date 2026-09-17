@@ -1,3 +1,4 @@
+//! \file
 
 #ifndef Y_MPI_Included
 #define Y_MPI_Included 1

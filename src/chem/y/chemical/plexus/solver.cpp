@@ -23,24 +23,13 @@ namespace Yttrium
         xmul(),
         xadd(),
         Fadd(),
-        xl10( std::log(10.0) ),
         opt(),
-        lu(cls.N),
-        finder( new Coven::Finder(cls.M) ),
-        JSer(cls.N),
-        dASer(cls.N),
-        nuSer(cls.N),
-        nuTSer(cls.N),
+        finder(  new Coven::Finder(cls.M) ),
+        algebra( new Algebra(cls.N,cls.M) ),
         trace(),
         tropt()
         {
-            for(size_t i=1;i<=cls.N;++i)
-            {
-                JSer.append(i,i);
-                dASer.append(i,cls.M);
-                nuSer.append(i,cls.M);
-                nuTSer.append(cls.M,i);
-            }
+
 
         }
 
@@ -121,9 +110,10 @@ namespace Yttrium
                 std::cerr << tropt << std::endl;
             }
 
-            XMatrix & dA  = dASer[n];
-            XMatrix & nu  = nuSer[n];
-            XMatrix & nuT = nuTSer[n];
+            XMatrix & J   = algebra->J[n];
+            XMatrix & dA  = algebra->dA[n];
+            XMatrix & nu  = algebra->nu[n];
+            XMatrix & nuT = algebra->nuT[n];
             XArray  xi(n);
             dA.ld(MKL::Numeric<xreal_t>::ZERO);
             for(size_t i=1;i<=n;++i)
@@ -142,7 +132,6 @@ namespace Yttrium
             std::cerr << "nu=" << nu << std::endl;
             std::cerr << "rhs=" << xi << std::endl;
 
-            XMatrix &J = JSer[n];
             for(size_t i=1;i<=n;++i)
             {
                 J[i][i] = xadd.dot(dA[i],nu[i]);
@@ -153,13 +142,13 @@ namespace Yttrium
             }
             std::cerr << "J=" << J << std::endl;
 
-            if(!lu.build(J))
+            if(!algebra->lu.build(J))
             {
                 std::cerr << "singular" << std::endl;
             }
 
             XArray dC(cls.M);
-            lu.solve(J,xi);
+            algebra->lu.solve(J,xi);
             std::cerr << "xi=" << xi << std::endl;
             nuT.mul(dC,xi);
             std::cerr << "dC=" << dC << std::endl;
@@ -231,7 +220,7 @@ namespace Yttrium
                 const xreal_t A2 = A*A;
                 Fadd << A2;
             }
-            return Fadd().sqrt() / xl10;
+            return Fadd().sqrt();
         }
 
         xreal_t Solver:: operator()(const xreal_t u)
