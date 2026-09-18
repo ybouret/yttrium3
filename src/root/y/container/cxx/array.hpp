@@ -71,6 +71,8 @@ namespace Yttrium
 
         //! duplicate \param arr another array
         inline explicit CxxArray(const CxxArray &arr) :
+        Container(),
+        ContiguousWritable<T>(),
         code( new Code(CopyOf,arr) )
         {
         }

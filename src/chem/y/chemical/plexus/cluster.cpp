@@ -70,8 +70,7 @@ namespace Yttrium
             }
 
             // write equilibria
-            const EList &elist = grade[order];
-            for(const ENode *en=elist->head;en;en=en->next)
+            for(const ENode *en= grade[order]->head;en;en=en->next)
             {
                 const Components &eq   = **en;
                 const String     color = weasel.getColorFor(eq,SubLevel);
