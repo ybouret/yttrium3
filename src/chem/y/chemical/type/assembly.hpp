@@ -49,6 +49,14 @@ namespace Yttrium
             //! pretty justified print \return output stream
             std::ostream & print(std::ostream &, const Entity &, const Justify::Type = Justify::Left) const;
 
+            //! print with prefix/suffix
+            std::ostream & print(std::ostream &,
+                                 const char * const,
+                                 const Entity &,
+                                 const char * const,
+                                 const Justify::Type = Justify::Center) const;
+
+
             //! display a list of data from array
             template <typename HLIST, typename ARRAY> inline
             void display(std::ostream &os, const HLIST &list,
@@ -59,10 +67,7 @@ namespace Yttrium
             {
                 for(const typename HLIST::NodeType *node=list->head;node;node=node->next)
                 {
-                    if(pfx) os << pfx;
-                    print(os,(**node));
-                    if(sfx) os << sfx;
-                    os << " = " << (**node)(A,L) << std::endl;
+                    print(os,pfx,(**node),sfx) << " = " << (**node)(A,L) << std::endl;
                 }
             }
 
@@ -77,10 +82,7 @@ namespace Yttrium
             {
                 for(const typename HLIST::NodeType *node=list->head;node;node=node->next)
                 {
-                    if(pfx) os << pfx;
-                    print(os,(**node));
-                    if(sfx) os << sfx;
-                    os << " = " << proc( (**node)(A,L) ) << std::endl;
+                    print(os,pfx,(**node),sfx)  << " = " << proc( (**node)(A,L) ) << std::endl;
                 }
             }
 

@@ -84,6 +84,27 @@ namespace Yttrium
             Y_XMLog(xml, "xi=" << xi);
             Y_XMLog(xml, "dC=" << dC);
 
+            //__________________________________________________________________
+            //
+            //
+            // check if need to cut
+            //
+            //__________________________________________________________________
+            for(const SNode *sn=cls.slist->head;sn;sn=sn->next)
+            {
+                const Species &sp = **sn;
+                const size_t   j  = sp.indx[SubLevel];
+                const xreal_t  cc = Cini[j];
+                const xreal_t  dc = dC[j];
+
+                if(xml.verbose)
+                    cls.sfmt.print(xml(),"[",sp,"]")
+                    << " : "  << std::setw(23) << cc.str()
+                    << " + (" << std::setw(23) << dc.str() << ")" << std::endl;
+
+            }
+
+
             return false;
         }
     }
