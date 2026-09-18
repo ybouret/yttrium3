@@ -18,14 +18,13 @@ namespace Yttrium
         Cini(cls.M),
         Cend(cls.M),
         Ctry(cls.M),
+        dC(cls.M),
         ans(cls.elist->size),
         blk(),
         xmul(),
         xadd(),
         Fadd(),
-        opt(),
-        finder(  new Coven::Finder(cls.M) ),
-        algebra( new Algebra(cls.N,cls.M) ),
+        assets( new Assets(cls.N,cls.M) ),
         trace(),
         tropt()
         {
@@ -110,55 +109,7 @@ namespace Yttrium
                 std::cerr << tropt << std::endl;
             }
 
-            //------------------------------------------------------------------
-            //
-            // try and move to global minimum
-            //
-            //------------------------------------------------------------------
-
-            XMatrix & J   = algebra->J[n];
-            XMatrix & dA  = algebra->dA[n];
-            XMatrix & nu  = algebra->nu[n];
-            XMatrix & nuT = algebra->nuT[n];
-            XArray  xi(n);
-            dA.ld(MKL::Numeric<xreal_t>::ZERO);
-            for(size_t i=1;i<=n;++i)
-            {
-                XWritable & dA_i = dA[i];
-                Ansatz    & a    = ans[i];
-                a.eq.dAffinity(dA_i,C,L);
-                nu[i].load(cls.allNu[ a.eq.indx[SubLevel]] );
-                xi[i] = -a.A0;
-            }
-
-            nuT.assignTranspose(nu);
-
-
-            std::cerr << "dA=" << dA << std::endl;
-            std::cerr << "nu=" << nu << std::endl;
-            std::cerr << "rhs=" << xi << std::endl;
-
-            for(size_t i=1;i<=n;++i)
-            {
-                J[i][i] = xadd.dot(dA[i],nu[i]);
-                for(size_t j=i+1;j<=n;++j)
-                {
-                    J[i][j] = J[j][i] = xadd.dot(dA[i],nu[j]);
-                }
-            }
-            std::cerr << "J=" << J << std::endl;
-
-            if(!algebra->lu.build(J))
-            {
-                std::cerr << "singular" << std::endl;
-            }
-
-            XArray dC(cls.M);
-            algebra->lu.solve(J,xi);
-            std::cerr << "xi=" << xi << std::endl;
-            nuT.mul(dC,xi);
-            std::cerr << "dC=" << dC << std::endl;
-
+            NRStep(xml,C,L);
 
 
         }

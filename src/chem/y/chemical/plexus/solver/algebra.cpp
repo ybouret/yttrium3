@@ -12,7 +12,8 @@ namespace Yttrium
         J(n),
         dA(n),
         nu(n),
-        nuT(n)
+        nuT(n),
+        xi(n)
         {
             for(size_t i=1;i<=n;++i)
             {
@@ -20,6 +21,7 @@ namespace Yttrium
                 dA.append(i,m);
                 nu.append(i,m);
                 nuT.append(m,i);
+                xi.append(i);
             }
         }
 

@@ -16,7 +16,7 @@ namespace Yttrium
             xreal_t x_opt;
             {
                 const Temporary<bool> quiet(xml.verbose,false);
-                x_opt = opt.find(xml,*this,Minimize::Direct,xx,ff,Minimize::Standard);
+                x_opt = assets->minimize.find(xml,*this,Minimize::Direct,xx,ff,Minimize::Standard);
             }
             Y_XMLog(xml, "[+] F(" << x_opt.str() <<") = " << ff.b );
             a.F1 = ff.b;

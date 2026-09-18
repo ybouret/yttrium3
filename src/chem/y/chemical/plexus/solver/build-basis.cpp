@@ -56,16 +56,17 @@ namespace Yttrium
             //
             //------------------------------------------------------------------
             Y_XMLog(xml, "-- selecting at most " << N << " equilibri" << ASCII::Plural::uma(N) << " out of " << ans.size() );
-            finder->free();
+            Coven::Finder &finder = *assets->finder;
+            finder.free();
             for(size_t i=1;i<=n;++i)
             {
                 const Ansatz      &a  = ans[i]; assert(a.am.st==Running);
                 const Equilibrium &eq = a.eq;
                 const IRow        &nu = cls.allNu[  eq.indx[SubLevel] ];
-                if(finder->accepts(nu))
+                if(finder.accepts(nu))
                 {
                     Y_XMLog(xml, "[+] " << eq.name);
-                    if(finder->size>=N)
+                    if(finder.size>=N)
                     {
                         Y_XMLog(xml, "-- found FULL basis");
                         break;
@@ -85,7 +86,7 @@ namespace Yttrium
             // cleanup
             //
             //------------------------------------------------------------------
-            n = finder->size;
+            n = finder.size;
             if(n<N) Y_XMLog(xml, "-- found PARTIAL basis");
             while(ans.size()>n)
                 ans.popTail();

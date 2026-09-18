@@ -4,12 +4,9 @@
 #ifndef Y_Chemical_Plexus_Solver_Included
 #define Y_Chemical_Plexus_Solver_Included 1
 
+#include "y/chemical/plexus/solver/assets.hpp"
 #include "y/chemical/plexus/solver/ansatz.hpp"
-#include "y/chemical/plexus/solver/algebra.hpp"
-#include "y/coven/finder.hpp"
-#include "y/mkl/minimize/api.hpp"
 #include "y/chemical/reactive/erepo.hpp"
-#include "y/mkl/algebra/lu.hpp"
 
 namespace Yttrium
 {
@@ -32,11 +29,9 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            typedef AutoPtr<Coven::Finder>    Finder;    //!< alias
             static bool                       Trace;     //!< emit profiles
             static unsigned                   TracePoints; //!< points per profile
             typedef MKL::Minimize             Minimize;  //!< alias
-            typedef Minimize::Engine<xreal_t> Optimizer; //!< alias
             static const char * const         StdProfileExt; //!< "ycp"
             static const char * const         OptProfileExt; //!< "yop"
             static const char * const         AnyProfileExt; //!< "y[c|o]p"
@@ -82,16 +77,15 @@ namespace Yttrium
             XArray             Cini;   //!< SubLevel array
             XArray             Cend;   //!< SubLevel array
             XArray             Ctry;   //!< SubLevel trial
+            XArray             dC;     //!< SubLevel Newton step
             Ansatz::Series     ans;    //!< possible ansatz
             ERepo              blk;    //!< blokced
             XMul               xmul;   //!< for inner multiplication
             XAdd               xadd;   //!< for inner additions
             XAdd               Fadd;   //!< for F computation
-            Optimizer          opt;
-            Finder             finder; //!< helper to build basis
-            AutoPtr<Algebra>   algebra; //!< algebra content
-            String             trace;  //!< gnuplot
-            String             tropt;  //!< gnuplot, optimized profiles
+            AutoPtr<Assets>    assets; 
+            String             trace;   //!< gnuplot
+            String             tropt;   //!< gnuplot, optimized profiles
             
         private:
             Y_Disable_Copy_And_Assign(Solver); //!< discarded
@@ -115,11 +109,16 @@ namespace Yttrium
                               const xreal_t F0,
                               const size_t  i);
 
-
+            //! upgrade ansatz minimum
             void upgrade(XML::Log &xml,
                          Ansatz   &,
                          XTriplet &,
                          XTriplet &);
+
+
+            bool NRStep(XML::Log        & xml,
+                        const XReadable & C,
+                        const Level       L);
 
 
         };

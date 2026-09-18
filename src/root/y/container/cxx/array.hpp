@@ -69,6 +69,12 @@ namespace Yttrium
         {
         }
 
+        inline explicit CxxArray(const CxxArray &arr) :
+        code( new Code(CopyOf,arr) )
+        {
+        }
+        
+
         //! duplicate \param _ helper \param arr readable array
         template <typename READABLE>
         inline explicit CxxArray(const CopyOf_ &_, READABLE &arr) :
@@ -135,7 +141,7 @@ namespace Yttrium
         //______________________________________________________________________
     private:
         class Code;
-        Y_Disable_Copy_And_Assign(CxxArray); //!< dicarded
+        Y_Disable_Assign(CxxArray); //!< dicarded
         Code * const code;                   //!< inner code
 
 
