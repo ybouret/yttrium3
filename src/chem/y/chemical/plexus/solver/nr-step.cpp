@@ -90,19 +90,34 @@ namespace Yttrium
             // check if need to cut
             //
             //__________________________________________________________________
+            bool    cut = false;
+            xreal_t fac = MKL::Numeric<xreal_t>::ONE;
             for(const SNode *sn=cls.slist->head;sn;sn=sn->next)
             {
                 const Species &sp = **sn;
                 const size_t   j  = sp.indx[SubLevel];
-                const xreal_t  cc = Cini[j];
+                const xreal_t  cc = Cini[j]; assert(cc.mantissa>=0);
                 const xreal_t  dc = dC[j];
+
+
 
                 if(xml.verbose)
                     cls.sfmt.print(xml(),"[",sp,"]")
                     << " : "  << std::setw(23) << cc.str()
                     << " + (" << std::setw(23) << dc.str() << ")" << std::endl;
-
+                if(dc.mantissa<0)
+                {
+                    const xreal_t dd = -dc; assert(dd.mantissa>0);
+                    if(dd>=cc)
+                    {
+                        cut = true;
+                        InSituMin(fac,cc/dd);
+                    }
+                }
             }
+            Y_XMLog(xml, "cut=" << cut << ", fac=" << fac);
+            
+
 
 
             return false;
