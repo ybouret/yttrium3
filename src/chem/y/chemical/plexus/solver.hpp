@@ -116,6 +116,7 @@ namespace Yttrium
 
 
             bool NRStep(XML::Log        & xml,
+                        const xreal_t     F0,
                         const XReadable & C,
                         const Level       L);
 

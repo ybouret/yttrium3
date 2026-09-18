@@ -109,7 +109,7 @@ namespace Yttrium
                 std::cerr << tropt << std::endl;
             }
 
-            NRStep(xml,C,L);
+            NRStep(xml,F0,C,L);
 
 
         }
