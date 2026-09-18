@@ -14,20 +14,43 @@ namespace Yttrium
     namespace Chemical
     {
 
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Assets for Solver computations
+        //
+        //
+        //______________________________________________________________________
         class Assets : public Object
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
 
+            //! setup \param n initial equilibria \param m sublevel species
             explicit Assets(const size_t n, const size_t m);
+
+            //! cleanup
             virtual ~Assets() noexcept;
 
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
 
-            MKL::Minimize::Engine<xreal_t> minimize;
-            AutoPtr<Algebra>               algebra;
-            AutoPtr<Coven::Finder>         finder;
+            MKL::Minimize::Engine<xreal_t> minimize; //!< minimizer
+            AutoPtr<Algebra>               algebra;  //!< algebra components
+            AutoPtr<Coven::Finder>         finder;   //!< find orthogonal basis
 
         private:
-            Y_Disable_Copy_And_Assign(Assets);
+            Y_Disable_Copy_And_Assign(Assets); //!< discarded
         };
 
     }

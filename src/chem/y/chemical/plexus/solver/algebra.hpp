@@ -25,18 +25,30 @@ namespace Yttrium
         class Algebra : public Object
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
             explicit Algebra(const size_t n, const size_t m); //!< setup \param n initial equilibria \param m sublevel species
             virtual ~Algebra() noexcept;                      //!< cleanup
 
-            MKL::LU<xreal_t>   lu;
-            CxxSeries<XMatrix> J;
-            CxxSeries<XMatrix> dA;
-            CxxSeries<XMatrix> nu;
-            CxxSeries<XMatrix> nuT;
-            CxxSeries<XArray>  xi;
-            
+            //__________________________________________________________________
+            //
+            //
+            //  Members
+            //
+            //__________________________________________________________________
+            MKL::LU<xreal_t>   lu;  //!< linear solver
+            CxxSeries<XMatrix> J;   //!< xi/Jacobians matrices
+            CxxSeries<XMatrix> dA;  //!< Affinity Jacobians
+            CxxSeries<XMatrix> nu;  //!< local topologies
+            CxxSeries<XMatrix> nuT; //!< local tranpose topologies
+            CxxSeries<XArray>  xi;  //!< local extents
+
         private:
-            Y_Disable_Copy_And_Assign(Algebra);
+            Y_Disable_Copy_And_Assign(Algebra); //!< discarded
         };
     }
 

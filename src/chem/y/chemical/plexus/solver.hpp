@@ -72,18 +72,17 @@ namespace Yttrium
             //
             //__________________________________________________________________
             const Cluster &    cls;    //!< attached cluster
-
-            XMatrix            Ceq;    //!< 1D solutions storage
-            XArray             Cini;   //!< SubLevel array
-            XArray             Cend;   //!< SubLevel array
-            XArray             Ctry;   //!< SubLevel trial
-            XArray             dC;     //!< SubLevel Newton step
-            Ansatz::Series     ans;    //!< possible ansatz
-            ERepo              blk;    //!< blokced
-            XMul               xmul;   //!< for inner multiplication
-            XAdd               xadd;   //!< for inner additions
-            XAdd               Fadd;   //!< for F computation
-            AutoPtr<Assets>    assets; 
+            XMatrix            Ceq;     //!< 1D solutions storage
+            XArray             Cini;    //!< SubLevel array
+            XArray             Cend;    //!< SubLevel array
+            XArray             Ctry;    //!< SubLevel trial
+            XArray             dC;      //!< SubLevel Newton step
+            Ansatz::Series     ans;     //!< possible ansatz
+            ERepo              blk;     //!< blokced
+            XMul               xmul;    //!< for inner multiplication
+            XAdd               xadd;    //!< for inner additions
+            XAdd               Fadd;    //!< for F computation
+            AutoPtr<Assets>    assets;  //!< assets for computations
             String             trace;   //!< gnuplot
             String             tropt;   //!< gnuplot, optimized profiles
             

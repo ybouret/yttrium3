@@ -251,6 +251,7 @@ namespace Yttrium
 /**/        }\
 /**/    } while(false)
 
+    //! execute CODE only on primary node
 #define Y_MPI_Trace(THE_MPI,CODE) do                        \
 /**/    {                                                   \
 /**/        MPI &mpi_ = (THE_MPI);                          \

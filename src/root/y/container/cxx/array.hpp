@@ -69,12 +69,12 @@ namespace Yttrium
         {
         }
 
+        //! duplicate \param arr another array
         inline explicit CxxArray(const CxxArray &arr) :
         code( new Code(CopyOf,arr) )
         {
         }
         
-
         //! duplicate \param _ helper \param arr readable array
         template <typename READABLE>
         inline explicit CxxArray(const CopyOf_ &_, READABLE &arr) :
