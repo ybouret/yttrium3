@@ -115,6 +115,10 @@ namespace Yttrium
                          XTriplet &);
 
 
+            bool computeStep(XML::Log        & xml,
+                             const XReadable & C,
+                             const Level       L);
+
             bool NRStep(XML::Log        & xml,
                         const xreal_t     F0,
                         const XReadable & C,
