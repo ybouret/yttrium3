@@ -8,9 +8,9 @@ namespace Yttrium
     {
 
 
-        bool     Solver:: Trace       = false;
-        unsigned Solver:: TracePoints = 1000;
-
+        bool         Solver:: Trace        = false;
+        unsigned     Solver:: TracePoints  = 1000;
+        const real_t Solver:: DefaultSafety = 0.95;
 
         Solver:: Solver( const Cluster  &cluster) :
         cls(cluster),
@@ -24,6 +24,8 @@ namespace Yttrium
         xmul(),
         xadd(),
         Fadd(),
+        expand( 2.0 ),
+        safety( DefaultSafety ),
         assets( new Assets(cls.N,cls.M) ),
         trace(),
         tropt()
@@ -103,14 +105,14 @@ namespace Yttrium
             }
 
 
+
+            NRStep(xml,F0,C,L);
+
             if(Trace)
             {
                 std::cerr << trace << std::endl;
                 std::cerr << tropt << std::endl;
             }
-
-            NRStep(xml,F0,C,L);
-
 
         }
 

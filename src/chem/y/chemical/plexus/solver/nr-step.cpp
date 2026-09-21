@@ -25,6 +25,7 @@ namespace Yttrium
             {
                 OutputFile fp("nr-step.ycp");
                 saveProfile(fp,TracePoints);
+                trace += ",'nr-step.ycp' w l";
             }
 
             // TODO: study / optimize

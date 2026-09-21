@@ -35,7 +35,8 @@ namespace Yttrium
             static const char * const         StdProfileExt; //!< "ycp"
             static const char * const         OptProfileExt; //!< "yop"
             static const char * const         AnyProfileExt; //!< "y[c|o]p"
-
+            static const real_t               DefaultSafety; //!< 0.95
+            
             //__________________________________________________________________
             //
             //
@@ -82,6 +83,8 @@ namespace Yttrium
             XMul               xmul;    //!< for inner multiplication
             XAdd               xadd;    //!< for inner additions
             XAdd               Fadd;    //!< for F computation
+            const xreal_t      expand;  //!< Newton Step max expand : 2.0
+            const xreal_t      safety;  //!< Newton Step safety cut : DefaultSafety
             AutoPtr<Assets>    assets;  //!< assets for computations
             String             trace;   //!< gnuplot
             String             tropt;   //!< gnuplot, optimized profiles
