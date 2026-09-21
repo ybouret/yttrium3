@@ -115,9 +115,18 @@ namespace Yttrium
                          XTriplet &);
 
 
+            //! compute Newton-Raphson step from Affinity
+            /**
+             \param xml output
+             \param C   starting point
+             \param L   starting level
+             \return true is not singular, computed into dC
+             */
             bool computeStep(XML::Log        & xml,
                              const XReadable & C,
                              const Level       L);
+
+            void approveStep(XML::Log        & xml);
 
             bool NRStep(XML::Log        & xml,
                         const xreal_t     F0,

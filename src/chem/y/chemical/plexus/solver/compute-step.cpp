@@ -1,4 +1,3 @@
-
 #include "y/chemical/plexus/solver.hpp"
 #include "y/stream/libc/output.hpp"
 
@@ -24,7 +23,7 @@ namespace Yttrium
             XMatrix &    nuT = alg.nuT[n];
             XArray  &    xi  = alg.xi[n];
 
-            Y_XML_Element_Attr(xml,computeStep,Y_XML_Attr(n));
+            Y_XML_Element_Attr(xml,ComputeStep,Y_XML_Attr(n));
 
             //__________________________________________________________________
             //
