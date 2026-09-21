@@ -49,7 +49,6 @@ Y_UTEST(solver)
     Clusters  cls(xml,eqs);
 
     Jive::_VFS::Apply( LocalFS::Instance(), ".", "cs[:digit:][.]png", Jive::Matching::Exactly, VFS::Entry::Base, Jive::_VFS::Remove);
-    //Jive::_VFS::Apply( LocalFS::Instance(), ".", "y[c|o]p", Jive::Matching::Exactly, VFS::Entry::Ext, Jive::_VFS::Remove);
     Solver::TryRemoveProfiles(".", Solver::AnyProfileExt);
 
     cls.renderAll("cs");
@@ -61,11 +60,14 @@ Y_UTEST(solver)
     Concentration::Fill(ran,C,M,probaZ,probaN);
 
     Solver::Trace = true;
-    
+    const size_t cycles = EnvironmentConvert::To<size_t>("CYCLES",1);
     for(const Cluster *cl=cls->head;cl;cl=cl->next)
     {
         Solver solver(*cl);
-        solver.run(xml,C,TopLevel,cls.K);
+        for(size_t i=1;i<=cycles;++i)
+        {
+            solver.run(xml,C,TopLevel,cls.K);
+        }
     }
 
 

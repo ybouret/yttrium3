@@ -28,6 +28,8 @@ namespace Yttrium
         expand( 2.0 ),
         safety( DefaultSafety ),
         assets( new Assets(cls.N,cls.M) ),
+        next(0),
+        prev(0),
         trace(),
         tropt()
         {

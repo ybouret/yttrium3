@@ -20,7 +20,7 @@ namespace Yttrium
         //
         //
         //______________________________________________________________________
-        class Solver
+        class Solver : public Object
         {
         public:
             //__________________________________________________________________
@@ -36,7 +36,7 @@ namespace Yttrium
             static const char * const         OptProfileExt; //!< "yop"
             static const char * const         AnyProfileExt; //!< "y[c|o]p"
             static const real_t               DefaultSafety; //!< 0.95
-            
+
             //__________________________________________________________________
             //
             //
@@ -52,7 +52,7 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            void run(XML::Log        & xml,
+            bool run(XML::Log        & xml,
                      XWritable       & C,
                      const Level       L,
                      const XReadable & K);
@@ -60,8 +60,8 @@ namespace Yttrium
             xreal_t F(const XReadable &C, const Level L);
             xreal_t operator()(const xreal_t u);
 
-            void   saveProfile(OutputStream &, const unsigned np);
-            String MakeFileName(const String &);
+            void        saveProfile(OutputStream &, const unsigned np);
+            String      MakeFileName(const String &);
 
             static void TryRemoveProfiles(const String & dirName, const char * const profileExt);
 
@@ -87,9 +87,11 @@ namespace Yttrium
             const xreal_t      expand;  //!< Newton Step max expand : 2.0
             const xreal_t      safety;  //!< Newton Step safety cut : DefaultSafety
             AutoPtr<Assets>    assets;  //!< assets for computations
+            Solver *           next;
+            Solver *           prev;
             String             trace;   //!< gnuplot
             String             tropt;   //!< gnuplot, optimized profiles
-            
+
         private:
             Y_Disable_Copy_And_Assign(Solver); //!< discarded
 
@@ -133,10 +135,10 @@ namespace Yttrium
             bool computeStep(XML::Log        & xml,
                              const XReadable & C,
                              const Level       L);
-            
+
             void approveStep(XML::Log        & xml);
 
-            
+
             bool NRStep(XML::Log        & xml,
                         const xreal_t     F0,
                         const XReadable & C,

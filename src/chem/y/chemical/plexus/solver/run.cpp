@@ -6,7 +6,7 @@ namespace Yttrium
     namespace Chemical
     {
 
-        void Solver:: run(XML::Log        & xml,
+        bool Solver:: run(XML::Log        & xml,
                           XWritable       & C,
                           const Level       L,
                           const XReadable & K)
@@ -32,7 +32,7 @@ namespace Yttrium
 
             //------------------------------------------------------------------
             //
-            // optimize local objective function over 1D
+            // optimize local objective function over 1D ansatzs
             //
             //------------------------------------------------------------------
             if(Trace)
@@ -65,6 +65,11 @@ namespace Yttrium
             }
 
 
+            //------------------------------------------------------------------
+            //
+            // optimize glocal objective function with jacobian of local basis
+            //
+            //------------------------------------------------------------------
             const bool bestGlobal = NRStep(xml,F0,C,L);
             if(bestGlobal)
             {
@@ -73,7 +78,6 @@ namespace Yttrium
             else
             {
                 Y_XMLog(xml, "[-bestGlobal]");
-
             }
 
 
@@ -81,6 +85,70 @@ namespace Yttrium
             {
                 std::cerr << trace << std::endl;
                 std::cerr << tropt << std::endl;
+            }
+
+
+            if(bestLocal)
+            {
+                //--------------------------------------------------------------
+                //
+                // GOT local improvement
+                //
+                //--------------------------------------------------------------
+                if(bestLocal)
+                {
+                    //----------------------------------------------------------
+                    // AND global improvement : keep best of both
+                    //----------------------------------------------------------
+
+                    if(Fg<bestLocal->F1)
+                    {
+                        Y_XMLog(xml,"[global/local]");
+                        Indexed::Transfer(C,L,Cend,SubLevel,cls.slist);
+                    }
+                    else
+                    {
+                        Y_XMLog(xml,"[local/global]");
+                        Indexed::Transfer(C,L,bestLocal->cc,SubLevel,cls.slist);
+                    }
+
+                    
+                    return true;
+                }
+                else
+                {
+                    //----------------------------------------------------------
+                    // BUT no global improvement: keep local
+                    //----------------------------------------------------------
+                    Y_XMLog(xml,"[local] ");
+                    Indexed::Transfer(C,L,bestLocal->cc,SubLevel,cls.slist);
+                    return true;
+                }
+            }
+            else
+            {
+                //--------------------------------------------------------------
+                //
+                // NO local improvement
+                //
+                //--------------------------------------------------------------
+                if(bestGlobal)
+                {
+                    //----------------------------------------------------------
+                    // BUT global improvement
+                    //----------------------------------------------------------
+                    Y_XMLog(xml,"[global]");
+                    Indexed::Transfer(C,L,Cend,SubLevel,cls.slist);
+                    return true;
+                }
+                else
+                {
+                    //----------------------------------------------------------
+                    // NO  global improvement EITHER
+                    //----------------------------------------------------------
+                    Y_XMLog(xml,"[stalled]");
+                    return false;
+                }
             }
 
         }
