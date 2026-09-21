@@ -93,13 +93,17 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(Solver); //!< discarded
 
-            //! regularize concentrations, return number of valid ansatzs
+            //! regularize concentrations
+            /**
+             build ansatz and blocked equilibria list
+             \return number of valid ansatzs
+             */
             size_t regularize(XML::Log &, XWritable &, const Level, const XReadable &);
 
             //! regularize, then build basis from independent eqs
             size_t buildBasis(XML::Log &, XWritable &, const Level, const XReadable &);
 
-            //! optimze ansatz over the full affinity
+            //! optimize ansatz over the full affinity
             /**
              \param xml output
              \param a   ansatz to optimize
@@ -107,10 +111,10 @@ namespace Yttrium
              \param i   ansatz index (for trace)
              \return true if local minimum is found
              */
-            bool   optimizing(XML::Log      &xml,
-                              Ansatz        &a,
-                              const xreal_t F0,
-                              const size_t  i);
+            bool optimizing(XML::Log      &xml,
+                            Ansatz        &a,
+                            const xreal_t F0,
+                            const size_t  i);
 
             //! upgrade ansatz minimum
             void upgrade(XML::Log &xml,
