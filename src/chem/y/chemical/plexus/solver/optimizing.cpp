@@ -18,7 +18,7 @@ namespace Yttrium
                 const Temporary<bool> quiet(xml.verbose,false);
                 x_opt = assets->minimize.find(xml,*this,Minimize::Direct,xx,ff,Minimize::Standard);
             }
-            Y_XMLog(xml, "[+] F(" << x_opt.str() <<") = " << ff.b );
+            Y_XMLog(xml, "[+] F(" << x_opt.str() <<") = " << ff.b.str() );
             a.F1 = ff.b;
             a.cc.load(Ctry);
         }

@@ -1,10 +1,31 @@
 #include "y/chemical/plexus/solver.hpp"
 #include "y/stream/libc/output.hpp"
+#include "y/type/temporary.hpp"
 
 namespace Yttrium
 {
     namespace Chemical
     {
+
+        namespace
+        {
+            static inline
+            void OptimizeNR(XML::Log & xml,
+                            Solver   & F,
+                            XTriplet & xx,
+                            XTriplet & ff)
+            {
+                xreal_t xopt;
+                {
+                    const Temporary<bool> quiet(xml.verbose,false);
+                    assert(xx.isIncreasing());
+                    assert(ff.isLocalMinimum());
+                    xopt = F.assets->minimize.find(xml,F, Solver::Minimize::Direct, xx, ff, Solver::Minimize::Standard);
+                }
+                Y_XMLog(xml, "[+] F(" << xopt.str() <<") = " << ff.b.str() );
+                F.Cend.load(F.Ctry);
+            }
+        }
 
         bool Solver:: NRStep(XML::Log        & xml,
                              const xreal_t     F0,
@@ -29,7 +50,7 @@ namespace Yttrium
                 trace += ",'nr-step.ycp' w l";
             }
 
-            Solver &self = *this;
+            Solver &self   = *this;
             bool    result = true;
             if(F1<F0)
             {
@@ -42,6 +63,7 @@ namespace Yttrium
                 if(ff.b<F1)
                 {
                     Y_XMLog(xml, "-- use corrected");
+                    OptimizeNR(xml,self,xx,ff);
                 }
                 else
                 {
@@ -59,7 +81,7 @@ namespace Yttrium
                 if(ff.b<F0)
                 {
                     Y_XMLog(xml, "-- use corrected");
-
+                    OptimizeNR(xml,self,xx,ff);
                     assert(true==result);
                 }
                 else
@@ -69,6 +91,12 @@ namespace Yttrium
                 }
             }
 
+            if(Trace)
+            {
+                OutputFile fp("nr-step.yop");
+                saveProfile(fp,TracePoints);
+                tropt += ",'nr-step.yop' w l";
+            }
 
 
 
