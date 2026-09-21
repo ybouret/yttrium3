@@ -33,10 +33,15 @@ namespace Yttrium
                              const Level       L)
         {
             Y_XML_Element(xml,NewtonRaphson);
-            //Y_XMLog(xml, "F0=" << F0.str());
+            Fg = F0;
 
+            //------------------------------------------------------------------
+            //
+            // compute and approve step
+            //
             /**/ if(!computeStep(xml,C,L)) return false;
             /**/     approveStep(xml);
+            //------------------------------------------------------------------
 
 
             const xreal_t F1 = F(Cend,SubLevel);
@@ -50,11 +55,20 @@ namespace Yttrium
                 trace += ",'nr-step.ycp' w l";
             }
 
+            //------------------------------------------------------------------
+            //
+            // check status of predicted point
+            //
+            //------------------------------------------------------------------
             Solver &self   = *this;
             bool    result = true;
             if(F1<F0)
             {
+                //--------------------------------------------------------------
+                //
                 // winning, check if optimization is required
+                //
+                //--------------------------------------------------------------
                 Y_XMLog(xml, "-- winning");
 
                 XTriplet xx = { MKL::Numeric<xreal_t>::ZERO, MKL::Numeric<xreal_t>::GOLDEN_R, MKL::Numeric<xreal_t>::ONE };
@@ -69,11 +83,15 @@ namespace Yttrium
                 {
                     Y_XMLog(xml, "-- use predicted");
                 }
-
+                Fg = ff.b;
             }
             else
             {
-                // loosing, check if possible optimization
+                //--------------------------------------------------------------
+                //
+                // loosing, check if possible last resort optimization
+                //
+                //--------------------------------------------------------------
                 Y_XMLog(xml, "-- loosing");
                 XTriplet xx = { MKL::Numeric<xreal_t>::ZERO, MKL::Numeric<xreal_t>::GOLDEN_C, MKL::Numeric<xreal_t>::ONE };
                 XTriplet ff = { F0, self(xx.b), F1 };
@@ -83,12 +101,14 @@ namespace Yttrium
                     Y_XMLog(xml, "-- use corrected");
                     OptimizeNR(xml,self,xx,ff);
                     assert(true==result);
+                    Fg = ff.b;
                 }
                 else
                 {
                     Y_XMLog(xml, "-- no improvement");
                     result = false;
                 }
+
             }
 
             if(Trace)
@@ -97,9 +117,7 @@ namespace Yttrium
                 saveProfile(fp,TracePoints);
                 tropt += ",'nr-step.yop' w l";
             }
-
-
-
+            
             return result;
         }
     }

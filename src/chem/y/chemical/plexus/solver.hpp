@@ -78,6 +78,7 @@ namespace Yttrium
             XArray             Cend;    //!< SubLevel array
             XArray             Ctry;    //!< SubLevel trial
             XArray             dC;      //!< SubLevel Newton step
+            xreal_t            Fg;      //!< NRstep result, global step
             Ansatz::Series     ans;     //!< possible ansatz
             ERepo              blk;     //!< blokced
             XMul               xmul;    //!< for inner multiplication
@@ -131,6 +132,7 @@ namespace Yttrium
             
             void approveStep(XML::Log        & xml);
 
+            
             bool NRStep(XML::Log        & xml,
                         const xreal_t     F0,
                         const XReadable & C,

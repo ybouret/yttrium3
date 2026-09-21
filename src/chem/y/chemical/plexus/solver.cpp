@@ -19,6 +19,7 @@ namespace Yttrium
         Cend(cls.M),
         Ctry(cls.M),
         dC(cls.M),
+        Fg(),
         ans(cls.elist->size),
         blk(),
         xmul(),
@@ -105,8 +106,17 @@ namespace Yttrium
             }
 
 
+            const bool bestGlobal = NRStep(xml,F0,C,L);
+            if(bestGlobal)
+            {
+                Y_XMLog(xml, "[+bestGlobal] " << Fg.str() );
+            }
+            else
+            {
+                Y_XMLog(xml, "[-bestGlobal]");
 
-            NRStep(xml,F0,C,L);
+            }
+
 
             if(Trace)
             {
