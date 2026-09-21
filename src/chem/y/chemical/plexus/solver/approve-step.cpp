@@ -1,6 +1,7 @@
 
 #include "y/chemical/plexus/solver.hpp"
 #include "y/stream/libc/output.hpp"
+#include "y/mkl/tao/1.hpp"
 
 namespace Yttrium
 {
@@ -11,9 +12,9 @@ namespace Yttrium
         {
             Y_XML_Element(xml,ApproveStep);
             assert(cls.M == cls.slist->size);
-            
+
             bool    mustCut = false;
-            xreal_t xfactor = MKL::Numeric<xreal_t>::ONE;
+            xreal_t xfactor = MKL::Numeric<xreal_t>::ZERO;
             for(const SNode *sn=cls.slist->head;sn;sn=sn->next)
             {
                 const Species & sp = **sn;
@@ -31,26 +32,38 @@ namespace Yttrium
                 if(dc.mantissa<0)
                 {
                     const xreal_t dd = -dc; assert(dd.mantissa>0);
-                    if(dd>=cc)
+
+                    const xreal_t fac = cc/dd;
+                    if(!mustCut)
                     {
                         mustCut = true;
-                        InSituMin(xfactor,cc/dd);
+                        xfactor = fac;
                     }
+                    else
+                    {
+                        InSituMin(xfactor,fac);
+                    }
+
                 }
             }
 
             const size_t m = cls.M;
             if(mustCut)
             {
-                Y_XMLog(xml, "Must Cut @" << xfactor.str());
-                for(size_t j=m;j>0;--j)
-                    Cend[j] = Cini[j] + xfactor * dC[j];
+                Y_XMLog(xml, "must cut @" << xfactor);
             }
             else
             {
                 for(size_t j=m;j>0;--j)
+                {
                     Cend[j] = Cini[j] + dC[j];
+
+                }
             }
+
+            abort();
+
+
 
         }
 
