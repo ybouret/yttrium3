@@ -128,7 +128,7 @@ namespace Yttrium
             bool computeStep(XML::Log        & xml,
                              const XReadable & C,
                              const Level       L);
-
+            
             void approveStep(XML::Log        & xml);
 
             bool NRStep(XML::Log        & xml,
