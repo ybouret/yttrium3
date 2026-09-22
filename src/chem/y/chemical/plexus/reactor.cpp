@@ -7,6 +7,17 @@ namespace Yttrium
     namespace Chemical
     {
 
+        Resources:: ~Resources() noexcept
+        {
+        }
+
+        Resources:: Resources(const size_t N, const size_t M) :
+        finder( new Coven::Finder(M) )
+        {
+        }
+        
+
+        /////
 
         Assay:: ~Assay() noexcept
         {
@@ -62,14 +73,18 @@ namespace Yttrium
 
         }
 
-        void Reactor:: run(XML::Log &xml, XWritable &C, const Level L, const XReadable &K)
+        Reactor::Outcome Reactor:: run(XML::Log &xml, XWritable &C, const Level L, const XReadable &K)
         {
             Y_XML_Element(xml,ReactorRun);
 
             const size_t na = buildAssays(xml,C,L,K);
-            Y_XMLog(xml,"#assay=" << na);
-            Y_XMLog(xml, "F0=" << ObjectiveFunction(C,L));
+            Y_XMLog(xml,"#assay = " << na);
+            if(na<=0)
+            {
+                return Achieved;
+            }
 
+            return Spurious;
         }
 
 

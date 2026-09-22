@@ -5,15 +5,31 @@
 #define Y_Chemical_Plexus_Reactor_Included 1
 
 #include "y/chemical/plexus/cluster.hpp"
+#include "y/chemical/reactive/erepo.hpp"
 
 #include "y/chemical/reactive/equilibrium/aftermath.hpp"
 #include "y/container/cxx/series.hpp"
 
+#include "y/coven/finder.hpp"
 
 namespace Yttrium
 {
     namespace Chemical
     {
+
+
+        class Resources : public Object
+        {
+        public:
+
+            explicit Resources(const size_t N, const size_t M);
+            virtual ~Resources() noexcept;
+
+            AutoPtr<Coven::Finder> finder;
+
+        private:
+            Y_Disable_Copy_And_Assign(Resources);
+        };
 
         class Assay
         {
@@ -63,14 +79,21 @@ namespace Yttrium
         {
         public:
 
+            enum Outcome
+            {
+                Improved,
+                Achieved,
+                Spurious
+            };
+
             explicit Reactor(const Cluster &);
             virtual ~Reactor() noexcept;
 
 
-            void run(XML::Log &xml,
-                     XWritable &C,
-                     const Level L,
-                     const XReadable &K);
+            Outcome run(XML::Log &xml,
+                        XWritable &C,
+                        const Level L,
+                        const XReadable &K);
 
 
             xreal_t ObjectiveFunction(const XReadable &, const Level);
@@ -89,10 +112,12 @@ namespace Yttrium
             XMul             xmul;
             XAdd             xadd;
             XAdd             fadd;
-            
+
         private:
             Y_Disable_Copy_And_Assign(Reactor);
             size_t buildAssays(XML::Log &, XWritable &, const Level, const XReadable &);
+            
+
         };
 
     }
