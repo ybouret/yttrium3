@@ -70,7 +70,8 @@ namespace Yttrium
             XAdd               xadd;      //!< for inner add
             XAdd               fadd;      //!< for objective function
             AutoPtr<Resources> resources; //!< numeric resources
-
+            String             gpStd;
+            String             gpOpt;
         private:
             Y_Disable_Copy_And_Assign(Reactor);
             size_t buildAssays(XML::Log &, XWritable &, const Level, const XReadable &);

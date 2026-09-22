@@ -55,7 +55,16 @@ namespace Yttrium
             F0 = ObjectiveFunction(Cini,SubLevel);
             Y_XMLog(xml,"F0 = " << F0.str());
 
-            studyAssays(xml);
+            const size_t        ok     = studyAssays(xml);
+            const Assay * const best1D = ok<=0 ? 0 : & assays[1];
+            if(best1D)
+            {
+                Y_XMLog(xml, "[best1D] " << best1D->F1.str() << " @" << best1D->eq.name);
+            }
+            else
+            {
+                Y_XMLog(xml, "[best1D] NONE");
+            }
 
             return Spurious;
         }
