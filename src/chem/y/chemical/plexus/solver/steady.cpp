@@ -19,16 +19,24 @@ namespace Yttrium
             while(true)
             {
                 ++cycle;
-                const bool   res = run(xml,C,L,K);
-                const String out = Fg.str();
-                Y_XMLog(xml, "[cycle #" << cycle << " | F = " << out << "]");
+                const Outcome outcome = run(xml,C,L,K);
+                const String  results = Fg.str();
+                Y_XMLog(xml, "[cycle #" << cycle << " | F = " << results << "]");
                 if(Trace)
                 {
                     OutputFile fp(runfn,true);
-                    fp("%u %s\n", cycle, out.c_str() );
+                    fp("%u %s\n", cycle, results.c_str() );
                 }
-                if( !res || (debug && cycle>=maxCycles) )
-                    break;
+
+                if(debug && cycle>=maxCycles) break;
+
+                switch(outcome)
+                {
+                    case Achieved: Y_XMLog(xml, "[Achieved]"); return;
+                    case Improved: Y_XMLog(xml, "[Improved]"); continue;
+                    case Spurious: Y_XMLog(xml, "[Achieved]"); return;
+                }
+
             }
 
         }

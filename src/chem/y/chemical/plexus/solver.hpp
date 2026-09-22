@@ -12,6 +12,8 @@ namespace Yttrium
 {
     namespace Chemical
     {
+
+
         //______________________________________________________________________
         //
         //
@@ -37,6 +39,13 @@ namespace Yttrium
             static const char * const         AnyProfileExt; //!< "y[c|o]p"
             static const real_t               DefaultSafety; //!< 0.95
 
+            enum Outcome
+            {
+                Improved,
+                Achieved,
+                Spurious
+            };
+
             //__________________________________________________________________
             //
             //
@@ -52,10 +61,10 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            bool run(XML::Log        & xml,
-                     XWritable       & C,
-                     const Level       L,
-                     const XReadable & K);
+            Outcome run(XML::Log        & xml,
+                        XWritable       & C,
+                        const Level       L,
+                        const XReadable & K);
 
             void steady(XML::Log        & xml,
                         XWritable       & C,

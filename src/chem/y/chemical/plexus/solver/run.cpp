@@ -6,10 +6,10 @@ namespace Yttrium
     namespace Chemical
     {
 
-        bool Solver:: run(XML::Log        & xml,
-                          XWritable       & C,
-                          const Level       L,
-                          const XReadable & K)
+        Solver::Outcome Solver:: run(XML::Log        & xml,
+                                     XWritable       & C,
+                                     const Level       L,
+                                     const XReadable & K)
         {
             const size_t count = cls.elist->size;
             Y_XML_Element_Attr(xml,SolverRun, Y_XML_Attr(count) );
@@ -113,8 +113,8 @@ namespace Yttrium
                         Fg = bestLocal->F1;
                     }
 
-                    
-                    return true;
+
+                    return Fg.mantissa <= 0 ? Achieved : Improved;
                 }
                 else
                 {
@@ -124,7 +124,7 @@ namespace Yttrium
                     Y_XMLog(xml,"[local] ");
                     Indexed::Transfer(C,L,bestLocal->cc,SubLevel,cls.slist);
                     Fg = bestLocal->F1;
-                    return true;
+                    return Fg.mantissa <= 0 ? Achieved : Improved;
                 }
             }
             else
@@ -141,7 +141,7 @@ namespace Yttrium
                     //----------------------------------------------------------
                     Y_XMLog(xml,"[global]");
                     Indexed::Transfer(C,L,Cend,SubLevel,cls.slist);
-                    return true;
+                    return Fg.mantissa <= 0 ? Achieved : Improved;
                 }
                 else
                 {
@@ -150,7 +150,7 @@ namespace Yttrium
                     //----------------------------------------------------------
                     Y_XMLog(xml,"[stalled]");
                     Fg = F0;
-                    return false;
+                    return Fg.mantissa <= 0 ? Achieved : Spurious;
                 }
             }
 
