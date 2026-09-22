@@ -1,58 +1,18 @@
 
 #include "y/chemical/plexus/reactor.hpp"
-#include "y/core/hsort.hpp"
+#include "y/stream/output.hpp"
 
 namespace Yttrium
 {
     namespace Chemical
     {
 
-        Resources:: ~Resources() noexcept
-        {
-        }
+        bool     Reactor:: Trace       = false;
+        unsigned Reactor:: TracePoints = 200;
 
-        Resources:: Resources(const size_t N, const size_t M) :
-        finder( new Coven::Finder(M) )
-        {
-        }
-        
+        const char * const Reactor:: StdProfileExt = "ycp";
+        const char * const Reactor:: OptProfileExt = "yop";
 
-        /////
-
-        Assay:: ~Assay() noexcept
-        {
-        }
-
-        Assay:: Assay(const Equilibrium & _eq,
-                      const xreal_t     & _eK,
-                      const Aftermath   & _am,
-                      XWritable         & _cc) noexcept :
-        eq(_eq),
-        eK(_eK),
-        lK(eK.log()),
-        am(_am),
-        cc(_cc),
-        A0()
-        {
-        }
-
-        Assay:: Assay(const Assay &_) noexcept :
-        eq(_.eq),
-        eK(_.eK),
-        lK(_.lK),
-        am(_.am),
-        cc(_.cc),
-        A0(_.A0)
-        {
-        }
-
-        xreal_t Assay:: affinity(const XReadable &C, const Level L, XAdd &xadd) const
-        {
-            return eq.affinity(lK,xadd,C,L);
-        }
-
-
-        ////
 
         Reactor:: ~Reactor() noexcept
         {
@@ -64,11 +24,16 @@ namespace Yttrium
         N(cl.N),
         M(cl.M),
         n(cl.elist->size),
+        F0(),
         Cini(M),
         Cend(M),
         Ctry(M),
         Ceq(n,M),
-        assays(n)
+        assays(n),
+        xmul(),
+        xadd(),
+        fadd(),
+        resources( new Resources(N,M) )
         {
 
         }
@@ -77,6 +42,8 @@ namespace Yttrium
         {
             Y_XML_Element(xml,ReactorRun);
 
+            
+            F0.ldz();
             const size_t na = buildAssays(xml,C,L,K);
             Y_XMLog(xml,"#assay = " << na);
             if(na<=0)
@@ -84,105 +51,18 @@ namespace Yttrium
                 return Achieved;
             }
 
+            Indexed::Transfer(Cini,SubLevel,C,L,cluster.slist);
+            F0 = ObjectiveFunction(Cini,SubLevel);
+            Y_XMLog(xml,"F0 = " << F0.str());
+
+            studyAssays(xml);
+
             return Spurious;
         }
 
 
-        size_t Reactor:: buildAssays(XML::Log &xml, XWritable &C, const Level L, const XReadable &K)
-        {
-            Y_XML_Element_Attr(xml,BuildAssays,Y_XML_Attr(n));
-
-        BUILD:
-            assays.free();
-            bool emergency = false;
-            for(const ENode *en=cluster.elist->head;en;en=en->next)
-            {
-                const Equilibrium &eq = **en;
-                const xreal_t      eK = eq(K,TopLevel);
-                XWritable         &cc = Indexed::Transfer(Ceq[ assays.size() + 1],SubLevel,C,L,cluster.slist);
-                const Aftermath    am = Aftermath::Compute(xml,cc,SubLevel,C,L,eq,eK,xmul,xadd);
-                switch(am.st)
-                {
-                    case Blocked:
-                        continue;
-
-                    case Running:
-                        if(emergency) continue;
-                        break;
-
-                    case Crucial:
-                        emergency = true;
-                        break;
-                }
-
-                const Assay assay(eq,eK,am,cc);
-                assays << assay;
-            }
-
-            if(emergency)
-            {
-                Y_XML_Element(xml,Emergency);
-                assert(assays.size()>0);
-
-                // remove running
-                for(size_t i=assays.size();i>0;)
-                {
-                    switch( assays[i].am.st )
-                    {
-                        case Blocked: throw Specific::Exception("Reactor::buildAssays","corrupted code");
-                        case Running: assays.remove(i); break;
-                        case Crucial: --i; break;
-                    }
-                }
-
-                // sort crucial
-                assert(assays.size()>0);
-                Core::HSort::Make(&assays[1], assays.size(), Assay::IncreasingAX);
-                for(size_t i=1;i<=assays.size();++i)
-                {
-                    const Assay &assay = assays[i]; assert(Crucial==assay.am.st);
-                    Y_XMLog(xml,
-                            "[-] nz="  << std::setw(3)   << assay.am.nz
-                            << " | xi=" << std::setw(22) << assay.am.xi.str()
-                            << " @ " << assay.eq.name );
-                }
-
-                // move to selected crucial
-                Indexed::Transfer(C,L,assays[1].cc,SubLevel,cluster.slist);
-                goto BUILD;
-            }
-
-
-            const size_t na = assays.size();
-            if(na>0)
-            {
-                for(size_t i=assays.size();i>0;--i)
-                {
-                    const Assay &assay = assays[i]; assert(Running==assay.am.st);
-                    Coerce(assay.A0) = assay.affinity(C,L,xadd);
-                }
-
-                Core::HSort::Make(&assays[1], assays.size(), Assay::DecreasingAA);
-
-                if(xml.verbose)
-                {
-
-                    for(size_t i=1;i<=na;++i)
-                    {
-                        const Assay &assay = assays[i];
-                        xml()
-                        << "[+] A0 = " << assay.A0.str()
-                        <<" |  xi = "  << assay.am.xi.str()
-                        << " @ " << assay.eq.name
-                        << std::endl;
-                    }
-                }
-
-                return assays.size();
-            }
-            else
-                return 0;
-        }
+       
+        
 
         xreal_t Reactor:: ObjectiveFunction(const XReadable &C, const Level L)
         {
@@ -196,6 +76,50 @@ namespace Yttrium
             return fadd().sqrt();
         }
 
+        xreal_t Reactor:: operator()(const xreal_t u)
+        {
+            const xreal_t v = MKL::Numeric<xreal_t>::ONE - u;
+
+            for(size_t j=M;j>0;--j)
+            {
+                xreal_t cmin = Cini[j];
+                xreal_t cmax = Cend[j];
+                const xreal_t c0 = cmin;
+                const xreal_t c1 = cmax;
+                if(cmin>cmax) Swap(cmin,cmax);
+                Ctry[j] = Clamp(cmin,c0*v+c1*u,cmax);
+            }
+
+            return ObjectiveFunction(Ctry,SubLevel);
+        }
+
+        String Reactor:: MakeFileName(const String &id)
+        {
+            String s;
+            for(size_t i=1;i<=id.size();++i)
+            {
+                const char c = id[i];
+                if( isalnum(c) || c == '-' || c == '+' )
+                {
+                    s << c;
+                }
+                else
+                    s << '_';
+            }
+            return s;
+        }
+
+
+        void Reactor:: saveProfile(OutputStream &fp)
+        {
+            fp("0 %.15g\n", (double) ObjectiveFunction(Cini,SubLevel) );
+            for(unsigned i=1;i<TracePoints;++i)
+            {
+                const real_t u = ((real_t)i) / TracePoints;
+                fp("%.15g %.15g\n", u, (double) (*this)(u) );
+            }
+            fp("1 %.15g\n", (double) ObjectiveFunction(Cend,SubLevel) );
+        }
 
     }
 

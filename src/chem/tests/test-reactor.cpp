@@ -61,6 +61,8 @@ Y_UTEST(reactor)
     const double      probaN = EnvironmentConvert::To<double>("probaN",0);
     Concentration::Fill(ran,C,M,probaZ,probaN);
 
+    Reactor::Trace = true;
+    Reactor::TryRemoveProfiles(".");
     for(const Cluster *cl=cls->head;cl;cl=cl->next)
     {
         Reactor reactor(*cl);
