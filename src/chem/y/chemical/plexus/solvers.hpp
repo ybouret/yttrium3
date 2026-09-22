@@ -18,10 +18,11 @@ namespace Yttrium
             explicit Solvers(const Clusters &);
             virtual ~Solvers() noexcept;
 
-            void run(XML::Log        & xml,
-                     XWritable       & C,
-                     const Level       L,
-                     const XReadable & K);
+            void operator()(XML::Log        & xml,
+                            XWritable       & C,
+                            const Level       L,
+                            const XReadable & K,
+                            const size_t      maxCycles=0);
 
         private:
             Y_Disable_Copy_And_Assign(Solvers);

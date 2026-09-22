@@ -66,7 +66,7 @@ namespace Yttrium
                         const Level       L,
                         const XReadable & K);
 
-            void steady(XML::Log        & xml,
+            bool steady(XML::Log        & xml,
                         XWritable       & C,
                         const Level       L,
                         const XReadable & K,
