@@ -57,7 +57,7 @@ namespace Yttrium
 
             if(bestLocal)
             {
-                Y_XMLog(xml, "[+bestLocal] " << bestLocal->F1.str() << " @" << bestLocal->eq.name);
+                Y_XMLog(xml, "[+bestLocal] F = " << bestLocal->F1.str() << " @" << bestLocal->eq.name);
             }
             else
             {
@@ -73,7 +73,7 @@ namespace Yttrium
             const bool bestGlobal = NRStep(xml,F0,C,L);
             if(bestGlobal)
             {
-                Y_XMLog(xml, "[+bestGlobal] " << Fg.str() );
+                Y_XMLog(xml, "[+bestGlobal] F = " << Fg.str() );
             }
             else
             {
@@ -110,6 +110,7 @@ namespace Yttrium
                     {
                         Y_XMLog(xml,"[local/global]");
                         Indexed::Transfer(C,L,bestLocal->cc,SubLevel,cls.slist);
+                        Fg = bestLocal->F1;
                     }
 
                     
@@ -122,6 +123,7 @@ namespace Yttrium
                     //----------------------------------------------------------
                     Y_XMLog(xml,"[local] ");
                     Indexed::Transfer(C,L,bestLocal->cc,SubLevel,cls.slist);
+                    Fg = bestLocal->F1;
                     return true;
                 }
             }
@@ -147,6 +149,7 @@ namespace Yttrium
                     // NO  global improvement EITHER
                     //----------------------------------------------------------
                     Y_XMLog(xml,"[stalled]");
+                    Fg = F0;
                     return false;
                 }
             }

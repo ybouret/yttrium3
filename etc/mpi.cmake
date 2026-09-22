@@ -1,6 +1,8 @@
 
 message(STATUS "")
-message(STATUS "Detecting MPI, please wait.. ")
+message(STATUS "/-----------------------------\\")
+message(STATUS "| Detecting MPI, please wait..|")
+message(STATUS "\\-----------------------------/")
 message(STATUS "")
 
 if(MINGW)

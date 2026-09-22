@@ -57,6 +57,13 @@ namespace Yttrium
                      const Level       L,
                      const XReadable & K);
 
+            void steady(XML::Log        & xml,
+                        XWritable       & C,
+                        const Level       L,
+                        const XReadable & K,
+                        const size_t      maxCycles = 0);
+
+
             xreal_t F(const XReadable &C, const Level L);
             xreal_t operator()(const xreal_t u);
 
@@ -64,7 +71,7 @@ namespace Yttrium
             String      MakeFileName(const String &);
 
             static void TryRemoveProfiles(const String & dirName, const char * const profileExt);
-
+            static void TryRemoveRunStats(const String & dirName);
 
             //__________________________________________________________________
             //
@@ -91,6 +98,7 @@ namespace Yttrium
             Solver *           prev;
             String             trace;   //!< gnuplot
             String             tropt;   //!< gnuplot, optimized profiles
+            const String       runfn;   //!< run file name solverID.dat
 
         private:
             Y_Disable_Copy_And_Assign(Solver); //!< discarded

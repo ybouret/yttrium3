@@ -50,6 +50,7 @@ Y_UTEST(solver)
 
     Jive::_VFS::Apply( LocalFS::Instance(), ".", "cs[:digit:][.]png", Jive::Matching::Exactly, VFS::Entry::Base, Jive::_VFS::Remove);
     Solver::TryRemoveProfiles(".", Solver::AnyProfileExt);
+    Solver::TryRemoveRunStats(".");
 
     cls.renderAll("cs");
 
@@ -59,15 +60,13 @@ Y_UTEST(solver)
     const double      probaN = EnvironmentConvert::To<double>("probaN",0);
     Concentration::Fill(ran,C,M,probaZ,probaN);
 
+    const size_t maxCycles = EnvironmentConvert::To<size_t>("STEADY",0);
     Solver::Trace = true;
-    const size_t cycles = EnvironmentConvert::To<size_t>("CYCLES",1);
     for(const Cluster *cl=cls->head;cl;cl=cl->next)
     {
         Solver solver(*cl);
-        for(size_t i=1;i<=cycles;++i)
-        {
-            solver.run(xml,C,TopLevel,cls.K);
-        }
+        solver.steady(xml,C,TopLevel,cls.K,maxCycles);
+
     }
 
 

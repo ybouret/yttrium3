@@ -1,6 +1,8 @@
 #include "y/chemical/plexus/solver.hpp"
 #include "y/core/hsort.hpp"
 #include "y/stream/libc/output.hpp"
+#include "y/string/format.hpp"
+#include "y/format/decimal.hpp"
 
 namespace Yttrium
 {
@@ -31,7 +33,8 @@ namespace Yttrium
         next(0),
         prev(0),
         trace(),
-        tropt()
+        tropt(),
+        runfn( Formatted::Get("solver%s.dat", Decimal(cls.gvid).c_str() ) )
         {
         }
 
