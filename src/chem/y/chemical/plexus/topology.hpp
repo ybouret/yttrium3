@@ -44,7 +44,7 @@ namespace Yttrium
             const SList     slist; //!< reactive species
             const IMatrix   nu;    //!< topology
             const IMatrix   nuT;   //!< topology'
-            const size_t &  N;     //!< number of equilbira
+            const size_t &  N;     //!< number of original equilibira
             const size_t &  M;     //!< number of species
             const EqFormat  efmt;  //!< helper to format equilibria
             const Assembly  sfmt;  //!< helper to format species
