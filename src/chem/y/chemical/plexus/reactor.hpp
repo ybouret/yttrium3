@@ -65,6 +65,7 @@ namespace Yttrium
             XArray             Cend;      //!< end point SubLevel concentrations
             XArray             Ctry;      //!< trial     SubLevel concentrations
             XMatrix            Ceq;       //!< 1D solutions [n:M]
+            ERepo              basis;     //!< basis
             CxxSeries<Assay>   assays;    //!< selected equilibria
             XMul               xmul;      //!< for inner mul
             XAdd               xadd;      //!< for inner add
@@ -72,12 +73,14 @@ namespace Yttrium
             AutoPtr<Resources> resources; //!< numeric resources
             String             gpStd;
             String             gpOpt;
+
         private:
             Y_Disable_Copy_And_Assign(Reactor);
             size_t buildAssays(XML::Log &, XWritable &, const Level, const XReadable &);
             size_t studyAssays(XML::Log &);
             void   updateAssay(XML::Log &, Assay &, XTriplet &, XTriplet &);
 
+            void   createBasis(XML::Log &);
         };
 
     }
