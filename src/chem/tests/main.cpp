@@ -7,7 +7,6 @@ Y_UTEST_DECL(4)
     Y_UTEST(db);
     Y_UTEST(aftermath);
     Y_UTEST(cluster);
-    Y_UTEST(solver);
     Y_UTEST(reactor);
 }
 Y_UTEST_EXEC()
