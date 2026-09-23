@@ -103,29 +103,49 @@ namespace Yttrium
             }
         }
 
+
+        xreal_t Components:: reacMassAction(const xreal_t K, XMul &X, const XReadable &C, const Level L) const
+        {
+            X.set(K); reac.massAction(X,C,L); return X();
+        }
+
+        xreal_t Components:: prodMassAction( XMul &X, const XReadable &C, const Level L) const
+        {
+            X.set(one); prod.massAction(X,C,L); return X();
+        }
+
         xreal_t Components:: massAction(const xreal_t     K,
                                         XMul &            X,
                                         const XReadable & C,
                                         const Level       L) const
         {
-            X.set(K); reac.massAction(X,C,L);
-            const xreal_t lhs = X();
+            return reacMassAction(K,X,C,L) - prodMassAction(X,C,L);
+        }
 
-            X.set(one); prod.massAction(X,C,L);
-            const xreal_t rhs = X();
 
-            return lhs-rhs;
+        
+        xreal_t Components:: reacMassAction(const xreal_t K, XMul &X, const XReadable &C, const Level L, const xreal_t xi) const
+        {
+            X.set(K); reac.massAction(X,C,L,-xi); return X();
+        }
+
+        xreal_t Components:: prodMassAction( XMul &X, const XReadable &C, const Level L, const xreal_t xi) const
+        {
+            X.set(one); prod.massAction(X,C,L,xi); return X();
         }
 
         xreal_t Components:: massAction(const xreal_t K, XMul &X, const XReadable &C, const Level L, const xreal_t xi) const
         {
-            X.set(K); reac.massAction(X,C,L,-xi);
-            const xreal_t lhs = X();
 
-            X.set(one); prod.massAction(X,C,L,xi);
-            const xreal_t rhs = X();
+            return reacMassAction(K,X,C,L,xi)-prodMassAction(X,C,L,xi);
 
-            return lhs-rhs;
+            //X.set(K); reac.massAction(X,C,L,-xi);
+            //const xreal_t lhs = X();
+
+            //X.set(one); prod.massAction(X,C,L,xi);
+            //const xreal_t rhs = X();
+
+            //return lhs-rhs;
         }
 
         void Components::  safeMove(XWritable &C, const Level L, const xreal_t xi) const noexcept

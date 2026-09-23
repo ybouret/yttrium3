@@ -55,12 +55,20 @@ namespace Yttrium
             //__________________________________________________________________
             void  addReac(const unsigned, const Species &); //!< add new reactant
             void  addProd(const unsigned, const Species &); //!< add new product
-            bool  electroneutral() const; //!< \return true iff electroneutral
-            bool  atLeastOneItem() const; //!< \return true iff at least one item
+            bool  electroneutral()                   const; //!< \return true iff electroneutral
+            bool  atLeastOneItem()                   const; //!< \return true iff at least one item
 
-            xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level)                const; //!< \return mass action
-            xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level, const xreal_t) const; //!< \return shifted mass action
             void    safeMove(XWritable &, const Level, const xreal_t)                       const noexcept; //!< safely move concentration using extent
+
+            xreal_t reacMassAction(const xreal_t, XMul &, const XReadable &, const Level) const; //!< \return GEQZ reactant   mass action
+            xreal_t prodMassAction(XMul &, const XReadable &, const Level)                const; //!< \return GEQZ product(s) mass action
+            xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level)     const; //!< \return mass action
+
+            xreal_t reacMassAction(const xreal_t, XMul &, const XReadable &, const Level, const xreal_t) const; //!< \return GEQZ reactant   mass action with xi
+            xreal_t prodMassAction(XMul &, const XReadable &, const Level, const xreal_t)                const; //!< \return GEQZ product(s) mass action with xo
+            xreal_t massAction(const xreal_t, XMul &, const XReadable &, const Level, const xreal_t)     const; //!< \return shifted mass action with xi
+
+
 
             //! compute affinity
             /**

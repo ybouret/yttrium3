@@ -53,7 +53,8 @@ namespace Yttrium
             K(usrK),
             S(usrS),
             X(usrX),
-            L(usrL)
+            L(usrL),
+            minusOne(-1)
             {
             }
 
@@ -77,6 +78,7 @@ namespace Yttrium
             const xreal_t      S;
             XMul             & X;
             const Level        L;
+            const xreal_t      minusOne;
 
         private:
             Y_Disable_Copy_And_Assign(Engine);
@@ -105,11 +107,16 @@ namespace Yttrium
             // need to find x.c
             //
             //------------------------------------------------------------------
+
+
+
             switch(E.kind)
             {
                 case Outlawed:
                     throw Specific::Exception(CallSign,"empty '%s'", E.name.c_str());
 
+                    //----------------------------------------------------------
+                    //
                 case ProdOnly:
                     switch(ms)
                     {
@@ -117,17 +124,27 @@ namespace Yttrium
                             return zero;
 
                         case Positive:
+                            // look up with scaling
                             x.c  = S;
-                            ma.c = F(x.c); assert(ma.c<=zero);
+                            ma.c = F(x.c);
+                            while(ma.c.mantissa>0.0) ma.c = F(x.c += x.c);
+                            assert(ma.c<=zero);
                             break;
 
                         case Negative:
+                            // use products limting extent
                             x.c  = -E.prod.extent(C,L);
-                            ma.c = F(x.c); assert(ma.c>=zero);
+                            ma.c = K;
+                            assert(ma.c>=zero);
                             break;
                     }
                     break;
+                    //
+                    //----------------------------------------------------------
 
+
+                    //----------------------------------------------------------
+                    //
                 case ReacOnly:
                     switch(ms)
                     {
@@ -135,19 +152,28 @@ namespace Yttrium
                             return zero;
 
                         case Positive:
+                            // use reactants limiting extent
                             x.c  = E.reac.extent(C,L);
-                            ma.c = F(x.c); assert(ma.c<=zero);
+                            ma.c = minusOne;
+                            assert(ma.c<=zero);
                             break;
 
                         case Negative:
+                            // look up with scaling
                             x.c  = -S;
-                            ma.c = F(x.c); assert(ma.c>=zero);
+                            ma.c = F(x.c);
+                            while(ma.c.mantissa<0.0) ma.c = F(x.c += x.c);
+                            assert(ma.c>=zero);
                             break;
-                            //throw Specific::Exception(CallSign,"todo Negative ReacOnly");
                     }
                     break;
+                    //
+                    //----------------------------------------------------------
 
+                    //----------------------------------------------------------
+                    //
                 case BothWays:
+                    abort();
                     switch(ms)
                     {
                         case __Zero__:
@@ -155,15 +181,19 @@ namespace Yttrium
 
                         case Positive:
                             x.c  = E.reac.extent(C,L);
-                            ma.c = F(x.c); assert(ma.c<=zero);
+                            ma.c = F(x.c);
+                            assert(ma.c<=zero);
                             break;
 
                         case Negative:
                             x.c  = - E.prod.extent(C,L);
-                            ma.c = F(x.c); assert(ma.c>=zero);
+                            ma.c = F(x.c);
+                            assert(ma.c>=zero);
                             break;
                     }
                     break;
+                    //
+                    //----------------------------------------------------------
             }
 
             assert(__Zero__!=ms);
@@ -268,7 +298,9 @@ do { if(xml.verbose) eq.displayCompact( xml() << "[" #LABEL "] ",Cinp,Linp) << s
 
             //------------------------------------------------------------------
             //
-            // setup
+            //
+            // setup according to zeroed concentrations
+            //
             //
             //------------------------------------------------------------------
             EqStatus es  = Running;
@@ -336,9 +368,15 @@ do { if(xml.verbose) eq.displayCompact( xml() << "[" #LABEL "] ",Cinp,Linp) << s
             assert(Running==es||Crucial==es);
 
 
-
+            //------------------------------------------------------------------
+            //
+            //
+            // Setup according to zeroed concentrations
+            //
+            //
+            //------------------------------------------------------------------
             {
-                xreal_t S; // scaling factor
+                xreal_t S = MKL::Numeric<xreal_t>::ZERO;
                 switch(eq.kind)
                 {
                     case Outlawed:
@@ -379,7 +417,9 @@ do { if(xml.verbose) eq.displayCompact( xml() << "[" #LABEL "] ",Cinp,Linp) << s
 
             //------------------------------------------------------------------
             //
-            // need to recompute full extent
+            //
+            // Need to recompute full extent
+            //
             //
             //------------------------------------------------------------------
             const xreal_t xi = eq.extent(Cinp, Linp, Cout, Lout, xadd);

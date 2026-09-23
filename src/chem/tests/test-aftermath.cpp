@@ -51,7 +51,7 @@ Y_UTEST(aftermath)
         Equilibrium &eq = **it;
         const xreal_t eK = eq.K(0);
         Ceq.load(C0);
-        Aftermath     am = Aftermath::Compute(xml,Ceq,TopLevel,C0,TopLevel,eq,eK,xmul,xadd);
+        Aftermath am = Aftermath::Compute(xml,Ceq,TopLevel,C0,TopLevel,eq,eK,xmul,xadd);
     }
 
 }

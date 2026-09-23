@@ -90,13 +90,10 @@ namespace Yttrium
             const EqStatus     st; //!< status
             const xreal_t      xi; //!< required xi
             const xreal_t      ax; //!< |xi|
-            const size_t       nz; //!< initial zeroed concentration
+            const size_t       nz; //!< initial zeroed concentration(s)
 
         private:
-#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
-            Y_Disable_Assign(Aftermath);
-#endif
-
+            Y_Disable_Assign(Aftermath); //!< discarding
         };
 
     }
