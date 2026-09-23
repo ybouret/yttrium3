@@ -6,7 +6,7 @@
 #include "y/coven/finder.hpp"
 #include "y/mkl/minimize/api.hpp"
 #include "y/pointer/auto.hpp"
-#include "y/chemical/plexus/solver/algebra.hpp"
+#include "y/chemical/plexus/reactor/algebra.hpp"
 
 namespace Yttrium
 {

@@ -5,7 +5,7 @@
 #define Y_Chemical_Plexus_Reactor_Included 1
 
 #include "y/chemical/plexus/cluster.hpp"
-#include "y/chemical/reactive/erepo.hpp"
+#include "y/handy/plain/light/list.hpp"
 
 #include "y/chemical/plexus/reactor/assay.hpp"
 #include "y/chemical/plexus/reactor/resources.hpp"
@@ -25,6 +25,8 @@ namespace Yttrium
         public:
             static const char * const StdProfileExt; //!< "ycp"
             static const char * const OptProfileExt; //!< "yop"
+            typedef Handy::PlainLightList<const Assay> ARepo;
+            typedef ARepo::NodeType                    ANode;
 
             enum Outcome
             {
@@ -64,8 +66,9 @@ namespace Yttrium
             XArray             Cini;      //!< initial   SubLevel concentrations
             XArray             Cend;      //!< end point SubLevel concentrations
             XArray             Ctry;      //!< trial     SubLevel concentrations
+            XArray             dC;        //!< from NR step
             XMatrix            Ceq;       //!< 1D solutions [n:M]
-            ERepo              basis;     //!< basis
+            ARepo              basis;     //!< basis
             CxxSeries<Assay>   assays;    //!< selected equilibria
             XMul               xmul;      //!< for inner mul
             XAdd               xadd;      //!< for inner add
@@ -79,8 +82,8 @@ namespace Yttrium
             size_t buildAssays(XML::Log &, XWritable &, const Level, const XReadable &);
             size_t studyAssays(XML::Log &);
             void   updateAssay(XML::Log &, Assay &, XTriplet &, XTriplet &);
-
             void   createBasis(XML::Log &);
+            bool   computeStep(XML::Log &);
         };
 
     }

@@ -1,5 +1,5 @@
 
-#include "y/chemical/plexus/solver/algebra.hpp"
+#include "y/chemical/plexus/reactor/algebra.hpp"
 
 namespace Yttrium
 {

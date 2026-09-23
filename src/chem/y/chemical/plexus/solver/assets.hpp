@@ -4,7 +4,7 @@
 #ifndef Y_Chemical_Plexus_Assets_Included
 #define Y_Chemical_Plexus_Assets_Included 1
 
-#include "y/chemical/plexus/solver/algebra.hpp"
+#include "y/chemical/plexus/reactor/algebra.hpp"
 #include "y/coven/finder.hpp"
 #include "y/mkl/minimize/api.hpp"
 #include "y/pointer/auto.hpp"

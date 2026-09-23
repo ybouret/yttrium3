@@ -1,4 +1,5 @@
 #include "y/chemical/plexus/reactor.hpp"
+#include "y/ascii/plural.hpp"
 
 namespace Yttrium
 {
@@ -21,7 +22,7 @@ namespace Yttrium
                 if( finder.accepts(nu) )
                 {
                     Y_XMLog(xml, "[+] " << eq.name);
-                    basis << dynamic_cast<Equilibrium&>(Coerce(assay.eq));
+                    basis << assay;
                     if(finder.size>=N)
                         break;
                 }
@@ -31,10 +32,7 @@ namespace Yttrium
                 }
             }
             Y_XMLog(xml," | ");
-            Y_XMLog(xml,"[*] basis is done with dim=" << basis->size);
-
-
-
+            Y_XMLog(xml,"[*] basis is done with " << basis->size << " equilibri" << ASCII::Plural::uma(basis->size) );
         }
     }
 
