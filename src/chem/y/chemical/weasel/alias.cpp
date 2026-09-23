@@ -16,7 +16,7 @@ namespace Yttrium
                               Library      & lib,
                               Equilibria   & eqs)
         {
-            std::cerr << "process regular expression \"" << expr << "\"" << std::endl;
+            //std::cerr << "process regular expression \"" << expr << "\"" << std::endl;
             Jive::Matching match = expr;
             Vector<size_t> found;
             for(unsigned i=0;i<EDB::Count;++i)

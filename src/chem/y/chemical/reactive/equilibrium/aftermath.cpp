@@ -173,21 +173,21 @@ namespace Yttrium
                     //----------------------------------------------------------
                     //
                 case BothWays:
-                    abort();
                     switch(ms)
                     {
                         case __Zero__:
                             return zero;
 
                         case Positive:
-                            x.c  = E.reac.extent(C,L);
-                            ma.c = F(x.c);
+                            x.c  = E.reac.extent(C,L); // limiting reactants extent
+                            ma.c = -E.prodMassAction(X,C,L,x.c);
                             assert(ma.c<=zero);
                             break;
 
                         case Negative:
-                            x.c  = - E.prod.extent(C,L);
-                            ma.c = F(x.c);
+                            x.c  = - E.prod.extent(C,L); // limiting products extent
+                            ma.c = E.reacMassAction(K,X,C,L,x.c);
+                            //ma.c = F(x.c);
                             assert(ma.c>=zero);
                             break;
                     }

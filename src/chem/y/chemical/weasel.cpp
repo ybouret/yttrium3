@@ -60,7 +60,7 @@ namespace Yttrium
         alias(code->parser.alias.name),
         formulaTranslator(code->ftrans)
         {
-            std::cerr << "sizeof(WeaselCode) = " << sizeof(WeaselCode) << std::endl;
+            //std::cerr << "sizeof(WeaselCode) = " << sizeof(WeaselCode) << std::endl;
         }
 
         Weasel:: ~Weasel() noexcept
@@ -93,7 +93,7 @@ namespace Yttrium
                 AutoPtr<XNode> node = top.popHead();
                 const String & name = *node->rule.name;
 
-                std::cerr << "-- processing '" << name << "'" << std::endl;
+                //std::cerr << "-- processing '" << name << "'" << std::endl;
                 if(name==*formula)
                 {
                     const Formula f( node.yield() );
