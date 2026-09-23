@@ -44,10 +44,16 @@ namespace Yttrium
             virtual ~Reactor() noexcept;
 
 
-            Outcome run(XML::Log &xml,
-                        XWritable &C,
-                        const Level L,
-                        const XReadable &K);
+            Outcome run(XML::Log        & xml,
+                        XWritable       & C,
+                        const Level       L,
+                        const XReadable & K);
+
+            bool transform(XML::Log &xml,
+                           XWritable       & C,
+                           const Level       L,
+                           const XReadable & K,
+                           const size_t      maxCycle);
 
 
             xreal_t ObjectiveFunction(const XReadable &, const Level);
@@ -58,7 +64,7 @@ namespace Yttrium
             static String MakeFileName(const String &);
 
             static void TryRemoveProfiles(const String &dirName);
-
+            static void TryRemoveRunStats(const String &dirName);
 
             const Cluster &    cluster;   //!< attached cluster
             const size_t  &    N;         //!< original number of equilibria

@@ -50,9 +50,7 @@ Y_UTEST(reactor)
     Clusters  cls(xml,eqs);
 
     Jive::_VFS::Apply( LocalFS::Instance(), ".", "cs[:digit:][.]png", Jive::Matching::Exactly, VFS::Entry::Base, Jive::_VFS::Remove);
-    //Solver::TryRemoveProfiles(".", Solver::AnyProfileExt);
-    //Solver::TryRemoveRunStats(".");
-
+    
     cls.renderAll("cs");
 
     const size_t      M = lib->size();
@@ -63,10 +61,13 @@ Y_UTEST(reactor)
 
     Reactor::Trace = true;
     Reactor::TryRemoveProfiles(".");
+    Reactor::TryRemoveRunStats(".");
+
+    const size_t maxCycles = EnvironmentConvert::To<size_t>("STEADY",0);
     for(const Cluster *cl=cls->head;cl;cl=cl->next)
     {
         Reactor reactor(*cl);
-        reactor.run(xml,C,TopLevel,cls.K);
+        reactor.transform(xml,C,TopLevel,cls.K,maxCycles);
     }
 
 
