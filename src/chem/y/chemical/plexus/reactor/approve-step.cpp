@@ -8,9 +8,16 @@ namespace Yttrium
         {
             Y_XML_Element(xml,ApproveStep);
             assert(M == cluster.slist->size);
-            xreal_t xfactor = MKL::Numeric<xreal_t>::ZERO;
 
+
+            //------------------------------------------------------------------
+            //
+            //
             // scan species-wise step
+            //
+            //
+            //------------------------------------------------------------------
+            xreal_t xfactor = MKL::Numeric<xreal_t>::ZERO;
             {
                 bool mustCut = false;
                 for(const SNode *sn=cluster.slist->head;sn;sn=sn->next)
@@ -19,8 +26,6 @@ namespace Yttrium
                     const size_t    j  = sp.indx[SubLevel];
                     const xreal_t   cc = Cini[j]; assert(cc.mantissa>=0);
                     const xreal_t   dc = dC[j];
-
-
 
                     if(xml.verbose)
                         cluster.sfmt.print(xml(),"[",sp,"]")
@@ -59,7 +64,14 @@ namespace Yttrium
                 }
             }
 
-            
+
+            //------------------------------------------------------------------
+            //
+            //
+            // compute Cend with numerical care
+            //
+            //
+            //------------------------------------------------------------------
             {
             COMPUTE_CNEW:
                 for(size_t j=M;j>0;--j)
@@ -85,8 +97,14 @@ namespace Yttrium
                 }
             }
 
+            //------------------------------------------------------------------
+            //
+            //
+            // deduce estimate of Fs=F@Cend
+            //
+            //
+            //------------------------------------------------------------------
             Fs = ObjectiveFunction(Cend,SubLevel);
-            
         }
     }
 

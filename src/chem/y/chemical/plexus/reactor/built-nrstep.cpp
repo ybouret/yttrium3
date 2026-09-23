@@ -69,12 +69,14 @@ namespace Yttrium
                 {
                     Y_XMLog(xml, "-- use corrected");
                     OptimizeNR(xml,self,xx,ff);
+                    Fs = ff.b;
+                    assert(Fs<F0);
                 }
                 else
                 {
                     Y_XMLog(xml, "-- use predicted");
+                    assert(Fs<F0);
                 }
-                Fs = ff.b;
                 assert(true==result);
             }
             else
@@ -93,11 +95,13 @@ namespace Yttrium
                     Y_XMLog(xml, "-- use corrected");
                     OptimizeNR(xml,self,xx,ff);
                     Fs = ff.b;
+                    assert(Fs<F0);
                     assert(true==result);
                 }
                 else
                 {
                     Y_XMLog(xml, "-- no improvement");
+                    assert(Fs>=F0);
                     result = false;
                 }
 

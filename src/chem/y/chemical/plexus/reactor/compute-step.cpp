@@ -59,11 +59,9 @@ namespace Yttrium
             {
                 J[i][i] = xadd.dot(dA[i],nu[i]);
                 for(size_t j=i-1;j>0;--j)
-                {
                     J[i][j] = J[j][i] = xadd.dot(dA[i],nu[j]);
-                }
             }
-            Y_XMLog(xml,"J="  << J);;
+            Y_XMLog(xml,"J="  << J);
 
             //__________________________________________________________________
             //
