@@ -48,7 +48,7 @@ namespace Yttrium
                 const real_t  p  = K.log10();
                 os << "'10^(" << p << ")'";
             }
-            return os << std::endl;
+            return os;
         }
     }
 

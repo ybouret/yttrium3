@@ -60,7 +60,6 @@ namespace Yttrium
         alias(code->parser.alias.name),
         formulaTranslator(code->ftrans)
         {
-            //std::cerr << "sizeof(WeaselCode) = " << sizeof(WeaselCode) << std::endl;
         }
 
         Weasel:: ~Weasel() noexcept

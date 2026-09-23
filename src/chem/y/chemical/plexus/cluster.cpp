@@ -34,6 +34,36 @@ namespace Yttrium
 
         }
 
+        void Cluster:: displayState(std::ostream &os, const XReadable &C, const Level L, const XReadable &K) const
+        {
+            XMul          xmul;
+            XAdd          xadd;
+            for(const ENode *en=elist->head;en;en=en->next)
+            {
+                const Equilibrium &eq = **en;
+                const xreal_t      eK = eq(K,TopLevel);
+                //efmt.print(os << "\t@",**en,false,t0);
+                efmt.efmt.print(os << "\t@",eq);
+                //os << "'" << std::setw(22) << eK.str() << "'";
+                if(true)
+                {
+                    const xreal_t ma = eq.massAction(eK,xmul,C,L);
+                    os << " | ma=" << std::setw(22) << ma.str();
+                }
+                if( eq.reac.active(C,L) && eq.prod.active(C,L) )
+                {
+                    const xreal_t A = eq.affinity( eK.log(), xadd, C, L);
+                    os << " | A=" << A.str();
+                }
+                else
+                {
+                    os << " | [blocked]";
+                }
+                os << std::endl;
+            }
+            
+        }
+
     }
 
 }

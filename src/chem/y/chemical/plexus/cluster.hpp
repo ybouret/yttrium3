@@ -57,12 +57,15 @@ namespace Yttrium
 
             //! display given grade
             /**
-             if(1==gr) then conservations are emitted
+             - if(1==gr) then conservations are emitted
              \param os output stream
              \param gr grade in [1:grade.size()]
              \return os
              */
             OutputStream & viz(OutputStream &os, const size_t gr) const;
+
+            
+            void displayState(std::ostream &os, const XReadable &C, const Level L, const XReadable &K) const;
 
             //__________________________________________________________________
             //

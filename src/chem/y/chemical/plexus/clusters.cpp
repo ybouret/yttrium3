@@ -64,7 +64,7 @@ namespace Yttrium
                         Y_XML_Element_Attr(xml,Cluster, Y_XML_Attr(GraphVizID) );
                         for(const ENode *en=cl->elist->head;en;en=en->next)
                         {
-                            eqs.EqFormat::print(xml() << "@ ",**en,true,t0);
+                            eqs.EqFormat::print(xml() << "@ ",**en,true,t0) << std::endl;
                         }
                         Y_XMLog(xml, "|_species=" << cl->slist);
                     }

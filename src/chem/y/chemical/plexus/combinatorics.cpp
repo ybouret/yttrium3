@@ -240,7 +240,7 @@ namespace Yttrium
 
                 for(const ENode *en=topo.elist->head;en;en=en->next)
                 {
-                    eqs.EqFormat::print(xml() << "@ ",**en,false,0.0);
+                    eqs.EqFormat::print(xml() << "@ ",**en,false,0.0) << std::endl;
                 }
             }
 

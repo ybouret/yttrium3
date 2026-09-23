@@ -69,6 +69,7 @@ Y_UTEST(reactor)
     {
         Reactor reactor(*cl);
         reactor.transform(xml,C,TopLevel,cls.K,maxCycles);
+        cl->displayState(std::cerr,C,TopLevel,cls.K);
     }
 
 
