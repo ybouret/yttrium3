@@ -12,7 +12,7 @@ namespace Yttrium
 
         const char * const Reactor:: StdProfileExt = "ycp";
         const char * const Reactor:: OptProfileExt = "yop";
-
+        const real_t       Reactor:: DefaultSafety = 0.95;
 
         Reactor:: ~Reactor() noexcept
         {
@@ -25,6 +25,7 @@ namespace Yttrium
         M(cl.M),
         n(cl.elist->size),
         F0(),
+        Fs(),
         Cini(M),
         Cend(M),
         Ctry(M),
@@ -35,6 +36,8 @@ namespace Yttrium
         xmul(),
         xadd(),
         fadd(),
+        expand(2.0),
+        safety(DefaultSafety),
         resources( new Resources(N,M) ),
         gpStd(),
         gpOpt()

@@ -41,7 +41,7 @@ namespace Yttrium
             //
             //------------------------------------------------------------------
             Indexed::Transfer(Cini,SubLevel,C,L,cluster.slist);
-            F0 = ObjectiveFunction(Cini,SubLevel);
+            F0 = Fs = ObjectiveFunction(Cini,SubLevel);
             Y_XMLog(xml,"F0 = " << F0.str());
 
             //------------------------------------------------------------------
@@ -78,7 +78,22 @@ namespace Yttrium
             //
             //
             //------------------------------------------------------------------
-            computeStep(xml);
+            const bool hasNRS = builtNRStep(xml);
+            if(hasNRS)
+            {
+                Y_XMLog(xml, "[hasNRS] " << Fs.str() );
+            }
+            else
+            {
+                Y_XMLog(xml, "[hasNRS] NONE");
+            }
+
+            if(Trace)
+            {
+                std::cerr << gpStd << std::endl;
+                std::cerr << gpOpt << std::endl;
+            }
+
 
             return Spurious;
         }

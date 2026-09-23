@@ -19,7 +19,7 @@ namespace Yttrium
             xreal_t xopt;
             {
                 const Temporary<bool> quiet(xml.verbose,false);
-                xopt = resources->minimizer.find(xml,*this,MKL::Minimize::Direct,xx,ff,MKL::Minimize::Standard);
+                xopt = resources->minimize.find(xml,*this,MKL::Minimize::Direct,xx,ff,MKL::Minimize::Standard);
             }
             Y_XMLog(xml, "|_F(" << xopt <<") = " << ff.b);
             assay.F1 = (*this)(xopt); // TODO: check minimizer algo
@@ -138,12 +138,7 @@ namespace Yttrium
 
             }
 
-            if(Trace)
-            {
-                std::cerr << gpStd << std::endl;
-                std::cerr << gpOpt << std::endl;
-            }
-
+          
             return ok;
         }
     }

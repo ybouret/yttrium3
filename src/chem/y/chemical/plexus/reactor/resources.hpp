@@ -20,7 +20,7 @@ namespace Yttrium
             virtual ~Resources() noexcept;
 
             AutoPtr<Coven::Finder>         finder;
-            MKL::Minimize::Engine<xreal_t> minimizer;
+            MKL::Minimize::Engine<xreal_t> minimize;
             AutoPtr<Algebra>               algebra;
             
         private:

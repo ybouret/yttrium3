@@ -1,6 +1,4 @@
-
 #include "y/chemical/plexus/reactor.hpp"
-#include "y/stream/libc/output.hpp"
 
 namespace Yttrium
 {
@@ -25,7 +23,6 @@ namespace Yttrium
             XMatrix &    nu  = alg.nu[n];
             XMatrix &    nuT = alg.nuT[n];
             XArray  &    xi  = alg.xi[n];
-
             //__________________________________________________________________
             //
             //
@@ -33,7 +30,6 @@ namespace Yttrium
             //
             //__________________________________________________________________
             dA.ld(MKL::Numeric<xreal_t>::ZERO);
-
             {
                 size_t i=1;
                 for(const ANode *an=basis->head;an;an=an->next,++i)
@@ -78,6 +74,7 @@ namespace Yttrium
             if(!alg.lu.build(J))
             {
                 Y_XMLog(xml, "[singular composition]");
+                dC.ld(MKL::Numeric<xreal_t>::ZERO);
                 return false;
             }
 

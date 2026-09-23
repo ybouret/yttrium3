@@ -25,6 +25,8 @@ namespace Yttrium
         public:
             static const char * const StdProfileExt; //!< "ycp"
             static const char * const OptProfileExt; //!< "yop"
+            static const real_t       DefaultSafety; //!< 0.95
+
             typedef Handy::PlainLightList<const Assay> ARepo;
             typedef ARepo::NodeType                    ANode;
 
@@ -63,6 +65,7 @@ namespace Yttrium
             const size_t  &    M;         //!< number of reactive species
             const size_t  &    n;         //!< total number of equilibria
             xreal_t            F0;        //!< initial objective function at Cini
+            xreal_t            Fs;        //!< objective function from NR step
             XArray             Cini;      //!< initial   SubLevel concentrations
             XArray             Cend;      //!< end point SubLevel concentrations
             XArray             Ctry;      //!< trial     SubLevel concentrations
@@ -73,6 +76,8 @@ namespace Yttrium
             XMul               xmul;      //!< for inner mul
             XAdd               xadd;      //!< for inner add
             XAdd               fadd;      //!< for objective function
+            const xreal_t      expand;  //!< Newton Step max expand : 2.0
+            const xreal_t      safety;  //!< Newton Step safety cut : DefaultSafety
             AutoPtr<Resources> resources; //!< numeric resources
             String             gpStd;
             String             gpOpt;
@@ -84,6 +89,8 @@ namespace Yttrium
             void   updateAssay(XML::Log &, Assay &, XTriplet &, XTriplet &);
             void   createBasis(XML::Log &);
             bool   computeStep(XML::Log &);
+            void   approveStep(XML::Log &);
+            bool   builtNRStep(XML::Log &);
         };
 
     }
