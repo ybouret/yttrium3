@@ -95,9 +95,8 @@ namespace Yttrium
         private:
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             Y_Disable_Assign(Aftermath);
-            Aftermath OnProdOnly(XWritable &, Components &, const xreal_t, XMul &);
 #endif
-            
+
         };
 
     }

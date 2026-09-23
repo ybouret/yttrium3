@@ -57,7 +57,7 @@ namespace Yttrium
             void subAffinity(XAdd &, const XReadable &, const Level) const; //!< sub affinities of regularized concentration
 
             xreal_t extent(const XReadable &, const Level)            const noexcept; //!< \return limiting extent
-            bool    active(const XReadable &, const Level)            const noexcept; //!< \return false if one concentration is <= 0
+            bool    active(const XReadable &, const Level)            const noexcept; //!< \return false if at least one concentration is <= 0
             void    safeMove(XWritable &, const Level, const xreal_t) const noexcept; //!< move all concentrations using extent
 
             //! transfer hired concentration

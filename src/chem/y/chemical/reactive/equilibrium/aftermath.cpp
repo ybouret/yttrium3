@@ -274,11 +274,11 @@ do { if(xml.verbose) eq.displayCompact( xml() << "[" #LABEL "] ",Cinp,Linp) << s
             EqStatus es  = Running;
             size_t   nrz = 0;
             size_t   npz = 0;
-            if(eq.reac.active(Cinp,Linp) )
+            if( eq.reac.active(Cinp,Linp) )
             {
                 //--------------------------------------------------------------
                 //
-                // active reactants
+                // all active reactants
                 //
                 //--------------------------------------------------------------
                 assert(eq.reac.countZeroed(Cinp,Linp)<=0);
@@ -306,7 +306,7 @@ do { if(xml.verbose) eq.displayCompact( xml() << "[" #LABEL "] ",Cinp,Linp) << s
             {
                 //--------------------------------------------------------------
                 //
-                // inactive reactants
+                // some inactive reactant(s)
                 //
                 //--------------------------------------------------------------
                 nrz = eq.reac.countZeroed(Cinp,Linp); assert(nrz>0);
@@ -384,6 +384,7 @@ do { if(xml.verbose) eq.displayCompact( xml() << "[" #LABEL "] ",Cinp,Linp) << s
             //------------------------------------------------------------------
             const xreal_t xi = eq.extent(Cinp, Linp, Cout, Lout, xadd);
             const size_t  nz = nrz+npz; assert( nz==eq.countZeroed(Cinp,Linp) );
+
             if(xml.verbose)
             {
                 eq.displayCompact( xml() << "[Solving] ",Cout,Lout) << std::endl;
