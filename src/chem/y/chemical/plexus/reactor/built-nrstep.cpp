@@ -35,7 +35,7 @@ namespace Yttrium
             if( !computeStep(xml) ) return false;
             /**/ approveStep(xml);
 
-            if(Trace)
+            if(TracePro)
             {
                 OutputFile fp("nr-step.ycp");
                 saveProfile(fp);
@@ -103,7 +103,7 @@ namespace Yttrium
 
             }
 
-            if(Trace)
+            if(TracePro)
             {
                 OutputFile fp("nr-step.yop");
                 saveProfile(fp);

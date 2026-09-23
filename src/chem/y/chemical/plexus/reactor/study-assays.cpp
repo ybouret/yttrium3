@@ -42,7 +42,7 @@ namespace Yttrium
             Y_XML_Element_Attr(xml,StudyAssays, Y_XML_Attr(na));
             size_t       ok = 0;
 
-            if(Trace)
+            if(TracePro)
             {
                 gpStd = "plot ";
                 gpOpt = "plot ";
@@ -56,7 +56,7 @@ namespace Yttrium
 
                 // load end point
                 Cend.load(assay.cc);
-                if(Trace)
+                if(TracePro)
                 {
                     const String fn = MakeFileName(eid) + '.' + StdProfileExt;
                     OutputFile   fp(fn);
@@ -124,7 +124,7 @@ namespace Yttrium
                 if(i>ok)     sfx    = " (stalled)";
                 Y_XMLog(xml, "F1 = " << assay.F1.str() << " @" << eid << sfx);
 
-                if(Trace)
+                if(TracePro)
                 {
                     Cend.load(assay.cc);
                     const String fn = MakeFileName(eid) + '.' + OptProfileExt;

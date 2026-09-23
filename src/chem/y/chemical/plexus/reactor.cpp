@@ -7,7 +7,9 @@ namespace Yttrium
     namespace Chemical
     {
 
-        bool     Reactor:: Trace       = false;
+        bool     Reactor:: TracePro       = false;
+        bool     Reactor:: TraceRun       = false;
+
         unsigned Reactor:: TracePoints = 200;
 
         const char * const Reactor:: StdProfileExt = "ycp";

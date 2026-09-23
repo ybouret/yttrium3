@@ -27,6 +27,10 @@ namespace Yttrium
             static const char * const OptProfileExt; //!< "yop"
             static const real_t       DefaultSafety; //!< 0.95
 
+            static bool     TracePro;
+            static bool     TraceRun;
+            static unsigned TracePoints;
+
             typedef Handy::PlainLightList<const Assay> ARepo;
             typedef ARepo::NodeType                    ANode;
 
@@ -37,8 +41,7 @@ namespace Yttrium
                 Spurious
             };
 
-            static bool     Trace;
-            static unsigned TracePoints;
+
 
             explicit Reactor(const Cluster &);
             virtual ~Reactor() noexcept;

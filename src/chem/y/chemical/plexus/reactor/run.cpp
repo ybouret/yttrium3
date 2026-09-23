@@ -88,7 +88,7 @@ namespace Yttrium
                 Y_XMLog(xml, "[hasNRS] NONE");
             }
 
-            if(Trace)
+            if(TracePro)
             {
                 std::cerr << gpStd << std::endl;
                 std::cerr << gpOpt << std::endl;

@@ -16,7 +16,7 @@ namespace Yttrium
         {
             Y_XML_Element(xml,Transform);
 
-            if(Trace)
+            if(TraceRun)
             {
                 const String fn = Formatted::Get("solver%s.dat", Decimal(cluster.gvid).c_str());
                 OutputFile::Overwrite(fn);
@@ -27,7 +27,7 @@ namespace Yttrium
         CYCLE:
             Y_XMLog(xml,"cycle #" << cycle);
             const Outcome outcome = run(xml,C,L,K);
-            if(Trace)
+            if(TraceRun)
             {
                 const String fn = Formatted::Get("solver%s.dat", Decimal(cluster.gvid).c_str());
                 OutputFile   fp(fn,true);

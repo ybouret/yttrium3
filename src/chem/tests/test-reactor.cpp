@@ -59,7 +59,8 @@ Y_UTEST(reactor)
     const double      probaN = EnvironmentConvert::To<double>("probaN",0);
     Concentration::Fill(ran,C,M,probaZ,probaN);
 
-    Reactor::Trace = true;
+    Reactor::TracePro = false;
+    Reactor::TraceRun = true;
     Reactor::TryRemoveProfiles(".");
     Reactor::TryRemoveRunStats(".");
 
