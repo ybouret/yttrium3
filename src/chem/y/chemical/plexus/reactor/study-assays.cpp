@@ -82,6 +82,8 @@ namespace Yttrium
                     {
                         // optimize furthermore
                         Y_XMLog(xml, "|_optimize");
+                        assert(xx.isIncreasing());
+                        assert(ff.isLocalMinimum());
                         updateAssay(xml,assay,xx,ff);
                     }
                     else
@@ -100,6 +102,8 @@ namespace Yttrium
                     {
                         // backtrack
                         Y_XMLog(xml, "|_backtrack");
+                        assert(xx.isIncreasing());
+                        assert(ff.isLocalMinimum());
                         updateAssay(xml,assay,xx,ff);
                         ++ok;
                     }

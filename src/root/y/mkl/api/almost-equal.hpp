@@ -5,6 +5,8 @@
 #ifndef Y_MKL_AlmostEqual_Included
 #define Y_MKL_AlmostEqual_Included 1
 
+#include "y/core/min.hpp"
+#include "y/core/max.hpp"
 #include "y/mkl/api/fabs.hpp"
 #include "y/mkl/numeric.hpp"
 #include "y/mkl/api/scalar-for.hpp"

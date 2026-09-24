@@ -39,6 +39,23 @@ namespace Yttrium
                              Triplet<T>    &f,
                              Function<T,T> &F);
 
+
+            //__________________________________________________________________
+            //
+            //! find local minimum
+            /**
+             \param xml output
+             \param x   initial coordinates
+             \param f   initial values
+             \param F   primary function
+             */
+            //__________________________________________________________________
+            static T Find(XML::Log      &xml,
+                          Triplet<T>    &x,
+                          Triplet<T>    &f,
+                          Function<T,T> &F);
+
+
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             template <typename FUNCTION> static inline
             void Step(XML::Log   & xml,
@@ -49,6 +66,17 @@ namespace Yttrium
                 Wrapper1D<T,T,FUNCTION> FW(F);
                 return Step(xml,x,f,FW);
             }
+
+            template <typename FUNCTION> static inline
+            T Find(XML::Log   & xml,
+                   FUNCTION   & F,
+                   Triplet<T> & x,
+                   Triplet<T> & f)
+            {
+                Wrapper1D<T,T,FUNCTION> FW(F);
+                return Find(xml,x,f,FW);
+            }
+
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         };

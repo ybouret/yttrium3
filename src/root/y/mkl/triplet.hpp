@@ -6,9 +6,9 @@
 #include "y/mkl/api/fabs.hpp"
 #include "y/mkl/api/half.hpp"
 #include "y/core/sort3.hpp"
-#include "y/core/max.hpp"
-#include "y/core/min.hpp"
 #include "y/core/secure.hpp"
+#include "y/core/min.hpp"
+#include "y/core/max.hpp"
 
 #include <iostream>
 
@@ -16,8 +16,6 @@ namespace Yttrium
 {
     namespace MKL
     {
-
-
 
         //______________________________________________________________________
         //
@@ -125,6 +123,7 @@ namespace Yttrium
             {
                 return b <= a && b <= c;
             }
+
 
             //! \return (a+c)/2
             inline T middle() const

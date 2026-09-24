@@ -109,3 +109,36 @@ void Golden<real_t>:: Step(XML::Log &xml, Triplet<real_t> &x, Triplet<real_t> &f
     }
 
 }
+
+
+template <>
+real_t Golden<real_t>:: Find(XML::Log &xml, Triplet<real_t> &x, Triplet<real_t> &f, Function<real_t,real_t> &F)
+{
+    Y_XML_Element(xml,GoldenFind);
+    assert(x.isOrdered());
+    assert(f.isLocalMinimum());
+
+    size_t cycle = 0;
+STEP:
+    ++cycle;
+    Y_XMLog(xml,"cycle #" << cycle);
+    Step(xml,x,f,F);
+    assert(x.isIncreasing());
+    assert(f.isLocalMinimum());
+    if( AlmostEqual<real_t>::Are(f.a,f.b) && AlmostEqual<real_t>::Are(f.b,f.c))
+    {
+        Y_XMLog(xml, "[flat region]");
+    }
+
+    if( AlmostEqual<real_t>::Are(x.a,x.c) )
+    {
+        Y_XMLog(xml, "pinpoint");
+        abort();
+    }
+
+    goto STEP;
+
+    f.b = F(x.b);
+    return x.b;
+}
+

@@ -45,16 +45,21 @@ namespace
 
             bool         verbose = true;
             XML::Log     xml(std::cerr,verbose);
-            const size_t cycles = EnvironmentConvert::To<size_t>("CYCLES",1);
 
-            std::cerr << "|_w=" << Fabs<T>(xx.c-xx.a) << std::endl;
-            for(size_t i=1;i<=cycles;++i)
+            if(false)
             {
-                Golden<T>::Step(xml,F<T>,xx,ff);
+                const size_t cycles = EnvironmentConvert::To<size_t>("CYCLES",1);
+
                 std::cerr << "|_w=" << Fabs<T>(xx.c-xx.a) << std::endl;
+                for(size_t i=1;i<=cycles;++i)
+                {
+                    Golden<T>::Step(xml,F<T>,xx,ff);
+                    std::cerr << "|_w=" << Fabs<T>(xx.c-xx.a) << std::endl;
+                }
             }
 
-
+            const T xopt = Golden<T>::Find(xml,F<T>,xx,ff);
+            std::cerr << "xopt=" << xopt << ": Fopt=" << ff.b << std::endl;
             break;
         }
     }
@@ -76,7 +81,7 @@ Y_UTEST(min_golden)
         }
     }
 
-    testGolden<float>( ran );
+    testGolden< XReal<float> >( ran );
 
 }
 Y_UDONE()

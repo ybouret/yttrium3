@@ -42,17 +42,24 @@ namespace Yttrium
                 gpStd += ",'nr-step.ycp' w l";
             }
 
-            Y_XMLog(xml, "F0 = " << F0.str() );
-            Y_XMLog(xml, "Fs = " << Fs.str() );
-            
+            //------------------------------------------------------------------
+            //
+            // Fs is computed
+            //
+            //------------------------------------------------------------------
+            Y_XML_Element(xml,UseBuiltStep);
+
+            Y_XMLog(xml, "F0 = " << F0.str() << " / " << ObjectiveFunction(Cini,SubLevel).str() );
+            Y_XMLog(xml, "Fs = " << Fs.str() << " / " << ObjectiveFunction(Cend,SubLevel).str() );
+
 
             //------------------------------------------------------------------
             //
             // check status of predicted point
             //
             //------------------------------------------------------------------
-            Reactor &self   = *this;
-            bool    result = true;
+            Reactor & self   = *this;
+            bool      result = true;
             if(Fs<F0)
             {
                 //--------------------------------------------------------------
@@ -68,6 +75,8 @@ namespace Yttrium
                 if(ff.b<Fs)
                 {
                     Y_XMLog(xml, "-- use corrected");
+                    assert(xx.isIncreasing());
+                    assert(ff.isLocalMinimum());
                     OptimizeNR(xml,self,xx,ff);
                     Fs = ff.b;
                     assert(Fs<F0);
@@ -93,6 +102,8 @@ namespace Yttrium
                 if(ff.b<F0)
                 {
                     Y_XMLog(xml, "-- use corrected");
+                    assert(xx.isIncreasing());
+                    assert(ff.isLocalMinimum());
                     OptimizeNR(xml,self,xx,ff);
                     Fs = ff.b;
                     assert(Fs<F0);
