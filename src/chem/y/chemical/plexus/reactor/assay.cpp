@@ -39,6 +39,27 @@ namespace Yttrium
         {
             return eq.affinity(lK,xadd,C,L);
         }
+
+
+        SignType Assay:: IncreasingAX(const Assay &lhs, const Assay &rhs) noexcept
+        {
+            switch( Sign::Of(lhs.am.nz,rhs.am.nz) )
+            {
+                case Positive: return Negative;
+                case Negative: return Positive;
+                case __Zero__: break;
+            }
+            return Sign::Of(lhs.am.ax,rhs.am.ax);
+        }
+
+        SignType Assay:: DecreasingAA(const Assay &lhs, const Assay &rhs) noexcept
+        {
+            const xreal_t laa = lhs.A0.abs();
+            const xreal_t raa = rhs.A0.abs();
+            return Sign::Of(raa,laa);
+        }
+
+
     }
 
 }

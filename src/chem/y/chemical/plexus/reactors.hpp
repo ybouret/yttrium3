@@ -12,23 +12,56 @@ namespace Yttrium
     namespace Chemical
     {
 
-
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Reactors for Clusters
+        //
+        //
+        //______________________________________________________________________
         class Reactors : public Proxy< const Core::ListOf<Reactor> >
         {
         public:
-            explicit Reactors(const Clusters &);
-            virtual ~Reactors() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Reactors(const Clusters &); //!< setup
+            virtual ~Reactors() noexcept;        //!< cleanup
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+
+            //! best effort run, status saved in each Reactor 'last'
+            /**
+             \param xml      output
+             \param C        [in|out] state
+             \param L        state level
+             \param maxCycle positive to debug
+             */
             void operator()(XML::Log  & xml,
                             XWritable & C,
                             const Level L,
                             const size_t maxCycle = 0);
 
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
         private:
-            Y_Disable_Copy_And_Assign(Reactors);
-            Y_Proxy_Decl();
-            const Clusters     & clusters;
-            CxxListOf<Reactor>   reactors;
+            Y_Disable_Copy_And_Assign(Reactors); //!< discarded
+            Y_Proxy_Decl();                      //!< helper
+            const Clusters     & clusters;       //!< attached clusters
+            CxxListOf<Reactor>   reactors;       //!< one reactor for each cluster
 
         };
 

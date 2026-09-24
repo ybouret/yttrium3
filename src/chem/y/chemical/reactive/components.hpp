@@ -82,6 +82,12 @@ namespace Yttrium
                              const XReadable & Ctry,
                              const Level       Ltry) const;
 
+            //! compute affinity jacobian
+            /**
+             \param dA output array
+             \param C  current state
+             \param L  current level
+             */
             void dAffinity(XWritable &dA, const XReadable &C, const Level L) const;
 
             //! compute extent from a transformation

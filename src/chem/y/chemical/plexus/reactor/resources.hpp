@@ -12,19 +12,42 @@ namespace Yttrium
 {
     namespace Chemical
     {
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Resources for Reactor
+        //
+        //
+        //______________________________________________________________________
         class Resources : public Object
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
 
+            //! setup \param N primary eqs \param M species count
             explicit Resources(const size_t N, const size_t M);
+
+            //! cleanup
             virtual ~Resources() noexcept;
 
-            AutoPtr<Coven::Finder>         finder;
-            MKL::Minimize::Engine<xreal_t> minimize;
-            AutoPtr<Algebra>               algebra;
-            
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
+            AutoPtr<Coven::Finder>         finder;   //!< basis finder
+            MKL::Minimize::Engine<xreal_t> minimize; //!< numerical minimizer
+            AutoPtr<Algebra>               algebra;  //!< algebraic ops
+
         private:
-            Y_Disable_Copy_And_Assign(Resources);
+            Y_Disable_Copy_And_Assign(Resources); //!< discarded
         };
 
     }

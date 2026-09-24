@@ -19,39 +19,81 @@ namespace Yttrium
     namespace Chemical
     {
 
-        
+        //______________________________________________________________________
+        //
+        //
+        //
+        //! Reactor for a Cluster
+        //
+        //
+        //______________________________________________________________________
         class Reactor : public Object
         {
         public:
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
             static const char * const StdProfileExt; //!< "ycp"
             static const char * const OptProfileExt; //!< "yop"
             static const real_t       DefaultSafety; //!< 0.95
 
-            static bool     TracePro;
-            static bool     TraceRun;
-            static unsigned TracePoints;
+            static bool     TracePro;    //!< enable to save profile
+            static bool     TraceRun;    //!< enable to save run values
+            static unsigned TracePoints; //!< points per profile
 
-            typedef Handy::PlainLightList<const Assay> ARepo;
-            typedef ARepo::NodeType                    ANode;
+            typedef Handy::PlainLightList<const Assay> ARepo; //!< alias
+            typedef ARepo::NodeType                    ANode; //!< alias
 
+            //! run outcome value
             enum Outcome
             {
-                Improved,
-                Achieved,
-                Spurious
+                Improved, //!< decreased value
+                Achieved, //!< convergence
+                Spurious  //!< no more decrease
             };
 
 
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            explicit Reactor(const Cluster &); //!< setup
+            virtual ~Reactor() noexcept;       //!< cleanp
 
-            explicit Reactor(const Cluster &);
-            virtual ~Reactor() noexcept;
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
 
-
+            //! run an algorithm step
+            /**
+             \param xml output
+             \param C   [in|out] state
+             \param L   state level
+             \param K   TopLevel K
+             \return run outcome
+             */
             Outcome run(XML::Log        & xml,
                         XWritable       & C,
                         const Level       L,
                         const XReadable & K);
 
+            //! best effort run
+            /**
+             \param xml      output
+             \param C        [in|out] state
+             \param L        state level
+             \param K        TopLevel K
+             \param maxCycle positive to debug
+             \return true if convergence, false if spurious, saved into 'last'
+             */
             bool transform(XML::Log        & xml,
                            XWritable       & C,
                            const Level       L,
@@ -59,20 +101,29 @@ namespace Yttrium
                            const size_t      maxCycle);
 
 
+            //! \return value at given coordinate
             xreal_t ObjectiveFunction(const XReadable &, const Level);
+
+            //! \return value in [Cini:Cend]
             xreal_t operator()(const xreal_t);
 
+            //! \return convergence of states
             bool convergence(const XReadable &, const Level,
                              const XReadable &, const Level) const noexcept;
-            
 
 
-            void          saveProfile(OutputStream &);
-            static String MakeFileName(const String &);
+            void          saveProfile(OutputStream &);  //!< save profile to output
+            static String MakeFileName(const String &); //!< equilibrium name to file name
 
-            static void TryRemoveProfiles(const String &dirName);
-            static void TryRemoveRunStats(const String &dirName);
+            static void TryRemoveProfiles(const String &dirName); //!< remove extension "y[c|o]p"      \param dirName working directory
+            static void TryRemoveRunStats(const String &dirName); //!< remove "solver[:digit:]+[.]dat" \param dirName working directory
 
+            //__________________________________________________________________
+            //
+            //
+            // Members
+            //
+            //__________________________________________________________________
             const Cluster &    cluster;   //!< attached cluster
             const size_t  &    N;         //!< original number of equilibria
             const size_t  &    M;         //!< number of reactive species
@@ -93,13 +144,14 @@ namespace Yttrium
             const xreal_t      expand;    //!< Newton Step max expand : 2.0
             const xreal_t      safety;    //!< Newton Step safety cut : DefaultSafety
             AutoPtr<Resources> resources; //!< numeric resources
-            Reactor *          next;
-            Reactor *          prev;
+            Reactor *          next;      //!< for list
+            Reactor *          prev;      //!< for list
             String             gpStd;     //!< gnuplot command when TracePro is activated
             String             gpOpt;     //!< gnuplot command when TracePro is activated
 
         private:
-            Y_Disable_Copy_And_Assign(Reactor);
+            Y_Disable_Copy_And_Assign(Reactor); //!< discard
+
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             size_t buildAssays(XML::Log &, XWritable &, const Level, const XReadable &);
             size_t studyAssays(XML::Log &);

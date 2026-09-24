@@ -64,7 +64,14 @@ namespace Yttrium
              */
             OutputStream & viz(OutputStream &os, const size_t gr) const;
 
-            
+
+            //! display current state
+            /**
+             \param os output stream
+             \param C  current state
+             \param L  current level
+             \param K  TopLevel constants
+             */
             void displayState(std::ostream &os, const XReadable &C, const Level L, const XReadable &K) const;
 
             //__________________________________________________________________
