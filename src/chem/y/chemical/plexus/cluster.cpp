@@ -38,13 +38,13 @@ namespace Yttrium
         {
             XMul          xmul;
             XAdd          xadd;
+            XAdd          rmsq;
+            unsigned      na = 0;
             for(const ENode *en=elist->head;en;en=en->next)
             {
                 const Equilibrium &eq = **en;
                 const xreal_t      eK = eq(K,TopLevel);
-                //efmt.print(os << "\t@",**en,false,t0);
                 efmt.efmt.print(os << "\t@",eq);
-                //os << "'" << std::setw(22) << eK.str() << "'";
                 if(true)
                 {
                     const xreal_t ma = eq.massAction(eK,xmul,C,L);
@@ -53,7 +53,10 @@ namespace Yttrium
                 if( eq.reac.active(C,L) && eq.prod.active(C,L) )
                 {
                     const xreal_t A = eq.affinity( eK.log(), xadd, C, L);
+                    const xreal_t A2 = A*A;
                     os << " | A=" << A.str();
+                    ++na;
+                    rmsq << A2;
                 }
                 else
                 {
@@ -61,7 +64,16 @@ namespace Yttrium
                 }
                 os << std::endl;
             }
-            
+            if(na)
+            {
+                const xreal_t rms = (rmsq()/(real_t)na).sqrt();
+                std::cerr << "\t-- RMS = " << rms.str() << std::endl;
+            }
+            else
+            {
+                std::cerr << "\t-- fully blocked" << std::endl;
+            }
+
         }
 
     }

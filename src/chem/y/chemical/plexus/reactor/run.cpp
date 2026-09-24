@@ -37,10 +37,22 @@ namespace Yttrium
             //------------------------------------------------------------------
             const size_t na = buildAssays(xml,C,L,K);
             Y_XMLog(xml,"#assay = " << na);
-            if(na<=0)
+
+            switch(na)
             {
-                return Achieved;
+                case 0:
+                    Y_XMLog(xml,"[Inactive]");
+                    return Achieved;
+
+                case 1:
+                    Y_XMLog(xml,"[Use '" << assays[1].eq.name << "']");
+                    Indexed::Transfer(C,L,assays[1].cc,SubLevel,cluster.slist);
+                    return Achieved;
+
+                default:
+                    break;
             }
+
 
             //------------------------------------------------------------------
             //
@@ -148,7 +160,6 @@ namespace Yttrium
                         Indexed::Transfer(C,L,best1D->cc,SubLevel,cluster.slist);
                         Fs = F1;
                         Y_XMLog(xml, "|_use1D " << HRConverged(converged) );
-
                     }
                 }
                 else
@@ -162,10 +173,9 @@ namespace Yttrium
                     Indexed::Transfer(C,L,best1D->cc,SubLevel,cluster.slist);
                     Fs = F1;
                     Y_XMLog(xml, "|_use1D " << HRConverged(converged) );
-
                 }
 
-                return Fs.mantissa <= 0 ? Achieved : Improved;
+                return (converged || Fs.mantissa <= 0) ? Achieved : Improved;
             }
             else
             {
@@ -184,7 +194,7 @@ namespace Yttrium
                     converged = convergence(C,L,Cend,SubLevel);
                     Indexed::Transfer(C,L,Cend,SubLevel,cluster.slist);
                     Y_XMLog(xml, "@hasNRS: " << Fs.str() << " " << HRConverged(converged) ); assert(Fs<F0);
-                    return Fs.mantissa <= 0 ? Achieved : Improved;
+                    return (converged || Fs.mantissa <= 0) ? Achieved : Improved;
                 }
                 else
                 {
