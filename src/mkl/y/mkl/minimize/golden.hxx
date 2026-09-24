@@ -1,5 +1,58 @@
 
+namespace
+{
+    static inline void GoldenExtract(Triplet<real_t>    & x,
+                                     Triplet<real_t>    & f,
+                                     const real_t * const xx,
+                                     const real_t * const ff,
+                                     const size_t         nn) noexcept
+    {
+        Core::Display(std::cerr << "ff=",ff,nn) << std::endl;
+        // locate imin
+        size_t imin = 0;
+        real_t fmin = ff[0];
+        for(size_t i=1;i<nn;++i)
+        {
+            const real_t ftmp = ff[i];
+            if(ftmp<fmin)
+            {
+                imin = i;
+                fmin = ftmp;
+            }
+        }
+        std::cerr << "imin=" << imin << std::endl;
+        std::cerr << "fmin=" << imin << std::endl;
 
+        // locate left flat zone
+        size_t nl = 0;
+        {
+            const size_t nlMax = imin;
+            for(size_t i=1;i<=nlMax;++i)
+            {
+                if(ff[imin-i]>fmin) break;
+                nl = i;
+            }
+            std::cerr << "nl = " << nl << std::endl;
+        }
+
+        // locate right flat zone
+        size_t nr = 0;
+        {
+            const size_t nrMax = nn-imin;
+            for(size_t i=1;i<=nrMax;++i)
+            {
+                if(ff[imin+i]>fmin) break;
+                nr = i;
+            }
+            std::cerr << "nr = " << nr << std::endl;
+        }
+
+        const size_t flatZone = 1 + nl + nr;
+        std::cerr << "flatZone=" << flatZone << std::endl;
+
+
+    }
+}
 
 template <>
 void Golden<real_t>:: Step(XML::Log &xml, Triplet<real_t> &x, Triplet<real_t> &f, Function<real_t,real_t> &F)
@@ -65,7 +118,7 @@ void Golden<real_t>:: Step(XML::Log &xml, Triplet<real_t> &x, Triplet<real_t> &f
                 nn    = 4;
                 break;
 
-            case __Zero__: // cut both
+            case __Zero__:   // cut both
                 ff[0] = f.a; xx[0] = x.a;
                 ff[1] =   F( xx[1] = Clamp(x.a,x.b - Numeric<real_t>::GOLDEN_C * ab,x.b) );
                 ff[2] = f.b; xx[2] = x.b;
@@ -75,6 +128,9 @@ void Golden<real_t>:: Step(XML::Log &xml, Triplet<real_t> &x, Triplet<real_t> &f
                 break;
         }
 
+        GoldenExtract(x,f,xx,ff,nn);
+
+        abort();
     }
 
 

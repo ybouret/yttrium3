@@ -6,6 +6,7 @@
 #include "y/stream/libc/output.hpp"
 #include "y/mkl/api/almost-equal.hpp"
 #include "y/libc/block/zero.h"
+#include "y/core/display.hpp"
 
 namespace Yttrium
 {
