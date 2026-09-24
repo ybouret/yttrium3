@@ -1,6 +1,7 @@
 
 #include "y/chemical/plexus/reactor.hpp"
 #include "y/stream/output.hpp"
+#include "y/mkl/api/almost-equal.hpp"
 
 namespace Yttrium
 {
@@ -107,6 +108,18 @@ namespace Yttrium
                 fp("%.15g %.15g\n", u, (double) (*this)(u) );
             }
             fp("1 %.15g\n", (double) ObjectiveFunction(Cend,SubLevel) );
+        }
+
+
+        bool Reactor:: convergence(const XReadable &C0, const Level L0,
+                                   const XReadable &C1, const Level L1) const noexcept
+        {
+            for(const SNode *sn = cluster.slist->head;sn;sn=sn->next)
+            {
+                const Species &sp = **sn;
+                if( !MKL::AlmostEqual<xreal_t>::Are(sp(C0,L0),sp(C1,L1)) ) return false;
+            }
+            return true;
         }
 
     }

@@ -62,6 +62,10 @@ namespace Yttrium
             xreal_t ObjectiveFunction(const XReadable &, const Level);
             xreal_t operator()(const xreal_t);
 
+            bool convergence(const XReadable &, const Level,
+                             const XReadable &, const Level) const noexcept;
+            
+
 
             void          saveProfile(OutputStream &);
             static String MakeFileName(const String &);

@@ -5,6 +5,15 @@ namespace Yttrium
 {
     namespace Chemical
     {
+
+        static inline
+        const char * HRConverged(const bool flag) noexcept
+        {
+            return flag ?
+            "[converged]" :
+            "[separated]";
+        }
+
         Reactor::Outcome Reactor:: run(XML::Log &xml, XWritable &C, const Level L, const XReadable &K)
         {
             Y_XML_Element(xml,ReactorRun);
@@ -22,7 +31,7 @@ namespace Yttrium
             //------------------------------------------------------------------
             //
             //
-            // build RUNNING assays, tweaking C is crucial equibliria are met
+            // build RUNNING assays, tweaking C if crucial equilibria are met
             //
             //
             //------------------------------------------------------------------
@@ -36,7 +45,7 @@ namespace Yttrium
             //------------------------------------------------------------------
             //
             //
-            // Initialize from assays
+            // Initialize from 1D assays
             //
             //
             //------------------------------------------------------------------
@@ -101,8 +110,12 @@ namespace Yttrium
             //
             //
             //------------------------------------------------------------------
-            const bool with1D = best1D;
-            const bool withNR = hasNRS;
+            const bool with1D    = best1D;
+            const bool withNR    = hasNRS;
+            bool       converged = false;
+
+
+
             Y_XML_Element_Attr(xml,SelectStep,Y_XML_Attr(with1D) << Y_XML_Attr(withNR) );
             if(best1D)
             {
@@ -125,14 +138,17 @@ namespace Yttrium
 
                     if(Fs<=F1)
                     {
-                        Y_XMLog(xml, "|_useNR");
+                        converged = convergence(C,L,Cend,SubLevel);
                         Indexed::Transfer(C,L,Cend,SubLevel,cluster.slist);
+                        Y_XMLog(xml, "|_useNR " << HRConverged(converged) );
                     }
                     else
                     {
-                        Y_XMLog(xml, "|_use1D");
+                        converged = convergence(C,L,best1D->cc,SubLevel);
                         Indexed::Transfer(C,L,best1D->cc,SubLevel,cluster.slist);
                         Fs = F1;
+                        Y_XMLog(xml, "|_use1D " << HRConverged(converged) );
+
                     }
                 }
                 else
@@ -142,10 +158,13 @@ namespace Yttrium
                     // BUT NO Newton-Raphson Step
                     //
                     //----------------------------------------------------------
-                    Y_XMLog(xml, "|_use1D");
+                    converged = convergence(C,L,best1D->cc,SubLevel);
                     Indexed::Transfer(C,L,best1D->cc,SubLevel,cluster.slist);
                     Fs = F1;
+                    Y_XMLog(xml, "|_use1D " << HRConverged(converged) );
+
                 }
+
                 return Fs.mantissa <= 0 ? Achieved : Improved;
             }
             else
@@ -162,8 +181,9 @@ namespace Yttrium
                     // BUT GOT Newton-Raphson Step
                     //
                     //----------------------------------------------------------
-                    Y_XMLog(xml, "@hasNRS: " << Fs.str() ); assert(Fs<F0);
+                    converged = convergence(C,L,Cend,SubLevel);
                     Indexed::Transfer(C,L,Cend,SubLevel,cluster.slist);
+                    Y_XMLog(xml, "@hasNRS: " << Fs.str() << " " << HRConverged(converged) ); assert(Fs<F0);
                     return Fs.mantissa <= 0 ? Achieved : Improved;
                 }
                 else
