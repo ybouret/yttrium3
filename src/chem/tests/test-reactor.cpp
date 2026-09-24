@@ -1,12 +1,8 @@
-
-
-
 #include "y/chemical/weasel.hpp"
 #include "y/utest/run.hpp"
 
 #include "y/stream/libc/output.hpp"
 
-#include "y/chemical/plexus/clusters.hpp"
 
 #include "y/container/cxx/array.hpp"
 #include "y/string/env/convert.hpp"
@@ -18,7 +14,7 @@
 #include "y/vfs/local/fs.hpp"
 #include "y/jive/vfs.hpp"
 
-#include "y/chemical/plexus/reactor.hpp"
+#include "y/chemical/plexus/reactors.hpp"
 #include "y/chemical/type/concentration.hpp"
 
 
@@ -59,16 +55,18 @@ Y_UTEST(reactor)
     const double      probaN = EnvironmentConvert::To<double>("probaN",0);
     Concentration::Fill(ran,C,M,probaZ,probaN);
 
+    Reactors reactors(cls);
+
     Reactor::TracePro = false;
     Reactor::TraceRun = true;
     Reactor::TryRemoveProfiles(".");
     Reactor::TryRemoveRunStats(".");
-
     const size_t maxCycles = EnvironmentConvert::To<size_t>("STEADY",0);
+
+    reactors(xml,C,TopLevel,maxCycles);
+
     for(const Cluster *cl=cls->head;cl;cl=cl->next)
     {
-        Reactor reactor(*cl);
-        reactor.transform(xml,C,TopLevel,cls.K,maxCycles);
         cl->displayState(std::cerr,C,TopLevel,cls.K);
     }
 

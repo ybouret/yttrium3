@@ -38,9 +38,12 @@ namespace Yttrium
         xmul(),
         xadd(),
         fadd(),
+        last(false),
         expand(2.0),
         safety(DefaultSafety),
         resources( new Resources(N,M) ),
+        next(0),
+        prev(0),
         gpStd(),
         gpOpt()
         {

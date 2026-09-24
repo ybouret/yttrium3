@@ -52,7 +52,7 @@ namespace Yttrium
                         const Level       L,
                         const XReadable & K);
 
-            bool transform(XML::Log &xml,
+            bool transform(XML::Log        & xml,
                            XWritable       & C,
                            const Level       L,
                            const XReadable & K,
@@ -85,14 +85,18 @@ namespace Yttrium
             XMul               xmul;      //!< for inner mul
             XAdd               xadd;      //!< for inner add
             XAdd               fadd;      //!< for objective function
-            const xreal_t      expand;  //!< Newton Step max expand : 2.0
-            const xreal_t      safety;  //!< Newton Step safety cut : DefaultSafety
+            const bool         last;      //!< last transform result
+            const xreal_t      expand;    //!< Newton Step max expand : 2.0
+            const xreal_t      safety;    //!< Newton Step safety cut : DefaultSafety
             AutoPtr<Resources> resources; //!< numeric resources
-            String             gpStd;
-            String             gpOpt;
+            Reactor *          next;
+            Reactor *          prev;
+            String             gpStd;     //!< gnuplot command when TracePro is activated
+            String             gpOpt;     //!< gnuplot command when TracePro is activated
 
         private:
             Y_Disable_Copy_And_Assign(Reactor);
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             size_t buildAssays(XML::Log &, XWritable &, const Level, const XReadable &);
             size_t studyAssays(XML::Log &);
             void   updateAssay(XML::Log &, Assay &, XTriplet &, XTriplet &);
@@ -100,6 +104,7 @@ namespace Yttrium
             bool   computeStep(XML::Log &);
             void   approveStep(XML::Log &);
             bool   builtNRStep(XML::Log &);
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
         };
 
     }
