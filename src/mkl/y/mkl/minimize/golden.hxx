@@ -152,7 +152,7 @@ namespace
                        const real_t * const ff,
                        const size_t         nn) noexcept
     {
-        Core::Display(std::cerr << "ff=",ff,nn) << std::endl;
+        //Core::Display(std::cerr << "ff=",ff,nn) << std::endl;
         assert(nn>=4);
 
 #if !defined(NDEBUG)
@@ -180,8 +180,7 @@ namespace
                 fmin = ftmp;
             }
         }
-        std::cerr << "imin=" << imin << std::endl;
-        std::cerr << "fmin=" << imin << std::endl;
+
 
         //----------------------------------------------------------------------
         //
@@ -198,7 +197,6 @@ namespace
                 if(ff[imin-i]>fmin) break;
                 nl = i;
             }
-            std::cerr << "nl = " << nl << std::endl;
         }
 
         //----------------------------------------------------------------------
@@ -216,7 +214,6 @@ namespace
                 if(ff[imin+i]>fmin) break;
                 nr = i;
             }
-            std::cerr << "nr = " << nr << std::endl;
         }
 
         //----------------------------------------------------------------------
@@ -227,7 +224,6 @@ namespace
         //
         //----------------------------------------------------------------------
         const size_t flatZone = 1 + nl + nr;
-        std::cerr << "flatZone=" << flatZone << std::endl;
 
         switch( flatZone )
         {
@@ -283,7 +279,7 @@ void Golden<real_t>:: Step(XML::Log &xml, Triplet<real_t> &x, Triplet<real_t> &f
     assert(x.isIncreasing());
     assert(f.isLocalMinimum());
 
-    Y_XMLog(xml,"x=" << x << ", f=" << f);
+    Y_XMLog(xml,"--  x=" << x << ", f=" << f);
 
     if(false)
     {
@@ -333,11 +329,12 @@ void Golden<real_t>:: Step(XML::Log &xml, Triplet<real_t> &x, Triplet<real_t> &f
         }
 
         GoldenExtract(x,f,xx,ff,nn);
+        Y_XMLog(xml,"--> x=" << x << ", f=" << f);
 
     }
 
 
-    
+
     if(false)
     {
         OutputFile fp("golden-step.dat",true);
@@ -354,29 +351,39 @@ real_t Golden<real_t>:: Find(XML::Log &xml, Triplet<real_t> &x, Triplet<real_t> 
     assert(x.isOrdered());
     assert(f.isLocalMinimum());
 
-    size_t cycle = 0;
-    size_t iflat = 0;
+    // initialize search
+    Step(xml,x,f,F);
+    real_t xopt = x.b;
+
+    size_t step=0;
+    size_t flat=0;
+
+    // process
 STEP:
-    ++cycle;
-    Y_XMLog(xml,"cycle #" << cycle);
+    ++step;
+    Y_XMLog(xml,"step #" << step);
     Step(xml,x,f,F);
     assert(x.isIncreasing());
     assert(f.isLocalMinimum());
     if( AlmostEqual<real_t>::Are(f.a,f.b) && AlmostEqual<real_t>::Are(f.b,f.c))
     {
-        if(!iflat) iflat = cycle;
-        Y_XMLog(xml, "[flat region @" << iflat << "]");
+        if(flat<=0) flat = step;
+        Y_XMLog(xml, "[f-cvg @step #" << flat << "]");
+
+        if( AlmostEqual<real_t>::Are(xopt,x.b))
+        {
+            Y_XMLog(xml, "[x-cvg @step #" << step << "]");
+            goto DONE;
+        }
     }
 
-    if( AlmostEqual<real_t>::Are(x.a,x.c) )
-    {
-        Y_XMLog(xml, "[pinpoint]");
-        abort();
-    }
-
+    xopt = x.b;
     goto STEP;
 
+DONE:
     f.b = F(x.b);
     return x.b;
+
+
 }
 

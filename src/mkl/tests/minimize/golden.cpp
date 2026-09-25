@@ -36,6 +36,8 @@ namespace
     template <typename T> static inline
     void testGolden(Random::CoinFlip &ran)
     {
+        const size_t iter = EnvironmentConvert::To<size_t>("ITER",1);
+        size_t       count = 0;
         while(true)
         {
             Triplet<T> xx = { getX<T>(ran), getX<T>(ran), getX<T>(ran) }; if( !xx.isOrdered() )     continue;
@@ -45,22 +47,10 @@ namespace
 
             bool         verbose = true;
             XML::Log     xml(std::cerr,verbose);
-
-            if(false)
-            {
-                const size_t cycles = EnvironmentConvert::To<size_t>("CYCLES",1);
-
-                std::cerr << "|_w=" << Fabs<T>(xx.c-xx.a) << std::endl;
-                for(size_t i=1;i<=cycles;++i)
-                {
-                    Golden<T>::Step(xml,F<T>,xx,ff);
-                    std::cerr << "|_w=" << Fabs<T>(xx.c-xx.a) << std::endl;
-                }
-            }
-
             const T xopt = Golden<T>::Find(xml,F<T>,xx,ff);
             std::cerr << "xopt=" << xopt << ": Fopt=" << ff.b << std::endl;
-            break;
+            if(++count>=iter)
+                break;
         }
     }
 
@@ -81,7 +71,7 @@ Y_UTEST(min_golden)
         }
     }
 
-    testGolden< float >( ran );
+    testGolden< double >( ran );
 
 }
 Y_UDONE()
