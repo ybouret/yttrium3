@@ -2,6 +2,7 @@
 #include "y/chemical/plexus/reactor.hpp"
 #include "y/stream/libc/output.hpp"
 #include "y/type/temporary.hpp"
+#include "y/mkl/minimize/golden.hpp"
 
 namespace Yttrium
 {
@@ -21,7 +22,7 @@ namespace Yttrium
                     const Temporary<bool> quiet(xml.verbose,false);
                     assert(xx.isIncreasing());
                     assert(ff.isLocalMinimum());
-                    xopt = F.resources->minimize.find(xml,F, MKL::Minimize::Direct, xx, ff, MKL::Minimize::Standard);
+                    xopt = MKL::Golden<xreal_t>::Find(xml,F,xx,ff);
                 }
                 Y_XMLog(xml, "[+] F(" << xopt.str() <<") = " << ff.b.str() );
                 F.Cend.load(F.Ctry);
@@ -33,7 +34,7 @@ namespace Yttrium
         {
             Y_XML_Element(xml,NewtonRaphson);
             if( !computeStep(xml) ) return false;
-            /**/ approveStep(xml);
+            /**/ approveStep(xml);  // approved
 
             if(TracePro)
             {

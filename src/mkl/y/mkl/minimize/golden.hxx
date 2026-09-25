@@ -109,11 +109,9 @@ namespace
                        Triplet<real_t>    & f,
                        const real_t * const xx,
                        const real_t * const ff,
-                       const size_t         nn,
                        const size_t         org,
                        const size_t         len) noexcept
     {
-        assert(nn>=4);
         assert(len>=4);
         const size_t nt = len-3; // number of triplets
         std::cerr << "nt=" << nt << std::endl;
@@ -122,12 +120,9 @@ namespace
         size_t lower = org;
         size_t upper = org+2;
         real_t width = Max(xx[upper]-xx[lower],  Numeric<real_t>::ZERO);
-        std::cerr << "width=" << width << " @" << lower << "->" << upper << std::endl;
         for(size_t t=1;t<nt;++t)
         {
             const real_t wtmp = Max(xx[++upper]-xx[++lower],  Numeric<real_t>::ZERO);
-            std::cerr << "wtmp =" << wtmp << " @" << lower << "->" << upper << std::endl;
-
             if(wtmp<width)
             {
                 width = wtmp;
@@ -152,7 +147,6 @@ namespace
                        const real_t * const ff,
                        const size_t         nn) noexcept
     {
-        //Core::Display(std::cerr << "ff=",ff,nn) << std::endl;
         assert(nn>=4);
 
 #if !defined(NDEBUG)
@@ -248,7 +242,7 @@ namespace
 
             default:
                 assert(flatZone>=4);
-                GoldenLoadFZN(x,f,xx,ff,nn,imin-nl,flatZone);
+                GoldenLoadFZN(x,f,xx,ff,imin-nl,flatZone);
         }
 
     }

@@ -53,22 +53,29 @@ Y_UTEST(reactor)
     CxxArray<xreal_t> C(M);
     const double      probaZ = EnvironmentConvert::To<double>("probaZ",0);
     const double      probaN = EnvironmentConvert::To<double>("probaN",0);
-    Concentration::Fill(ran,C,M,probaZ,probaN);
 
     Reactors reactors(cls);
 
-    Reactor::TracePro = false;
+    Reactor::TracePro = Environment::Flag("PRO");
     Reactor::TraceRun = true;
     Reactor::TryRemoveProfiles(".");
     Reactor::TryRemoveRunStats(".");
-    const size_t maxCycles = EnvironmentConvert::To<size_t>("STEADY",0);
+    const size_t maxCycles = EnvironmentConvert::To<size_t>("CYCLES",0);
+    const size_t maxIter   = EnvironmentConvert::To<size_t>("ITER",1);
 
-    reactors(xml,C,TopLevel,maxCycles);
 
-    for(const Cluster *cl=cls->head;cl;cl=cl->next)
+    for(size_t iter=1;iter<=maxIter;++iter)
     {
-        cl->displayState(std::cerr,C,TopLevel,cls.K);
+        Concentration::Fill(ran,C,M,probaZ,probaN);
+        reactors(xml,C,TopLevel,maxCycles);
+        for(const Cluster *cl=cls->head;cl;cl=cl->next)
+        {
+            cl->displayState(std::cerr,C,TopLevel,cls.K);
+        }
+        std::cerr << "-- done iter#" << iter << std::endl;
     }
+
+
 
 
 }

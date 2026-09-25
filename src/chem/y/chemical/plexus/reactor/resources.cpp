@@ -11,7 +11,6 @@ namespace Yttrium
 
         Resources:: Resources(const size_t N, const size_t M) :
         finder( new Coven::Finder(M) ),
-        minimize(),
         algebra( new Algebra(N,M) )
         {
         }

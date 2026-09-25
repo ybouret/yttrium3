@@ -3,6 +3,7 @@
 #include "y/core/hsort.hpp"
 #include "y/stream/libc/output.hpp"
 #include "y/type/temporary.hpp"
+#include "y/mkl/minimize/golden.hpp"
 
 namespace Yttrium
 {
@@ -19,10 +20,10 @@ namespace Yttrium
             xreal_t xopt;
             {
                 const Temporary<bool> quiet(xml.verbose,false);
-                xopt = resources->minimize.find(xml,*this,MKL::Minimize::Direct,xx,ff,MKL::Minimize::Standard);
+                xopt = MKL::Golden<xreal_t>::Find(xml, *this, xx, ff);
             }
             Y_XMLog(xml, "|_F(" << xopt <<") = " << ff.b);
-            assay.F1 = (*this)(xopt); // TODO: check minimizer algo
+            assay.F1 = ff.b;
             assay.cc.load(Ctry);
         }
 
