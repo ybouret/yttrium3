@@ -122,7 +122,7 @@ namespace Yttrium
             //
             //
             //------------------------------------------------------------------
-            const bool with1D    = best1D;
+            const bool with1D    = 0!=best1D;
             const bool withNR    = hasNRS;
             bool       converged = false;
 
