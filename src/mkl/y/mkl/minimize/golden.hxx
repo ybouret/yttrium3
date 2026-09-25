@@ -1,14 +1,174 @@
 
 namespace
 {
-    static inline void GoldenExtract(Triplet<real_t>    & x,
-                                     Triplet<real_t>    & f,
-                                     const real_t * const xx,
-                                     const real_t * const ff,
-                                     const size_t         nn) noexcept
+
+
+    static inline
+    void GoldenLoadFZ1(Triplet<real_t>    & x,
+                       Triplet<real_t>    & f,
+                       const real_t * const xx,
+                       const real_t * const ff,
+                       const size_t         nn,
+                       const size_t         im) noexcept
+    {
+        assert(nn>=4);
+        if(0==im)
+        {
+            // stuck on left
+            x.a = x.b = xx[0];
+            f.a = f.b = ff[0];
+            x.c = xx[1];
+            f.c = ff[1];
+            assert(x.isIncreasing());
+            assert(f.isLocalMinimum());
+        }
+        else
+        {
+            const size_t upper = nn-1;
+            if(upper==im)
+            {
+                // stuck on right
+                const size_t lower=upper-1;
+                x.a = xx[lower]; f.a = ff[lower];
+                x.b = x.c = xx[upper];
+                f.b = f.c = ff[upper];
+                assert(x.isIncreasing());
+                assert(f.isLocalMinimum());
+            }
+            else
+            {
+                // core
+                const size_t j = im-1;
+                x.load(xx+j);
+                f.load(ff+j);
+                assert(x.isIncreasing());
+                assert(f.isLocalMinimum());
+            }
+        }
+    }
+
+    static inline
+    void GoldenLoadFZ2(Triplet<real_t>    & x,
+                       Triplet<real_t>    & f,
+                       const real_t * const xx,
+                       const real_t * const ff,
+                       const size_t         nn,
+                       const size_t         org) noexcept
+    {
+        assert(nn>=4);
+
+        if(org<=0)
+        {
+            // take left-most triplet
+            x.load(xx);
+            f.load(ff);
+            assert(x.isIncreasing());
+            assert(f.isLocalMinimum());
+        }
+        else
+        {
+            const size_t top = nn-3;
+            if(org>=top)
+            {
+                // take right-most triplet
+                x.load(xx+top);
+                f.load(ff+top);
+                assert(x.isIncreasing());
+                assert(f.isLocalMinimum());
+            }
+            else
+            {
+                assert(org>0);
+                assert(org<top);
+                const size_t lo = org-1;
+                const size_t up = org+3; assert(up<nn);
+                const real_t dl = Max(xx[org]-xx[lo],  Numeric<real_t>::ZERO);
+                const real_t dr = Max(xx[up]-xx[up-1], Numeric<real_t>::ZERO);
+                if(dl<=dr)
+                {
+                    // take left point
+                    x.load(xx+lo);
+                    f.load(ff+lo);
+                    assert(x.isIncreasing());
+                    assert(f.isLocalMinimum());
+                }
+                else
+                {
+                    // take right point
+                    x.load(xx+org);
+                    f.load(ff+org);
+                    assert(x.isIncreasing());
+                    assert(f.isLocalMinimum());
+                }
+            }
+        }
+    }
+
+    static inline
+    void GoldenLoadFZN(Triplet<real_t>    & x,
+                       Triplet<real_t>    & f,
+                       const real_t * const xx,
+                       const real_t * const ff,
+                       const size_t         nn,
+                       const size_t         org,
+                       const size_t         len) noexcept
+    {
+        assert(nn>=4);
+        assert(len>=4);
+        const size_t nt = len-3; // number of triplets
+        std::cerr << "nt=" << nt << std::endl;
+
+        size_t small = org;
+        size_t lower = org;
+        size_t upper = org+2;
+        real_t width = Max(xx[upper]-xx[lower],  Numeric<real_t>::ZERO);
+        std::cerr << "width=" << width << " @" << lower << "->" << upper << std::endl;
+        for(size_t t=1;t<nt;++t)
+        {
+            const real_t wtmp = Max(xx[++upper]-xx[++lower],  Numeric<real_t>::ZERO);
+            std::cerr << "wtmp =" << wtmp << " @" << lower << "->" << upper << std::endl;
+
+            if(wtmp<width)
+            {
+                width = wtmp;
+                small = lower;
+            }
+        }
+
+        x.load(xx+small);
+        f.load(ff+small);
+        assert(x.isIncreasing());
+        assert(f.isLocalMinimum());
+
+    }
+
+
+
+
+    static inline
+    void GoldenExtract(Triplet<real_t>    & x,
+                       Triplet<real_t>    & f,
+                       const real_t * const xx,
+                       const real_t * const ff,
+                       const size_t         nn) noexcept
     {
         Core::Display(std::cerr << "ff=",ff,nn) << std::endl;
-        // locate imin
+        assert(nn>=4);
+
+#if !defined(NDEBUG)
+        for(size_t i=1;i<nn;++i) {
+            assert(xx[i-1]<=xx[i]);
+        }
+
+#endif // !defined(NDEBUG)
+
+        //----------------------------------------------------------------------
+        //
+        //
+        // Locate imin
+        //
+        //
+        //----------------------------------------------------------------------
         size_t imin = 0;
         real_t fmin = ff[0];
         for(size_t i=1;i<nn;++i)
@@ -23,7 +183,13 @@ namespace
         std::cerr << "imin=" << imin << std::endl;
         std::cerr << "fmin=" << imin << std::endl;
 
-        // locate left flat zone
+        //----------------------------------------------------------------------
+        //
+        //
+        // Locate left flat zone
+        //
+        //
+        //----------------------------------------------------------------------
         size_t nl = 0;
         {
             const size_t nlMax = imin;
@@ -35,7 +201,13 @@ namespace
             std::cerr << "nl = " << nl << std::endl;
         }
 
-        // locate right flat zone
+        //----------------------------------------------------------------------
+        //
+        //
+        // Locate right flat zone
+        //
+        //
+        //----------------------------------------------------------------------
         size_t nr = 0;
         {
             const size_t nrMax = nn-imin;
@@ -47,9 +219,41 @@ namespace
             std::cerr << "nr = " << nr << std::endl;
         }
 
+        //----------------------------------------------------------------------
+        //
+        //
+        // Compute flat zone
+        //
+        //
+        //----------------------------------------------------------------------
         const size_t flatZone = 1 + nl + nr;
         std::cerr << "flatZone=" << flatZone << std::endl;
 
+        switch( flatZone )
+        {
+
+            case 1:
+                GoldenLoadFZ1(x,f,xx,ff,nn,imin);
+                break;
+
+            case 2:
+                assert(imin>=nl);
+                GoldenLoadFZ2(x,f,xx,ff,nn,imin-nl);
+                break;
+
+            case 3: {
+                assert(imin>=nl);
+                const size_t org = imin - nl;
+                x.load(xx+org);
+                f.load(ff+org);
+                assert(x.isIncreasing());
+                assert(f.isLocalMinimum());
+            } break;
+
+            default:
+                assert(flatZone>=4);
+                GoldenLoadFZN(x,f,xx,ff,nn,imin-nl,flatZone);
+        }
 
     }
 }
@@ -130,80 +334,10 @@ void Golden<real_t>:: Step(XML::Log &xml, Triplet<real_t> &x, Triplet<real_t> &f
 
         GoldenExtract(x,f,xx,ff,nn);
 
-        abort();
     }
 
 
-#if 0
-    //--------------------------------------------------------------------------
-    //
-    //
-    // check intervals
-    //
-    //
-    //--------------------------------------------------------------------------
-    const real_t ab = Max(x.b-x.a,Numeric<real_t>::ZERO);
-    const real_t bc = Max(x.c-x.b,Numeric<real_t>::ZERO);
-
-    if(ab>bc)
-    {
-        //----------------------------------------------------------------------
-        //
-        // cut ab
-        //
-        //----------------------------------------------------------------------
-        const real_t x_g = Clamp(x.a,x.b - Numeric<real_t>::GOLDEN_C * ab,x.b);
-        const real_t f_g = F(x_g);
-        const bool   ok  = f_g < f.b;
-        if(ok)
-        {
-            // new min
-            x.c = x.b; f.c = f.b;
-            x.b = x_g; f.b = f_g;
-            assert(x.isIncreasing());
-            assert(f.isLocalMinimum());
-        }
-        else
-        {
-            // .b remains, .a moves
-            x.a = x_g; f.a = f_g;
-            assert(x.isIncreasing());
-            assert(f.isLocalMinimum());
-        }
-        Y_XMLog(xml,"[>]" << (ok?"[+]":"[-]") << " F(" << x_g << ") = " << f_g);
-
-    }
-    else
-    {
-        //----------------------------------------------------------------------
-        //
-        // cut bc
-        //
-        //----------------------------------------------------------------------
-        const real_t x_g = Clamp(x.b,x.b + Numeric<real_t>::GOLDEN_C * bc,x.c);
-        const real_t f_g = F(x_g);
-        const bool   ok  = f_g < f.b;
-        if(ok)
-        {
-            // new min
-            x.a = x.b; f.a = f.b;
-            x.b = x_g; f.b = f_g;
-            assert(x.isIncreasing());
-            assert(f.isLocalMinimum());
-        }
-        else
-        {
-            // .b remains, .c moves
-            x.c = x_g; f.c = f_g;
-            assert(x.isIncreasing());
-            assert(f.isLocalMinimum());
-        }
-        Y_XMLog(xml,"[<]" << (ok?"[+]":"[-]") << " F(" << x_g << ") = " << f_g);
-    }
-
-    Y_XMLog(xml,"x=" << x << ", f=" << f);
-#endif
-
+    
     if(false)
     {
         OutputFile fp("golden-step.dat",true);

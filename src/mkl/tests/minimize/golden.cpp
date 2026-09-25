@@ -81,7 +81,7 @@ Y_UTEST(min_golden)
         }
     }
 
-    testGolden< double >( ran );
+    testGolden< float >( ran );
 
 }
 Y_UDONE()
