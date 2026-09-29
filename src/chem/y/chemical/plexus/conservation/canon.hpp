@@ -66,7 +66,7 @@ namespace Yttrium
                 LList    laws;    //!< list of laws
                 Canon *  next;    //!< for list
                 Canon *  prev;    //!< for list
-                Assembly lfmt;    //!< to format
+                Assembly lfmt;    //!< to format laws
 
             private:
                 Y_Disable_Copy_And_Assign(Canon); //!< discarded
