@@ -20,6 +20,7 @@ Y_UTEST_DECL(5)
     Y_UTEST(min_golden);
     Y_UTEST(min_parabolic);
     Y_UTEST(min_api);
+    Y_UTEST(min_quadratic);
 
     Y_UTEST(ode_rk4);
     Y_UTEST(ode_expl);
