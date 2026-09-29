@@ -2,7 +2,12 @@
 namespace
 {
 
-
+    //__________________________________________________________________________
+    //
+    //
+    // Extract new triplet with ONE exact numeric minimum
+    //
+    //__________________________________________________________________________
     static inline
     void GoldenLoadFZ1(Triplet<real_t>    & x,
                        Triplet<real_t>    & f,
@@ -14,7 +19,11 @@ namespace
         assert(nn>=4);
         if(0==im)
         {
-            // stuck on left
+            //------------------------------------------------------------------
+            //
+            // stuck on left : squeeze
+            //
+            //------------------------------------------------------------------
             x.a = x.b = xx[0];
             f.a = f.b = ff[0];
             x.c = xx[1];
@@ -27,7 +36,11 @@ namespace
             const size_t upper = nn-1;
             if(upper==im)
             {
-                // stuck on right
+                //------------------------------------------------------------------
+                //
+                // stuck on right : squeeze
+                //
+                //------------------------------------------------------------------
                 const size_t lower=upper-1;
                 x.a = xx[lower]; f.a = ff[lower];
                 x.b = x.c = xx[upper];
@@ -37,7 +50,11 @@ namespace
             }
             else
             {
-                // core
+                //------------------------------------------------------------------
+                //
+                // core : extract
+                //
+                //------------------------------------------------------------------
                 const size_t j = im-1;
                 x.load(xx+j);
                 f.load(ff+j);
@@ -47,6 +64,13 @@ namespace
         }
     }
 
+
+    //__________________________________________________________________________
+    //
+    //
+    // Extract new triplet with TWO exact numeric minima
+    //
+    //__________________________________________________________________________
     static inline
     void GoldenLoadFZ2(Triplet<real_t>    & x,
                        Triplet<real_t>    & f,
@@ -59,7 +83,11 @@ namespace
 
         if(org<=0)
         {
+            //------------------------------------------------------------------
+            //
             // take left-most triplet
+            //
+            //------------------------------------------------------------------
             x.load(xx);
             f.load(ff);
             assert(x.isIncreasing());
@@ -70,7 +98,11 @@ namespace
             const size_t top = nn-3;
             if(org>=top)
             {
+                //--------------------------------------------------------------
+                //
                 // take right-most triplet
+                //
+                //--------------------------------------------------------------
                 x.load(xx+top);
                 f.load(ff+top);
                 assert(x.isIncreasing());
@@ -78,6 +110,11 @@ namespace
             }
             else
             {
+                //--------------------------------------------------------------
+                //
+                // got at least one point at each side: take closest
+                //
+                //--------------------------------------------------------------
                 assert(org>0);
                 assert(org<top);
                 const size_t lo = org-1;
@@ -104,6 +141,12 @@ namespace
         }
     }
 
+    //__________________________________________________________________________
+    //
+    //
+    // Extract new triplet with AT LEAST FOUR exact numeric minima
+    //
+    //__________________________________________________________________________
     static inline
     void GoldenLoadFZN(Triplet<real_t>    & x,
                        Triplet<real_t>    & f,
@@ -114,7 +157,6 @@ namespace
     {
         assert(len>=4);
         const size_t nt = len-3; // number of triplets
-        std::cerr << "nt=" << nt << std::endl;
 
         size_t small = org;
         size_t lower = org;
