@@ -245,7 +245,7 @@ namespace
         size_t nr = 0;
         {
             const size_t nrMax = nn-imin;
-            for(size_t i=1;i<=nrMax;++i)
+            for(size_t i=1;i<nrMax;++i)
             {
                 if(ff[imin+i]>fmin) break;
                 nr = i;
