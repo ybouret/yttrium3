@@ -7,7 +7,6 @@ include_directories(${MPI_C_INCLUDE_DIRS})
 Y_CreateLibrary(y-mpi++
 y/mpi++
 y/mpi++/api
-y/mpi++/codec
 )
 
 add_subdirectory(tests)
