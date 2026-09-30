@@ -9,6 +9,7 @@
 
 namespace Yttrium
 {
+#if 1
     namespace MPI_Codec_Internal
     {
         template <typename T>
@@ -31,7 +32,8 @@ namespace Yttrium
         static const bool IsLegacyScalar = !IsSerializable && TypeTraits<T>::IsArithmetic;
         static const bool IsLegacyVector = !IsSerializable && MPI_Codec_Internal::IsVector<T>::Value;
     };
-
+#endif
+    
 }
 
 
