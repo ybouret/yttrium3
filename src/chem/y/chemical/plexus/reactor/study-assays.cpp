@@ -20,7 +20,8 @@ namespace Yttrium
             xreal_t xopt;
             {
                 const Temporary<bool> quiet(xml.verbose,false);
-                xopt = MKL::Golden<xreal_t>::Find(xml, *this, xx, ff);
+                //xopt = MKL::Golden<xreal_t>::Find(xml, *this, xx, ff);
+                xopt = resources->minimizer.find(xml,*this,xx,ff);
             }
             Y_XMLog(xml, "|_F(" << xopt <<") = " << ff.b);
             assay.F1 = ff.b;

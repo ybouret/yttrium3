@@ -4,6 +4,7 @@
 #define Y_Chemical_Plexus_Reactor_Resources_Included
 
 #include "y/coven/finder.hpp"
+#include "y/mkl/minimize/quadratic.hpp"
 #include "y/pointer/auto.hpp"
 #include "y/chemical/plexus/reactor/algebra.hpp"
 
@@ -25,6 +26,14 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
+            // Definitions
+            //
+            //__________________________________________________________________
+            typedef Coven::Finder           Finder;
+            typedef MKL::Quadratic<xreal_t> Minimizer;
+            //__________________________________________________________________
+            //
+            //
             // C++
             //
             //__________________________________________________________________
@@ -41,9 +50,10 @@ namespace Yttrium
             // Members
             //
             //__________________________________________________________________
-            AutoPtr<Coven::Finder>         finder;   //!< basis finder
-            AutoPtr<Algebra>               algebra;  //!< algebraic ops
-            
+            AutoPtr<Finder>    finder;    //!< basis finder
+            Minimizer          minimizer; //!< numeric minima finder
+            AutoPtr<Algebra>   algebra;   //!< algebraic ops
+
         private:
             Y_Disable_Copy_And_Assign(Resources); //!< discarded
         };

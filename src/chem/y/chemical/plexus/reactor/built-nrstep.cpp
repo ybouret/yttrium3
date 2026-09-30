@@ -22,7 +22,9 @@ namespace Yttrium
                     const Temporary<bool> quiet(xml.verbose,false);
                     assert(xx.isIncreasing());
                     assert(ff.isLocalMinimum());
-                    xopt = MKL::Golden<xreal_t>::Find(xml,F,xx,ff);
+                    //xopt = MKL::Golden<xreal_t>::Find(xml,F,xx,ff);
+                    xopt = F.resources->minimizer.find(xml,F,xx,ff);
+
                 }
                 Y_XMLog(xml, "[+] F(" << xopt.str() <<") = " << ff.b.str() );
                 F.Cend.load(F.Ctry);
