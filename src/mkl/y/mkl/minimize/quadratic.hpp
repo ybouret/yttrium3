@@ -112,8 +112,8 @@ namespace Yttrium
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
         private:
-            Y_Disable_Copy_And_Assign(Quadratic);
-            Code * const code;
+            Y_Disable_Copy_And_Assign(Quadratic); //!< discarded
+            Code * const code;                    //!< inner code
         };
 
 

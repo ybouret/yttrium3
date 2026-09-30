@@ -29,8 +29,8 @@ namespace Yttrium
             // Definitions
             //
             //__________________________________________________________________
-            typedef Coven::Finder           Finder;
-            typedef MKL::Quadratic<xreal_t> Minimizer;
+            typedef Coven::Finder           Finder;    //!< alias
+            typedef MKL::Quadratic<xreal_t> Minimizer; //!< alias
             //__________________________________________________________________
             //
             //

@@ -71,7 +71,6 @@ namespace Yttrium
                  \param x   initial coordinates
                  \param f   initial values
                  \param F   primary function
-                 \param win criterion
                  \return minimum x
                  */
                 T find(XML::Log    &   xml,
@@ -91,11 +90,11 @@ namespace Yttrium
                     Wrapper1D<T,T,FUNCTION> FW(F);
                     return find(xml,how,x,f,FW);
                 }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
             private:
-                Y_Disable_Copy_And_Assign(Engine);
-                Code * const code;
-#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+                Y_Disable_Copy_And_Assign(Engine); //!< discarded
+                Code * const code;                 //!< inner code
             };
 
         };
