@@ -49,6 +49,18 @@ inline void goldenRatio(XML::Log &xml, Triplet<T> &x, Triplet<T> &f, Function<T,
             break;
     }
 
+    if(Trace)
+    {
+        sortSample();
+        OutputFile fp("quad-gold-inp.dat");
+        saveSample(fp);
+    }
+
     extract(xml,x,f);
 
+    if(Trace)
+    {
+        OutputFile fp("quad-gold-out.dat");
+        saveTriple(fp,x,f);
+    }
 }

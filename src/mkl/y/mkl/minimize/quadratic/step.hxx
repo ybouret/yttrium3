@@ -36,11 +36,9 @@ inline void step(XML::Log      &xml,
             fp("%.15g %.15g\n", (double)x.c, (double)f.c);
         }
 
-        lc=0;
         {
-            OutputFile fp("quad-step.dat");
-            lc = 2;
-            Save(fp, &x[1], &f[1], 3, lc);
+            OutputFile fp("quad-inp.dat");
+            Save(fp, &x[1], &f[1], 3);
         }
     }
 

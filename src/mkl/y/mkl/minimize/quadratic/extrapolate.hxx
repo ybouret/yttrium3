@@ -94,6 +94,19 @@ inline void extrapolate(XML::Log      &xml,
         }
     }
 
+    if(Trace)
+    {
+        sortSample();
+        OutputFile fp("quad-extra-inp.dat");
+        saveSample(fp);
+    }
+
     extract(xml,x,f);
+
+    if(Trace)
+    {
+        OutputFile fp("quad-extra-out.dat");
+        saveTriple(fp,x,f);
+    }
 
 }

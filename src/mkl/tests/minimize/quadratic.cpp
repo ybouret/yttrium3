@@ -29,10 +29,12 @@ namespace
     }
 
     template <typename T> static inline
-    void testQuadratic(Quadratic<T> &Q, Random::CoinFlip &ran)
+    void testQuadratic(Quadratic<T>     & Q,
+                       Random::CoinFlip & ran)
     {
-        const size_t iter = EnvironmentConvert::To<size_t>("ITER",1);
-        size_t       count = 0;
+        const size_t iter   = EnvironmentConvert::To<size_t>("ITER",1);
+        const size_t cycles = EnvironmentConvert::To<size_t>("CYCLE",0);
+        size_t       count  = 0;
         while(true)
         {
             Triplet<T> xx = { getX<T>(ran), getX<T>(ran), getX<T>(ran) }; if( !xx.isOrdered() )     continue;
@@ -43,11 +45,8 @@ namespace
             bool         verbose = true;
             XML::Log     xml(std::cerr,verbose);
 
-            for(size_t i=1;i<=1;++i)
-                Q.step(xml, F<T>, xx, ff);
-
-            //const T xopt = Golden<T>::Find(xml,F<T>,xx,ff);
-            //std::cerr << "xopt=" << xopt << ": Fopt=" << ff.b << std::endl;
+            const T xopt = Q.find(xml, F<T>, xx, ff, cycles);
+            std::cerr << "xopt=" << xopt << ": Fopt=" << ff.b << std::endl;
             if(++count>=iter)
                 break;
         }

@@ -70,7 +70,7 @@ namespace Yttrium
                       Triplet<T>    &x,
                       Triplet<T>    &f,
                       Function<T,T> &F);
-            
+
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
             template <typename FUNCTION>   inline
@@ -81,6 +81,33 @@ namespace Yttrium
             {
                 Wrapper1D<T,T,FUNCTION> FW(F);
                 return step(xml,x,f,FW);
+            }
+#endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
+            //! find local minimum
+            /**
+             \param xml output
+             \param x   initial coordinates
+             \param f   initial values
+             \param F   primary function
+             \param cycles maximum cycles to debug
+             */
+            T find(XML::Log      &xml,
+                   Triplet<T>    &x,
+                   Triplet<T>    &f,
+                   Function<T,T> &F,
+                   const size_t   cycles=0);
+
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+            template <typename FUNCTION>   inline
+            T find(XML::Log   & xml,
+                   FUNCTION   & F,
+                   Triplet<T> & x,
+                   Triplet<T> & f,
+                   const size_t cycles = 0)
+            {
+                Wrapper1D<T,T,FUNCTION> FW(F);
+                return find(xml,x,f,FW,cycles);
             }
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 

@@ -14,11 +14,7 @@ inline void extract(XML::Log      &xml,
     //
     //--------------------------------------------------------------------------
     Core::HSort::Make(xx,nn,Sign::Increasing<T>,ff);
-    if(xml.verbose)
-    {
-        Core::Display( xml() << "xx=",xx,nn) << std::endl;
-        Core::Display( xml() << "ff=",ff,nn) << std::endl;
-    }
+    
 
     //--------------------------------------------------------------------------
     //
