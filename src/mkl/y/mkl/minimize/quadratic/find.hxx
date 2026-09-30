@@ -45,7 +45,7 @@ inline T find(XML::Log      &xml,
             }
 
             xopt = xnew;
-            if(debug&&count>=cycles)
+            if( debug&& (count>=cycles) )
             {
                 Y_XMLog(xml, "[debugging break!]");
                 break;

@@ -8,16 +8,23 @@ inline void extract(XML::Log   & xml,
                     Triplet<T> & f)
 {
     Y_XML_Element_Attr(xml,Extract, Y_XML_Attr(nn));
-    Core::HSort::Make(xx,nn,Sign::Increasing<T>,ff);
 
+    //--------------------------------------------------------------------------
+    //
+    //
+    // sort sample
+    //
+    //
+    //--------------------------------------------------------------------------
+    sortSample();
 
-#if !defined(NDEBUG)
-    for(size_t i=1;i<nn;++i)
-        assert(xx[i-1]<=xx[i]);
-#endif
-
-
+    //--------------------------------------------------------------------------
+    //
+    //
     // locate a minimum value
+    //
+    //
+    //--------------------------------------------------------------------------
     size_t imin = 0;
     T      fmin = ff[0];
     for(size_t i=1;i<nn;++i)
@@ -30,8 +37,13 @@ inline void extract(XML::Log   & xml,
         }
     }
 
-
+    //--------------------------------------------------------------------------
+    //
+    //
     // Locate left flat zone
+    //
+    //
+    //--------------------------------------------------------------------------
     size_t nl = 0;
     {
         const size_t nlMax = imin;
@@ -42,8 +54,13 @@ inline void extract(XML::Log   & xml,
         }
     }
 
-
+    //--------------------------------------------------------------------------
+    //
+    //
     // Locate right flat zone
+    //
+    //
+    //--------------------------------------------------------------------------
     size_t nr = 0;
     {
         const size_t nrMax = nn-imin;
@@ -54,15 +71,20 @@ inline void extract(XML::Log   & xml,
         }
     }
 
-
-    // Compute flat zone
+    //--------------------------------------------------------------------------
+    //
+    //
+    // Compute flat zone and act accordingly
+    //
+    //
+    //--------------------------------------------------------------------------
     const size_t flatZone = 1 + nl + nr;
-    //std::cerr << "flatZone = 1+" << nl << "+" << nr << " = " << flatZone << " @" << imin << std::endl;
     assert(flatZone<=nn);
 
     switch(flatZone)
     {
         case 0: throw Specific::Exception("Quadratic::Extract", "corrupted!");
+
         case 1: loadFZ1(x,f,imin);
             break;
 
