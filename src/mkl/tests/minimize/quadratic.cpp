@@ -82,6 +82,7 @@ namespace Yttrium
 #include "y/stream/libc/output.hpp"
 #include "y/core/hsort.hpp"
 #include "y/core/display.hpp"
+#include "y/container/cxx/light-array.hpp"
 
 namespace Yttrium
 {
@@ -93,8 +94,9 @@ namespace Yttrium
         class Quadratic<T>:: Code : public Object
         {
         public:
-            static const size_t NMAX = 8;
+            static const size_t              NMAX = 8;
             typedef Cameo::Multiplication<T> VMul;
+            typedef LightArray<T>            ArrayType;
 
             inline explicit Code() noexcept :
             Object(),
@@ -135,7 +137,6 @@ namespace Yttrium
 
 
                 // initialize with local minimum, assuming ordered x
-                clear();
 
                 assert(x.isOrdered());
                 assert(f.isLocalMinimum());
@@ -171,6 +172,23 @@ namespace Yttrium
                 }
 
                 Y_XML_Element_Attr(xml,QuadraticStep,Y_XML_Attr(x) << Y_XML_Attr(f));
+
+                extrapolate(xml,x,f,F);
+                goldenRatio(xml,x,f,F);
+
+            }
+
+
+            inline void extrapolate(XML::Log      &xml,
+                                    Triplet<T>    &x,
+                                    Triplet<T>    &f,
+                                    Function<T,T> &F)
+            {
+                Y_XML_Element_Attr(xml,Extrapolate,Y_XML_Attr(x) << Y_XML_Attr(f));
+                clear();
+
+                assert(x.isIncreasing());
+                assert(f.isLocalMinimum());
 
                 // unfold cases
                 if(x.b<=x.a)
@@ -230,17 +248,9 @@ namespace Yttrium
                     }
                 }
 
-                // extract 1/2
-                extract(xml,x,f);
-
-                // balance
-                balance(xml,x,f,F);
-
-                // extract 2/2
                 extract(xml,x,f);
 
             }
-
 
 
 
@@ -252,7 +262,7 @@ namespace Yttrium
             VMul     vmul;
             T        xx[NMAX]; //!< x values
             T        ff[NMAX]; //!< f value
-            unsigned lc;      //!< line color
+            unsigned lc;       //!< line color to trace
 
         private:
             Y_Disable_Copy_And_Assign(Code);
@@ -299,7 +309,7 @@ namespace Yttrium
                     Save(fp, xx, ff, nn, lc);
                 }
 
-                
+
 
                 size_t imin = 0;
                 T      fmin = ff[0];
@@ -360,7 +370,7 @@ namespace Yttrium
                     } break;
 
                     default:
-                        abort();
+                        loadFZN(x,f,imin-nl,flatZone);
                 }
 
                 {
@@ -376,8 +386,8 @@ namespace Yttrium
             // Extract new triplet with ONE exact numeric minimum
             //
             inline void loadFZ1(Triplet<T>    & x,
-                                 Triplet<T>    & f,
-                                 const size_t         im) noexcept
+                                Triplet<T>    & f,
+                                const size_t         im) noexcept
             {
                 assert(nn>=3);
                 if(0==im)
@@ -494,10 +504,46 @@ namespace Yttrium
                 }
             }
 
-
-            inline void balance(XML::Log &xml, Triplet<T> &x, Triplet<T> &f, Function<T,T> &F)
+            //__________________________________________________________________________
+            //
+            //
+            // Extract new triplet with AT LEAST FOUR exact numeric minima
+            //
+            //__________________________________________________________________________
+            inline
+            void loadFZN(Triplet<T>    & x,
+                         Triplet<T>    & f,
+                         const size_t    org,
+                         const size_t    len) noexcept
             {
-                Y_XML_Element(xml,Balance);
+                assert(len>=4);
+                const size_t nt = len-3; // number of triplets
+
+                size_t small = org;
+                size_t lower = org;
+                size_t upper = org+2;
+                T      width = Max(xx[upper]-xx[lower],zero);
+                for(size_t t=1;t<nt;++t)
+                {
+                    const T wtmp = Max(xx[++upper]-xx[++lower],zero);
+                    if(wtmp<width)
+                    {
+                        width = wtmp;
+                        small = lower;
+                    }
+                }
+
+                x.load(xx+small);
+                f.load(ff+small);
+                assert(x.isIncreasing());
+                assert(f.isLocalMinimum());
+
+            }
+
+
+            inline void goldenRatio(XML::Log &xml, Triplet<T> &x, Triplet<T> &f, Function<T,T> &F)
+            {
+                Y_XML_Element(xml,GoldenRatio);
                 assert(x.isIncreasing());
                 assert(f.isLocalMinimum());
 
@@ -513,20 +559,25 @@ namespace Yttrium
                 {
                     case Negative: assert(ab<bc);
                         // cut bc
+                        Y_XMLog(xml, "[<]");
                         sample(xml,Clamp(x.b, x.b + bc * C, x.c),F);
                         break;
 
                     case Positive: assert(ab>bc);
                         // cut ab
+                        Y_XMLog(xml, "[>]");
                         sample(xml,Clamp(x.a, x.b - ab * C, x.b),F);
                         break;
 
                     case __Zero__:
                         // cut both
+                        Y_XMLog(xml, "[><]");
                         sample(xml,Clamp(x.b, x.b + bc * C, x.c),F);
                         sample(xml,Clamp(x.a, x.b - ab * C, x.b),F);
                         break;
                 }
+
+                extract(xml,x,f);
 
             }
 
@@ -580,7 +631,7 @@ namespace
             bool         verbose = true;
             XML::Log     xml(std::cerr,verbose);
 
-            for(size_t i=1;i<=10;++i)
+            for(size_t i=1;i<=4;++i)
                 Q.step(xml, F<T>, xx, ff);
 
             //const T xopt = Golden<T>::Find(xml,F<T>,xx,ff);
