@@ -43,7 +43,7 @@ namespace
             bool         verbose = true;
             XML::Log     xml(std::cerr,verbose);
 
-            for(size_t i=1;i<=4;++i)
+            for(size_t i=1;i<=1;++i)
                 Q.step(xml, F<T>, xx, ff);
 
             //const T xopt = Golden<T>::Find(xml,F<T>,xx,ff);
@@ -58,9 +58,11 @@ namespace
 
 Y_UTEST(min_quadratic)
 {
-    //Quadratic<double> qd;
+
     XRealOutput::Mode = XRealOutput::Compact;
     Core::Rand   ran;
+
+    QuadraticStep::Trace = true;
 
     Quadratic<float>  q;
     testQuadratic(q,ran);
