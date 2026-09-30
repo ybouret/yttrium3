@@ -1,6 +1,6 @@
 
 #include "y/mkl/minimize/api.hpp"
-#include "y/mkl/minimize/parabolic.hpp"
+#include "y/mkl/minimize/quadratic.hpp"
 #include "y/mkl/minimize/bracket.hpp"
 #include "y/object.hpp"
 #include "y/type/destroy.hpp"
@@ -13,17 +13,15 @@ namespace Yttrium
     {
 
         template <typename T>
-        class Minimize:: Engine<T> :: Code :
-        public Object, public Parabolic<T>
+        class Minimize:: Engine<T> :: Code : public Object, public Quadratic<T>
         {
         public:
-            using Parabolic<T>::step;
+            using Quadratic<T>::find;
 
-            inline explicit Code() : Object(), Parabolic<T>()
+            inline explicit Code() : Object(), Quadratic<T>()
             {
-
             }
-            
+
             inline virtual ~Code() noexcept
             {
             }
@@ -32,14 +30,14 @@ namespace Yttrium
                           const Process       how,
                           Triplet<T>        & x,
                           Triplet<T>        & f,
-                          Function<T,T>     & F,
-                          const Criterion     win)
+                          Function<T,T>     & F)
             {
                 Y_XML_Element_Attr(xml,Minimize,Y_XML_Attr(x) << Y_XML_Attr(f));
 
                 switch(how)
                 {
                     case Minimize::Direct:
+                        assert(x.isOrdered());
                         assert(f.isLocalMinimum());
                         break;
 
@@ -58,41 +56,7 @@ namespace Yttrium
                         break;
                 }
 
-                
-                unsigned cycle = 1;
-                // initialize
-                Y_XMLog(xml, "[cycle=" << cycle << "] [initialize]");
-                step(xml,x,f,F);
-                T x_opt = x.b;
-
-                // loop
-                while(true)
-                {
-                    ++cycle;
-                    Y_XMLog(xml, "[cycle=" << cycle << "]");
-                    step(xml,x,f,F);
-                    const T    x_new = x.b;
-                    const bool f_cvg = AlmostEqual<T>::Are(f.a,f.b) && AlmostEqual<T>::Are(f.b,f.c);
-                    const bool x_cvg = AlmostEqual<T>::Are(x_opt,x_new);
-                    Y_XMLog(xml, "[f-convergence: " << f_cvg << "]");
-                    Y_XMLog(xml, "[x-convergence: " << x_cvg << "]");
-
-                    switch(win)
-                    {
-                        case Standard: if(f_cvg) goto WIN;
-                            break;
-
-                        case Pedantic: if(x_cvg && f_cvg) goto WIN;
-                            break;
-                    }
-
-                    x_opt = x_new;
-                }
-
-            WIN:
-                Y_XMLog(xml,"converged: f(" << x.b << ")=" << f.b);
-                f.b=F(x.b);
-                return x.b;
+                return find(xml,x,f,F);
             }
 
 

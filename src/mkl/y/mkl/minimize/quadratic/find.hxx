@@ -4,7 +4,7 @@ inline T find(XML::Log      &xml,
               Function<T,T> &F,
               const size_t   cycles)
 {
-    Y_XML_Element(xml,QuadracicFind);
+    Y_XML_Element(xml,QuadraticFind);
 
     //--------------------------------------------------------------------------
     //

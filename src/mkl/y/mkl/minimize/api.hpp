@@ -36,17 +36,6 @@ namespace Yttrium
                 Expand, //!< exprand from [a:b]
             };
 
-            //__________________________________________________________________
-            //
-            //
-            //! convergence criterion
-            //
-            //__________________________________________________________________
-            enum Criterion
-            {
-                Standard, //!< converged function values
-                Pedantic  //!< standard and converged successive estimations
-            };
 
             //__________________________________________________________________
             //
@@ -89,8 +78,7 @@ namespace Yttrium
                        const Process   how,
                        Triplet<T>    & x,
                        Triplet<T>    & f,
-                       Function<T,T> & F,
-                       const Criterion win);
+                       Function<T,T> & F);
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
                 template <typename FUNCTION>   inline
@@ -98,11 +86,10 @@ namespace Yttrium
                        FUNCTION        & F,
                        const Process     how,
                        Triplet<T>      & x,
-                       Triplet<T>      & f,
-                       const Criterion   win)
+                       Triplet<T>      & f)
                 {
                     Wrapper1D<T,T,FUNCTION> FW(F);
-                    return find(xml,how,x,f,FW,win);
+                    return find(xml,how,x,f,FW);
                 }
 
             private:
