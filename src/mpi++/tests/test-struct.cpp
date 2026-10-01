@@ -1,8 +1,6 @@
 
 #include "y/mpi++/api.hpp"
 #include "y/utest/run.hpp"
-#include "y/core/rand.hpp"
-#include "y/random/fill.hpp"
 #include "y/format/hexadecimal.hpp"
 #include "y/check/crc32.hpp"
 #include <cstring>

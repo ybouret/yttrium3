@@ -131,11 +131,11 @@ namespace Yttrium
                               const int    sendtag,
                               const int    recvtag)
     {
-        static const DataType &_ = getDataTypeOf<uint64_t>();
+        static const MPI_Datatype dataType = getDataTypeOf<uint64_t>().value;
         const uint64_t s64 = sendLength;
         uint64_t       r64 = 0;
-        sendrecv(&s64,1,_.dt,sizeof(uint64_t),sendRank,
-                 &r64,1,_.dt,sizeof(uint64_t),recvRank,
+        sendrecv(&s64,1,dataType,sizeof(uint64_t),sendRank,
+                 &r64,1,dataType,sizeof(uint64_t),recvRank,
                  sendtag,
                  recvtag);
         return ConvertU64ToSize(r64);

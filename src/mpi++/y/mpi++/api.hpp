@@ -77,13 +77,26 @@ namespace Yttrium
         public:
             typedef ArcPtr<DataType>        Pointer;
             typedef HashMap<String,Pointer> Table; //!< hash table of types
+            enum Genre
+            {
+                BuiltIn,
+                Defined
+            };
 
-            DataType(const MPI_Datatype, const size_t) noexcept; //!< setup with type and size
-            //DataType(const DataType &)                 noexcept; //!< duplicate
-            ~DataType()                                noexcept; //!< cleanup
 
-            const MPI_Datatype dt; //!< datatype
-            const size_t       sz; //!< size of type
+
+            explicit DataType(const MPI_Datatype, const size_t) noexcept; //!< setup with built-in type and size
+            explicit DataType(MPI &              mpi,
+                              const int          count,
+                              const int          array_of_block_lengths[],
+                              const MPI_Aint     array_of_displacements[],
+                              const MPI_Datatype array_of_types[]);
+
+            virtual ~DataType()                        noexcept; //!< cleanup
+
+            const MPI_Datatype value;
+            const size_t       bytes;
+            const Genre        genre;
 
         private:
             Y_Disable_Copy_And_Assign(DataType); //!< discard
@@ -168,11 +181,23 @@ namespace Yttrium
         //! \return data type from type info of MPI supported type
         const DataType & getDataType(const std::type_info &) const;
 
-        //! \return data type from type of T, a supported MPI ty[e
+        //! \return data type from type of T
         template <typename T> inline
         const DataType & getDataTypeOf() const {
-            return getDataType( typeid(T) );
+            static const DataType & _ = getDataType(typeid(T));
+            return _;
         };
+
+        template <typename T>
+        inline MPI_Datatype _DatatypeOf() const
+        {
+            static const MPI_Datatype _ = getDataTypeOf<T>().value;
+            return _;
+        }
+
+        size_t bytesFor(const MPI_Datatype) const;
+
+
 
         //______________________________________________________________________
         //

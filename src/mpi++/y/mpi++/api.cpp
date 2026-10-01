@@ -114,7 +114,7 @@ namespace Yttrium
                 MPI::DataType::Pointer * const pdt = table.search(key);
                 if(pdt)
                 {
-                    if( (**pdt).sz != datasize )
+                    if( (**pdt).bytes != datasize )
                         throw Specific::Exception(MPI::CallSign, "invalid data size for <%s>", key.c_str());
                     return;
                 }
@@ -171,6 +171,17 @@ namespace Yttrium
         const DataType::Pointer * const pdt = table.search(key);
         if(!pdt) throw Specific::Exception(CallSign,"unregistered <%s>", key.c_str());
         return **pdt;
+    }
+
+    size_t MPI:: bytesFor(const MPI_Datatype dt) const
+    {
+        for(DataType::Table::ConstIterator it=table.begin();it!=table.end();++it)
+        {
+            const MPI::DataType &mdt = **it;
+            if(dt==mdt.value)
+                return mdt.bytes;
+        }
+        throw MPI::Exception(MPI_ERR_TYPE, "MPI::bytesFor data: not in table");
     }
 
     void MPI:: resetRates() noexcept

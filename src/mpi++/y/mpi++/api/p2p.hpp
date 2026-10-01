@@ -151,7 +151,7 @@ void send1(const T      & obj,
            const size_t   dst,
            const int      tag  = DefaultTag)
 {
-    static const MPI_Datatype dt = getDataTypeOf<T>().dt;
+    static const MPI_Datatype dt = getDataTypeOf<T>().value;
     send( &obj, 1, dt, sizeof(T), dst, tag);
 }
 
@@ -165,7 +165,7 @@ template <typename T> inline
 T recv1(const size_t   src,
         const int      tag  = DefaultTag)
 {
-    static const MPI_Datatype dt = getDataTypeOf<T>().dt;
+    static const MPI_Datatype dt = getDataTypeOf<T>().value;
     Memory::Moniker<T> moniker;
     T * const          addr = & *moniker;
     recv(addr,1,dt,sizeof(T),src,tag);
