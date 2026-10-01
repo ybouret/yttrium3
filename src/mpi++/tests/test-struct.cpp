@@ -40,8 +40,8 @@ Y_UTEST(struct)
         offsets[0] = offsetof(car, shifts);
         offsets[1] = offsetof(car, topSpeed);
 
-        MPI_Type_create_struct(nitems, blocklengths, offsets, types, &mpi_car_type);
-        MPI_Type_commit(&mpi_car_type);
+        Y_MPI_Call( MPI_Type_create_struct(nitems, blocklengths, offsets, types, &mpi_car_type) );
+        Y_MPI_Call( MPI_Type_commit(&mpi_car_type) );
 
         Y_BZero(blocklengths);
         Y_BZero(types);
@@ -74,7 +74,7 @@ Y_UTEST(struct)
 
 
 
-    MPI_Type_free(&mpi_car_type);
+    (void) MPI_Type_free(&mpi_car_type);
 
     Y_MPI_ForEach(mpi,std::cerr << mpi
                   << " | send: " << mpi.sendRate.str(chrono)

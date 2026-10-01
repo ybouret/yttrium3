@@ -64,26 +64,29 @@ namespace Yttrium
         class LegacyVectorCodec;
         class SerializedIOCodec;
 
+
+
         //______________________________________________________________________
         //
         //
         //! DataType
         //
         //______________________________________________________________________
-        class DataType
+        class DataType : public CountedObject
         {
         public:
-            typedef HashMap<String,DataType> Table; //!< hash table of types
+            typedef ArcPtr<DataType>        Pointer;
+            typedef HashMap<String,Pointer> Table; //!< hash table of types
 
             DataType(const MPI_Datatype, const size_t) noexcept; //!< setup with type and size
-            DataType(const DataType &)                 noexcept; //!< duplicate
+            //DataType(const DataType &)                 noexcept; //!< duplicate
             ~DataType()                                noexcept; //!< cleanup
 
             const MPI_Datatype dt; //!< datatype
             const size_t       sz; //!< size of type
 
         private:
-            Y_Disable_Assign(DataType); //!< discard
+            Y_Disable_Copy_And_Assign(DataType); //!< discard
         };
 
         //______________________________________________________________________

@@ -111,17 +111,17 @@ namespace Yttrium
             static const size_t   datasize = sizeof(T);
             const String          key = typeid(T).name();
             {
-                MPI::DataType * const mdt = table.search(key);
-                if(mdt)
+                MPI::DataType::Pointer * const pdt = table.search(key);
+                if(pdt)
                 {
-                    if( mdt->sz != datasize )
+                    if( (**pdt).sz != datasize )
                         throw Specific::Exception(MPI::CallSign, "invalid data size for <%s>", key.c_str());
                     return;
                 }
             }
 
-            const MPI::DataType mdt(datatype,datasize);
-            if(!table.insert(key,mdt))
+            const MPI::DataType::Pointer pdt = new MPI::DataType(datatype,datasize);
+            if(!table.insert(key,pdt))
                 throw Specific::Exception(MPI::CallSign, "failed to populate <%s>", key.c_str());
         }
     }
@@ -167,10 +167,10 @@ namespace Yttrium
 
     const MPI::DataType & MPI:: getDataType(const std::type_info &ti) const
     {
-        const String           key = ti.name();
-        const DataType * const mdt = table.search(key);
-        if(!mdt) throw Specific::Exception(CallSign,"unregistered <%s>", key.c_str());
-        return *mdt;
+        const String                    key = ti.name();
+        const DataType::Pointer * const pdt = table.search(key);
+        if(!pdt) throw Specific::Exception(CallSign,"unregistered <%s>", key.c_str());
+        return **pdt;
     }
 
     void MPI:: resetRates() noexcept

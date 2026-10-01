@@ -42,6 +42,6 @@ template <typename T> inline
 void bcast1(T             &data,
             const size_t   root)
 {
-    static const DataType &_ = getDataTypeOf<T>();
-    bcast(&data,1,_.dt,sizeof(T),root);
+    static const MPI_Datatype dt = getDataTypeOf<T>().dt;
+    bcast(&data,1,dt,sizeof(T),root);
 }
