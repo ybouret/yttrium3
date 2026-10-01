@@ -16,6 +16,12 @@ namespace Yttrium
         return (int) count;
     }
 
+    void MPI:: barrier()
+    {
+        Y_MPI_Call( MPI_Barrier(MPI_COMM_WORLD) );
+    }
+
+
     MPI:: ~MPI() noexcept
     {
         Coerce(table).release(); // because of MPI_Type_free

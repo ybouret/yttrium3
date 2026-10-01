@@ -198,6 +198,8 @@ namespace Yttrium
          */
         static int GetCount(const size_t count, const char * const func);
 
+        void barrier();
+
         //! \return data type from type info of MPI supported type
         const DataType & getDataType(const std::type_info &) const;
 
@@ -326,6 +328,7 @@ namespace Yttrium
 #define  Y_MPI_ForEach(THE_MPI,CODE) do \
 /**/    { \
 /**/        MPI &mpi_ = (THE_MPI); \
+/**/        mpi.barrier(); \
 /**/        if(mpi_.primary) \
 /**/        {\
 /**/            do { CODE; } while(false); \
