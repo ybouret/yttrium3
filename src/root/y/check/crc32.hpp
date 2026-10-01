@@ -81,4 +81,6 @@ namespace Yttrium
 
 }
 
+#define Y_CRC32(BLOCK) ( Yttrium::CRC32::Of( (const void *)(BLOCK),sizeof(BLOCK)) )
+
 #endif // !Y_CRC32_Included

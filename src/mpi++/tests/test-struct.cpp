@@ -4,6 +4,7 @@
 #include "y/core/rand.hpp"
 #include "y/random/fill.hpp"
 #include "y/format/hexadecimal.hpp"
+#include "y/check/crc32.hpp"
 #include <cstring>
 
 using namespace Yttrium;
@@ -28,33 +29,46 @@ Y_UTEST(struct)
     System::WallTime chrono;
 
     /* create a type for struct car */
-    const int    nitems=2;
-    int          blocklengths[2] = {1,1};
-    MPI_Datatype types[2] = {MPI_INT, MPI_FLOAT};
     MPI_Datatype mpi_car_type;
-    MPI_Aint     offsets[2];
 
-    offsets[0] = offsetof(car, shifts);
-    offsets[1] = offsetof(car, topSpeed);
+    {
+        const int    nitems=2;
+        int          blocklengths[2] = {1,1};
+        MPI_Datatype types[2] = {MPI_INT, MPI_FLOAT};
+        MPI_Aint     offsets[2];
 
-    MPI_Type_create_struct(nitems, blocklengths, offsets, types, &mpi_car_type);
-    MPI_Type_commit(&mpi_car_type);
+        offsets[0] = offsetof(car, shifts);
+        offsets[1] = offsetof(car, topSpeed);
+
+        MPI_Type_create_struct(nitems, blocklengths, offsets, types, &mpi_car_type);
+        MPI_Type_commit(&mpi_car_type);
+
+        Y_BZero(blocklengths);
+        Y_BZero(types);
+        Y_BZero(offsets);
+
+    }
+    
+    static const size_t NCAR = 3;
 
     if(mpi.primary)
     {
-        car send[2] = { {4,90.0f}, {6,130.0f} };
-        Core::Display(std::cerr << "cars=",send,2) << std::endl;
+        car            send[NCAR] = { {4,90.0f}, {6,130.0f}, {3,50.0f} };
+        const uint32_t crc        = Y_CRC32(send);
+        Core::Display(std::cerr << "cars =",send,NCAR) << " | crc = " << Hexadecimal(crc) << std::endl;
         for(size_t rank=1;rank<mpi.size;++rank)
         {
-            mpi.send(send,2,mpi_car_type,2*sizeof(car),rank);
+            mpi.send(send,NCAR,mpi_car_type,NCAR*sizeof(car),rank);
             mpi.syn(rank);
         }
     }
     else
     {
-        car recv[2];
-        mpi.recv(recv,2,mpi_car_type,2*sizeof(car),0);
-        Core::Display(std::cerr << "@" << mpi << ": ",recv,2) << std::endl;
+        car recv[NCAR];
+        mpi.recv(recv,NCAR,mpi_car_type,NCAR*sizeof(car),0);
+        const uint32_t crc = Y_CRC32(recv);
+
+        Core::Display(std::cerr << "@" << mpi << ": ",recv,NCAR) << " | crc = " << Hexadecimal(crc) << std::endl;
         mpi.ack(0);
     }
 
