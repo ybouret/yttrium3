@@ -18,6 +18,7 @@ namespace Yttrium
 
     MPI:: ~MPI() noexcept
     {
+        Coerce(table).release(); // because of MPI_Type_free
         MPI_Finalize();
     }
 
@@ -101,7 +102,60 @@ namespace Yttrium
 
     }
 
+    void MPI:: decl(const std::type_info &tid,
+                    const int             count,
+                    const int             array_of_block_lengths[],
+                    const MPI_Aint        array_of_displacements[],
+                    const MPI_Datatype    array_of_types[])
+    {
+        const String key = tid.name();
+        if(table.search(key))
+            throw Exception(MPI_ERR_TYPE,"declaring multiple type '%s'", key.c_str() );
 
+        const DataType::Pointer dtp  = new DataType(*this,count,array_of_block_lengths,array_of_displacements,array_of_types);
+
+        if( !Coerce(table).insert(key,dtp) )
+            throw Exception(MPI_ERR_TYPE,"failed to register '%s'", key.c_str() );
+
+    }
+
+    const MPI::DataType & MPI:: getDataType(const std::type_info &ti) const
+    {
+        const String                    key = ti.name();
+        const DataType::Pointer * const pdt = table.search(key);
+        if(!pdt) throw Specific::Exception(CallSign,"unregistered <%s>", key.c_str());
+        return **pdt;
+    }
+
+    MPI_Datatype MPI:: _Datatype(const std::type_info &ti) const
+    {
+        return getDataType(ti).value;
+    }
+
+
+    size_t MPI:: bytesFor(const MPI_Datatype dt) const
+    {
+        for(DataType::Table::ConstIterator it=table.begin();it!=table.end();++it)
+        {
+            const MPI::DataType &mdt = **it;
+            if(dt==mdt.value)
+                return mdt.bytes;
+        }
+        throw MPI::Exception(MPI_ERR_TYPE, "MPI::bytesFor data: not in table");
+    }
+
+    void MPI:: resetRates() noexcept
+    {
+        sendRate.ldz();
+        recvRate.ldz();
+    }
+
+}
+
+#include "y/mkl/xreal.hpp"
+
+namespace Yttrium
+{
     namespace
     {
         template <typename T> static inline
@@ -124,7 +178,22 @@ namespace Yttrium
             if(!table.insert(key,pdt))
                 throw Specific::Exception(MPI::CallSign, "failed to populate <%s>", key.c_str());
         }
+
+        template <typename T> static inline
+        void populateXReal(MPI &mpi)
+        {
+            typedef XReal<T> Type;
+            mpi.declAsPair<Type>(typeid(T),
+                                 offsetof(Type,mantissa),
+                                 typeid(int),
+                                 offsetof(Type,exponent));
+        }
+
+
+
     }
+
+
 
 #define Y_MPI_DECL(type,TYPE) populate<type>(Coerce(table),MPI_##TYPE)
 
@@ -160,35 +229,16 @@ namespace Yttrium
         Y_MPI_DECL(uint64_t,UINT64_T);
 
         Y_MPI_DECL(bool,C_BOOL);
-        
+
+        populateXReal<float>(*this);
+        populateXReal<double>(*this);
+        populateXReal<long double>(*this);
+
 
     }
 
 
-    const MPI::DataType & MPI:: getDataType(const std::type_info &ti) const
-    {
-        const String                    key = ti.name();
-        const DataType::Pointer * const pdt = table.search(key);
-        if(!pdt) throw Specific::Exception(CallSign,"unregistered <%s>", key.c_str());
-        return **pdt;
-    }
 
-    size_t MPI:: bytesFor(const MPI_Datatype dt) const
-    {
-        for(DataType::Table::ConstIterator it=table.begin();it!=table.end();++it)
-        {
-            const MPI::DataType &mdt = **it;
-            if(dt==mdt.value)
-                return mdt.bytes;
-        }
-        throw MPI::Exception(MPI_ERR_TYPE, "MPI::bytesFor data: not in table");
-    }
-
-    void MPI:: resetRates() noexcept
-    {
-        sendRate.ldz();
-        recvRate.ldz();
-    }
 
 
 }

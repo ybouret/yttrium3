@@ -26,6 +26,8 @@ Y_UTEST(defined)
     MPI &             mpi = MPI::Init(&argc,&argv);
     System::WallTime  chrono;
 
+
+#if 0
     const int    nitems=2;
     int          blocklengths[2] = {1,1};
     MPI_Datatype types[2] = {MPI_SHORT, MPI_FLOAT};
@@ -33,10 +35,16 @@ Y_UTEST(defined)
 
     offsets[0] = offsetof(Car, shifts);
     offsets[1] = offsetof(Car, topSpeed);
-
     MPI::DataType dt(mpi,nitems,blocklengths,offsets,types);
     Y_MPI_Trace(mpi,std::cerr << "dt.bytes=" << dt.bytes << std::endl);
+#endif
 
+    mpi.declAsPair<Car>(typeid(short), offsetof(Car, shifts),
+                        typeid(float), offsetof(Car, topSpeed) );
+
+    const MPI::DataType &dt = mpi.getDataTypeOf<Car>();
+    if(mpi.primary) Y_PRINTV(dt.bytes);
+    
     static const size_t NCAR = 3;
 
     if(mpi.primary)
