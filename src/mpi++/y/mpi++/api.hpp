@@ -75,17 +75,37 @@ namespace Yttrium
         class DataType : public CountedObject
         {
         public:
-            typedef ArcPtr<DataType>        Pointer;
-            typedef HashMap<String,Pointer> Table; //!< hash table of types
+            //__________________________________________________________________
+            //
+            // Definitions
+            //__________________________________________________________________
+            typedef ArcPtr<DataType>        Pointer; //!< alias
+            typedef HashMap<String,Pointer> Table;   //!< hash table of types
+
+            //! identifies genre as BuiltIn or user Defined
             enum Genre
             {
-                BuiltIn,
-                Defined
+                BuiltIn, //!< pre-committed data type
+                Defined  //!< user defined data type
             };
 
 
+            //__________________________________________________________________
+            //
+            // C++
+            //__________________________________________________________________
 
-            explicit DataType(const MPI_Datatype, const size_t) noexcept; //!< setup with built-in type and size
+            //! setup with built-in type and size
+            explicit DataType(const MPI_Datatype, const size_t) noexcept;
+
+            //! setup with user's metrics
+            /**
+             \param mpi instance to get individual bytes
+             \param count number of fields in all subsequent arrays, count>0
+             \param array_of_block_lengths consecutive block lengths
+             \param array_of_displacements  offsets of previous blocks
+             \param array_of_types          types of preivous blocks
+             */
             explicit DataType(MPI &              mpi,
                               const int          count,
                               const int          array_of_block_lengths[],
@@ -94,9 +114,9 @@ namespace Yttrium
 
             virtual ~DataType()                        noexcept; //!< cleanup
 
-            const MPI_Datatype value;
-            const size_t       bytes;
-            const Genre        genre;
+            const MPI_Datatype value; //!< the data type value
+            const size_t       bytes; //!< bytes per transmitted item
+            const Genre        genre; //!< type genre
 
         private:
             Y_Disable_Copy_And_Assign(DataType); //!< discard
@@ -188,6 +208,7 @@ namespace Yttrium
             return _;
         };
 
+        //! \return matching MPI_Datatype
         template <typename T>
         inline MPI_Datatype _DatatypeOf() const
         {
@@ -195,6 +216,7 @@ namespace Yttrium
             return _;
         }
 
+        //! \return bytes for given MPI_Datatype, throw if not found
         size_t bytesFor(const MPI_Datatype) const;
 
 
