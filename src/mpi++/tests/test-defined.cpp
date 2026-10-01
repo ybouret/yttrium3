@@ -68,6 +68,7 @@ Y_UTEST(defined)
         mpi.ack(0);
     }
 
+    MPI_Barrier(MPI_COMM_WORLD);
     Y_MPI_ForEach(mpi,std::cerr << mpi
                   << " | send: " << mpi.sendRate.str(chrono)
                   << " | recv: " << mpi.recvRate.str(chrono)

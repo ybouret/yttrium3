@@ -57,6 +57,7 @@ Y_UTEST(p2p)
         Random::FillWith(ran,here,sizeof(here));
         mpi.sendrecvBytes(here, sizeof(here), mpi.prevRank(), peer, sizeof(peer), mpi.nextRank());
     }
+    
     Y_MPI_ForEach(mpi,std::cerr << mpi
                   << " | send: " << mpi.sendRate.str(chrono)
                   << " | recv: " << mpi.recvRate.str(chrono)

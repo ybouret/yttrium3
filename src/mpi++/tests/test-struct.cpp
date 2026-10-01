@@ -74,6 +74,8 @@ Y_UTEST(struct)
 
     (void) MPI_Type_free(&mpi_car_type);
 
+    MPI_Barrier(MPI_COMM_WORLD);
+
     Y_MPI_ForEach(mpi,std::cerr << mpi
                   << " | send: " << mpi.sendRate.str(chrono)
                   << " | recv: " << mpi.recvRate.str(chrono)
