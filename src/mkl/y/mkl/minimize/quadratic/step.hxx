@@ -24,10 +24,10 @@ inline void step(XML::Log      &xml,
     if(Trace)
     {
         {
-            const unsigned np  = 100;
+            const unsigned short np  = 100;
             OutputFile fp("quad-data.dat");
             fp("%.15g %.15g\n", (double)x.a, (double)f.a);
-            for(unsigned i=1;i<np;++i)
+            for(unsigned short i=1;i<np;++i)
             {
                 const T xt = x.a + ( (T) i ) * (x.c-x.a) / (T)np;
                 const T ft = F(xt);
