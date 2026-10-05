@@ -91,6 +91,7 @@ namespace Yttrium
         Y_Disable_Copy_And_Assign(SerialCarrier); //!< discarded
     };
 
+#if !defined(_MSC_VER)
 #define Y_MPI_Serial_Decl(CLASS) \
 template<> MPI::SerialCarrier<CLASS>::ReadProc const MPI::SerialCarrier<CLASS>:: Read
 
@@ -100,7 +101,8 @@ template<> MPI::SerialCarrier<CLASS>::ReadProc const MPI::SerialCarrier<CLASS>::
     Y_MPI_Serial_Decl(Apex::Natural);
     Y_MPI_Serial_Decl(Apex::Integer);
     Y_MPI_Serial_Decl(Apex::Rational);
-    
+#endif
+
 }
 
 
