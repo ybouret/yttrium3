@@ -26,7 +26,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
         typedef T             Type;           //!< alias
-        static const size_t   DIMENSION = 4; //!< alias
+        static const size_t   DIMENSIONS = 4; //!< alias
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         //______________________________________________________________________
@@ -49,7 +49,7 @@ namespace Yttrium
         //______________________________________________________________________
 
         //! pseudo writable
-        inline size_t size() const noexcept { return DIMENSION; }
+        inline size_t size() const noexcept { return DIMENSIONS; }
 
         //______________________________________________________________________
         //

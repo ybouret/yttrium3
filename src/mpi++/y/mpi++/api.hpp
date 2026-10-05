@@ -348,6 +348,7 @@ namespace Yttrium
 #define Y_MPI_Trace(THE_MPI,CODE) do                        \
 /**/    {                                                   \
 /**/        MPI &mpi_ = (THE_MPI);                          \
+/**/        mpi_.barrier();                                 \
 /**/        if(mpi_.primary) { do { CODE; } while(false); } \
 /**/    } while(false)
 }

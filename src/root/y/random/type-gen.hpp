@@ -142,6 +142,15 @@ namespace Yttrium
             }
         };
 
+
+        template <typename T> struct Gen< V4D<T> >
+        {
+            static inline V4D<T> Get(Random::CoinFlip &coin)
+            {
+                return V4D<T>(Gen<T>::Get(coin),Gen<T>::Get(coin),Gen<T>::Get(coin),Gen<T>::Get(coin));
+            }
+        };
+
         struct Generate
         {
             template <typename ARRAY> static inline

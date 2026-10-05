@@ -43,7 +43,7 @@ namespace
         for(size_t n=0;n<3;++n)
 
         {
-            for(unsigned i=1;i<=T::Dimension;++i)
+            for(unsigned i=1;i<=T::DIMENSIONS;++i)
             {
                 v[i] = (typename T::Type) k++;
             }
@@ -64,7 +64,6 @@ Y_UTEST(cameo_addition)
 {
 
     testScal<apq>();
-#if 1
     testScal<apn>();
     testScal<apz>();
     testScal<int>();
@@ -82,7 +81,7 @@ Y_UTEST(cameo_addition)
     testVect< Complex< XReal<long double> > >();
 
     testVect< V3D<double> >();
-#endif
+# 
     
 }
 Y_UDONE()

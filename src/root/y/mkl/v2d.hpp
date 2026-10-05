@@ -32,7 +32,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
         typedef T             Type; //!< alias
-        static const size_t   DIMENSION = 2; //!< alias
+        static const size_t   DIMENSIONS = 2; //!< alias
         
         //______________________________________________________________________
         //
@@ -54,7 +54,7 @@ namespace Yttrium
         //______________________________________________________________________
 
         //! pseudo writable \return 2
-        inline size_t size() const noexcept { return DIMENSION; }
+        inline size_t size() const noexcept { return DIMENSIONS; }
 
         //______________________________________________________________________
         //
