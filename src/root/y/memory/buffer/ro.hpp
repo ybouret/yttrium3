@@ -34,14 +34,20 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
-            // C++
+            // Interface
             //
             //__________________________________________________________________
             virtual const void * ro()     const noexcept = 0; //!< \return first byte address
             virtual size_t       length() const noexcept = 0; //!< \return available bytes
 
 
-
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            uint32_t crc() const noexcept;
 
         private:
             Y_Disable_Copy_And_Assign(ReadOnlyBuffer); //!< discarded

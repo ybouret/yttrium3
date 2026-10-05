@@ -8,6 +8,7 @@
 #include "y/stream/output.hpp"
 #include "y/container/sequence/vector.hpp"
 #include "y/type/proxy.hpp"
+#include "y/memory/buffer/rw.hpp"
 
 namespace Yttrium
 {
@@ -20,7 +21,7 @@ namespace Yttrium
     //
     //__________________________________________________________________________
     class OutputMemoryStream :
-    public OutputStream , public Proxy< Vector<char> >, public Memory::ReadOnlyBuffer
+    public OutputStream , public Proxy< Vector<char> >, public Memory::ReadWriteBuffer
     {
     public:
         //______________________________________________________________________

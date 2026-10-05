@@ -5,6 +5,7 @@
 
 
 #include "y/stream/memory/output.hpp"
+#include "y/stream/memory/input.hpp"
 
 using namespace Yttrium;
 
@@ -120,6 +121,15 @@ namespace Yttrium
 
         OutputMemoryStream buffer;
 
+    protected:
+        const Memory::ReadOnlyBuffer & load(MPI &mpi, const size_t source, const int tag)
+        {
+            const size_t blockSize = mpi.recvSize(source,tag);
+            buffer->adjust(blockSize,0);
+            mpi.recvBytes(buffer.rw(),blockSize,source,tag);
+            return buffer;
+        }
+
     private:
         Y_Disable_Copy_And_Assign(MPI_Serial_Carrier);
     };
@@ -132,6 +142,8 @@ namespace Yttrium
     {
     public:
         Y_Args_Expose(T,Type);
+        typedef void (*ReadProc)(MutableType &);
+        static ReadProc const Read;
 
         explicit SerialCarrier(const size_t minCapacity) noexcept : MPI_Serial_Carrier(minCapacity) {}
         virtual ~SerialCarrier() noexcept {}
@@ -162,6 +174,12 @@ namespace Yttrium
                           const size_t  source,
                           const int     tag)
         {
+            InputMemoryStream fp(CallSign,load(mpi,source,tag));
+            MutableType     * host = static_cast<MutableType *>(entry);
+            for(size_t i=items;i>0;--i,++host)
+            {
+
+            }
 
         }
 
@@ -171,18 +189,33 @@ namespace Yttrium
         Y_Disable_Copy_And_Assign(SerialCarrier);
     };
 
-
+    MPI::SerialCarrier<String>::ReadProc Read = 0;
 
 
 }
 
+#include "y/format/hexadecimal.hpp"
+
 Y_UTEST(carrier)
 {
     MPI & mpi = MPI::Init(&argc,&argv);
-    Y_MPI_ForEach(mpi,std::cerr << "@" << mpi << std::endl);
 
 
     MPI::SerialCarrier<String> cr(100);
+    if(mpi.primary)
+    {
+        String primary = "Hello, World!";
+        for(size_t rank=1;rank<mpi.size;++rank)
+        {
+            cr.send(mpi,&primary,1,rank,7);
+        }
+    }
+    else
+    {
+        cr.recv(mpi,0, 0, 0, 7);
+    }
+
+    Y_MPI_ForEach(mpi, std::cerr << "@" << mpi << " : length=" << cr.buffer.length() << " | crc " << Hexadecimal(cr.buffer.crc()) << std::endl );
 
 
 }
