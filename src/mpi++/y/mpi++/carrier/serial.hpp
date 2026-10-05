@@ -9,21 +9,49 @@
 
 namespace Yttrium
 {
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Carrier for Serializable objects
+    //
+    //
+    //__________________________________________________________________________
     template <typename T>
     class MPI:: SerialCarrier : public MPI_Serial_Carrier
     {
     public:
-        Y_Args_Expose(T,Type);
-        typedef void (*ReadProc)(MutableType &, InputStream &);
-        static ReadProc const Read;
+        //______________________________________________________________________
+        //
+        //
+        // Definitions
+        //
+        //______________________________________________________________________
+        Y_Args_Expose(T,Type); //!< alias
+        typedef void (*ReadProc)(MutableType &, InputStream &); //!< alias
+        static ReadProc const Read; //!< to be implemented
 
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+
+        //! setup \param minCapacity for inner buffer
         inline explicit SerialCarrier(const size_t minCapacity) noexcept :
         MPI_Serial_Carrier(minCapacity)
         {}
 
+        //! cleanup
         inline virtual ~SerialCarrier() noexcept {}
 
+        //______________________________________________________________________
+        //
+        //
         // Interface
+        //
+        //______________________________________________________________________
         inline virtual void send(MPI &              mpi,
                                  const void * const entry,
                                  const size_t       items,
@@ -60,8 +88,10 @@ namespace Yttrium
 
 
     private:
-        Y_Disable_Copy_And_Assign(SerialCarrier);
+        Y_Disable_Copy_And_Assign(SerialCarrier); //!< discarded
     };
+
+    template<> MPI::SerialCarrier<String>::ReadProc const MPI::SerialCarrier<String>:: Read;
 }
 
 

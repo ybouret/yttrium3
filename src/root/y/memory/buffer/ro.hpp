@@ -47,7 +47,7 @@ namespace Yttrium
             // Methods
             //
             //__________________________________________________________________
-            uint32_t crc() const noexcept;
+            uint32_t crc() const noexcept; //!< \return crc32 of current content
 
         private:
             Y_Disable_Copy_And_Assign(ReadOnlyBuffer); //!< discarded

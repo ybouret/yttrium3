@@ -12,27 +12,6 @@
 
 using namespace Yttrium;
 
-namespace Yttrium
-{
-
-    
-
-
-    namespace
-    {
-        static inline void ReadString(String &s, InputStream &fp)
-        {
-            static const char * const varName = "String";
-            String tmp = String::Read(fp,varName);
-            s.xch(tmp);
-        }
-    }
-
-    template<> MPI::SerialCarrier<String>::ReadProc const MPI::SerialCarrier<String>:: Read = ReadString;
-
-
-}
-
 #include "y/format/hexadecimal.hpp"
 
 Y_UTEST(carrier)
@@ -41,7 +20,7 @@ Y_UTEST(carrier)
 
 
     MPI::SerialCarrier<String> cr(100);
-    String str;
+    String                     str;
     if(mpi.primary)
     {
         str = "Hello, World!";

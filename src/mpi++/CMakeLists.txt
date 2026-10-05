@@ -8,6 +8,7 @@ Y_CreateLibrary(y-mpi++
 y/mpi++
 y/mpi++/api
 y/mpi++/carrier
+y/mpi++/carrier/serial
 )
 
 add_subdirectory(tests)

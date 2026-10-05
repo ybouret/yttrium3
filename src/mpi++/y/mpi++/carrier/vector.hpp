@@ -8,14 +8,32 @@
 
 namespace Yttrium
 {
-    //! for arrays of vector type
+    //__________________________________________________________________________
+    //
+    //
+    //
+    //! Carrier for fixed-size vectors of scalar types
+    //
+    //
+    //__________________________________________________________________________
     class MPI::  VectorCarrier : public Carrier
     {
     public:
-        explicit VectorCarrier(const MPI::DataType &mdt,
-                               const size_t         dim) noexcept;
-        virtual ~VectorCarrier() noexcept;
+        //______________________________________________________________________
+        //
+        //
+        // C++
+        //
+        //______________________________________________________________________
+        explicit VectorCarrier(const MPI::DataType &,const size_t ) noexcept; //!< setup with type and dimensions
+        virtual ~VectorCarrier() noexcept; //!< cleanup
 
+        //______________________________________________________________________
+        //
+        //
+        // Interface
+        //
+        //______________________________________________________________________
         virtual void send(MPI &              mpi,
                           const void * const entry,
                           const size_t       items,
@@ -28,13 +46,19 @@ namespace Yttrium
                           const size_t  source,
                           const int     tag);
 
-        const MPI::DataType & scalarType;
-        const size_t          dimensions;
+        //______________________________________________________________________
+        //
+        //
+        // Members
+        //
+        //______________________________________________________________________
+        const MPI::DataType & scalarType; //!< base scalar type
+        const size_t          dimensions; //!< vector dimensions
 
 
 
     private:
-        Y_Disable_Copy_And_Assign(VectorCarrier);
+        Y_Disable_Copy_And_Assign(VectorCarrier); //!< discarded
     };
 
 }
