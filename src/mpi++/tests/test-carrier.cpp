@@ -1,5 +1,5 @@
 
-#include "y/mpi++/carrier.hpp"
+#include "y/mpi++/carrier/scalar.hpp"
 
 #include "y/utest/run.hpp"
 #include <cstring>
@@ -15,81 +15,9 @@ namespace Yttrium
 
 
 
-    //! for arrays of scalar type
-    class MPI::  ScalarCarrier : public Carrier
-    {
-    public:
-        explicit ScalarCarrier(const MPI::DataType &mdt) noexcept : dataType(mdt) {}
-        virtual ~ScalarCarrier() noexcept {}
+   
 
-        virtual void send(MPI &              mpi,
-                          const void * const entry,
-                          const size_t       items,
-                          const size_t       target,
-                          const int          tag)
-        {
-            mpi.send(entry,items,dataType.value,dataType.bytes*items,target,tag);
-        }
-
-        virtual void recv(MPI &         mpi,
-                          void * const  entry,
-                          const size_t  items,
-                          const size_t  source,
-                          const int     tag)
-        {
-            mpi.recv(entry,items,dataType.value,dataType.bytes*items,source,tag);
-        }
-
-        const MPI::DataType &dataType;
-
-
-    private:
-        Y_Disable_Copy_And_Assign(ScalarCarrier);
-    };
-
-    //! for arrays of vector type
-    class MPI::  VectorCarrier : public Carrier
-    {
-    public:
-        explicit VectorCarrier(const MPI::DataType &mdt,
-                               const size_t         dim) noexcept :
-        scalarType(mdt),
-        dimensions(dim)
-        {
-            assert(dim>0);
-        }
-
-        virtual ~VectorCarrier() noexcept {}
-
-        virtual void send(MPI &              mpi,
-                          const void * const entry,
-                          const size_t       items,
-                          const size_t       target,
-                          const int          tag)
-        {
-            const size_t words = items * dimensions;
-            mpi.send(entry,words,scalarType.value,scalarType.bytes*words,target,tag);
-        }
-
-        virtual void recv(MPI &         mpi,
-                          void * const  entry,
-                          const size_t  items,
-                          const size_t  source,
-                          const int     tag)
-        {
-            const size_t words = items * dimensions;
-            mpi.recv(entry,words,scalarType.value,scalarType.bytes*words,source,tag);
-        }
-
-        const MPI::DataType & scalarType;
-        const size_t          dimensions;
-
-
-
-    private:
-        Y_Disable_Copy_And_Assign(VectorCarrier);
-    };
-
+   
     class MPI_Serial_Carrier : public MPI::Carrier
     {
     public:
