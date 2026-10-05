@@ -142,7 +142,7 @@ namespace Yttrium
     {
     public:
         Y_Args_Expose(T,Type);
-        typedef void (*ReadProc)(MutableType &);
+        typedef void (*ReadProc)(MutableType &, InputStream &);
         static ReadProc const Read;
 
         explicit SerialCarrier(const size_t minCapacity) noexcept : MPI_Serial_Carrier(minCapacity) {}
@@ -177,9 +177,7 @@ namespace Yttrium
             InputMemoryStream fp(CallSign,load(mpi,source,tag));
             MutableType     * host = static_cast<MutableType *>(entry);
             for(size_t i=items;i>0;--i,++host)
-            {
-
-            }
+                Read(*host,fp);
 
         }
 
@@ -189,7 +187,18 @@ namespace Yttrium
         Y_Disable_Copy_And_Assign(SerialCarrier);
     };
 
-    MPI::SerialCarrier<String>::ReadProc Read = 0;
+
+    namespace
+    {
+        static inline void ReadString(String &s, InputStream &fp)
+        {
+            static const char * const varName = "String";
+            String tmp = String::Read(fp,varName);
+            s.xch(tmp);
+        }
+    }
+
+    template<> MPI::SerialCarrier<String>::ReadProc const MPI::SerialCarrier<String>:: Read = ReadString;
 
 
 }
@@ -202,20 +211,21 @@ Y_UTEST(carrier)
 
 
     MPI::SerialCarrier<String> cr(100);
+    String str;
     if(mpi.primary)
     {
-        String primary = "Hello, World!";
+        str = "Hello, World!";
         for(size_t rank=1;rank<mpi.size;++rank)
         {
-            cr.send(mpi,&primary,1,rank,7);
+            cr.send(mpi,&str,1,rank,7);
         }
     }
     else
     {
-        cr.recv(mpi,0, 0, 0, 7);
+        cr.recv(mpi,&str,1,0,7);
     }
 
-    Y_MPI_ForEach(mpi, std::cerr << "@" << mpi << " : length=" << cr.buffer.length() << " | crc " << Hexadecimal(cr.buffer.crc()) << std::endl );
+    Y_MPI_ForEach(mpi, std::cerr << "@" << mpi << " : length=" << cr.buffer.length() << " | crc " << Hexadecimal(cr.buffer.crc()) << " => '" << str << "'" << std::endl );
 
 
 }
