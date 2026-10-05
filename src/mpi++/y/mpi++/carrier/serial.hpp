@@ -92,16 +92,19 @@ namespace Yttrium
     };
 
 #if !defined(_MSC_VER)
+
+    //! helper to declare specific Read function
 #define Y_MPI_Serial_Decl(CLASS) \
 template<> MPI::SerialCarrier<CLASS>::ReadProc const MPI::SerialCarrier<CLASS>:: Read
 
-    Y_MPI_Serial_Decl(String);
+    Y_MPI_Serial_Decl(String); //!< Read for String
 
     namespace Apex { class Natural; class Integer; class Rational; }
-    Y_MPI_Serial_Decl(Apex::Natural);
-    Y_MPI_Serial_Decl(Apex::Integer);
-    Y_MPI_Serial_Decl(Apex::Rational);
-#endif
+    Y_MPI_Serial_Decl(Apex::Natural);  //!< Read for apn
+    Y_MPI_Serial_Decl(Apex::Integer);  //!< Read for apz
+    Y_MPI_Serial_Decl(Apex::Rational); //!< Read for apq
+
+#endif // !defined(_MSC_VER)
 
 }
 
