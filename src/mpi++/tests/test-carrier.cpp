@@ -1,5 +1,6 @@
 
-#include "y/mpi++/api.hpp"
+#include "y/mpi++/carrier.hpp"
+
 #include "y/utest/run.hpp"
 #include <cstring>
 
@@ -12,29 +13,7 @@ using namespace Yttrium;
 namespace Yttrium
 {
 
-    class MPI::Carrier : public CountedObject
-    {
-    public:
-        explicit Carrier() noexcept {}
-        virtual ~Carrier() noexcept {}
 
-
-        virtual void send(MPI &              mpi,
-                          const void * const entry,
-                          const size_t       items,
-                          const size_t       target,
-                          const int          tag) = 0;
-
-        virtual void recv(MPI &         mpi,
-                          void * const  entry,
-                          const size_t  items,
-                          const size_t  source,
-                          const int     tag) = 0;
-
-
-    private:
-        Y_Disable_Copy_And_Assign(Carrier);
-    };
 
     //! for arrays of scalar type
     class MPI::  ScalarCarrier : public Carrier
