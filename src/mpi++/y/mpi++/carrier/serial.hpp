@@ -64,7 +64,7 @@ namespace Yttrium
             // collect data
             {
                 ConstType * host = static_cast<ConstType *>(entry);
-                for(size_t i=items;i>0;--i)
+                for(size_t i=items;i>0;--i,++host)
                     (void) host->serialize(buffer);
             }
 
@@ -82,7 +82,6 @@ namespace Yttrium
             MutableType     * host = static_cast<MutableType *>(entry);
             for(size_t i=items;i>0;--i,++host)
                 Read(*host,fp);
-
         }
 
 
