@@ -157,4 +157,13 @@ namespace Yttrium
     }
 
 
+    void MPI:: sendBuffer(const Memory::ReadOnlyBuffer &buf,
+                          const size_t                  dst,
+                          const int                     tag)
+    {
+        const size_t blockSize = buf.length();
+        sendSize(blockSize,dst,tag);
+        sendBytes(buf.ro(),blockSize,dst,tag);
+    }
+
 }

@@ -172,4 +172,12 @@ T recv1(const size_t   src,
     return *addr;
 }
 
-
+//! helper to send a memory buffer
+/**
+ \param buf buffer
+ \param dst destination rank
+ \param tag optional tag
+ */
+void sendBuffer(const Memory::ReadOnlyBuffer &buf,
+                const size_t                  dst,
+                const int                     tag = DefaultTag);

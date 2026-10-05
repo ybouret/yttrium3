@@ -20,7 +20,7 @@ namespace Yttrium
     //
     //__________________________________________________________________________
     class OutputMemoryStream :
-    public OutputStream , public Proxy< Vector<char> >
+    public OutputStream , public Proxy< Vector<char> >, public Memory::ReadOnlyBuffer
     {
     public:
         //______________________________________________________________________
@@ -52,6 +52,8 @@ namespace Yttrium
         virtual void flush() noexcept;
         virtual void write(const char);
         virtual void write(const void * const, const size_t);
+        virtual const void * ro()     const noexcept;
+        virtual size_t       length() const noexcept;
 
         //______________________________________________________________________
         //

@@ -30,5 +30,15 @@ namespace Yttrium
 
     Y_Proxy_Impl(OutputMemoryStream,data)
 
+
+    const void * OutputMemoryStream:: ro() const noexcept
+    {
+        return data();
+    }
+
+    size_t OutputMemoryStream:: length() const noexcept
+    {
+        return data.size();
+    }
 }
 

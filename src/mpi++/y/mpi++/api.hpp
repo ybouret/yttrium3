@@ -62,7 +62,7 @@ namespace Yttrium
         class Carrier;
         class ScalarCarrier;
         class VectorCarrier;
-        class SerialCarrier;
+        template <typename> class SerialCarrier;
 
         //______________________________________________________________________
         //
