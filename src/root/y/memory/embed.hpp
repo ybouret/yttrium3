@@ -1,8 +1,8 @@
 
 //! \file
 
-#ifndef Y_Memory_Embedded_Included
-#define Y_Memory_Embedded_Included 1
+#ifndef Y_Memory_Embed_Included
+#define Y_Memory_Embed_Included 1
 
 
 #include "y/config/setup.hpp"

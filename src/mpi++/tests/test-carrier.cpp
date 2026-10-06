@@ -17,7 +17,6 @@ using namespace Yttrium;
 #include "y/core/rand.hpp"
 #include "y/system/rtti.hpp"
 
-#include "y/memory/type/moniker.hpp"
 
 namespace
 {
@@ -46,10 +45,8 @@ namespace
         }
         else
         {
-            {
-                Memory::Moniker<T> empty;
-                vec.adjust(items,*empty);
-            }
+
+            vec.adjust(items);
             Y_ASSERT(items==vec.size());
             cr.recv(mpi,vec(),items,0,0x07);
         }

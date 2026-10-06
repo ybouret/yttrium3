@@ -5,6 +5,7 @@
 
 #include "y/type/args.hpp"
 #include "y/type/sign.hpp"
+#include "y/memory/type/moniker.hpp"
 
 namespace Yttrium
 {
@@ -62,6 +63,13 @@ namespace Yttrium
             }
 
             assert(n==this->size());
+        }
+
+        //! adjust size with default data \param n new size
+        inline void adjust(const size_t n)
+        {
+            const Memory::Moniker<MutableType> empty;
+            adjust(n,*empty);
         }
 
 
