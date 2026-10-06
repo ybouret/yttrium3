@@ -16,6 +16,8 @@
 #include "y/container/associative/hash/map.hpp"
 #include "y/memory/type/moniker.hpp"
 #include "y/format/human-readable.hpp"
+#include "y/stream/memory/output.hpp"
+
 
 #include <typeinfo>
 
@@ -128,30 +130,30 @@ namespace Yttrium
         class  Carrier : public CountedObject
         {
         public:
-            //______________________________________________________________________
+            //__________________________________________________________________
             //
             //
             // Definitions
             //
-            //______________________________________________________________________
+            //__________________________________________________________________
             typedef ArcPtr<Carrier>        Handle; //!< alias
             typedef HashMap<String,Handle> Table;  //!< alias
 
-            //______________________________________________________________________
+            //__________________________________________________________________
             //
             //
             // C++
             //
-            //______________________________________________________________________
+            //__________________________________________________________________
             explicit Carrier() noexcept; //!< setup
             virtual ~Carrier() noexcept; //!< cleanup
 
-            //______________________________________________________________________
+            //__________________________________________________________________
             //
             //
             // Interface
             //
-            //______________________________________________________________________
+            //__________________________________________________________________
 
 
             //! send array of objects
@@ -185,6 +187,46 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(Carrier); //!< discarded
+        };
+
+        //______________________________________________________________________
+        //
+        //
+        //! SerialCarrier base class
+        //
+        //______________________________________________________________________
+        class SerialCarrier_ : public Carrier
+        {
+        public:
+            //__________________________________________________________________
+            //
+            // Definitions
+            //__________________________________________________________________
+            static const char * const BufferName; //!< "MPI::SerialCarrier"
+
+            //__________________________________________________________________
+            //
+            // C++
+            //__________________________________________________________________
+            explicit SerialCarrier_(const size_t minCapacity); //!< setup \pararm minCapacity bytes for buffer
+            virtual ~SerialCarrier_() noexcept;                //!< cleanup
+
+            //__________________________________________________________________
+            //
+            // Members
+            //__________________________________________________________________
+            OutputMemoryStream buffer; //!< I/O buffer
+
+        protected:
+            //__________________________________________________________________
+            //
+            // Methods
+            //__________________________________________________________________
+            //! read buffer from source and tag \return loaded buffer
+            const Memory::ReadOnlyBuffer & load(MPI &,const size_t,const int);
+
+        private:
+            Y_Disable_Copy_And_Assign(SerialCarrier_); //!< dicarded
         };
 
 

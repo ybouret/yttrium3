@@ -23,4 +23,16 @@ namespace Yttrium
         return buffer;
     }
 
+
+    const char * const MPI::SerialCarrier_::BufferName = "MPI::SerialCarrier";
+
+    MPI::SerialCarrier_:: SerialCarrier_(const size_t minCapacity) :
+    Carrier(),
+    buffer(BufferName,minCapacity)
+    {}
+
+    MPI::SerialCarrier_:: ~SerialCarrier_() noexcept
+    {
+    }
+
 }
