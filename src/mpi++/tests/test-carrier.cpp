@@ -14,12 +14,16 @@ using namespace Yttrium;
 #include "y/core/rand.hpp"
 #include "y/system/rtti.hpp"
 
+#include "y/check/crc32.hpp"
 
 namespace
 {
 
     template <typename T> static inline
-    void testCarrier(MPI &mpi,  Random::CoinFlip &ran, MPI::Carrier &cr)
+    void testCarrier(MPI              & mpi,
+                     Random::CoinFlip & ran,
+                     MPI::Carrier     & cr,
+                     const bool         chk)
     {
 
         size_t       items = 5 + ran.toss<size_t>(5);
@@ -48,8 +52,15 @@ namespace
             cr.recv(mpi,vec(),items,0,0x07);
         }
 
-
-        Y_MPI_ForEach(mpi, std::cerr << "@" << mpi << ": " << vec << std::endl);
+        if(chk)
+        {
+            const uint32_t crc = CRC32::Of( vec(), vec.size() * sizeof(T) );
+            Y_MPI_ForEach(mpi, std::cerr << "@" << mpi << ": " << vec << " | " << Hexadecimal(crc) << std::endl);
+        }
+        else
+        {
+            Y_MPI_ForEach(mpi, std::cerr << "@" << mpi << ": " << vec << std::endl);
+        }
     }
 
 
@@ -57,8 +68,8 @@ namespace
     void testSerial(MPI &mpi, Random::CoinFlip &ran)
     {
         Y_MPI_Trace(mpi, std::cerr << std::endl << "testSerial<" << RTTI::Name<T>() << ">" << std::endl);
-        MPI::SerialCarrier<T> cr(1024);
-        testCarrier<T>(mpi,ran,cr);
+        MPI::Carrier &cr =  mpi.getSerialCarrier<T>();
+        testCarrier<T>(mpi,ran,cr,false);
     }
 
 
@@ -66,16 +77,16 @@ namespace
     void testScalar(MPI &mpi, Random::CoinFlip &ran)
     {
         Y_MPI_Trace(mpi, std::cerr << std::endl << "testScalar<" << RTTI::Name<T>() << ">" << std::endl);
-        MPI::ScalarCarrier cr( mpi.getDataTypeOf<T>() );
-        testCarrier<T>(mpi,ran,cr);
+        MPI::Carrier & cr = mpi.getScalarCarrier<T>();
+        testCarrier<T>(mpi,ran,cr,true);
     }
 
     template <typename T, template <typename> class VEC>
     void testVector(MPI &mpi, Random::CoinFlip &ran)
     {
-        Y_MPI_Trace(mpi, std::cerr << std::endl << "testVector<" << RTTI::Name< VEC<T> >() << "> DIM" << VEC<T>::DIMENSIONS << std::endl);
-        MPI::VectorCarrier cr( mpi.getDataTypeOf<T>(), VEC<T>::DIMENSIONS );
-        testCarrier< VEC<T> >(mpi,ran,cr);
+        Y_MPI_Trace(mpi, std::cerr << std::endl << "testVector<" << RTTI::Name< VEC<T> >() << "> DIM=" << VEC<T>::DIMENSIONS << std::endl);
+        MPI::Carrier & cr = mpi.getVectorCarrier<VEC,T>();
+        testCarrier< VEC<T> >(mpi,ran,cr,true);
     }
 
 
@@ -88,21 +99,25 @@ Y_UTEST(carrier)
     MPI &      mpi = MPI::Init(&argc,&argv);
     Core::Rand ran;
 
-    testSerial<String>(mpi,ran);
-    testSerial<apn>(mpi,ran);
-    testSerial<apz>(mpi,ran);
-    testSerial<apq>(mpi,ran);
-
     testScalar<float>(mpi,ran);
     testScalar<int16_t>(mpi,ran);
-
-    XRealOutput::Mode = XRealOutput::Compact;
-    testScalar< XReal<double> >(mpi,ran);
 
     testVector<double,Complex>(mpi,ran);
     testVector<float,V2D>(mpi,ran);
     testVector<double,V3D>(mpi,ran);
     testVector<float,V4D>(mpi,ran);
+
+
+    testSerial<String>(mpi,ran);
+    testSerial<apn>(mpi,ran);
+    testSerial<apz>(mpi,ran);
+    testSerial<apq>(mpi,ran);
+
+    
+    XRealOutput::Mode = XRealOutput::Compact;
+    testScalar< XReal<double> >(mpi,ran);
+
+
 
 
 }

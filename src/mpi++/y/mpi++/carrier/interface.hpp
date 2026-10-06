@@ -69,39 +69,78 @@ private:
 };
 
 
-const Carrier * queryCarrier(const String&) const noexcept;
-const Carrier * queryCarrier(const std::type_info&) const;
+//______________________________________________________________________________
+//
+//
+// Carrier query/store with carriers
+//
+//______________________________________________________________________________
 
-template <typename T> inline const Carrier * queryCarrierOf() const
+//! \return carrier by key
+Carrier * queryCarrier(const String&) noexcept;
+
+//! \return carrier by type_info
+Carrier * queryCarrier(const std::type_info&)  ;
+
+//! \return carrier based on typeid(T)
+template <typename T> inline   Carrier * queryCarrierOf()
 {
     return queryCarrier(typeid(T));
 }
 
-void storeCarrier(const String &, Carrier * const);
+//! store a new carrier with key
+Carrier & storeCarrier(const String &, Carrier * const);
 
 
+
+//______________________________________________________________________________
+//
+//
+// Carriers creation
+//
+//______________________________________________________________________________
+
+//! \return new carrier for given scalar data type
 static Carrier * CreateScalarCarrier(const DataType&);
+
+//! \return new carrier for given vector of data type
 static Carrier * CreateVectorCarrier(const DataType&, const size_t);
 
-//! \return carrier for T
-template <typename T> static inline
-Carrier * ScalarCarrierProc(MPI &mpi)
+
+template <typename T> inline
+Carrier & getScalarCarrier()
 {
-    static const DataType& _ = mpi.getDataTypeOf<T>();
-    return CreateScalarCarrier(_);
+    const String    key = typeid(T).name();
+    Carrier * const cr  = queryCarrier(key);
+    if(cr)
+        return *cr;
+    else
+        return storeCarrier(key,CreateScalarCarrier( getDataType(key) ));
 }
 
-//! \return carrier for VEC<T>
-template <template <typename> class VEC, typename T> static inline
-Carrier * VectorCarrierProc(MPI &mpi)
+template <template <typename> class VECTOR, typename T> inline
+Carrier & getVectorCarrier()
 {
-    static const DataType& _ = mpi.getDataTypeOf<T>();
-    return CreateVectorCarrier(_, VEC<T>::DIMENSIONS);
+    typedef VECTOR<T> Type;
+    const String      key = typeid(Type).name();
+    Carrier * const   cr  = queryCarrier(key);
+    if(cr)
+        return *cr;
+    else
+        return storeCarrier(key,CreateVectorCarrier( getDataTypeOf<T>(), Type::DIMENSIONS ));
 }
 
-//! \return carrier for Serializable
-template <typename T> static inline
-Carrier * SerialCarrierProc(MPI &)
+template <typename T> inline
+Carrier & getSerialCarrier()
 {
-    return new SerialCarrier<T>(BUFSIZ);
+    const String    key = typeid(T).name();
+    Carrier * const cr  = queryCarrier(key);
+    if(cr)
+        return *cr;
+    else
+        return storeCarrier(key, new SerialCarrier<T>(BUFSIZ)  );
 }
+
+
+
+

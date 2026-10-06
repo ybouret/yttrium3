@@ -126,12 +126,18 @@ namespace Yttrium
 
     }
 
-    const MPI::DataType & MPI:: getDataType(const std::type_info &ti) const
+
+    const MPI::DataType & MPI:: getDataType(const String &key) const
     {
-        const String                    key = ti.name();
         const DataType::Pointer * const pdt = dataTypes.search(key);
         if(!pdt) throw Specific::Exception(CallSign,"unregistered <%s>", key.c_str());
         return **pdt;
+    }
+
+    const MPI::DataType & MPI:: getDataType(const std::type_info &ti) const
+    {
+        const String                    key = ti.name();
+        return getDataType(key);
     }
 
     MPI_Datatype MPI:: _Datatype(const std::type_info &ti) const
@@ -245,27 +251,28 @@ namespace Yttrium
     }
 
 
-    const MPI::Carrier * MPI:: queryCarrier(const String &key) const noexcept
+    MPI::Carrier * MPI:: queryCarrier(const String &key) noexcept
     {
-        const Carrier::Handle* const hook = carriers.search(key);
+        Carrier::Handle * const hook = Coerce(carriers).search(key);
         if (0!=hook) return &**hook;
         return 0;
     }
 
     
 
-    const MPI::Carrier* MPI::queryCarrier(const std::type_info &ti) const
+    MPI::Carrier* MPI::queryCarrier(const std::type_info &ti)
     {
         const String key = ti.name();
         return queryCarrier(key);
     }
 
 
-    void MPI:: storeCarrier(const String &key, Carrier * const cr)
+    MPI::Carrier & MPI:: storeCarrier(const String &key, Carrier * const cr)
     {
-        const Carrier::Handle h(cr);
+        Carrier::Handle h(cr);
         if(! Coerce(carriers).insert(key,h) )
             throw Specific::Exception("MPI::storeCarrier", "multiple '%s'", key.c_str());
+        return *h;
     }
 
 }

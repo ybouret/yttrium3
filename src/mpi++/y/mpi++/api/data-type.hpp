@@ -68,6 +68,9 @@ private:
 };
 
 
+//! \return data type from type info name
+const DataType & getDataType(const String &) const;
+
 //! \return data type from type info of MPI supported type
 const DataType & getDataType(const std::type_info &) const;
 
