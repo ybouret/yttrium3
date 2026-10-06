@@ -34,4 +34,9 @@ namespace Yttrium
         mpi.recv(entry,items,dataType.value,dataType.bytes*items,source,tag);
     }
 
+
+    MPI::Carrier* MPI::CreateScalarCarrier(const DataType& dt)
+    {
+        return new ScalarCarrier(dt);
+    }
 }

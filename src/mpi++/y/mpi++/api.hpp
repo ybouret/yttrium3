@@ -330,6 +330,32 @@ namespace Yttrium
             decl<T>(count,array_of_block_lengths,array_of_displacements,array_of_types);
         }
 
+        const Carrier * queryCarrier(const String&) const noexcept;
+        const Carrier * queryCarrier(const std::type_info&) const;
+         
+        template <typename T> inline const Carrier* queryCarrierOf() const
+        {
+            return queryCarrier(typeid(T));
+        }
+
+        static Carrier * CreateScalarCarrier(const DataType&);
+        static Carrier * CreateVectorCarrier(const DataType&, const size_t);
+        
+        //! \return carrier for T
+        template <typename T> 
+        Carrier* ScalarCarrierProc()
+        {
+            static const DataType& _ = getDataTypeOf<T>();
+            return CreateScalarCarrier(_);
+        }
+
+        //! \return carrier for VEC<T>
+        template <template <typename> class VEC, typename T>
+        Carrier* VectorCarrierProc()
+        {
+            static const DataType& _ = getDataTypeOf<T>();
+            return CreateVectorCarrier(_, VEC<T>::DIMENSIONS);
+        }
 
         //______________________________________________________________________
         //

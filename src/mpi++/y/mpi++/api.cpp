@@ -245,7 +245,19 @@ namespace Yttrium
     }
 
 
+    const MPI::Carrier * MPI:: queryCarrier(const String &key) const noexcept
+    {
+        const Carrier::Handle* const hook = carriers.search(key);
+        if (0!=hook) return &**hook;
+        return 0;
+    }
 
+
+    const MPI::Carrier* MPI::queryCarrier(const std::type_info &ti) const 
+    {
+        const String key = ti.name();
+        return queryCarrier(key);
+    }
 
 
 }

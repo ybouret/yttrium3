@@ -34,4 +34,10 @@ namespace Yttrium
         const size_t words = items * dimensions;
         mpi.recv(entry,words,scalarType.value,scalarType.bytes*words,source,tag);
     }
+
+    MPI::Carrier * MPI:: CreateVectorCarrier(const DataType &mdt, const size_t dim)
+    {
+        return new VectorCarrier(mdt, dim);
+    }
+
 }
