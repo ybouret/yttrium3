@@ -252,12 +252,20 @@ namespace Yttrium
         return 0;
     }
 
+    
 
-    const MPI::Carrier* MPI::queryCarrier(const std::type_info &ti) const 
+    const MPI::Carrier* MPI::queryCarrier(const std::type_info &ti) const
     {
         const String key = ti.name();
         return queryCarrier(key);
     }
 
+
+    void MPI:: storeCarrier(const String &key, Carrier * const cr)
+    {
+        const Carrier::Handle h(cr);
+        if(! Coerce(carriers).insert(key,h) )
+            throw Specific::Exception("MPI::storeCarrier", "multiple '%s'", key.c_str());
+    }
 
 }

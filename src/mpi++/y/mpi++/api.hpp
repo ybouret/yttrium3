@@ -65,62 +65,9 @@ namespace Yttrium
         class ScalarCarrier;
         class VectorCarrier;
 
-        //______________________________________________________________________
-        //
-        //
-        //! DataType
-        //
-        //______________________________________________________________________
-        class DataType : public CountedObject
-        {
-        public:
-            //__________________________________________________________________
-            //
-            // Definitions
-            //__________________________________________________________________
-            typedef ArcPtr<DataType>        Pointer; //!< alias
-            typedef HashMap<String,Pointer> Table;   //!< hash table of types
+#include "y/mpi++/api/data-type.hpp"
 
-            //! identifies genre as BuiltIn or user Defined
-            enum Genre
-            {
-                BuiltIn, //!< pre-committed data type
-                Defined  //!< user defined data type
-            };
-
-
-            //__________________________________________________________________
-            //
-            // C++
-            //__________________________________________________________________
-
-            //! setup with built-in type and size
-            explicit DataType(const MPI_Datatype, const size_t) noexcept;
-
-            //! setup with user's metrics
-            /**
-             \param mpi instance to get individual bytes
-             \param count number of fields in all subsequent arrays, count>0
-             \param array_of_block_lengths consecutive block lengths
-             \param array_of_displacements  offsets of previous blocks
-             \param array_of_types          types of preivous blocks
-             */
-            explicit DataType(MPI &              mpi,
-                              const int          count,
-                              const int          array_of_block_lengths[],
-                              const MPI_Aint     array_of_displacements[],
-                              const MPI_Datatype array_of_types[]);
-
-            virtual ~DataType()                        noexcept; //!< cleanup
-
-            const MPI_Datatype value; //!< the data type value
-            const size_t       bytes; //!< bytes per transmitted item
-            const Genre        genre; //!< type genre
-
-        private:
-            Y_Disable_Copy_And_Assign(DataType); //!< discard
-        };
-
+       
         //______________________________________________________________________
         //
         //
@@ -449,29 +396,41 @@ namespace Yttrium
         const Carrier * queryCarrier(const String&) const noexcept;
         const Carrier * queryCarrier(const std::type_info&) const;
 
-        template <typename T> inline const Carrier* queryCarrierOf() const
+        template <typename T> inline const Carrier * queryCarrierOf() const
         {
             return queryCarrier(typeid(T));
         }
+
+        void storeCarrier(const String &, Carrier * const);
+
 
         static Carrier * CreateScalarCarrier(const DataType&);
         static Carrier * CreateVectorCarrier(const DataType&, const size_t);
 
         //! \return carrier for T
-        template <typename T>
-        Carrier* ScalarCarrierProc()
-        {
-            static const DataType& _ = getDataTypeOf<T>();
+        template <typename T> static inline
+        Carrier * ScalarCarrierProc(MPI &mpi) {
+            static const DataType& _ = mpi.getDataTypeOf<T>();
             return CreateScalarCarrier(_);
         }
 
         //! \return carrier for VEC<T>
-        template <template <typename> class VEC, typename T>
-        Carrier* VectorCarrierProc()
+        template <template <typename> class VEC, typename T> static inline
+        Carrier * VectorCarrierProc(MPI &mpi)
         {
-            static const DataType& _ = getDataTypeOf<T>();
+            static const DataType& _ = mpi.getDataTypeOf<T>();
             return CreateVectorCarrier(_, VEC<T>::DIMENSIONS);
         }
+
+        //! \return carrier for Serializable
+        template <typename T> static inline
+        Carrier * SerialCarrierProc(MPI &)
+        {
+            return new SerialCarrier<T>(BUFSIZ);
+        }
+
+
+
 
         //______________________________________________________________________
         //
