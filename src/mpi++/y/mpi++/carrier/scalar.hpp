@@ -3,7 +3,7 @@
 #ifndef Y_MPI_ScalarCarrier_Included
 #define Y_MPI_ScalarCarrier_Included 1
 
-#include "y/mpi++/carrier.hpp"
+#include "y/mpi++/api.hpp"
 
 namespace Yttrium
 {

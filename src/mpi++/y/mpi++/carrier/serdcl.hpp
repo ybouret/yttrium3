@@ -4,7 +4,7 @@
 #ifndef Y_MPI_SerDclCarrier_Included
 #define Y_MPI_SerDclCarrier_Included 1
 
-#include "y/mpi++/carrier.hpp"
+#include "y/mpi++/api.hpp"
 #include "y/stream/memory/output.hpp"
 
 namespace Yttrium

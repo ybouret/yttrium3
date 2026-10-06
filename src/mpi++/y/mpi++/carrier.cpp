@@ -1,4 +1,4 @@
-#include "y/mpi++/carrier.hpp"
+#include "y/mpi++/api.hpp"
 
 namespace Yttrium
 {

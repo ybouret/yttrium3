@@ -27,7 +27,7 @@ Y_UTEST(init)
     if(mpi.primary)
     {
         std::cerr << "Table:" << std::endl;
-        for(MPI::DataType::Table::ConstIterator it=mpi.table.begin();it!=mpi.table.end();++it)
+        for(MPI::DataType::Table::ConstIterator it=mpi.dataTypes.begin();it!=mpi.dataTypes.end();++it)
         {
             std::cerr << it->key() << " : sizeof=" << (**it).bytes << std::endl;
         }

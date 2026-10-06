@@ -24,7 +24,7 @@ namespace Yttrium
 
     MPI:: ~MPI() noexcept
     {
-        Coerce(table).release(); // because of MPI_Type_free
+        Coerce(dataTypes).release(); // because of MPI_Type_free
         MPI_Finalize();
     }
 
@@ -74,7 +74,8 @@ namespace Yttrium
     sendRate(),
     recvRate(),
     processorName(__mpi_processor_name),
-    table()
+    dataTypes(),
+    carriers()
     {
         if(!__mpi_auth) throw Specific:: Exception(CallSign,"must call Init(...)");
 
@@ -104,7 +105,7 @@ namespace Yttrium
             Y_MPI_Call( MPI_Get_processor_name(__mpi_processor_name,&res) );
         }
 
-        buildTable();
+        buildDataTypes();
 
     }
 
@@ -115,12 +116,12 @@ namespace Yttrium
                     const MPI_Datatype    array_of_types[])
     {
         const String key = tid.name();
-        if(table.search(key))
+        if(dataTypes.search(key))
             throw Exception(MPI_ERR_TYPE,"declaring multiple type '%s'", key.c_str() );
 
         const DataType::Pointer dtp  = new DataType(*this,count,array_of_block_lengths,array_of_displacements,array_of_types);
 
-        if( !Coerce(table).insert(key,dtp) )
+        if( !Coerce(dataTypes).insert(key,dtp) )
             throw Exception(MPI_ERR_TYPE,"failed to register '%s'", key.c_str() );
 
     }
@@ -128,7 +129,7 @@ namespace Yttrium
     const MPI::DataType & MPI:: getDataType(const std::type_info &ti) const
     {
         const String                    key = ti.name();
-        const DataType::Pointer * const pdt = table.search(key);
+        const DataType::Pointer * const pdt = dataTypes.search(key);
         if(!pdt) throw Specific::Exception(CallSign,"unregistered <%s>", key.c_str());
         return **pdt;
     }
@@ -141,7 +142,7 @@ namespace Yttrium
 
     size_t MPI:: bytesFor(const MPI_Datatype dt) const
     {
-        for(DataType::Table::ConstIterator it=table.begin();it!=table.end();++it)
+        for(DataType::Table::ConstIterator it=dataTypes.begin();it!=dataTypes.end();++it)
         {
             const MPI::DataType &mdt = **it;
             if(dt==mdt.value)
@@ -201,9 +202,9 @@ namespace Yttrium
 
 
 
-#define Y_MPI_DECL(type,TYPE) populate<type>(Coerce(table),MPI_##TYPE)
+#define Y_MPI_DECL(type,TYPE) populate<type>(Coerce(dataTypes),MPI_##TYPE)
 
-    void MPI:: buildTable()
+    void MPI:: buildDataTypes()
     {
         Y_MPI_DECL(float,FLOAT);
         Y_MPI_DECL(double,DOUBLE);

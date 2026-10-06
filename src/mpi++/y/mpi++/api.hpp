@@ -59,7 +59,6 @@ namespace Yttrium
         static const int          DefaultTag = 1;                               //!< default tag
         static const size_t       MaxCount   = IntegerFor<int>::Maximum;        //!< for int/size_t conversion
         static size_t             ConvertU64ToSize(const uint64_t);             //!< \return converted u64 to size_t, with check
-        class Carrier;
         class ScalarCarrier;
         class VectorCarrier;
         template <typename> class SerialCarrier;
@@ -119,6 +118,75 @@ namespace Yttrium
         private:
             Y_Disable_Copy_And_Assign(DataType); //!< discard
         };
+
+        //______________________________________________________________________
+        //
+        //
+        //! Carrier interface
+        //
+        //______________________________________________________________________
+        class  Carrier : public CountedObject
+        {
+        public:
+            //______________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //______________________________________________________________________
+            typedef ArcPtr<Carrier>        Handle; //!< alias
+            typedef HashMap<String,Handle> Table;  //!< alias
+
+            //______________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //______________________________________________________________________
+            explicit Carrier() noexcept; //!< setup
+            virtual ~Carrier() noexcept; //!< cleanup
+
+            //______________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //______________________________________________________________________
+
+
+            //! send array of objects
+            /**
+             \param mpi    instance
+             \param entry  first object address
+             \param items  number of objects
+             \param target target rank
+             \param tag    channel
+             */
+            virtual void send(MPI &              mpi,
+                              const void * const entry,
+                              const size_t       items,
+                              const size_t       target,
+                              const int          tag) = 0;
+
+            //! receive array of objects
+            /**
+             \param mpi    instance
+             \param entry  first object address
+             \param items  number of objects
+             \param source source rank
+             \param tag    channel
+             */
+            virtual void recv(MPI &         mpi,
+                              void * const  entry,
+                              const size_t  items,
+                              const size_t  source,
+                              const int     tag) = 0;
+
+
+        private:
+            Y_Disable_Copy_And_Assign(Carrier); //!< discarded
+        };
+
 
         //______________________________________________________________________
         //
@@ -305,14 +373,15 @@ namespace Yttrium
         Rate                  sendRate;      //!< sending rate
         Rate                  recvRate;      //!< receiving rate
         const char * const    processorName; //!< MPI_GetProcessorName
-        const DataType::Table table;         //!< table of data types
-
+        const DataType::Table dataTypes;     //!< table of data types
+        const Carrier::Table  carriers;      //!< table of carriers
+        
     private:
         Y_Disable_Copy_And_Assign(MPI); //!< discarded
         friend class Singleton<MPI,ClassLockPolicy>;
         virtual ~MPI() noexcept; //!< cleanup: MPI_Finalize()
         explicit MPI();          //!< setup from Initialize(...)
-        void buildTable();       //!< build table of supported MPI data type
+        void buildDataTypes();   //!< build table of supported MPI data type
     };
 
     //! helper to handle errors

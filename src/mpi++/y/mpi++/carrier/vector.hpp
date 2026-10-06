@@ -4,7 +4,7 @@
 #ifndef Y_MPI_VectorCarrier_Included
 #define Y_MPI_VectorCarrier_Included 1
 
-#include "y/mpi++/carrier.hpp"
+#include "y/mpi++/api.hpp"
 
 namespace Yttrium
 {
