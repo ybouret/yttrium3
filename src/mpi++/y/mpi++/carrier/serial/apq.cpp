@@ -1,4 +1,4 @@
-#include "y/mpi++/carrier/serial.hpp"
+#include "y/mpi++/api.hpp"
 #include "y/apex/rational.hpp"
 
 namespace Yttrium
@@ -8,8 +8,7 @@ namespace Yttrium
     {
         static inline void ReadAPQ(apq &q, InputStream &fp)
         {
-            static const char * const varName = "apq";
-            apq tmp = apq::Read(fp,varName);
+            apq tmp = apq::Read(fp,apq::CallSign);
             q.xch(tmp);
         }
     }

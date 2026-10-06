@@ -1,5 +1,4 @@
-
-#include "y/mpi++/carrier/serial.hpp"
+#include "y/mpi++/api.hpp"
 
 namespace Yttrium
 {

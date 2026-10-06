@@ -1,6 +1,6 @@
 
 
-#include "y/mpi++/carrier/serial.hpp"
+#include "y/mpi++/api.hpp"
 #include "y/apex/natural.hpp"
 
 namespace Yttrium
@@ -10,8 +10,7 @@ namespace Yttrium
     {
         static inline void ReadAPN(apn &n, InputStream &fp)
         {
-            static const char * const varName = "apn";
-            apn tmp = apn::Read(fp,varName);
+            apn tmp = apn::Read(fp,apn::CallSign);
             n.xch(tmp);
         }
     }

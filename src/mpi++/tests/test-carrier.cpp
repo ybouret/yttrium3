@@ -1,7 +1,5 @@
-
 #include "y/mpi++/carrier/scalar.hpp"
 #include "y/mpi++/carrier/vector.hpp"
-#include "y/mpi++/carrier/serial.hpp"
 
 #include "y/random/type-gen.hpp"
 

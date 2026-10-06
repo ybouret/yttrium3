@@ -1,7 +1,4 @@
-
-
-
-#include "y/mpi++/carrier/serial.hpp"
+#include "y/mpi++/api.hpp"
 #include "y/apex/integer.hpp"
 
 namespace Yttrium
@@ -11,8 +8,7 @@ namespace Yttrium
     {
         static inline void ReadAPZ(apz &z, InputStream &fp)
         {
-            static const char * const varName = "apz";
-            apz tmp = apz::Read(fp,varName);
+            apz tmp = apz::Read(fp,apz::CallSign);
             z.xch(tmp);
         }
     }

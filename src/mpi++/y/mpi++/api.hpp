@@ -17,6 +17,7 @@
 #include "y/memory/type/moniker.hpp"
 #include "y/format/human-readable.hpp"
 #include "y/stream/memory/output.hpp"
+#include "y/stream/memory/input.hpp"
 
 
 #include <typeinfo>
@@ -63,7 +64,6 @@ namespace Yttrium
         static size_t             ConvertU64ToSize(const uint64_t);             //!< \return converted u64 to size_t, with check
         class ScalarCarrier;
         class VectorCarrier;
-        template <typename> class SerialCarrier;
 
         //______________________________________________________________________
         //
@@ -208,7 +208,7 @@ namespace Yttrium
             //
             // C++
             //__________________________________________________________________
-            explicit SerialCarrier_(const size_t minCapacity); //!< setup \pararm minCapacity bytes for buffer
+            explicit SerialCarrier_(const size_t minCapacity); //!< setup \param minCapacity bytes for buffer
             virtual ~SerialCarrier_() noexcept;                //!< cleanup
 
             //__________________________________________________________________
@@ -227,6 +227,80 @@ namespace Yttrium
 
         private:
             Y_Disable_Copy_And_Assign(SerialCarrier_); //!< dicarded
+        };
+
+
+        template <typename T>
+        class SerialCarrier : public SerialCarrier_
+        {
+        public:
+            //______________________________________________________________________
+            //
+            //
+            // Definitions
+            //
+            //______________________________________________________________________
+            Y_Args_Expose(T,Type); //!< alias
+            typedef void (*ReadProc)(MutableType &, InputStream &); //!< alias
+            static ReadProc const Read; //!< to be implemented
+
+            //______________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //______________________________________________________________________
+
+            //! setup \param minCapacity for inner buffer
+            inline explicit SerialCarrier(const size_t minCapacity) noexcept :
+            SerialCarrier_(minCapacity)
+            {}
+
+            //! cleanup
+            inline virtual ~SerialCarrier() noexcept {}
+
+            //______________________________________________________________________
+            //
+            //
+            // Interface
+            //
+            //______________________________________________________________________
+            inline virtual void send(MPI &              mpi,
+                                     const void * const entry,
+                                     const size_t       items,
+                                     const size_t       target,
+                                     const int          tag)
+            {
+                // initialize buffer
+                buffer->free();
+
+                // collect data
+                {
+                    ConstType * host = static_cast<ConstType *>(entry);
+                    for(size_t i=items;i>0;--i,++host)
+                        (void) host->serialize(buffer);
+                }
+
+                // send buffer
+                mpi.sendBuffer(buffer,target,tag);
+            }
+
+            inline virtual void recv(MPI &         mpi,
+                                     void * const  entry,
+                                     const size_t  items,
+                                     const size_t  source,
+                                     const int     tag)
+            {
+                InputMemoryStream fp(CallSign,load(mpi,source,tag));
+                MutableType     * host = static_cast<MutableType *>(entry);
+                for(size_t i=items;i>0;--i,++host)
+                    Read(*host,fp);
+            }
+
+
+
+        private:
+            Y_Disable_Copy_And_Assign(SerialCarrier); //!< discarded
         };
 
 
@@ -374,7 +448,7 @@ namespace Yttrium
 
         const Carrier * queryCarrier(const String&) const noexcept;
         const Carrier * queryCarrier(const std::type_info&) const;
-         
+
         template <typename T> inline const Carrier* queryCarrierOf() const
         {
             return queryCarrier(typeid(T));
@@ -382,9 +456,9 @@ namespace Yttrium
 
         static Carrier * CreateScalarCarrier(const DataType&);
         static Carrier * CreateVectorCarrier(const DataType&, const size_t);
-        
+
         //! \return carrier for T
-        template <typename T> 
+        template <typename T>
         Carrier* ScalarCarrierProc()
         {
             static const DataType& _ = getDataTypeOf<T>();
@@ -443,7 +517,7 @@ namespace Yttrium
         const char * const    processorName; //!< MPI_GetProcessorName
         const DataType::Table dataTypes;     //!< table of data types
         const Carrier::Table  carriers;      //!< table of carriers
-        
+
     private:
         Y_Disable_Copy_And_Assign(MPI); //!< discarded
         friend class Singleton<MPI,ClassLockPolicy>;
@@ -488,7 +562,26 @@ namespace Yttrium
 /**/        mpi_.barrier();                                 \
 /**/        if(mpi_.primary) { do { CODE; } while(false); } \
 /**/    } while(false)
-}
 
+
+
+
+#if !defined(_MSC_VER)
+
+    //! helper to declare specific Read function
+#define Y_MPI_Serial_Decl(CLASS)                    \
+/**/ template<> MPI::SerialCarrier<CLASS>::ReadProc \
+/**/ const      MPI::SerialCarrier<CLASS>::Read
+
+
+    namespace Apex { class Natural; class Integer; class Rational; }
+    Y_MPI_Serial_Decl(Apex::Natural);  //!< Read for apn
+    Y_MPI_Serial_Decl(Apex::Integer);  //!< Read for apz
+    Y_MPI_Serial_Decl(Apex::Rational); //!< Read for apq
+    Y_MPI_Serial_Decl(String);         //!< Read for String
+
+#endif // !defined(_MSC_VER)
+
+}
 
 #endif // !Y_MPI_Included
