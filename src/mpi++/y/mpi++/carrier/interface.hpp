@@ -106,7 +106,7 @@ static Carrier * CreateScalarCarrier(const DataType&);
 //! \return new carrier for given vector of data type
 static Carrier * CreateVectorCarrier(const DataType&, const size_t);
 
-
+//! \return get/create scalar carrier for T
 template <typename T> inline
 Carrier & getScalarCarrier()
 {
@@ -118,6 +118,7 @@ Carrier & getScalarCarrier()
         return storeCarrier(key,CreateScalarCarrier( getDataType(key) ));
 }
 
+//! \return get/create vector carrier for VECTOR<T>
 template <template <typename> class VECTOR, typename T> inline
 Carrier & getVectorCarrier()
 {
@@ -130,6 +131,7 @@ Carrier & getVectorCarrier()
         return storeCarrier(key,CreateVectorCarrier( getDataTypeOf<T>(), Type::DIMENSIONS ));
 }
 
+//! \return get/create a serial carrier for serializable T
 template <typename T> inline
 Carrier & getSerialCarrier()
 {
