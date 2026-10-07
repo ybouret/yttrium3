@@ -39,6 +39,10 @@
 namespace Yttrium
 {
 
+
+
+
+
     //__________________________________________________________________________
     //
     //
@@ -70,6 +74,22 @@ namespace Yttrium
 
 #include "y/mpi++/carrier/interface.hpp"
 #include "y/mpi++/carrier/serial.hpp"
+
+        template <typename T, typename = int>
+        struct HasDIMENSIONS { static const bool Value = false; };
+
+        template <typename T>
+        struct HasDIMENSIONS <T, decltype((void) T::DIMENSIONS, 0)>
+        {
+            static const bool Value = true;
+        };
+
+        template <typename T>
+        struct UseSerial { static const bool Value = Y_Is_SuperSubClass_Strict(Serializable,T); };
+
+        template <typename T>
+        struct UseVector { static const bool Value = HasDIMENSIONS<T>::Value; };
+
 
         //______________________________________________________________________
         //
