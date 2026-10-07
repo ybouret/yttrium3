@@ -18,7 +18,7 @@
 #include "y/format/human-readable.hpp"
 #include "y/stream/memory/output.hpp"
 #include "y/stream/memory/input.hpp"
-
+#include "y/type/alternative.hpp"
 
 #include <typeinfo>
 
@@ -75,6 +75,8 @@ namespace Yttrium
 #include "y/mpi++/carrier/interface.hpp"
 #include "y/mpi++/carrier/serial.hpp"
 
+
+
         template <typename T, typename = int>
         struct HasDIMENSIONS { static const bool Value = false; };
 
@@ -85,10 +87,36 @@ namespace Yttrium
         };
 
         template <typename T>
-        struct UseSerial { static const bool Value = Y_Is_SuperSubClass_Strict(Serializable,T); };
+        struct SerialCarrierAPI
+        {
+            static inline Carrier & Get(MPI &mpi) { return mpi.getSerialCarrier<T>(); }
+        };
 
         template <typename T>
-        struct UseVector { static const bool Value = HasDIMENSIONS<T>::Value; };
+        struct VectorCarrierAPI
+        {
+            static inline Carrier & Get(MPI &mpi) { return mpi.getVectorCarrier<T>(); }
+        };
+
+        template <typename T>
+        struct ScalarCarrierAPI
+        {
+            static inline Carrier & Get(MPI &mpi) { return mpi.getScalarCarrier<T>(); }
+        };
+
+        
+        template <typename T>
+        struct SelectCarrier
+        {
+            static const bool UseSerial = Y_Is_SuperSubClass_Strict(Serializable,T);
+            static const bool UseVector = HasDIMENSIONS<T>::Value;
+            typedef typename Alternative<
+            UseSerial,SerialCarrierAPI<T>,
+            UseVector,VectorCarrierAPI<T>,
+            ScalarCarrierAPI<T>
+            >::Type API;
+        };
+
 
 
         //______________________________________________________________________

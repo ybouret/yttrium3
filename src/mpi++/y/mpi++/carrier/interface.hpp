@@ -119,17 +119,22 @@ Carrier & getScalarCarrier()
 }
 
 //! \return get/create vector carrier for VECTOR<T>
-template <template <typename> class VECTOR, typename T> inline
+
+template <typename T> inline
 Carrier & getVectorCarrier()
 {
-    typedef VECTOR<T> Type;
-    const String      key = typeid(Type).name();
+    const String      key = typeid(T).name();
     Carrier * const   cr  = queryCarrier(key);
     if(cr)
         return *cr;
     else
-        return storeCarrier(key,CreateVectorCarrier( getDataTypeOf<T>(), Type::DIMENSIONS ));
+    {
+        typedef typename T::Type ScalarType;
+        return storeCarrier(key,CreateVectorCarrier( getDataTypeOf<ScalarType>(), T::DIMENSIONS ));
+    }
 }
+
+
 
 //! \return get/create a serial carrier for serializable T
 template <typename T> inline

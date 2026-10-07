@@ -81,14 +81,21 @@ namespace
         testCarrier<T>(mpi,ran,cr,true);
     }
 
-    template <typename T, template <typename> class VEC>
+    template <typename T, template <typename> class VEC> static inline
     void testVector(MPI &mpi, Random::CoinFlip &ran)
     {
         Y_MPI_Trace(mpi, std::cerr << std::endl << "testVector<" << RTTI::Name< VEC<T> >() << "> DIM=" << VEC<T>::DIMENSIONS << std::endl);
-        MPI::Carrier & cr = mpi.getVectorCarrier<VEC,T>();
+        MPI::Carrier & cr = mpi.getVectorCarrier< VEC<T> >();
         testCarrier< VEC<T> >(mpi,ran,cr,true);
     }
 
+    template <typename T> static inline
+    void testWithAPI(MPI &mpi, Random::CoinFlip &ran)
+    {
+        Y_MPI_Trace(mpi, std::cerr << std::endl << "testWithAPI<" << RTTI::Name<T>() << ">" << std::endl);
+        MPI::Carrier & cr = MPI::SelectCarrier<T>::API::Get(mpi);
+        testCarrier<T>(mpi,ran,cr,false);
+    }
 
 
 }
@@ -117,6 +124,11 @@ Y_UTEST(carrier)
     XRealOutput::Mode = XRealOutput::Compact;
     testScalar< XReal<double> >(mpi,ran);
 
+
+    testWithAPI<float>(mpi,ran);
+    testWithAPI<String>(mpi,ran);
+    testWithAPI< XReal<float> >(mpi,ran);
+    testWithAPI< Complex<float> >(mpi,ran);
 
 
 
