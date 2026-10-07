@@ -1,3 +1,5 @@
+#include "y/mkl/complex.hpp"
+#include "y/mkl/v4d.hpp"
 
 #include "y/utest/run.hpp"
 
@@ -22,6 +24,15 @@ namespace Yttrium
         static const bool Value = true;
     };
 
+    template <typename T, typename = int>
+    struct HasDIMENSIONS { static const bool Value = false; };
+
+    template <typename T>
+    struct HasDIMENSIONS <T, decltype((void) T::DIMENSIONS, 0)>
+    {
+        static const bool Value = true;
+    };
+
 }
 
 namespace
@@ -36,5 +47,10 @@ Y_UTEST(detector)
 {
     Y_PRINTV( HasX<A>::Value );
     Y_PRINTV( HasX<B>::Value );
+
+    Y_PRINTV( HasDIMENSIONS<float>::Value );
+    Y_PRINTV( HasDIMENSIONS< Complex<float> >::Value );
+    Y_PRINTV( HasDIMENSIONS< V4D<int> >::Value );
+
 }
 Y_UDONE()
