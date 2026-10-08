@@ -41,9 +41,9 @@ namespace
         const String progress = Percent::Get(portIndx,numPorts);
 
         (std::cerr << "[" << progress << "]  \r").flush();
-        InputProcess fp(cmd);
-        String line;
-        size_t count = 0;
+        InputProcess   fp(cmd);
+        String         line;
+        size_t         count = 0;
         Vector<String> parts;
         Vector<String> words;
         while( fp.gets(line) )
