@@ -76,48 +76,64 @@ namespace Yttrium
 #include "y/mpi++/carrier/serial.hpp"
 
 
-
-        template <typename T, typename = int>
-        struct HasDIMENSIONS {
-            static const bool Value = false;
-        };
-
-        template <typename T>
-        struct HasDIMENSIONS <T, decltype((void) T::DIMENSIONS, 0)> {
-            static const bool Value = true;
-        };
-
-        template <typename T>
-        struct SerialCarrierAPI {
-            static inline Carrier & Get(MPI &mpi) { return mpi.getSerialCarrier<T>(); }
-        };
-
-        template <typename T>
-        struct VectorCarrierAPI {
-            static inline Carrier & Get(MPI &mpi) { return mpi.getVectorCarrier<T>(); }
-        };
-
-        template <typename T>
-        struct ScalarCarrierAPI {
-            static inline Carrier & Get(MPI &mpi) { return mpi.getScalarCarrier<T>(); }
-        };
-
-        
-        template <typename T>
-        struct SelectCarrier
+        //______________________________________________________________________
+        //
+        //! Inner helpers to select Carrier
+        //______________________________________________________________________
+        struct Inner
         {
-            static const bool UseSerial = Y_Is_SuperSubClass_Strict(Serializable,T);
-            static const bool UseVector = HasDIMENSIONS<T>::Value;
-            typedef typename Alternative<
-            UseSerial, SerialCarrierAPI<T>,
-            UseVector, VectorCarrierAPI<T>,
-            /**/       ScalarCarrierAPI<T>
-            >::Type API;
+            //! false HasDIMENSIONS
+            template <typename T, typename = int>
+            struct HasDIMENSIONS {
+                static const bool Value = false; //!< alias
+            };
+
+            //! true HasDIMENSIONS
+            template <typename T>
+            struct HasDIMENSIONS <T, decltype((void) T::DIMENSIONS, 0)> {
+                static const bool Value = true; //!< alias
+            };
+
+            //! select serial carrier
+            template <typename T>
+            struct SerialCarrierAPI {
+                //! \return adapted serial carrier
+                static inline Carrier & Get(MPI &mpi) { return mpi.getSerialCarrier<T>(); }
+            };
+
+            //! select vector carrier
+            template <typename T>
+            struct VectorCarrierAPI {
+                //! \return adpated vector carrier
+                static inline Carrier & Get(MPI &mpi) { return mpi.getVectorCarrier<T>(); }
+            };
+
+            //! select scalar carrier
+            template <typename T>
+            struct ScalarCarrierAPI {
+                //! \return adapted scalar carrier
+                static inline Carrier & Get(MPI &mpi) { return mpi.getScalarCarrier<T>(); }
+            };
+
+
+            //! API selector
+            template <typename T>
+            struct SelectCarrier
+            {
+                static const bool UseSerial = Y_Is_SuperSubClass_Strict(Serializable,T);//!< alias
+                static const bool UseVector = HasDIMENSIONS<T>::Value;                  //!< alias
+                typedef typename Alternative<
+                UseSerial, SerialCarrierAPI<T>,
+                UseVector, VectorCarrierAPI<T>,
+                /**/       ScalarCarrierAPI<T>
+                >::Type API; //!< resulting API
+            };
         };
 
+        //! \return adapted carrier based on T properties
         template <typename T> inline
         Carrier & getCarrier() {
-            typedef typename SelectCarrier<T>::API SelectCarrierAPI;
+            typedef typename Inner::SelectCarrier<T>::API SelectCarrierAPI;
             return SelectCarrierAPI::Get(*this);
         }
 
@@ -255,6 +271,7 @@ namespace Yttrium
 /**/        MPI &mpi_ = (THE_MPI);                          \
 /**/        mpi_.barrier();                                 \
 /**/        if(mpi_.primary) { do { CODE; } while(false); } \
+/**/        mpi_.barrier();                                 \
 /**/    } while(false)
 
 
