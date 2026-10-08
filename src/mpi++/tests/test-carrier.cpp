@@ -93,7 +93,7 @@ namespace
     void testWithAPI(MPI &mpi, Random::CoinFlip &ran)
     {
         Y_MPI_Trace(mpi, std::cerr << std::endl << "testWithAPI<" << RTTI::Name<T>() << ">" << std::endl);
-        MPI::Carrier & cr = MPI::SelectCarrier<T>::API::Get(mpi);
+        static MPI::Carrier & cr = mpi.getCarrier<T>();
         testCarrier<T>(mpi,ran,cr,false);
     }
 

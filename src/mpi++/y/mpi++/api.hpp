@@ -78,29 +78,27 @@ namespace Yttrium
 
 
         template <typename T, typename = int>
-        struct HasDIMENSIONS { static const bool Value = false; };
+        struct HasDIMENSIONS {
+            static const bool Value = false;
+        };
 
         template <typename T>
-        struct HasDIMENSIONS <T, decltype((void) T::DIMENSIONS, 0)>
-        {
+        struct HasDIMENSIONS <T, decltype((void) T::DIMENSIONS, 0)> {
             static const bool Value = true;
         };
 
         template <typename T>
-        struct SerialCarrierAPI
-        {
+        struct SerialCarrierAPI {
             static inline Carrier & Get(MPI &mpi) { return mpi.getSerialCarrier<T>(); }
         };
 
         template <typename T>
-        struct VectorCarrierAPI
-        {
+        struct VectorCarrierAPI {
             static inline Carrier & Get(MPI &mpi) { return mpi.getVectorCarrier<T>(); }
         };
 
         template <typename T>
-        struct ScalarCarrierAPI
-        {
+        struct ScalarCarrierAPI {
             static inline Carrier & Get(MPI &mpi) { return mpi.getScalarCarrier<T>(); }
         };
 
@@ -111,12 +109,17 @@ namespace Yttrium
             static const bool UseSerial = Y_Is_SuperSubClass_Strict(Serializable,T);
             static const bool UseVector = HasDIMENSIONS<T>::Value;
             typedef typename Alternative<
-            UseSerial,SerialCarrierAPI<T>,
-            UseVector,VectorCarrierAPI<T>,
-            ScalarCarrierAPI<T>
+            UseSerial, SerialCarrierAPI<T>,
+            UseVector, VectorCarrierAPI<T>,
+            /**/       ScalarCarrierAPI<T>
             >::Type API;
         };
 
+        template <typename T> inline
+        Carrier & getCarrier() {
+            typedef typename SelectCarrier<T>::API SelectCarrierAPI;
+            return SelectCarrierAPI::Get(*this);
+        }
 
 
         //______________________________________________________________________
