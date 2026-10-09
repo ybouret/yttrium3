@@ -6,6 +6,7 @@
 \usepackage{pslatex}
 \usepackage{chemarr}
 \usepackage{mathptmx}
+\usepackage[dvipsnames]{xcolor}
 %\usepackage{mathabx}
 %\usepackage{bookman}
 
@@ -116,6 +117,8 @@ And finally:
 
 \section{One Way Flip}
 
+\subsection{Generic Case}
+
 \begin{itemize}
 \item We assume that a species $A$ in a first medium is exchange with a species $B$ in a second medium by a transporter $E$.
 \item We assume that $n_A$ molecules of $A$   and $n_B$ molecules of $B$
@@ -164,6 +167,26 @@ V_0 & = & 2k_fE_0\\
 \boxed{
 	\partial_t [A] = -n_A \; V_0 \dfrac{[A]^{n_A} [B']^{n_B}}{K^{(n_A+n_B)}+[A]^{n_A} [B']^{n_B}}
 	}
+\end{equation}
+
+\subsection{Application to Bicarbonate}
+
+With:
+\begin{equation}
+\left\lbrace
+\begin{array}{ccl}
+~[A] & = & [HCO_3^-]_i \\
+~[B'] & = & [Cl^-]_e\\
+\end{array}
+\right.
+\end{equation}
+
+\begin{equation}
+\begin{array}{ccc}
+\partial_t [HCO_3^-]_i & = & -V_{AE} \dfrac{[HCO_3^-]_i}{K_{AE} + [HCO_3^-]_i}  \\
+\Downarrow & \Downarrow & \Downarrow \\
+\partial_t [HCO_3^-]_i & = & -V_{AE} \dfrac{[HCO_3^-]_i\textcolor{Green}{[Cl^-]_e}}{K_{AE} \textcolor{Green}{[Cl^-]_{e,0}}+ [HCO_3^-]_i \textcolor{Green}{[Cl^-]_e}}  \\
+\end{array}
 \end{equation}
 
 \end{document}
