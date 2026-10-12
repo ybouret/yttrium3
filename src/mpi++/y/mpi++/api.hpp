@@ -210,6 +210,13 @@ namespace Yttrium
             return SelectCarrierAPI::Get(*this);
         }
 
+        //! high-level send through carrier
+        /**
+         \param entry  first item address
+         \param items  number of items to send
+         \param target target rank
+         \param tag    optional tag
+         */
         template <typename T> inline
         void send(const T * const entry,
                   const size_t    items,
@@ -220,6 +227,13 @@ namespace Yttrium
             cr.send(*this,entry,items,target,tag);
         }
 
+        //! high-level recv through carrier
+        /**
+         \param entry  first item address
+         \param items  number of items to recv
+         \param source source rank
+         \param tag    optional tag
+         */
         template <typename T> inline
         void recv(T * const    entry,
                   const size_t items,
