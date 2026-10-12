@@ -64,6 +64,16 @@ public:
                       const int     tag) = 0;
 
 
+    virtual void sendrecv(MPI        &       mpi,
+                          const void * const sendEntry,
+                          const size_t       sendItems,
+                          const size_t       sendRank,
+                          void * const       recvEntry,
+                          const size_t       recvItems,
+                          const size_t       recvRank,
+                          const int          tag) = 0;
+
+
 private:
     Y_Disable_Copy_And_Assign(Carrier); //!< discarded
 };

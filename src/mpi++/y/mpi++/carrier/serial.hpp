@@ -123,6 +123,18 @@ public:
             Read(*host,fp);
     }
 
+    inline virtual void sendrecv(MPI        &       mpi,
+                                 const void * const sendEntry,
+                                 const size_t       sendItems,
+                                 const size_t       sendRank,
+                                 void * const       recvEntry,
+                                 const size_t       recvItems,
+                                 const size_t       recvRank,
+                                 const int          tag)
+    {
+
+    }
+
 
 
 private:

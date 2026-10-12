@@ -34,6 +34,20 @@ namespace Yttrium
         mpi.recv(entry,items,dataType.value,dataType.bytes*items,source,tag);
     }
 
+    void MPI::ScalarCarrier:: sendrecv(MPI        &       mpi,
+                                       const void * const sendEntry,
+                                       const size_t       sendItems,
+                                       const size_t       sendRank,
+                                       void * const       recvEntry,
+                                       const size_t       recvItems,
+                                       const size_t       recvRank,
+                                       const int          tag)
+    {
+        mpi.sendrecv(sendEntry,sendItems,dataType.value,dataType.bytes*sendItems,sendRank,
+                     recvEntry,recvItems,dataType.value,dataType.bytes*recvItems,recvRank,
+                     tag,tag);
+    }
+
 
     MPI::Carrier* MPI::CreateScalarCarrier(const DataType& dt)
     {
