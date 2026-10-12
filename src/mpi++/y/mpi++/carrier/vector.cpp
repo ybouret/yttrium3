@@ -53,7 +53,7 @@ namespace Yttrium
 
     MPI::Carrier * MPI:: CreateVectorCarrier(const DataType &mdt, const size_t dim)
     {
-        return new VectorCarrier(mdt, dim);
+        return new VectorCarrier(mdt,dim);
     }
 
 }

@@ -25,11 +25,11 @@ namespace
                      const bool         chk)
     {
 
+
         size_t       items = 5 + ran.toss<size_t>(5);
         mpi.bcastSize(items,0);
 
         Vector<T>             vec(WithAtLeast,items);
-
         if(mpi.primary)
         {
             for(size_t i=items;i>0;--i)
@@ -45,7 +45,6 @@ namespace
         }
         else
         {
-
             vec.adjust(items);
             Y_ASSERT(items==vec.size());
             cr.recv(mpi,vec(),items,0,0x07);
@@ -60,6 +59,10 @@ namespace
         {
             Y_MPI_ForEach(mpi, std::cerr << "@" << mpi << ": " << vec << std::endl);
         }
+
+        Vector<T> arr(WithAtLeast,items);
+        arr.adjust(items);
+
     }
 
 
@@ -119,7 +122,7 @@ Y_UTEST(carrier)
     testSerial<apz>(mpi,ran);
     testSerial<apq>(mpi,ran);
 
-    
+
     XRealOutput::Mode = XRealOutput::Compact;
     testScalar< XReal<double> >(mpi,ran);
 
