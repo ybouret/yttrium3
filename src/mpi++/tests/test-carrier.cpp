@@ -1,9 +1,8 @@
 #include "y/mpi++/carrier/scalar.hpp"
 #include "y/mpi++/carrier/vector.hpp"
-
 #include "y/random/type-gen.hpp"
-
 #include "y/utest/run.hpp"
+
 #include <cstring>
 
 

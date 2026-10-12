@@ -31,7 +31,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             explicit CoinFlip() noexcept; //!< setup
-            virtual ~CoinFlip() noexcept; //!M cleanup
+            virtual ~CoinFlip() noexcept; //!< cleanup
 
             //__________________________________________________________________
             //

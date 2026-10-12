@@ -8,5 +8,6 @@ Y_UTEST_DECL(16)
     Y_UTEST(struct);
     Y_UTEST(defined);
     Y_UTEST(carrier);
+    Y_UTEST(advanced);
 }
 Y_UTEST_EXEC()

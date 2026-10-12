@@ -38,11 +38,7 @@
 
 namespace Yttrium
 {
-
-
-
-
-
+    
     //__________________________________________________________________________
     //
     //
@@ -76,66 +72,6 @@ namespace Yttrium
 #include "y/mpi++/carrier/serial.hpp"
 
 
-        //______________________________________________________________________
-        //
-        //! Inner helpers to select Carrier
-        //______________________________________________________________________
-        struct Inner
-        {
-            //! false HasDIMENSIONS
-            template <typename T, typename = int>
-            struct HasDIMENSIONS {
-                static const bool Value = false; //!< alias
-            };
-
-            //! true HasDIMENSIONS
-            template <typename T>
-            struct HasDIMENSIONS <T, decltype((void) T::DIMENSIONS, 0)> {
-                static const bool Value = true; //!< alias
-            };
-
-            //! select serial carrier
-            template <typename T>
-            struct SerialCarrierAPI {
-                //! \return adapted serial carrier
-                static inline Carrier & Get(MPI &mpi) { return mpi.getSerialCarrier<T>(); }
-            };
-
-            //! select vector carrier
-            template <typename T>
-            struct VectorCarrierAPI {
-                //! \return adpated vector carrier
-                static inline Carrier & Get(MPI &mpi) { return mpi.getVectorCarrier<T>(); }
-            };
-
-            //! select scalar carrier
-            template <typename T>
-            struct ScalarCarrierAPI {
-                //! \return adapted scalar carrier
-                static inline Carrier & Get(MPI &mpi) { return mpi.getScalarCarrier<T>(); }
-            };
-
-
-            //! API selector
-            template <typename T>
-            struct SelectCarrier
-            {
-                static const bool UseSerial = Y_Is_SuperSubClass_Strict(Serializable,T);//!< alias
-                static const bool UseVector = HasDIMENSIONS<T>::Value;                  //!< alias
-                typedef typename Alternative<
-                UseSerial, SerialCarrierAPI<T>,
-                UseVector, VectorCarrierAPI<T>,
-                /**/       ScalarCarrierAPI<T>
-                >::Type API; //!< resulting API
-            };
-        };
-
-        //! \return adapted carrier based on T properties
-        template <typename T> inline
-        Carrier & getCarrier() {
-            typedef typename Inner::SelectCarrier<T>::API SelectCarrierAPI;
-            return SelectCarrierAPI::Get(*this);
-        }
 
 
         //______________________________________________________________________
@@ -211,6 +147,89 @@ namespace Yttrium
         void syn(const size_t peer);      //!< recv one byte \param peer peer rank
         void resetRates() noexcept;       //!< reset all rates
 
+        //______________________________________________________________________
+        //
+        //
+        //! Inner helpers to select Carrier
+        //
+        //______________________________________________________________________
+        struct Inner
+        {
+            //! false HasDIMENSIONS
+            template <typename T, typename = int>
+            struct HasDIMENSIONS {
+                static const bool Value = false; //!< alias
+            };
+
+            //! true HasDIMENSIONS
+            template <typename T>
+            struct HasDIMENSIONS <T, decltype((void) T::DIMENSIONS, 0)> {
+                static const bool Value = true; //!< alias
+            };
+
+            //! select serial carrier
+            template <typename T>
+            struct SerialCarrierAPI {
+                //! \return adapted serial carrier
+                static inline Carrier & Get(MPI &mpi) { return mpi.getSerialCarrier<T>(); }
+            };
+
+            //! select vector carrier
+            template <typename T>
+            struct VectorCarrierAPI {
+                //! \return adpated vector carrier
+                static inline Carrier & Get(MPI &mpi) { return mpi.getVectorCarrier<T>(); }
+            };
+
+            //! select scalar carrier
+            template <typename T>
+            struct ScalarCarrierAPI {
+                //! \return adapted scalar carrier
+                static inline Carrier & Get(MPI &mpi) { return mpi.getScalarCarrier<T>(); }
+            };
+
+
+            //! API selector
+            template <typename T>
+            struct SelectCarrier
+            {
+                static const bool UseSerial = Y_Is_SuperSubClass_Strict(Serializable,T);//!< alias
+                static const bool UseVector = HasDIMENSIONS<T>::Value;                  //!< alias
+                typedef typename Alternative<
+                UseSerial, SerialCarrierAPI<T>,
+                UseVector, VectorCarrierAPI<T>,
+                /**/       ScalarCarrierAPI<T>
+                >::Type API; //!< resulting API
+            };
+        };
+
+        //! \return adapted carrier based on T properties
+        template <typename T> inline
+        Carrier & getCarrier() {
+            typedef typename Inner::SelectCarrier<T>::API SelectCarrierAPI;
+            return SelectCarrierAPI::Get(*this);
+        }
+
+        template <typename T> inline
+        void send(const T * const entry,
+                  const size_t    items,
+                  const size_t    target,
+                  const int       tag = DefaultTag)
+        {
+            static Carrier &cr = getCarrier<T>();
+            cr.send(*this,entry,items,target,tag);
+        }
+
+        template <typename T> inline
+        void recv(T * const    entry,
+                  const size_t items,
+                  const size_t source,
+                  const int    tag = DefaultTag )
+        {
+            static Carrier &cr = getCarrier<T>();
+            cr.recv(*this,entry,items,source,tag);
+        }
+
 
         //______________________________________________________________________
         //
@@ -263,6 +282,7 @@ namespace Yttrium
 /**/            do { CODE; } while(false); \
 /**/            mpi_.ack(0);\
 /**/        }\
+/**/        mpi.barrier(); \
 /**/    } while(false)
 
     //! execute CODE only on primary node
