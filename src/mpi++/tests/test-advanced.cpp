@@ -61,16 +61,16 @@ Y_UTEST(advanced)
     testAdvanced< XReal<float> >(mpi,ran);
     testAdvanced< Complex<double> >(mpi,ran);
     testAdvanced< V3D<float> >(mpi,ran);
+    
+    Y_MPI_Trace(mpi,std::cerr << std::endl);
     return 0;
 
     testAdvanced<String>(mpi,ran);
     testAdvanced<apn>(mpi,ran);
     testAdvanced<apz>(mpi,ran);
     testAdvanced<apq>(mpi,ran);
-    testAdvanced< Complex<double> >(mpi,ran);
 
 
-    Y_MPI_Trace(mpi,std::cerr << std::endl);
 }
 Y_UDONE()
 

@@ -32,7 +32,7 @@ public:
     // Members
     //
     //__________________________________________________________________________
-    OutputMemoryStream buffer; //!< I/O buffer
+    OutputMemoryStream selfBuffer; //!< I/O buffer
 
 protected:
     //__________________________________________________________________________
@@ -100,7 +100,7 @@ public:
         //----------------------------------------------------------------------
         // initialize buffer
         //----------------------------------------------------------------------
-        buffer->free();
+        selfBuffer->free();
 
         //----------------------------------------------------------------------
         // collect data
@@ -108,13 +108,13 @@ public:
         {
             ConstType * host = static_cast<ConstType *>(entry);
             for(size_t i=items;i>0;--i,++host)
-                (void) host->serialize(buffer);
+                (void) host->serialize(selfBuffer);
         }
 
         //----------------------------------------------------------------------
         // send buffer
         //----------------------------------------------------------------------
-        mpi.sendBuffer(buffer,target,tag);
+        mpi.sendBuffer(selfBuffer,target,tag);
     }
 
     inline virtual void recv(MPI &         mpi,
