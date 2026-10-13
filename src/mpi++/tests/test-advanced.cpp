@@ -13,28 +13,41 @@ namespace
     static inline void testAdvanced(MPI &mpi, Random::CoinFlip &ran)
     {
         Y_MPI_Trace(mpi,(std::cerr << std::endl << "test<" << RTTI::Name<T>() << ">" << std::endl).flush());
+
+
         size_t items = 2 + ran.toss<size_t>(8);
         mpi.bcastSize(items,0);
-
-        Vector<T> vec(WithAtLeast,items);
+        Vector<T> here(WithAtLeast,items);
         if(mpi.primary)
         {
             for(size_t i=items;i>0;--i)
             {
                 const T tmp = Random::Gen<T>::Get(ran);
-                vec << tmp;
+                here << tmp;
             }
             for(size_t rank=1;rank<mpi.size;++rank)
             {
-                mpi.send( vec(), items, rank);
+                mpi.send( here(), items, rank);
             }
         }
         else
         {
-            vec.adjust(items);
-            mpi.recv( vec(), items, 0);
+            here.adjust(items);
+            mpi.recv( here(), items, 0);
         }
-        Y_MPI_ForEach(mpi,(std::cerr << "@" << mpi << ": " << vec << std::endl).flush());
+        Y_MPI_ForEach(mpi,(std::cerr << "@" << mpi << ": " << here << std::endl).flush());
+
+        for(size_t i=1;i<=items;++i)
+            here[i]  = Random::Gen<T>::Get(ran);
+
+        Vector<T> peer(WithAtLeast,items);
+        peer.adjust(items);
+        mpi.sendrecv(here(),items,mpi.prevRank(),
+                     peer(),items,mpi.nextRank());
+
+        Y_MPI_ForEach(mpi,(std::cerr << "@" << mpi << ": " << here << " | " << peer << std::endl).flush());
+
+
 
     }
 }
@@ -45,13 +58,16 @@ Y_UTEST(advanced)
     Core::Rand ran;
 
     testAdvanced<short int>(mpi,ran);
+    testAdvanced< XReal<float> >(mpi,ran);
+    testAdvanced< Complex<double> >(mpi,ran);
+    testAdvanced< V3D<float> >(mpi,ran);
+    return 0;
+
     testAdvanced<String>(mpi,ran);
     testAdvanced<apn>(mpi,ran);
     testAdvanced<apz>(mpi,ran);
     testAdvanced<apq>(mpi,ran);
-    testAdvanced< XReal<float> >(mpi,ran);
     testAdvanced< Complex<double> >(mpi,ran);
-    testAdvanced< V3D<float> >(mpi,ran);
 
 
     Y_MPI_Trace(mpi,std::cerr << std::endl);

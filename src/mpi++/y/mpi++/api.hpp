@@ -244,6 +244,26 @@ namespace Yttrium
             cr.recv(*this,entry,items,source,tag);
         }
 
+        //! high-level sendrecv through carrier
+        /**
+         \param entry  first item address
+         \param items  number of items to send
+         \param target target rank
+         \param tag    optional tag
+         */
+        template <typename T> inline
+        void sendrecv(const T * const sendEntry,
+                      const size_t    sendItems,
+                      const size_t    sendRank,
+                      T * const       recvEntry,
+                      const size_t    recvItems,
+                      const size_t    recvRank,
+                      const int       tag = DefaultTag)
+        {
+            static Carrier &cr = getCarrier<T>();
+            cr.sendrecv(*this,sendEntry,sendItems,sendRank,recvEntry,recvItems,recvRank,tag);
+        }
+
 
         //______________________________________________________________________
         //
