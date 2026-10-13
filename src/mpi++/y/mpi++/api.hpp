@@ -246,10 +246,13 @@ namespace Yttrium
 
         //! high-level sendrecv through carrier
         /**
-         \param entry  first item address
-         \param items  number of items to send
-         \param target target rank
-         \param tag    optional tag
+         \param sendEntry  address of first object to send
+         \param sendItems  number of objects to send
+         \param sendRank   target rank
+         \param recvEntry  address of first object to recv
+         \param recvItems  number of objects to recv
+         \param recvRank   source rank
+         \param tag        optional tag
          */
         template <typename T> inline
         void sendrecv(const T * const sendEntry,

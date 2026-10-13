@@ -45,6 +45,15 @@ protected:
     //! read buffer from source and tag \return loaded buffer
     const Memory::ReadOnlyBuffer & load(MPI &,const size_t,const int);
 
+    //! exchange sizes
+    /**
+     \param mpi MPI
+     \param sendSize number of bytes to send
+     \param sendRank target rank
+     \param recvRank source rank
+     \param tag      communication tag
+     \return number of bytes to recv
+     */
     size_t sendRecvSizes(MPI &        mpi,
                          const size_t sendSize,
                          const size_t sendRank,
@@ -140,6 +149,12 @@ public:
 private:
     Y_Disable_Copy_And_Assign(SerialCarrier); //!< discarded
 
+    //! encode objects
+    /**
+     \param entry first object address
+     \param items number of objects
+     \return encoded bytes
+     */
     inline size_t encode(const void * const entry,
                          const size_t       items)
     {
@@ -160,6 +175,12 @@ private:
         return selfBuffer.length();
     }
 
+    //! decode serialized buffer
+    /**
+     \param entry first object address
+     \param items objects to decode
+     \param robuf read data
+     */
     inline void decode(void * const                  entry,
                        const size_t                  items,
                        const Memory::ReadOnlyBuffer &robuf)

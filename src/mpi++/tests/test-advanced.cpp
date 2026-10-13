@@ -62,13 +62,13 @@ Y_UTEST(advanced)
     testAdvanced< Complex<double> >(mpi,ran);
     testAdvanced< V3D<float> >(mpi,ran);
     testAdvanced<String>(mpi,ran);
-
-    Y_MPI_Trace(mpi,std::cerr << std::endl);
-    return 0;
-
     testAdvanced<apn>(mpi,ran);
     testAdvanced<apz>(mpi,ran);
     testAdvanced<apq>(mpi,ran);
+
+    Y_MPI_Trace(mpi,std::cerr << std::endl);
+
+
 
 
 }

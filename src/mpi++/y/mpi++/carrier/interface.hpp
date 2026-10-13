@@ -63,7 +63,17 @@ public:
                       const size_t  source,
                       const int     tag) = 0;
 
-
+    //! send/recv arrays of objects
+    /**
+     \param mpi        instance
+     \param sendEntry  address of first object to send
+     \param sendItems  number of objects to send
+     \param sendRank   target rank
+     \param recvEntry  address of first object to recv
+     \param recvItems  number of objects to recv
+     \param recvRank   source rank
+     \param tag        channel
+     */
     virtual void sendrecv(MPI        &       mpi,
                           const void * const sendEntry,
                           const size_t       sendItems,
