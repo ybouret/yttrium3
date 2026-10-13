@@ -7,7 +7,8 @@ namespace Yttrium
 
     MPI::SerialCarrier_:: SerialCarrier_(const size_t minCapacity) :
     Carrier(),
-    selfBuffer(BufferName,minCapacity)
+    selfBuffer(BufferName,minCapacity),
+    peerBuffer(BufferName,minCapacity)
     {}
 
     MPI::SerialCarrier_:: ~SerialCarrier_() noexcept
@@ -21,4 +22,14 @@ namespace Yttrium
         mpi.recvBytes(selfBuffer.rw(),blockSize,source,tag);
         return selfBuffer;
     }
+
+    size_t MPI::SerialCarrier_::  sendRecvSizes(MPI & mpi,
+                                              const size_t sendSize,
+                                              const size_t sendRank,
+                                              const size_t recvRank,
+                                              const int    tag)
+    {
+        return mpi.sendRecvSize(sendSize, sendRank, recvRank, tag, tag);
+    }
+
 }

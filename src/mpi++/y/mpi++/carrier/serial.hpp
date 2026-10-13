@@ -33,6 +33,7 @@ public:
     //
     //__________________________________________________________________________
     OutputMemoryStream selfBuffer; //!< I/O buffer
+    OutputMemoryStream peerBuffer; //!< I/O buffer
 
 protected:
     //__________________________________________________________________________
@@ -43,6 +44,12 @@ protected:
     //__________________________________________________________________________
     //! read buffer from source and tag \return loaded buffer
     const Memory::ReadOnlyBuffer & load(MPI &,const size_t,const int);
+
+    size_t sendRecvSizes(MPI &        mpi,
+                         const size_t sendSize,
+                         const size_t sendRank,
+                         const size_t recvRank,
+                         const int    tag);
 
 private:
     Y_Disable_Copy_And_Assign(SerialCarrier_); //!< dicarded
@@ -97,6 +104,45 @@ public:
                              const size_t       target,
                              const int          tag)
     {
+        (void)encode(entry,items);
+        mpi.sendBuffer(selfBuffer,target,tag);
+    }
+
+    inline virtual void recv(MPI &         mpi,
+                             void * const  entry,
+                             const size_t  items,
+                             const size_t  source,
+                             const int     tag)
+    {
+        decode(entry,items,load(mpi,source,tag));
+    }
+
+    inline virtual void sendrecv(MPI        &       mpi,
+                                 const void * const sendEntry,
+                                 const size_t       sendItems,
+                                 const size_t       sendRank,
+                                 void * const       recvEntry,
+                                 const size_t       recvItems,
+                                 const size_t       recvRank,
+                                 const int          tag)
+    {
+        const size_t sendSize = encode(sendEntry,sendItems);
+        const size_t recvSize = sendRecvSizes(mpi,sendSize,sendRank,recvRank,tag);
+        peerBuffer->adjust(recvSize,0);
+        mpi.sendrecvBytes(selfBuffer.ro(), sendSize, sendRank,
+                          peerBuffer.rw(), recvSize, recvRank,
+                          tag,tag);
+        decode(recvEntry,recvItems,peerBuffer);
+    }
+
+
+
+private:
+    Y_Disable_Copy_And_Assign(SerialCarrier); //!< discarded
+
+    inline size_t encode(const void * const entry,
+                         const size_t       items)
+    {
         //----------------------------------------------------------------------
         // initialize buffer
         //----------------------------------------------------------------------
@@ -111,39 +157,18 @@ public:
                 (void) host->serialize(selfBuffer);
         }
 
-        //----------------------------------------------------------------------
-        // send buffer
-        //----------------------------------------------------------------------
-        mpi.sendBuffer(selfBuffer,target,tag);
+        return selfBuffer.length();
     }
 
-    inline virtual void recv(MPI &         mpi,
-                             void * const  entry,
-                             const size_t  items,
-                             const size_t  source,
-                             const int     tag)
+    inline void decode(void * const                  entry,
+                       const size_t                  items,
+                       const Memory::ReadOnlyBuffer &robuf)
     {
-        InputMemoryStream fp(CallSign,load(mpi,source,tag));
+        InputMemoryStream fp(CallSign,robuf);
         MutableType     * host = static_cast<MutableType *>(entry);
         for(size_t i=items;i>0;--i,++host)
             Read(*host,fp);
     }
 
-    inline virtual void sendrecv(MPI        &       mpi,
-                                 const void * const sendEntry,
-                                 const size_t       sendItems,
-                                 const size_t       sendRank,
-                                 void * const       recvEntry,
-                                 const size_t       recvItems,
-                                 const size_t       recvRank,
-                                 const int          tag)
-    {
-
-    }
-
-
-
-private:
-    Y_Disable_Copy_And_Assign(SerialCarrier); //!< discarded
 };
 
