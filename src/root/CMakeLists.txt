@@ -39,6 +39,7 @@ y/calculus
 y/calculus/prime
 y/type
 y/type/va
+y/type/detect
 y/memory
 y/memory/type
 y/memory/small

@@ -1,13 +1,12 @@
+#include "y/type/detect/member.hpp"
+
 #include "y/mkl/complex.hpp"
 #include "y/mkl/v4d.hpp"
 
 #include "y/utest/run.hpp"
 
-#include "y/type/list.hpp"
 
-#include <typeinfo>
 
-// https://stackoverflow.com/questions/1005476/how-to-detect-whether-there-is-a-specific-member-variable-in-class
 
 // SFINAE stands for Substitution Failure is Not An Error
 
@@ -15,8 +14,6 @@ namespace
 {
     struct A { int x; };
     struct B { int y; };
-
-
 }
 
 
@@ -80,6 +77,9 @@ struct HasDIMENSIONS {
     static const bool Value = (sizeof(test<T>(0)) == sizeof(Yes));
 };
 
+namespace {
+    Y_DetectMember(Got,x);
+}
 
 
 
@@ -99,6 +99,13 @@ Y_UTEST(detector)
     std::cerr << std::endl;
     Y_PRINTV( HasDIMENSIONS<int>::Value );
     Y_PRINTV( HasDIMENSIONS< V2D<float> >::Value );
+
+    std::cerr << std::endl;
+    Y_PRINTV(Gotx<A>::Value);
+    Y_PRINTV(Gotx<B>::Value);
+    Y_PRINTV(Gotx<bool>::Value);
+
+
 
 
 }
