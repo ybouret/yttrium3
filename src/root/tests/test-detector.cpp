@@ -79,6 +79,8 @@ struct HasDIMENSIONS {
 
 namespace {
     Y_DetectMember(Got,x);
+    Y_DetectMember(Got,DIMENSIONS);
+
 }
 
 
@@ -105,6 +107,9 @@ Y_UTEST(detector)
     Y_PRINTV(Gotx<B>::Value);
     Y_PRINTV(Gotx<bool>::Value);
 
+    std::cerr << std::endl;
+    Y_PRINTV(GotDIMENSIONS<bool>::Value );
+    Y_PRINTV(GotDIMENSIONS< Complex<float> >::Value );
 
 
 
