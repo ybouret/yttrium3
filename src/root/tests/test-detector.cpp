@@ -84,6 +84,27 @@ struct Foo {
     typedef float Foobar;
 };
 
+template <typename T>
+struct GotX {
+    // Types "Yes" and "No" are guaranteed to have different sizes,
+    // specifically sizeof(Yes) == 1 and sizeof(No) == 2.
+    typedef char Yes[1];
+    typedef char No[2];
+
+    template <typename C>
+    static Yes & test( decltype(C::x) *);
+
+    template <typename>
+    static No  & test(...);
+
+    // If the "sizeof" of the result of calling test<T>(0) is equal to
+    // sizeof(Yes), the first overload worked and T has a nested type named
+    // Foobar.
+    static const bool Value = (sizeof(test<T>(0)) == sizeof(Yes));
+};
+
+
+
 
 using namespace Yttrium;
 
@@ -93,25 +114,11 @@ Y_UTEST(detector)
     Y_PRINTV(HasTypedefFoobar<int>::value);
     Y_PRINTV(HasTypedefFoobar<Foo>::value);
 
-
-    return 0;
-
-    HasX<A>::Show();
-    HasX<B>::Show();
-
-    Y_PRINTV( HasX<A>::Value );
-    Y_PRINTV( HasX<B>::Value );
-    Y_PRINTV( HasX<bool>::Value );
+    Y_PRINTV(GotX<A>::Value);
+    Y_PRINTV(GotX<B>::Value);
+    Y_PRINTV(GotX<bool>::Value);
 
 
-
-    //Y_PRINTV( has_id<X>::value );
-    //Y_PRINTV( has_id<Y>::value );
-
-
-    //Y_PRINTV( HasDIMENSIONS<float>::Value );
-    //Y_PRINTV( HasDIMENSIONS< Complex<float> >::Value );
-    //Y_PRINTV( HasDIMENSIONS< V4D<int> >::Value );
 
 }
 Y_UDONE()
