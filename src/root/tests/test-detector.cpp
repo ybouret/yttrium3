@@ -14,12 +14,8 @@
 namespace Yttrium
 {
 
-    typedef TL1(int) OneInt;
-    template <typename T>
-    struct IsInt
-    {
-        static const bool Value = (TL::IndexOf<OneInt,T>::Value>=0);
-    };
+
+
 
     template <typename T, typename U = int>
     struct HasX {
@@ -53,6 +49,7 @@ namespace Yttrium
 
 
 
+
 }
 
 namespace
@@ -68,6 +65,7 @@ using namespace Yttrium;
 Y_UTEST(detector)
 {
     std::cerr << std::boolalpha;
+
 
     HasX<A>::Show();
     HasX<B>::Show();
