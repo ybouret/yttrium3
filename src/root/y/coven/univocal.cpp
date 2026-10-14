@@ -6,7 +6,10 @@ namespace Yttrium
 
     namespace Coven
     {
-
+        const unsigned Univocal:: LEFT_UNTOUCHED;
+        const unsigned Univocal:: SIMPLIFICATION;
+        const unsigned Univocal:: OPPOSITE_SIGNS;
+        const unsigned Univocal:: COUPLED_UPDATE;
 
         unsigned Univocal:: OppositeSigns(const size_t numPos,
                                           const size_t numNeg,
