@@ -81,7 +81,7 @@ struct HasTypedefFoobar {
 };
 
 struct Foo {
-    using Foobar = float;
+    typedef float Foobar;
 };
 
 
