@@ -60,12 +60,47 @@ namespace
 
 }
 
+
+template <typename T>
+struct HasTypedefFoobar {
+    // Types "Yes" and "No" are guaranteed to have different sizes,
+    // specifically sizeof(Yes) == 1 and sizeof(No) == 2.
+    using Yes = char[1];
+    using No = char[2];
+
+    template <typename C>
+    static Yes& test(typename C::Foobar*);
+
+    template <typename>
+    static No& test(...);
+
+    // If the "sizeof" of the result of calling test<T>(nullptr) is equal to
+    // sizeof(Yes), the first overload worked and T has a nested type named
+    // Foobar.
+    static const bool value = (sizeof(test<T>(nullptr)) == sizeof(Yes));
+};
+
+struct Foo {
+    using Foobar = float;
+};
+
+//int main() {
+//    std::println("{}", HasTypedefFoobar<int>::value);
+//    std::println("{}", HasTypedefFoobar<Foo>::value);
+//    return 0;
+//}
+
+
 using namespace Yttrium;
 
 Y_UTEST(detector)
 {
     std::cerr << std::boolalpha;
+    Y_PRINTV(HasTypedefFoobar<int>::value);
+    Y_PRINTV(HasTypedefFoobar<Foo>::value);
 
+
+    return 0;
 
     HasX<A>::Show();
     HasX<B>::Show();
