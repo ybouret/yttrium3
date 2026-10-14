@@ -12,9 +12,9 @@ namespace
     template <typename T>
     static inline void testAdvanced(MPI &mpi, Random::CoinFlip &ran)
     {
-        Y_MPI_Trace(mpi,(std::cerr << std::endl << "test<" << RTTI::Name<T>() << ">" << std::endl).flush());
+        Y_MPI_PrintOne(mpi,std::cerr,std::endl << "test<" << RTTI::Name<T>() << ">");
 
-
+        Y_MPI_PrintOne(mpi,std::cerr,"-- Testing Ping --");
         size_t items = 2 + ran.toss<size_t>(8);
         mpi.bcastSize(items,0);
         Vector<T> here(WithAtLeast,items);
@@ -35,18 +35,35 @@ namespace
             here.adjust(items);
             mpi.recv( here(), items, 0);
         }
-        Y_MPI_ForEach(mpi,(std::cerr << "@" << mpi << ": " << here << std::endl).flush());
+        Y_MPI_PrintAll(mpi,std::cerr,"@" << mpi << ": " << here);
 
+        Y_MPI_PrintOne(mpi,std::cerr,"-- Testing Ring --");
         for(size_t i=1;i<=items;++i)
             here[i]  = Random::Gen<T>::Get(ran);
 
-        Vector<T> peer(WithAtLeast,items);
-        peer.adjust(items);
-        mpi.sendrecv(here(),items,mpi.prevRank(),
-                     peer(),items,mpi.nextRank());
+        {
+            Vector<T> peer(WithAtLeast,items);
+            peer.adjust(items);
+            mpi.sendrecv(here(),items,mpi.prevRank(),
+                         peer(),items,mpi.nextRank());
 
-        Y_MPI_ForEach(mpi,(std::cerr << "@" << mpi << ": " << here << " | " << peer << std::endl).flush());
+            Y_MPI_PrintAll(mpi,std::cerr,"@" << mpi << ": " << here << " | " << peer);
+        }
 
+        Y_MPI_PrintOne(mpi,std::cerr,"-- Testing Bcast --");
+
+        if(mpi.primary)
+        {
+            for(size_t i=1;i<=items;++i)
+                here[i]  = Random::Gen<T>::Get(ran);
+        }
+        else
+        {
+            here.free();
+            here.adjust(items);
+        }
+        mpi.bcast(here(),items,0);
+        Y_MPI_PrintAll(mpi,std::cerr,"@" << mpi << ": " << here);
 
 
     }
@@ -66,7 +83,7 @@ Y_UTEST(advanced)
     testAdvanced<apz>(mpi,ran);
     testAdvanced<apq>(mpi,ran);
 
-    Y_MPI_Trace(mpi,std::cerr << std::endl);
+    Y_MPI_Endl(mpi,std::cerr);
 
 
 

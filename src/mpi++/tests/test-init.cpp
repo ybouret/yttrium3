@@ -20,9 +20,11 @@ Y_UTEST(init)
         {
             excp.display(std::cerr);
         }
-
+        std::cerr.flush();
     }
-    Y_MPI_ForEach(mpi, std::cerr << mpi << std::endl);
+
+    mpi.barrier();
+    Y_MPI_PrintAll(mpi,std::cerr,mpi);
 
     if(mpi.primary)
     {

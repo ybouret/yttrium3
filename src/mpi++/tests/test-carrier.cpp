@@ -53,11 +53,11 @@ namespace
         if(chk)
         {
             const uint32_t crc = CRC32::Of( vec(), vec.size() * sizeof(T) );
-            Y_MPI_ForEach(mpi, std::cerr << "@" << mpi << ": " << vec << " | " << Hexadecimal(crc) << std::endl);
+            Y_MPI_PrintAll(mpi,std::cerr,"@" << mpi << ": " << vec << " | " << Hexadecimal(crc));
         }
         else
         {
-            Y_MPI_ForEach(mpi, std::cerr << "@" << mpi << ": " << vec << std::endl);
+            Y_MPI_PrintAll(mpi,std::cerr,"@" << mpi << ": " << vec);
         }
 
         Vector<T> arr(WithAtLeast,items);
@@ -69,7 +69,7 @@ namespace
     template <typename T> static inline
     void testSerial(MPI &mpi, Random::CoinFlip &ran)
     {
-        Y_MPI_Trace(mpi, std::cerr << std::endl << "testSerial<" << RTTI::Name<T>() << ">" << std::endl);
+        Y_MPI_PrintOne(mpi,std::cerr,std::endl << "testSerial<" << RTTI::Name<T>() << ">");
         MPI::Carrier &cr =  mpi.getSerialCarrier<T>();
         testCarrier<T>(mpi,ran,cr,false);
     }
@@ -78,7 +78,7 @@ namespace
     template <typename T> static inline
     void testScalar(MPI &mpi, Random::CoinFlip &ran)
     {
-        Y_MPI_Trace(mpi, std::cerr << std::endl << "testScalar<" << RTTI::Name<T>() << ">" << std::endl);
+        Y_MPI_PrintOne(mpi,std::cerr,std::endl << "testScalar<" << RTTI::Name<T>() << ">");
         MPI::Carrier & cr = mpi.getScalarCarrier<T>();
         testCarrier<T>(mpi,ran,cr,true);
     }
@@ -86,7 +86,7 @@ namespace
     template <typename T, template <typename> class VEC> static inline
     void testVector(MPI &mpi, Random::CoinFlip &ran)
     {
-        Y_MPI_Trace(mpi, std::cerr << std::endl << "testVector<" << RTTI::Name< VEC<T> >() << "> DIM=" << VEC<T>::DIMENSIONS << std::endl);
+        Y_MPI_PrintOne(mpi,std::cerr,std::endl << "testVector<" << RTTI::Name< VEC<T> >() << "> DIM=" << VEC<T>::DIMENSIONS);
         MPI::Carrier & cr = mpi.getVectorCarrier< VEC<T> >();
         testCarrier< VEC<T> >(mpi,ran,cr,true);
     }
@@ -94,7 +94,7 @@ namespace
     template <typename T> static inline
     void testWithAPI(MPI &mpi, Random::CoinFlip &ran)
     {
-        Y_MPI_Trace(mpi, std::cerr << std::endl << "testWithAPI<" << RTTI::Name<T>() << ">" << std::endl);
+        Y_MPI_PrintOne(mpi,std::cerr,std::endl << "testWithAPI<" << RTTI::Name<T>() << ">");
         static MPI::Carrier & cr = mpi.getCarrier<T>();
         testCarrier<T>(mpi,ran,cr,false);
     }

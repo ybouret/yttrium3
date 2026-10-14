@@ -27,31 +27,20 @@ Y_UTEST(defined)
     System::WallTime  chrono;
 
 
-#if 0
-    const int    nitems=2;
-    int          blocklengths[2] = {1,1};
-    MPI_Datatype types[2] = {MPI_SHORT, MPI_FLOAT};
-    MPI_Aint     offsets[2];
-
-    offsets[0] = offsetof(Car, shifts);
-    offsets[1] = offsetof(Car, topSpeed);
-    MPI::DataType dt(mpi,nitems,blocklengths,offsets,types);
-    Y_MPI_Trace(mpi,std::cerr << "dt.bytes=" << dt.bytes << std::endl);
-#endif
 
     mpi.declAsPair<Car>(typeid(short), offsetof(Car, shifts),
                         typeid(float), offsetof(Car, topSpeed) );
 
     const MPI::DataType &dt = mpi.getDataTypeOf<Car>();
-    if(mpi.primary) Y_PRINTV(dt.bytes);
-    
+    Y_MPI_Trace(mpi,Y_PRINTV(dt.bytes));
+
     static const size_t NCAR = 3;
 
     if(mpi.primary)
     {
         Car            send[NCAR] = { {4,90.0f}, {6,130.0f}, {3,50.0f} };
         const uint32_t crc        = Y_CRC32(send);
-        Core::Display(std::cerr << "cars =",send,NCAR) << " | crc = " << Hexadecimal(crc) << std::endl;
+        (Core::Display(std::cerr << "cars =",send,NCAR) << " | crc = " << Hexadecimal(crc) << std::endl).flush();
         for(size_t rank=1;rank<mpi.size;++rank)
         {
             mpi.send(send,NCAR,dt.value,NCAR*dt.bytes,rank);
@@ -64,14 +53,14 @@ Y_UTEST(defined)
         mpi.recv(recv,NCAR,dt.value,NCAR*dt.bytes,0);
         const uint32_t crc = Y_CRC32(recv);
 
-        Core::Display(std::cerr << "@" << mpi << ": ",recv,NCAR) << " | crc = " << Hexadecimal(crc) << std::endl;
+        (Core::Display(std::cerr << "@" << mpi << ": ",recv,NCAR) << " | crc = " << Hexadecimal(crc) << std::endl).flush();
         mpi.ack(0);
     }
 
-    Y_MPI_ForEach(mpi,std::cerr << mpi
+    Y_MPI_PrintAll(mpi,std::cerr,mpi
                   << " | send: " << mpi.sendRate.str(chrono)
                   << " | recv: " << mpi.recvRate.str(chrono)
-                  << std::endl);
+                  );
 
 }
 Y_UDONE()

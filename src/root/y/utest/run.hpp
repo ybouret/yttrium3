@@ -44,11 +44,11 @@ namespace Yttrium
 
     //! display justified sizeof
 #define Y_SIZEOF(CLASS) \
-Yttrium::UTest::Display::Print(std::cerr,"sizeof(",#CLASS,")") << " = " << sizeof(CLASS) << std::endl
+(Yttrium::UTest::Display::Print(std::cerr,"sizeof(",#CLASS,")") << " = " << sizeof(CLASS) << std::endl).flush()
 
     //! display justified field value
 #define Y_PRINTV(FIELD) \
-Yttrium::UTest::Display::Print(std::cerr,"       ",#FIELD," ") << " = " << (FIELD) << std::endl
+(Yttrium::UTest::Display::Print(std::cerr,"       ",#FIELD," ") << " = " << (FIELD) << std::endl).flush()
 
     //! local silent assertion
 #define Y_ASSERT(EXPR) \

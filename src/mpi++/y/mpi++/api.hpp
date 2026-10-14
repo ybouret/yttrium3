@@ -267,6 +267,15 @@ namespace Yttrium
             cr.sendrecv(*this,sendEntry,sendItems,sendRank,recvEntry,recvItems,recvRank,tag);
         }
 
+        //! high-level broadcast through carrier
+        template <typename T> inline
+        void bcast(T * const    entry,
+                   const size_t items,
+                   const size_t root)
+        {
+            static Carrier &cr = getCarrier<T>();
+            cr.bcast(*this,entry,items,root);
+        }
 
         //______________________________________________________________________
         //
