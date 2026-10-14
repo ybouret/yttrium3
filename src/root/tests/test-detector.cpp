@@ -65,14 +65,14 @@ template <typename T>
 struct HasTypedefFoobar {
     // Types "Yes" and "No" are guaranteed to have different sizes,
     // specifically sizeof(Yes) == 1 and sizeof(No) == 2.
-    using Yes = char[1];
-    using No = char[2];
+    typedef char Yes[1];
+    typedef char No[2];
 
     template <typename C>
-    static Yes& test(typename C::Foobar*);
+    static Yes & test(typename C::Foobar*);
 
     template <typename>
-    static No& test(...);
+    static No  & test(...);
 
     // If the "sizeof" of the result of calling test<T>(nullptr) is equal to
     // sizeof(Yes), the first overload worked and T has a nested type named
