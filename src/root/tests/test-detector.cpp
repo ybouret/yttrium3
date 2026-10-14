@@ -77,7 +77,7 @@ struct HasTypedefFoobar {
     // If the "sizeof" of the result of calling test<T>(nullptr) is equal to
     // sizeof(Yes), the first overload worked and T has a nested type named
     // Foobar.
-    static const bool value = (sizeof(test<T>(nullptr)) == sizeof(Yes));
+    static const bool value = (sizeof(test<T>(0)) == sizeof(Yes));
 };
 
 struct Foo {
