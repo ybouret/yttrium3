@@ -3,7 +3,11 @@
 
 #include "y/utest/run.hpp"
 
+#include <type_traits>
+
 // https://stackoverflow.com/questions/1005476/how-to-detect-whether-there-is-a-specific-member-variable-in-class
+
+// SFINAE stands for Substitution Failure is Not An Error
 
 namespace Yttrium
 {
@@ -33,24 +37,42 @@ namespace Yttrium
         static const bool Value = true;
     };
 
+
+
+    template<typename T, typename = void>
+    struct has_id : std::false_type { };
+
+    template<typename T>
+    struct has_id<T, decltype(std::declval<T>().id, void())> : std::true_type { };
+
+
 }
 
 namespace
 {
     struct A { int x; };
     struct B { int y; };
+
+    struct X { int id; };
+    struct Y { int foo; };
 }
 
 using namespace Yttrium;
 
 Y_UTEST(detector)
 {
+    std::cerr << std::boolalpha;
+
     Y_PRINTV( HasX<A>::Value );
     Y_PRINTV( HasX<B>::Value );
 
-    Y_PRINTV( HasDIMENSIONS<float>::Value );
-    Y_PRINTV( HasDIMENSIONS< Complex<float> >::Value );
-    Y_PRINTV( HasDIMENSIONS< V4D<int> >::Value );
+    Y_PRINTV( has_id<X>::value );
+    Y_PRINTV( has_id<Y>::value );
+
+
+    //Y_PRINTV( HasDIMENSIONS<float>::Value );
+    //Y_PRINTV( HasDIMENSIONS< Complex<float> >::Value );
+    //Y_PRINTV( HasDIMENSIONS< V4D<int> >::Value );
 
 }
 Y_UDONE()
