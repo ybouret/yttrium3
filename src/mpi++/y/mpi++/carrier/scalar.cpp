@@ -48,6 +48,14 @@ namespace Yttrium
                      tag,tag);
     }
 
+    void MPI:: ScalarCarrier:: bcast(MPI        & mpi,
+                                     void * const entry,
+                                     const size_t items,
+                                     const size_t root)
+    {
+        mpi.bcast(entry,items,dataType.value,dataType.bytes*items,root);
+    }
+
 
     MPI::Carrier* MPI::CreateScalarCarrier(const DataType& dt)
     {

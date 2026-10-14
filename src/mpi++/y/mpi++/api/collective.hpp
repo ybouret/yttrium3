@@ -33,15 +33,14 @@ void bcastSize(size_t     & length,
                const size_t root);
 
 
-//! broadcasting one type
+//! broadcasting one basic type
 /**
  \param data I/O data
  \param root sender rank
- */
-template <typename T> inline
-void bcast1(T             &data,
-            const size_t   root)
+ */ template <typename T> inline
+void bcastScalar(T             &data,
+                 const size_t   root)
 {
-    static const MPI_Datatype dt = getDataTypeOf<T>().value;
-    bcast(&data,1,dt,sizeof(T),root);
+    static const DataType &dt = getDataTypeOf<T>();
+    bcast(&data,1,dt.value,dt.bytes,root);
 }

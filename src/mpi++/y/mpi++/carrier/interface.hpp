@@ -84,6 +84,12 @@ public:
                           const int          tag) = 0;
 
 
+    //! bcast arrays of objects
+    virtual void bcast(MPI &mpi,
+                       void * const entry,
+                       const size_t items,
+                       const size_t root) = 0;
+
 private:
     Y_Disable_Copy_And_Assign(Carrier); //!< discarded
 };

@@ -144,6 +144,27 @@ public:
         decode(recvEntry,recvItems,peerBuffer);
     }
 
+    inline virtual void bcast(MPI &        mpi,
+                              void * const entry,
+                              const size_t items,
+                              const size_t root)
+    {
+        // prepare root buffer
+        size_t sendSize = (root==mpi.rank) ? encode(entry,items) : 0;
+
+        // broadcast sendSize
+        mpi.bcastSize(sendSize,root);
+
+        // adjust other buffer(s)
+        if(root!=mpi.rank) selfBuffer->adjust(sendSize,0);
+
+        // broacast root content
+        mpi.bcastBytes(selfBuffer.rw(),sendSize,root);
+
+        // decode other buffer(s)
+        if(root!=mpi.rank) decode(entry,items,selfBuffer);
+    }
+
 
 
 private:

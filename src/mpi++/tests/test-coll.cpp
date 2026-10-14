@@ -17,37 +17,36 @@ Y_UTEST(coll)
         int value = 0;
         if(mpi.primary)
             value = 7;
-        Y_MPI_ForEach(mpi,std::cerr << mpi << ": value=" << value << std::endl);
-        mpi.bcast1(value,0);
-        Y_MPI_ForEach(mpi,std::cerr << mpi << ": value=" << value << std::endl);
-        Y_MPI_Trace(mpi,std::cerr << std::endl);
+        Y_MPI_PrintAll(mpi,std::cerr,mpi << ": value=" << value);
+
+        mpi.bcastScalar(value,0);
+        Y_MPI_PrintAll(mpi,std::cerr,mpi << ": value=" << value);
+        Y_MPI_Endl(mpi,std::cerr);
     }
 
     {
         char buffer[16];
         if(mpi.primary) Random::FillWith(ran,buffer,sizeof(buffer)); else memset(buffer,0,sizeof(buffer));
-        Y_MPI_ForEach(mpi, Hexadecimal::Display(std::cerr << mpi << ":" ,buffer,sizeof(buffer)) << std::endl);
+        Y_MPI_ForEach(mpi, (Hexadecimal::Display(std::cerr << mpi << ":" ,buffer,sizeof(buffer)) << std::endl).flush());
         mpi.bcastBytes(buffer,sizeof(buffer),0);
-        Y_MPI_Trace(mpi,std::cerr << "bcast..." << std::endl);
-        Y_MPI_ForEach(mpi, Hexadecimal::Display(std::cerr << mpi << ":" ,buffer,sizeof(buffer)) << std::endl);
-        Y_MPI_Trace(mpi,std::cerr << std::endl);
+        Y_MPI_PrintOne(mpi,std::cerr,"broadcasting bytes...");
+        Y_MPI_ForEach(mpi, (Hexadecimal::Display(std::cerr << mpi << ":" ,buffer,sizeof(buffer)) << std::endl).flush() );
+        Y_MPI_Endl(mpi,std::cerr);
     }
 
     {
         size_t sz = 00;
         if(mpi.primary) sz = 1001;
-        Y_MPI_ForEach(mpi,std::cerr << mpi << ": sz=" << sz << std::endl);
+        Y_MPI_PrintAll(mpi,std::cerr,mpi << ": sz=" << sz);
+        Y_MPI_PrintOne(mpi,std::cerr,"broadcasting size...");
         mpi.bcastSize(sz,0);
-        Y_MPI_Trace(mpi,std::cerr << "bcastSize..." << std::endl);
-        Y_MPI_ForEach(mpi,std::cerr << mpi << ": sz=" << sz << std::endl);
-        Y_MPI_Trace(mpi,std::cerr << std::endl);
+        Y_MPI_PrintAll(mpi,std::cerr,mpi << ": sz=" << sz);
+        Y_MPI_Endl(mpi,std::cerr);
     }
 
 
-    if(mpi.primary)
-    {
-        std::cerr << std::endl;
-    }
+    Y_MPI_Endl(mpi,std::cerr);
+
 
 }
 Y_UDONE()

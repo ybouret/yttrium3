@@ -332,6 +332,14 @@ namespace Yttrium
 /**/    } while(false)
 
 
+#define Y_MPI_PrintOne(THE_MPI,OSTREAM,MSG) \
+/**/        Y_MPI_Trace(THE_MPI, ( (OSTREAM) << MSG << std::endl).flush() )
+
+#define Y_MPI_PrintAll(THE_MPI,OSTREAM,MSG) \
+/**/        Y_MPI_ForEach(THE_MPI, ( (OSTREAM) << MSG << std::endl).flush() )
+
+
+#define Y_MPI_Endl(THE_MPI,OSTREAM) Y_MPI_Trace(THE_MPI,((OSTREAM)<<std::endl).flush())
 
 
 #if !defined(_MSC_VER)

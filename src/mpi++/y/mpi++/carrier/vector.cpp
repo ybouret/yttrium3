@@ -51,6 +51,15 @@ namespace Yttrium
                      tag,tag);
     }
 
+    void MPI:: VectorCarrier:: bcast(MPI        & mpi,
+                                     void * const entry,
+                                     const size_t items,
+                                     const size_t root)
+    {
+        const size_t words = items * dimensions;
+        mpi.bcast(entry,words,scalarType.value,scalarType.bytes*words,root);
+    }
+
     MPI::Carrier * MPI:: CreateVectorCarrier(const DataType &mdt, const size_t dim)
     {
         return new VectorCarrier(mdt,dim);

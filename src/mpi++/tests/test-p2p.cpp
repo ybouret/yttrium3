@@ -17,7 +17,7 @@ Y_UTEST(p2p)
     Core::Rand       ran;
     MPI &            mpi = MPI::Init(&argc,&argv);
 
-    Y_MPI_Trace(mpi, std::cerr << "Testing ping..." << std::endl; );
+    Y_MPI_PrintOne(mpi,std::cerr,"Testing ping...");
     {
         char buffer[128];
 
@@ -40,13 +40,12 @@ Y_UTEST(p2p)
 
         }
 
-        Y_MPI_ForEach(mpi,std::cerr << mpi
+        Y_MPI_PrintAll(mpi,std::cerr, mpi
                       << " | send: " << mpi.sendRate.str(chrono)
-                      << " | recv: " << mpi.recvRate.str(chrono)
-                      << std::endl);
+                      << " | recv: " << mpi.recvRate.str(chrono) );
     }
 
-    Y_MPI_Trace(mpi, std::cerr << std::endl << "Testing ring..." << std::endl; );
+    Y_MPI_PrintOne(mpi,std::cerr,"Testing ring...");
     mpi.resetRates();
     for(size_t iter=0;iter<16;++iter)
     {
@@ -58,10 +57,9 @@ Y_UTEST(p2p)
         mpi.sendrecvBytes(here, sizeof(here), mpi.prevRank(), peer, sizeof(peer), mpi.nextRank());
     }
     
-    Y_MPI_ForEach(mpi,std::cerr << mpi
-                  << " | send: " << mpi.sendRate.str(chrono)
-                  << " | recv: " << mpi.recvRate.str(chrono)
-                  << std::endl);
+    Y_MPI_PrintAll(mpi,std::cerr, mpi
+                   << " | send: " << mpi.sendRate.str(chrono)
+                   << " | recv: " << mpi.recvRate.str(chrono));
 
 
 }

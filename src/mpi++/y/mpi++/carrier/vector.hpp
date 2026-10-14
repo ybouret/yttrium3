@@ -54,6 +54,11 @@ namespace Yttrium
                               const size_t       recvItems,
                               const size_t       recvRank,
                               const int          tag);
+        
+        virtual void bcast(MPI &mpi,
+                           void * const entry,
+                           const size_t items,
+                           const size_t root);
 
         //______________________________________________________________________
         //
