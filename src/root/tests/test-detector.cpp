@@ -27,7 +27,7 @@ namespace Yttrium
     };
 
     template <typename T>
-    struct HasX <T, decltype((void) T::x,0)>
+    struct HasX <T, decltype(T::x,0)>
     {
         static const bool Value = true;
         static inline void Show()
