@@ -84,12 +84,6 @@ struct Foo {
     using Foobar = float;
 };
 
-//int main() {
-//    std::println("{}", HasTypedefFoobar<int>::value);
-//    std::println("{}", HasTypedefFoobar<Foo>::value);
-//    return 0;
-//}
-
 
 using namespace Yttrium;
 
