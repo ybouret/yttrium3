@@ -8,6 +8,18 @@ namespace Yttrium
 
         namespace Lexical
         {
+
+            const unsigned Rule:: Emit;
+            const unsigned Rule:: Drop;
+            const unsigned Rule:: Call;
+            const unsigned Rule:: Back;
+            const unsigned Rule:: Jump;
+            const unsigned Rule:: Endl;
+            const unsigned Rule:: Mask;
+
+
+
+
             const char   Rule:: BackMarker[] = "$";
             const size_t Rule:: BackLength   = sizeof(BackMarker)-1;
 
