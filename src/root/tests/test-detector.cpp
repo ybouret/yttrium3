@@ -11,47 +11,6 @@
 
 // SFINAE stands for Substitution Failure is Not An Error
 
-namespace Yttrium
-{
-
-
-
-
-    template <typename T, typename U = int>
-    struct HasX {
-        static const bool Value = false;
-        static inline void Show()
-        {
-            std::cerr << "typeid(U)=" << typeid(U).name() << std::endl;
-        }
-    };
-
-    template <typename T>
-    struct HasX <T, decltype(T::x,0)>
-    {
-        static const bool Value = true;
-        static inline void Show()
-        {
-            std::cerr << "TRUE" << std::endl;
-        }
-    };
-
-    template <typename T, typename = int>
-    struct HasDIMENSIONS { static const bool Value = false; };
-
-    template <typename T>
-    struct HasDIMENSIONS <T, decltype((void) T::DIMENSIONS, 0)>
-    {
-        static const bool Value = true;
-
-    };
-
-
-
-
-
-}
-
 namespace
 {
     struct A { int x; };
@@ -85,7 +44,7 @@ struct Foo {
 };
 
 template <typename T>
-struct GotX {
+struct HasX {
     // Types "Yes" and "No" are guaranteed to have different sizes,
     // specifically sizeof(Yes) == 1 and sizeof(No) == 2.
     typedef char Yes[1];
@@ -98,8 +57,26 @@ struct GotX {
     static No  & test(...);
 
     // If the "sizeof" of the result of calling test<T>(0) is equal to
-    // sizeof(Yes), the first overload worked and T has a nested type named
-    // Foobar.
+    // sizeof(Yes), the first overload worked and T has a member named 'x'
+    static const bool Value = (sizeof(test<T>(0)) == sizeof(Yes));
+};
+
+
+template <typename T>
+struct HasDIMENSIONS {
+    // Types "Yes" and "No" are guaranteed to have different sizes,
+    // specifically sizeof(Yes) == 1 and sizeof(No) == 2.
+    typedef char Yes[1];
+    typedef char No[2];
+
+    template <typename C>
+    static Yes & test( decltype(C::DIMENSIONS) *);
+
+    template <typename>
+    static No  & test(...);
+
+    // If the "sizeof" of the result of calling test<T>(0) is equal to
+    // sizeof(Yes), the first overload worked and T has a member named DIMENSIONS
     static const bool Value = (sizeof(test<T>(0)) == sizeof(Yes));
 };
 
@@ -114,10 +91,14 @@ Y_UTEST(detector)
     Y_PRINTV(HasTypedefFoobar<int>::value);
     Y_PRINTV(HasTypedefFoobar<Foo>::value);
 
-    Y_PRINTV(GotX<A>::Value);
-    Y_PRINTV(GotX<B>::Value);
-    Y_PRINTV(GotX<bool>::Value);
+    std::cerr << std::endl;
+    Y_PRINTV(HasX<A>::Value);
+    Y_PRINTV(HasX<B>::Value);
+    Y_PRINTV(HasX<bool>::Value);
 
+    std::cerr << std::endl;
+    Y_PRINTV( HasDIMENSIONS<int>::Value );
+    Y_PRINTV( HasDIMENSIONS< V2D<float> >::Value );
 
 
 }
