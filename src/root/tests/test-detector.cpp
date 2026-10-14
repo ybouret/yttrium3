@@ -11,14 +11,7 @@
 
 namespace Yttrium
 {
-#if 0
-    template <typename T, typename = int>
-    struct HasX : std::false_type { };
-
-    template <typename T>
-    struct HasX <T, decltype((void) T::x, 0)> : std::true_type { };
-#endif
-
+    
     template <typename T, typename = float>
     struct HasX { static const bool Value = false; };
 
