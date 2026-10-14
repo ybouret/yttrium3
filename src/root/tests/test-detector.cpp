@@ -3,6 +3,8 @@
 
 #include "y/utest/run.hpp"
 
+#include "y/type/list.hpp"
+
 #include <typeinfo>
 
 // https://stackoverflow.com/questions/1005476/how-to-detect-whether-there-is-a-specific-member-variable-in-class
@@ -11,6 +13,13 @@
 
 namespace Yttrium
 {
+
+    typedef TL1(int) OneInt;
+    template <typename T>
+    struct IsInt
+    {
+        static const bool Value = (TL::IndexOf<OneInt,T>::Value>=0);
+    };
 
     template <typename T, typename U = int>
     struct HasX {
