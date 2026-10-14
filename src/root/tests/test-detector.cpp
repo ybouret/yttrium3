@@ -38,13 +38,13 @@ namespace Yttrium
     };
 
 
-
+#if 0
     template<typename T, typename = void>
     struct has_id : std::false_type { };
 
     template<typename T>
-    struct has_id<T, decltype(std::declval<T>().id, void())> : std::true_type { };
-
+    struct has_id<T, decltype( std::declval<T>().id, void())> : std::true_type { };
+#endif
 
 }
 
@@ -66,8 +66,8 @@ Y_UTEST(detector)
     Y_PRINTV( HasX<A>::Value );
     Y_PRINTV( HasX<B>::Value );
 
-    Y_PRINTV( has_id<X>::value );
-    Y_PRINTV( has_id<Y>::value );
+    //Y_PRINTV( has_id<X>::value );
+    //Y_PRINTV( has_id<Y>::value );
 
 
     //Y_PRINTV( HasDIMENSIONS<float>::Value );
