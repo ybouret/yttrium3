@@ -19,6 +19,7 @@
 #include "y/stream/memory/output.hpp"
 #include "y/stream/memory/input.hpp"
 #include "y/type/alternative.hpp"
+#include "y/type/detect/member.hpp"
 
 #include <typeinfo>
 
@@ -155,17 +156,8 @@ namespace Yttrium
         //______________________________________________________________________
         struct Inner
         {
-            //! false HasDIMENSIONS
-            template <typename T, typename = int>
-            struct HasDIMENSIONS {
-                static const bool Value = false; //!< alias
-            };
-
-            //! true HasDIMENSIONS
-            template <typename T>
-            struct HasDIMENSIONS <T, decltype((void) T::DIMENSIONS, 0)> {
-                static const bool Value = true; //!< alias
-            };
+            Y_DetectMember(Has,DIMENSIONS);
+            
 
             //! select serial carrier
             template <typename T>
