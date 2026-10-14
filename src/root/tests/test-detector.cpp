@@ -11,14 +11,24 @@
 
 namespace Yttrium
 {
-    
-    template <typename T, typename = float>
-    struct HasX { static const bool Value = false; };
+
+    template <typename T, typename U = float>
+    struct HasX {
+        static const bool Value = false;
+        static inline void Show()
+        {
+            std::cerr << "typeid(U)=" << typeid(U).name() << std::endl;
+        }
+    };
 
     template <typename T>
     struct HasX <T, decltype((void) T::x, 0.0f)>
     {
         static const bool Value = true;
+        static inline void Show()
+        {
+            std::cerr << "TRUE" << std::endl;
+        }
     };
 
     template <typename T, typename = int>
@@ -28,6 +38,7 @@ namespace Yttrium
     struct HasDIMENSIONS <T, decltype((void) T::DIMENSIONS, 0)>
     {
         static const bool Value = true;
+
     };
 
 
@@ -48,6 +59,9 @@ using namespace Yttrium;
 Y_UTEST(detector)
 {
     std::cerr << std::boolalpha;
+
+    HasX<A>::Show();
+    HasX<B>::Show();
 
     Y_PRINTV( HasX<A>::Value );
     Y_PRINTV( HasX<B>::Value );
