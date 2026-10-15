@@ -7,6 +7,7 @@
 namespace Yttrium
 {
 
+    //! build a MEMBER detection struct PREFIXMEMBER
 #define Y_DetectMember(PREFIX,MEMBER)                                        \
 /**/    template <typename T> struct PREFIX ## MEMBER {                      \
 /**/        typedef char Yes[1]; typedef char No[2];                         \

@@ -156,8 +156,8 @@ namespace Yttrium
         //______________________________________________________________________
         struct Inner
         {
-            Y_DetectMember(Has,DIMENSIONS);
-            
+            Y_DetectMember(Has,DIMENSIONS); //!< build HasDIMENSIONS
+
 
             //! select serial carrier
             template <typename T>
@@ -333,13 +333,16 @@ namespace Yttrium
 /**/    } while(false)
 
 
+    //! print only on primary
 #define Y_MPI_PrintOne(THE_MPI,OSTREAM,MSG) \
 /**/        Y_MPI_Trace(THE_MPI, ( (OSTREAM) << MSG << std::endl).flush() )
 
+    //! print on all nodes
 #define Y_MPI_PrintAll(THE_MPI,OSTREAM,MSG) \
 /**/        Y_MPI_ForEach(THE_MPI, ( (OSTREAM) << MSG << std::endl).flush() )
 
 
+    //! endl on primary
 #define Y_MPI_Endl(THE_MPI,OSTREAM) Y_MPI_Trace(THE_MPI,((OSTREAM)<<std::endl).flush())
 
 
