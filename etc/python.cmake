@@ -1,3 +1,4 @@
+message(STATUS "Detecting Python3 Interpreter")
 find_package(Python3 COMPONENTS Interpreter)
 
 if(Python3_Interpreter_FOUND)

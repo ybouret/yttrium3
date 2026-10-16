@@ -98,8 +98,18 @@ add_subdirectory(python)
 #
 #
 ################################################################################
+message(STATUS)
 cmake_print_variables(Y_UnitTests)
 if( NOT "" STREQUAL "${Y_UnitTests}")
     add_custom_target(regression
     DEPENDS ${Y_UnitTests})
 endif()
+
+################################################################################
+#
+#
+# Done!
+#
+#
+################################################################################
+message(STATUS)
