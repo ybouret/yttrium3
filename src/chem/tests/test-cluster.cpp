@@ -14,15 +14,12 @@
 
 #include "y/mkl/algebra/xgj.hpp"
 #include "y/string/format.hpp"
-#include "y/jive/vfs.hpp"
-#include "y/vfs/local/fs.hpp"
 
 using namespace Yttrium;
 using namespace Chemical;
 
 Y_UTEST(cluster)
 {
-    VFS &              fs     = LocalFS::Instance();
     Weasel &           weasel = Weasel::Instance();
     Library            lib;
     Equilibria         eqs;
@@ -44,43 +41,7 @@ Y_UTEST(cluster)
     std::cerr << std::endl;
 
 
-    Jive::_VFS::Apply(fs, ".", "cs[:digit:][.]png", Jive::Matching::Exactly, VFS::Entry::Base, Jive::_VFS::Remove);
     cls.renderAll("cs");
-
-
-
-
-
-#if 0
-    const Partition part(xml,eqs);
-
-    Vector<xreal_t>   K;
-    const size_t      M = lib->size();
-    CxxArray<xreal_t> C(M);
-    const double probaZ = EnvironmentConvert::To<double>("probaZ",0);
-    const double probaN = EnvironmentConvert::To<double>("probaN",0);
-    Concentration::Fill(ran,C,M,probaZ,probaN);
-
-    for(const EGroup *g=part.party.head;g;g=g->next)
-    {
-        Topology             topo(xml,*g);
-        Conservations        conservations(xml,topo);
-        Conservation::Canons canons(xml,conservations.laws,topo,conservations.lfmt);
-
-        for(const Conservation::Canon *canon=canons->head;canon;canon=canon->next)
-        {
-            Conservation::Adjudicator adjudicator(*canon);
-            adjudicator.judge(xml,C,TopLevel);
-        }
-
-        Combinatorics        combinatorics(xml,topo,eqs,K);
-    }
-
-    std::cerr << std::endl;
-    std::cerr << "lib=" << lib << std::endl;
-#endif
-
-
 
 }
 Y_UDONE()

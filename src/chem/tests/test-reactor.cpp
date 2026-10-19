@@ -44,8 +44,6 @@ Y_UTEST(reactor)
     bool      verbose = true;
     XML::Log  xml(std::cerr,verbose);
     Clusters  cls(xml,eqs);
-
-    Jive::_VFS::Apply( LocalFS::Instance(), ".", "cs[:digit:][.]png", Jive::Matching::Exactly, VFS::Entry::Base, Jive::_VFS::Remove);
     
     cls.renderAll("cs");
 

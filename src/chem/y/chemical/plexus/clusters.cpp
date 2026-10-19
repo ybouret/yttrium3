@@ -6,6 +6,9 @@ namespace Yttrium
 {
     namespace Chemical
     {
+
+        const char * const Clusters:: RenderSuffixExpression = "[:digit:][.](png)&";
+
         Clusters:: ~Clusters() noexcept
         {
         }
@@ -118,6 +121,22 @@ namespace Yttrium
             baseName += Decimal(gr).c_str();
             baseName += ".dot";
             return baseName;
+        }
+
+    }
+
+}
+
+#include "y/jive/vfs.hpp"
+#include "y/vfs/local/fs.hpp"
+
+namespace Yttrium
+{
+    namespace Chemical
+    {
+        void Clusters:: TryRemoveAll(const String &expr)
+        {
+            Jive::_VFS::Apply( LocalFS::Instance(),  ".", expr, Jive::Matching::Exactly, VFS::Entry::Base, Jive::_VFS::Remove);
         }
 
     }

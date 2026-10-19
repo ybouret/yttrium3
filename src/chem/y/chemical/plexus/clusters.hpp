@@ -24,6 +24,14 @@ namespace Yttrium
             //__________________________________________________________________
             //
             //
+            // Definitions
+            //
+            //__________________________________________________________________
+            static const char * const RenderSuffixExpression; //!< "[:digit:][.](png)&"
+
+            //__________________________________________________________________
+            //
+            //
             // C++
             //
             //__________________________________________________________________
@@ -83,8 +91,16 @@ namespace Yttrium
             //! render all grades \param baseName base name for all graphs
             template <typename BASENAME> inline
             void renderAll(const BASENAME &baseName) const {
+                removeAll(baseName);
                 for(size_t gr=1;gr<=maxGrade;++gr)
                     render(baseName,gr);
+            }
+
+            template <typename BASENAME> inline
+            void removeAll(const BASENAME &baseName) const
+            {
+                String expr = baseName; ;
+                TryRemoveAll(expr += RenderSuffixExpression);
             }
 
 
@@ -105,6 +121,7 @@ namespace Yttrium
         private:
             const Partition part;       //!< initial partition
 
+            static void TryRemoveAll(const String &expr);
         };
     }
 
