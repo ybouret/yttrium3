@@ -205,6 +205,25 @@ endif()
 ################################################################################
 if("${Y_CC}" MATCHES "ic.*")
         message( STATUS "Using Intel Compilers")
+        set(Y_VALID_INTEL FALSE)
+        set(Y_CXX "")
+
+        if("${Y_CC}" MATCHES "ic.*")
+                set(Y_VALID_INTEL TRUE)
+                string( REPLACE "icc" "icpc" Y_CXX "${Y_CC}")
+        endif()
+
+        if("${Y_CC}" MATCHES "icx.*")
+                set(Y_VALID_INTEL TRUE)
+                string( REPLACE "icx" "icpx" Y_CXX "${Y_CC}")
+        endif()
+
+        if(NOT Y_VALID_INTEL)
+                message(FATAL_ERROR "Unknown Intel Compiler Series...")
+        endif()
+
+        set(CMAKE_CXX_COMPILER "${Y_CC_DIR}/${Y_CXX}" CACHE STRING "C++" FORCE)
+
         set(Y_KNOWN_COMPILER TRUE)
         set(Y_ICC TRUE)
         string( APPEND CMAKE_C_FLAGS   " -Wall -pipe -std=c99")
@@ -231,7 +250,7 @@ if(NOT Y_KNOWN_COMPILER)
         message( FATAL_ERROR "Unknown Compiler ${Y_CC}")
 endif()
 
-#message(FATAL_ERROR "debugging...")
+message(FATAL_ERROR "debugging...")
 
 
 ################################################################################
