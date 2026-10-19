@@ -250,7 +250,7 @@ endif()
 cmake_print_variables(CMAKE_CXX_COMPILER)
 
 
-message(FATAL_ERROR "debugging...")
+#message(FATAL_ERROR "debugging...")
 
 
 ################################################################################
