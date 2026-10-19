@@ -165,8 +165,6 @@ if("${Y_CC}" MATCHES "gcc.*")
         message( STATUS "Using GNU Compilers")
         string( REPLACE "gcc" "g++" Y_CXX "${Y_CC}")
         set(CMAKE_CXX_COMPILER "${Y_CC_DIR}/${Y_CXX}" CACHE STRING "C++" FORCE)
-        cmake_print_variables(CMAKE_CXX_COMPILER)
-
         set(Y_KNOWN_COMPILER TRUE)
         set(Y_GNU TRUE)
         string( APPEND CMAKE_C_FLAGS   " -pipe -Wall -Wextra -std=c99")
@@ -189,7 +187,6 @@ if("${Y_CC}" MATCHES "clang.*")
         message( STATUS "Using Clang Compilers")
         string( REPLACE "clang" "clang++" Y_CXX "${Y_CC}")
         set(CMAKE_CXX_COMPILER "${Y_CC_DIR}/${Y_CXX}" CACHE STRING "C++" FORCE)
-        cmake_print_variables(CMAKE_CXX_COMPILER)
         set(Y_KNOWN_COMPILER TRUE)
         set(Y_CLANG TRUE)
         string( APPEND CMAKE_C_FLAGS   " -pipe -Wall -Wextra")
@@ -249,6 +246,9 @@ endif()
 if(NOT Y_KNOWN_COMPILER)
         message( FATAL_ERROR "Unknown Compiler ${Y_CC}")
 endif()
+
+cmake_print_variables(CMAKE_CXX_COMPILER)
+
 
 message(FATAL_ERROR "debugging...")
 
