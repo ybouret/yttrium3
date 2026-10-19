@@ -45,9 +45,9 @@ const char * const Application:: CallSign = "Application";
 
 Y_Spyndle(Application)
 
-Y_Spyndle_Meth(double,Application,norm,(double x, double y), (x,y) )
-Y_Spyndle_Meth(const char *,Application,callSign,(),())
-Y_Spyndle_Meth(uint32_t,Application,crc,(const char *msg),(msg))
+Y_Spyndle_Meth(double,      Application, norm,(double x, double y), (x,y) )
+Y_Spyndle_Meth(const char *,Application, callSign,(),())
+Y_Spyndle_Meth(uint32_t,    Application, crc,(const char *msg),(msg))
 
 
 Y_DLL_EXTERN()

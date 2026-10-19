@@ -27,8 +27,8 @@ namespace Yttrium
         // Definitions
         //
         //______________________________________________________________________
-        typedef T ClassType; //!< alias
-        static  T * App;     //!< 'singleton' app
+        typedef T   ClassType; //!< alias
+        static  T * App;       //!< 'singleton' app
 
 
         //______________________________________________________________________
@@ -69,6 +69,7 @@ namespace Yttrium
         //
         //______________________________________________________________________
         inline virtual ~Spyndle() noexcept {} //!< cleanup
+
     protected:
         inline explicit Spyndle() noexcept : SpyndleAPI() {} //!< setup
 
@@ -88,7 +89,7 @@ namespace Yttrium
 
 //! define Spyndle_[What|When|Init|Quit] methods for global management as 
 #define Y_Spyndle(CLASS) \
-Y_DLL_EXTERN() \
+Y_DLL_EXTERN()           \
 Y_EXPORT const char * Y_DLL_API Spyndle_What() noexcept { return CLASS::What;   } \
 Y_EXPORT const char * Y_DLL_API Spyndle_Info() noexcept { return CLASS::Info;   } \
 Y_EXPORT bool         Y_DLL_API Spyndle_Init() noexcept { return CLASS::Init(); } \
@@ -97,7 +98,8 @@ Y_DLL_FINISH()
 
 //! helper to call a method thru a C-function
 #define Y_Spyndle_Meth(RETURN,CLASS,METH,ARGS_DECL,ARGS_LIST) \
-Y_DLL_CPROTO Y_EXPORT RETURN Y_DLL_API CLASS##_##METH ARGS_DECL noexcept { return Yttrium::Spyndle<CLASS>::App->METH ARGS_LIST ;  } \
+Y_DLL_CPROTO Y_EXPORT \
+RETURN Y_DLL_API CLASS##_##METH ARGS_DECL noexcept { return Yttrium::Spyndle<CLASS>::App->METH ARGS_LIST ;  } \
 
 
 #endif // !Y_RTLD_Spyndle_Included
