@@ -138,11 +138,15 @@ cmake_print_variables(Y_Machine)
 #
 #
 ################################################################################
-get_filename_component(Y_CC ${CMAKE_C_COMPILER} NAME_WE)
-get_filename_component(Y_CXX ${CMAKE_CXX_COMPILER} NAME_WE)
+get_filename_component(Y_CC      ${CMAKE_C_COMPILER} NAME_WE)
+get_filename_component(Y_CC_DIR  ${CMAKE_C_COMPILER} DIRECTORY)
+#get_filename_component(Y_CXX ${CMAKE_CXX_COMPILER} NAME_WE)
 cmake_print_variables(CMAKE_C_COMPILER)
-cmake_print_variables(CMAKE_CXX_COMPILER)
-cmake_print_variables(Y_CC Y_CXX)
+#cmake_print_variables(CMAKE_CXX_COMPILER)
+cmake_print_variables(Y_CC)
+cmake_print_variables(Y_CC_DIR)
+
+
 
 set(Y_CC_MAJOR 0)
 set(Y_CC_MINOR 0)
@@ -162,6 +166,11 @@ set(Y_KNOWN_COMPILER FALSE)
 ################################################################################
 if("${Y_CC}" MATCHES "gcc.*")
         message( STATUS "Using GNU Compilers")
+        string( REPLACE "gcc" "g++" Y_CXX "${Y_CC}")
+        set(CMAKE_CXX_COMPILER "${Y_CC_DIR}/${Y_CXX}" CACHE STRING "C++")
+        cmake_print_variables(Y_CXX)
+        cmake_print_variables(CMAKE_CXX_COMPILER)
+
         set(Y_KNOWN_COMPILER TRUE)
         set(Y_GNU TRUE)
         string( APPEND CMAKE_C_FLAGS   " -pipe -Wall -Wextra -std=c99")
@@ -222,6 +231,9 @@ endif()
 if(NOT Y_KNOWN_COMPILER)
         message( FATAL_ERROR "Unknown Compiler ${Y_CC}")
 endif()
+
+#message(FATAL_ERROR "debugging...")
+
 
 ################################################################################
 #
