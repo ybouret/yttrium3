@@ -192,7 +192,7 @@ namespace Yttrium
                 EqPtr eq( MixedEquilibrium::Create(eqs->size()+1,emx,ecf, smx, scf, K) );
                 eqs.add(eq);
                 if(xml.verbose)
-                    eqs.EqFormat::print(xml() << "[+] ",*eq,false,0.0);
+                    eqs.EqFormat::print(xml() << "[+] ",*eq,false,0.0)<<std::endl;
                 Coerce(topo.elist) << *eq;
                 grade[order]  << *eq;
                 Coerce(topo.efmt).enroll(*eq);

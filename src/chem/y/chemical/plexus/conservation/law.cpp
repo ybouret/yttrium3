@@ -131,11 +131,12 @@ namespace Yttrium
                                const SList    & slist,
                                const Topology & topo)
             {
-                const Law &law = *this;
-                Y_XML_Element_Attr(xml,Compile,Y_XML_Attr(law));
-                const size_t  m  = slist->size;
-                apn           g2 = 0;
+                const Law &   law = *this;
+                const size_t  m   = slist->size;
+                apn           g2  = 0;
                 CxxArray<apn> gv(m);
+                Y_XML_Element_Attr(xml,Compile,Y_XML_Attr(law));
+
 
                 //--------------------------------------------------------------
                 //
@@ -217,14 +218,19 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 //
                 //
-                // collect dependencies
+                // collect dependencies from primary equilibria:
+                // database will be ordered
                 //
                 //
                 //--------------------------------------------------------------
                 for(ENode *en = topo.group->head;en;en=en->next)
                 {
                     Equilibrium &eq = **en;
-                    if(linkedTo(eq)) Coerce(eqdb)->inscribe(eq);
+                    if(linkedTo(eq))
+                    {
+                        assert(0==eq.indx[AuxLevel]);
+                        Coerce(eqdb)->inscribe(eq);
+                    }
                 }
 
                 Y_XMLog(xml,"database  = " << eqdb->list);
@@ -244,6 +250,7 @@ namespace Yttrium
                     {
                         const Components &eq = **en;
                         const size_t      ei = eq.indx[SubLevel];
+                        Coerce(eq.indx[AuxLevel]) = i;
                         for(const Actor *ac=(**this).head;ac;ac=ac->next)
                         {
                             const Species & sp = ac->sp;
