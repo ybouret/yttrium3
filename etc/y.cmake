@@ -138,11 +138,16 @@ cmake_print_variables(Y_Machine)
 #
 #
 ################################################################################
+message(STATUS)
+message(STATUS "Identifying C Compiler")
+
+get_filename_component(Y_CC_EXE  ${CMAKE_C_COMPILER} NAME)
 get_filename_component(Y_CC      ${CMAKE_C_COMPILER} NAME_WE)
 get_filename_component(Y_CC_DIR  ${CMAKE_C_COMPILER} DIRECTORY)
 cmake_print_variables(CMAKE_C_COMPILER)
-cmake_print_variables(Y_CC_DIR Y_CC)
-
+cmake_print_variables(Y_CC_DIR)
+cmake_print_variables(Y_CC_EXE)
+cmake_print_variables(Y_CC)
 
 
 set(Y_CC_MAJOR 0)
@@ -163,7 +168,7 @@ set(Y_KNOWN_COMPILER FALSE)
 ################################################################################
 if("${Y_CC}" MATCHES "gcc.*")
         message( STATUS "Using GNU Compilers")
-        string( REPLACE "gcc" "g++" Y_CXX "${Y_CC}")
+        string( REPLACE "gcc" "g++" Y_CXX "${Y_CC_EXE}")
         set(CMAKE_CXX_COMPILER "${Y_CC_DIR}/${Y_CXX}" CACHE STRING "C++" FORCE)
         set(Y_KNOWN_COMPILER TRUE)
         set(Y_GNU TRUE)
@@ -185,7 +190,7 @@ endif()
 ################################################################################
 if("${Y_CC}" MATCHES "clang.*")
         message( STATUS "Using Clang Compilers")
-        string( REPLACE "clang" "clang++" Y_CXX "${Y_CC}")
+        string( REPLACE "clang" "clang++" Y_CXX "${Y_CC_EXE}")
         set(CMAKE_CXX_COMPILER "${Y_CC_DIR}/${Y_CXX}" CACHE STRING "C++" FORCE)
         set(Y_KNOWN_COMPILER TRUE)
         set(Y_CLANG TRUE)
@@ -207,12 +212,12 @@ if("${Y_CC}" MATCHES "ic.*")
 
         if("${Y_CC}" MATCHES "ic.*")
                 set(Y_VALID_INTEL TRUE)
-                string( REPLACE "icc" "icpc" Y_CXX "${Y_CC}")
+                string( REPLACE "icc" "icpc" Y_CXX "${Y_CC_EXE}")
         endif()
 
         if("${Y_CC}" MATCHES "icx.*")
                 set(Y_VALID_INTEL TRUE)
-                string( REPLACE "icx" "icpx" Y_CXX "${Y_CC}")
+                string( REPLACE "icx" "icpx" Y_CXX "${Y_CC_EXE}")
         endif()
 
         if(NOT Y_VALID_INTEL)
@@ -249,8 +254,6 @@ endif()
 
 cmake_print_variables(CMAKE_CXX_COMPILER)
 
-
-#message(FATAL_ERROR "debugging...")
 
 
 ################################################################################
