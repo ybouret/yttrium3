@@ -1221,3 +1221,5 @@ endif()
 # TODO: Create MSVC import lib for MinGW-compiled shared lib.
 # pexports libpng.dll > libpng.def
 # lib /def:libpng.def /machine:x86
+
+Y_ThirdParty(png_static)
