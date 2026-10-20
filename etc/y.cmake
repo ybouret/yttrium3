@@ -140,14 +140,12 @@ cmake_print_variables(Y_Machine)
 ################################################################################
 message(STATUS)
 message(STATUS "Identifying C Compiler")
-
-get_filename_component(Y_CC_EXE  ${CMAKE_C_COMPILER} NAME)
-get_filename_component(Y_CC      ${CMAKE_C_COMPILER} NAME_WE)
-get_filename_component(Y_CC_DIR  ${CMAKE_C_COMPILER} DIRECTORY)
 cmake_print_variables(CMAKE_C_COMPILER)
-cmake_print_variables(Y_CC_DIR)
-cmake_print_variables(Y_CC_EXE)
-cmake_print_variables(Y_CC)
+cmake_print_variables(CMAKE_CXX_COMPILER)
+
+get_filename_component(Y_CC  ${CMAKE_C_COMPILER} NAME_WE)
+get_filename_component(Y_CXX ${CMAKE_CXX_COMPILER} NAME_WE)
+cmake_print_variables(Y_CC Y_CXX)
 
 
 set(Y_CC_MAJOR 0)
@@ -168,8 +166,6 @@ set(Y_KNOWN_COMPILER FALSE)
 ################################################################################
 if("${Y_CC}" MATCHES "gcc.*")
         message( STATUS "Using GNU Compilers")
-        string( REPLACE "gcc" "g++" Y_CXX "${Y_CC_EXE}")
-        set(CMAKE_CXX_COMPILER "${Y_CC_DIR}/${Y_CXX}" CACHE STRING "C++" FORCE)
         set(Y_KNOWN_COMPILER TRUE)
         set(Y_GNU TRUE)
         string( APPEND CMAKE_C_FLAGS   " -pipe -Wall -Wextra -std=c99")
@@ -190,8 +186,6 @@ endif()
 ################################################################################
 if("${Y_CC}" MATCHES "clang.*")
         message( STATUS "Using Clang Compilers")
-        string( REPLACE "clang" "clang++" Y_CXX "${Y_CC_EXE}")
-        set(CMAKE_CXX_COMPILER "${Y_CC_DIR}/${Y_CXX}" CACHE STRING "C++" FORCE)
         set(Y_KNOWN_COMPILER TRUE)
         set(Y_CLANG TRUE)
         string( APPEND CMAKE_C_FLAGS   " -pipe -Wall -Wextra")
@@ -207,25 +201,7 @@ endif()
 ################################################################################
 if("${Y_CC}" MATCHES "ic.*")
         message( STATUS "Using Intel Compilers")
-        set(Y_VALID_INTEL FALSE)
-        set(Y_CXX "")
-
-        if("${Y_CC}" MATCHES "ic.*")
-                set(Y_VALID_INTEL TRUE)
-                string( REPLACE "icc" "icpc" Y_CXX "${Y_CC_EXE}")
-        endif()
-
-        if("${Y_CC}" MATCHES "icx.*")
-                set(Y_VALID_INTEL TRUE)
-                string( REPLACE "icx" "icpx" Y_CXX "${Y_CC_EXE}")
-        endif()
-
-        if(NOT Y_VALID_INTEL)
-                message(FATAL_ERROR "Unknown Intel Compiler Series...")
-        endif()
-
-        set(CMAKE_CXX_COMPILER "${Y_CC_DIR}/${Y_CXX}" CACHE STRING "C++" FORCE)
-
+       
         set(Y_KNOWN_COMPILER TRUE)
         set(Y_ICC TRUE)
         string( APPEND CMAKE_C_FLAGS   " -Wall -pipe -std=c99")
@@ -263,7 +239,7 @@ cmake_print_variables(CMAKE_CXX_COMPILER)
 ################################################################################
 if(Y_Linux OR Y_SunOS OR Y_FreeBSD)
         if(Y_GNU OR Y_CLANG OR Y_ICC)
-                string( APPEND CMAKE_C_FLAGS " -fPIC")
+                string( APPEND CMAKE_C_FLAGS   " -fPIC")
                 string( APPEND CMAKE_CXX_FLAGS " -fPIC")
         endif()
 endif()
