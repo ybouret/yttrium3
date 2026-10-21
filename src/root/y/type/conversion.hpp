@@ -7,8 +7,15 @@
 
 namespace Yttrium
 {
-    
+    //__________________________________________________________________________
+    //
+    //
     //! class conversion prototype
+    /**
+     based on SFINAE: Substitution Failure Is Not An Error
+     */
+    //
+    //__________________________________________________________________________
     template <class T,class U>
     class Conversion {
     private:
@@ -16,7 +23,7 @@ namespace Yttrium
         class           LargeType { uint32_t unused; /*!< N/A */ }; //!< inner large type
 
         static  SmallType Test( U ); //!< returned type for U         \return SmallType prototype
-        static  LargeType Test(...); //!< returned type for other U   \return LargeType prototoyp
+        static  LargeType Test(...); //!< returned type for other U   \return LargeType prototype
         static  T         MakeT();   //!< a prototype for returning T \return any prototype
 
     public:
@@ -28,7 +35,14 @@ namespace Yttrium
         };
     };
 
+    //__________________________________________________________________________
+    //
+    //
+    //
     //! specialized self conversion
+    //
+    //
+    //__________________________________________________________________________
     template <class T >
     class Conversion<T,T> {
     public:

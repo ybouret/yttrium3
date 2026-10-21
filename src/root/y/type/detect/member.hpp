@@ -8,6 +8,9 @@ namespace Yttrium
 {
 
     //! build a MEMBER detection struct PREFIXMEMBER
+    /**
+     based on SFINAE: Substitution Failure Is Not An Error
+     */
 #define Y_DetectMember(PREFIX,MEMBER)                                        \
 /**/    template <typename T> struct PREFIX ## MEMBER {                      \
 /**/        typedef char Yes[1]; typedef char No[2];                         \
