@@ -96,6 +96,10 @@ namespace Yttrium
                     render(baseName,gr);
             }
 
+            //! try remove all 'baseName + RenderSuffixExpression'
+            /**
+             \param baseName used to save graph(s)
+             */
             template <typename BASENAME> inline
             void removeAll(const BASENAME &baseName) const
             {
@@ -121,6 +125,7 @@ namespace Yttrium
         private:
             const Partition part;       //!< initial partition
 
+            //! try remove all files matching basename 'expr' \param expr regular expression for basename
             static void TryRemoveAll(const String &expr);
         };
     }
