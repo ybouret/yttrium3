@@ -115,7 +115,7 @@ namespace Yttrium
             CxxListOf<Cluster> list;             //!< inner list
             Vector<xreal_t>    topK;             //!< top level constants
 
-            //! \return name
+            //! \return name for GraphViz
             static const String & MakeDotName(String &, const size_t);
 
         public:
