@@ -38,7 +38,7 @@
 #if !defined(Y_Compiler) && defined(__GNUC__)
 #  define Y_Compiler "GNU"
 #  define Y_GNU 1
-#  if(__GNUC__<7)
+#  if(__GNUC__<6)
 #  define noexcept throw()
 #  endif
 #endif // !defined(Y_Compiler) && defined(__GNUC__)
