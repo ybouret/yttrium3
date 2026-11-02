@@ -15,22 +15,30 @@ def evolution(t, z, a, b, c, d):
     return [a*x - b*x*y,  c*x*y - d*y]
 
 # using SciPy Initial Value Problem solver
-tmax = 15.0
-sol  = solve_ivp(evolution, [0,tmax], [10, 5], args=(3, 1, 1, 3),
-                dense_output=True)
+# args is a list of (a,b,c,d) values
+X0   = 0
+Y0   = 0
+TMAX = 10.0
+sol  = solve_ivp(evolution, 
+                 [0,TMAX], 
+                 [X0, Y0], 
+                 args=(-1, 0, 0, 1),
+                 dense_output=True)
 
 # using result to draw something
-t = np.linspace(0, tmax, 300)
+t = np.linspace(0, TMAX, 300)
 z = sol.sol(t)
 plt.plot(t, z.T)
 plt.xlabel('t')
-plt.legend(['proie', 'prédateur'], shadow=True)
-plt.title('Système Proie-Prédateur')
+plt.legend(['preys', 'predators'], shadow=True)
+plt.title('Preys vs Predators')
 plt.grid(color='g', linestyle='dotted', linewidth=1)
 plt.show()
 
+# plot phase space: y as a function of x
 xy = np.split(z.T,2,axis=1)
 plt.plot(xy[0],xy[1])
-plt.xlabel('x')
-plt.ylabel('y')
+plt.title('Phase Space')
+plt.xlabel('Preys')
+plt.ylabel('Predators')
 plt.grid(color='g', linestyle='dotted', linewidth=1)
