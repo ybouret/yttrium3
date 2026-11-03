@@ -242,7 +242,7 @@ Using:
 \end{equation}
 
 \begin{equation}
-[E] = \dfrac{E_0}{1+\rho_a [A][A'] + \rho_b [B][B']}
+[E] = \dfrac{E_0}{1+\rho_a [A][A'] + \rho_b [A][B']} = \dfrac{E_0}{1+ [A] (\rho_a[A'] + \rho_b[B'])} 
 \end{equation}
 
 \begin{equation}
@@ -250,29 +250,8 @@ Using:
 \end{equation}
 
 \begin{equation}
-\partial_t [B'] = - [A][B'] k_b \rho_b [E] = - k_b E_0 \dfrac{\rho_b [A][B'] }{1+\rho_a [A][A'] + \rho_b [B][B']}
+\partial_t [B'] = - [A][B'] k_b \rho_b [E] = - k_b E_0 \dfrac{\rho_b [A][B'] }{1+\rho_a [A][A'] + \rho_b [A][B']}
 \end{equation}
-
-
-\section{Second Attempt}
-
-Let us assume that an exchanger $E$ exchanges an inner species $A$ with an outer species $B'$ that competes with the outer species $A'$.
-
-\begin{equation}
-\left\lbrace
-\begin{array}{rcl}
-E + A'  & \xrightleftharpoons[r_a]{f_a} & EA' \\
-\\
-E + B'  & \xrightleftharpoons[r_b]{f_b} & EB' \\
-\\
-A+EB'   & \xrightleftharpoons[r_x]{f_x} & AEB' \\
-\\
-AEB'    & \xrightarrow{k_x} & A' + E + B      \\
-\end{array}
-\right.
-\end{equation}
-
-Expression is too complicated...
 
 
 
