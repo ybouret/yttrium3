@@ -3,7 +3,9 @@
 ## Simplified FLTK configuration, based on fltk-config
 ##
 ################################################################################
-message( STATUS "<FTLK>" )
+
+message( STATUS )
+message( STATUS "Looking for FLTK..." )
 
 ################################################################################
 ##
@@ -17,7 +19,7 @@ if(MSVC)
 
 else(MSVC)
 
-	set(FLTK_BIN $ENV{FLTK_BIN} CACHE STRING "Override fltk-config location" )
+	#set(FLTK_BIN $ENV{FLTK_BIN} CACHE STRING "Override fltk-config location" )
 	if( "" STREQUAL "${FLTK_BIN}" )
 		# automatic detection
 		message( STATUS "Looking for default FLTK")
