@@ -77,6 +77,11 @@ namespace Yttrium
         store( Memory::Page::From(blockAddr) );
     }
 
+}
+
+namespace Yttrium
+{
+
     LightObject:: Factory:: Factory() :
     acquiring(0),
     releasing(0),
@@ -87,6 +92,9 @@ namespace Yttrium
     wksp()
     {
         assert(sizeof(Node) == nArena.blockSize);
+        assert( IsPowerOfTwo(TableSize) );
+        assert( TableSize * sizeof(Slot) == TableBytes );
+        assert( TableBytes <= sizeof(wksp) );
         
         Coerce(slots) = static_cast<Slot *>( Y_BZero(wksp) );
         for(size_t i=0;i<TableSize;++i)
@@ -117,7 +125,7 @@ namespace Yttrium
         assert(slots);
 
         Slot & slot = slots[blockSize&TableMask];
-        if(acquiring&&blockSize==acquiring->blockSize)
+        if(acquiring && (blockSize==acquiring->blockSize) )
         {
             assert( slot.owns(acquiring) );
             return slot.moveToHead(acquiring)->acquireBlock();
@@ -149,7 +157,7 @@ namespace Yttrium
         assert(0!=blockAddr); assert(blockSize>0);
 
         Slot & slot = slots[blockSize&TableMask];
-        if(releasing&&blockSize==releasing->blockSize)
+        if(releasing && (blockSize==releasing->blockSize) )
         {
             assert( slot.owns(releasing) );
             return slot.moveToHead(releasing)->releaseBlock(blockAddr);
@@ -172,9 +180,7 @@ namespace Yttrium
         {
             Slot &slot = slots[i];
             for(Node * node=slot.head;node;node=node->next)
-            {
                 node->gc(amount);
-            }
         }
     }
 

@@ -104,9 +104,8 @@ namespace Yttrium
         // Internal hash table metrics
         //
         //______________________________________________________________________
-        static const size_t         BytesPerSlot = sizeof(Slot);                                         //!< alias
         static const size_t         DefaultBytes = Y_BLOCK_SIZE;                                         //!< inner static memory hint
-        static const size_t         TableSize    = MetaPrevPowerOfTwo<DefaultBytes/BytesPerSlot>::Value; //!< inner static memory
+        static const size_t         TableSize    = MetaPrevPowerOfTwo<DefaultBytes/sizeof(Slot)>::Value; //!< inner static memory
         static const unsigned       TableSizeLn2 = IntegerLog2<TableSize>::Value;                        //!< ensure power-of-two
         static const size_t         TableMask    = TableSize-1;                                          //!< x%TableSize == x&TableMask
         static const size_t         TableBytes   = TableSize * sizeof(Slot);                             //!< actual table bytes request
