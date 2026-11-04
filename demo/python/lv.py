@@ -16,13 +16,13 @@ def evolution(t, z, a, b, c, d):
 
 # using SciPy Initial Value Problem solver
 # args is a list of (a,b,c,d) values
-X0   = 0
-Y0   = 0
+X0   = 5
+Y0   = 10
 TMAX = 10.0
 sol  = solve_ivp(evolution, 
                  [0,TMAX], 
                  [X0, Y0], 
-                 args=(-1, 0, 0, 1),
+                 args=(2, 0.34, 0.42, 1.9),
                  dense_output=True)
 
 # using result to draw something
