@@ -26,7 +26,7 @@ namespace Yttrium
     //
     //
     //
-    //! factory for LightObject
+    //! Factory for LightObject
     //
     //
     //__________________________________________________________________________
@@ -90,7 +90,7 @@ namespace Yttrium
             // Members
             //__________________________________________________________________
             const size_t blockSize; //!< request by user
-            Arena &      arena;     //!< arena.blockSize >= sizeof(MemoryPage), blockSize
+            Arena &      arena;     //!< arena.blockSize >= Max(sizeof(MemoryPage), blockSize)
             Node *       next;      //!< for pool/list
             Node *       prev;      //!< for list
         private:

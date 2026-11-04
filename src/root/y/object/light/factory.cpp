@@ -22,14 +22,13 @@ namespace Yttrium
     next(0),
     prev(0)
     {
+        assert(arena.blockSize>=blockSize);
     }
 
     LightObject:: Factory:: Node:: ~Node() noexcept
     {
         while(size>0)
-        {
             arena.release( query() );
-        }
     }
 
     void LightObject:: Factory:: Node:: gc(const uint8_t amount) noexcept
@@ -87,11 +86,11 @@ namespace Yttrium
     nHouse( nArena ),
     wksp()
     {
+        assert(sizeof(Node) == nArena.blockSize);
+        
         Coerce(slots) = static_cast<Slot *>( Y_BZero(wksp) );
         for(size_t i=0;i<TableSize;++i)
-        {
             new (slots+i) Slot();
-        }
     }
 
     LightObject:: Factory:: ~Factory() noexcept
@@ -100,9 +99,8 @@ namespace Yttrium
         {
             Slot &slot = slots[i];
             while(slot.size>0)
-            {
                 nHouse.recycle(slot.popHead());
-            }
+
             assert(0==slot.size);
             assert(0==slot.head);
             Destruct(&slot);

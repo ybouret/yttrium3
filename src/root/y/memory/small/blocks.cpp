@@ -169,9 +169,13 @@ namespace Yttrium
 
             Arena & Blocks:: operator[](const size_t blockSize)
             {
+                assert(blockSize>0);
+
                 Y_Lock(arena.access);
                 Arena * p = 0;
                 fetch_(p,blockSize);
+                assert(0!=p);
+                assert(blockSize==p->blockSize);
                 return *p;
             }
 
