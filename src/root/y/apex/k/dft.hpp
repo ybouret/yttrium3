@@ -14,6 +14,7 @@
 
 #include "y/memory/allocator/archon.hpp"
 #include "y/libc/block/zeroed.h"
+#include "y/memory/sentinel.hpp"
 
 #if defined(Y_Apex_Trace)
 #include "y/system/wall-time.hpp"
@@ -170,7 +171,8 @@ namespace Yttrium
                 unsigned     ns = 0;
                 while (nn < mn)
                 {
-                    nn <<= 1; ++ns; assert( One << ns == nn);
+                    nn <<= 1; ++ns;
+                    assert( One << ns == nn);
                 }
                 const size_t nc = nn;       // number of complexes
                 nn <<= 1; ++ns;             // number of reals
@@ -201,6 +203,11 @@ namespace Yttrium
 #if defined(Y_Apex_Trace)
                     mark = System::WallTime::Ticks();
 #endif
+                    //----------------------------------------------------------
+                    //
+                    // prepare memory layout
+                    //
+                    //----------------------------------------------------------
                     double *  const a = static_cast<double *>(blockEntry)-1; // a[1:nn]
                     double *  const b = a+nn;                                // b[1:nn]
                     uint8_t * const w = static_cast<uint8_t*>(blockEntry);   // w[0:..] to use result memory
@@ -208,8 +215,12 @@ namespace Yttrium
 
 
 
+                    //----------------------------------------------------------
+                    //
+                    // send bytes into realse
+                    //
+                    //----------------------------------------------------------
 //#define Y_APEX_DFT_RAW_SEND 1
-
 #if defined(Y_APEX_DFT_RAW_SEND)
                     for(size_t i=n,j=0;i>0;--i) a[i] = lhs.getByte(j++);
                     for(size_t i=m,j=0;i>0;--i) b[i] = rhs.getByte(j++);
@@ -218,56 +229,75 @@ namespace Yttrium
                     Transfer<WORD>::Send(b,rhs.word,rhs.words);
 #endif
 
-
+                    //----------------------------------------------------------
+                    //
+                    // compute both FFT
+                    //
+                    //----------------------------------------------------------
                     DFT::RealForward(a,b,nn);
 
 
-                    b[1] *= a[1];
-                    b[2] *= a[2];
+                    //----------------------------------------------------------
+                    //
+                    // perform product and reverse FFT in b
+                    //
+                    //----------------------------------------------------------
                     {
-                        Complex<double> * zb = (Complex<double> *) &b[1];
-                        Complex<double> * za = (Complex<double> *) &a[1];
-                        for(size_t i=nc-1;i>0;--i)
+#if !defined(NDEBUG)
+                        const Memory::Sentinel check_a(&a[1],nn*sizeof(double));
+#endif
+                        b[1] *= a[1];
+                        b[2] *= a[2];
                         {
-                            *(++zb) *= *(++za);
+                            Complex<double> * zb = (Complex<double> *) &b[1];
+                            Complex<double> * za = (Complex<double> *) &a[1];
+                            for(size_t i=nc-1;i>0;--i)
+                                *(++zb) *= *(++za);
                         }
+
+                        DFT::RealReverse(b,nn);
                     }
-
-
-                    DFT::RealReverse(b,nn);
-
                     //mgr.releaseBlock(blockEntry,blockShift); return dft.yield();
 
-                    double              cy  = 0;
-                    static const double RX  = 256.0;
-                    for(size_t j=nn;j>0;--j) {
-                        const double t = floor( b[j]/(double)nc+cy+0.5 );
-                        cy=(unsigned long) (t*0.00390625);
-                        w[j] = (uint8_t)(t-cy*RX);
-                    }
-                    if (cy >= RX)
-                        throw Specific::Exception("DFT::Multiplication","%s",AlgebraicFailure);
-
-
-                    
-
-                    Coerce(dft->words) = Alignment::To<WORD>::Ceil(mpn) / sizeof(WORD);
-                    assert(dft->words*sizeof(WORD)>=mpn);
-
-//#define Y_APEX_DFT_RAW_RECV 1
-#if defined(Y_APEX_DFT_RAW_RECV)
+                    //----------------------------------------------------------
+                    //
+                    // convert FFT into bytes
+                    //
+                    //----------------------------------------------------------
                     {
-                        size_t top = mpn-1;
-                        dft->or_(top, (uint8_t) cy);
-                        for(size_t j=1;j<mpn;++j)
-                            dft->or_(--top,w[j]);
-                    }
-#else
-                    {
-                        w[0] = (uint8_t)cy;
-                        Transfer<WORD>::Recv(dft->word,w,mpn);
-                    }
+#if !defined(NDEBUG)
+                        const Memory::Sentinel check_b(&b[1],nn*sizeof(double));
 #endif
+                        double              cy  = 0;
+                        static const double RX  = 256.0;
+                        for(size_t j=nn;j>0;--j) {
+                            const double t = floor( b[j]/(double)nc+cy+0.5 );
+                            cy=(unsigned long) (t*0.00390625);
+                            w[j] = (uint8_t)(t-cy*RX);
+                        }
+                        if (cy >= RX)
+                            throw Specific::Exception("DFT::Multiplication","%s",AlgebraicFailure);
+
+
+                        Coerce(dft->words) = Alignment::To<WORD>::Ceil(mpn) / sizeof(WORD);
+                        assert(dft->words*sizeof(WORD)>=mpn);
+
+                        //#define Y_APEX_DFT_RAW_RECV 1
+#if defined(Y_APEX_DFT_RAW_RECV)
+                        {
+                            size_t top = mpn-1;
+                            dft->or_(top, (uint8_t) cy);
+                            for(size_t j=1;j<mpn;++j)
+                                dft->or_(--top,w[j]);
+                        }
+#else
+                        {
+                            w[0] = (uint8_t)cy;
+                            Transfer<WORD>::Recv(dft->word,w,mpn);
+                        }
+#endif
+                    }
+
                     dft->update();
 
                 }
