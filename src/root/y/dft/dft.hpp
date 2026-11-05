@@ -638,7 +638,7 @@ namespace Yttrium
 /**/ DATA[i2] =  h1i + T(wr*h2i+wi*h2r); \
 /**/ DATA[i3] =  h1r - T(wr*h2r-wi*h2i); \
 /**/ DATA[i4] = -h1i + T(wr*h2i+wi*h2r)
-#endif
+#endif // !DOXYGEN_SHOULD_SKIP_THIS
 
         //! Real FFT
         /**
@@ -848,11 +848,6 @@ namespace Yttrium
             }
         }
 
-
-
-
-
-
     };
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -865,12 +860,12 @@ namespace Yttrium
     template <> const long double DFT:: Table<long double>:: PositiveSin[]; //!< decl
     template <> const long double DFT:: Table<long double>:: NegativeSin[]; //!< decl
     template <> const long double DFT:: Table<long double>:: CosMinusOne[]; //!< decl
-#endif
+#endif // !defined(_MSC_VER)
 
-#endif
+#endif // !DOXYGEN_SHOULD_SKIP_THIS
 
 }
 
 
-#endif
+#endif // !Y_DFT_Included
 

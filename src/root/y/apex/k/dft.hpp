@@ -196,7 +196,7 @@ namespace Yttrium
                 void   * const blockEntry = mgr.acquireBlock(blockShift);
                 assert( (One << blockShift) >= 2*nn*sizeof(double) );
                 assert( Yttrium_Zeroed(blockEntry,One<<blockShift));
-                
+
                 {
 #if defined(Y_Apex_Trace)
                     mark = System::WallTime::Ticks();
