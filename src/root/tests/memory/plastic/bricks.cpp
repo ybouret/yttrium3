@@ -37,10 +37,13 @@ namespace
             Y_ASSERT(self->size==b.size);
             Y_ASSERT( Y_TRUE == Yttrium_Zeroed(b.addr,b.size) );
 
-            const Memory::Sentinel keepSelf("self",self,sizeof(Memory::Plastic::Brick));
-            const Memory::Sentinel keepNext("next",next,sizeof(Memory::Plastic::Brick));
+            const Memory::Sentinel keepSelf(self,sizeof(Memory::Plastic::Brick));
+            const Memory::Sentinel keepNext(next,sizeof(Memory::Plastic::Brick));
 
             Random::Fill(ran, (uint8_t *)b.addr, b.size);
+
+            Y_ASSERT( keepSelf.isUntouched() );
+            Y_ASSERT( keepNext.isUntouched() );
 
         }
     }

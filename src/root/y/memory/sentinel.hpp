@@ -9,32 +9,56 @@ namespace Yttrium
 {
     namespace Memory
     {
-        //__________________________________________________________________
+        //______________________________________________________________________
         //
         //
         //
         //! light-weight sentinel on a memory region
         //
         //
-        //__________________________________________________________________
+        //______________________________________________________________________
         class Sentinel
         {
         public:
-            //! setup
+            //__________________________________________________________________
+            //
+            //
+            // C++
+            //
+            //__________________________________________________________________
+            //! setup for block
             /**
-             \param blockName persistent block name
              \param blockAddr persistent block address
              \param blockSize persistent block size
              */
-            Sentinel(const char * const blockName,
-                     const void * const blockAddr,
+            Sentinel(const void * const blockAddr,
                      const size_t       blockSize) noexcept;
+
+
+            //! setup for variable \param host variable to watch
+            template <typename T> inline
+            Sentinel(const T &host) noexcept :
+            addr( &host ),
+            size( sizeof(T) ),
+            crc( chk() )
+            {
+            }
+
 
             //! cleanup with checksum check
             ~Sentinel() noexcept;
 
+            //__________________________________________________________________
+            //
+            //
+            // Methods
+            //
+            //__________________________________________________________________
+            uint32_t chk()         const noexcept; //!< \return checksum of addr[size]
+            bool     wasModified() const noexcept; //!< \return chk() != crc
+            bool     isUntouched() const noexcept; //!< \return chk() == crc
 
-            const char * const name; //!< persistent name
+
         private:
             Y_Disable_Copy_And_Assign(Sentinel); //!< discarded
             const void * const addr; //!< original address
@@ -43,5 +67,9 @@ namespace Yttrium
         };
     }
 }
+
+
+
+
 #endif // !Y_Memory_Sentinel_Included
 
