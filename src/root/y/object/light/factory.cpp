@@ -154,7 +154,8 @@ namespace Yttrium
     void   LightObject:: Factory:: store(void * const blockAddr, const size_t blockSize) noexcept
     {
         Y_Lock(access);
-        assert(0!=blockAddr); assert(blockSize>0);
+        assert(0!=blockAddr); 
+        assert(blockSize>0);
 
         Slot & slot = slots[blockSize&TableMask];
         if(releasing && (blockSize==releasing->blockSize) )
