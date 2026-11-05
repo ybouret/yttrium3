@@ -13,7 +13,7 @@
 
 
 #include "y/memory/allocator/archon.hpp"
-
+#include "y/libc/block/zeroed.h"
 
 #if defined(Y_Apex_Trace)
 #include "y/system/wall-time.hpp"
@@ -34,6 +34,8 @@ namespace Yttrium
         {
             static inline void Send(double * a, const uint32_t * word, const size_t words) noexcept
             {
+                assert(a);
+                assert(word);
                 word += words;
                 for(size_t i=words;i>0;--i)
                 {
@@ -128,7 +130,7 @@ namespace Yttrium
         //______________________________________________________________________
         struct KegDFT
         {
-            static uint64_t       Trace;                //!< to trace call ticks
+            static uint64_t       Trace;               //!< to trace call ticks
             static const char     AlgebraicFailure[];  //!< "Algebraic Failure"
 
 
@@ -151,7 +153,9 @@ namespace Yttrium
                 //
                 //--------------------------------------------------------------
                 const size_t n = lhs.bytes;
-                const size_t m = rhs.bytes; if(n<=0||m<=0) return new Keg<WORD>();
+                const size_t m = rhs.bytes;
+                if(n<=0||m<=0)
+                    return new Keg<WORD>(); // trivial case
 
 #if defined(Y_Apex_Trace)
                 uint64_t mark = System::WallTime::Ticks();
@@ -168,9 +172,9 @@ namespace Yttrium
                 {
                     nn <<= 1; ++ns; assert( One << ns == nn);
                 }
-                const size_t nc = nn; // number of complexes
-                nn <<= 1; ++ns;       // number of reals
-                assert( One << ns == nn);
+                const size_t nc = nn;       // number of complexes
+                nn <<= 1; ++ns;             // number of reals
+                assert( (One << ns) == nn); // consistency
 
                 //--------------------------------------------------------------
                 //
@@ -181,7 +185,7 @@ namespace Yttrium
 #if defined(Y_Apex_Trace)
                 Trace += System::WallTime::Ticks() - mark;
 #endif
-                AutoPtr< Keg<WORD> >  dft = new Keg<WORD>(mpn);
+                AutoPtr< Keg<WORD> >  dft = new Keg<WORD>(mpn); assert(dft.isValid());
 
                 //--------------------------------------------------------------
                 //
@@ -191,10 +195,8 @@ namespace Yttrium
                 const unsigned blockShift = ns+1+IntegerLog2For<double>::Value;
                 void   * const blockEntry = mgr.acquireBlock(blockShift);
                 assert( (One << blockShift) >= 2*nn*sizeof(double) );
-
-                //memset(blockEntry,0xff,(One << blockShift));
-
-
+                assert( Yttrium_Zeroed(blockEntry,One<<blockShift));
+                
                 {
 #if defined(Y_Apex_Trace)
                     mark = System::WallTime::Ticks();

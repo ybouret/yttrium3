@@ -30,14 +30,16 @@ SignType CompareDFT(const size_t nbits)
     do {
         //++nops;
         AutoPtr< Keg<WORD> > lhs = Keg<WORD>::MakeRandom(ran, nbits);  assert(lhs.isValid());
-        AutoPtr< Keg<WORD> > rhs  = Keg<WORD>::MakeRandom(ran, nbits); assert(rhs.isValid());
+        AutoPtr< Keg<WORD> > rhs = Keg<WORD>::MakeRandom(ran, nbits);  assert(rhs.isValid());
 
         uint64_t             mark = System::WallTime::Ticks();
-        AutoPtr< Keg<WORD> > dft = KegDFT::Compute(*lhs, *rhs); assert(dft.isValid());
+        AutoPtr< Keg<WORD> > dft  = KegDFT::Compute(*lhs, *rhs);
+        assert(dft.isValid());
         dft64 += System::WallTime::Ticks() - mark;
 
         mark = System::WallTime::Ticks();
-        AutoPtr< Keg<WORD> > mul = KegMul::Compute<WORD, CORE>(lhs->word, lhs->words, rhs->word, rhs->words); assert(mul.isValid());
+        AutoPtr< Keg<WORD> > mul = KegMul::Compute<WORD, CORE>(lhs->word, lhs->words, rhs->word, rhs->words);
+        assert(mul.isValid());
         mul64 += System::WallTime::Ticks() - mark;
 
         const SignType curr = Sign::Of(dft64,mul64);

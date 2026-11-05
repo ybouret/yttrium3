@@ -472,11 +472,11 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
 
             //! make random with exactly nbit
             /**
-             \param nbit bits to ste
+             \param nbit bits to set
              \param coin coin to choose bit
-             \return new keg with exactly nbit and randon content
+             \return new keg with exactly nbit and otherwise random content
              */
-            static Keg * MakeRandom( Random::CoinFlip &coin, const size_t nbit)
+            static Keg * MakeRandom(Random::CoinFlip &coin, const size_t nbit)
             {
                 if(nbit<=0)
                     return new Keg();

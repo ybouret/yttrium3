@@ -16,8 +16,8 @@ using namespace Apex;
 namespace
 {
 
-    const size_t minBits = 128;
-    const size_t maxBits = 8192;
+    const size_t minBits = 32;
+    const size_t maxBits = 32768;
     long double  tmx     = 0.01L;
 
     template <typename WORD, typename CORE>
@@ -38,7 +38,7 @@ namespace
         {
             for(size_t rbits=lbits;rbits<=maxBits;rbits <<=1)
             {
-                (std::cerr << " " <<  std::setw(4) << lbits<< " x " << std::setw(4) << rbits).flush();
+                (std::cerr << " " <<  std::setw(6) << lbits<< " x " << std::setw(6) << rbits).flush();
                 KegDFT::Trace = 0;
                 KegMul::Trace = 0;
                 mul64         = 0;
