@@ -60,7 +60,7 @@ Y_UTEST(memory_small_chunk)
     for(size_t blockSize=1;blockSize<=maxBlockSize;++blockSize)
     {
         std::cerr << "-- blockSize=" << blockSize << std::endl;
-        for(uint8_t numBlocks=1;numBlocks;++numBlocks)
+        for(uint8_t numBlocks=1;0!=numBlocks;++numBlocks)
         {
             Memory::Small::Chunk chunk(blockSize,numBlocks,data);
             memset(addr,0,sizeof(addr));

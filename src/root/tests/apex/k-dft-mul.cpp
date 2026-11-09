@@ -50,8 +50,8 @@ namespace
                     AutoPtr< Keg<WORD> > lhs = Keg<WORD>::MakeRandom(ran, lbits ); Y_ASSERT(lbits==lhs->bits);
                     AutoPtr< Keg<WORD> > rhs = Keg<WORD>::MakeRandom(ran, rbits ); Y_ASSERT(rbits==rhs->bits);
 
-                    uint64_t mark = System::WallTime::Ticks();
-                    AutoPtr< Keg<WORD> > mul = KegMul::Compute<WORD,CORE>(lhs->word,lhs->words,rhs->word,rhs->words);
+                    uint64_t             mark = System::WallTime::Ticks();
+                    AutoPtr< Keg<WORD> > mul  = KegMul::Compute<WORD,CORE>(lhs->word,lhs->words,rhs->word,rhs->words);
                     mul64 += System::WallTime::Ticks() - mark;
 
                     mark = System::WallTime::Ticks();
