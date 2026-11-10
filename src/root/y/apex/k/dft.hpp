@@ -189,7 +189,6 @@ namespace Yttrium
                 Trace += System::WallTime::Ticks() - mark;
 #endif
                 AutoPtr< Keg<WORD> >  dft = new Keg<WORD>(mpn); assert(dft.isValid());
-                return dft.yield();
 
                 //--------------------------------------------------------------
                 //
@@ -233,6 +232,8 @@ namespace Yttrium
                     Transfer<WORD>::Send(b,rhs.word,rhs.words);
 #endif
 
+                    mgr.releaseBlock(blockEntry,blockShift); return dft.yield();
+
                     //----------------------------------------------------------
                     //
                     // compute both FFT
@@ -271,7 +272,6 @@ namespace Yttrium
 
                         DFT::RealReverse(b,nn);
                     }
-                    //mgr.releaseBlock(blockEntry,blockShift); return dft.yield();
 
                     //----------------------------------------------------------
                     //
