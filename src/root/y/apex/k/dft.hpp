@@ -417,7 +417,7 @@ namespace Yttrium
 #else
                     {
                         w[0] = (uint8_t)cy;
-                        Transfer<WORD>::Recv(dft->word,w,mpn);
+                        //Transfer<WORD>::Recv(dft->word,w,mpn);
                     }
 #endif
                     dft->update();
