@@ -6,7 +6,7 @@
 
 #include "y/apex/k/keg.hpp"
 #include "y/check/static.hpp"
-
+#include "y/check/memory.hpp"
 
 #if defined(Y_Apex_Trace)
 #include "y/system/wall-time.hpp"
@@ -67,6 +67,7 @@ namespace Yttrium
                             product[i] = static_cast<WORD>(carry);
                             carry >>= WordBits;
                         }
+                        assert(CheckMemory::Within(res->word,res->maxWords,product[p]));
                         product[p] =  static_cast<WORD>(carry);
                     }
                 }
@@ -103,6 +104,7 @@ namespace Yttrium
                             product[i] = static_cast<WORD>(carry);
                             carry >>= WordBits;
                         }
+                        assert(CheckMemory::Within(res->word,res->maxWords,product[p]));
                         product[p] =  static_cast<WORD>(carry);
                     }
                 }
