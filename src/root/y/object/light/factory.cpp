@@ -1,6 +1,8 @@
 
 #include "y/object/light/factory.hpp"
 #include "y/libc/block/zero.h"
+#include "y/libc/block/zeroed.h"
+
 #include "y/concurrent/nucleus.hpp"
 #include "y/memory/small/blocks.hpp"
 #include "y/system/error.hpp"
@@ -16,7 +18,8 @@ namespace Yttrium
 
     const char * const LightObject:: Factory:: CallSign = "LightObject::Factory";
 
-    LightObject:: Factory:: Node:: Node(const size_t bs, Arena &a) noexcept :
+    LightObject:: Factory:: Node:: Node(const size_t bs,
+                                        Arena       &a) noexcept :
     blockSize(bs),
     arena(a),
     next(0),
@@ -61,14 +64,10 @@ namespace Yttrium
 
     void * LightObject:: Factory:: Node:: acquireBlock()
     {
-        if(size>0)
-        {
-            return memset(query(),0,blockSize);
-        }
-        else
-        {
-            return arena.acquire();
-        }
+        void * const blockAddr = (size>0) ? memset(query(),0,blockSize) : arena.acquire();
+        assert(Yttrium_Zeroed(blockAddr,blockSize) );
+        std::cerr << "[+" << blockAddr << "] " << blockSize << "/" << arena.blockSize << std::endl;
+        return blockAddr;
     }
 
     void LightObject:: Factory:: Node :: releaseBlock(void *const blockAddr) noexcept
@@ -91,11 +90,22 @@ namespace Yttrium
     nHouse( nArena ),
     wksp()
     {
+
+        //----------------------------------------------------------------------
+        //
+        // Sanity Check
+        //
+        //----------------------------------------------------------------------
         assert(sizeof(Node) == nArena.blockSize);
         assert( IsPowerOfTwo(TableSize) );
         assert( TableSize * sizeof(Slot) == TableBytes );
         assert( TableBytes <= sizeof(wksp) );
-        
+
+        //----------------------------------------------------------------------
+        //
+        // Setup slots
+        //
+        //----------------------------------------------------------------------
         Coerce(slots) = static_cast<Slot *>( Y_BZero(wksp) );
         for(size_t i=0;i<TableSize;++i)
             new (slots+i) Slot();
@@ -134,7 +144,7 @@ namespace Yttrium
         {
 
             //------------------------------------------------------------------
-            // look for node
+            // look for existing node
             //------------------------------------------------------------------
             for(Node *node=slot.head;node;node=node->next)
             {
@@ -151,7 +161,8 @@ namespace Yttrium
         }
     }
 
-    void   LightObject:: Factory:: store(void * const blockAddr, const size_t blockSize) noexcept
+    void   LightObject:: Factory:: store(void * const blockAddr,
+                                         const size_t blockSize) noexcept
     {
         Y_Lock(access);
         assert(0!=blockAddr); 
@@ -168,7 +179,9 @@ namespace Yttrium
             for(Node *node=slot.head;node;node=node->next)
             {
                 if(blockSize==node->blockSize)
+                {
                     return slot.moveToHead(releasing=node)->releaseBlock(blockAddr);
+                }
             }
             Libc::Error::Critical(EINVAL, "%s invalid release address/blockSize=%s", CallSign, Decimal(blockSize).c_str() );
         }

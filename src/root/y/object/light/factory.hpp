@@ -51,7 +51,7 @@ namespace Yttrium
         //______________________________________________________________________
         //
         //
-        //! Node holding blocks of same blockSize, LEVEL-2 cache
+        //! Node holding blocks of same blockSize (LEVEL-2 cache)
         //
         //______________________________________________________________________
         class Node : public Pool, public Caching
@@ -89,13 +89,14 @@ namespace Yttrium
             //
             // Members
             //__________________________________________________________________
-            const size_t blockSize; //!< request by user
+            const size_t blockSize; //!< requested by user
             Arena &      arena;     //!< arena.blockSize >= Max(sizeof(MemoryPage), blockSize)
             Node *       next;      //!< for pool/list
             Node *       prev;      //!< for list
         private:
             Y_Disable_Copy_And_Assign(Node); //!< discarded
         };
+        
         typedef Core::ListOf<Node> Slot; //!< alias
 
         //______________________________________________________________________
