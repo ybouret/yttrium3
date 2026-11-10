@@ -29,6 +29,34 @@ namespace Yttrium
             return Within(blockAddr,numBlocks,&host);
         }
 
+        static const void * GetUpper(const void * const entry,
+                                     const size_t       bytes,
+                                     const size_t       blockSize) noexcept;
+
+
+        template <typename T> static inline
+        bool Inside(const void * const entry,
+                    const size_t       bytes,
+                    const T * const    address)  noexcept
+        {
+            assert(address);
+            assert(bytes>=sizeof(T));
+            const T * const lower = static_cast<const T *>(entry);
+            if(address<lower)
+                return false;
+            const T * const upper = static_cast<const T *>(GetUpper(entry,bytes,sizeof(T)));
+            if(address>upper)
+                return false;
+            return true;
+        }
+
+        template <typename T> static inline
+        bool Inside(const void * const entry,
+                    const size_t       bytes,
+                    const T &          host)  noexcept
+        {
+            return Inside(entry,bytes,&host);
+        }
     };
 
 }
