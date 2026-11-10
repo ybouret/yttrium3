@@ -164,7 +164,7 @@ namespace Yttrium
 #endif
                 //--------------------------------------------------------------
                 //
-                // Compute minimal common size
+                // Compute minimal common size in BYTES
                 //
                 //--------------------------------------------------------------
                 const size_t mn = Max(m,n);
@@ -184,7 +184,7 @@ namespace Yttrium
                 // Allocate result
                 //
                 //--------------------------------------------------------------
-                const size_t          mpn = m+n; assert(mpn>=2); // in bytes
+                const size_t          mpn = m+n; assert(mpn>=2); // in BYTES
 #if defined(Y_Apex_Trace)
                 Trace += System::WallTime::Ticks() - mark;
 #endif
@@ -228,6 +228,12 @@ namespace Yttrium
                     for(size_t i=n,j=0;i>0;--i) a[i] = lhs.getByte(j++);
                     for(size_t i=m,j=0;i>0;--i) b[i] = rhs.getByte(j++);
 #else
+                    if(nn<sizeof(WORD)*lhs.words)
+                    {
+                        std::cerr << "lhs: bytes=" << lhs.bytes << ", words=" << lhs.words << std::endl;
+                        std::cerr << "nn=" << nn << "/total bytes=" << lhs.words * sizeof(WORD)  << std::endl;
+                        abort();
+                    }
                     Transfer<WORD>::Send(a,lhs.word,lhs.words);
                     Transfer<WORD>::Send(b,rhs.word,rhs.words);
 #endif
@@ -372,7 +378,6 @@ namespace Yttrium
                     double * const  b = (static_cast<double *>(blockEntry)-1)+nn; // b[1:nn]
                     uint8_t * const w = static_cast<uint8_t*>(blockEntry);        // w[0:..] to use result memory
 
-                    //#define Y_APEX_DFT_RAW_SEND 1
 #if defined(Y_APEX_DFT_RAW_SEND)
                     for(size_t i=n,j=0;i>0;--i) b[i] = arg.getByte(j++);
 #else

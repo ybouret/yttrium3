@@ -102,7 +102,7 @@ Y_UTEST(apex_k_dft_mul)
         tmx = ASCII::Convert::To<long double>(argv[1],"tmx",0);
     }
 
-    if(0)
+    if(1)
     {
         testDFT<uint8_t,uint16_t>(ran);
         testDFT<uint8_t,uint32_t>(ran);
