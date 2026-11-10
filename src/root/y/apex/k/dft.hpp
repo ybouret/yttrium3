@@ -151,7 +151,7 @@ namespace Yttrium
 
                 //--------------------------------------------------------------
                 //
-                // Check lengths
+                // Check lengths in BYTES
                 //
                 //--------------------------------------------------------------
                 const size_t n = lhs.bytes;
@@ -184,11 +184,12 @@ namespace Yttrium
                 // Allocate result
                 //
                 //--------------------------------------------------------------
-                const size_t          mpn = m+n; assert(mpn>=2);
+                const size_t          mpn = m+n; assert(mpn>=2); // in bytes
 #if defined(Y_Apex_Trace)
                 Trace += System::WallTime::Ticks() - mark;
 #endif
                 AutoPtr< Keg<WORD> >  dft = new Keg<WORD>(mpn); assert(dft.isValid());
+                return dft.yield();
 
                 //--------------------------------------------------------------
                 //
@@ -296,6 +297,7 @@ namespace Yttrium
 
                         Coerce(dft->words) = Alignment::To<WORD>::Ceil(mpn) / sizeof(WORD);
                         assert(dft->words*sizeof(WORD)>=mpn);
+                        assert(dft->words<=dft->maxWords);
 
                         //#define Y_APEX_DFT_RAW_RECV 1
 #if defined(Y_APEX_DFT_RAW_RECV)
@@ -315,14 +317,12 @@ namespace Yttrium
                     }
 
                     dft->update();
-
                 }
 
 #if defined(Y_Apex_Trace)
                 Trace += System::WallTime::Ticks() - mark;
 #endif
                 mgr.releaseBlock(blockEntry,blockShift);
-
                 return dft.yield();
             }
 
@@ -417,11 +417,10 @@ namespace Yttrium
 #else
                     {
                         w[0] = (uint8_t)cy;
-                        //Transfer<WORD>::Recv(dft->word,w,mpn);
+                        Transfer<WORD>::Recv(dft->word,w,mpn);
                     }
 #endif
                     dft->update();
-
                 }
 
                 mgr.releaseBlock(blockEntry,blockShift);
