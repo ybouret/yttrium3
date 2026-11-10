@@ -15,6 +15,7 @@
 #include "y/memory/allocator/archon.hpp"
 #include "y/libc/block/zeroed.h"
 #include "y/memory/sentinel.hpp"
+#include "y/check/memory.hpp"
 
 #if defined(Y_Apex_Trace)
 #include "y/system/wall-time.hpp"
@@ -117,7 +118,7 @@ namespace Yttrium
 
         };
 
-
+#define  Y_Apex_KCheck(HOST) assert( CheckMemory::Inside(blockEntry,blockBytes,HOST) )
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
@@ -196,8 +197,11 @@ namespace Yttrium
                 //--------------------------------------------------------------
                 const unsigned blockShift = ns+1+IntegerLog2For<double>::Value;
                 void   * const blockEntry = mgr.acquireBlock(blockShift);
-                assert( (One << blockShift) >= 2*nn*sizeof(double) );
-                assert( Yttrium_Zeroed(blockEntry,One<<blockShift));
+#if !defined(NDEBUG)
+                const size_t   blockBytes = One << blockShift;
+#endif
+                assert( blockBytes >= 2*nn*sizeof(double) );
+                assert( Yttrium_Zeroed(blockEntry,blockBytes) );
 
                 {
 #if defined(Y_Apex_Trace)
@@ -244,14 +248,24 @@ namespace Yttrium
                     {
 #if !defined(NDEBUG)
                         const Memory::Sentinel check_a(&a[1],nn*sizeof(double));
-#endif
+                        Y_Apex_KCheck(a[1]);
+                        Y_Apex_KCheck(a[2]);
+                        Y_Apex_KCheck(b[1]);
+                        Y_Apex_KCheck(b[2]);
+#endif // !defined(NDEBUG)
+
+
                         b[1] *= a[1];
                         b[2] *= a[2];
                         {
-                            Complex<double> * zb = (Complex<double> *) &b[1];
-                            Complex<double> * za = (Complex<double> *) &a[1];
+                            Complex<double>       * zb = (Complex<double> *) &b[1];
+                            const Complex<double> * za = (Complex<double> *) &a[1];
                             for(size_t i=nc-1;i>0;--i)
+                            {
+                                Y_Apex_KCheck(za[1]);
+                                Y_Apex_KCheck(zb[1]);
                                 *(++zb) *= *(++za);
+                            }
                         }
 
                         DFT::RealReverse(b,nn);
