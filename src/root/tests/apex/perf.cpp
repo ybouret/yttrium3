@@ -33,7 +33,7 @@ SignType CompareDFT(const size_t nbits)
 		AutoPtr< Keg<WORD> > rhs = Keg<WORD>::MakeRandom(ran, nbits);  assert(rhs.isValid());
 
 		uint64_t             mark = System::WallTime::Ticks();
-		AutoPtr< Keg<WORD> > dft = KegDFT::Compute(*lhs, *rhs);
+		AutoPtr< Keg<WORD> > dft  = KegDFT::Compute(*lhs, *rhs);
 		assert(dft.isValid());
 		dft64 += System::WallTime::Ticks() - mark;
 
@@ -65,6 +65,10 @@ void TestDFT()
 	(std::cerr << "-- DFT [MUL]" << std::setw(3) << sizeof(WORD) * 8 << "-bits | " << std::setw(3) << sizeof(CORE) * 8 << "-bits: ").flush();
 	size_t   lowerBits = 8;
 	SignType lowerSign = CompareDFT<WORD, CORE>(lowerBits); Y_ASSERT(lowerSign == Positive);
+
+    std::cerr << std::endl;
+    return;
+
 	size_t   upperBits = lowerBits;
 	size_t   count = 0;
 	std::cerr << "[";

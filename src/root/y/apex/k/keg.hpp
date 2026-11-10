@@ -487,6 +487,7 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
                     for(size_t i=0;i<msb;++i) {
                         if(coin.heads()) res->setBit(i);
                     }
+                    assert(nbit==res->bits);
                     return res;
                 }
             }
