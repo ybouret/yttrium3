@@ -9,12 +9,16 @@
 
 #include "y/format/percent.hpp"
 
+#include "y/apex/rational.hpp"
+#include "y/container/sequence/vector.hpp"
+#include "y/core/min.hpp"
+
 using namespace Yttrium;
 using namespace Apex;
 
 namespace
 {
-    static long double tmx = 0.01L;
+    static long double tmx = 0.001L;
 
 
     template <typename WORD, typename CORE> static inline
@@ -25,51 +29,54 @@ namespace
 
         Core::Rand       ran;
         System::WallTime chrono;
-        size_t           nops = 0;
+        apn              ops   = 0;
+        apq              sum   = 0;
+        uint64_t         dft64 = 0;
+        uint64_t         mul64 = 0;
+        Vector<SignType> svec;
         do {
-            ++nops;
             const AutoPtr< KegType > lhs = KegType::MakeRandom(ran, nbits);  assert(lhs.isValid()); assert(nbits == lhs->bits);
             const AutoPtr< KegType > rhs = KegType::MakeRandom(ran, nbits);  assert(rhs.isValid()); assert(nbits == rhs->bits);
+
+            // gather timings
+            uint64_t                 m64 = System::WallTime::Ticks();
             const AutoPtr< KegType > dft = KegDFT::Compute(*lhs, *rhs);
+            dft64 += System::WallTime::Ticks() - m64;
+
+            m64 = System::WallTime::Ticks();
             const AutoPtr< KegType > mul = KegMul::Compute<WORD, CORE>(lhs->word, lhs->words, rhs->word, rhs->words);
-            if (nops >= 1) break;
+            mul64 += System::WallTime::Ticks() - m64;
+
+            // compute average sign and standard error
+            ++ops;
+            const SignType last = Sign::Of(mul64,dft64);
+            svec << last;
+            switch( last )
+            {
+                case Negative: --sum; break;
+                case Positive: ++sum; break;
+                case __Zero__:        break;
+            }
+
+            const long double ell = chrono(Min(dft64,mul64));
+
+
+            const apq ave = sum / ops;
+            apq       er2 = 0;
+            for(size_t i=svec.size();i>0;--i)
+            {
+                apq s = svec[i];
+                s -= ave;
+                er2 += s*s;
+            }
+            er2 /= ops*ops;
+            const long double err = er2.ratio<long double>();
+            std::cerr << "ave=" << ave << ", err=" << err << " @" << ops << " during " << ell << ", bits=" << nbits << std::endl;
+
+            if(ell>=tmx && err<=0.01L && ops>=100) break;
+
         } while (true);
-        return __Zero__;
-
-#if 0
-        uint64_t dft64 = 0;
-        uint64_t mul64 = 0;
-        SignType last = __Zero__;
-        size_t   same = 0;
-        do {
-            //++nops;
-            AutoPtr< KegType > lhs = KegType::MakeRandom(ran, nbits);  assert(lhs.isValid());
-            AutoPtr< KegType > rhs = KegType::MakeRandom(ran, nbits);  assert(rhs.isValid());
-
-            uint64_t             mark = System::WallTime::Ticks();
-            AutoPtr< KegType > dft = KegDFT::Compute(*lhs, *rhs);
-            assert(dft.isValid());
-            dft64 += System::WallTime::Ticks() - mark;
-
-            mark = System::WallTime::Ticks();
-            AutoPtr< KegType > mul = KegMul::Compute<WORD, CORE>(lhs->word, lhs->words, rhs->word, rhs->words);
-            assert(mul.isValid());
-            mul64 += System::WallTime::Ticks() - mark;
-
-            const SignType curr = Sign::Of(dft64, mul64);
-            if (curr == last)
-            {
-                ++same;
-            }
-            else
-            {
-                last = curr;
-                same = 1;
-            }
-        } while (chrono(dft64) < tmx || same < 10);
-        std::cerr << nbits << "\t=> " << std::setw(3) << last << " #same=" << std::setw(8) << same << std::endl;
-        return last;
-#endif
+        return sum.numer.s;
     }
 
     static const size_t MaxOps = 30;
@@ -113,12 +120,14 @@ namespace
 
 }
 
+#include "y/stream/libc/output.hpp"
+
 Y_UTEST(apex_perf)
 {
 #if 0
     Core::Rand ran;
     if (argc > 1) tmx = ASCII::Convert::To<long double>(argv[1], "tmx", 0);
-    
+
     if (0)
     {
         TestDFT<uint8_t, uint16_t>();
@@ -129,13 +138,20 @@ Y_UTEST(apex_perf)
     }
     TestDFT<uint32_t, uint64_t>();
 #else
-    size_t bits = 8;
-    if (argc > 1) bits = ASCII::Convert::To<size_t>(argv[1], "bits", 0);
-    Y_PRINTV(bits);
+    //size_t bits = 8;
+    //if (argc > 1) bits = ASCII::Convert::To<size_t>(argv[1], "bits", 0);
+    //Y_PRINTV(bits);
     //CompareDFT<uint32_t, uint64_t>(bits);
 
-    for (size_t i = 1; i <= bits; ++i)
-        CompareDFT<uint32_t, uint64_t>(i);
+    OutputFile::Overwrite("apex-mul.dat");
+    for(unsigned bits=1000;bits<=32000;bits += 1000)
+    {
+        const SignType s = CompareDFT<uint32_t,uint64_t>(bits);
+        OutputFile     fp("apex-mul.dat",true);
+        fp("%u %d\n", bits, (int)s);
+    }
+
+    //for (size_t i = 1; i <= bits; ++i) CompareDFT<uint32_t, uint64_t>(i);
 #endif
 
 }
