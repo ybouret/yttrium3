@@ -13,21 +13,14 @@ namespace Yttrium
     struct CheckMemory
     {
         template <typename T> static inline
-        bool Within(const T * const    blockAddr,
-                    const size_t       numBlocks,
-                    const T    * const pObject) noexcept
+        bool  Within(const T * const    blockAddr,
+                     const size_t       numBlocks,
+                     const T    * const pObject) noexcept
         {
             assert(pObject);
             return (pObject>=blockAddr) && (pObject<blockAddr+numBlocks);
         }
 
-        template <typename T> static inline
-        bool Within(const T * const    blockAddr,
-                    const size_t       numBlocks,
-                    const T &          host) noexcept
-        {
-            return Within(blockAddr,numBlocks,&host);
-        }
 
         static const void * GetUpper(const void * const entry,
                                      const size_t       bytes,
@@ -35,9 +28,9 @@ namespace Yttrium
 
 
         template <typename T> static inline
-        bool Inside(const void * const entry,
-                    const size_t       bytes,
-                    const T * const    address)  noexcept
+        bool  Inside(const void * const entry,
+                     const size_t       bytes,
+                     const T * const    address)  noexcept
         {
             assert(address);
             assert(bytes>=sizeof(T));
@@ -50,13 +43,6 @@ namespace Yttrium
             return true;
         }
 
-        template <typename T> static inline
-        bool Inside(const void * const entry,
-                    const size_t       bytes,
-                    const T &          host)  noexcept
-        {
-            return Inside(entry,bytes,&host);
-        }
     };
 
 }

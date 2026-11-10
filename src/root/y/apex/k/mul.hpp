@@ -67,7 +67,7 @@ namespace Yttrium
                             product[i] = static_cast<WORD>(carry);
                             carry >>= WordBits;
                         }
-                        assert(CheckMemory::Within(res->word,res->maxWords,product[p]));
+                        assert(CheckMemory::Within(res->word,res->maxWords,product+p));
                         product[p] =  static_cast<WORD>(carry);
                     }
                 }
@@ -104,7 +104,7 @@ namespace Yttrium
                             product[i] = static_cast<WORD>(carry);
                             carry >>= WordBits;
                         }
-                        assert(CheckMemory::Within(res->word,res->maxWords,product[p]));
+                        assert(CheckMemory::Within(res->word,res->maxWords,product+p));
                         product[p] =  static_cast<WORD>(carry);
                     }
                 }

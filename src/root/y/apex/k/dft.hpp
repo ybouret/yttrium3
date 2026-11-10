@@ -118,7 +118,7 @@ namespace Yttrium
 
         };
 
-#define  Y_Apex_KCheck(HOST) assert( CheckMemory::Inside(blockEntry,blockBytes,HOST) )
+#define  Y_Apex_DFT_Check(HOST) assert( CheckMemory::Inside(blockEntry,blockBytes,HOST) )
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
@@ -248,10 +248,10 @@ namespace Yttrium
                     {
 #if !defined(NDEBUG)
                         const Memory::Sentinel check_a(&a[1],nn*sizeof(double));
-                        Y_Apex_KCheck(a[1]);
-                        Y_Apex_KCheck(a[2]);
-                        Y_Apex_KCheck(b[1]);
-                        Y_Apex_KCheck(b[2]);
+                        Y_Apex_DFT_Check(a+1);
+                        Y_Apex_DFT_Check(a+2);
+                        Y_Apex_DFT_Check(b+1);
+                        Y_Apex_DFT_Check(b+2);
 #endif // !defined(NDEBUG)
 
 
@@ -262,8 +262,8 @@ namespace Yttrium
                             const Complex<double> * za = (Complex<double> *) &a[1];
                             for(size_t i=nc-1;i>0;--i)
                             {
-                                Y_Apex_KCheck(za[1]);
-                                Y_Apex_KCheck(zb[1]);
+                                Y_Apex_DFT_Check(za+1);
+                                Y_Apex_DFT_Check(zb+1);
                                 *(++zb) *= *(++za);
                             }
                         }
@@ -284,6 +284,8 @@ namespace Yttrium
                         double              cy  = 0;
                         static const double RX  = 256.0;
                         for(size_t j=nn;j>0;--j) {
+                            Y_Apex_DFT_Check(b+j);
+                            Y_Apex_DFT_Check(w+j);
                             const double t = floor( b[j]/(double)nc+cy+0.5 );
                             cy=(unsigned long) (t*0.00390625);
                             w[j] = (uint8_t)(t-cy*RX);
@@ -305,6 +307,7 @@ namespace Yttrium
                         }
 #else
                         {
+                            Y_Apex_DFT_Check(w+0);
                             w[0] = (uint8_t)cy;
                             Transfer<WORD>::Recv(dft->word,w,mpn);
                         }
