@@ -232,7 +232,7 @@ namespace Yttrium
                     Transfer<WORD>::Send(b,rhs.word,rhs.words);
 #endif
 
-                    mgr.releaseBlock(blockEntry,blockShift); return dft.yield();
+                    //mgr.releaseBlock(blockEntry,blockShift); return dft.yield();
 
                     //----------------------------------------------------------
                     //
@@ -309,7 +309,6 @@ namespace Yttrium
                         }
 #else
                         {
-                            Y_Apex_DFT_Check(w+0);
                             w[0] = (uint8_t)cy;
                             Transfer<WORD>::Recv(dft->word,w,mpn);
                         }
