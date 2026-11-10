@@ -164,6 +164,7 @@ Y_UTEST(container:lexicon)
 Y_UTEST(container:book)
 
 Y_UTEST(apex:k)
+Y_UTEST(apex:iterator)
 Y_UTEST(apex:k:bits)
 Y_UTEST(apex:k:sd)
 Y_UTEST(apex:k:gcd)

@@ -34,20 +34,20 @@ namespace Yttrium
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         template <> struct Transfer<uint32_t>
         {
-            static inline void Send(double * a, const uint32_t * word, const size_t words) noexcept
-            {
-                assert(a);
-                assert(word);
-                word += words;
-                for(size_t i=words;i>0;--i)
-                {
-                    uint32_t w = *(--word);
-                    *(++a) = (uint8_t)(w>>24);
-                    *(++a) = (uint8_t)(w>>16);
-                    *(++a) = (uint8_t)(w>>8);
-                    *(++a) = (uint8_t)(w);
-                }
-            }
+            //static inline void Send(double * a, const uint32_t * word, const size_t words) noexcept
+            //{
+            //    assert(a);
+            //    assert(word);
+            //    word += words;
+            //    for(size_t i=words;i>0;--i)
+            //    {
+            //        uint32_t w = *(--word);
+            //        *(++a) = (uint8_t)(w>>24);
+            //        *(++a) = (uint8_t)(w>>16);
+            //        *(++a) = (uint8_t)(w>>8);
+            //        *(++a) = (uint8_t)(w);
+            //    }
+            //}
 
             static inline void Recv(uint32_t * word,  const uint8_t *w, const size_t mpn) noexcept
             {
@@ -70,16 +70,16 @@ namespace Yttrium
 
         template <> struct Transfer<uint16_t>
         {
-            static inline void Send(double * a, const uint16_t * word, const size_t words) noexcept
-            {
-                word += words;
-                for(size_t i=words;i>0;--i)
-                {
-                    uint16_t w = *(--word);
-                    *(++a) = (uint8_t)(w>>8);
-                    *(++a) = (uint8_t)(w);
-                }
-            }
+            //static inline void Send(double * a, const uint16_t * word, const size_t words) noexcept
+            //{
+            //    word += words;
+            //    for(size_t i=words;i>0;--i)
+            //    {
+            //        uint16_t w = *(--word);
+            //        *(++a) = (uint8_t)(w>>8);
+            //        *(++a) = (uint8_t)(w);
+            //    }
+            //}
 
             static inline void Recv(uint16_t * word, const uint8_t *w, const size_t mpn) noexcept
             {
@@ -102,10 +102,10 @@ namespace Yttrium
 
         template <> struct Transfer<uint8_t>
         {
-            static inline void Send(double * a, const uint8_t * word, const size_t words) noexcept
-            {
-                for(size_t i=words;i>0;--i) a[i] = *(word++);
-            }
+            //static inline void Send(double * a, const uint8_t * word, const size_t words) noexcept
+            //{
+            //    for(size_t i=words;i>0;--i) a[i] = *(word++);
+            //}
 
             static inline void Recv(uint8_t * word, const uint8_t *w, const size_t mpn) noexcept
             {
@@ -118,7 +118,7 @@ namespace Yttrium
 
         };
 
-#define  Y_Apex_DFT_Check(HOST) assert( CheckMemory::Inside(blockEntry,blockBytes,HOST) )
+//#define  Y_Apex_DFT_Check(HOST) assert( CheckMemory::Inside(blockEntry,blockBytes,HOST) )
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
@@ -199,9 +199,10 @@ namespace Yttrium
                 void   * const blockEntry = mgr.acquireBlock(blockShift);
 #if !defined(NDEBUG)
                 const size_t   blockBytes = One << blockShift;
-#endif
                 assert( blockBytes >= 2*nn*sizeof(double) );
                 assert( Yttrium_Zeroed(blockEntry,blockBytes) );
+#endif
+
 
                 {
 #if defined(Y_Apex_Trace)
@@ -228,14 +229,7 @@ namespace Yttrium
                     for(size_t i=n,j=0;i>0;--i) a[i] = lhs.getByte(j++);
                     for(size_t i=m,j=0;i>0;--i) b[i] = rhs.getByte(j++);
 #else
-                    if(nn<sizeof(WORD)*lhs.words)
-                    {
-                        std::cerr << "lhs: bytes=" << lhs.bytes << ", words=" << lhs.words << std::endl;
-                        std::cerr << "nn=" << nn << "/total bytes=" << lhs.words * sizeof(WORD)  << std::endl;
-                        abort();
-                    }
-                    Transfer<WORD>::Send(a,lhs.word,lhs.words);
-                    Transfer<WORD>::Send(b,rhs.word,rhs.words);
+
 #endif
 
                     //mgr.releaseBlock(blockEntry,blockShift); return dft.yield();
@@ -256,10 +250,10 @@ namespace Yttrium
                     {
 #if !defined(NDEBUG)
                         const Memory::Sentinel check_a(&a[1],nn*sizeof(double));
-                        Y_Apex_DFT_Check(a+1);
-                        Y_Apex_DFT_Check(a+2);
-                        Y_Apex_DFT_Check(b+1);
-                        Y_Apex_DFT_Check(b+2);
+                        //Y_Apex_DFT_Check(a+1);
+                        //Y_Apex_DFT_Check(a+2);
+                        //Y_Apex_DFT_Check(b+1);
+                        //Y_Apex_DFT_Check(b+2);
 #endif // !defined(NDEBUG)
 
 
@@ -270,8 +264,8 @@ namespace Yttrium
                             const Complex<double> * za = (Complex<double> *) &a[1];
                             for(size_t i=nc-1;i>0;--i)
                             {
-                                Y_Apex_DFT_Check(za+1);
-                                Y_Apex_DFT_Check(zb+1);
+                                //Y_Apex_DFT_Check(za+1);
+                                //Y_Apex_DFT_Check(zb+1);
                                 *(++zb) *= *(++za);
                             }
                         }
@@ -291,8 +285,8 @@ namespace Yttrium
                         double              cy  = 0;
                         static const double RX  = 256.0;
                         for(size_t j=nn;j>0;--j) {
-                            Y_Apex_DFT_Check(b+j);
-                            Y_Apex_DFT_Check(w+j);
+                            //Y_Apex_DFT_Check(b+j);
+                            //Y_Apex_DFT_Check(w+j);
                             const double t = floor( b[j]/(double)nc+cy+0.5 );
                             cy=(unsigned long) (t*0.00390625);
                             w[j] = (uint8_t)(t-cy*RX);
@@ -381,7 +375,7 @@ namespace Yttrium
 #if defined(Y_APEX_DFT_RAW_SEND)
                     for(size_t i=n,j=0;i>0;--i) b[i] = arg.getByte(j++);
 #else
-                    Transfer<WORD>::Send(b,arg.word,arg.words);
+
 #endif
 
                     DFT::RealForward(b,nn);
@@ -429,7 +423,6 @@ namespace Yttrium
 
                 mgr.releaseBlock(blockEntry,blockShift);
                 return dft.yield();
-
             }
 
 

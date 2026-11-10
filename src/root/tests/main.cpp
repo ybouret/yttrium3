@@ -132,6 +132,7 @@ Y_UTEST_DECL(8)
 
 
     Y_UTEST(apex_k);
+    Y_UTEST(apex_iterator);
     Y_UTEST(apex_k_bits);
     Y_UTEST(apex_k_sd);
     Y_UTEST(apex_k_gcd);
