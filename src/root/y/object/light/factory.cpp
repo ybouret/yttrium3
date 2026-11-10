@@ -26,6 +26,7 @@ namespace Yttrium
     prev(0)
     {
         assert(arena.blockSize>=blockSize);
+        assert(arena.blockSize>=sizeof(Memory::Page));
     }
 
     LightObject:: Factory:: Node:: ~Node() noexcept
@@ -73,7 +74,6 @@ namespace Yttrium
     void LightObject:: Factory:: Node :: releaseBlock(void *const blockAddr) noexcept
     {
         assert(blockAddr);
-        std::cerr << "[-" << blockAddr << "] " << blockSize << "/" << arena.blockSize << std::endl;
         store( Memory::Page::From(blockAddr) );
     }
 
@@ -168,6 +168,7 @@ namespace Yttrium
         Y_Lock(access);
         assert(0!=blockAddr); 
         assert(blockSize>0);
+        std::cerr << "[-" << blockAddr << "] " << blockSize << std::endl;
 
         Slot & slot = slots[blockSize&TableMask];
         if(releasing && (blockSize==releasing->blockSize) )
