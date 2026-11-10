@@ -50,8 +50,8 @@ namespace Yttrium
                 assert(b!=0);
                 assert(p>0);
                 assert(q>0);
-                const size_t   n   = p+q;
-                Keg<WORD> *    res = new Keg<WORD>(WithAtLeast,n);
+                const size_t   n   = p+q; assert(n>0);
+                Keg<WORD> *    res = new Keg<WORD>(WithAtLeast,n); assert(res->maxWords>=n);
 #if defined(Y_Apex_Trace)
                 const uint64_t mark = System::WallTime::Ticks();
 #endif

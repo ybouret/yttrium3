@@ -14,101 +14,101 @@ using namespace Apex;
 
 namespace
 {
-	static long double tmx = 0.01L;
+    static long double tmx = 0.01L;
 
 
-	template <typename WORD, typename CORE> static inline
-		SignType CompareDFT(const size_t nbits)
-	{
-		typedef Keg<WORD> KegType;
-		(std::cerr << "\tDFT(" << std::setw(4) << nbits << " bits) -- " << sizeof(WORD) * 8 << "-bits | " << sizeof(CORE) * 8 << "-bits: " << std::endl).flush();
+    template <typename WORD, typename CORE> static inline
+    SignType CompareDFT(const size_t nbits)
+    {
+        typedef Keg<WORD> KegType;
+        (std::cerr << "\tDFT(" << std::setw(4) << nbits << " bits) -- " << sizeof(WORD) * 8 << "-bits | " << sizeof(CORE) * 8 << "-bits: " << std::endl).flush();
 
-		Core::Rand       ran;
-		System::WallTime chrono;
-		size_t           nops = 0;
-		do {
-			++nops;
-			const AutoPtr< KegType > lhs = KegType::MakeRandom(ran, nbits);  assert(lhs.isValid()); assert(nbits == lhs->bits);
-			const AutoPtr< KegType > rhs = KegType::MakeRandom(ran, nbits);  assert(rhs.isValid()); assert(nbits == rhs->bits);
-			const AutoPtr< KegType > dft = KegDFT::Compute(*lhs, *rhs);
-			const AutoPtr< KegType > mul = KegMul::Compute<WORD, CORE>(lhs->word, lhs->words, rhs->word, rhs->words);
-			if (nops >= 1) break;
-		} while (true);
-		return __Zero__;
+        Core::Rand       ran;
+        System::WallTime chrono;
+        size_t           nops = 0;
+        do {
+            ++nops;
+            const AutoPtr< KegType > lhs = KegType::MakeRandom(ran, nbits);  assert(lhs.isValid()); assert(nbits == lhs->bits);
+            const AutoPtr< KegType > rhs = KegType::MakeRandom(ran, nbits);  assert(rhs.isValid()); assert(nbits == rhs->bits);
+            const AutoPtr< KegType > dft = KegDFT::Compute(*lhs, *rhs);
+            const AutoPtr< KegType > mul = KegMul::Compute<WORD, CORE>(lhs->word, lhs->words, rhs->word, rhs->words);
+            if (nops >= 1) break;
+        } while (true);
+        return __Zero__;
 
 #if 0
-		uint64_t dft64 = 0;
-		uint64_t mul64 = 0;
-		SignType last = __Zero__;
-		size_t   same = 0;
-		do {
-			//++nops;
-			AutoPtr< KegType > lhs = KegType::MakeRandom(ran, nbits);  assert(lhs.isValid());
-			AutoPtr< KegType > rhs = KegType::MakeRandom(ran, nbits);  assert(rhs.isValid());
+        uint64_t dft64 = 0;
+        uint64_t mul64 = 0;
+        SignType last = __Zero__;
+        size_t   same = 0;
+        do {
+            //++nops;
+            AutoPtr< KegType > lhs = KegType::MakeRandom(ran, nbits);  assert(lhs.isValid());
+            AutoPtr< KegType > rhs = KegType::MakeRandom(ran, nbits);  assert(rhs.isValid());
 
-			uint64_t             mark = System::WallTime::Ticks();
-			AutoPtr< KegType > dft = KegDFT::Compute(*lhs, *rhs);
-			assert(dft.isValid());
-			dft64 += System::WallTime::Ticks() - mark;
+            uint64_t             mark = System::WallTime::Ticks();
+            AutoPtr< KegType > dft = KegDFT::Compute(*lhs, *rhs);
+            assert(dft.isValid());
+            dft64 += System::WallTime::Ticks() - mark;
 
-			mark = System::WallTime::Ticks();
-			AutoPtr< KegType > mul = KegMul::Compute<WORD, CORE>(lhs->word, lhs->words, rhs->word, rhs->words);
-			assert(mul.isValid());
-			mul64 += System::WallTime::Ticks() - mark;
+            mark = System::WallTime::Ticks();
+            AutoPtr< KegType > mul = KegMul::Compute<WORD, CORE>(lhs->word, lhs->words, rhs->word, rhs->words);
+            assert(mul.isValid());
+            mul64 += System::WallTime::Ticks() - mark;
 
-			const SignType curr = Sign::Of(dft64, mul64);
-			if (curr == last)
-			{
-				++same;
-			}
-			else
-			{
-				last = curr;
-				same = 1;
-			}
-		} while (chrono(dft64) < tmx || same < 10);
-		std::cerr << nbits << "\t=> " << std::setw(3) << last << " #same=" << std::setw(8) << same << std::endl;
-		return last;
+            const SignType curr = Sign::Of(dft64, mul64);
+            if (curr == last)
+            {
+                ++same;
+            }
+            else
+            {
+                last = curr;
+                same = 1;
+            }
+        } while (chrono(dft64) < tmx || same < 10);
+        std::cerr << nbits << "\t=> " << std::setw(3) << last << " #same=" << std::setw(8) << same << std::endl;
+        return last;
 #endif
-	}
+    }
 
-	static const size_t MaxOps = 30;
+    static const size_t MaxOps = 30;
 
-	template <typename WORD, typename CORE> static inline
-		void TestDFT()
-	{
-		(std::cerr << "-- DFT [MUL]" << std::setw(3) << sizeof(WORD) * 8 << "-bits | " << std::setw(3) << sizeof(CORE) * 8 << "-bits: ").flush();
-		size_t   lowerBits = 8;
-		SignType lowerSign = CompareDFT<WORD, CORE>(lowerBits); Y_ASSERT(lowerSign == Positive);
-		size_t   upperBits = lowerBits;
-		size_t   count = 0;
-		std::cerr << "[";
-		do
-		{
-			upperBits <<= 1;
-			++count; (std::cerr << '#').flush();
-		} while (Negative != CompareDFT<WORD, CORE>(upperBits));
+    template <typename WORD, typename CORE> static inline
+    void TestDFT()
+    {
+        (std::cerr << "-- DFT [MUL]" << std::setw(3) << sizeof(WORD) * 8 << "-bits | " << std::setw(3) << sizeof(CORE) * 8 << "-bits: ").flush();
+        size_t   lowerBits = 8;
+        SignType lowerSign = CompareDFT<WORD, CORE>(lowerBits); Y_ASSERT(lowerSign == Positive);
+        size_t   upperBits = lowerBits;
+        size_t   count = 0;
+        std::cerr << "[";
+        do
+        {
+            upperBits <<= 1;
+            ++count; (std::cerr << '#').flush();
+        } while (Negative != CompareDFT<WORD, CORE>(upperBits));
 
-		while (upperBits - lowerBits > 1)
-		{
-			++count;
-			const size_t   middleBits = (upperBits + lowerBits) >> 1;
-			const SignType middleSign = CompareDFT<WORD, CORE>(middleBits);
-			switch (middleSign)
-			{
-			case Positive:  (std::cerr << '+').flush(); lowerBits = middleBits; continue;
-			case Negative:  (std::cerr << '-').flush(); upperBits = middleBits; continue;
-			case __Zero__:  (std::cerr << '*').flush(); upperBits = lowerBits = middleBits;
-				break;
-			}
-			break;
-		}
-		const size_t upperBytes = Alignment::On<8>::Ceil(upperBits) / 8;
-		std::cerr << "]";
-		while (++count < MaxOps) std::cerr << ' ';
-		std::cerr << "==> " << std::setw(5) << upperBits << " bits | " << std::setw(5) << upperBytes << " bytes" << std::endl;
+        while (upperBits - lowerBits > 1)
+        {
+            ++count;
+            const size_t   middleBits = (upperBits + lowerBits) >> 1;
+            const SignType middleSign = CompareDFT<WORD, CORE>(middleBits);
+            switch (middleSign)
+            {
+                case Positive:  (std::cerr << '+').flush(); lowerBits = middleBits; continue;
+                case Negative:  (std::cerr << '-').flush(); upperBits = middleBits; continue;
+                case __Zero__:  (std::cerr << '*').flush(); upperBits = lowerBits = middleBits;
+                    break;
+            }
+            break;
+        }
+        const size_t upperBytes = Alignment::On<8>::Ceil(upperBits) / 8;
+        std::cerr << "]";
+        while (++count < MaxOps) std::cerr << ' ';
+        std::cerr << "==> " << std::setw(5) << upperBits << " bits | " << std::setw(5) << upperBytes << " bytes" << std::endl;
 
-	}
+    }
 
 
 }
@@ -116,26 +116,26 @@ namespace
 Y_UTEST(apex_perf)
 {
 #if 0
-	Core::Rand ran;
-	if (argc > 1) tmx = ASCII::Convert::To<long double>(argv[1], "tmx", 0);
-
-	if (0)
-	{
-		TestDFT<uint8_t, uint16_t>();
-		TestDFT<uint8_t, uint32_t>();
-		TestDFT<uint8_t, uint64_t>();
-		TestDFT<uint16_t, uint32_t>();
-		TestDFT<uint16_t, uint64_t>();
-	}
-	TestDFT<uint32_t, uint64_t>();
+    Core::Rand ran;
+    if (argc > 1) tmx = ASCII::Convert::To<long double>(argv[1], "tmx", 0);
+    
+    if (0)
+    {
+        TestDFT<uint8_t, uint16_t>();
+        TestDFT<uint8_t, uint32_t>();
+        TestDFT<uint8_t, uint64_t>();
+        TestDFT<uint16_t, uint32_t>();
+        TestDFT<uint16_t, uint64_t>();
+    }
+    TestDFT<uint32_t, uint64_t>();
 #else
-	size_t bits = 8;
-	if (argc > 1) bits = ASCII::Convert::To<size_t>(argv[1], "bits", 0);
-	Y_PRINTV(bits);
-	//CompareDFT<uint32_t, uint64_t>(bits);
+    size_t bits = 8;
+    if (argc > 1) bits = ASCII::Convert::To<size_t>(argv[1], "bits", 0);
+    Y_PRINTV(bits);
+    //CompareDFT<uint32_t, uint64_t>(bits);
 
-	for (size_t i = 1; i <= bits; ++i)
-		CompareDFT<uint32_t, uint64_t>(i);
+    for (size_t i = 1; i <= bits; ++i)
+        CompareDFT<uint32_t, uint64_t>(i);
 #endif
 
 }
