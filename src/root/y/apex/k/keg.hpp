@@ -187,12 +187,12 @@ word( AcquireWords<WORD>(Coerce(blockShift),Coerce(maxBytes),Coerce(maxWords) ) 
             Y_Apex_Keg_Alloc()
             {
                 assert(words>0);
-                static const WordType _1 = 1;
-                const size_t msi = words-1;   // most significant index
-                WordType    &msw = word[msi]; // most significant word
-                const size_t idx = n - (msi*WordBits);
+                static const WordType one = 1;
+                const size_t          msi = words-one; // most significant index
+                WordType    &         msw = word[msi]; // most significant word
+                const size_t          idx = n - (msi*WordBits);
                 assert(idx<WordBits);
-                msw = (WordType)( _1 << idx );
+                msw = (WordType)( one << idx );
             }
 
 

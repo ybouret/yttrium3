@@ -56,7 +56,7 @@ namespace Yttrium
             /**
              \param blockShift set for maxBytes
              \param maxBytes   required content in bytes, set to 2^blockShift
-             \return new bytes
+             \return new bytes[maxBytes]
              */
             static void * AcquireBytes(unsigned &blockShift,
                                        size_t   &maxBytes);
@@ -66,7 +66,7 @@ namespace Yttrium
              \param blockShift set for maxBytes
              \param maxBytes   required content in bytes, set to 2^blockShift
              \param maxWords   set to maxBytes/sizeof(WORD)
-             \return new words
+             \return new words[maxWords]
              */
             template <typename WORD>
             static inline WORD * AcquireWords(unsigned &blockShift,

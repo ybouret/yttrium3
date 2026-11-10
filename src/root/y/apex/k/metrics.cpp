@@ -32,7 +32,7 @@ namespace Yttrium
                                          size_t   &maxBytes)
         {
             static Memory::Archon & mgr = Memory::Archon::Instance();
-            static const size_t     _1  = 1;
+            static const size_t     one  = 1;
 
             if(maxBytes>Memory::Archon::MaxBlockBytes)
                 throw Specific::Exception(CallSign, "required bytes overflow");
@@ -40,8 +40,11 @@ namespace Yttrium
             if(InSituMax(blockShift=CeilLog2(maxBytes),Memory::Archon::MinBlockShift)>Memory::Archon::MaxBlockShift)
                 throw Specific::Exception(CallSign,"blockShift=%u exceeds %u", blockShift, Memory::Archon::MaxBlockShift);
 
+            assert(blockShift >= Memory::Archon::MinBlockShift);
+            assert(blockShift <= Memory::Archon::MaxBlockShift);
+
             void * const addr = mgr.acquireBlock(blockShift);
-            maxBytes = _1 << blockShift;
+            maxBytes = one << blockShift;
             return addr;
         }
 
