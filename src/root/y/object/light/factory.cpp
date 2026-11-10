@@ -73,6 +73,7 @@ namespace Yttrium
     void LightObject:: Factory:: Node :: releaseBlock(void *const blockAddr) noexcept
     {
         assert(blockAddr);
+        std::cerr << "[-" << blockAddr << "] " << blockSize << "/" << arena.blockSize << std::endl;
         store( Memory::Page::From(blockAddr) );
     }
 
