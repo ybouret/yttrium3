@@ -13,9 +13,7 @@
 
 
 #include "y/memory/allocator/archon.hpp"
-#include "y/libc/block/zeroed.h"
-#include "y/memory/sentinel.hpp"
-#include "y/check/memory.hpp"
+#include "y/apex/api/iterator.hpp"
 
 #if defined(Y_Apex_Trace)
 #include "y/system/wall-time.hpp"
@@ -31,24 +29,10 @@ namespace Yttrium
         typedef Memory::Archon DFT_Allocator; //!< alias
         
         template <typename T> struct Transfer;
+
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)
         template <> struct Transfer<uint32_t>
         {
-            //static inline void Send(double * a, const uint32_t * word, const size_t words) noexcept
-            //{
-            //    assert(a);
-            //    assert(word);
-            //    word += words;
-            //    for(size_t i=words;i>0;--i)
-            //    {
-            //        uint32_t w = *(--word);
-            //        *(++a) = (uint8_t)(w>>24);
-            //        *(++a) = (uint8_t)(w>>16);
-            //        *(++a) = (uint8_t)(w>>8);
-            //        *(++a) = (uint8_t)(w);
-            //    }
-            //}
-
             static inline void Recv(uint32_t * word,  const uint8_t *w, const size_t mpn) noexcept
             {
                 unsigned choice = 0;
@@ -70,17 +54,6 @@ namespace Yttrium
 
         template <> struct Transfer<uint16_t>
         {
-            //static inline void Send(double * a, const uint16_t * word, const size_t words) noexcept
-            //{
-            //    word += words;
-            //    for(size_t i=words;i>0;--i)
-            //    {
-            //        uint16_t w = *(--word);
-            //        *(++a) = (uint8_t)(w>>8);
-            //        *(++a) = (uint8_t)(w);
-            //    }
-            //}
-
             static inline void Recv(uint16_t * word, const uint8_t *w, const size_t mpn) noexcept
             {
                 unsigned choice = 0;
@@ -102,11 +75,6 @@ namespace Yttrium
 
         template <> struct Transfer<uint8_t>
         {
-            //static inline void Send(double * a, const uint8_t * word, const size_t words) noexcept
-            //{
-            //    for(size_t i=words;i>0;--i) a[i] = *(word++);
-            //}
-
             static inline void Recv(uint8_t * word, const uint8_t *w, const size_t mpn) noexcept
             {
                 word += mpn;
@@ -118,7 +86,6 @@ namespace Yttrium
 
         };
 
-//#define  Y_Apex_DFT_Check(HOST) assert( CheckMemory::Inside(blockEntry,blockBytes,HOST) )
 
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
@@ -200,7 +167,6 @@ namespace Yttrium
 #if !defined(NDEBUG)
                 const size_t   blockBytes = One << blockShift;
                 assert( blockBytes >= 2*nn*sizeof(double) );
-                assert( Yttrium_Zeroed(blockEntry,blockBytes) );
 #endif
 
 
@@ -228,9 +194,13 @@ namespace Yttrium
 #if defined(Y_APEX_DFT_RAW_SEND)
                     for(size_t i=n,j=0;i>0;--i) a[i] = lhs.getByte(j++);
                     for(size_t i=m,j=0;i>0;--i) b[i] = rhs.getByte(j++);
-#else
 
+#else
+                    { ByteIterator<WORD> it(lhs.word); for(size_t i=n;i>0;--i) a[i] = it(); }
+                    { ByteIterator<WORD> it(rhs.word); for(size_t i=m;i>0;--i) b[i] = it(); }
 #endif
+
+
 
                     //mgr.releaseBlock(blockEntry,blockShift); return dft.yield();
 
@@ -248,13 +218,6 @@ namespace Yttrium
                     //
                     //----------------------------------------------------------
                     {
-#if !defined(NDEBUG)
-                        const Memory::Sentinel check_a(&a[1],nn*sizeof(double));
-                        //Y_Apex_DFT_Check(a+1);
-                        //Y_Apex_DFT_Check(a+2);
-                        //Y_Apex_DFT_Check(b+1);
-                        //Y_Apex_DFT_Check(b+2);
-#endif // !defined(NDEBUG)
 
 
                         b[1] *= a[1];
@@ -279,14 +242,9 @@ namespace Yttrium
                     //
                     //----------------------------------------------------------
                     {
-#if !defined(NDEBUG)
-                        const Memory::Sentinel check_b(&b[1],nn*sizeof(double));
-#endif
                         double              cy  = 0;
                         static const double RX  = 256.0;
                         for(size_t j=nn;j>0;--j) {
-                            //Y_Apex_DFT_Check(b+j);
-                            //Y_Apex_DFT_Check(w+j);
                             const double t = floor( b[j]/(double)nc+cy+0.5 );
                             cy=(unsigned long) (t*0.00390625);
                             w[j] = (uint8_t)(t-cy*RX);
