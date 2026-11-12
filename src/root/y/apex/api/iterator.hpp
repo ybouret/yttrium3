@@ -50,10 +50,7 @@ namespace Yttrium
             const uint16_t * entry;
             uint16_t         word;
             State            state;
-
-            uint8_t get0() noexcept;
-            uint8_t get1() noexcept;
-
+            
         };
 
         template <>
