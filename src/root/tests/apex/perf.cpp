@@ -15,55 +15,40 @@
 #include "y/container/sequence/vector.hpp"
 #include "y/core/min.hpp"
 
+#include "y/mkl/statistics/variance.hpp"
+#include "y/mkl/statistics/average.hpp"
+
 using namespace Yttrium;
 using namespace Apex;
 
 namespace
 {
 
-    static inline
-    double average(const Vector<uint64_t>& arr,
-                   double&                 err,
-                   const apn   &           sum)
-    {
-        err = 0;
-        const size_t num = arr.size();
-        const apq ave(sum, num);
-        if (num > 0)
-        {
-            apq err2;
-            for (size_t i = num; i > 0; --i)
-            {
-                const apn _ = arr[i];
-                const apq del = ave - _;
-                err2 += del * del;
-            }
-            const apn den = num * num;
-            err2 /= den;
-            err = std::sqrt(err2.ratio<double>());
-        }
-        return ave.ratio<double>();
-    }
+
+
 
     static const size_t WarmUp  = 100;
-    static double       RhoMax  = 0.05L;
     static const size_t Storage = 1024 * 1024;
 
 
     template <typename WORD, typename CORE> static inline
-    void CompareDFT(double &dftScore, double &mulScore, const size_t nbits)
+    double CompareDFT(double &dftScore, double &mulScore, const size_t nbits)
     {
         typedef Keg<WORD> KegType;
         (std::cerr << "\tDFT(" << std::setw(4) << nbits << " bits) -- " << sizeof(WORD) * 8 << "-bits | " << sizeof(CORE) * 8 << "-bits: " << std::endl).flush();
 
-        Core::Rand       ran;
-        System::WallTime chrono;
-        Vector<uint64_t> dft64(WithAtLeast, Storage);
-        Vector<uint64_t> mul64(WithAtLeast, Storage);
+        Core::Rand              ran;
+        System::WallTime        chrono;
+        Vector<double>          rho(WithAtLeast,Storage);
+        Cameo::Addition<double> xadd(Storage);
         apn dftSum;
         apn mulSum;
+        apn count=0;
+        double rhoAve = -1;
         while (true)
         {
+            ++count;
+
             const AutoPtr< KegType > lhs = KegType::MakeRandom(ran, nbits);  assert(lhs.isValid()); assert(nbits == lhs->bits);
             const AutoPtr< KegType > rhs = KegType::MakeRandom(ran, nbits);  assert(rhs.isValid()); assert(nbits == rhs->bits);
 
@@ -72,7 +57,6 @@ namespace
             const AutoPtr< KegType > dft = KegDFT::Compute(*lhs, *rhs);
             {
                 const uint64_t ell = System::WallTime::Ticks() - m64;
-                dft64 << ell;
                 dftSum += ell;
             }
 
@@ -80,39 +64,35 @@ namespace
             const AutoPtr< KegType > mul = KegMul::Compute<WORD, CORE>(lhs->word, lhs->words, rhs->word, rhs->words);
             {
                 const uint64_t ell = System::WallTime::Ticks() - m64;
-                mul64 << ell;
                 mulSum += ell;
             }
 
-            //Y_ASSERT( __Zero__ == KegCmp::ResultFor(*mul,*dft) );
+            if(true)
+            {
+                Y_ASSERT( __Zero__ == KegCmp::ResultFor(*mul,*dft) );
+            }
+
+            const apq dftAve = dftSum / count; dftScore = dftAve.ratio<double>();
+            const apq mulAve = mulSum / count; mulScore = mulAve.ratio<double>();
+
+            {
+                const apq apRho(mulSum,dftSum);
+                rho << apRho.ratio<double>(); assert( count == rho.size() );
+            }
 
 
-            // compute average sign and standard error
-            double       dftErr = 0;
-            double       mulErr = 0;
-            const double dftAve = average(dft64, dftErr, dftSum);
-            const double mulAve = average(mul64, mulErr, mulSum);
-            const double dftRho = dftErr / dftAve;
-            const double mulRho = mulErr / mulAve;
 
-#if 0
-            std::cerr
-            << "<dft> = " << dftAve << " +/- " << dftErr << " @" << dftRho
-            << " | "
-            << "<mul> = " << mulAve << " +/- " << mulErr << " @" << mulRho
-            << std::endl;
-#endif
-
-            const size_t card = dft64.size();
-
-            if (card < WarmUp)
+            if (count < WarmUp)
                 continue;
 
-            if (dftRho < RhoMax && mulRho < RhoMax)
+            rhoAve              = MKL::Statistics::Average::Of(rho,xadd);
+            const double rhoVar = MKL::Statistics::Variance::Of(rho,rhoAve,xadd);
+            const double rhoErr = std::sqrt( rhoVar / (double) rho.size() );
+
+            if(rhoErr<1e-2)
             {
-                dftScore = dftAve;
-                mulScore = mulAve;
-                return;
+                std::cerr << "\t" << rhoAve << " | err=" << rhoErr << std::endl;
+                return rhoAve;
             }
 
         };
@@ -187,9 +167,9 @@ Y_UTEST(apex_perf)
     for(unsigned bits=1000;bits<=24000;bits += 500)
     {
         double dft=0,mul=0;
-        CompareDFT<uint32_t,uint64_t>(dft,mul,bits);
+        const double rho = CompareDFT<uint32_t,uint64_t>(dft,mul,bits);
         OutputFile     fp("apex-mul.dat",true);
-        fp("%u %g %g\n", bits, dft, mul);
+        fp("%u %g %g %g\n", bits, rho, dft, mul);
     }
 
     //for (size_t i = 1; i <= bits; ++i) CompareDFT<uint32_t, uint64_t>(i);
