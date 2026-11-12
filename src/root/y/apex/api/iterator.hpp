@@ -22,7 +22,7 @@ namespace Yttrium
             ~ByteIterator()                     noexcept;
 
             uint8_t operator()(void) noexcept;
-
+            bool    within(const uint8_t* const blockAddr, const size_t blockSize) const noexcept;
 
         private:
             Y_Disable_Copy_And_Assign(ByteIterator);
@@ -44,6 +44,7 @@ namespace Yttrium
             ~ByteIterator()                      noexcept;
 
             uint8_t operator()(void) noexcept;
+            bool    within(const uint16_t* const blockAddr, const size_t blockSize) const noexcept;
 
         private:
             Y_Disable_Copy_And_Assign(ByteIterator);
@@ -69,6 +70,7 @@ namespace Yttrium
             ~ByteIterator() noexcept;
 
             uint8_t operator()(void) noexcept;
+            bool    within(const uint32_t* const blockAddr, const size_t blockSize) const noexcept;
 
 
         private:
