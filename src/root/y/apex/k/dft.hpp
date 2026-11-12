@@ -190,7 +190,7 @@ namespace Yttrium
                     // send bytes into realse
                     //
                     //----------------------------------------------------------
-#define Y_APEX_DFT_RAW_SEND 1
+//#define Y_APEX_DFT_RAW_SEND 1
 #if defined(Y_APEX_DFT_RAW_SEND)
                     for(size_t i=n,j=0;i>0;--i) a[i] = lhs.getByte(j++);
                     for(size_t i=m,j=0;i>0;--i) b[i] = rhs.getByte(j++);
@@ -218,19 +218,14 @@ namespace Yttrium
                     //
                     //----------------------------------------------------------
                     {
-
-
                         b[1] *= a[1];
                         b[2] *= a[2];
                         {
                             Complex<double>       * zb = (Complex<double> *) &b[1];
                             const Complex<double> * za = (Complex<double> *) &a[1];
                             for(size_t i=nc-1;i>0;--i)
-                            {
-                                //Y_Apex_DFT_Check(za+1);
-                                //Y_Apex_DFT_Check(zb+1);
                                 *(++zb) *= *(++za);
-                            }
+                           
                         }
 
                         DFT::RealReverse(b,nn);
@@ -333,7 +328,7 @@ namespace Yttrium
 #if defined(Y_APEX_DFT_RAW_SEND)
                     for(size_t i=n,j=0;i>0;--i) b[i] = arg.getByte(j++);
 #else
-
+                    ByteIterator<WORD> it(arg.word); for (size_t i = n; i > 0; --i) b[i] = it();
 #endif
 
                     DFT::RealForward(b,nn);
