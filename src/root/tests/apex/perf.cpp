@@ -1,5 +1,7 @@
 #include "y/apex/k/dft.hpp"
 #include "y/apex/k/mul.hpp"
+#include "y/apex/k/cmp.hpp"
+
 #include "y/utest/run.hpp"
 
 #include "y/core/rand.hpp"
@@ -20,6 +22,36 @@ namespace
 {
     static long double tmx = 0.001L;
 
+    static inline
+    long double average(const Vector<uint64_t> &arr, long double &err)
+    {
+        err = 0;
+        apn sum = 0;
+        const size_t num = arr.size();
+        for(size_t i=num;i>0;--i)
+        {
+            sum += arr[i];
+        }
+        const apq ave(sum,num);
+        if(num>0)
+        {
+            apq err2;
+            for(size_t i=num;i>0;--i)
+            {
+                const apq del = ave - arr[i];
+                err2 += del*del;
+            }
+            const apn den = num*num;
+            err2 /= den;
+            err = std::sqrt( err2.ratio<long double>() );
+        }
+        return ave.ratio<long double>();
+    }
+
+    static const size_t WarmUp = 100;
+    static long double  RhoMax = 0.1L;
+    static const size_t Storage = 1024*1024;
+
 
     template <typename WORD, typename CORE> static inline
     SignType CompareDFT(const size_t nbits)
@@ -29,54 +61,51 @@ namespace
 
         Core::Rand       ran;
         System::WallTime chrono;
-        apn              ops   = 0;
-        apq              sum   = 0;
-        uint64_t         dft64 = 0;
-        uint64_t         mul64 = 0;
-        Vector<SignType> svec;
-        do {
+        Vector<uint64_t> dft64(WithAtLeast,Storage);
+        Vector<uint64_t> mul64(WithAtLeast,Storage);
+
+        while(true)
+        {
             const AutoPtr< KegType > lhs = KegType::MakeRandom(ran, nbits);  assert(lhs.isValid()); assert(nbits == lhs->bits);
             const AutoPtr< KegType > rhs = KegType::MakeRandom(ran, nbits);  assert(rhs.isValid()); assert(nbits == rhs->bits);
 
             // gather timings
             uint64_t                 m64 = System::WallTime::Ticks();
             const AutoPtr< KegType > dft = KegDFT::Compute(*lhs, *rhs);
-            dft64 += System::WallTime::Ticks() - m64;
+            dft64 << System::WallTime::Ticks() - m64;
 
             m64 = System::WallTime::Ticks();
             const AutoPtr< KegType > mul = KegMul::Compute<WORD, CORE>(lhs->word, lhs->words, rhs->word, rhs->words);
-            mul64 += System::WallTime::Ticks() - m64;
+            mul64 << System::WallTime::Ticks() - m64;
+
+            //Y_ASSERT( __Zero__ == KegCmp::ResultFor(*mul,*dft) );
+
 
             // compute average sign and standard error
-            ++ops;
-            const SignType last = Sign::Of(mul64,dft64);
-            svec << last;
-            switch( last )
-            {
-                case Negative: --sum; break;
-                case Positive: ++sum; break;
-                case __Zero__:        break;
-            }
+            long double       dftErr = 0;
+            long double       mulErr = 0;
+            const long double dftAve = average(dft64,dftErr);
+            const long double mulAve = average(mul64,mulErr);
+            const long double dftRho = dftErr/dftAve;
+            const long double mulRho = mulErr/mulAve;
 
-            const long double ell = chrono(Min(dft64,mul64));
+            std::cerr
+            << "<dft> = " << dftAve << " +/- " << dftErr << " @" << dftRho
+            << " | "
+            << "<mul> = " << mulAve << " +/- " << mulErr << " @" << mulRho
+            << std::endl;
 
+            const size_t card = dft64.size();
 
-            const apq ave = sum / ops;
-            apq       er2 = 0;
-            for(size_t i=svec.size();i>0;--i)
-            {
-                apq s = svec[i];
-                s -= ave;
-                er2 += s*s;
-            }
-            er2 /= ops*ops;
-            const long double err = er2.ratio<long double>();
-            std::cerr << "ave=" << ave << ", err=" << err << " @" << ops << " during " << ell << ", bits=" << nbits << std::endl;
+            if(card<WarmUp)
+                continue;
 
-            if(ell>=tmx && err<=0.01L && ops>=100) break;
+            if(dftRho<RhoMax && mulRho<RhoMax)
+                break;
 
-        } while (true);
-        return sum.numer.s;
+        };
+
+        return __Zero__;
     }
 
     static const size_t MaxOps = 30;
@@ -138,18 +167,18 @@ Y_UTEST(apex_perf)
     }
     TestDFT<uint32_t, uint64_t>();
 #else
-    //size_t bits = 8;
-    //if (argc > 1) bits = ASCII::Convert::To<size_t>(argv[1], "bits", 0);
-    //Y_PRINTV(bits);
-    //CompareDFT<uint32_t, uint64_t>(bits);
+    size_t bits = 8;
+    if (argc > 1) bits = ASCII::Convert::To<size_t>(argv[1], "bits", 0);
+    Y_PRINTV(bits);
+    CompareDFT<uint32_t, uint64_t>(bits);
 
-    OutputFile::Overwrite("apex-mul.dat");
-    for(unsigned bits=1000;bits<=32000;bits += 1000)
-    {
-        const SignType s = CompareDFT<uint32_t,uint64_t>(bits);
-        OutputFile     fp("apex-mul.dat",true);
-        fp("%u %d\n", bits, (int)s);
-    }
+    //OutputFile::Overwrite("apex-mul.dat");
+    //for(unsigned bits=1000;bits<=32000;bits += 1000)
+    //{
+    //    const SignType s = CompareDFT<uint32_t,uint64_t>(bits);
+    //    OutputFile     fp("apex-mul.dat",true);
+    //    fp("%u %d\n", bits, (int)s);
+    //}
 
     //for (size_t i = 1; i <= bits; ++i) CompareDFT<uint32_t, uint64_t>(i);
 #endif
