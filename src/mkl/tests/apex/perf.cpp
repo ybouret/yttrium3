@@ -35,7 +35,7 @@ namespace
 
 
 
-    static const size_t WarmUp  = 100;
+    static const size_t WarmUp  = 200;
     static const size_t Storage = 1024 * 1024;
 
 
@@ -137,6 +137,8 @@ Y_UTEST(apex_perf)
 
     for(size_t i=1;i<y.size();++i)
     {
+        const double ycurr = y[i];
+        if(ycurr>=0) continue;
         if(y[i+1]>=y[i])
         {
             std::cerr << "Keeping " << i << " out of " << y.size() << std::endl;
@@ -160,8 +162,11 @@ Y_UTEST(apex_perf)
         Triplet<double> yy = { y.head(), 0, y.tail() };
         ZBis<double>   solve;
 
-        const double xopt = solve(F,xx,yy);
-        std::cerr << "xopt=" << xopt << std::endl;
+        const double popt = solve(F,xx,yy);
+        std::cerr << "popt=" << popt << std::endl;
+        const double rbits = pow(2.0,popt);
+        std::cerr << "real_bits=" << rbits << std::endl;
+
     }
 
 
