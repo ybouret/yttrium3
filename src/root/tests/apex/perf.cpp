@@ -100,44 +100,7 @@ namespace
 
     }
 
-    static const size_t MaxOps = 30;
-
-    template <typename WORD, typename CORE> static inline
-    void TestDFT()
-    {
-        (std::cerr << "-- DFT [MUL]" << std::setw(3) << sizeof(WORD) * 8 << "-bits | " << std::setw(3) << sizeof(CORE) * 8 << "-bits: ").flush();
-        size_t   lowerBits = 8;
-        SignType lowerSign = CompareDFT<WORD, CORE>(lowerBits); Y_ASSERT(lowerSign == Positive);
-        size_t   upperBits = lowerBits;
-        size_t   count = 0;
-        std::cerr << "[";
-        do
-        {
-            upperBits <<= 1;
-            ++count; (std::cerr << '#').flush();
-        } while (Negative != CompareDFT<WORD, CORE>(upperBits));
-
-        while (upperBits - lowerBits > 1)
-        {
-            ++count;
-            const size_t   middleBits = (upperBits + lowerBits) >> 1;
-            const SignType middleSign = CompareDFT<WORD, CORE>(middleBits);
-            switch (middleSign)
-            {
-                case Positive:  (std::cerr << '+').flush(); lowerBits = middleBits; continue;
-                case Negative:  (std::cerr << '-').flush(); upperBits = middleBits; continue;
-                case __Zero__:  (std::cerr << '*').flush(); upperBits = lowerBits = middleBits;
-                    break;
-            }
-            break;
-        }
-        const size_t upperBytes = Alignment::On<8>::Ceil(upperBits) / 8;
-        std::cerr << "]";
-        while (++count < MaxOps) std::cerr << ' ';
-        std::cerr << "==> " << std::setw(5) << upperBits << " bits | " << std::setw(5) << upperBytes << " bytes" << std::endl;
-
-    }
-
+    
 
 }
 
