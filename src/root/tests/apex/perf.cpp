@@ -14,6 +14,7 @@
 #include "y/apex/rational.hpp"
 #include "y/container/sequence/vector.hpp"
 #include "y/core/min.hpp"
+#include "y/format/decimal.hpp"
 
 #include "y/mkl/statistics/variance.hpp"
 #include "y/mkl/statistics/average.hpp"
@@ -164,12 +165,14 @@ Y_UTEST(apex_perf)
     //CompareDFT<uint32_t, uint64_t>(bits);
 
     OutputFile::Overwrite("apex-mul.dat");
-    for(unsigned bits=1000;bits<=24000;bits += 500)
+    static const size_t one=1;
+    for(unsigned p=6;p<=16;++p)
     {
+        const size_t bits=one<<p;
         double dft=0,mul=0;
         const double rho = CompareDFT<uint32_t,uint64_t>(dft,mul,bits);
         OutputFile     fp("apex-mul.dat",true);
-        fp("%u %g %g %g\n", bits, rho, dft, mul);
+        fp("%s %g %g %g\n", Decimal(p).c_str(), std::log(rho), dft, mul);
     }
 
     //for (size_t i = 1; i <= bits; ++i) CompareDFT<uint32_t, uint64_t>(i);

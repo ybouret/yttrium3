@@ -5,6 +5,7 @@ root
 minimize
 ode
 tao
+interpolation
 )
 
 Y_LinkLibraries(test-mkl y-mkl)
@@ -37,4 +38,5 @@ Y_UTEST(tao:device)
 Y_UTEST(tao2)
 Y_UTEST(tao3)
 
+Y_UTEST(interpolation:continuous)
 

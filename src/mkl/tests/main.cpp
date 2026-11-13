@@ -28,5 +28,6 @@ Y_UTEST_DECL(5)
     Y_UTEST(tao2);
     Y_UTEST(tao3);
 
+    Y_UTEST(interpolation_continuous);
 }
 Y_UTEST_EXEC()

@@ -63,4 +63,4 @@ namespace Yttrium
 }
 
 
-#endif
+#endif // !Y_MKL_Interpolation_Polynomial_Included
