@@ -14,10 +14,10 @@ namespace Yttrium
     {
 
         template <typename T, template <class> class INTERP>
-        class ContinousInterpolation
+        class ContinuousInterpolation
         {
         public:
-            inline explicit ContinousInterpolation(const Readable<T> &xa,
+            inline explicit ContinuousInterpolation(const Readable<T> &xa,
                                                    const Readable<T> &ya) :
             interp(xa.size()),
             xx(xa),
@@ -28,7 +28,7 @@ namespace Yttrium
             }
 
 
-            inline virtual ~ContinousInterpolation() noexcept
+            inline virtual ~ContinuousInterpolation() noexcept
             {
             }
 
@@ -39,7 +39,7 @@ namespace Yttrium
 
 
         private:
-            Y_Disable_Copy_And_Assign(ContinousInterpolation);
+            Y_Disable_Copy_And_Assign(ContinuousInterpolation);
             INTERP<T>           interp;
             const Readable<T> & xx;
             const Readable<T> & yy;

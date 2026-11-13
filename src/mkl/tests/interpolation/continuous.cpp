@@ -43,12 +43,12 @@ Y_UTEST(interpolation_continuous)
     }
 
     {
-        ContinousInterpolation<float,PolynomialInterpolation> F(xa,ya);
+        ContinuousInterpolation<float,PolynomialInterpolation> F(xa,ya);
         saveInterp("interp-pol.txt",F);
     }
 
     {
-        ContinousInterpolation<float,RationalInterpolation> F(xa,ya);
+        ContinuousInterpolation<float,RationalInterpolation> F(xa,ya);
         saveInterp("interp-rat.txt",F);
     }
 

@@ -29,5 +29,7 @@ Y_UTEST_DECL(5)
     Y_UTEST(tao3);
 
     Y_UTEST(interpolation_continuous);
+
+    Y_UTEST(apex_perf);
 }
 Y_UTEST_EXEC()

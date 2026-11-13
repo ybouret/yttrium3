@@ -6,6 +6,7 @@ minimize
 ode
 tao
 interpolation
+apex
 )
 
 Y_LinkLibraries(test-mkl y-mkl)
@@ -40,3 +41,4 @@ Y_UTEST(tao3)
 
 Y_UTEST(interpolation:continuous)
 
+Y_UTEST(apex:perf)

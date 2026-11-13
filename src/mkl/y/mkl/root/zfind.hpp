@@ -112,5 +112,5 @@ namespace Yttrium
     }
 }
 
-#endif
+#endif // !Y_MKL_ZFind_Included
 
