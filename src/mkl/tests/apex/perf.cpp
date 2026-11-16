@@ -191,7 +191,7 @@ namespace
         //std::cerr << "x=" << x << std::endl;
         //std::cerr << "y=" << y << std::endl;
         OutputFile fp(logName,true);
-        fp("%s %s", Decimal(wbits).c_str(), Decimal(cbits).c_str() );
+        fp("%2s %2s", Decimal(wbits).c_str(), Decimal(cbits).c_str() );
         if(y.head()<0&&y.tail()>0)
         {
             std::cerr << "Looking For Optimal Ratio..." << std::endl;
@@ -206,12 +206,12 @@ namespace
             std::cerr << "popt=" << popt << std::endl;
             const double rbits = pow(2.0,popt);
             std::cerr << "real_bits=" << rbits << std::endl;
-            fp(" %g",rbits);
+            fp(" %10g %10g",rbits,ceil(rbits/8.0));
         }
         else
         {
             std::cerr << "Not optimal ratio found..." << std::endl;
-            fp << " -1";
+            fp << " -1 -1";
         }
         fp << '\n';
 
