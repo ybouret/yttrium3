@@ -19,7 +19,13 @@ namespace Yttrium
                 static const char * const                CallSign;
                 typedef Keyed< String,ArcPtr<Variable> > Pointer;
 
-                explicit Variable(const String &varName);
+                template <typename NAME>
+                inline   Variable(const NAME &varName) :
+                CountedObject(), name(varName)
+                {
+                    checkName();
+                }
+
                 virtual ~Variable() noexcept;
 
                 const String name;
@@ -29,14 +35,14 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(Variable);
+                void checkName() const;
             };
 
             const char * const Variable:: CallSign = "Fit::Variable";
 
             Variable:: ~Variable() noexcept {}
-            Variable:: Variable(const String &varName) :
-            CountedObject(),
-            name(varName)
+
+            void Variable:: checkName() const
             {
                 if(name.size()<=0)
                     throw Specific::Exception(CallSign, "empty name");
@@ -131,6 +137,7 @@ namespace Yttrium
 }
 
 #include "y/container/associative/suffix/set.hpp"
+#include "y/type/proxy.hpp"
 
 namespace Yttrium
 {
@@ -140,32 +147,43 @@ namespace Yttrium
         {
             typedef SuffixSet<String,Variable::Pointer> VarDB;
 
-            class Variables : public VarDB
+            class Variables : public Proxy<const VarDB>
             {
             public:
+                typedef VarDB::Iterator Iterator;
+
                 explicit Variables();
                 virtual ~Variables() noexcept;
                 Variables(const Variables &);
                 Variables & operator=( const Variables &);
+
+
+
+            private:
+                VarDB vdb;
+                Y_Proxy_Decl();
             };
+
+
+            Y_Proxy_Impl(Variables,vdb)
 
             Variables:: ~Variables() noexcept
             {
             }
 
-            Variables:: Variables() : VarDB()
+            Variables:: Variables() : vdb()
             {
             }
 
             Variables:: Variables(const Variables &other) :
-            VarDB(other)
+            vdb(other.vdb)
             {
             }
 
             Variables & Variables:: operator=( const Variables &other )
             {
-                Variables _(other);
-                xch(_);
+                VarDB _(other.vdb);
+                vdb.xch(_);
                 return *this;
             }
 
