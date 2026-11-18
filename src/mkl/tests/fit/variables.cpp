@@ -33,6 +33,13 @@ namespace Yttrium
                 virtual size_t indx() const noexcept = 0;
                 const String  & key() const noexcept;
 
+                friend std::ostream & operator<<(std::ostream &os, const Variable &var)
+                {
+
+                    os << var.name << '@' << var.indx();
+                    return os;
+                }
+
             private:
                 Y_Disable_Copy_And_Assign(Variable);
                 void checkName() const;
@@ -162,6 +169,7 @@ namespace Yttrium
 
 #include "y/container/associative/suffix/set.hpp"
 #include "y/type/proxy.hpp"
+#include "y/format/decimal.hpp"
 
 namespace Yttrium
 {
@@ -176,6 +184,7 @@ namespace Yttrium
             public:
                 // Definitions
                 typedef VarDB::Iterator Iterator;
+                typedef VarDB::ConstIterator ConstIterator;
 
                 // C++
                 explicit Variables();
@@ -185,12 +194,28 @@ namespace Yttrium
 
 
                 // Methods
+
+                //! create a new, automatically indexed, primary variable
+                /**
+                 \param varName variable name
+                 \return created variable
+                 */
                 template <typename NAME>
                 const Variable & operator()(const NAME &varName)
                 {
                     const Variable::Pointer var = new PrimaryVariable(varName, vdb.size()+1);
                     return insert(var);
                 }
+
+                template <typename NAME>
+                const Variable & operator()(const NAME &alias, const Variable &source)
+                {
+                    const Variable::Pointer var = new ReplicaVariable(alias,source);
+                    return insert(var);
+                }
+
+
+
 
             private:
                 VarDB vdb;
@@ -223,7 +248,24 @@ namespace Yttrium
 
             const Variable & Variables:: insert( const Variable::Pointer &var )
             {
-                
+                const String & name = var->name;
+                const size_t   indx = var->indx();
+                for(Iterator it=vdb.begin();it!=vdb.end();++it)
+                {
+                    const Variable &v = **it;
+
+                    if(v.name==name)
+                        throw Specific::Exception(Variable::CallSign, "multiple '%s'", name.c_str());
+
+                    if(v.indx()==indx)
+                        throw Specific::Exception(Variable::CallSign, "'%s' has same index #%s than '%s'", name.c_str(), Decimal(indx).c_str(), v.name.c_str() );
+
+                }
+
+                if(!vdb.insert(var))
+                    throw Specific::Exception(Variable::CallSign,"unexpect insertion failure of '%s'", name.c_str());
+
+                return *var;
             }
 
 
@@ -238,8 +280,20 @@ namespace Yttrium
 
 #include "y/utest/run.hpp"
 
+using namespace Yttrium;
+using namespace MKL;
+
+
 Y_UTEST(fit_variables)
 {
+
+    Fit::Variables vars;
+    const Fit::Variable &D1 = vars("D1");
+    const Fit::Variable &D2 = vars("D2");
+    const Fit::Variable &t0 = vars("t0");
+
+    std::cerr << vars << std::endl;
+
 
 }
 Y_UDONE()
