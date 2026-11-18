@@ -31,5 +31,7 @@ Y_UTEST_DECL(5)
     Y_UTEST(interpolation_continuous);
 
     Y_UTEST(apex_perf);
+
+    Y_UTEST(fit_variables);
 }
 Y_UTEST_EXEC()

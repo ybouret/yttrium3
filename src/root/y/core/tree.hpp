@@ -119,6 +119,13 @@ namespace Yttrium
 
             OutputStream & viz(OutputStream &) const; //!< emit GraphViz \return output stream
 
+            inline void swapForTree(Tree &tree) noexcept
+            {
+                CoerceSwap(root,tree.root);
+                CoerceSwap(size,tree.size);
+                Coerce(pool).swapForPool( Coerce(tree.pool) );
+            }
+
         private:
             Y_Disable_Copy_And_Assign(Tree); //!< discarded
             TreeNode * const root;           //!< root for 0-length path

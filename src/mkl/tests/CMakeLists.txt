@@ -7,6 +7,7 @@ ode
 tao
 interpolation
 apex
+fit
 )
 
 Y_LinkLibraries(test-mkl y-mkl)
@@ -42,3 +43,6 @@ Y_UTEST(tao3)
 Y_UTEST(interpolation:continuous)
 
 Y_UTEST(apex:perf)
+
+Y_UTEST(fit:variables)
+

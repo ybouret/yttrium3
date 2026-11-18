@@ -156,6 +156,14 @@ namespace Yttrium
         inline ConstReverseIterator rend()   const noexcept { return 0; }
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
+
+        inline void xch( SuffixProto &peer ) noexcept
+        {
+            list.swapForList(peer.list);
+            tree.swapForTree(peer.tree);
+            pool.swapForPool(peer.pool);
+        }
+
         //______________________________________________________________________
         //
         //
@@ -255,7 +263,6 @@ namespace Yttrium
 
     private:
         Y_Disable_Assign(SuffixProto); //!< discarded
-        //Y_Disable_Copy(SuffixProto);
 
     };
 
