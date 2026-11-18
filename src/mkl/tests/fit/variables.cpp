@@ -68,14 +68,20 @@ namespace Yttrium
             class PrimaryVariable : public Variable
             {
             public:
-                explicit PrimaryVariable(const String &varName, const size_t varIndx);
-
+                template <typename NAME> inline
+                explicit PrimaryVariable(const NAME &varName, const size_t varIndx) :
+                Variable(varName),
+                indx_(varIndx)
+                {
+                    checkIndx();
+                }
                 virtual ~PrimaryVariable() noexcept;
 
                 virtual size_t indx() const noexcept;
 
             private:
                 Y_Disable_Copy_And_Assign(PrimaryVariable);
+                void checkIndx() const;
                 const size_t indx_;
             };
 
@@ -83,9 +89,7 @@ namespace Yttrium
             {
             }
 
-            PrimaryVariable:: PrimaryVariable(const String &varName, const size_t varIndx) :
-            Variable(varName),
-            indx_( varIndx )
+            void PrimaryVariable:: checkIndx() const
             {
                 if( indx_ <= 0 ) throw Specific::Exception(CallSign, "invalid index");
             }
@@ -111,24 +115,44 @@ namespace Yttrium
             class ReplicaVariable : public Variable
             {
             public:
-                explicit ReplicaVariable(const String &varName, const Variable::Pointer &primaryVar);
+                template <typename NAME> inline
+                explicit ReplicaVariable(const NAME     &varName,
+                                         const Variable &variable) :
+                Variable(varName),
+                ptr( CheckVariable(variable) )
+                {
+                }
 
                 virtual ~ReplicaVariable() noexcept;
+
+                virtual size_t indx() const noexcept;
+
             private:
                 Y_Disable_Copy_And_Assign(ReplicaVariable);
-                const Variable::Pointer primary;
+                const Variable::Pointer ptr;
+                static Variable * CheckVariable(const Variable &);
             };
 
             ReplicaVariable:: ~ReplicaVariable() noexcept
             {
             }
 
-            ReplicaVariable:: ReplicaVariable(const String &varName, const Variable::Pointer &primaryVar) :
-            Variable(varName),
-            primary(primaryVar)
-            {
 
+            Variable * ReplicaVariable:: CheckVariable(const Variable &var)
+            {
+                if(var.quantity()<=0)
+                    throw Specific::Exception(Variable::CallSign, "not a dynamic variable");
+                return & Coerce(var);
             }
+
+
+
+            size_t ReplicaVariable:: indx() const noexcept
+            {
+                return ptr->indx();
+            }
+
+
         }
 
 
@@ -150,18 +174,28 @@ namespace Yttrium
             class Variables : public Proxy<const VarDB>
             {
             public:
+                // Definitions
                 typedef VarDB::Iterator Iterator;
 
+                // C++
                 explicit Variables();
                 virtual ~Variables() noexcept;
                 Variables(const Variables &);
                 Variables & operator=( const Variables &);
 
 
+                // Methods
+                template <typename NAME>
+                const Variable & operator()(const NAME &varName)
+                {
+                    const Variable::Pointer var = new PrimaryVariable(varName, vdb.size()+1);
+                    return insert(var);
+                }
 
             private:
                 VarDB vdb;
                 Y_Proxy_Decl();
+                const Variable & insert( const Variable::Pointer &var );
             };
 
 
@@ -185,6 +219,11 @@ namespace Yttrium
                 VarDB _(other.vdb);
                 vdb.xch(_);
                 return *this;
+            }
+
+            const Variable & Variables:: insert( const Variable::Pointer &var )
+            {
+                
             }
 
 
