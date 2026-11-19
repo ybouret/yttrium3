@@ -1,61 +1,10 @@
 #include "y/mkl/fit/variable/primary.hpp"
+#include "y/mkl/fit/variable/replica.hpp"
+
 #include "y/exception.hpp"
 
 
-namespace Yttrium
-{
-    namespace MKL
-    {
-        namespace Fit
-        {
-            class ReplicaVariable : public Variable
-            {
-            public:
-                template <typename NAME> inline
-                explicit ReplicaVariable(const NAME     &varName,
-                                         const Variable &variable) :
-                Variable(varName),
-                ptr( CheckVariable(variable) )
-                {
-                }
 
-                virtual ~ReplicaVariable() noexcept;
-
-                virtual size_t indx() const noexcept;
-
-                static Variable * CheckVariable(const Variable &);
-
-            private:
-                Y_Disable_Copy_And_Assign(ReplicaVariable);
-                const Variable::Pointer ptr;
-            };
-
-            ReplicaVariable:: ~ReplicaVariable() noexcept
-            {
-            }
-
-
-            Variable * ReplicaVariable:: CheckVariable(const Variable &var)
-            {
-                if(var.quantity()<=0)
-                    throw Specific::Exception(Variable::CallSign, "not a dynamic variable");
-                return & Coerce(var);
-            }
-
-
-
-            size_t ReplicaVariable:: indx() const noexcept
-            {
-                return ptr->indx();
-            }
-
-
-        }
-
-
-    }
-
-}
 
 #include "y/container/associative/suffix/set.hpp"
 #include "y/type/proxy.hpp"

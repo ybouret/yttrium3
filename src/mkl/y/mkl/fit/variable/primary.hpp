@@ -1,4 +1,3 @@
-
 //! \file
 
 #ifndef Y_MKL_Fit_PrimaryVariable_Included
