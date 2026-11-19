@@ -1,82 +1,10 @@
 
-#include "y/string.hpp"
+#include "y/mkl/fit/variable.hpp"
 
-#include "y/pointer/arc.hpp"
-#include "y/pointer/keyed.hpp"
 
 #include "y/exception.hpp"
 
-namespace Yttrium
-{
-    namespace MKL
-    {
-        namespace Fit
-        {
 
-            class Variable : public String
-            {
-            public:
-                static const char * const                CallSign;
-                typedef Keyed< String,ArcPtr<Variable> > Pointer;
-
-                template <typename NAME>
-                inline   Variable(const NAME &varName) :
-                String(varName)
-                {
-                    checkName();
-                }
-
-                virtual ~Variable() noexcept;
-
-
-                virtual size_t indx() const noexcept = 0;
-                const String  & key() const noexcept;
-
-                friend std::ostream & operator<<(std::ostream &os, const Variable &var)
-                {
-                    os << static_cast<const String&>(var) << '@' << var.indx();
-                    return os;
-                }
-
-                template <typename ARRAY> inline
-                typename ARRAY::Type & operator[](ARRAY &arr) const
-                {
-                    const size_t i = indx(); assert(i>0); assert(i<=arr.size());
-                    return arr[i];
-                }
-
-                template <typename ARRAY> inline
-                typename ARRAY::ConstType & operator[](const ARRAY &arr) const
-                {
-                    const size_t i = indx(); assert(i>0); assert(i<=arr.size());
-                    return arr[i];
-                }
-
-            private:
-                Y_Disable_Copy_And_Assign(Variable);
-                void checkName() const;
-            };
-
-            const char * const Variable:: CallSign = "Fit::Variable";
-
-            Variable:: ~Variable() noexcept {}
-
-            void Variable:: checkName() const
-            {
-                if(size()<=0)
-                    throw Specific::Exception(CallSign, "empty name");
-            }
-
-            const String  & Variable:: key() const noexcept
-            {
-                return *this;
-            }
-
-        }
-
-    }
-
-}
 
 namespace Yttrium
 {

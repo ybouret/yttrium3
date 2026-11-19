@@ -11,6 +11,8 @@ y/mkl/minimize/quadratic
 y/mkl/ode
 y/mkl/ode/explicit
 y/mkl/tao
+y/mkl/fit
+y/mkl/fit/variable
 )
 
 add_subdirectory(tests)
