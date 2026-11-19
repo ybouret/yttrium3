@@ -45,4 +45,5 @@ Y_UTEST(interpolation:continuous)
 Y_UTEST(apex:perf)
 
 Y_UTEST(fit:variables)
+Y_UTEST(fit:samples)
 
