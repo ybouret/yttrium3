@@ -2,6 +2,8 @@
 #include "y/utest/run.hpp"
 #include "y/container/sequence/vector.hpp"
 
+#include "y/container/matrix.hpp"
+
 using namespace Yttrium;
 using namespace MKL;
 
@@ -44,6 +46,21 @@ Y_UTEST(fit_variables)
     Y_PRINTV(D1[cst]);
     Y_PRINTV(D2[cst]);
     Y_PRINTV(t0[cst]);
+
+    Matrix<size_t> m(3,3);
+    for(size_t i=1;i<=m.rows;++i)
+    {
+        for(size_t j=1;j<=m.cols;++j)
+        {
+            m[i][j] = i+j;
+        }
+
+    }
+    Y_PRINTV(D1[m]);
+    Y_PRINTV(D2[m]);
+    Y_PRINTV(t0[m]);
+
+
 }
 Y_UDONE()
 

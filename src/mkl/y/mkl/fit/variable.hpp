@@ -10,6 +10,8 @@
 
 namespace Yttrium
 {
+    template <typename> class Matrix;
+
     namespace MKL
     {
         namespace Fit
@@ -84,6 +86,20 @@ namespace Yttrium
                 {
                     const size_t i = indx(); assert(i>0); assert(i<=arr.size());
                     return arr[i];
+                }
+
+                template <typename T> inline
+                typename Matrix<T>::RowType & operator[](Matrix<T> &m) const
+                {
+                    const size_t i = indx(); assert(i>=1); assert(i<=m.rows);
+                    return m[i];
+                }
+
+                template <typename T> inline
+                const typename Matrix<T>::RowType & operator[](const Matrix<T> &m) const
+                {
+                    const size_t i = indx(); assert(i>=1); assert(i<=m.rows);
+                    return m[i];
                 }
 
             private:
