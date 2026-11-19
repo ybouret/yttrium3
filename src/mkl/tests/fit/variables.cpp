@@ -1,57 +1,6 @@
-
-#include "y/mkl/fit/variable.hpp"
-
-
+#include "y/mkl/fit/variable/primary.hpp"
 #include "y/exception.hpp"
 
-
-
-namespace Yttrium
-{
-    namespace MKL
-    {
-        namespace Fit
-        {
-            class PrimaryVariable : public Variable
-            {
-            public:
-                template <typename NAME> inline
-                explicit PrimaryVariable(const NAME &varName, const size_t varIndx) :
-                Variable(varName),
-                indx_(varIndx)
-                {
-                    checkIndx();
-                }
-                virtual ~PrimaryVariable() noexcept;
-
-                virtual size_t indx() const noexcept;
-
-            private:
-                Y_Disable_Copy_And_Assign(PrimaryVariable);
-                void checkIndx() const;
-                const size_t indx_;
-            };
-
-            PrimaryVariable:: ~PrimaryVariable() noexcept
-            {
-            }
-
-            void PrimaryVariable:: checkIndx() const
-            {
-                if( indx_ <= 0 ) throw Specific::Exception(CallSign, "invalid index");
-            }
-
-            size_t PrimaryVariable:: indx() const noexcept
-            {
-                assert(indx_>0);
-                return indx_;
-            }
-
-        }
-
-    }
-
-}
 
 namespace Yttrium
 {
