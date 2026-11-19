@@ -276,12 +276,17 @@ namespace Yttrium
             {
             }
 
-            Variables:: Variables() : vdb(), span(0)
+            Variables:: Variables() :
+            Proxy<const VarDB>(),
+            vdb(), span(0)
             {
             }
 
+
             Variables:: Variables(const Variables &other) :
-            vdb(other.vdb), span(other.span)
+            Proxy<const VarDB>(),
+            vdb(other.vdb),
+            span(other.span)
             {
             }
 
