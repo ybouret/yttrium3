@@ -52,6 +52,8 @@ namespace Yttrium
 
 }
 
+#include "y/functor.hpp"
+
 namespace Yttrium
 {
     namespace MKL
@@ -63,6 +65,7 @@ namespace Yttrium
             class Sample : public SampleMetrics
             {
             public:
+                typedef Functor<ORDINATES,TL2(ABSCISSAE,const Variables&)> Function;
 
                 template <typename NAME> inline
                 explicit Sample(const NAME &name) : SampleMetrics(name)
@@ -72,7 +75,7 @@ namespace Yttrium
 
                 inline virtual ~Sample() noexcept {}
                 
-                virtual ORDINATES operator()(const size_t i, const Variables &) = 0;
+                //virtual ORDINATES operator()(const size_t i, const Variables &) = 0;
 
             private:
                 Y_Disable_Copy_And_Assign(Sample);
