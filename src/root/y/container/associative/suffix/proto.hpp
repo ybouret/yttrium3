@@ -157,6 +157,7 @@ namespace Yttrium
 #endif // !defined(DOXYGEN_SHOULD_SKIP_THIS)
 
 
+        //! no-throw exchange \param peer another proto
         inline void xch( SuffixProto &peer ) noexcept
         {
             list.swapForList(peer.list);

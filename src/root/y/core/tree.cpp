@@ -220,5 +220,14 @@ namespace Yttrium
             Coerce(size) = 0;
         }
 
+
+        void Tree:: swapForTree(Tree &tree) noexcept
+        {
+            CoerceSwap(root,tree.root);
+            CoerceSwap(size,tree.size);
+            Coerce(pool).swapForPool( Coerce(tree.pool) );
+        }
+
+
     }
 }
