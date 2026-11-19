@@ -11,9 +11,29 @@ namespace Yttrium
     {
         namespace Fit
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Primary (a.k.a Global) variable
+            //
+            //
+            //__________________________________________________________________
             class PrimaryVariable : public Variable
             {
             public:
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+
+                //! setup
+                /**
+                 \param varName compatible name
+                 \param varIndx positive index
+                */
                 template <typename NAME> inline
                 explicit PrimaryVariable(const NAME &varName, const size_t varIndx) :
                 Variable(varName),
@@ -21,14 +41,22 @@ namespace Yttrium
                 {
                     checkIndx();
                 }
+
+                //! cleanup
                 virtual ~PrimaryVariable() noexcept;
 
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
                 virtual size_t indx() const noexcept;
 
             private:
-                Y_Disable_Copy_And_Assign(PrimaryVariable);
-                void checkIndx() const;
-                const size_t indx_;
+                Y_Disable_Copy_And_Assign(PrimaryVariable); //!< discard
+                void checkIndx() const;                     //!< positive index
+                const size_t indx_;                         //!< unique index
             };
 
            

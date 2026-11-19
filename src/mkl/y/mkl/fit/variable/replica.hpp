@@ -12,9 +12,29 @@ namespace Yttrium
     {
         namespace Fit
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Replica (a.k.a Local) variable
+            //
+            //
+            //__________________________________________________________________
             class ReplicaVariable : public Variable
             {
             public:
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+
+                //! setup
+                /**
+                 \param varName compatible name
+                 \param variable existing DYNAMIC variable
+                 */
                 template <typename NAME> inline
                 explicit ReplicaVariable(const NAME     &varName,
                                          const Variable &variable) :
@@ -23,15 +43,30 @@ namespace Yttrium
                 {
                 }
 
+                //! cleanup
                 virtual ~ReplicaVariable() noexcept;
 
+                //______________________________________________________________
+                //
+                //
+                // interface
+                //
+                //______________________________________________________________
                 virtual size_t indx() const noexcept;
 
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+
+                //! check DYNAMIC variable \return its address
                 static Variable * CheckVariable(const Variable &);
 
             private:
-                Y_Disable_Copy_And_Assign(ReplicaVariable);
-                const Variable::Pointer ptr;
+                Y_Disable_Copy_And_Assign(ReplicaVariable); //!< disarded
+                const Variable::Pointer ptr;                //!< inner pointer
             };
 
          

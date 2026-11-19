@@ -15,12 +15,34 @@ namespace Yttrium
         namespace Fit
         {
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Variable interface
+            //
+            //
+            //__________________________________________________________________
             class Variable : public String
             {
             public:
-                static const char * const                CallSign;
-                typedef Keyed< String,ArcPtr<Variable> > Pointer;
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                static const char * const                CallSign; //!< "Fit::Variable"
+                typedef Keyed< String,ArcPtr<Variable> > Pointer;  //!< alias
 
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+
+                //! setup \param varName compatible variable name
                 template <typename NAME>
                 inline   Variable(const NAME &varName) :
                 String(varName)
@@ -28,14 +50,27 @@ namespace Yttrium
                     checkName();
                 }
 
-                virtual ~Variable() noexcept;
-                Y_OSTREAM_PROTO(Variable);
+                virtual ~Variable() noexcept; //!< cleanup
+                Y_OSTREAM_PROTO(Variable);    //!< display
 
-                virtual size_t indx() const noexcept = 0;
-                const String  & key() const noexcept;
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
+                virtual size_t indx() const noexcept = 0; //!< \return unique index
 
-               
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+                const String  & key() const noexcept; //!< \return *this*
 
+
+                //! \param arr array-like \return arr[indx()]
                 template <typename ARRAY> inline
                 typename ARRAY::Type & operator[](ARRAY &arr) const
                 {
@@ -43,6 +78,7 @@ namespace Yttrium
                     return arr[i];
                 }
 
+                //! \param arr array-like \return arr[indx()]
                 template <typename ARRAY> inline
                 typename ARRAY::ConstType & operator[](const ARRAY &arr) const
                 {
@@ -51,8 +87,8 @@ namespace Yttrium
                 }
 
             private:
-                Y_Disable_Copy_And_Assign(Variable);
-                void checkName() const;
+                Y_Disable_Copy_And_Assign(Variable); //!< discard
+                void checkName() const;              //!< exclude empty name
             };
 
           

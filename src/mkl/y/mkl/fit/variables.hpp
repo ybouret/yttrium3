@@ -16,23 +16,52 @@ namespace Yttrium
     {
         namespace Fit
         {
+            //__________________________________________________________________
+            //
+            //
+            //! Base Proxy for Variables
+            //
+            //__________________________________________________________________
             typedef SuffixSet<String,Variable::Pointer> VarDB;
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Set of variables
+            //
+            //
+            //__________________________________________________________________
             class Variables : public Proxy<const VarDB>
             {
             public:
+                //______________________________________________________________
+                //
+                //
                 // Definitions
-                typedef VarDB::Iterator Iterator;
-                typedef VarDB::ConstIterator ConstIterator;
+                //
+                //______________________________________________________________
+                typedef VarDB::Iterator      Iterator;      //!< alias
+                typedef VarDB::ConstIterator ConstIterator; //!< alias
 
+                //______________________________________________________________
+                //
+                //
                 // C++
-                explicit Variables();
-                virtual ~Variables() noexcept;
-                Variables(const Variables &);
-                Variables & operator=( const Variables &);
-                Y_OSTREAM_PROTO(Variables);
+                //
+                //______________________________________________________________
+                explicit Variables();                      //!< setup empty
+                virtual ~Variables() noexcept;             //!< cleanup
+                Variables(const Variables &);              //!< duplicate
+                Variables & operator=( const Variables &); //!< assign
+                Y_OSTREAM_PROTO(Variables);                //!< display
 
+                //______________________________________________________________
+                //
+                //
                 // Methods
+                //
+                //______________________________________________________________
 
                 //! create a new, automatically indexed, primary variable
                 /**
@@ -70,23 +99,34 @@ namespace Yttrium
                     return insert(var);
                 }
 
+                //! insert primary of aliased variable
+                /**
+                 \param rhs compatible name of variable
+                 \return *this*
+                 */
                 template <typename RHS> inline
                 Variables & operator<<(const RHS &rhs)
                 {
                     Variables &self = *this;
-                    self(rhs);
+                    (void)self(rhs);
                     return self;
                 }
 
                
 
             private:
-                Y_Proxy_Decl();
-                const Variable & insert( const Variable::Pointer &var );
+                Y_Proxy_Decl(); //!< helper
+                const Variable & insert( const Variable::Pointer & ); //!< \return inserted variable
 
-                VarDB vdb;
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                VarDB vdb;         //!< inner database
             public:
-                const size_t span;
+                const size_t span; //!< maximum index
             };
 
 
