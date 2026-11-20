@@ -61,11 +61,11 @@ namespace Yttrium
         namespace Fit
         {
 
-            template <typename ABSCISSAE, typename ORDINATES>
+
+            template <typename ORDINATE>
             class Sample : public SampleMetrics
             {
             public:
-                typedef Functor<ORDINATES,TL2(ABSCISSAE,const Variables&)> Function;
 
                 template <typename NAME> inline
                 explicit Sample(const NAME &name) : SampleMetrics(name)
@@ -75,7 +75,7 @@ namespace Yttrium
 
                 inline virtual ~Sample() noexcept {}
                 
-                //virtual ORDINATES operator()(const size_t i, const Variables &) = 0;
+                virtual ORDINATE operator()(const size_t i, const Variables &) = 0;
 
             private:
                 Y_Disable_Copy_And_Assign(Sample);
@@ -86,6 +86,29 @@ namespace Yttrium
     }
 
 }
+
+namespace Yttrium
+{
+    namespace MKL
+    {
+        namespace Fit
+        {
+
+            template <typename ABSCISSA, typename ORDINATE>
+            class SampleOf : public Sample<ORDINATE>
+            {
+            public:
+
+            private:
+                Y_Disable_Copy_And_Assign(SampleOf);
+            };
+
+        }
+
+    }
+
+}
+
 
 
 

@@ -5,6 +5,7 @@
 #define Y_LightArray_Included 1
 
 #include "y/container/contiguous/writable.hpp"
+#include "y/hide.hpp"
 
 namespace Yttrium
 {
@@ -40,7 +41,7 @@ namespace Yttrium
         inline LightArray(Type * const entry, const size_t count) noexcept :
         Container(),
         ContiguousWritable<T>(),
-        cxx( (MutableType *)entry ),
+        cxx( (MutableType *)Hide::Alias(entry) ),
         num( count )
         {
             assert(!(0==cxx&&num>0));

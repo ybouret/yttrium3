@@ -33,6 +33,18 @@ namespace Yttrium
             return static_cast<const T*>( Address(addr) );
         }
 
+        template <typename T> static inline
+        T * Alias(T * const p) noexcept
+        {
+            return static_cast<T*>( Address(p) );
+        }
+
+        template <typename T> static inline
+        const T * Alias(const T * const p) noexcept
+        {
+            return static_cast<const T*>( Address(p) );
+        }
+
         
     };
 
