@@ -99,6 +99,21 @@ namespace Yttrium
             {
             public:
 
+                inline explicit SampleOf(const ABSCISSA * const xa,
+                                         const ORDINATE * const ya,
+                                         const size_t           na) noexcept :
+                x(xa,na),
+                y(ya,na)
+                {
+                    
+                }
+
+
+                inline virtual ~SampleOf() noexcept {}
+
+                const LightArray<ABSCISSA> x;
+                const LightArray<ORDINATE> y;
+
             private:
                 Y_Disable_Copy_And_Assign(SampleOf);
             };
