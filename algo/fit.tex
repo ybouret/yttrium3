@@ -30,7 +30,17 @@
 
 \end{itemize}
 
-\section{Gradient}
+ 	
+
+
+\section{Differential Approximation}
+
+We assume that:
+\begin{equation}
+	D^2(\vec a + \delta \vec a) \simeq  D^2(\vec a) + \langle \partial_{\vec a} D^2 \vert \delta \vec a \rangle
+	+ \dfrac{1}{2} \langle \delta \vec{a} \vert \mathcal H_{\vec a} \vert \delta \vec a \rangle
+\end{equation}
+
 
 \begin{equation}
 	\partial_{a_k} D^2_j = \sum_{i=1}^{N_j} \langle  \partial_{a_k} \vec F(x_{ji},\vec a) \vert \vec y_{ji} - \vec F(x_{ji},\vec a) \rangle
