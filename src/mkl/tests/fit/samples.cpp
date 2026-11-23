@@ -35,7 +35,6 @@ namespace Yttrium
                 void           checkSize() const;
                 Variables      vars;
 
-
             private:
                 Y_Disable_Copy_And_Assign(SampleMetrics);
 
@@ -64,6 +63,8 @@ namespace Yttrium
             SampleMetrics:: ~SampleMetrics() noexcept
             {
             }
+
+
 
         }
 
@@ -99,7 +100,7 @@ namespace Yttrium
 }
 
 #include "y/cameo/addition.hpp"
-
+#include "y/mkl/api/mod2.hpp"
 
 namespace Yttrium
 {
@@ -128,14 +129,16 @@ namespace Yttrium
                                        FunctionType             &F,
                                        const Readable<ABSCISSA> &aorg) = 0;
 
-                AdditionType addition;
+                AdditionType xadd;
 
             private:
                 Y_Disable_Copy_And_Assign(Sample);
-                
+
+            protected:
                 inline ABSCISSA collect(const ORDINATE &lhs, const ORDINATE &rhs)
                 {
-                    return 0;
+                    const ORDINATE delta = lhs-rhs;
+                    return Mod2<ORDINATE>(delta);
                 }
             };
 
@@ -200,9 +203,9 @@ namespace Yttrium
                                               const Readable<ABSCISSA> & aorg)
                 {
                     const size_t n = size(); assert(n>0);
-                    sumD2 << collect(y[1],yf[1] = F.start(x[1],vars,aorg));
+                    sumD2 << this->collect(y[1],yf[1] = F.start(x[1],vars,aorg));
                     for(size_t i=2;i<=n;++i)
-                        sumD2 << collect(y[i],yf[i] = F.value(x[i],vars,aorg));
+                        sumD2 << this->collect(y[i],yf[i] = F.value(x[i],vars,aorg));
                 }
             };
 
@@ -260,6 +263,18 @@ namespace Yttrium
                     return nsum;
                 }
 
+                template <typename NAME>
+                SampleType & operator()(const NAME &           name,
+                                        const ABSCISSA * const xa,
+                                        const ORDINATE * const ya,
+                                        const size_t           na)
+                {
+                    SamplePointer sp = new DataSample<ABSCISSA,ORDINATE>(name,xa,ya,na);
+                    if(!this->insert(sp)) throw Specific::Exception(this->c_str(),"multiple '%s'", sp->c_str());
+                    return *sp;
+                }
+
+
             private:
                 Y_Disable_Copy_And_Assign(Samples);
                 inline virtual void collectD2(AdditionType             &sumD2,
@@ -301,8 +316,25 @@ Y_UTEST(fit_samples)
 {
 
     Fit::Samples<double,double> samples("samples");
+    Fit::Sample<double,double> &S1 = samples("s1",_t1,_x1,_n1);
+    Fit::Sample<double,double> &S2 = samples("s2",_t2,_x2,_n2);
 
+    const Fit::Variable & t0 = samples.vars("t0");
+    const Fit::Variable & D1 = samples.vars("D1");
+    const Fit::Variable & D2 = samples.vars("D2");
 
+    const size_t nvar = samples.vars.span;
+
+    Y_PRINTV(samples.vars);
+    Y_PRINTV(nvar);
+
+    S1.vars(t0);
+    S1.vars("D",D1);
+    Y_PRINTV(S1.vars);
+
+    S2.vars(t0);
+    S2.vars("D",D2);
+    Y_PRINTV(S2.vars);
 
 }
 Y_UDONE()
