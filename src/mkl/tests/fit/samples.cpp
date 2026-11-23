@@ -112,8 +112,9 @@ namespace Yttrium
             class Sample : public SampleMetrics
             {
             public:
-                typedef Function<ABSCISSA,ORDINATE> FunctionType;
-                typedef Cameo::Addition<ABSCISSA>   XAddtionType;
+                typedef Function<ABSCISSA,ORDINATE>  FunctionType;
+                typedef Cameo::Addition<ABSCISSA>    AdditionType;
+                typedef Keyed<String,ArcPtr<Sample>> Pointer;
 
                 template <typename NAME> inline
                 explicit Sample(const NAME &name) : SampleMetrics(name)
@@ -123,22 +124,18 @@ namespace Yttrium
 
                 inline virtual ~Sample() noexcept {}
 
-                inline ABSCISSA D2(FunctionType &F)
-                {
-                    xadd.free();
-                    gatherD2(F);
-                    return xadd.sum();
-                }
+                virtual void collectD2(AdditionType             &xadd,
+                                       FunctionType             &F,
+                                       const Readable<ABSCISSA> &aorg) = 0;
 
-                XAddtionType xadd;
+                AdditionType addition;
 
             private:
                 Y_Disable_Copy_And_Assign(Sample);
-
-                virtual void collectD2(FunctionType &F, const Readable<ABSCISSA> &aorg) = 0;
-                inline void collect(const ORDINATE &lhs, const ORDINATE &rhs)
+                
+                inline ABSCISSA collect(const ORDINATE &lhs, const ORDINATE &rhs)
                 {
-
+                    return 0;
                 }
             };
 
@@ -164,11 +161,13 @@ namespace Yttrium
             public:
                 typedef Sample<ABSCISSA,ORDINATE>          SampleType;
                 typedef typename SampleType::FunctionType  FunctionType;
+                typedef typename SampleType::AdditionType  AdditionType;
+
                 using SampleType::checkSize;
                 using SampleType::vars;
 
                 template <typename NAME> inline
-                explicit DataSample(const NAME &name,
+                explicit DataSample(const NAME &           name,
                                     const ABSCISSA * const xa,
                                     const ORDINATE * const ya,
                                     const size_t           na) :
@@ -193,17 +192,22 @@ namespace Yttrium
                 const LightArray<ORDINATE> y;
                 CxxArray<ORDINATE>         yf;
 
-
             private:
                 Y_Disable_Copy_And_Assign(DataSample);
-                virtual void collectD2(FunctionType &F, const Readable<ABSCISSA> &aorg)
+
+                inline virtual void collectD2(AdditionType             & sumD2,
+                                              FunctionType             & F,
+                                              const Readable<ABSCISSA> & aorg)
                 {
                     const size_t n = size(); assert(n>0);
-                    collect(y[1],yf[1] = F.start(x[1],vars,aorg));
+                    sumD2 << collect(y[1],yf[1] = F.start(x[1],vars,aorg));
                     for(size_t i=2;i<=n;++i)
-                        collect(y[i],yf[i] = F.value(x[1],vars,aorg));
+                        sumD2 << collect(y[i],yf[i] = F.value(x[i],vars,aorg));
                 }
             };
+
+
+
 
         }
 
@@ -211,6 +215,71 @@ namespace Yttrium
 }
 
 
+namespace Yttrium
+{
+    namespace MKL
+    {
+        namespace Fit
+        {
+            template <typename ABSCISSA, typename ORDINATE>
+            class Samples :
+            public Sample<ABSCISSA,ORDINATE>,
+            public SuffixSet<String, typename Sample<ABSCISSA,ORDINATE>::Pointer >
+            {
+            public:
+                typedef Sample<ABSCISSA,ORDINATE>          SampleType;
+                typedef typename SampleType::Pointer       SamplePointer;
+                typedef typename SampleType::FunctionType  FunctionType;
+                typedef typename SampleType::AdditionType  AdditionType;
+
+                typedef SuffixSet<String,SamplePointer>    SampleDB;
+                typedef typename SampleDB::Iterator        Iterator;
+                typedef typename SampleDB::ConstIterator   ConstIterator;
+
+                using SampleType::vars;
+
+                template <typename NAME>
+                inline explicit Samples(const NAME &name) :
+                SampleType(name),
+                SampleDB()
+                {
+                }
+
+
+                inline virtual ~Samples() noexcept {}
+
+
+                virtual size_t size() const noexcept
+                {
+                    const SampleDB &self = *this;
+                    size_t          nsum = 0;
+                    for(ConstIterator it=self.begin();it != self.end();++it)
+                    {
+                        nsum += (**it).size();
+                    }
+                    return nsum;
+                }
+
+            private:
+                Y_Disable_Copy_And_Assign(Samples);
+                inline virtual void collectD2(AdditionType             &sumD2,
+                                              FunctionType             &F,
+                                              const Readable<ABSCISSA> &aorg)
+                {
+                    SampleDB &self = *this;
+                    for(Iterator it=self.begin();it != self.end();++it)
+                    {
+                        (**it).collectD2(sumD2,F,aorg);
+                    }
+
+                }
+            };
+
+        }
+
+    }
+
+}
 
 
 
@@ -231,6 +300,7 @@ namespace
 Y_UTEST(fit_samples)
 {
 
+    Fit::Samples<double,double> samples("samples");
 
 
 
