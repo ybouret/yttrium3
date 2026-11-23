@@ -1,0 +1,41 @@
+\documentclass[aps,12pt]{revtex4}
+\usepackage[a4paper]{geometry}
+\usepackage{graphicx}
+\usepackage{amssymb,amsfonts,amsmath,amsthm}
+\usepackage{bm}
+\usepackage{pslatex}
+\usepackage{chemarr}
+\usepackage{mathptmx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{bookman}    
+
+
+\begin{document}
+
+\section{Definitions}
+
+\begin{itemize}
+
+\item Let us define $\vec F(x,\vec a)$ a function from $\mathbb R$ to $\mathbb R^d$ with parameters $\vec a$.
+\item Let us define $S_j$ a sample with $N_j$ points $(x_{ji},\vec y_{ji})$.
+\item We define the squared distance:
+\begin{equation}
+	D^2_j = \frac{1}{2}\sum_{i=1}^{N_j} \left[\vec y_{ji} - \vec F(x_{ji},\vec a) \right]^2
+\end{equation}
+
+\item We define the total squared distance:
+\begin{equation}
+	 D^2 = \sum_{j=1}^M D^2_j
+\end{equation}
+
+\end{itemize}
+
+\section{Gradient}
+
+\begin{equation}
+	\partial_{a_k} D^2_j = \sum_{i=1}^{N_j} \langle  \partial_{a_k} \vec F(x_{ji},\vec a) \vert \vec y_{ji} - \vec F(x_{ji},\vec a) \rangle
+\end{equation}
+
+
+
+\end{document}
