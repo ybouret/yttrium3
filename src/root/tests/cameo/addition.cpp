@@ -81,7 +81,7 @@ Y_UTEST(cameo_addition)
     testVect< Complex< XReal<long double> > >();
 
     testVect< V3D<double> >();
-# 
+    
     
 }
 Y_UDONE()

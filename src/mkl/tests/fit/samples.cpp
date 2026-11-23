@@ -94,6 +94,35 @@ namespace Yttrium
             private:
                 Y_Disable_Copy_And_Assign(Function);
             };
+
+            template <typename ABSCISSA, typename ORDINATE>
+            class OrdinaryFunction : public Function<ABSCISSA,ORDINATE>
+            {
+            public:
+
+                inline explicit OrdinaryFunction() noexcept {}
+                inline virtual ~OrdinaryFunction() noexcept {}
+
+                inline virtual ORDINATE start(const ABSCISSA &x, const Variables &vars, const Readable<ABSCISSA> &aorg)
+                {
+                    return get(x,vars,aorg);
+                }
+
+                inline virtual ORDINATE value(const ABSCISSA &x, const Variables &vars, const Readable<ABSCISSA> &aorg)
+                {
+                    return get(x,vars,aorg);
+                }
+
+                inline ORDINATE operator()(const ABSCISSA x, const Variables &vars, const Readable<ABSCISSA> &aorg)
+                {
+                    return get(x,vars,aorg);
+                }
+
+            private:
+                Y_Disable_Copy_And_Assign(OrdinaryFunction);
+                virtual ORDINATE get(const ABSCISSA &, const Variables &, const Readable<ABSCISSA> &) = 0;
+            };
+
         }
 
     }
@@ -128,6 +157,14 @@ namespace Yttrium
                 virtual void collectD2(AdditionType             &xadd,
                                        FunctionType             &F,
                                        const Readable<ABSCISSA> &aorg) = 0;
+
+
+                inline ABSCISSA D2(FunctionType &F, const Readable<ABSCISSA> &aorg)
+                {
+                    xadd.ldz();
+                    collectD2(xadd,F,aorg);
+                    return xadd();
+                }
 
                 AdditionType xadd;
 
@@ -312,20 +349,53 @@ namespace
     static const size_t _n2      = sizeof(_t2)/sizeof(_t2[0]);
 }
 
+namespace
+{
+    class Diffusion : public Fit::OrdinaryFunction<double,double>
+    {
+    public:
+
+        inline explicit Diffusion()
+        {
+        }
+
+        inline virtual ~Diffusion() noexcept
+        {
+        }
+
+
+
+
+
+    private:
+        Y_Disable_Copy_And_Assign(Diffusion);
+
+        virtual double get(const double &t, const Fit::Variables &vars, const Readable<double> &aorg)
+        {
+            const double t0 = vars["t0"][aorg];
+            const double D  = vars["D"][aorg];
+            if(t<=t0)
+                return 0;
+            else
+                return sqrt(D*(t-t0));
+        }
+    };
+}
+
 Y_UTEST(fit_samples)
 {
 
-    Fit::Samples<double,double> samples("samples");
-    Fit::Sample<double,double> &S1 = samples("s1",_t1,_x1,_n1);
-    Fit::Sample<double,double> &S2 = samples("s2",_t2,_x2,_n2);
+    Fit::Samples<double,double> SA("samples");
+    Fit::Sample<double,double> &S1 = SA("s1",_t1,_x1,_n1);
+    Fit::Sample<double,double> &S2 = SA("s2",_t2,_x2,_n2);
 
-    const Fit::Variable & t0 = samples.vars("t0");
-    const Fit::Variable & D1 = samples.vars("D1");
-    const Fit::Variable & D2 = samples.vars("D2");
+    const Fit::Variable & t0 = SA.vars("t0");
+    const Fit::Variable & D1 = SA.vars("D1");
+    const Fit::Variable & D2 = SA.vars("D2");
 
-    const size_t nvar = samples.vars.span;
+    const size_t nvar = SA.vars.span;
 
-    Y_PRINTV(samples.vars);
+    Y_PRINTV(SA.vars);
     Y_PRINTV(nvar);
 
     S1.vars(t0);
@@ -335,6 +405,21 @@ Y_UTEST(fit_samples)
     S2.vars(t0);
     S2.vars("D",D2);
     Y_PRINTV(S2.vars);
+
+    CxxArray<double> aorg(nvar);
+    SA.vars["t0"][aorg] = -100;
+    SA.vars["D1"][aorg] = 0.15;
+    SA.vars["D2"][aorg] = 0.20;
+
+    Diffusion F;
+
+    const double S1D2 = S1.D2(F,aorg);
+    const double S2D2 = S2.D2(F,aorg);
+    const double SAD2 = SA.D2(F,aorg);
+
+    Y_PRINTV(S1D2);
+    Y_PRINTV(S2D2);
+    Y_PRINTV(SAD2);
 
 }
 Y_UDONE()

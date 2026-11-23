@@ -112,7 +112,11 @@ namespace Yttrium
                     return self;
                 }
 
-               
+                const Variable & operator[](const String &)     const;
+                const Variable & operator[](const char * const) const;
+                const Variable & operator[](const char)         const;
+
+
 
             private:
                 Y_Proxy_Decl(); //!< helper

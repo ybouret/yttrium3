@@ -68,6 +68,27 @@ namespace Yttrium
                 return os << vars.vdb << "|span=" << vars.span;
             }
 
+
+            const Variable & Variables:: operator[](const String &name) const
+            {
+                const Variable::Pointer *ppv = vdb.search(name);
+                if(!ppv) throw Specific::Exception(Variable::CallSign,"missing '%s'", name.c_str() );
+                return **ppv;
+            }
+
+            const Variable & Variables:: operator[](const char * const name) const
+            {
+                const String _(name); return (*this)[_];
+            }
+
+
+            const Variable & Variables:: operator[](const char name) const
+            {
+                const String _(name); return (*this)[_];
+            }
+
+
+
         }
 
     }
