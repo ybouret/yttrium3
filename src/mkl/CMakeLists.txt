@@ -13,6 +13,8 @@ y/mkl/ode/explicit
 y/mkl/tao
 y/mkl/fit
 y/mkl/fit/variable
+y/mkl/fit/sample
+y/mkl/fit/type
 )
 
 add_subdirectory(tests)

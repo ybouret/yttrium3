@@ -1,86 +1,13 @@
-#include "y/mkl/fit/variables.hpp"
+#include "y/mkl/fit/sample/metrics.hpp"
+
 #include "y/utest/run.hpp"
-#include "y/container/sequence/vector.hpp"
 #include "y/container/matrix.hpp"
 
-namespace Yttrium
-{
-    namespace MKL
-    {
-        namespace Fit
-        {
-
-            //__________________________________________________________________
-            //
-            //
-            //
-            //! SampleMetrics
-            //
-            //
-            //__________________________________________________________________
-            class SampleMetrics : public String
-            {
-            public:
-                template <typename NAME> inline
-                explicit SampleMetrics(const NAME &name) :
-                String(name),
-                vars()
-                {
-                }
-
-                virtual ~SampleMetrics() noexcept;
 
 
-                virtual size_t cardinal()  const noexcept = 0;
-                virtual void   save(OutputStream &) const = 0;
-
-                void           checkSize() const;
-                void           autoSave() const;
-                Variables      vars;
-
-            private:
-                Y_Disable_Copy_And_Assign(SampleMetrics);
-
-            };
-
-        }
-
-    }
-
-}
 
 
-#include "y/stream/libc/output.hpp"
 
-namespace Yttrium
-{
-    namespace MKL
-    {
-        namespace Fit
-        {
-
-            void SampleMetrics:: checkSize() const
-            {
-                if( size() <= 0 ) throw Specific::Exception(c_str(),"empty sample");
-            }
-
-            SampleMetrics:: ~SampleMetrics() noexcept
-            {
-            }
-
-            void SampleMetrics:: autoSave() const
-            {
-                const String fileName = *this + ".dat";
-                OutputFile   fp(fileName);
-                save(fp);
-            }
-
-
-        }
-
-    }
-
-}
 
 
 namespace Yttrium
@@ -389,7 +316,7 @@ namespace Yttrium
                 {
                     DataSampleType * const ds   = new DataSampleType(name,xa,ya,na);
                     {
-                        SamplePointer sp   = ds;
+                        const SamplePointer sp   = ds;
                         if(!db.insert(sp)) throw Specific::Exception(this->c_str(),"multiple '%s'", sp->c_str());
                     }
                     Coerce(ds->tag) = db.size();
@@ -408,10 +335,7 @@ namespace Yttrium
                                               const Readable<ABSCISSA> &aorg)
                 {
                     for(Iterator it=db.begin();it != db.end();++it)
-                    {
                         (**it).collectD2(sumD2,F,aorg);
-                    }
-
                 }
             };
 
