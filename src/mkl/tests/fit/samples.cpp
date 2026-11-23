@@ -30,9 +30,12 @@ namespace Yttrium
 
                 virtual ~SampleMetrics() noexcept;
 
-                
-                virtual size_t size() const noexcept = 0;
+
+                virtual size_t cardinal()  const noexcept = 0;
+                virtual void   save(OutputStream &) const = 0;
+
                 void           checkSize() const;
+                void           autoSave() const;
                 Variables      vars;
 
             private:
@@ -47,6 +50,7 @@ namespace Yttrium
 }
 
 
+#include "y/stream/libc/output.hpp"
 
 namespace Yttrium
 {
@@ -64,6 +68,12 @@ namespace Yttrium
             {
             }
 
+            void SampleMetrics:: autoSave() const
+            {
+                const String fileName = *this + ".dat";
+                OutputFile   fp(fileName);
+                save(fp);
+            }
 
 
         }
@@ -128,6 +138,52 @@ namespace Yttrium
     }
 }
 
+#include "y/stream/output.hpp"
+#include "y/format/decimal.hpp"
+
+namespace Yttrium
+{
+    namespace MKL
+    {
+        namespace Fit
+        {
+            template <typename ABSCISSA, typename ORDINATE>
+            struct WriteXY
+            {
+                static const size_t DIMENSIONS = sizeof(ORDINATE)/sizeof(ABSCISSA);
+
+                static inline void Emit(OutputStream &fp, const ORDINATE &y)
+                {
+                    const ABSCISSA * const p = (const ABSCISSA *) &y;
+                    for(size_t i=0;i<DIMENSIONS;++i)
+                        fp(" %.15g", (double) p[i]);
+                }
+
+
+                static inline void To(OutputStream   &fp,
+                                                const ABSCISSA &x,
+                                                const ORDINATE &y,
+                                                const ORDINATE &yf,
+                                                const size_t    tag)
+                {
+                    fp("%.15g",(double)x);
+                    Emit(fp,y);
+                    Emit(fp,yf);
+                    if(tag)
+                        fp(" %s",Decimal(tag).c_str());
+                    fp << '\n';
+                }
+
+            };
+
+
+        }
+
+    }
+
+}
+
+
 #include "y/cameo/addition.hpp"
 #include "y/mkl/api/mod2.hpp"
 
@@ -147,14 +203,17 @@ namespace Yttrium
                 typedef Keyed<String,ArcPtr<Sample>> Pointer;
 
                 template <typename NAME> inline
-                explicit Sample(const NAME &name) : SampleMetrics(name)
+                explicit Sample(const NAME &name) :
+                SampleMetrics(name),
+                xadd()
                 {
 
                 }
 
                 inline virtual ~Sample() noexcept {}
 
-                virtual void collectD2(AdditionType             &xadd,
+
+                virtual void collectD2(AdditionType             &sumD2,
                                        FunctionType             &F,
                                        const Readable<ABSCISSA> &aorg) = 0;
 
@@ -214,23 +273,32 @@ namespace Yttrium
                 SampleType(name),
                 x( (ABSCISSA *) xa, na ),
                 y( (ORDINATE *) ya, na ),
-                yf(na)
+                yf(na),
+                tag(0)
                 {
                     checkSize();
                 }
 
                 inline virtual ~DataSample() noexcept {}
 
-                inline virtual size_t size() const noexcept
+                inline virtual size_t cardinal() const noexcept
                 {
                     assert( x.size() == y.size() );
+                    assert( x.size() == yf.size() );
                     return x.size();
                 }
 
+                virtual void save(OutputStream &fp) const
+                {
+                    const size_t n = cardinal();
+                    for(size_t i=1;i<=n;++i)
+                        WriteXY<ABSCISSA,ORDINATE>::To(fp,x[i], y[i], yf[i], tag);
+                }
 
                 const LightArray<ABSCISSA> x;
                 const LightArray<ORDINATE> y;
                 CxxArray<ORDINATE>         yf;
+                const size_t               tag;
 
             private:
                 Y_Disable_Copy_And_Assign(DataSample);
@@ -239,11 +307,13 @@ namespace Yttrium
                                               FunctionType             & F,
                                               const Readable<ABSCISSA> & aorg)
                 {
-                    const size_t n = size(); assert(n>0);
+                    const size_t n = cardinal(); assert(n>0);
                     sumD2 << this->collect(y[1],yf[1] = F.start(x[1],vars,aorg));
                     for(size_t i=2;i<=n;++i)
                         sumD2 << this->collect(y[i],yf[i] = F.value(x[i],vars,aorg));
                 }
+
+
             };
 
 
@@ -264,7 +334,7 @@ namespace Yttrium
             template <typename ABSCISSA, typename ORDINATE>
             class Samples :
             public Sample<ABSCISSA,ORDINATE>,
-            public SuffixSet<String, typename Sample<ABSCISSA,ORDINATE>::Pointer >
+            public Proxy< SuffixSet<String, typename Sample<ABSCISSA,ORDINATE>::Pointer > >
             {
             public:
                 typedef Sample<ABSCISSA,ORDINATE>          SampleType;
@@ -275,13 +345,15 @@ namespace Yttrium
                 typedef SuffixSet<String,SamplePointer>    SampleDB;
                 typedef typename SampleDB::Iterator        Iterator;
                 typedef typename SampleDB::ConstIterator   ConstIterator;
+                typedef DataSample<ABSCISSA,ORDINATE>      DataSampleType;
 
                 using SampleType::vars;
 
                 template <typename NAME>
                 inline explicit Samples(const NAME &name) :
                 SampleType(name),
-                SampleDB()
+                Proxy<SampleDB>(),
+                db()
                 {
                 }
 
@@ -289,37 +361,53 @@ namespace Yttrium
                 inline virtual ~Samples() noexcept {}
 
 
-                virtual size_t size() const noexcept
+                virtual size_t cardinal() const noexcept
                 {
-                    const SampleDB &self = *this;
-                    size_t          nsum = 0;
-                    for(ConstIterator it=self.begin();it != self.end();++it)
+                    size_t ns = 0;
+                    for(ConstIterator it=db.begin();it != db.end();++it)
                     {
-                        nsum += (**it).size();
+                        ns += (**it).cardinal();
                     }
-                    return nsum;
+                    return ns;
                 }
 
-                template <typename NAME>
-                SampleType & operator()(const NAME &           name,
-                                        const ABSCISSA * const xa,
-                                        const ORDINATE * const ya,
-                                        const size_t           na)
+                inline virtual void save(OutputStream &fp) const
                 {
-                    SamplePointer sp = new DataSample<ABSCISSA,ORDINATE>(name,xa,ya,na);
-                    if(!this->insert(sp)) throw Specific::Exception(this->c_str(),"multiple '%s'", sp->c_str());
-                    return *sp;
+                    for(ConstIterator it=db.begin();it != db.end();++it)
+                    {
+                        (**it).save(fp);
+                        fp << '\n';
+                    }
+                }
+
+
+                template <typename NAME>
+                inline SampleType & operator()(const NAME &           name,
+                                               const ABSCISSA * const xa,
+                                               const ORDINATE * const ya,
+                                               const size_t           na)
+                {
+                    DataSampleType * const ds   = new DataSampleType(name,xa,ya,na);
+                    {
+                        SamplePointer sp   = ds;
+                        if(!db.insert(sp)) throw Specific::Exception(this->c_str(),"multiple '%s'", sp->c_str());
+                    }
+                    Coerce(ds->tag) = db.size();
+                    return *ds;
                 }
 
 
             private:
                 Y_Disable_Copy_And_Assign(Samples);
+                SampleDB db;
+
+                inline virtual const SampleDB & locus() const noexcept { return db; }
+
                 inline virtual void collectD2(AdditionType             &sumD2,
                                               FunctionType             &F,
                                               const Readable<ABSCISSA> &aorg)
                 {
-                    SampleDB &self = *this;
-                    for(Iterator it=self.begin();it != self.end();++it)
+                    for(Iterator it=db.begin();it != db.end();++it)
                     {
                         (**it).collectD2(sumD2,F,aorg);
                     }
@@ -363,10 +451,6 @@ namespace
         {
         }
 
-
-
-
-
     private:
         Y_Disable_Copy_And_Assign(Diffusion);
 
@@ -401,10 +485,13 @@ Y_UTEST(fit_samples)
     S1.vars(t0);
     S1.vars("D",D1);
     Y_PRINTV(S1.vars);
+    Y_PRINTV(S1.cardinal());
 
     S2.vars(t0);
     S2.vars("D",D2);
     Y_PRINTV(S2.vars);
+    Y_PRINTV(S2.cardinal());
+    Y_PRINTV(SA.cardinal());
 
     CxxArray<double> aorg(nvar);
     SA.vars["t0"][aorg] = -100;
@@ -417,9 +504,14 @@ Y_UTEST(fit_samples)
     const double S2D2 = S2.D2(F,aorg);
     const double SAD2 = SA.D2(F,aorg);
 
+
     Y_PRINTV(S1D2);
     Y_PRINTV(S2D2);
     Y_PRINTV(SAD2);
+
+    S1.autoSave();
+    S2.autoSave();
+    SA.autoSave();
 
 }
 Y_UDONE()
