@@ -5,6 +5,7 @@
 
 #include "y/mkl/fit/sample/metrics.hpp"
 #include "y/mkl/fit/type/function.hpp"
+#include "y/mkl/fit/type/gradient.hpp"
 #include "y/cameo/addition.hpp"
 #include "y/mkl/api/mod2.hpp"
 

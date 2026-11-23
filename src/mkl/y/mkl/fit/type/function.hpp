@@ -21,8 +21,8 @@ namespace Yttrium
                 inline explicit Function() noexcept {}
                 inline virtual ~Function() noexcept {}
 
-                virtual ORDINATE start(const ABSCISSA &, const Variables &, const Readable<ABSCISSA> &) = 0;
-                virtual ORDINATE value(const ABSCISSA &, const Variables &, const Readable<ABSCISSA> &) = 0;
+                virtual ORDINATE start(const ABSCISSA &x, const Variables &vars, const Readable<ABSCISSA> &aorg) = 0;
+                virtual ORDINATE value(const ABSCISSA &x, const Variables &vars, const Readable<ABSCISSA> &aorg) = 0;
 
             private:
                 Y_Disable_Copy_And_Assign(Function);
