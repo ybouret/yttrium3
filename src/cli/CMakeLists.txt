@@ -15,5 +15,7 @@ if(APPLE)
 Y_CLI(y_mp_needs)
 endif()
 
+Y_CLI(y_match)
+
 message( STATUS )
 

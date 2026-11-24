@@ -37,6 +37,7 @@ namespace Yttrium
                 typedef Sample<ABSCISSA,ORDINATE>          SampleType;   //!< alias
                 typedef typename SampleType::FunctionType  FunctionType; //!< alias
                 typedef typename SampleType::AdditionType  AdditionType; //!< alias
+                typedef typename SampleType::AddendaType   AddendaType;  //!< alias
 
                 using SampleType::checkCardinal;
                 using SampleType::vars;
@@ -90,6 +91,15 @@ namespace Yttrium
                     const size_t n = cardinal();
                     for(size_t i=1;i<=n;++i)
                         WriteXY<ABSCISSA,ORDINATE>::To(fp,x[i], y[i], yf[i], tag);
+                }
+
+                void collectD2org(AddendaType              & L,
+                                  FunctionType             & G,
+                                  const Readable<ABSCISSA> & aorg,
+                                  const Readable<bool>     & used)
+                {
+
+                    
                 }
 
                 //______________________________________________________________
