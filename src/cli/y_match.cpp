@@ -35,7 +35,11 @@ Y_PROGRAM()
 
     // compile expression
     Jive::Matching       matching = argv[2];
+
+    // open file
     AutoPtr<InputStream> input = (argc>3) ? new InputFile(argv[3]) : new InputFile(StdIn);
+
+    // scan each line
     String               line;
     size_t               iline=0;
     while(input->gets(line))

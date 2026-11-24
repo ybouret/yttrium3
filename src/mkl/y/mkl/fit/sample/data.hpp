@@ -93,12 +93,16 @@ namespace Yttrium
                         WriteXY<ABSCISSA,ORDINATE>::To(fp,x[i], y[i], yf[i], tag);
                 }
 
-                void collectD2org(AddendaType              & L,
+                void collectD2org(Writable<ABSCISSA>       & dFda,
+                                  AddendaType              & L,
                                   FunctionType             & G,
                                   const Readable<ABSCISSA> & aorg,
                                   const Readable<bool>     & used)
                 {
 
+                    const size_t         n    = cardinal(); assert(n>0);
+                    const size_t         nadd = 1 + n + (n*(n+1))/2;
+                    AdditionType * const head = L.make(nadd);
                     
                 }
 
