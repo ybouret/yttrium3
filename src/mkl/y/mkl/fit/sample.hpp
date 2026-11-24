@@ -16,14 +16,36 @@ namespace Yttrium
         namespace Fit
         {
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Sample Interface
+            //
+            //
+            //__________________________________________________________________
             template <typename ABSCISSA, typename ORDINATE>
             class Sample : public SampleMetrics
             {
             public:
-                typedef Function<ABSCISSA,ORDINATE>  FunctionType;
-                typedef Cameo::Addition<ABSCISSA>    AdditionType;
-                typedef Keyed<String,ArcPtr<Sample>> Pointer;
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                typedef Function<ABSCISSA,ORDINATE>  FunctionType; //!< alias
+                typedef Cameo::Addition<ABSCISSA>    AdditionType; //!< alias
+                typedef Keyed<String,ArcPtr<Sample>> Pointer;      //!< alias
 
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+
+                //! setup \param name compatible name
                 template <typename NAME> inline
                 explicit Sample(const NAME &name) :
                 SampleMetrics(name),
@@ -32,28 +54,67 @@ namespace Yttrium
 
                 }
 
+                //! cleanup
                 inline virtual ~Sample() noexcept {}
 
 
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
+
+                //! collect D2 contribution
+                /**
+                 \param sumD2 target addition
+                 \param F     fit function
+                 \param aorg  current parameters
+                 */
                 virtual void collectD2(AdditionType             &sumD2,
                                        FunctionType             &F,
                                        const Readable<ABSCISSA> &aorg) = 0;
 
 
-                inline ABSCISSA D2(FunctionType &F, const Readable<ABSCISSA> &aorg)
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+
+                //! compute local D2
+                /**
+                 \param  F fit function
+                 \param  atry trial parameters
+                 \return collected D2
+                 */
+                inline ABSCISSA D2(FunctionType &F, const Readable<ABSCISSA> &atry)
                 {
                     xadd.ldz();
-                    collectD2(xadd,F,aorg);
+                    collectD2(xadd,F,atry);
                     return xadd();
                 }
 
-                AdditionType xadd;
+                //______________________________________________________________
+                //
+                //
+                // Members+
+                //
+                //______________________________________________________________
+                AdditionType xadd; //!< addition helper
 
             private:
-                Y_Disable_Copy_And_Assign(Sample);
+                Y_Disable_Copy_And_Assign(Sample); //!< dicarded
 
             protected:
-                inline ABSCISSA collect(const ORDINATE &lhs, const ORDINATE &rhs)
+                //! helper for squared module
+                /**
+                 \param lhs lhs ordinate
+                 \param rhs rhs ordinate
+                 \return |lhs-rhs|^2 as abscissa
+                 */
+                inline ABSCISSA localD2(const ORDINATE &lhs, const ORDINATE &rhs)
                 {
                     const ORDINATE delta = lhs-rhs;
                     return Mod2<ORDINATE>(delta);

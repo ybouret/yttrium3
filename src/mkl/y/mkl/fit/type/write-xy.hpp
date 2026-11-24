@@ -12,11 +12,25 @@ namespace Yttrium
     {
         namespace Fit
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Helper to save sample content
+            //
+            //
+            //__________________________________________________________________
             template <typename ABSCISSA, typename ORDINATE>
             struct WriteXY
             {
+                //! assuming ORDINATE is same as/vector of ABSCISSA
                 static const size_t DIMENSIONS = sizeof(ORDINATE)/sizeof(ABSCISSA);
 
+                //! emit DIMENSIONS values
+                /**
+                 \param fp output stream
+                 \param y  ordinate(s)
+                 */
                 static inline void Emit(OutputStream &fp, const ORDINATE &y)
                 {
                     const ABSCISSA * const p = (const ABSCISSA *) &y;
@@ -24,7 +38,14 @@ namespace Yttrium
                         fp(" %.15g", (double) p[i]);
                 }
 
-
+                //! emit abscissae/ordinates/fits
+                /**
+                 \param fp output stream
+                 \param x  abscissa
+                 \param y  ordinate
+                 \param yf fit ordinate
+                 \param tag I/O tag
+                 */
                 static inline void To(OutputStream   &fp,
                                       const ABSCISSA &x,
                                       const ORDINATE &y,

@@ -9,9 +9,9 @@ namespace Yttrium
         namespace Fit
         {
 
-            void SampleMetrics:: checkSize() const
+            void SampleMetrics:: checkCardinal() const
             {
-                if( size() <= 0 ) throw Specific::Exception(c_str(),"empty sample");
+                if( cardinal() <= 0 ) throw Specific::Exception(c_str(),"empty sample");
             }
 
             SampleMetrics:: ~SampleMetrics() noexcept

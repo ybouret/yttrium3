@@ -12,24 +12,47 @@ namespace Yttrium
     {
         namespace Fit
         {
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Set of Samples
+            //
+            //
+            //__________________________________________________________________
             template <typename ABSCISSA, typename ORDINATE>
             class Samples :
             public Sample<ABSCISSA,ORDINATE>,
             public Proxy< SuffixSet<String, typename Sample<ABSCISSA,ORDINATE>::Pointer > >
             {
             public:
-                typedef Sample<ABSCISSA,ORDINATE>          SampleType;
-                typedef typename SampleType::Pointer       SamplePointer;
-                typedef typename SampleType::FunctionType  FunctionType;
-                typedef typename SampleType::AdditionType  AdditionType;
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
 
-                typedef SuffixSet<String,SamplePointer>    SampleDB;
-                typedef typename SampleDB::Iterator        Iterator;
-                typedef typename SampleDB::ConstIterator   ConstIterator;
-                typedef DataSample<ABSCISSA,ORDINATE>      DataSampleType;
+                typedef Sample<ABSCISSA,ORDINATE>          SampleType;     //!< alias
+                typedef typename SampleType::Pointer       SamplePointer;  //!< alias
+                typedef typename SampleType::FunctionType  FunctionType;   //!< alias
+                typedef typename SampleType::AdditionType  AdditionType;   //!< alias
+
+                typedef SuffixSet<String,SamplePointer>    SampleDB;       //!< alias
+                typedef typename SampleDB::Iterator        Iterator;       //!< alias
+                typedef typename SampleDB::ConstIterator   ConstIterator;  //!< alias
+                typedef DataSample<ABSCISSA,ORDINATE>      DataSampleType; //!< alias
 
                 using SampleType::vars;
 
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+
+                //! setup \param name compatible name
                 template <typename NAME>
                 inline explicit Samples(const NAME &name) :
                 SampleType(name),
@@ -39,9 +62,15 @@ namespace Yttrium
                 }
 
 
+                //! cleanup
                 inline virtual ~Samples() noexcept {}
 
-
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
                 virtual size_t cardinal() const noexcept
                 {
                     size_t ns = 0;
@@ -59,7 +88,14 @@ namespace Yttrium
                     }
                 }
 
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
 
+                //! helper to create a new data sample
                 template <typename NAME>
                 inline SampleType & operator()(const NAME &           name,
                                                const ABSCISSA * const xa,
@@ -77,8 +113,8 @@ namespace Yttrium
 
 
             private:
-                Y_Disable_Copy_And_Assign(Samples);
-                SampleDB db;
+                Y_Disable_Copy_And_Assign(Samples); //!< discard
+                SampleDB db; //!< set
 
                 inline virtual const SampleDB & locus() const noexcept { return db; }
 

@@ -88,6 +88,7 @@ namespace Yttrium
                     return arr[i];
                 }
 
+                //! \param m matrix \return m[indx()]
                 template <typename T> inline
                 typename Matrix<T>::RowType & operator[](Matrix<T> &m) const
                 {
@@ -95,6 +96,7 @@ namespace Yttrium
                     return m[i];
                 }
 
+                //! \param m matrix \return m[indx()]
                 template <typename T> inline
                 const typename Matrix<T>::RowType & operator[](const Matrix<T> &m) const
                 {

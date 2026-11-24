@@ -33,12 +33,14 @@ namespace Yttrium
             return static_cast<const T*>( Address(addr) );
         }
 
+        //! \param p object \return same but hidden object
         template <typename T> static inline
         T * Alias(T * const p) noexcept
         {
             return static_cast<T*>( Address(p) );
         }
 
+        //! \param p object \return same but hidden object
         template <typename T> static inline
         const T * Alias(const T * const p) noexcept
         {

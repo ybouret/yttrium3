@@ -112,9 +112,9 @@ namespace Yttrium
                     return self;
                 }
 
-                const Variable & operator[](const String &)     const;
-                const Variable & operator[](const char * const) const;
-                const Variable & operator[](const char)         const;
+                const Variable & operator[](const String &)     const; //!< \return named variable
+                const Variable & operator[](const char * const) const; //!< \return named variable
+                const Variable & operator[](const char)         const; //!< \return named variable
 
 
 

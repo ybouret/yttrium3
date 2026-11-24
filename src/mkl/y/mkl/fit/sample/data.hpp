@@ -16,17 +16,45 @@ namespace Yttrium
         namespace Fit
         {
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Sample of Data
+            //
+            //
+            //__________________________________________________________________
             template <typename ABSCISSA, typename ORDINATE>
             class DataSample : public Sample<ABSCISSA,ORDINATE>
             {
             public:
-                typedef Sample<ABSCISSA,ORDINATE>          SampleType;
-                typedef typename SampleType::FunctionType  FunctionType;
-                typedef typename SampleType::AdditionType  AdditionType;
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                typedef Sample<ABSCISSA,ORDINATE>          SampleType;   //!< alias
+                typedef typename SampleType::FunctionType  FunctionType; //!< alias
+                typedef typename SampleType::AdditionType  AdditionType; //!< alias
 
-                using SampleType::checkSize;
+                using SampleType::checkCardinal;
                 using SampleType::vars;
 
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+
+                //! setup
+                /**
+                 \param name compatible name
+                 \param xa   first abscissa address
+                 \param ya   first ordinate address
+                 \param na   number of data
+                 */
                 template <typename NAME> inline
                 explicit DataSample(const NAME &           name,
                                     const ABSCISSA * const xa,
@@ -38,11 +66,18 @@ namespace Yttrium
                 yf(na),
                 tag(0)
                 {
-                    checkSize();
+                    checkCardinal();
                 }
 
+                //! cleanup
                 inline virtual ~DataSample() noexcept {}
 
+                //______________________________________________________________
+                //
+                //
+                // Interface
+                //
+                //______________________________________________________________
                 inline virtual size_t cardinal() const noexcept
                 {
                     assert( x.size() == y.size() );
@@ -57,22 +92,29 @@ namespace Yttrium
                         WriteXY<ABSCISSA,ORDINATE>::To(fp,x[i], y[i], yf[i], tag);
                 }
 
-                const LightArray<ABSCISSA> x;
-                const LightArray<ORDINATE> y;
-                CxxArray<ORDINATE>         yf;
-                const size_t               tag;
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                const LightArray<ABSCISSA> x;   //!< abscissae
+                const LightArray<ORDINATE> y;   //!< ordinates
+                CxxArray<ORDINATE>         yf;  //!< fitted ordinates
+                const size_t               tag; //!< for I/O
 
             private:
-                Y_Disable_Copy_And_Assign(DataSample);
+                Y_Disable_Copy_And_Assign(DataSample); //!< discarded>
 
+                
                 inline virtual void collectD2(AdditionType             & sumD2,
                                               FunctionType             & F,
                                               const Readable<ABSCISSA> & aorg)
                 {
                     const size_t n = cardinal(); assert(n>0);
-                    sumD2 << this->collect(y[1],yf[1] = F.start(x[1],vars,aorg));
+                    sumD2 << this->localD2(y[1],yf[1] = F.start(x[1],vars,aorg));
                     for(size_t i=2;i<=n;++i)
-                        sumD2 << this->collect(y[i],yf[i] = F.value(x[i],vars,aorg));
+                        sumD2 << this->localD2(y[i],yf[i] = F.value(x[i],vars,aorg));
                 }
 
 
