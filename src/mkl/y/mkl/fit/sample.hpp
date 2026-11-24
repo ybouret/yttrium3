@@ -7,6 +7,7 @@
 #include "y/mkl/fit/type/function.hpp"
 #include "y/mkl/fit/type/gradient.hpp"
 #include "y/cameo/addition.hpp"
+#include "y/cameo/addenda.hpp"
 #include "y/mkl/api/mod2.hpp"
 
 namespace Yttrium
@@ -36,6 +37,7 @@ namespace Yttrium
                 //______________________________________________________________
                 typedef Function<ABSCISSA,ORDINATE>  FunctionType; //!< alias
                 typedef Cameo::Addition<ABSCISSA>    AdditionType; //!< alias
+                typedef Cameo::Addenda<ABSCISSA>     AddendaType;  //!< alias
                 typedef Keyed<String,ArcPtr<Sample>> Pointer;      //!< alias
 
                 //______________________________________________________________
@@ -49,7 +51,7 @@ namespace Yttrium
                 template <typename NAME> inline
                 explicit Sample(const NAME &name) :
                 SampleMetrics(name),
-                xadd()
+                addenda()
                 {
 
                 }
@@ -91,6 +93,7 @@ namespace Yttrium
                  */
                 inline ABSCISSA D2(FunctionType &F, const Readable<ABSCISSA> &atry)
                 {
+                    AdditionType &xadd = * addenda.make(1);
                     xadd.ldz();
                     collectD2(xadd,F,atry);
                     return xadd();
@@ -102,7 +105,8 @@ namespace Yttrium
                 // Members+
                 //
                 //______________________________________________________________
-                AdditionType xadd; //!< addition helper
+                //AdditionType xadd;    //!< addition helper
+                AddendaType  addenda; //!< addition helper
 
             private:
                 Y_Disable_Copy_And_Assign(Sample); //!< dicarded
