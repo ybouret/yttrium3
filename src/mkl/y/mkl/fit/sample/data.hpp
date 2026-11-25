@@ -34,16 +34,15 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
-                typedef Sample<ABSCISSA,ORDINATE>          SampleType;   //!< alias
-                typedef typename SampleType::FunctionType  FunctionType; //!< alias
-                typedef typename SampleType::GradientType  GradientType; //!< alias
-                typedef typename SampleType::AdditionType  AdditionType; //!< alias
-                typedef typename SampleType::AddendaType   AddendaType;  //!< alias
-                typedef typename SampleType::AddHandle     AddHandle;    //!< alias
+                typedef Sample<ABSCISSA,ORDINATE>           SampleType;     //!< alias
+                typedef typename SampleType::FunctionType   FunctionType;   //!< alias
+                typedef typename SampleType::GradientType   GradientType;   //!< alias
+                typedef typename SampleType::AdditionType   AdditionType;   //!< alias
+                typedef typename SampleType::AdditionHandle AdditionHandle; //!< alias
 
                 using SampleType::checkCardinal;
                 using SampleType::vars;
-                using SampleType::Zeroed;
+                using SampleType::UpdateD2;
 
                 //______________________________________________________________
                 //
@@ -96,10 +95,6 @@ namespace Yttrium
                         WriteXY<ABSCISSA,ORDINATE>::To(fp,x[i], y[i], yf[i], tag);
                 }
 
-               
-
-
-                
 
                 //______________________________________________________________
                 //
@@ -116,31 +111,16 @@ namespace Yttrium
                 Y_Disable_Copy_And_Assign(DataSample); //!< discarded>
 
                 
-                inline virtual void collectD2(AdditionType             & sumD2,
-                                              FunctionType             & F,
-                                              const Readable<ABSCISSA> & aorg)
+                inline virtual
+                void gatherD2(AdditionType             & sumD2,
+                              FunctionType             & F,
+                              const Readable<ABSCISSA> & aorg)
                 {
                     const size_t n = cardinal(); assert(n>0);
-                    sumD2 << this->localD2(y[1],yf[1] = F.start(x[1],vars,aorg));
+                    UpdateD2(sumD2,y[1],yf[1]=F.start(x[1],vars,aorg));
                     for(size_t i=2;i<=n;++i)
-                        sumD2 << this->localD2(y[i],yf[i] = F.value(x[i],vars,aorg));
+                        UpdateD2(sumD2,y[i],yf[i]=F.start(x[i],vars,aorg));
                 }
-
-                inline virtual void collectD2org(Writable<ORDINATE>       & dFda,
-                                                 AdditionType             & sumD2,
-                                                 Writable<AddHandle>      & sumBeta,
-                                                 GradientType             & G,
-                                                 const Readable<ABSCISSA> & aorg,
-                                                 const Readable<bool>     & used)
-                {
-
-                    const size_t         n     = cardinal(); assert(n>0);
-                    this->localD2(dFda,sumD2,sumBeta,y[1],yf[1] = G.start( Zeroed(dFda),x[1],vars,aorg,used), used);
-                    for(size_t i=2;i<=n;++i)
-                        this->localD2(dFda,sumD2,sumBeta,y[i],yf[i] = G.value( Zeroed(dFda),x[i],vars,aorg,used), used);
-                }
-
-
             };
 
 

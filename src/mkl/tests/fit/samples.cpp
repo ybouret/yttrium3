@@ -1,7 +1,6 @@
+#include "y/mkl/fit/least-squares.hpp"
 #include "y/mkl/fit/samples.hpp"
 #include "y/utest/run.hpp"
-
-
 
 
 
@@ -123,39 +122,18 @@ Y_UTEST(fit_samples)
     SA.vars["D1"][aorg] = 0.15;
     SA.vars["D2"][aorg] = 0.20;
 
-    Diffusion F;
+    Diffusion          F;
+    DiffusionGradient  G;
 
-    const double S1D2 = S1.D2(F,aorg);
-    const double S2D2 = S2.D2(F,aorg);
-    const double SAD2 = SA.D2(F,aorg);
+    Fit::LeastSquares<double,double> fit;
 
+    const double S1D2 = fit.D2(S1,F,aorg);
+    const double S2D2 = fit.D2(S2,F,aorg);
+    const double SAD2 = fit.D2(SA,F,aorg);
 
     Y_PRINTV(S1D2);
     Y_PRINTV(S2D2);
     Y_PRINTV(SAD2);
-
-    S1.autoSave();
-    S2.autoSave();
-    SA.autoSave();
-
-    std::cerr << std::endl;
-    DiffusionGradient G;
-    CxxArray<double>  beta1(nvar,0);
-    CxxArray<double>  beta2(nvar,0);
-    CxxArray<double>  betaA(nvar,0);
-    CxxArray<bool>    used(nvar,true);
-
-    const double S1D2bis = S1.D2org(beta1,G,aorg,used);
-    const double S2D2bis = S2.D2org(beta2,G,aorg,used);
-    const double SAD2bis = SA.D2org(betaA,G,aorg,used);
-    Y_PRINTV(S1D2bis);
-    Y_PRINTV(beta1);
-
-    Y_PRINTV(S2D2bis);
-    Y_PRINTV(beta2);
-
-    Y_PRINTV(SAD2bis);
-    Y_PRINTV(betaA);
 
 
 }

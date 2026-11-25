@@ -33,13 +33,12 @@ namespace Yttrium
                 //
                 //______________________________________________________________
 
-                typedef Sample<ABSCISSA,ORDINATE>          SampleType;     //!< alias
-                typedef typename SampleType::Pointer       SamplePointer;  //!< alias
-                typedef typename SampleType::FunctionType  FunctionType;   //!< alias
-                typedef typename SampleType::GradientType  GradientType;   //!< alias
-                typedef typename SampleType::AdditionType  AdditionType;   //!< alias
-                typedef typename SampleType::AddendaType   AddendaType;    //!< alias
-                typedef typename SampleType::AddHandle     AddHandle;      //!< alias
+                typedef Sample<ABSCISSA,ORDINATE>           SampleType;      //!< alias
+                typedef typename SampleType::Pointer        SamplePointer;   //!< alias
+                typedef typename SampleType::FunctionType   FunctionType;    //!< alias
+                typedef typename SampleType::GradientType   GradientType;    //!< alias
+                typedef typename SampleType::AdditionType   AdditionType;    //!< alias
+                typedef typename SampleType::AdditionHandle AdditionHandle;  //!< alias
 
                 typedef SuffixSet<String,SamplePointer>    SampleDB;       //!< alias
                 typedef typename SampleDB::Iterator        Iterator;       //!< alias
@@ -121,26 +120,17 @@ namespace Yttrium
 
                 inline virtual const SampleDB & locus() const noexcept { return db; }
 
-                inline virtual void collectD2(AdditionType             &sumD2,
-                                              FunctionType             &F,
-                                              const Readable<ABSCISSA> &aorg)
-                {
-                    for(Iterator it=db.begin();it != db.end();++it)
-                        (**it).collectD2(sumD2,F,aorg);
-                }
-
                 inline virtual
-                void collectD2org(Writable<ORDINATE>       & dFda,
-                                  AdditionType             & sumD2,
-                                  Writable<AddHandle>      & sumBeta,
-                                  GradientType             & G,
-                                  const Readable<ABSCISSA> & aorg,
-                                  const Readable<bool>     & used)
+                void gatherD2(AdditionType             & sumD2,
+                              FunctionType             & F,
+                              const Readable<ABSCISSA> & aorg)
                 {
                     for(Iterator it=db.begin();it != db.end();++it)
-                        (**it).collectD2org(dFda,sumD2,sumBeta,G,aorg,used);
-                }
+                    {
+                        (**it).gatherD2(sumD2,F,aorg);
+                    }
 
+                }
             };
 
         }
