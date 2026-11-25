@@ -47,13 +47,13 @@ namespace Yttrium
                 //
                 //______________________________________________________________
 
-                //! setup \param name compatible name
+                //! setup with at least one XAddition \param name compatible name
                 template <typename NAME> inline
                 explicit Sample(const NAME &name) :
                 SampleMetrics(name),
                 addenda()
                 {
-
+                    (void) addenda.make(1);
                 }
 
                 //! cleanup
@@ -96,7 +96,8 @@ namespace Yttrium
                  */
                 inline ABSCISSA D2(FunctionType &F, const Readable<ABSCISSA> &atry)
                 {
-                    AdditionType &xadd = * addenda.make(1);
+                    assert(addenda->size>0);
+                    AdditionType &xadd = *addenda->head;
                     xadd.ldz();
                     collectD2(xadd,F,atry);
                     return xadd();
