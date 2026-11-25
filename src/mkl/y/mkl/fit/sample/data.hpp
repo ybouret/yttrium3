@@ -42,6 +42,7 @@ namespace Yttrium
 
                 using SampleType::checkCardinal;
                 using SampleType::vars;
+                using SampleType::Zeroed;
 
                 //______________________________________________________________
                 //
@@ -96,23 +97,6 @@ namespace Yttrium
 
                
 
-                void collectD2org(Writable<ORDINATE>       & dFda,
-                                  AddendaType              & L,
-                                  GradientType             & G,
-                                  const Readable<ABSCISSA> & aorg,
-                                  const Readable<bool>     & used)
-                {
-
-                    const size_t         n     = cardinal(); assert(n>0);
-                    AdditionType * const node  = L->head; assert(node);
-
-
-                    this->localD2(dFda,L->head,y[1],yf[1] = G.start( Zeroed(dFda),x[1],vars,aorg,used));
-                    for(size_t i=2;i<=n;++i)
-                    {
-                        this->localD2(dFda,L->head,y[i],yf[i] = G.value( Zeroed(dFda),x[i],vars,aorg,used));
-                    }
-                }
 
                 
 
@@ -139,6 +123,24 @@ namespace Yttrium
                     sumD2 << this->localD2(y[1],yf[1] = F.start(x[1],vars,aorg));
                     for(size_t i=2;i<=n;++i)
                         sumD2 << this->localD2(y[i],yf[i] = F.value(x[i],vars,aorg));
+                }
+
+                inline virtual void collectD2org(Writable<ORDINATE>       & dFda,
+                                                 AddendaType              & L,
+                                                 GradientType             & G,
+                                                 const Readable<ABSCISSA> & aorg,
+                                                 const Readable<bool>     & used)
+                {
+
+                    const size_t         n     = cardinal(); assert(n>0);
+                    AdditionType * const node  = L->head; assert(node);
+
+
+                    this->localD2(dFda,L->head,y[1],yf[1] = G.start( Zeroed(dFda),x[1],vars,aorg,used), used);
+                    for(size_t i=2;i<=n;++i)
+                    {
+                        this->localD2(dFda,L->head,y[i],yf[i] = G.value( Zeroed(dFda),x[i],vars,aorg,used),used);
+                    }
                 }
 
 

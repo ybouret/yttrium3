@@ -36,7 +36,9 @@ namespace Yttrium
                 typedef Sample<ABSCISSA,ORDINATE>          SampleType;     //!< alias
                 typedef typename SampleType::Pointer       SamplePointer;  //!< alias
                 typedef typename SampleType::FunctionType  FunctionType;   //!< alias
+                typedef typename SampleType::GradientType  GradientType;   //!< alias
                 typedef typename SampleType::AdditionType  AdditionType;   //!< alias
+                typedef typename SampleType::AddendaType   AddendaType;    //!< alias
 
                 typedef SuffixSet<String,SamplePointer>    SampleDB;       //!< alias
                 typedef typename SampleDB::Iterator        Iterator;       //!< alias
@@ -125,6 +127,16 @@ namespace Yttrium
                     for(Iterator it=db.begin();it != db.end();++it)
                         (**it).collectD2(sumD2,F,aorg);
                 }
+
+                virtual void collectD2org(Writable<ORDINATE>       & dFda,
+                                          AddendaType              & L,
+                                          GradientType             & G,
+                                          const Readable<ABSCISSA> & aorg,
+                                          const Readable<bool>     & used)
+                {
+                    
+                }
+
             };
 
         }

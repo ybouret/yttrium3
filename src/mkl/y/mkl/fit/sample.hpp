@@ -51,7 +51,8 @@ namespace Yttrium
                 template <typename NAME> inline
                 explicit Sample(const NAME &name) :
                 SampleMetrics(name),
-                addenda()
+                addenda(),
+                zero(0)
                 {
                     (void) addenda.make(1);
                 }
@@ -71,15 +72,19 @@ namespace Yttrium
                 /**
                  \param sumD2 target addition
                  \param F     fit function
-                 \param aorg  current parameters
+                 \param atry  current parameters
                  */
                 virtual void collectD2(AdditionType             &sumD2,
                                        FunctionType             &F,
-                                       const Readable<ABSCISSA> &aorg) = 0;
+                                       const Readable<ABSCISSA> &atry) = 0;
 
 
-                
-             
+                virtual void collectD2org(Writable<ORDINATE>       & dFda,
+                                          AddendaType              & L,
+                                          GradientType             & G,
+                                          const Readable<ABSCISSA> & aorg,
+                                          const Readable<bool>     & used) = 0;
+
 
                 //______________________________________________________________
                 //
@@ -102,14 +107,31 @@ namespace Yttrium
                     return xadd();
                 }
 
-                inline void prepareFor(const Variables &vars)
+                inline void prepareFor(const size_t nvar)
                 {
-                    const size_t   nvar = vars.span;
-                    AdditionType * node = addenda.make( AdditionTypeCount(nvar) );
+                    (void) addenda.make( AdditionTypeCount(nvar) );
                     addenda.ldz();
                     gradient.adjust(nvar);
-                    return node;
                 }
+
+                inline ABSCISSA D2org(Writable<ABSCISSA>       &beta,
+                                      GradientType             &G,
+                                      const Readable<ABSCISSA> &aorg,
+                                      const Readable<bool>     &used)
+                {
+                    // prepare resources
+                    assert(beta.size()>=vars.span);
+                    beta.ld(zero);
+                    prepareFor(vars.span);
+
+                    // collect info
+                    collectD2org(gradient,addenda,G,aorg,used);
+
+                    // compile collected info
+                    return compile(beta,used);
+                }
+
+
 
                 //______________________________________________________________
                 //
@@ -119,7 +141,7 @@ namespace Yttrium
                 //______________________________________________________________
                 AddendaType      addenda; //!< addition helper
                 Vector<ORDINATE> gradient; //!< local gradient
-
+                const ABSCISSA   zero;     //!< 0
             private:
                 Y_Disable_Copy_And_Assign(Sample); //!< dicarded
 
@@ -154,6 +176,26 @@ namespace Yttrium
                     }
 
                 }
+
+
+                inline ABSCISSA compile(Writable<ABSCISSA>       &beta,
+                                        const Readable<bool>     &used)
+                {
+                    // extract beta
+                    AdditionType * node = addenda->head;
+                    Variables::ConstIterator it = vars->begin();
+                    for(size_t i=vars->size();i>0;--i,++it)
+                    {
+                        node=node->next; assert(node);
+                        const Variable &var = **it; if(!var[used]) continue;
+                        AdditionType   &sum = *node;
+                        var[beta] = sum();
+                    }
+
+                    // return D2 stored in addenda head
+                    return (*addenda->head)();
+                }
+
             };
 
         }

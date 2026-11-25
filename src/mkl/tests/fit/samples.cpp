@@ -137,7 +137,19 @@ Y_UTEST(fit_samples)
     S1.autoSave();
     S2.autoSave();
     SA.autoSave();
-    
+
+    std::cerr << std::endl;
+    DiffusionGradient G;
+    CxxArray<double>  beta1(nvar,0);
+    CxxArray<double>  beta2(nvar,0);
+    CxxArray<bool>    used(nvar,true);
+
+    const double S1D2bis = S1.D2org(beta1,G,aorg,used);
+    const double S2D2bis = S2.D2org(beta2,G,aorg,used);
+    Y_PRINTV(S1D2bis);
+    Y_PRINTV(beta1);
+    Y_PRINTV(S2D2bis);
+    Y_PRINTV(beta2);
 
 }
 Y_UDONE()
