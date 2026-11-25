@@ -5,6 +5,7 @@
 
 #include "y/mkl/fit/sample.hpp"
 #include "y/cameo/addenda.hpp"
+#include "y/container/sequence/vector.hpp"
 
 namespace Yttrium
 {
@@ -20,6 +21,7 @@ namespace Yttrium
                 typedef Sample<ABSCISSA,ORDINATE>         SampleType;
                 typedef typename SampleType::FunctionType FunctionType;
                 typedef typename SampleType::AdditionType AdditionType;
+                typedef typename SampleType::AdditionHandle AdditionHandle;
 
                 inline explicit LeastSquares()  :
                 sumD2()
@@ -41,9 +43,9 @@ namespace Yttrium
 
 
 
-                AdditionType sumD2;
-
-
+                AdditionType             sumD2;
+                Vector<AdditionHandle>   sumBeta;
+                Cameo::Addenda<ABSCISSA> addenda;
 
 
             private:
