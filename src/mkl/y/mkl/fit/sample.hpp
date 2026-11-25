@@ -39,6 +39,7 @@ namespace Yttrium
                 typedef Cameo::Addition<ABSCISSA>    AdditionType; //!< alias
                 typedef Cameo::Addenda<ABSCISSA>     AddendaType;  //!< alias
                 typedef Keyed<String,ArcPtr<Sample>> Pointer;      //!< alias
+                typedef AdditionType *               AddHandle;    //!< alias
 
                 //______________________________________________________________
                 //
@@ -51,6 +52,8 @@ namespace Yttrium
                 template <typename NAME> inline
                 explicit Sample(const NAME &name) :
                 SampleMetrics(name),
+                dsqrAdd(0),
+                betaAdd(),
                 addenda(),
                 zero(0)
                 {
@@ -79,12 +82,13 @@ namespace Yttrium
                                        const Readable<ABSCISSA> &atry) = 0;
 
 
+
                 virtual void collectD2org(Writable<ORDINATE>       & dFda,
-                                          AddendaType              & L,
+                                          AdditionType             & sumD2,
+                                          Writable<AddHandle>      & sumBeta,
                                           GradientType             & G,
                                           const Readable<ABSCISSA> & aorg,
                                           const Readable<bool>     & used) = 0;
-
 
                 //______________________________________________________________
                 //
@@ -109,9 +113,17 @@ namespace Yttrium
 
                 inline void prepareFor(const size_t nvar)
                 {
-                    (void) addenda.make( AdditionTypeCount(nvar) );
+                    AddHandle handle = addenda.make( AdditionTypeCount(nvar) );
                     addenda.ldz();
                     gradient.adjust(nvar);
+                    betaAdd.adjust(nvar);
+                    Coerce(dsqrAdd) = handle; assert(handle);
+                    for(size_t i=1;i<=nvar;++i)
+                    {
+                        handle=handle->next; assert(handle);
+                        betaAdd[i] = handle;
+                    }
+
                 }
 
                 inline ABSCISSA D2org(Writable<ABSCISSA>       &beta,
@@ -125,7 +137,7 @@ namespace Yttrium
                     prepareFor(vars.span);
 
                     // collect info
-                    collectD2org(gradient,addenda,G,aorg,used);
+                    collectD2org(gradient,*dsqrAdd,betaAdd,G,aorg,used);
 
                     // compile collected info
                     return compile(beta,used);
@@ -139,9 +151,12 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                AddendaType      addenda; //!< addition helper
-                Vector<ORDINATE> gradient; //!< local gradient
-                const ABSCISSA   zero;     //!< 0
+                Vector<ORDINATE>     gradient; //!< local gradient
+                AdditionType * const dsqrAdd;  //!< to add D2
+                Vector<AddHandle>    betaAdd;  //!< to add beta
+                AddendaType          addenda;  //!< addition helper
+                const ABSCISSA       zero;     //!< 0
+
             private:
                 Y_Disable_Copy_And_Assign(Sample); //!< dicarded
 
@@ -159,20 +174,19 @@ namespace Yttrium
                 }
 
                 inline void localD2(const Readable<ORDINATE> &dFda,
-                                    AdditionType *            node,
+                                    AdditionType             &sumD2,
+                                    Writable<AddHandle>      &sumBeta,
                                     const ORDINATE           &y,
                                     const ORDINATE           &yf,
                                     const Readable<bool>     &used)
                 {
-                    assert(node);
                     const ORDINATE delta = y-yf;
-                    *node << delta*delta; // store for D2
+                    sumD2 << delta*delta; // store for D2
                     Variables::ConstIterator it = vars->begin();
                     for(size_t i=vars->size();i>0;--i,++it)
                     {
-                        node=node->next; assert(node);
                         const Variable &var = **it; if(!var[used]) continue;
-                        *node << var[dFda] * delta; // store for beta
+                        *var[sumBeta] << var[dFda] * delta; // store for beta
                     }
 
                 }
@@ -182,18 +196,16 @@ namespace Yttrium
                                         const Readable<bool>     &used)
                 {
                     // extract beta
-                    AdditionType * node = addenda->head;
                     Variables::ConstIterator it = vars->begin();
                     for(size_t i=vars->size();i>0;--i,++it)
                     {
-                        node=node->next; assert(node);
                         const Variable &var = **it; if(!var[used]) continue;
-                        AdditionType   &sum = *node;
-                        var[beta] = sum();
+                        var[beta] = (*var[betaAdd])();
                     }
 
                     // return D2 stored in addenda head
-                    return (*addenda->head)();
+                    assert(dsqrAdd);
+                    return (*dsqrAdd)();
                 }
 
             };
