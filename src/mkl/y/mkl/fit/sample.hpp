@@ -36,6 +36,7 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 typedef Function<ABSCISSA,ORDINATE>  FunctionType; //!< alias
+                typedef Gradient<ABSCISSA,ORDINATE>  GradientType; //!< alias
                 typedef Cameo::Addition<ABSCISSA>    AdditionType; //!< alias
                 typedef Cameo::Addenda<ABSCISSA>     AddendaType;  //!< alias
                 typedef Keyed<String,ArcPtr<Sample>> Pointer;      //!< alias

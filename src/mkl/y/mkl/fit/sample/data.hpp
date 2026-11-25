@@ -36,6 +36,7 @@ namespace Yttrium
                 //______________________________________________________________
                 typedef Sample<ABSCISSA,ORDINATE>          SampleType;   //!< alias
                 typedef typename SampleType::FunctionType  FunctionType; //!< alias
+                typedef typename SampleType::GradientType  GradientType; //!< alias
                 typedef typename SampleType::AdditionType  AdditionType; //!< alias
                 typedef typename SampleType::AddendaType   AddendaType;  //!< alias
 
@@ -95,15 +96,24 @@ namespace Yttrium
 
                 void collectD2org(Writable<ABSCISSA>       & dFda,
                                   AddendaType              & L,
-                                  FunctionType             & G,
+                                  GradientType             & G,
                                   const Readable<ABSCISSA> & aorg,
                                   const Readable<bool>     & used)
                 {
 
-                    const size_t         n    = cardinal(); assert(n>0);
-                    const size_t         nadd = 1 + n + (n*(n+1))/2;
-                    AdditionType * const head = L.make(nadd);
-                    
+                    const size_t         n     = cardinal(); assert(n>0);
+                    const size_t         nadd  = 1 + n + (n*(n+1))/2;
+                    AdditionType * const head  = L.make(nadd);
+                    AdditionType &       sumD2 = *head;
+
+
+                    sumD2 << this->localD2(y[1],yf[1] = G.start(dFda,x[1],vars,aorg,used));
+                    for(size_t i=2;i<=n;++i)
+                    {
+                        sumD2 << this->localD2(y[i],yf[i] = G.value(dFda,x[i],vars,aorg,used));
+                    }
+
+
                 }
 
                 //______________________________________________________________
