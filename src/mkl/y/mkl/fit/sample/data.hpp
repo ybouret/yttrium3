@@ -104,18 +104,17 @@ namespace Yttrium
                 {
 
                     const size_t         n     = cardinal(); assert(n>0);
-                    const size_t         nadd  = 1 + n + (n*(n+1))/2;
-                    AdditionType &       sumD2 = *L.make(nadd);
+                    AdditionType * const node  = L->head; assert(node);
 
 
-                    sumD2 << this->localD2(dFda,y[1],yf[1] = G.start(dFda,x[1],vars,aorg,used));
+                    this->localD2(dFda,L->head,y[1],yf[1] = G.start(dFda,x[1],vars,aorg,used));
                     for(size_t i=2;i<=n;++i)
                     {
-                        sumD2 << this->localD2(dFda,y[i],yf[i] = G.value(dFda,x[i],vars,aorg,used));
+                        this->localD2(dFda,L->head,y[i],yf[i] = G.value(dFda,x[i],vars,aorg,used));
                     }
-
-                    
                 }
+
+                
 
                 //______________________________________________________________
                 //

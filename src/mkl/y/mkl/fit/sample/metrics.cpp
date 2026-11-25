@@ -25,7 +25,11 @@ namespace Yttrium
                 save(fp);
             }
 
-
+            size_t  SampleMetrics:: AdditionTypeCount(const size_t nvar)
+            {
+                assert(nvar>0);
+                return 1+nvar + (nvar*(1+nvar))/2;
+            }
         }
 
     }

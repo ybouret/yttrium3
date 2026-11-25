@@ -8,7 +8,6 @@
 #include "y/mkl/fit/type/gradient.hpp"
 #include "y/cameo/addition.hpp"
 #include "y/cameo/addenda.hpp"
-#include "y/mkl/api/mod2.hpp"
 
 namespace Yttrium
 {
@@ -48,7 +47,7 @@ namespace Yttrium
                 //
                 //______________________________________________________________
 
-                //! setup with at least one XAddition \param name compatible name
+                //! setup with at least one AdditionType \param name compatible name
                 template <typename NAME> inline
                 explicit Sample(const NAME &name) :
                 SampleMetrics(name),
@@ -97,20 +96,25 @@ namespace Yttrium
                  */
                 inline ABSCISSA D2(FunctionType &F, const Readable<ABSCISSA> &atry)
                 {
-                    assert(addenda->size>0);
-                    AdditionType &xadd = *addenda->head;
+                    AdditionType &xadd = *addenda.make(1);
                     xadd.ldz();
                     collectD2(xadd,F,atry);
                     return xadd();
                 }
 
+                inline void prepareFor(const size_t nvar)
+                {
+                    AdditionType * node = addenda.make( AdditionTypeCount(nvar) );
+                    addenda.ldz();
+                    return node;
+                }
+
                 //______________________________________________________________
                 //
                 //
-                // Members+
+                // Members
                 //
                 //______________________________________________________________
-                //AdditionType xadd;    //!< addition helper
                 AddendaType  addenda; //!< addition helper
 
             private:
@@ -126,12 +130,23 @@ namespace Yttrium
                 inline ABSCISSA localD2(const ORDINATE &y, const ORDINATE &yf)
                 {
                     const ORDINATE delta = y-yf;
-                    return Mod2<ORDINATE>(delta);
+                    return delta*delta;
                 }
 
-                inline ABSCISSA localD2(const Readable<ORDINATE> &dFda, const ORDINATE &y, const ORDINATE &dy)
+                inline void localD2(const Readable<ORDINATE> &dFda,
+                                    AdditionType *            node,
+                                    const ORDINATE           &y,
+                                    const ORDINATE           &yf,
+                                    const Readable<bool>     &used)
                 {
-                    
+                    assert(node);
+                    const size_t   nvar  = dFda.size();
+                    const ORDINATE delta = y-yf;
+                    *node << delta*delta;  // D2 in first node
+                    for(size_t i=1;i<=nvar;++i)
+                    {
+                        node=node->next; assert(node);
+                    }
                 }
 
             };

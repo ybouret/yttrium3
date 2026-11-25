@@ -142,6 +142,12 @@ namespace Yttrium
                 return list.head;
             }
 
+            void ldz() noexcept
+            {
+                for(AdditionType *node=list.head;node;node=node->next)
+                    node->ldz();
+            }
+
 
         private:
             Y_Disable_Copy_And_Assign(Addenda); //!< discard
