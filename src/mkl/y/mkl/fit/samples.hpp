@@ -46,6 +46,7 @@ namespace Yttrium
                 typedef DataSample<ABSCISSA,ORDINATE>      DataSampleType; //!< alias
 
                 using SampleType::vars;
+                using SampleType::access;
 
                 //______________________________________________________________
                 //
@@ -125,11 +126,11 @@ namespace Yttrium
                               FunctionType             & F,
                               const Readable<ABSCISSA> & aorg)
                 {
+                    Y_Lock(access);
                     for(Iterator it=db.begin();it != db.end();++it)
                     {
                         (**it).gatherD2(sumD2,F,aorg);
                     }
-
                 }
             };
 

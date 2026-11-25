@@ -7,7 +7,7 @@
 #include "y/mkl/fit/type/function.hpp"
 #include "y/mkl/fit/type/gradient.hpp"
 #include "y/cameo/addition.hpp"
-#include "y/container/sequence/vector.hpp"
+#include "y/concurrent/mutex.hpp"
 
 namespace Yttrium
 {
@@ -50,7 +50,8 @@ namespace Yttrium
                 //! setup with at least one AdditionType \param name compatible name
                 template <typename NAME> inline
                 explicit Sample(const NAME &name) :
-                SampleMetrics(name)
+                SampleMetrics(name),
+                access()
                 {
                 }
 
@@ -78,11 +79,14 @@ namespace Yttrium
                                    FunctionType             & F,
                                    const Readable<ABSCISSA> & aorg)
                 {
+                    Y_Lock(access);
                     sumD2.ldz();
                     gatherD2(sumD2,F,aorg);
                     return sumD2();
                 }
 
+
+                Concurrent::Mutex access;
 
             private:
                 Y_Disable_Copy_And_Assign(Sample); //!< dicarded

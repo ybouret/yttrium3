@@ -43,6 +43,7 @@ namespace Yttrium
                 using SampleType::checkCardinal;
                 using SampleType::vars;
                 using SampleType::UpdateD2;
+                using SampleType::access;
 
                 //______________________________________________________________
                 //
@@ -116,6 +117,7 @@ namespace Yttrium
                               FunctionType             & F,
                               const Readable<ABSCISSA> & aorg)
                 {
+                    Y_Lock(access);
                     const size_t n = cardinal(); assert(n>0);
                     UpdateD2(sumD2,y[1],yf[1]=F.start(x[1],vars,aorg));
                     for(size_t i=2;i<=n;++i)
