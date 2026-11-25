@@ -134,7 +134,8 @@ namespace Yttrium
                                           const Readable<ABSCISSA> & aorg,
                                           const Readable<bool>     & used)
                 {
-                    
+                    for(Iterator it=db.begin();it != db.end();++it)
+                        (**it).collectD2org(dFda,L,G,aorg,used);
                 }
 
             };

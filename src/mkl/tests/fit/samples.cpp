@@ -142,14 +142,21 @@ Y_UTEST(fit_samples)
     DiffusionGradient G;
     CxxArray<double>  beta1(nvar,0);
     CxxArray<double>  beta2(nvar,0);
+    CxxArray<double>  betaA(nvar,0);
     CxxArray<bool>    used(nvar,true);
 
     const double S1D2bis = S1.D2org(beta1,G,aorg,used);
     const double S2D2bis = S2.D2org(beta2,G,aorg,used);
+    const double SAD2bis = SA.D2org(betaA,G,aorg,used);
     Y_PRINTV(S1D2bis);
     Y_PRINTV(beta1);
+
     Y_PRINTV(S2D2bis);
     Y_PRINTV(beta2);
+
+    Y_PRINTV(SAD2bis);
+    Y_PRINTV(betaA);
+
 
 }
 Y_UDONE()
