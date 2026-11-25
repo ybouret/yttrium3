@@ -119,15 +119,21 @@ namespace Yttrium
             protected:
                 //! helper for squared module
                 /**
-                 \param lhs lhs ordinate
-                 \param rhs rhs ordinate
-                 \return |lhs-rhs|^2 as abscissa
+                 \param y  source ordinate
+                 \param yf guess ordinate
+                 \return |y-yf|^2 as abscissa
                  */
-                inline ABSCISSA localD2(const ORDINATE &lhs, const ORDINATE &rhs)
+                inline ABSCISSA localD2(const ORDINATE &y, const ORDINATE &yf)
                 {
-                    const ORDINATE delta = lhs-rhs;
+                    const ORDINATE delta = y-yf;
                     return Mod2<ORDINATE>(delta);
                 }
+
+                inline ABSCISSA localD2(const Readable<ORDINATE> &dFda, const ORDINATE &y, const ORDINATE &dy)
+                {
+                    
+                }
+
             };
 
         }

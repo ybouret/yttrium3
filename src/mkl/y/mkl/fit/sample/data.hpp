@@ -94,7 +94,9 @@ namespace Yttrium
                         WriteXY<ABSCISSA,ORDINATE>::To(fp,x[i], y[i], yf[i], tag);
                 }
 
-                void collectD2org(Writable<ABSCISSA>       & dFda,
+               
+
+                void collectD2org(Writable<ORDINATE>       & dFda,
                                   AddendaType              & L,
                                   GradientType             & G,
                                   const Readable<ABSCISSA> & aorg,
@@ -103,17 +105,16 @@ namespace Yttrium
 
                     const size_t         n     = cardinal(); assert(n>0);
                     const size_t         nadd  = 1 + n + (n*(n+1))/2;
-                    AdditionType * const head  = L.make(nadd);
-                    AdditionType &       sumD2 = *head;
+                    AdditionType &       sumD2 = *L.make(nadd);
 
 
-                    sumD2 << this->localD2(y[1],yf[1] = G.start(dFda,x[1],vars,aorg,used));
+                    sumD2 << this->localD2(dFda,y[1],yf[1] = G.start(dFda,x[1],vars,aorg,used));
                     for(size_t i=2;i<=n;++i)
                     {
-                        sumD2 << this->localD2(y[i],yf[i] = G.value(dFda,x[i],vars,aorg,used));
+                        sumD2 << this->localD2(dFda,y[i],yf[i] = G.value(dFda,x[i],vars,aorg,used));
                     }
 
-
+                    
                 }
 
                 //______________________________________________________________
