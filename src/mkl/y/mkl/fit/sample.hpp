@@ -140,13 +140,8 @@ namespace Yttrium
                                     const Readable<bool>     &used)
                 {
                     assert(node);
-                    const size_t   nvar  = dFda.size();
                     const ORDINATE delta = y-yf;
-                    *node << delta*delta;  // D2 in first node
-                    for(size_t i=1;i<=nvar;++i)
-                    {
-                        node=node->next; assert(node);
-                    }
+                    *node << delta*delta;
                 }
 
             };

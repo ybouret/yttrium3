@@ -107,10 +107,10 @@ namespace Yttrium
                     AdditionType * const node  = L->head; assert(node);
 
 
-                    this->localD2(dFda,L->head,y[1],yf[1] = G.start(dFda,x[1],vars,aorg,used));
+                    this->localD2(dFda,L->head,y[1],yf[1] = G.start( Zeroed(dFda),x[1],vars,aorg,used));
                     for(size_t i=2;i<=n;++i)
                     {
-                        this->localD2(dFda,L->head,y[i],yf[i] = G.value(dFda,x[i],vars,aorg,used));
+                        this->localD2(dFda,L->head,y[i],yf[i] = G.value( Zeroed(dFda),x[i],vars,aorg,used));
                     }
                 }
 

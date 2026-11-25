@@ -59,6 +59,13 @@ namespace Yttrium
                 void           autoSave()      const; //!< save in name.data
                 static size_t  AdditionTypeCount(const size_t nvar); //!< 1 + nvar + (n*(1+nvar))/2
 
+                template <typename T> static inline
+                Writable<T> & zeroed( Writable<T> &v )
+                {
+                    const T zero = 0;
+                    return v.ld(zero);
+                }
+
                 //______________________________________________________________
                 //
                 //

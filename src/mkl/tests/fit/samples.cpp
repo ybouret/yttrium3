@@ -48,6 +48,47 @@ namespace
                 return sqrt(D*(t-t0));
         }
     };
+
+    class DiffusionGradient : public Fit::OrdinaryGradient<double,double>
+    {
+    public:
+        inline explicit DiffusionGradient()
+        {
+        }
+
+        inline virtual ~DiffusionGradient() noexcept
+        {
+        }
+        
+    private:
+        Y_Disable_Copy_And_Assign(DiffusionGradient);
+
+        virtual double get(Writable<double> &dFda,
+                           const double &t,
+                           const Fit::Variables &vars,
+                           const Readable<double> &aorg,
+                           const Readable<bool> &used)
+        {
+            const Fit::Variable &_t0 = vars["t0"];
+            const Fit::Variable &_D  = vars["D"];
+            const double t0 = _t0[aorg];
+            const double D  = _D[aorg];
+            if(t<=t0)
+            {
+                return 0;
+            }
+            else
+            {
+                const double dt = t-t0;
+                const double f  = sqrt(D*dt);
+                if( _t0[used] ) _t0[dFda] = 0.5 * dt/f;
+                if( _D[used]  ) _D[dFda]  = 0.5 * D/f;
+                return f;
+            }
+        }
+
+    };
+
 }
 
 Y_UTEST(fit_samples)
@@ -96,6 +137,7 @@ Y_UTEST(fit_samples)
     S1.autoSave();
     S2.autoSave();
     SA.autoSave();
+    
 
 }
 Y_UDONE()
