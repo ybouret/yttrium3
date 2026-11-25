@@ -6,8 +6,8 @@
 #include "y/mkl/fit/sample/metrics.hpp"
 #include "y/mkl/fit/type/function.hpp"
 #include "y/mkl/fit/type/gradient.hpp"
-#include "y/cameo/addition.hpp"
 #include "y/cameo/addenda.hpp"
+#include "y/container/sequence/vector.hpp"
 
 namespace Yttrium
 {
@@ -78,7 +78,7 @@ namespace Yttrium
                                        const Readable<ABSCISSA> &aorg) = 0;
 
 
-
+                
              
 
                 //______________________________________________________________
@@ -102,10 +102,12 @@ namespace Yttrium
                     return xadd();
                 }
 
-                inline void prepareFor(const size_t nvar)
+                inline void prepareFor(const Variables &vars)
                 {
+                    const size_t   nvar = vars.span;
                     AdditionType * node = addenda.make( AdditionTypeCount(nvar) );
                     addenda.ldz();
+                    gradient.adjust(nvar);
                     return node;
                 }
 
@@ -115,7 +117,8 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                AddendaType  addenda; //!< addition helper
+                AddendaType      addenda; //!< addition helper
+                Vector<ORDINATE> gradient; //!< local gradient
 
             private:
                 Y_Disable_Copy_And_Assign(Sample); //!< dicarded
@@ -141,9 +144,16 @@ namespace Yttrium
                 {
                     assert(node);
                     const ORDINATE delta = y-yf;
-                    *node << delta*delta;
-                }
+                    *node << delta*delta; // store for D2
+                    Variables::ConstIterator it = vars->begin();
+                    for(size_t i=vars->size();i>0;--i,++it)
+                    {
+                        node=node->next; assert(node);
+                        const Variable &var = **it; if(!var[used]) continue;
+                        *node << var[dFda] * delta; // store for beta
+                    }
 
+                }
             };
 
         }
