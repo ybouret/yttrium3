@@ -92,10 +92,28 @@ namespace Yttrium
                 Y_Disable_Copy_And_Assign(Sample); //!< dicarded
 
             protected:
-                static inline void UpdateD2(AdditionType &sumD2, const ORDINATE &y, const ORDINATE &yf)
+                static inline void UpdateOnlyD2(AdditionType &sumD2, const ORDINATE &y, const ORDINATE &yf)
                 {
                     const ORDINATE delta = y - yf;
                     sumD2 << delta*delta;
+                }
+
+                inline void updateEntire(AdditionType             & sumD2,
+                                         Writable<AdditionHandle> & sumBeta,
+                                         const Readable           & dFda,
+                                         const ORDINATE           & y,
+                                         const ORDINATE           & yf,
+                                         const Readable<bool>     & used)
+                {
+                    const ORDINATE delta = y - yf;
+                    sumD2 << delta*delta;
+
+                    Variables::ConstIterator it = vars->begin();
+                    for(size_t i=vars->size();i>0;--i,++it)
+                    {
+                        const Variable &var = **it; if(!var[used]) continue;
+                        var[sumBeta]->push( var[dFda] * delta );
+                    }
                 }
             };
 
