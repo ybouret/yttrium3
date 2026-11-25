@@ -57,7 +57,7 @@ namespace Yttrium
                 //______________________________________________________________
                 void           checkCardinal() const; //!< check positive cardinal
                 void           autoSave()      const; //!< save in name.data
-                static size_t  AddendaSizeFor(const size_t nvar); //!< 1 + nvar + (n*(1+nvar))/2
+                static size_t  AddendaSizeFor(const size_t nvar); //!< nvar + (n*(1+nvar))/2
 
 
 

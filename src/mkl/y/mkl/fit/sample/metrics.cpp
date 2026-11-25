@@ -28,7 +28,7 @@ namespace Yttrium
             size_t  SampleMetrics:: AddendaSizeFor(const size_t nvar)
             {
                 assert(nvar>0);
-                return 1+nvar + (nvar*(1+nvar))/2;
+                return nvar + (nvar*(1+nvar))/2;
             }
         }
 

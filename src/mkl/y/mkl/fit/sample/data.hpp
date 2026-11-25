@@ -41,9 +41,10 @@ namespace Yttrium
                 typedef typename SampleType::AdditionHandle AdditionHandle; //!< alias
 
                 using SampleType::checkCardinal;
-                using SampleType::vars;
                 using SampleType::UpdateOnlyD2;
+                using SampleType::updateEntire;
                 using SampleType::access;
+                using SampleType::vars;
 
                 //______________________________________________________________
                 //
@@ -124,7 +125,22 @@ namespace Yttrium
                         UpdateOnlyD2(sumD2,y[i],yf[i]=F.start(x[i],vars,aorg));
                 }
 
-                
+
+                inline virtual
+                void gatherD2(AdditionType             & sumD2,
+                              Writable<AdditionHandle> & sumBeta,
+                              GradientType             & G,
+                              const Readable<ABSCISSA> & aorg,
+                              const Readable<bool>     & used,
+                              Writable<ORDINATE>       & dFda)
+                {
+                    Y_Lock(access);
+                    const size_t n = cardinal(); assert(n>0);
+                    updateEntire(sumD2,sumBeta,dFda,y[1],yf[1]=G.start(dFda,x[1],vars,aorg,used),used);
+                    for(size_t i=2;i<=n;++i)
+                        updateEntire(sumD2,sumBeta,dFda,y[i],yf[i]=G.start(dFda,x[i],vars,aorg,used),used);
+
+                }
 
             };
 

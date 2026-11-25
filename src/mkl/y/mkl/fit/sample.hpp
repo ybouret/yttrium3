@@ -68,6 +68,12 @@ namespace Yttrium
                                       FunctionType             &F,
                                       const Readable<ABSCISSA> &aorg) = 0;
 
+                virtual void gatherD2(AdditionType             & sumD2,
+                                      Writable<AdditionHandle> & sumBeta,
+                                      GradientType             & G,
+                                      const Readable<ABSCISSA> & aorg,
+                                      const Readable<bool>     & used,
+                                      Writable<ORDINATE>       & dFda) = 0;
 
                 //______________________________________________________________
                 //
@@ -85,6 +91,22 @@ namespace Yttrium
                     return sumD2();
                 }
 
+                inline ABSCISSA D2(AdditionType             & sumD2,
+                                   Writable<AdditionHandle> & sumBeta,
+                                   GradientType             & G,
+                                   const Readable<ABSCISSA> & aorg,
+                                   const Readable<bool>     & used,
+                                   Writable<ORDINATE>       & dFda)
+                {
+                    Y_Lock(access);
+                    sumD2.ldz();
+                    for(size_t i=sumBeta.size();i>0;--i) sumBeta[i]->ldz();
+                    gatherD2(sumD2,sumBeta,G,aorg,used,dFda);
+                    return sumD2();
+                }
+
+
+
 
                 Concurrent::Mutex access;
 
@@ -100,7 +122,7 @@ namespace Yttrium
 
                 inline void updateEntire(AdditionType             & sumD2,
                                          Writable<AdditionHandle> & sumBeta,
-                                         const Readable           & dFda,
+                                         const Readable<ORDINATE> & dFda,
                                          const ORDINATE           & y,
                                          const ORDINATE           & yf,
                                          const Readable<bool>     & used)
@@ -112,7 +134,7 @@ namespace Yttrium
                     for(size_t i=vars->size();i>0;--i,++it)
                     {
                         const Variable &var = **it; if(!var[used]) continue;
-                        var[sumBeta]->push( var[dFda] * delta );
+                        *var[sumBeta] << ( var[dFda] * delta );
                     }
                 }
             };
