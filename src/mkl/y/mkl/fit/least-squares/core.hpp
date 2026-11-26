@@ -92,7 +92,6 @@ namespace Yttrium
                 Y_Disable_Copy_And_Assign(LeastSquaresCore); //!< discarded
 
             protected:
-
                 inline void buildLambda()
                 {
                     const ABSCISSA ten = 10;
