@@ -186,7 +186,7 @@ Y_UTEST(fit_samples)
 
     {
         Fit::LeastSquaresCore<float> f;
-        Y_PRINTV(*f.pLambda);
+        Y_PRINTV(f.lambda);
     }
 
 }

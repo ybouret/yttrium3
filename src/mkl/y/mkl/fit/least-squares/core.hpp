@@ -59,11 +59,12 @@ namespace Yttrium
                 sumBeta(),
                 sumAlpha(),
                 addenda(),
-                pLambda( NewLambda() ),
+                lambda( "lambda", Field::Layout1D(PMIN,PMAX) ),
                 zero(0),
                 one(1)
                 {
-                    
+                    buildLambda();
+
                 }
 
                 inline virtual ~LeastSquaresCore() noexcept
@@ -83,7 +84,7 @@ namespace Yttrium
                 Vector<AdditionHandle>   sumBeta;  //!< helper to compute beta
                 Matrix<AdditionHandle>   sumAlpha; //!< helper to compute alpha
                 AddendaType              addenda;  //!< dynamic inner additions
-                const AutoPtr<Lambda>    pLambda;  //!< inner lambda values
+                const Lambda             lambda;   //!< inner lambda values
                 const ABSCISSA           zero;     //!< 0
                 const ABSCISSA           one;      //!< 1
 
@@ -92,13 +93,13 @@ namespace Yttrium
 
             protected:
 
-                static inline
-                Lambda * NewLambda()
+                inline void buildLambda()
                 {
-                    const Field::Layout1D layout(PMIN,PMAX);
-                    AutoPtr<Lambda> pLam = new Lambda("lambda",layout);
-
-                    return pLam.yield();
+                    const ABSCISSA ten = 10;
+                    Coerce(lambda[0]) = 1;
+                    for(unit_t i=-1;i>PMIN;--i) Coerce(lambda[i]) = lambda[i+1]/ten;
+                    for(unit_t i=1;i<=PMAX;++i) Coerce(lambda[i]) = lambda[i-1]*ten;
+                    //Core::Display(std::cerr, &lambda[PMIN], lambda->width) << std::endl;
                 }
 
                 //! prepare core memory \param nvar number of variables
