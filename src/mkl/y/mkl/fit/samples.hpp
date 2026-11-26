@@ -136,6 +136,7 @@ namespace Yttrium
                 inline virtual
                 void gatherD2(AdditionType             & sumD2,
                               Writable<AdditionHandle> & sumBeta,
+                              Matrix<AdditionHandle>   & sumAlpha,
                               GradientType             & G,
                               const Readable<ABSCISSA> & aorg,
                               const Readable<bool>     & used,
@@ -144,7 +145,7 @@ namespace Yttrium
                     Y_Lock(access);
                     for(Iterator it=db.begin();it != db.end();++it)
                     {
-                        (**it).gatherD2(sumD2,sumBeta,G,aorg,used,dFda);
+                        (**it).gatherD2(sumD2,sumBeta,sumAlpha,G,aorg,used,dFda);
                     }
                 }
 

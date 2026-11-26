@@ -30,6 +30,7 @@ namespace Yttrium
                 using CoreType:: sumD2;
                 using CoreType:: last;
                 using CoreType:: sumBeta;
+                using CoreType:: sumAlpha;
 
                 inline explicit LeastSquares()  :
                 CoreType(),
@@ -59,7 +60,7 @@ namespace Yttrium
                     prepareFor(S);
 
                     // gather components
-                    const ABSCISSA result = (last=S.D2(sumD2,sumBeta,G,aorg,used,dFda));
+                    const ABSCISSA result = (last=S.D2(sumD2,sumBeta,sumAlpha,G,aorg,used,dFda));
 
                     // compile components
                     this->compileFrom(S.vars,used);

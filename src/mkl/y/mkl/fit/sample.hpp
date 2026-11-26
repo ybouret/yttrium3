@@ -72,6 +72,7 @@ namespace Yttrium
 
                 virtual void gatherD2(AdditionType             & sumD2,
                                       Writable<AdditionHandle> & sumBeta,
+                                      Matrix<AdditionHandle>   & sumAlpha,
                                       GradientType             & G,
                                       const Readable<ABSCISSA> & aorg,
                                       const Readable<bool>     & used,
@@ -95,6 +96,7 @@ namespace Yttrium
 
                 inline ABSCISSA D2(AdditionType             & sumD2,
                                    Writable<AdditionHandle> & sumBeta,
+                                   Matrix<AdditionHandle>   & sumAlpha,
                                    GradientType             & G,
                                    const Readable<ABSCISSA> & aorg,
                                    const Readable<bool>     & used,
@@ -103,7 +105,7 @@ namespace Yttrium
                     Y_Lock(access);
                     sumD2.ldz();
                     for(size_t i=sumBeta.size();i>0;--i) sumBeta[i]->ldz();
-                    gatherD2(sumD2,sumBeta,G,aorg,used,dFda);
+                    gatherD2(sumD2,sumBeta,sumAlpha,G,aorg,used,dFda);
                     return sumD2();
                 }
 
@@ -121,6 +123,7 @@ namespace Yttrium
 
                 inline void updateEntire(AdditionType             & sumD2,
                                          Writable<AdditionHandle> & sumBeta,
+                                         Matrix<AdditionHandle>   & sumAlpha,
                                          const Readable<ORDINATE> & dFda,
                                          const ORDINATE           & y,
                                          const ORDINATE           & yf,
@@ -138,10 +141,19 @@ namespace Yttrium
                     Variables::ConstIterator it = vars->begin();
                     for(size_t i=vars->size();i>0;--i,++it)
                     {
-                        const Variable &var = **it; if(!var[used]) continue;
-                        const ABSCISSA  tmp = var[dFda] * delta;
-                        //std::cerr << "\tstoring " << tmp << std::endl;
-                        *var[sumBeta] << tmp;
+                        const Variable &var_i  = **it; if(!var_i[used]) continue;
+                        const ORDINATE  dFda_i = var_i[dFda];
+                        *var_i[sumBeta] << dFda_i * delta;
+
+                        MatrixRow<AdditionHandle> &sa_i = var_i[sumAlpha];
+                        Variables::ConstIterator   jt   = it;
+                        for(size_t j=i;j>0;--j,++jt)
+                        {
+                            const Variable &var_j  = **jt; if(!var_j[used]) continue;
+                            const ORDINATE  dFda_j = var_j[dFda];
+                            const ABSCISSA  atmp   = dFda_i * dFda_j;
+                            //*var_j[sa_i] << atmp;
+                        }
                     }
                 }
             };

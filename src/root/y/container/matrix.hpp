@@ -12,6 +12,7 @@
 #include "y/hide.hpp"
 #include "y/cameo/addition.hpp"
 #include "y/container/cxx/light-array.hpp"
+#include "y/core/min.hpp"
 
 namespace Yttrium
 {
@@ -303,6 +304,17 @@ namespace Yttrium
                     *(p++) = value;
             }
             return *this;
+        }
+
+        //! set all diagonal items to same value
+        inline Matrix & diag(ParamType value)
+        {
+            Matrix &self = *this;
+            for(size_t i=Min(rows,cols);i>0;--i)
+            {
+                self[i][i] = value;
+            }
+            return self;
         }
 
         //! multiply each item \param u factor \return *this

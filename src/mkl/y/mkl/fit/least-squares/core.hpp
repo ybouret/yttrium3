@@ -8,6 +8,7 @@
 #include "y/mkl/fit/sample/metrics.hpp"
 #include "y/cameo/addenda.hpp"
 #include "y/container/sequence/vector.hpp"
+#include "y/container/matrix.hpp"
 
 namespace Yttrium
 {
@@ -29,8 +30,10 @@ namespace Yttrium
                 last(-1),
                 beta(),
                 sumBeta(),
+                sumAlpha(),
                 addenda(),
-                zero(0)
+                zero(0),
+                one(1)
                 {
                 }
 
@@ -42,24 +45,47 @@ namespace Yttrium
                 AdditionType             sumD2;
                 ABSCISSA                 last;
                 Vector<ABSCISSA>         beta;
+                Matrix<ABSCISSA>         alpha;
                 Vector<AdditionHandle>   sumBeta;
+                Matrix<AdditionHandle>   sumAlpha;
                 AddendaType              addenda;
                 const ABSCISSA           zero;
+                const ABSCISSA           one;
 
             private:
                 Y_Disable_Copy_And_Assign(LeastSquaresCore);
 
             protected:
+
                 inline void prepareCoreFor(const size_t nvar)
                 {
+                    // prepare beta
                     beta.adjust(nvar);
                     beta.ld(zero);
+
+                    // prepare alpha
+                    alpha.make(nvar,nvar);
+                    alpha.ld(zero).diag(one);
+
+                    // prepare addenda
                     sumBeta.adjust(nvar);
                     AdditionType * node = addenda.make( SampleMetrics::AddendaSizeFor(nvar) );
+
+                    // fill sumBeta with nvar nodes
                     for(size_t i=1;i<=nvar;++i,node=node->next)
                     {
                         assert(node);
                         sumBeta[i] = node;
+                    }
+
+                    // fill sumAlpha with nvar*(1+nvar)/2 symetric nodes
+                    for(size_t i=1;i<=nvar;++i)
+                    {
+                        for(size_t j=i;j<=nvar;++j,node=node->next)
+                        {
+                            assert(node);
+                            sumAlpha[i][j] = sumAlpha[j][i] = node;
+                        }
                     }
                 }
 
