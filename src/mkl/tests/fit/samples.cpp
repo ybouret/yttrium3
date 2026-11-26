@@ -156,6 +156,15 @@ Y_UTEST(fit_samples)
     Y_PRINTV(fit.beta);
     Y_PRINTV(fit.alpha);
 
+
+    Y_PRINTV( Fit::LeastSquaresCore<float>::PMIN );
+    Y_PRINTV( Fit::LeastSquaresCore<double>::PMIN );
+    Y_PRINTV( Fit::LeastSquaresCore<long double>::PMIN );
+    Y_PRINTV( Fit::LeastSquaresCore< XReal<float> >::PMIN );
+    Y_PRINTV( Fit::LeastSquaresCore< XReal<double> >::PMIN );
+    Y_PRINTV( Fit::LeastSquaresCore< XReal<long double> >::PMIN );
+
+
 }
 Y_UDONE()
 

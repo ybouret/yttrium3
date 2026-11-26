@@ -9,6 +9,7 @@
 #include "y/cameo/addenda.hpp"
 #include "y/container/sequence/vector.hpp"
 #include "y/container/matrix.hpp"
+#include "y/mkl/numeric.hpp"
 
 namespace Yttrium
 {
@@ -32,9 +33,10 @@ namespace Yttrium
                 //______________________________________________________________
                 //
                 //
-                // Definitions+
+                // Definitions
                 //
                 //______________________________________________________________
+                static const int PMIN;
                 typedef Cameo::Addition<ABSCISSA> AdditionType;   //!< alias
                 typedef Cameo::Addenda<ABSCISSA>  AddendaType;    //!< alias
                 typedef AdditionType *            AdditionHandle; //!< alias
@@ -56,6 +58,7 @@ namespace Yttrium
                 zero(0),
                 one(1)
                 {
+                    
                 }
 
                 inline virtual ~LeastSquaresCore() noexcept
@@ -162,6 +165,10 @@ namespace Yttrium
                 }
 
             };
+
+            template <typename ABSCISSA>
+            const int LeastSquaresCore<ABSCISSA>::PMIN = - (int)( Numeric<ABSCISSA>::DIG + 1);
+
 
         }
     }
