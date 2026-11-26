@@ -15,6 +15,7 @@ y/mkl/fit
 y/mkl/fit/variable
 y/mkl/fit/sample
 y/mkl/fit/type
+y/mkl/fit/least-squares
 )
 
 add_subdirectory(tests)

@@ -139,7 +139,6 @@ namespace Yttrium
                     updateEntire(sumD2,sumBeta,dFda,y[1],yf[1]=G.start(dFda,x[1],vars,aorg,used),used);
                     for(size_t i=2;i<=n;++i)
                         updateEntire(sumD2,sumBeta,dFda,y[i],yf[i]=G.start(dFda,x[i],vars,aorg,used),used);
-
                 }
 
             };

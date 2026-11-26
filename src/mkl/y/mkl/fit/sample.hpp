@@ -3,11 +3,9 @@
 #ifndef Y_MKL_Fit_Sample_Included
 #define Y_MKL_Fit_Sample_Included 1
 
-#include "y/mkl/fit/sample/metrics.hpp"
+#include "y/mkl/fit/sample/core.hpp"
 #include "y/mkl/fit/type/function.hpp"
 #include "y/mkl/fit/type/gradient.hpp"
-#include "y/cameo/addition.hpp"
-#include "y/concurrent/mutex.hpp"
 
 namespace Yttrium
 {
@@ -16,6 +14,7 @@ namespace Yttrium
         namespace Fit
         {
 
+            
             //__________________________________________________________________
             //
             //
@@ -25,7 +24,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             template <typename ABSCISSA, typename ORDINATE>
-            class Sample : public SampleMetrics
+            class Sample : public SampleCore<ABSCISSA>
             {
             public:
                 //______________________________________________________________
@@ -34,11 +33,15 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
-                typedef Function<ABSCISSA,ORDINATE>  FunctionType; //!< alias
-                typedef Gradient<ABSCISSA,ORDINATE>  GradientType; //!< alias
-                typedef Cameo::Addition<ABSCISSA>    AdditionType; //!< alias
-                typedef AdditionType *               AdditionHandle; //!< alias
-                typedef Keyed<String,ArcPtr<Sample>> Pointer;      //!< alias
+                typedef Function<ABSCISSA,ORDINATE>       FunctionType;   //!< alias
+                typedef Gradient<ABSCISSA,ORDINATE>       GradientType;   //!< alias
+                typedef SampleCore<ABSCISSA>              CoreType;       //!< alias
+                typedef typename CoreType::AdditionType   AdditionType;   //!< alias
+                typedef typename CoreType::AdditionHandle AdditionHandle; //!< alias
+                typedef Keyed<String,ArcPtr<Sample>>      Pointer;        //!< alias
+
+                using SampleMetrics::access;
+                using SampleMetrics::vars;
 
                 //______________________________________________________________
                 //
@@ -50,8 +53,7 @@ namespace Yttrium
                 //! setup with at least one AdditionType \param name compatible name
                 template <typename NAME> inline
                 explicit Sample(const NAME &name) :
-                SampleMetrics(name),
-                access()
+                SampleCore<ABSCISSA>(name)
                 {
                 }
 
@@ -105,10 +107,7 @@ namespace Yttrium
                     return sumD2();
                 }
 
-
-
-
-                Concurrent::Mutex access;
+                
 
             private:
                 Y_Disable_Copy_And_Assign(Sample); //!< dicarded

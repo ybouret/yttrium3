@@ -4,6 +4,7 @@
 #define Y_MKL_Fit_SampleMetrics_Included 1
 
 #include "y/mkl/fit/variables.hpp"
+#include "y/concurrent/mutex.hpp"
 
 namespace Yttrium
 {
@@ -33,7 +34,8 @@ namespace Yttrium
                 template <typename NAME> inline
                 explicit SampleMetrics(const NAME &name) :
                 String(name),
-                vars()
+                vars(),
+                access()
                 {
                 }
 
@@ -67,7 +69,8 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                Variables      vars; //!< own variables
+                Variables         vars; //!< own variables
+                Concurrent::Mutex access;
 
             private:
                 Y_Disable_Copy_And_Assign(SampleMetrics); //!< discarded

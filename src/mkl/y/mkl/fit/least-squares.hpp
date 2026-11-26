@@ -3,9 +3,9 @@
 #ifndef Y_MKL_Fit_LeastSquares_Included
 #define Y_MKL_Fit_LeastSquares_Included 1
 
+
+#include "y/mkl/fit/least-squares/core.hpp"
 #include "y/mkl/fit/sample.hpp"
-#include "y/cameo/addenda.hpp"
-#include "y/container/sequence/vector.hpp"
 
 namespace Yttrium
 {
@@ -14,34 +14,26 @@ namespace Yttrium
         namespace Fit
         {
 
-            template <typename ABSCISSA>
-            class LeastSquaresCore
-            {
-            public:
-
-            private:
-                Y_Disable_Copy_And_Assign(LeastSquaresCore);
-            };
-
-
             template <typename ABSCISSA, typename ORDINATE>
-            class LeastSquares
+            class LeastSquares : public LeastSquaresCore<ABSCISSA>
             {
             public:
-                typedef Sample<ABSCISSA,ORDINATE>           SampleType;
-                typedef typename SampleType::FunctionType   FunctionType;
-                typedef typename SampleType::GradientType   GradientType;
-                typedef typename SampleType::AdditionType   AdditionType;
-                typedef typename SampleType::AdditionHandle AdditionHandle;
+                typedef LeastSquaresCore<ABSCISSA>          CoreType;       //!< alias
+                typedef typename CoreType::AddendaType      AddendaType;    //!< alias
+                typedef Sample<ABSCISSA,ORDINATE>           SampleType;     //!< alias
+                typedef typename SampleType::FunctionType   FunctionType;   //!< alias
+                typedef typename SampleType::GradientType   GradientType;   //!< alias
+                typedef typename SampleType::AdditionType   AdditionType;   //!< alias
+                typedef typename SampleType::AdditionHandle AdditionHandle; //!< alias
+
+                using CoreType:: beta;
+                using CoreType:: sumD2;
+                using CoreType:: last;
+                using CoreType:: sumBeta;
 
                 inline explicit LeastSquares()  :
-                sumD2(),
-                last(-1),
-                beta(),
-                dFda(),
-                sumBeta(),
-                addenda(),
-                zero(0)
+                CoreType(),
+                dFda()
                 {
 
                 }
@@ -66,35 +58,20 @@ namespace Yttrium
                     prepareFor(S);
                     const ABSCISSA result = (last=S.D2(sumD2,sumBeta,G,aorg,used,dFda));
 
+
                     return result;
                 }
 
                 inline void prepareFor(const SampleType &S)
                 {
                     const size_t nvar = S.vars->size();
-
-                    beta.adjust(nvar); beta.ld(zero);
+                    this->prepareCoreFor(nvar);
                     dFda.adjust(nvar);
-                    sumBeta.adjust(nvar);
-                    AdditionType * node = addenda.make( SampleType::AddendaSizeFor(nvar) );
-                    for(size_t i=1;i<=nvar;++i,node=node->next)
-                    {
-                        assert(node);
-                        sumBeta[i] = node;
-                    }
                 }
 
 
-
-
-
-                AdditionType             sumD2;
-                ABSCISSA                 last;
-                Vector<ABSCISSA>         beta;
                 Vector<ORDINATE>         dFda;
-                Vector<AdditionHandle>   sumBeta;
-                Cameo::Addenda<ABSCISSA> addenda;
-                const ABSCISSA           zero;
+
 
             private:
                 Y_Disable_Copy_And_Assign(LeastSquares);
