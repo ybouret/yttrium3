@@ -116,7 +116,19 @@ namespace Yttrium
                 const Variable & operator[](const char * const) const; //!< \return named variable
                 const Variable & operator[](const char)         const; //!< \return named variable
 
-
+                template <typename TARGET, typename SOURCE>
+                inline TARGET & transfer(TARGET &target, SOURCE &source) const
+                {
+                    const size_t  n  = vdb.size();
+                    ConstIterator it = vdb.begin();
+                    for(size_t i=n;i>0;--i,++it)
+                    {
+                        const Variable &var = **it;
+                        var[target] = var[source];
+                        
+                    }
+                    return target;
+                }
 
             private:
                 Y_Proxy_Decl(); //!< helper

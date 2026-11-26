@@ -90,7 +90,9 @@ namespace Yttrium
                 Matrix<ABSCISSA>         alpha;    //!< approximate hessian
                 Matrix<ABSCISSA>         curv;     //!< approximate curvature
                 LU<ABSCISSA>             lu;       //!< linear algebra
-                Vector<ABSCISSA>         atry;     //!< trial parameters
+                Vector<ABSCISSA>         aini;     //!< ini point
+                Vector<ABSCISSA>         aend;     //!< end point]
+                Vector<ABSCISSA>         atmp;     //!< tmp point
                 const Lambda             lambda;   //!< inner lambda values
                 const ABSCISSA           zero;     //!< 0
                 const ABSCISSA           one;      //!< 1
@@ -128,7 +130,9 @@ namespace Yttrium
                     //----------------------------------------------------------
                     // prepare other
                     //----------------------------------------------------------
-                    atry.adjust(nvar);
+                    aini.adjust(nvar);
+                    aend.adjust(nvar);
+                    atmp.adjust(nvar);
 
                     //----------------------------------------------------------
                     // prepare inner additions

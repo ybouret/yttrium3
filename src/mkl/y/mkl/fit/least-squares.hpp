@@ -6,6 +6,8 @@
 
 #include "y/mkl/fit/least-squares/core.hpp"
 #include "y/mkl/fit/sample.hpp"
+#include "y/mkl/minimize/quadratic.hpp"
+#include "y/type/temporary.hpp"
 
 namespace Yttrium
 {
@@ -41,7 +43,13 @@ namespace Yttrium
 
                 using CoreType:: beta;
                 using CoreType:: curv;
-                using CoreType:: atry;
+                using CoreType:: aini;
+                using CoreType:: aend;
+                using CoreType:: atmp;
+
+                using CoreType:: one;
+                using CoreType:: zero;
+
                 using CoreType:: sumD2;
                 using CoreType:: sumBeta;
                 using CoreType:: sumAlpha;
@@ -128,9 +136,15 @@ namespace Yttrium
                                  const Readable<bool>     & used)
                 {
 
+                    Temporary<FunctionType*> tmpF(myF,&F);
+                    Temporary<SampleType*>   tmpS(myS,&S);
+
+                    Triplet<ABSCISSA>  U  = { 0,0,1 };
+                    Triplet<ABSCISSA>  D  = { D2full(S,G,aorg,used),-1,-1 };
+
+
                     // build full metrics
-                    const ABSCISSA D2_org = D2full(S,G,aorg,used);
-                    std::cerr << "D2_org=" << D2_org << std::endl;
+                    std::cerr << "D2_org=" << D.a << std::endl;
 
                     // build local curvature
                     const CurvatureResult topo   = this->buildCurvature(p);
@@ -141,21 +155,32 @@ namespace Yttrium
                     }
 
                     // build step
-                    const size_t n = beta.size();
+
+
                     std::cerr << "beta=" << beta << std::endl;
                     this->lu.solve(curv,beta);
 
                     std::cerr << "step=" << beta << std::endl;
+
+                    // prepare parameters
+                    S.vars.transfer(aini.ld(zero),aorg);
+
+                    std::cerr << "aorg=" << aorg << " => aini=" << aini << std::endl;
+                    const size_t n = aini.size();
                     for(size_t i=n;i>0;--i)
                     {
-                        atry[i] = aorg[i] + beta[i];
+                        aend[i] = aini[i] + beta[i];
                     }
 
                     // evaluate trial step
-                    const ABSCISSA D2_try = D2(S,F,atry);
+                    const ABSCISSA D2_try = D2(S,F,aend);
                     std::cerr << "D2_try=" << D2_try << std::endl;
 
+
+
                 }
+
+
 
 
                 //______________________________________________________________
@@ -169,6 +194,8 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(LeastSquares); //!< discarded
+                FunctionType * myF;
+                SampleType   * myS;
 
                 //! prepare all memory
                 inline void prepareFor(const SampleType &S)
@@ -176,6 +203,19 @@ namespace Yttrium
                     const size_t nvar = S.vars.span;
                     this->prepareCoreFor(nvar);
                     dFda.adjust(nvar);
+                }
+
+                ABSCISSA operator()(const ABSCISSA u)
+                {
+                    assert(myF);
+                    FunctionType  &F = *myF;
+                    const ABSCISSA v = one-u;
+                    const size_t   n = aini.size();
+                    for(size_t i=n;i>0;--i)
+                    {
+                        atmp[i] = v*aini[i] + u*aend[i];
+                    }
+                    return F(*myS,F,atmp);
                 }
             };
 
