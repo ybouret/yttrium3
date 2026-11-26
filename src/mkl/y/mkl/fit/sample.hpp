@@ -152,7 +152,7 @@ namespace Yttrium
                             const Variable &var_j  = **jt; if(!var_j[used]) continue;
                             const ORDINATE  dFda_j = var_j[dFda];
                             const ABSCISSA  atmp   = dFda_i * dFda_j;
-                            //*var_j[sa_i] << atmp;
+                            *var_j[sa_i] << atmp;
                         }
                     }
                 }

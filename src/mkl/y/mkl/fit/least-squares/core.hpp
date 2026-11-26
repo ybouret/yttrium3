@@ -67,8 +67,10 @@ namespace Yttrium
                     alpha.make(nvar,nvar);
                     alpha.ld(zero).diag(one);
 
-                    // prepare addenda
                     sumBeta.adjust(nvar);
+                    sumAlpha.make(nvar,nvar);
+
+                    // prepare addenda
                     AdditionType * node = addenda.make( SampleMetrics::AddendaSizeFor(nvar) );
 
                     // fill sumBeta with nvar nodes
