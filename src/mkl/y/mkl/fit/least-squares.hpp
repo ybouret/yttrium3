@@ -69,12 +69,7 @@ namespace Yttrium
                     return result;
                 }
 
-                inline void prepareFor(const SampleType &S)
-                {
-                    const size_t nvar = S.vars.span;
-                    this->prepareCoreFor(nvar);
-                    dFda.adjust(nvar);
-                }
+
 
 
                 Vector<ORDINATE>         dFda;
@@ -82,6 +77,12 @@ namespace Yttrium
 
             private:
                 Y_Disable_Copy_And_Assign(LeastSquares);
+                inline void prepareFor(const SampleType &S)
+                {
+                    const size_t nvar = S.vars.span;
+                    this->prepareCoreFor(nvar);
+                    dFda.adjust(nvar);
+                }
             };
 
         }

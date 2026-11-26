@@ -132,8 +132,7 @@ namespace Yttrium
 
                     // compute delta
                     const ORDINATE delta = y - yf;
-                    //std::cerr << "dFda=" << dFda << " / delta=" << delta << std::endl;
-
+                    
                     // store D2 component
                     sumD2 << delta*delta;
 
@@ -141,18 +140,22 @@ namespace Yttrium
                     Variables::ConstIterator it = vars->begin();
                     for(size_t i=vars->size();i>0;--i,++it)
                     {
+                        // for beta
                         const Variable &var_i  = **it; if(!var_i[used]) continue;
                         const ORDINATE  dFda_i = var_i[dFda];
                         *var_i[sumBeta] << dFda_i * delta;
 
-                        MatrixRow<AdditionHandle> &sa_i = var_i[sumAlpha];
-                        Variables::ConstIterator   jt   = it;
-                        for(size_t j=i;j>0;--j,++jt)
+                        // for alpha
                         {
-                            const Variable &var_j  = **jt; if(!var_j[used]) continue;
-                            const ORDINATE  dFda_j = var_j[dFda];
-                            const ABSCISSA  atmp   = dFda_i * dFda_j;
-                            *var_j[sa_i] << atmp;
+                            MatrixRow<AdditionHandle> &sa_i = var_i[sumAlpha];
+                            Variables::ConstIterator   jt   = it;
+                            for(size_t j=i;j>0;--j,++jt)
+                            {
+                                const Variable &var_j  = **jt; if(!var_j[used]) continue;
+                                const ORDINATE  dFda_j = var_j[dFda];
+                                const ABSCISSA  atmp   = dFda_i * dFda_j;
+                                *var_j[sa_i] << atmp;
+                            }
                         }
                     }
                 }

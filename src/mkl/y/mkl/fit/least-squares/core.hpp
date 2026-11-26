@@ -29,6 +29,7 @@ namespace Yttrium
                 sumD2(),
                 last(-1),
                 beta(),
+                alpha(),
                 sumBeta(),
                 sumAlpha(),
                 addenda(),
@@ -97,9 +98,22 @@ namespace Yttrium
                     Variables::ConstIterator it = vars->begin();
                     for(size_t i=vars->size();i>0;--i,++it)
                     {
-                        const Variable &var = **it;if(!var[used]) continue;
-                        AdditionType   &sum = *var[sumBeta];
-                        var[beta] = sum();
+                        const Variable &v_i = **it;if(!v_i[used]) continue;
+                        AdditionType   &sum = *v_i[sumBeta];
+                        v_i[beta] = sum();
+
+                        MatrixRow<AdditionHandle> &sa_i = v_i[sumAlpha];
+                        MatrixRow<ABSCISSA>       &a_i  = v_i[alpha];
+                        Variables::ConstIterator   jt   = it;
+                        for(size_t j=i;j>0;--j,++jt)
+                        {
+                            const Variable &v_j = **jt; if(!v_j[used]) continue;
+                            AdditionType   &sum = *v_j[sa_i];
+                            const ABSCISSA  a_ij = sum();
+                            v_j[a_i]        = a_ij;
+                            v_i[v_j[alpha]] = a_ij;
+                        }
+
                     }
                 }
 
