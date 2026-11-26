@@ -14,25 +14,48 @@ namespace Yttrium
         namespace Fit
         {
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! Sample Core definitions, ABSCISSA only
+            //
+            //
+            //__________________________________________________________________
             template <typename ABSCISSA>
             class SampleCore : public SampleMetrics
             {
             public:
-                typedef Cameo::Addition<ABSCISSA>    AdditionType; //!< alias
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
+                typedef Cameo::Addition<ABSCISSA>    AdditionType;   //!< alias
                 typedef AdditionType *               AdditionHandle; //!< alias
 
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
+
+                //! setup \param name compatible name
                 template <typename NAME> inline
                 explicit SampleCore(const NAME &name) :
                 SampleMetrics(name)
                 {
                 }
 
+                //! cleanup
                 inline virtual ~SampleCore() noexcept {}
 
 
 
             private:
-                Y_Disable_Copy_And_Assign(SampleCore);
+                Y_Disable_Copy_And_Assign(SampleCore); //!< discarded
             };
 
         }

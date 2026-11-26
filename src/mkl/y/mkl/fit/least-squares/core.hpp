@@ -17,14 +17,34 @@ namespace Yttrium
         namespace Fit
         {
 
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! ABSCISSA only part of LeastSquares
+            //
+            //
+            //__________________________________________________________________
             template <typename ABSCISSA>
             class LeastSquaresCore
             {
             public:
-                typedef Cameo::Addition<ABSCISSA> AdditionType;
-                typedef Cameo::Addenda<ABSCISSA>  AddendaType;
-                typedef AdditionType *            AdditionHandle;
+                //______________________________________________________________
+                //
+                //
+                // Definitions+
+                //
+                //______________________________________________________________
+                typedef Cameo::Addition<ABSCISSA> AdditionType;   //!< alias
+                typedef Cameo::Addenda<ABSCISSA>  AddendaType;    //!< alias
+                typedef AdditionType *            AdditionHandle; //!< alias
 
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
                 inline explicit LeastSquaresCore() :
                 sumD2(),
                 last(-1),
@@ -42,46 +62,65 @@ namespace Yttrium
                 {
                 }
 
-
-                AdditionType             sumD2;
-                ABSCISSA                 last;
-                Vector<ABSCISSA>         beta;
-                Matrix<ABSCISSA>         alpha;
-                Vector<AdditionHandle>   sumBeta;
-                Matrix<AdditionHandle>   sumAlpha;
-                AddendaType              addenda;
-                const ABSCISSA           zero;
-                const ABSCISSA           one;
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                AdditionType             sumD2;    //!< sum of D2
+                ABSCISSA                 last;     //!< last D2
+                Vector<ABSCISSA>         beta;     //!< descent direction
+                Matrix<ABSCISSA>         alpha;    //!< approximate hessian
+                Vector<AdditionHandle>   sumBeta;  //!< helper to compute beta
+                Matrix<AdditionHandle>   sumAlpha; //!< helper to compute alpha
+                AddendaType              addenda;  //!< dynamic inner additions
+                const ABSCISSA           zero;     //!< 0
+                const ABSCISSA           one;      //!< 1
 
             private:
-                Y_Disable_Copy_And_Assign(LeastSquaresCore);
+                Y_Disable_Copy_And_Assign(LeastSquaresCore); //!< discarded
 
             protected:
 
+                //! prepare core memory \param nvar number of variables
                 inline void prepareCoreFor(const size_t nvar)
                 {
+                    //----------------------------------------------------------
                     // prepare beta
+                    //----------------------------------------------------------
                     beta.adjust(nvar);
                     beta.ld(zero);
 
+                    //----------------------------------------------------------
                     // prepare alpha
+                    //----------------------------------------------------------
                     alpha.make(nvar,nvar);
                     alpha.ld(zero).diag(one);
 
+                    //----------------------------------------------------------
+                    // prepare addition handles
+                    //----------------------------------------------------------
                     sumBeta.adjust(nvar);
                     sumAlpha.make(nvar,nvar);
 
+                    //----------------------------------------------------------
                     // prepare addenda
+                    //----------------------------------------------------------
                     AdditionType * node = addenda.make( SampleMetrics::AddendaSizeFor(nvar) );
 
+                    //----------------------------------------------------------
                     // fill sumBeta with nvar nodes
+                    //----------------------------------------------------------
                     for(size_t i=1;i<=nvar;++i,node=node->next)
                     {
                         assert(node);
                         sumBeta[i] = node;
                     }
 
+                    //----------------------------------------------------------
                     // fill sumAlpha with nvar*(1+nvar)/2 symetric nodes
+                    //----------------------------------------------------------
                     for(size_t i=1;i<=nvar;++i)
                     {
                         for(size_t j=i;j<=nvar;++j,node=node->next)
@@ -92,6 +131,11 @@ namespace Yttrium
                     }
                 }
 
+                //! compile beta and alpha from sumBeta and sumAlpha
+                /**
+                 \param vars variables
+                 \param used flags
+                 */
                 inline void compileFrom(const Variables      &vars,
                                         const Readable<bool> &used)
                 {

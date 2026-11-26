@@ -115,12 +115,18 @@ namespace Yttrium
 
                 //! any valid value evaluation
                 /**
+                 \param dFda local gradient, computed
                  \param x    abscissa
                  \param vars variables
                  \param aorg current parameters
+                 \param used flags
                  \return evaluated value
                  */
-                inline ORDINATE operator()(Writable<ORDINATE> &dFda, const ABSCISSA x, const Variables &vars, const Readable<ABSCISSA> &aorg, const Readable<bool> &used)
+                inline ORDINATE operator()(Writable<ORDINATE>      & dFda,
+                                           const ABSCISSA             x,
+                                           const Variables          & vars,
+                                           const Readable<ABSCISSA> & aorg,
+                                           const Readable<bool>     & used)
                 {
                     return get(dFda,x,vars,aorg,used);
                 }

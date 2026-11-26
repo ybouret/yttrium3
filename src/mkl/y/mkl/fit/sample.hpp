@@ -66,10 +66,28 @@ namespace Yttrium
                 // Interface
                 //
                 //______________________________________________________________
+
+                //! gather D2 only
+                /**
+                 \param sumD2 addition, updated
+                 \param F     function
+                 \param aorg  current parameters
+                 */
                 virtual void gatherD2(AdditionType             &sumD2,
                                       FunctionType             &F,
                                       const Readable<ABSCISSA> &aorg) = 0;
 
+
+                //! gather D2 and differential metrics
+                /**
+                 \param sumD2    addition, updated
+                 \param sumBeta  additions for beta
+                 \param sumAlpha additions for alpha
+                 \param G        function/gradient
+                 \param aorg     current parameters
+                 \param used     flags
+                 \param dFda     local gradient memory
+                 */
                 virtual void gatherD2(AdditionType             & sumD2,
                                       Writable<AdditionHandle> & sumBeta,
                                       Matrix<AdditionHandle>   & sumAlpha,
@@ -84,6 +102,13 @@ namespace Yttrium
                 // Methods
                 //
                 //______________________________________________________________
+
+                //! compute D2 only
+                /**
+                 \param sumD2 addition, updated
+                 \param F     function
+                 \param aorg  current parameters
+                 */
                 inline ABSCISSA D2(AdditionType             & sumD2,
                                    FunctionType             & F,
                                    const Readable<ABSCISSA> & aorg)
@@ -94,6 +119,16 @@ namespace Yttrium
                     return sumD2();
                 }
 
+                //! compute D2 and gather differential metrics
+                /**
+                 \param sumD2    addition, updated
+                 \param sumBeta  additions for beta
+                 \param sumAlpha additions for alpha
+                 \param G        function/gradient
+                 \param aorg     current parameters
+                 \param used     flags
+                 \param dFda     local gradient memory
+                 */
                 inline ABSCISSA D2(AdditionType             & sumD2,
                                    Writable<AdditionHandle> & sumBeta,
                                    Matrix<AdditionHandle>   & sumAlpha,
@@ -115,12 +150,17 @@ namespace Yttrium
                 Y_Disable_Copy_And_Assign(Sample); //!< dicarded
 
             protected:
-                static inline void UpdateOnlyD2(AdditionType &sumD2, const ORDINATE &y, const ORDINATE &yf)
+
+                //! update only D2
+                static inline void UpdateOnlyD2(AdditionType &sumD2,
+                                                const ORDINATE &y,
+                                                const ORDINATE &yf)
                 {
                     const ORDINATE delta = y - yf;
                     sumD2 << delta*delta;
                 }
 
+                //! update D2 and all differential metrics
                 inline void updateEntire(AdditionType             & sumD2,
                                          Writable<AdditionHandle> & sumBeta,
                                          Matrix<AdditionHandle>   & sumAlpha,
@@ -129,23 +169,32 @@ namespace Yttrium
                                          const ORDINATE           & yf,
                                          const Readable<bool>     & used)
                 {
-
+                    //----------------------------------------------------------
                     // compute delta
+                    //----------------------------------------------------------
                     const ORDINATE delta = y - yf;
-                    
+
+                    //----------------------------------------------------------
                     // store D2 component
+                    //----------------------------------------------------------
                     sumD2 << delta*delta;
 
+                    //----------------------------------------------------------
                     // store other components
+                    //----------------------------------------------------------
                     Variables::ConstIterator it = vars->begin();
                     for(size_t i=vars->size();i>0;--i,++it)
                     {
+                        //------------------------------------------------------
                         // for beta
+                        //------------------------------------------------------
                         const Variable &var_i  = **it; if(!var_i[used]) continue;
                         const ORDINATE  dFda_i = var_i[dFda];
                         *var_i[sumBeta] << dFda_i * delta;
 
+                        //------------------------------------------------------
                         // for alpha
+                        //------------------------------------------------------
                         {
                             MatrixRow<AdditionHandle> &sa_i = var_i[sumAlpha];
                             Variables::ConstIterator   jt   = it;

@@ -13,11 +13,24 @@ namespace Yttrium
     {
         namespace Fit
         {
-
+            //__________________________________________________________________
+            //
+            //
+            //
+            //! LeastSquares interface
+            //
+            //
+            //__________________________________________________________________
             template <typename ABSCISSA, typename ORDINATE>
             class LeastSquares : public LeastSquaresCore<ABSCISSA>
             {
             public:
+                //______________________________________________________________
+                //
+                //
+                // Definitions
+                //
+                //______________________________________________________________
                 typedef LeastSquaresCore<ABSCISSA>          CoreType;       //!< alias
                 typedef typename CoreType::AddendaType      AddendaType;    //!< alias
                 typedef Sample<ABSCISSA,ORDINATE>           SampleType;     //!< alias
@@ -32,6 +45,12 @@ namespace Yttrium
                 using CoreType:: sumBeta;
                 using CoreType:: sumAlpha;
 
+                //______________________________________________________________
+                //
+                //
+                // C++
+                //
+                //______________________________________________________________
                 inline explicit LeastSquares()  :
                 CoreType(),
                 dFda()
@@ -44,6 +63,20 @@ namespace Yttrium
 
                 }
 
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+
+                //! compute D2
+                /**
+                 \param S sample
+                 \param F function
+                 \param a parameters
+                 \return current D2
+                 */
                 inline ABSCISSA D2(SampleType               &S,
                                    FunctionType             &F,
                                    const Readable<ABSCISSA> &a)
@@ -51,32 +84,54 @@ namespace Yttrium
                     return (last=S.D2(sumD2,F,a));
                 }
 
+                //! compute D2 and differential metrics
+                /**
+                 \param S    sample
+                 \param G    gradient
+                 \param aorg parameters
+                 \param used flags
+                 \return current D2
+                 */
                 inline ABSCISSA D2full(SampleType               &S,
                                        GradientType             &G,
                                        const Readable<ABSCISSA> &aorg,
                                        const Readable<bool>     &used)
                 {
+                    //----------------------------------------------------------
                     // prepare resources
+                    //----------------------------------------------------------
                     prepareFor(S);
 
+                    //----------------------------------------------------------
                     // gather components
+                    //----------------------------------------------------------
                     const ABSCISSA result = (last=S.D2(sumD2,sumBeta,sumAlpha,G,aorg,used,dFda));
 
+                    //----------------------------------------------------------
                     // compile components
+                    //----------------------------------------------------------
                     this->compileFrom(S.vars,used);
 
+                    //----------------------------------------------------------
                     // return D2
+                    //----------------------------------------------------------
                     return result;
                 }
 
 
-
-
-                Vector<ORDINATE>         dFda;
+                //______________________________________________________________
+                //
+                //
+                // Members
+                //
+                //______________________________________________________________
+                Vector<ORDINATE> dFda; //!< local gradient
 
 
             private:
-                Y_Disable_Copy_And_Assign(LeastSquares);
+                Y_Disable_Copy_And_Assign(LeastSquares); //!< discarded
+
+                //! prepare all memory
                 inline void prepareFor(const SampleType &S)
                 {
                     const size_t nvar = S.vars.span;

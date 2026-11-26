@@ -69,8 +69,8 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                Variables         vars; //!< own variables
-                Concurrent::Mutex access;
+                Variables         vars;   //!< own variables
+                Concurrent::Mutex access; //!< access mutex
 
             private:
                 Y_Disable_Copy_And_Assign(SampleMetrics); //!< discarded
