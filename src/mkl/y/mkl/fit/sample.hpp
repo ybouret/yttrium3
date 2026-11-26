@@ -126,14 +126,22 @@ namespace Yttrium
                                          const ORDINATE           & yf,
                                          const Readable<bool>     & used)
                 {
+
+                    // compute delta
                     const ORDINATE delta = y - yf;
+                    //std::cerr << "dFda=" << dFda << " / delta=" << delta << std::endl;
+
+                    // store D2 component
                     sumD2 << delta*delta;
 
+                    // store other components
                     Variables::ConstIterator it = vars->begin();
                     for(size_t i=vars->size();i>0;--i,++it)
                     {
                         const Variable &var = **it; if(!var[used]) continue;
-                        *var[sumBeta] << ( var[dFda] * delta );
+                        const ABSCISSA  tmp = var[dFda] * delta;
+                        //std::cerr << "\tstoring " << tmp << std::endl;
+                        *var[sumBeta] << tmp;
                     }
                 }
             };

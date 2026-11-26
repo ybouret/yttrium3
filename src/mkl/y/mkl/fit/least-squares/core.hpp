@@ -52,13 +52,26 @@ namespace Yttrium
             protected:
                 inline void prepareCoreFor(const size_t nvar)
                 {
-                    beta.adjust(nvar); beta.ld(zero);
+                    beta.adjust(nvar);
+                    beta.ld(zero);
                     sumBeta.adjust(nvar);
                     AdditionType * node = addenda.make( SampleMetrics::AddendaSizeFor(nvar) );
                     for(size_t i=1;i<=nvar;++i,node=node->next)
                     {
                         assert(node);
                         sumBeta[i] = node;
+                    }
+                }
+
+                inline void compileFrom(const Variables      &vars,
+                                        const Readable<bool> &used)
+                {
+                    Variables::ConstIterator it = vars->begin();
+                    for(size_t i=vars->size();i>0;--i,++it)
+                    {
+                        const Variable &var = **it;if(!var[used]) continue;
+                        AdditionType   &sum = *var[sumBeta];
+                        var[beta] = sum();
                     }
                 }
 

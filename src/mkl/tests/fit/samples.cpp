@@ -135,6 +135,21 @@ Y_UTEST(fit_samples)
     Y_PRINTV(S2D2);
     Y_PRINTV(SAD2);
 
+    std::cerr << std::endl;
+    CxxArray<bool> used(nvar,true);
+
+    const double S1D2full = fit.D2full(S1, G, aorg, used);
+    Y_PRINTV(S1D2full);
+    Y_PRINTV(fit.beta);
+
+
+    const double S2D2full = fit.D2full(S2, G, aorg, used);
+    Y_PRINTV(S2D2full);
+    Y_PRINTV(fit.beta);
+
+    const double SAD2full = fit.D2full(SA, G, aorg, used);
+    Y_PRINTV(SAD2full);
+    Y_PRINTV(fit.beta);
 
 }
 Y_UDONE()

@@ -55,16 +55,22 @@ namespace Yttrium
                                        const Readable<ABSCISSA> &aorg,
                                        const Readable<bool>     &used)
                 {
+                    // prepare resources
                     prepareFor(S);
+
+                    // gather components
                     const ABSCISSA result = (last=S.D2(sumD2,sumBeta,G,aorg,used,dFda));
 
+                    // compile components
+                    this->compileFrom(S.vars,used);
 
+                    // return D2
                     return result;
                 }
 
                 inline void prepareFor(const SampleType &S)
                 {
-                    const size_t nvar = S.vars->size();
+                    const size_t nvar = S.vars.span;
                     this->prepareCoreFor(nvar);
                     dFda.adjust(nvar);
                 }
