@@ -32,7 +32,7 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
-
+                typedef Probe<ABSCISSA>                     ProbeType;       //!< alias
                 typedef Sample<ABSCISSA,ORDINATE>           SampleType;      //!< alias
                 typedef typename SampleType::Pointer        SamplePointer;   //!< alias
                 typedef typename SampleType::FunctionType   FunctionType;    //!< alias
@@ -122,21 +122,19 @@ namespace Yttrium
                 inline virtual const SampleDB & locus() const noexcept { return db; }
 
                 inline virtual
-                void gatherD2(AdditionType             & sumD2,
+                void gatherD2(ProbeType                & probe,
                               FunctionType             & F,
                               const Readable<ABSCISSA> & aorg)
                 {
                     Y_Lock(access);
                     for(Iterator it=db.begin();it != db.end();++it)
                     {
-                        (**it).gatherD2(sumD2,F,aorg);
+                        (**it).gatherD2(probe,F,aorg);
                     }
                 }
 
                 inline virtual
-                void gatherD2(AdditionType             & sumD2,
-                              Writable<AdditionHandle> & sumBeta,
-                              Matrix<AdditionHandle>   & sumAlpha,
+                void gatherD2(ProbeType                & probe,
                               GradientType             & G,
                               const Readable<ABSCISSA> & aorg,
                               const Readable<bool>     & used,
@@ -145,7 +143,7 @@ namespace Yttrium
                     Y_Lock(access);
                     for(Iterator it=db.begin();it != db.end();++it)
                     {
-                        (**it).gatherD2(sumD2,sumBeta,sumAlpha,G,aorg,used,dFda);
+                        (**it).gatherD2(probe,G,aorg,used,dFda);
                     }
                 }
 

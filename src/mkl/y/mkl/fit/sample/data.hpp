@@ -34,6 +34,7 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
+                typedef Probe<ABSCISSA>                     ProbeType;      //!< alias
                 typedef Sample<ABSCISSA,ORDINATE>           SampleType;     //!< alias
                 typedef typename SampleType::FunctionType   FunctionType;   //!< alias
                 typedef typename SampleType::GradientType   GradientType;   //!< alias
@@ -114,22 +115,20 @@ namespace Yttrium
 
                 
                 inline virtual
-                void gatherD2(AdditionType             & sumD2,
+                void gatherD2(ProbeType                & probe,
                               FunctionType             & F,
                               const Readable<ABSCISSA> & aorg)
                 {
                     Y_Lock(access);
                     const size_t n = cardinal(); assert(n>0);
-                    UpdateOnlyD2(sumD2,y[1],yf[1]=F.start(x[1],vars,aorg));
+                    UpdateOnlyD2(probe,y[1],yf[1]=F.start(x[1],vars,aorg));
                     for(size_t i=2;i<=n;++i)
-                        UpdateOnlyD2(sumD2,y[i],yf[i]=F.start(x[i],vars,aorg));
+                        UpdateOnlyD2(probe,y[i],yf[i]=F.start(x[i],vars,aorg));
                 }
 
 
                 inline virtual
-                void gatherD2(AdditionType             & sumD2,
-                              Writable<AdditionHandle> & sumBeta,
-                              Matrix<AdditionHandle>   & sumAlpha,
+                void gatherD2(ProbeType                & probe,
                               GradientType             & G,
                               const Readable<ABSCISSA> & aorg,
                               const Readable<bool>     & used,
@@ -137,9 +136,9 @@ namespace Yttrium
                 {
                     Y_Lock(access);
                     const size_t n = cardinal(); assert(n>0);
-                    updateEntire(sumD2,sumBeta,sumAlpha,dFda,y[1],yf[1]=G.start(dFda,x[1],vars,aorg,used),used);
+                    updateEntire(probe,dFda,y[1],yf[1]=G.start(dFda,x[1],vars,aorg,used),used);
                     for(size_t i=2;i<=n;++i)
-                        updateEntire(sumD2,sumBeta,sumAlpha,dFda,y[i],yf[i]=G.start(dFda,x[i],vars,aorg,used),used);
+                        updateEntire(probe,dFda,y[i],yf[i]=G.start(dFda,x[i],vars,aorg,used),used);
                 }
 
             };

@@ -3,7 +3,7 @@
 #ifndef Y_MKL_Fit_Sample_Included
 #define Y_MKL_Fit_Sample_Included 1
 
-#include "y/mkl/fit/sample/core.hpp"
+#include "y/mkl/fit/sample/probe.hpp"
 #include "y/mkl/fit/type/function.hpp"
 #include "y/mkl/fit/type/gradient.hpp"
 
@@ -39,7 +39,8 @@ namespace Yttrium
                 typedef typename CoreType::AdditionType   AdditionType;   //!< alias
                 typedef typename CoreType::AdditionHandle AdditionHandle; //!< alias
                 typedef Keyed<String,ArcPtr<Sample>>      Pointer;        //!< alias
-
+                typedef Probe<ABSCISSA>                   ProbeType;      //!< alias
+                
                 using SampleMetrics::access;
                 using SampleMetrics::vars;
 
@@ -69,28 +70,24 @@ namespace Yttrium
 
                 //! gather D2 only
                 /**
-                 \param sumD2 addition, updated
+                 \param probe updated
                  \param F     function
                  \param aorg  current parameters
                  */
-                virtual void gatherD2(AdditionType             &sumD2,
+                virtual void gatherD2(ProbeType                &probe,
                                       FunctionType             &F,
                                       const Readable<ABSCISSA> &aorg) = 0;
 
 
                 //! gather D2 and differential metrics
                 /**
-                 \param sumD2    addition, updated
-                 \param sumBeta  additions for beta
-                 \param sumAlpha additions for alpha
+                 \param probe    updated
                  \param G        function/gradient
                  \param aorg     current parameters
                  \param used     flags
                  \param dFda     local gradient memory
                  */
-                virtual void gatherD2(AdditionType             & sumD2,
-                                      Writable<AdditionHandle> & sumBeta,
-                                      Matrix<AdditionHandle>   & sumAlpha,
+                virtual void gatherD2(ProbeType                & probe,
                                       GradientType             & G,
                                       const Readable<ABSCISSA> & aorg,
                                       const Readable<bool>     & used,
@@ -105,43 +102,36 @@ namespace Yttrium
 
                 //! compute D2 only
                 /**
-                 \param sumD2 addition, updated
+                 \param probe updated
                  \param F     function
                  \param aorg  current parameters
                  */
-                inline ABSCISSA D2(AdditionType             & sumD2,
+                inline ABSCISSA D2(ProbeType                &probe,
                                    FunctionType             & F,
                                    const Readable<ABSCISSA> & aorg)
                 {
                     Y_Lock(access);
-                    sumD2.ldz();
-                    gatherD2(sumD2,F,aorg);
-                    return sumD2();
+                    gatherD2(probe,F,aorg);
+                    return probe.sumD2();
                 }
 
                 //! compute D2 and gather differential metrics
                 /**
-                 \param sumD2    addition, updated
-                 \param sumBeta  additions for beta
-                 \param sumAlpha additions for alpha
+                 \param probe    updated
                  \param G        function/gradient
                  \param aorg     current parameters
                  \param used     flags
                  \param dFda     local gradient memory
                  */
-                inline ABSCISSA D2(AdditionType             & sumD2,
-                                   Writable<AdditionHandle> & sumBeta,
-                                   Matrix<AdditionHandle>   & sumAlpha,
+                inline ABSCISSA D2(ProbeType                & probe,
                                    GradientType             & G,
                                    const Readable<ABSCISSA> & aorg,
                                    const Readable<bool>     & used,
                                    Writable<ORDINATE>       & dFda)
                 {
                     Y_Lock(access);
-                    sumD2.ldz();
-                    for(size_t i=sumBeta.size();i>0;--i) sumBeta[i]->ldz();
-                    gatherD2(sumD2,sumBeta,sumAlpha,G,aorg,used,dFda);
-                    return sumD2();
+                    gatherD2(probe,G,aorg,used,dFda);
+                    return probe.sumD2();
                 }
 
                 
@@ -152,18 +142,16 @@ namespace Yttrium
             protected:
 
                 //! update only D2
-                static inline void UpdateOnlyD2(AdditionType &sumD2,
+                static inline void UpdateOnlyD2(ProbeType   &probe,
                                                 const ORDINATE &y,
                                                 const ORDINATE &yf)
                 {
                     const ORDINATE delta = y - yf;
-                    sumD2 << delta*delta;
+                    probe.sumD2 << delta*delta;
                 }
 
                 //! update D2 and all differential metrics
-                inline void updateEntire(AdditionType             & sumD2,
-                                         Writable<AdditionHandle> & sumBeta,
-                                         Matrix<AdditionHandle>   & sumAlpha,
+                inline void updateEntire(ProbeType                & probe,
                                          const Readable<ORDINATE> & dFda,
                                          const ORDINATE           & y,
                                          const ORDINATE           & yf,
@@ -174,10 +162,13 @@ namespace Yttrium
                     //----------------------------------------------------------
                     const ORDINATE delta = y - yf;
 
+                    //std::cerr << "delta = " << delta << "; dFda  = " << dFda  << std::endl;
+
+
                     //----------------------------------------------------------
                     // store D2 component
                     //----------------------------------------------------------
-                    sumD2 << delta*delta;
+                    probe.sumD2 << delta*delta;
 
                     //----------------------------------------------------------
                     // store other components
@@ -190,13 +181,13 @@ namespace Yttrium
                         //------------------------------------------------------
                         const Variable &var_i  = **it; if(!var_i[used]) continue;
                         const ORDINATE  dFda_i = var_i[dFda];
-                        *var_i[sumBeta] << dFda_i * delta;
+                        *var_i[probe.sumBeta] << (dFda_i * delta);
 
                         //------------------------------------------------------
                         // for alpha
                         //------------------------------------------------------
                         {
-                            MatrixRow<AdditionHandle> &sa_i = var_i[sumAlpha];
+                            MatrixRow<AdditionHandle> &sa_i = var_i[probe.sumAlpha];
                             Variables::ConstIterator   jt   = it;
                             for(size_t j=i;j>0;--j,++jt)
                             {

@@ -40,8 +40,9 @@ namespace Yttrium
                 typedef typename SampleType::AdditionHandle AdditionHandle; //!< alias
 
                 using CoreType:: beta;
+                using CoreType:: curv;
+                using CoreType:: atry;
                 using CoreType:: sumD2;
-                using CoreType:: last;
                 using CoreType:: sumBeta;
                 using CoreType:: sumAlpha;
 
@@ -81,7 +82,8 @@ namespace Yttrium
                                    FunctionType             &F,
                                    const Readable<ABSCISSA> &a)
                 {
-                    return (last=S.D2(sumD2,F,a));
+                    sumD2.ldz();
+                    return S.D2(*this,F,a);
                 }
 
                 //! compute D2 and differential metrics
@@ -105,7 +107,7 @@ namespace Yttrium
                     //----------------------------------------------------------
                     // gather components
                     //----------------------------------------------------------
-                    const ABSCISSA result = (last=S.D2(sumD2,sumBeta,sumAlpha,G,aorg,used,dFda));
+                    const ABSCISSA result =  S.D2(*this,G,aorg,used,dFda);
 
                     //----------------------------------------------------------
                     // compile components
@@ -116,6 +118,43 @@ namespace Yttrium
                     // return D2
                     //----------------------------------------------------------
                     return result;
+                }
+
+                inline void step(SampleType               & S,
+                                 unit_t                   & p,
+                                 FunctionType             & F,
+                                 GradientType             & G,
+                                 Writable<ABSCISSA>       & aorg,
+                                 const Readable<bool>     & used)
+                {
+
+                    // build full metrics
+                    const ABSCISSA D2_org = D2full(S,G,aorg,used);
+                    std::cerr << "D2_org=" << D2_org << std::endl;
+
+                    // build local curvature
+                    const CurvatureResult topo   = this->buildCurvature(p);
+                    if(Singular == topo )
+                    {
+
+                        return;
+                    }
+
+                    // build step
+                    const size_t n = beta.size();
+                    std::cerr << "beta=" << beta << std::endl;
+                    this->lu.solve(curv,beta);
+
+                    std::cerr << "step=" << beta << std::endl;
+                    for(size_t i=n;i>0;--i)
+                    {
+                        atry[i] = aorg[i] + beta[i];
+                    }
+
+                    // evaluate trial step
+                    const ABSCISSA D2_try = D2(S,F,atry);
+                    std::cerr << "D2_try=" << D2_try << std::endl;
+
                 }
 
 

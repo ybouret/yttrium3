@@ -5,13 +5,11 @@
 #define Y_MKL_Fit_LeastSquaresCore_Included 1
 
 
-#include "y/mkl/fit/sample/metrics.hpp"
-#include "y/cameo/addenda.hpp"
-#include "y/container/sequence/vector.hpp"
-#include "y/container/matrix.hpp"
+#include "y/mkl/fit/sample/probe.hpp"
 #include "y/mkl/numeric.hpp"
 #include "y/field/1d.hpp"
 #include "y/pointer/auto.hpp"
+#include "y/mkl/algebra/lu.hpp"
 
 namespace Yttrium
 {
@@ -19,6 +17,13 @@ namespace Yttrium
     {
         namespace Fit
         {
+
+            enum CurvatureResult
+            {
+                Straight, //!< used required lambda
+                Expanded, //!< needed expansion
+                Singular  //!< too much expansion
+            };
 
             //__________________________________________________________________
             //
@@ -29,7 +34,7 @@ namespace Yttrium
             //
             //__________________________________________________________________
             template <typename ABSCISSA>
-            class LeastSquaresCore
+            class LeastSquaresCore : public Probe<ABSCISSA>
             {
             public:
                 //______________________________________________________________
@@ -40,10 +45,16 @@ namespace Yttrium
                 //______________________________________________________________
                 static const unit_t PMIN;
                 static const unit_t PMAX;
-                typedef Cameo::Addition<ABSCISSA> AdditionType;   //!< alias
-                typedef Cameo::Addenda<ABSCISSA>  AddendaType;    //!< alias
-                typedef AdditionType *            AdditionHandle; //!< alias
-                typedef Field::In1D<ABSCISSA>     Lambda;         //!< alias
+                typedef Field::In1D<ABSCISSA>              Lambda;         //!< alias
+                typedef Probe<ABSCISSA>                    ProbeType;
+                typedef typename ProbeType::AdditionHandle AdditionHandle;
+                typedef typename ProbeType::AdditionType   AdditionType;
+
+                using ProbeType::sumBeta;
+                using ProbeType::sumAlpha;
+
+
+
 
                 //______________________________________________________________
                 //
@@ -52,24 +63,22 @@ namespace Yttrium
                 //
                 //______________________________________________________________
                 inline explicit LeastSquaresCore() :
-                sumD2(),
-                last(-1),
                 beta(),
                 alpha(),
-                sumBeta(),
-                sumAlpha(),
-                addenda(),
+                curv(),
+                lu(),
                 lambda( "lambda", Field::Layout1D(PMIN,PMAX) ),
                 zero(0),
                 one(1)
                 {
                     buildLambda();
-
                 }
 
                 inline virtual ~LeastSquaresCore() noexcept
                 {
                 }
+
+                
 
                 //______________________________________________________________
                 //
@@ -77,13 +86,11 @@ namespace Yttrium
                 // Members
                 //
                 //______________________________________________________________
-                AdditionType             sumD2;    //!< sum of D2
-                ABSCISSA                 last;     //!< last D2
                 Vector<ABSCISSA>         beta;     //!< descent direction
                 Matrix<ABSCISSA>         alpha;    //!< approximate hessian
-                Vector<AdditionHandle>   sumBeta;  //!< helper to compute beta
-                Matrix<AdditionHandle>   sumAlpha; //!< helper to compute alpha
-                AddendaType              addenda;  //!< dynamic inner additions
+                Matrix<ABSCISSA>         curv;     //!< approximate curvature
+                LU<ABSCISSA>             lu;       //!< linear algebra
+                Vector<ABSCISSA>         atry;     //!< trial parameters
                 const Lambda             lambda;   //!< inner lambda values
                 const ABSCISSA           zero;     //!< 0
                 const ABSCISSA           one;      //!< 1
@@ -92,13 +99,14 @@ namespace Yttrium
                 Y_Disable_Copy_And_Assign(LeastSquaresCore); //!< discarded
 
             protected:
+
+                //! building lambda field
                 inline void buildLambda()
                 {
                     const ABSCISSA ten = 10;
                     Coerce(lambda[0]) = 1;
                     for(unit_t i=-1;i>PMIN;--i) Coerce(lambda[i]) = lambda[i+1]/ten;
                     for(unit_t i=1;i<=PMAX;++i) Coerce(lambda[i]) = lambda[i-1]*ten;
-                    //Core::Display(std::cerr, &lambda[PMIN], lambda->width) << std::endl;
                 }
 
                 //! prepare core memory \param nvar number of variables
@@ -111,42 +119,21 @@ namespace Yttrium
                     beta.ld(zero);
 
                     //----------------------------------------------------------
-                    // prepare alpha
+                    // prepare alpha and curv
                     //----------------------------------------------------------
                     alpha.make(nvar,nvar);
                     alpha.ld(zero).diag(one);
+                    curv.make(nvar,nvar);
 
                     //----------------------------------------------------------
-                    // prepare addition handles
+                    // prepare other
                     //----------------------------------------------------------
-                    sumBeta.adjust(nvar);
-                    sumAlpha.make(nvar,nvar);
+                    atry.adjust(nvar);
 
                     //----------------------------------------------------------
-                    // prepare addenda
+                    // prepare inner additions
                     //----------------------------------------------------------
-                    AdditionType * node = addenda.make( SampleMetrics::AddendaSizeFor(nvar) );
-
-                    //----------------------------------------------------------
-                    // fill sumBeta with nvar nodes
-                    //----------------------------------------------------------
-                    for(size_t i=1;i<=nvar;++i,node=node->next)
-                    {
-                        assert(node);
-                        sumBeta[i] = node;
-                    }
-
-                    //----------------------------------------------------------
-                    // fill sumAlpha with nvar*(1+nvar)/2 symetric nodes
-                    //----------------------------------------------------------
-                    for(size_t i=1;i<=nvar;++i)
-                    {
-                        for(size_t j=i;j<=nvar;++j,node=node->next)
-                        {
-                            assert(node);
-                            sumAlpha[i][j] = sumAlpha[j][i] = node;
-                        }
-                    }
+                    this->readyFor(nvar);
                 }
 
                 //! compile beta and alpha from sumBeta and sumAlpha
@@ -178,6 +165,28 @@ namespace Yttrium
 
                     }
                 }
+
+
+                inline CurvatureResult buildCurvature(unit_t &p)
+                {
+                    assert(p>=PMIN);
+                    assert(p<=PMAX);
+                    size_t         cycle = 1;
+                SCALE:
+                    const ABSCISSA scale = one; //+ lambda[p];
+                    curv.assign(alpha);
+                    for(size_t i=curv.rows;i>0;--i)
+                        curv[i][i] *= scale;
+
+                    
+                    if( lu.build(curv) )
+                        return (1 == cycle) ? Straight : Expanded;
+
+                    if(++p>PMAX) return Singular;
+                    ++cycle;
+                    goto SCALE;
+                }
+
 
             };
 

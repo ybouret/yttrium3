@@ -80,8 +80,8 @@ namespace
             {
                 const double dt = t-t0;
                 const double f  = sqrt(D*dt);
-                if( _t0[used] ) _t0[dFda] = 0.5 * dt/f;
-                if( _D[used]  ) _D[dFda]  = 0.5 * D/f;
+                if( _t0[used] ) _t0[dFda] = -0.5 * D/f;
+                if( _D[used]  ) _D[dFda]  =  0.5 * dt/f;
                 return f;
             }
         }
@@ -94,8 +94,8 @@ Y_UTEST(fit_samples)
 {
 
     Fit::Samples<double,double> SA("samples");
-    Fit::Sample<double,double> &S1 = SA("s1",_t1,_x1,_n1);
-    Fit::Sample<double,double> &S2 = SA("s2",_t2,_x2,_n2);
+    Fit::Sample<double,double> &S1 = SA("s1",_t1,_x1, _n1);
+    Fit::Sample<double,double> &S2 = SA("s2",_t2,_x2, _n2);
 
     const Fit::Variable & t0 = SA.vars("t0");
     const Fit::Variable & D1 = SA.vars("D1");
@@ -184,10 +184,9 @@ Y_UTEST(fit_samples)
         std::cerr << std::endl;
     }
 
-    {
-        Fit::LeastSquaresCore<float> f;
-        Y_PRINTV(f.lambda);
-    }
+    unit_t p = 0;
+    fit.step(S1, p, F, G, aorg, used);
+    S1.autoSave();
 
 }
 Y_UDONE()
