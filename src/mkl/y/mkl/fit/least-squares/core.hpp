@@ -10,6 +10,8 @@
 #include "y/container/sequence/vector.hpp"
 #include "y/container/matrix.hpp"
 #include "y/mkl/numeric.hpp"
+#include "y/field/1d.hpp"
+#include "y/pointer/auto.hpp"
 
 namespace Yttrium
 {
@@ -36,10 +38,12 @@ namespace Yttrium
                 // Definitions
                 //
                 //______________________________________________________________
-                static const int PMIN;
+                static const unit_t PMIN;
+                static const unit_t PMAX;
                 typedef Cameo::Addition<ABSCISSA> AdditionType;   //!< alias
                 typedef Cameo::Addenda<ABSCISSA>  AddendaType;    //!< alias
                 typedef AdditionType *            AdditionHandle; //!< alias
+                typedef Field::In1D<ABSCISSA>     Lambda;         //!< alias
 
                 //______________________________________________________________
                 //
@@ -55,6 +59,7 @@ namespace Yttrium
                 sumBeta(),
                 sumAlpha(),
                 addenda(),
+                pLambda( NewLambda() ),
                 zero(0),
                 one(1)
                 {
@@ -78,6 +83,7 @@ namespace Yttrium
                 Vector<AdditionHandle>   sumBeta;  //!< helper to compute beta
                 Matrix<AdditionHandle>   sumAlpha; //!< helper to compute alpha
                 AddendaType              addenda;  //!< dynamic inner additions
+                const AutoPtr<Lambda>    pLambda;  //!< inner lambda values
                 const ABSCISSA           zero;     //!< 0
                 const ABSCISSA           one;      //!< 1
 
@@ -85,6 +91,15 @@ namespace Yttrium
                 Y_Disable_Copy_And_Assign(LeastSquaresCore); //!< discarded
 
             protected:
+
+                static inline
+                Lambda * NewLambda()
+                {
+                    const Field::Layout1D layout(PMIN,PMAX);
+                    AutoPtr<Lambda> pLam = new Lambda("lambda",layout);
+
+                    return pLam.yield();
+                }
 
                 //! prepare core memory \param nvar number of variables
                 inline void prepareCoreFor(const size_t nvar)
@@ -167,7 +182,10 @@ namespace Yttrium
             };
 
             template <typename ABSCISSA>
-            const int LeastSquaresCore<ABSCISSA>::PMIN = - (int)( Numeric<ABSCISSA>::DIG + 1);
+            const unit_t LeastSquaresCore<ABSCISSA>::PMIN = - (int)( Numeric<ABSCISSA>::DIG + 1);
+
+            template <typename ABSCISSA>
+            const unit_t LeastSquaresCore<ABSCISSA>::PMAX = Numeric<ABSCISSA>::MAX_10_EXP;
 
 
         }

@@ -15,7 +15,7 @@ namespace Yttrium
         {
             static Memory::Allocator &mgr = Object::Factory::Instance();
             assert(bytes>0);
-            std::cerr << "acquire " << bytes << std::endl;
+            //std::cerr << "acquire " << bytes << std::endl;
             return mgr.acquire(bytes);
         }
 
@@ -24,7 +24,7 @@ namespace Yttrium
             static Memory::Allocator &mgr = Object::Factory::Instance();
             assert(bytes>0);
             assert(0!=entry);
-            std::cerr << "release " << bytes << std::endl;
+            //std::cerr << "release " << bytes << std::endl;
             return mgr.release(entry,bytes);
         }
 

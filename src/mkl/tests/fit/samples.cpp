@@ -155,15 +155,39 @@ Y_UTEST(fit_samples)
     Y_PRINTV(SAD2full);
     Y_PRINTV(fit.beta);
     Y_PRINTV(fit.alpha);
+    std::cerr << std::endl;
 
+    if(false)
+    {
+        Y_PRINTV( Fit::LeastSquaresCore<float>::PMIN );
+        Y_PRINTV( Fit::LeastSquaresCore<float>::PMAX );
+        std::cerr << std::endl;
 
-    Y_PRINTV( Fit::LeastSquaresCore<float>::PMIN );
-    Y_PRINTV( Fit::LeastSquaresCore<double>::PMIN );
-    Y_PRINTV( Fit::LeastSquaresCore<long double>::PMIN );
-    Y_PRINTV( Fit::LeastSquaresCore< XReal<float> >::PMIN );
-    Y_PRINTV( Fit::LeastSquaresCore< XReal<double> >::PMIN );
-    Y_PRINTV( Fit::LeastSquaresCore< XReal<long double> >::PMIN );
+        Y_PRINTV( Fit::LeastSquaresCore<double>::PMIN );
+        Y_PRINTV( Fit::LeastSquaresCore<double>::PMAX );
+        std::cerr << std::endl;
 
+        Y_PRINTV( Fit::LeastSquaresCore<long double>::PMIN );
+        Y_PRINTV( Fit::LeastSquaresCore<long double>::PMAX );
+        std::cerr << std::endl;
+
+        Y_PRINTV( Fit::LeastSquaresCore< XReal<float> >::PMIN );
+        Y_PRINTV( Fit::LeastSquaresCore< XReal<float> >::PMAX );
+        std::cerr << std::endl;
+
+        Y_PRINTV( Fit::LeastSquaresCore<XReal<double>>::PMIN );
+        Y_PRINTV( Fit::LeastSquaresCore<XReal<double>>::PMAX );
+        std::cerr << std::endl;
+
+        Y_PRINTV( Fit::LeastSquaresCore< XReal<long double> >::PMIN );
+        Y_PRINTV( Fit::LeastSquaresCore< XReal<long double> >::PMAX );
+        std::cerr << std::endl;
+    }
+
+    {
+        Fit::LeastSquaresCore<float> f;
+        Y_PRINTV(*f.pLambda);
+    }
 
 }
 Y_UDONE()
