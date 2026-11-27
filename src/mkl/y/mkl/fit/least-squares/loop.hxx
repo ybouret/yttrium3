@@ -6,14 +6,15 @@ inline void operator()(XML::Log                 & xml,
                        const Readable<bool>     & used)
 {
 
-    Y_XML_Element(xml,LS_Loop);
+    Y_XML_Element(xml,LeastSquares);
     size_t cycle = 0;
     unit_t p     = this->PMIN/2;
 FULL:
     ++cycle;
+    Y_XML_Element_Attr(xml,Full,Y_XML_Attr(cycle) << Y_XML_Attr(p) );
     if(xml.verbose)
     {
-        Y_XMLog(xml, "-- starting point for cycle #" << cycle);
+        Y_XMLog(xml, "-- starting point:");
         S.vars.display(*xml,"\t(*) ",aorg,0);
     }
 
@@ -38,9 +39,8 @@ FULL:
     //
     //--------------------------------------------------------------------------
     const ABSCISSA D2_org= D2full(S,G,aorg,used);
-    Y_XMLog(xml, "-- metrics:");
-    Y_XMLog(xml, "-- D2_org = " << D2_org);
-    Y_XMLog(xml, "-- beta   = " << beta);
+    Y_XMLog(xml, "D2_org = " << D2_org);
+    Y_XMLog(xml, "beta   = " << beta);
 
     //--------------------------------------------------------------------------
     //
@@ -52,13 +52,13 @@ FULL:
     size_t sub = 0;
 CURV:
     ++sub;
-    Y_XMLog(xml, "-- using p=" << p << " @cycle@#" << cycle << "." << sub);
+    Y_XML_Element_Attr(xml,Partial, Y_XML_Attr(cycle) << Y_XML_Attr(sub)  << Y_XML_Attr(p) );
     const CurvatureResult res   = this->buildCurvature(p);
     const char * const    rid   = CurvatureNamed::Value(res);
-    Y_XMLog(xml, "-- curvature result was '" << rid << "'");
+    Y_XMLog(xml, "-- " << rid << " Curvature");
     if(Singular == res )
     {
-        Y_XMLog(xml, "-- failure...");
+        Y_XMLog(xml, "-- [" << Core::Failure << "]");
         return;
     }
 
@@ -72,7 +72,7 @@ CURV:
     step.load(beta);
     this->lu.solve(curv,step);
     if(xml.verbose)
-        S.vars.display(*xml,"\t[+] d_",step,0);
+        S.vars.display(*xml,"\t\t[+] d_",step,0);
 
     S.vars.transfer(aini.ld(zero),aorg);
 
@@ -86,7 +86,7 @@ CURV:
     if(xml.verbose)
     {
         Y_XMLog(xml, "-- landing point:");
-        S.vars.display(*xml,"\t(*) ",aend,0);
+        S.vars.display(*xml,"\t\t(*) ",aend,0);
     }
 
 
