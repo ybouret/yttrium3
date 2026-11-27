@@ -1,16 +1,19 @@
-inline void loop(XML::Log                 & xml,
-                 SampleType               & S,
-                 unit_t                   & p,
-                 FunctionType             & F,
-                 GradientType             & G,
-                 Writable<ABSCISSA>       & aorg,
-                 const Readable<bool>     & used)
+inline void operator()(XML::Log                 & xml,
+                       SampleType               & S,
+                       FunctionType             & F,
+                       GradientType             & G,
+                       Writable<ABSCISSA>       & aorg,
+                       const Readable<bool>     & used)
 {
 
     Y_XML_Element(xml,LS_Loop);
+    size_t cycle = 0;
+    unit_t p     = this->PMIN/2;
+FULL:
+    ++cycle;
     if(xml.verbose)
     {
-        Y_XMLog(xml, "-- starting point:");
+        Y_XMLog(xml, "-- starting point for cycle #" << cycle);
         S.vars.display(*xml,"\t(*) ",aorg,0);
     }
 
@@ -36,8 +39,8 @@ inline void loop(XML::Log                 & xml,
     //--------------------------------------------------------------------------
     const ABSCISSA D2_org= D2full(S,G,aorg,used);
     Y_XMLog(xml, "-- metrics:");
-    Y_XMLog(xml, "D2_org = " << D2_org);
-    Y_XMLog(xml, "beta   = " << beta);
+    Y_XMLog(xml, "-- D2_org = " << D2_org);
+    Y_XMLog(xml, "-- beta   = " << beta);
 
     //--------------------------------------------------------------------------
     //
@@ -46,10 +49,13 @@ inline void loop(XML::Log                 & xml,
     //
     //
     //--------------------------------------------------------------------------
+    size_t sub = 0;
 CURV:
-    Y_XMLog(xml, "-- using p=" << p);
+    ++sub;
+    Y_XMLog(xml, "-- using p=" << p << " @cycle@#" << cycle << "." << sub);
     const CurvatureResult res   = this->buildCurvature(p);
-    Y_XMLog(xml, "-- curvature result was '" << CurvatureNamed::Value(res) << "'");
+    const char * const    rid   = CurvatureNamed::Value(res);
+    Y_XMLog(xml, "-- curvature result was '" << rid << "'");
     if(Singular == res )
     {
         Y_XMLog(xml, "-- failure...");
@@ -93,7 +99,7 @@ CURV:
     //
     //--------------------------------------------------------------------------
     const ABSCISSA D2_try = D2(S,F,aend);
-    Y_XMLog(xml,"D2_try=" << D2_try);
+    Y_XMLog(xml,"-- D2_try=" << D2_try);
 
     {
         OutputFile fp("d2.txt");
@@ -111,21 +117,53 @@ CURV:
     //
     //--------------------------------------------------------------------------
     const bool cvg = this->converged();
-    Y_XMLog(xml, "-- convergence: " << (cvg?"true" : "false") );
+    Y_XMLog(xml, "-- convergence on each variable: " << (cvg?"true" : "false") );
 
     if(D2_try<D2_org)
     {
+        // better D2
+        Y_XMLog(xml, "-- D2 decreased with " << rid << " Curvature");
         this->Decrease(p);
+        S.vars.transfer(aorg,aend);
+        switch(res)
+        {
+            case Straight:
+                if(cvg)
+                {
+                    Y_XMLog(xml, "-- clear convergence");
+                    return;
+                }
+                break; // => need to loop again, not converged
 
+            case Expanded:
+                if(cvg)
+                    Y_XMLog(xml, "-- need to decrease bias");
+                break; // => need to loop again in any case
 
+            case Singular:
+                throw Specific::Exception("LeastSquares", "corrupted code");
+        }
+        goto FULL;
     }
     else
     {
+        // worse D2
+        Y_XMLog(xml, "-- D2 increased");
+
+        if(cvg)
+        {
+            Y_XMLog(xml,"-- fuzzy convergence");
+            S.vars.transfer(aorg,aend);
+            return;
+        }
+
+        // need to slow down step
         if(!this->Increase(p))
         {
             return;
         }
 
+        // and try again
         goto CURV;
     }
 

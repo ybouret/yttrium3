@@ -118,9 +118,14 @@ Y_UTEST(fit_samples)
     Y_PRINTV(SA.cardinal());
 
     CxxArray<double> aorg(nvar);
-    SA.vars["t0"][aorg] = -100;
-    SA.vars["D1"][aorg] = 0.15;
-    SA.vars["D2"][aorg] = 0.20;
+
+    const double ini_t0 = -100;
+    const double ini_D1 = 0.15;
+    const double ini_D2 = 0.20;
+
+    SA.vars["t0"][aorg] = ini_t0;
+    SA.vars["D1"][aorg] = ini_D1;
+    SA.vars["D2"][aorg] = ini_D2;
 
     Diffusion          F;
     DiffusionGradient  G;
@@ -187,9 +192,18 @@ Y_UTEST(fit_samples)
     bool     verbose = true;
     XML::Log xml(std::cerr,verbose);
 
-    unit_t p = 0;
-    fit.loop(xml,S1, p, F, G, aorg, used);
+
+    SA.vars["t0"][aorg] = ini_t0;
+    SA.vars["D1"][aorg] = ini_D1;
+    SA.vars["D2"][aorg] = ini_D2;
+    fit(xml,S1,F, G, aorg, used);
     S1.autoSave();
+
+    SA.vars["t0"][aorg] = ini_t0;
+    SA.vars["D1"][aorg] = ini_D1;
+    SA.vars["D2"][aorg] = ini_D2;
+    fit(xml,S2,F, G, aorg, used);
+    S2.autoSave();
 
 }
 Y_UDONE()
