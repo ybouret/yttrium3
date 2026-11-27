@@ -9,6 +9,8 @@
 #include "y/mkl/minimize/quadratic.hpp"
 #include "y/type/temporary.hpp"
 
+#include "y/stream/libc/output.hpp"
+
 namespace Yttrium
 {
     namespace MKL
@@ -62,7 +64,9 @@ namespace Yttrium
                 //______________________________________________________________
                 inline explicit LeastSquares()  :
                 CoreType(),
-                dFda()
+                dFda(),
+                myF(0),
+                myS(0)
                 {
 
                 }
@@ -128,60 +132,7 @@ namespace Yttrium
                     return result;
                 }
 
-                inline void step(SampleType               & S,
-                                 unit_t                   & p,
-                                 FunctionType             & F,
-                                 GradientType             & G,
-                                 Writable<ABSCISSA>       & aorg,
-                                 const Readable<bool>     & used)
-                {
-
-                    Temporary<FunctionType*> tmpF(myF,&F);
-                    Temporary<SampleType*>   tmpS(myS,&S);
-
-                    Triplet<ABSCISSA>  U  = { 0,0,1 };
-                    Triplet<ABSCISSA>  D  = { D2full(S,G,aorg,used),-1,-1 };
-
-
-                    // build full metrics
-                    std::cerr << "D2_org=" << D.a << std::endl;
-
-                    // build local curvature
-                    const CurvatureResult topo   = this->buildCurvature(p);
-                    if(Singular == topo )
-                    {
-
-                        return;
-                    }
-
-                    // build step
-
-
-                    std::cerr << "beta=" << beta << std::endl;
-                    this->lu.solve(curv,beta);
-
-                    std::cerr << "step=" << beta << std::endl;
-
-                    // prepare parameters
-                    S.vars.transfer(aini.ld(zero),aorg);
-
-                    std::cerr << "aorg=" << aorg << " => aini=" << aini << std::endl;
-                    const size_t n = aini.size();
-                    for(size_t i=n;i>0;--i)
-                    {
-                        aend[i] = aini[i] + beta[i];
-                    }
-
-                    // evaluate trial step
-                    const ABSCISSA D2_try = D2(S,F,aend);
-                    std::cerr << "D2_try=" << D2_try << std::endl;
-
-
-
-                }
-
-
-
+#include "y/mkl/fit/least-squares/step.hxx"
 
                 //______________________________________________________________
                 //
@@ -205,7 +156,7 @@ namespace Yttrium
                     dFda.adjust(nvar);
                 }
 
-                ABSCISSA operator()(const ABSCISSA u)
+                inline virtual ABSCISSA operator()(const ABSCISSA u)
                 {
                     assert(myF);
                     FunctionType  &F = *myF;
@@ -213,9 +164,12 @@ namespace Yttrium
                     const size_t   n = aini.size();
                     for(size_t i=n;i>0;--i)
                     {
-                        atmp[i] = v*aini[i] + u*aend[i];
+                        const ABSCISSA a0 = aini[i], a1 = aend[i];
+                        ABSCISSA amin = a0, amax=a1;
+                        if(amin>amax) Swap(amin,amax);
+                        atmp[i] = Clamp<ABSCISSA>(amin,v*a0 + u*a1,amax);
                     }
-                    return F(*myS,F,atmp);
+                    return D2(*myS,F,atmp);
                 }
             };
 

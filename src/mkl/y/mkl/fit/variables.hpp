@@ -116,6 +116,12 @@ namespace Yttrium
                 const Variable & operator[](const char * const) const; //!< \return named variable
                 const Variable & operator[](const char)         const; //!< \return named variable
 
+                //! transfer matching data
+                /**
+                 \param target target array
+                 \param source source array
+                 \return target
+                 */
                 template <typename TARGET, typename SOURCE>
                 inline TARGET & transfer(TARGET &target, SOURCE &source) const
                 {
