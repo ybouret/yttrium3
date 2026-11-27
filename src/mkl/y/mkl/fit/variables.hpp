@@ -9,6 +9,7 @@
 
 #include "y/container/associative/suffix/set.hpp"
 #include "y/type/proxy.hpp"
+#include "y/format/justify.hpp"
 
 namespace Yttrium
 {
@@ -136,6 +137,29 @@ namespace Yttrium
                     return target;
                 }
 
+                template <typename ARRAY> inline
+                std::ostream & display(std::ostream      & os,
+                                       const char * const  sfx,
+                                       ARRAY             & array,
+                                       const char * const  pfx,
+                                       const Justify::Type J = Justify::Center) const
+                {
+                    const size_t  n  = vdb.size();
+                    ConstIterator it = vdb.begin();
+                    for(size_t i=n;i>0;--i,++it)
+                    {
+                        const Variable &var = **it;
+                        if(sfx) os << sfx;
+                        os << Justify(var,wfmt,J);
+                        if(pfx) os << pfx;
+                        os << " = ";
+                        os << var[array];
+                        os << std::endl;
+                    }
+                    return os;
+                }
+
+
             private:
                 Y_Proxy_Decl(); //!< helper
                 const Variable & insert( const Variable::Pointer & ); //!< \return inserted variable
@@ -149,6 +173,7 @@ namespace Yttrium
                 VarDB vdb;         //!< inner database
             public:
                 const size_t span; //!< maximum index
+                const size_t wfmt; //!< width format
             };
 
 

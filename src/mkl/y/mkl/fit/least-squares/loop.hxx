@@ -1,10 +1,19 @@
-inline void step(SampleType               & S,
+inline void loop(XML::Log                 & xml,
+                 SampleType               & S,
                  unit_t                   & p,
                  FunctionType             & F,
                  GradientType             & G,
                  Writable<ABSCISSA>       & aorg,
                  const Readable<bool>     & used)
 {
+
+    Y_XML_Element(xml,LS_Loop);
+    if(xml.verbose)
+    {
+        Y_XMLog(xml, "-- starting point:");
+        S.vars.display(*xml,"\t(*) ",aorg,0);
+    }
+
 
     //--------------------------------------------------------------------------
     //
@@ -25,8 +34,10 @@ inline void step(SampleType               & S,
     //
     //
     //--------------------------------------------------------------------------
-    Triplet<ABSCISSA>  D  = { D2full(S,G,aorg,used),-1,-1 };
-    std::cerr << "D2_org=" << D.a << std::endl;
+    const ABSCISSA D2_org= D2full(S,G,aorg,used);
+    Y_XMLog(xml, "-- metrics:");
+    Y_XMLog(xml, "D2_org = " << D2_org);
+    Y_XMLog(xml, "beta   = " << beta);
 
     //--------------------------------------------------------------------------
     //
@@ -35,10 +46,13 @@ inline void step(SampleType               & S,
     //
     //
     //--------------------------------------------------------------------------
-    const CurvatureResult topo   = this->buildCurvature(p);
-    if(Singular == topo )
+CURV:
+    Y_XMLog(xml, "-- using p=" << p);
+    const CurvatureResult res   = this->buildCurvature(p);
+    Y_XMLog(xml, "-- curvature result was '" << CurvatureNamed::Value(res) << "'");
+    if(Singular == res )
     {
-
+        Y_XMLog(xml, "-- failure...");
         return;
     }
 
@@ -49,21 +63,27 @@ inline void step(SampleType               & S,
     //
     //
     //--------------------------------------------------------------------------
-    std::cerr << "beta=" << beta << std::endl;
-    this->lu.solve(curv,beta);
-
-    std::cerr << "step=" << beta << std::endl;
+    step.load(beta);
+    this->lu.solve(curv,step);
+    if(xml.verbose)
+        S.vars.display(*xml,"\t[+] d_",step,0);
 
     S.vars.transfer(aini.ld(zero),aorg);
 
-    std::cerr << "aorg=" << aorg << " => aini=" << aini << std::endl;
     const size_t n = aini.size();
     for(size_t i=n;i>0;--i)
     {
-        aend[i] = aini[i] + beta[i];
+        aend[i] = aini[i] + step[i];
     }
 
     // TODO: clip with intervals ?
+    if(xml.verbose)
+    {
+        Y_XMLog(xml, "-- landing point:");
+        S.vars.display(*xml,"\t(*) ",aend,0);
+    }
+
+
 
     //--------------------------------------------------------------------------
     //
@@ -72,8 +92,8 @@ inline void step(SampleType               & S,
     //
     //
     //--------------------------------------------------------------------------
-    D.c = D2(S,F,aend);
-    std::cerr << "D2_try=" << D.c << std::endl;
+    const ABSCISSA D2_try = D2(S,F,aend);
+    Y_XMLog(xml,"D2_try=" << D2_try);
 
     {
         OutputFile fp("d2.txt");
@@ -90,23 +110,25 @@ inline void step(SampleType               & S,
     //
     //
     //--------------------------------------------------------------------------
-    if(D.c<D.a)
+    const bool cvg = this->converged();
+    Y_XMLog(xml, "-- convergence: " << (cvg?"true" : "false") );
+
+    if(D2_try<D2_org)
     {
-        //----------------------------------------------------------------------
-        //
-        // Improved D2
-        //
-        //----------------------------------------------------------------------
-        
+        this->Decrease(p);
+
+
     }
     else
     {
-        //----------------------------------------------------------------------
-        //
-        // Worsen D2
-        //
-        //----------------------------------------------------------------------
+        if(!this->Increase(p))
+        {
+            return;
+        }
+
+        goto CURV;
     }
+
 
 }
 

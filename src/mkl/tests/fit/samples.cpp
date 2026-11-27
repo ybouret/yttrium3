@@ -184,8 +184,11 @@ Y_UTEST(fit_samples)
         std::cerr << std::endl;
     }
 
+    bool     verbose = true;
+    XML::Log xml(std::cerr,verbose);
+
     unit_t p = 0;
-    fit.step(S1, p, F, G, aorg, used);
+    fit.loop(xml,S1, p, F, G, aorg, used);
     S1.autoSave();
 
 }

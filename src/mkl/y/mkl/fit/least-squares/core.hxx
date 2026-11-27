@@ -17,7 +17,10 @@ beta(),
 alpha(),
 curv(),
 lu(),
-aini(), aend(), atmp(),
+step(),
+aini(),
+aend(),
+atmp(),
 lambda( LambdaName, Field::Layout1D(PMIN,PMAX) ),
 zero(0),
 one(1)
@@ -44,6 +47,7 @@ void LeastSquaresCore<real_t>::  prepareCoreFor(const size_t nvar)
     //----------------------------------------------------------
     // prepare other
     //----------------------------------------------------------
+    step.adjust(nvar);
     aini.adjust(nvar);
     aend.adjust(nvar);
     atmp.adjust(nvar);
@@ -100,3 +104,28 @@ CurvatureResult LeastSquaresCore<real_t>:: buildCurvature(unit_t &p)
     goto SCALE;
 }
 
+
+template <>
+bool LeastSquaresCore<real_t>:: converged() const noexcept
+{
+    for(size_t i=aini.size();i>0;--i)
+    {
+        if( !AlmostEqual<real_t>::Are(aini[i],aend[i])) return false;
+    }
+    return true;
+}
+
+template <>
+bool LeastSquaresCore<real_t>:: Increase(unit_t &p) noexcept
+{
+    if(++p>PMAX)
+        return false;
+    else
+        return true;
+}
+
+template<>
+void LeastSquaresCore<real_t>:: Decrease(unit_t &p) noexcept
+{
+    InSituMax(--p,PMIN);
+}

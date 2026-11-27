@@ -6,10 +6,10 @@
 
 #include "y/mkl/fit/least-squares/core.hpp"
 #include "y/mkl/fit/sample.hpp"
-#include "y/mkl/minimize/quadratic.hpp"
 #include "y/type/temporary.hpp"
-
 #include "y/stream/libc/output.hpp"
+#include "y/core/secure.hpp"
+#include "y/xml/element.hpp"
 
 namespace Yttrium
 {
@@ -45,6 +45,7 @@ namespace Yttrium
 
                 using CoreType:: beta;
                 using CoreType:: curv;
+                using CoreType:: step;
                 using CoreType:: aini;
                 using CoreType:: aend;
                 using CoreType:: atmp;
@@ -132,7 +133,7 @@ namespace Yttrium
                     return result;
                 }
 
-#include "y/mkl/fit/least-squares/step.hxx"
+#include "y/mkl/fit/least-squares/loop.hxx"
 
                 //______________________________________________________________
                 //
@@ -165,9 +166,7 @@ namespace Yttrium
                     for(size_t i=n;i>0;--i)
                     {
                         const ABSCISSA a0 = aini[i], a1 = aend[i];
-                        ABSCISSA amin = a0, amax=a1;
-                        if(amin>amax) Swap(amin,amax);
-                        atmp[i] = Clamp<ABSCISSA>(amin,v*a0 + u*a1,amax);
+                        atmp[i] = Secure<ABSCISSA>(a0,v*a0 + u*a1,a1);
                     }
                     return D2(*myS,F,atmp);
                 }

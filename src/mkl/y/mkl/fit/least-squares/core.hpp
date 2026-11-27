@@ -31,6 +31,11 @@ namespace Yttrium
                 Singular  //!< too much expansion
             };
 
+            struct CurvatureNamed
+            {
+                static const char * Value(const CurvatureResult) noexcept;
+            };
+
             //__________________________________________________________________
             //
             //
@@ -68,6 +73,16 @@ namespace Yttrium
                 explicit LeastSquaresCore();          //!< setup
                 virtual ~LeastSquaresCore() noexcept; //!< cleanup
 
+
+                //______________________________________________________________
+                //
+                //
+                // Methods
+                //
+                //______________________________________________________________
+                static void Decrease(unit_t &p) noexcept;
+                static bool Increase(unit_t &p) noexcept;
+
                 //______________________________________________________________
                 //
                 //
@@ -78,6 +93,7 @@ namespace Yttrium
                 Matrix<ABSCISSA>         alpha;    //!< approximate hessian
                 Matrix<ABSCISSA>         curv;     //!< approximate curvature
                 LU<ABSCISSA>             lu;       //!< linear algebra
+                Vector<ABSCISSA>         step;     //!< approximate step
                 Vector<ABSCISSA>         aini;     //!< ini point
                 Vector<ABSCISSA>         aend;     //!< end point]
                 Vector<ABSCISSA>         atmp;     //!< tmp point
@@ -113,6 +129,7 @@ namespace Yttrium
                  */
                 CurvatureResult buildCurvature(unit_t &p);
 
+                bool converged() const noexcept;
 
             };
 

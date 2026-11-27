@@ -19,7 +19,9 @@ namespace Yttrium
 
             Variables:: Variables() :
             Proxy<const VarDB>(),
-            vdb(), span(0)
+            vdb(),
+            span(0),
+            wfmt(0)
             {
             }
 
@@ -27,7 +29,8 @@ namespace Yttrium
             Variables:: Variables(const Variables &other) :
             Proxy<const VarDB>(),
             vdb(other.vdb),
-            span(other.span)
+            span(other.span),
+            wfmt(other.wfmt)
             {
             }
 
@@ -36,6 +39,7 @@ namespace Yttrium
                 VarDB _(other.vdb);
                 vdb.xch(_);
                 CoerceSwap(span,other.span);
+                CoerceSwap(wfmt,other.wfmt);
                 return *this;
             }
 
@@ -59,6 +63,7 @@ namespace Yttrium
                     throw Specific::Exception(Variable::CallSign,"unexpect insertion failure of '%s'", name.c_str());
 
                 InSituMax( Coerce(span), indx );
+                InSituMax( Coerce(wfmt), name.size() );
 
                 return *var;
             }
